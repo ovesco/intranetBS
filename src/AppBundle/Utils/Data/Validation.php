@@ -321,7 +321,7 @@ class Validation {
         if($container == null) {
 
             $id         = $entity->getId();
-            $Pclass     = explode('\\', \Doctrine\Common\Util\ClassUtils::getRealClass(get_class($entity)));
+            $class     = explode('\\', \Doctrine\Common\Util\ClassUtils::getRealClass(get_class($entity)));
             $key        = $this->getKey($entity);
             $container  = new ModificationsContainer();
 

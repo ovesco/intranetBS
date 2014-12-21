@@ -13,10 +13,43 @@ var editable = {
             $(obj).attr('data-saved', $(obj).text());
 
             $(obj).html(editable.getInput(obj));
+
+            $(obj).find('input').focus();
+
+            /* Apply modification on ENTER */
+            $(obj).bind("enterKey", function(e){
+
+                if ($(obj).find('.edited-input').is('textarea')) // omit texfields, ENTER is new line
+                    return;
+
+                editable.apply(obj);
+            });
+
+            /* Abort modification on ESC */
+            $(obj).bind("escKey", function(e){
+                editable.abort(obj);
+            });
+
+            /* Raise event depending on key pressed */
+            $(obj).keyup(function(e){
+                var keyCode = (event.keyCode ? event.keyCode : event.which);
+
+                switch(keyCode) {
+                    case 13:
+                        $(this).trigger("enterKey");
+                        break;
+
+                    case 27:
+                        $(this).trigger("escKey");
+                        break;
+                }
+            });
+
+            $(obj).focusout(function(e) {
+                //TODO: il faut gérer le focus out : demander à l'utilisateur s'il veut annuler ou sauver
+            });
         }
     },
-
-
 
 
 
@@ -24,17 +57,24 @@ var editable = {
      * Va valider les changements réalisés. Appelé lorsqu'on appuie sur le bouton vert
      * L'appel ajax retournera un array contenant les path qui sont requis pour pouvoir réaliser la validation. On les met
      * en valeur sur la page
-     * @param obj le bouton cliqué
+     * @param btn le bouton cliqué
      */
-    apply: function(obj) {
+    applyClick: function(btn) {
 
-        var saved = $(obj).parent().parent().attr('data-saved'),
-            path  = $(obj).parent().parent().attr('data-path'),
-            current = $(obj).prev().prev().val();
+        editable.apply($(btn).parents('td'));
+    },
+
+
+    apply: function(td) {
+
+        var saved = $(td).attr('data-saved'),
+            path  = $(td).attr('data-path'),
+            current = $(td).find('.edited-input').val();
+
 
         if(current != undefined && saved !== current) {
 
-            var dataType  = $(obj).parent().parent().attr('data-type');
+            var dataType  = $(td).parent().parent().attr('data-type');
 
             $.ajax({
                 url: Routing.generate('interne_ajax_app_modify_property', {path: path, value: current}),
@@ -53,12 +93,9 @@ var editable = {
 
                     }
 
-
-
-                    var td = $(obj).parent().parent();
                     $(td).attr('data-saved', current);
 
-                    editable.backup($(obj).parent().parent());
+                    editable.backup(td);
                 },
                 error: function (data) {
                     alerte.balance("Erreur lors de la modification, essayez d'actualiser la page et réessayez.", 'error');
@@ -67,11 +104,8 @@ var editable = {
         }
 
         else
-            editable.abort(obj);
+            editable.abort(td);
     },
-
-
-
 
 
     /**
@@ -79,9 +113,13 @@ var editable = {
      * Va annuler l'état de modification et remettre la valeur initiale
      * @param btn le bouton cliqué
      */
-    abort: function(btn) {
+    abortClick: function(btn) {
+      editable.abort($(btn).parents('td'));
+    },
 
-        var td = $(btn).parent().parent(); //On vise le TD
+
+
+    abort: function(td) {
 
         /*
          * le setTimeOut est nécessaire, car le bouton annuler se trouve à l'intérieure du TD, du coup, si on le mettait
@@ -127,7 +165,7 @@ var editable = {
              * à l'intérieur
              */
             case 'text':
-                input += '<input type="text" value="' + brut + '" />';
+                input += '<input class="edited-input" type="text" value="' + brut + '" />';
                 break;
 
             /*
@@ -155,7 +193,7 @@ var editable = {
                         options_text += '<option value="' + options[i].id + '">' + options[i].value + '</option>';
                 }
 
-                input += '<select>' + options_text + '</select>';
+                input += '<select class="edited-input">' + options_text + '</select>';
                 break;
 
             /*
@@ -165,29 +203,29 @@ var editable = {
              */
             case 'datepicker':
 
-                input += '<input type="date" value="' + brut + '" />';
+                input += '<input class="edited-input" type="date" value="' + brut + '" />';
                 break;
 
             /*
              * dans le cas d'un textarea on affiche une textarea avec sa valeur originelle à l'intérieur
              */
             case 'textarea':
-                input += '<textarea>' + brut + '</textarea>';
+                input += '<textarea class="edited-input">' + brut + '</textarea>';
                 break;
 
             /*
              * Par défaut on affiche le type du texte, un input basique
              */
             default:
-                input += '<input type="text" value="' + brut + '" />';
+                input += '<input class="edited-input" type="text" value="' + brut + '" />';
                 break;
         }
 
         /*
          * On termine ensuite l'input avec les boutons valider et annuler
          */
-        input += '<a class="ui circular mini red icon button" onclick="editable.abort(this);"><i class="remove icon"></i></a>' +
-                 '<a class="ui circular mini green icon button" onClick="editable.apply(this);"><i class="checkmark icon"></i></a>' +
+        input += '<a class="ui circular mini red icon button" onclick="editable.abortClick(this);"><i class="remove icon"></i></a>' +
+                 '<a class="ui circular mini green icon button" onClick="editable.applyClick(this);"><i class="checkmark icon"></i></a>' +
                  '</div>';
 
         return input;

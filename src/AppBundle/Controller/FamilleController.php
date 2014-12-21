@@ -25,7 +25,7 @@ class FamilleController extends Controller {
      * @return Response la vue
      *
      * @paramConverter("famille", class="AppBundle:Famille")
-     * @route("famille/voir-famille/{famille}", name="interne_voir_famille")
+     * @route("famille/voir/{famille}", name="interne_voir_famille")
      * @Template("Famille/voir_famille.html.twig")
      */
     public function showFamilleAction($famille) {

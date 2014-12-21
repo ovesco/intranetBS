@@ -15,7 +15,7 @@ class AdresseType extends AbstractType
             ->add('npa',        'number',       array('required' => false, 'label' => 'NPA'))
             ->add('localite',   'text',         array('required' => false, 'label' => 'Localité'))
             ->add('facturable', 'checkbox',     array('required' => false, 'label' => 'Facturable'))
-            ->add('remarques',  'textarea',     array('required' => false, 'label' => 'remarques'))
+            ->add('remarques',  'textarea',     array('required' => false, 'label' => 'Remarques'))
         ;
     }
 
