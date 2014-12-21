@@ -1,0 +1,3 @@
+InterneSecurity_roles_fonctiond:
+    pattern:  /roles-et-fonctions
+    defaults: { _controller: InterneSecurityBundle:Security:rolesFonctions }

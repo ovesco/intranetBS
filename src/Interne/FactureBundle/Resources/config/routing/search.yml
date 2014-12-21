@@ -1,0 +1,5 @@
+interne_facture_search_form:
+    path:     /form
+    defaults: { _controller: InterneFactureBundle:Search:search }
+    options:
+                    expose: true

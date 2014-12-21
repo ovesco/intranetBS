@@ -1,0 +1,61 @@
+{% extends "InterneHomeBundle::layout.html.twig" %}
+
+{% block title %}Détail du model de facture{% endblock %}
+
+{% block body %}
+
+
+<div class="row">
+
+    <div class="col-lg-6">
+        <div class="widget">
+
+            <div class="widget-title">
+                <span>Détail du model de facture</span>
+
+                <div class="widget-toolbar">
+
+                    <a href="{{path('interne_facture_model', {'id' : model.id} ) }}">
+                        <button class="widget-options-button">
+                            <span class="glyphicon glyphicon-arrow-left" infobulle="Retour à la liste"></span>
+                        </button>
+                    </a>
+                    <a href="{{path('interne_facture_model_update', {'id' : model.id} ) }}">
+                        <button class="widget-options-button">Modifier</button>
+                    </a>
+                    <a href="{{path('interne_facture_model_delete', {'id' : model.id} ) }}">
+                        <button class="widget-options-button">Supprimer</button>
+                    </a>
+
+                </div>
+            </div>
+
+            <div class="widget-content">
+                <div class="widget-data">
+
+                    Titre: {{ model.titre }}<br>
+
+                    Remarque: {{ model.remarque }}<br>
+
+                    Montant émis: {{ model.montantEmis }}<br>
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+    {% endblock %}
+
+    {% block javascript %}
+
+    <script type="text/javascript">
+
+
+    </script>
+
+{% endblock %}

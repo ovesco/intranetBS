@@ -1,0 +1,7 @@
+parameters:
+#    interne_facture.example.class: Interne\FactureBundle\Example
+
+services:
+#    interne_facture.example:
+#        class: %interne_facture.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

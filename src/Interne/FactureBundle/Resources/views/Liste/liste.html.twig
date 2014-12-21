@@ -1,0 +1,230 @@
+{% extends "InterneHomeBundle::layout.html.twig" %}
+
+{% block title %}Liste de factures{% endblock %}
+
+{% block body %}
+
+
+        <ul id="liste_facture_id" hidden>
+            {% for facture in factures %}
+                <li>{{ facture.id }}</li>
+            {% endfor %}
+        </ul>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-title">
+                <span>Liste de factures</span>
+                <div class="widget-toolbar">
+
+                    <div class="btn-group">
+                        <button type="button" data-toggle="dropdown">
+                            Action en masse
+                            <span class="caret">
+                            </span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                            <li>
+                                <a data-toggle="modal" data-target="#modal_add_rappel">
+                                    Ajouter un rappel
+                                </a>
+                            </li>
+                            <li>
+                                <a data-toggle="modal" data-target="#myModal">
+                                    Imprimer
+                                </a>
+                            </li>
+                            <li>
+                                <a id="liste_payed" href="#">
+                                    Definir comme "payée"
+                                </a>
+                            </li>
+                            <li>
+                                <a id="liste_delete" href="#">
+                                    Supprimer
+                                </a>
+                            </li>
+                        </ul>
+                        </div>
+                </div>
+
+            </div>
+
+            <div class="widget-content">
+                <table class="table" id="facture_liste_table">
+
+                    <thead>
+                    <tr>
+
+                        <th rowspan="2">Num. Réf.</th>
+                        <th rowspan="2">Facturation</th>
+
+                        <th colspan="2">Dates</th>
+                        <th colspan="3">Montants</th>
+                        <th rowspan="2">Nb. Rappels</th>
+                        <th rowspan="2">Statut</th>
+                        <th colspan="4" rowspan="2">Actions</th>
+                    </tr>
+                    <tr>
+
+                        <th>Création</th>
+                        <th>Payement</th>
+
+                        <th>Frais rappel</th>
+                        <th>Total</th>
+                        <th>Reçu</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                        {% include "InterneFactureBundle:Liste:tableLineInput.html.twig"
+                        with {'factures': factures} %}
+
+
+
+
+                    </tbody>
+
+
+                </table>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal_add_rappel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Ajouter un rappel en masse</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="form-group">
+                            Frais de rappel: <input type="number" id="modal_form_rappel_frais">
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="liste_add_rappel">Ajouter rappel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% endblock %}
+
+{% block javascript %}
+
+    <script type="text/javascript">
+
+
+
+
+        jQuery(document).ready(function() {
+
+            //On récupère la liste des id des factures présentent dans la liste.
+            var $liste_id = [];
+            $('#liste_facture_id li').each(function() {
+                $liste_id.push($(this).text())
+            });
+
+
+            $('#liste_add_rappel').on('click', function (e) {
+
+                e.preventDefault();
+                //on récupère les valeurs du formulaire
+
+                $frais = $('#modal_form_rappel_frais').val();
+
+                var data = { listeFactureId: $liste_id, frais_rappel: $frais};
+
+                $.ajax({
+                    type: "POST",
+                    url: "{{ path('interne_facture_liste_add_rappels') }}",
+                    data: data,
+                    error: function(jqXHR, textStatus, errorThrown) { alert('erreur'); },
+                    success: function(htmlResponse) {
+
+                        $('#facture_liste_table > tbody>tr').remove();
+
+                        $('#facture_liste_table > tbody').append(htmlResponse);
+
+
+
+                    }
+                });
+            });
+
+
+            $('#liste_payed').on('click', function (e) {
+
+                e.preventDefault();
+
+                var data = { listeFactureId: $liste_id};
+
+                $.ajax({
+                    type: "POST",
+                    url: "{{ path('interne_facture_liste_payed') }}",
+                    data: data,
+                    error: function(jqXHR, textStatus, errorThrown) { alert('erreur'); },
+                    success: function(htmlResponse) {
+
+                        $('#facture_liste_table > tbody>tr').remove();
+
+                        $('#facture_liste_table > tbody').append(htmlResponse);
+
+
+
+                    }
+                });
+            });
+
+            $('#liste_delete').on('click', function (e) {
+
+                e.preventDefault();
+
+                alert('il faudra une petite validation avant!!!')
+
+                var data = { listeFactureId: $liste_id};
+
+                $.ajax({
+                    type: "POST",
+                    url: "{{ path('interne_facture_liste_delete') }}",
+                    data: data,
+                    error: function(jqXHR, textStatus, errorThrown) { alert('erreur'); },
+                    success: function(htmlResponse) {
+
+                        $('#facture_liste_table > tbody>tr').remove();
+
+                        //enelver aussi de la liste
+
+
+                    }
+                });
+            });
+
+
+
+
+
+        });
+
+
+    </script>
+
+{% endblock %}

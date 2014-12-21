@@ -1,0 +1,65 @@
+{% for facture in factures %}
+
+    <tr>
+
+        <td>{{ facture.id }}</td>
+
+        {% if facture.membre is not empty %}
+            <td>{{ facture.membre.prenom }} {{ facture.membre.nom }}</td>
+
+        {% elseif facture.famille is not empty %}
+            <td>{{ facture.famille }}</td>
+        {% else %}
+            <td><span class="label label-warning">Sans liens</span></td>
+        {% endif %}
+
+
+
+        <td>{{ facture.dateCreation|date("m/d/Y") }}</td>
+        <td>{{ facture.datePayement|date("m/d/Y") }}</td>
+
+        <td>{{ facture.fraisRappel }}</td>
+        <td>{{ facture.montantTotal}}</td>
+        <td>{{ facture.montantRecu }}</td>
+        <td>{{ facture.nombreRappels }}</td>
+
+        {% if facture.statut == 'ouverte' %}
+            <td>
+                <span class="label label-info">
+                    Ouverte
+                </span>
+            </td>
+        {% elseif facture.statut == 'payee' %}
+            <td>
+                <span class="label label-success">
+                    Payée
+                </span>
+            </td>
+        {% else %}
+            <td>
+            </td>
+        {% endif %}
+
+        <td>
+            <a href="{{path('interne_facture_update', {'id' : facture.id} ) }}">
+                <span class="glyphicon glyphicon-pencil" infobulle="Editer"></span>
+            </a>
+        </td>
+        <td>
+            <a href="{{path('interne_facture_show', {'id' : facture.id} ) }}">
+                <span class="glyphicon glyphicon-zoom-in" infobulle="Afficher"></span>
+            </a>
+        </td>
+        <td>
+            <a href="{{path('interne_facture_delete', {'id' : facture.id} ) }}">
+                <span class="glyphicon glyphicon-trash" infobulle="Supprimer"></span>
+            </a>
+        </td>
+        <td>
+            <a href="{{ path('interne_facture_print', {'id' : facture.id} ) }}" target="_blank">
+                <span class="glyphicon glyphicon-print" infobulle="Imprimer"></span>
+            </a>
+        </td>
+    </tr>
+
+{% endfor %}

@@ -1,0 +1,132 @@
+{% extends "InterneHomeBundle::layout.html.twig" %}
+
+{% block title %}Détail de la facture{% endblock %}
+
+{% block body %}
+
+
+<div class="row">
+
+    <div class="col-lg-6">
+            <div class="widget">
+
+                <div class="widget-title">
+                    <span>Détail de la facture</span>
+
+                    <div class="widget-toolbar">
+
+                        <a href="{{path('interne_facture_update', {'id' : facture.id} ) }}">
+                            <span class="glyphicon glyphicon-pencil" infobulle="Editer"></span>
+                        </a>
+
+
+
+                        <a href="{{path('interne_facture_delete', {'id' : facture.id} ) }}">
+                            <span class="glyphicon glyphicon-trash" infobulle="Supprimer"></span>
+                        </a>
+
+                        <a href="{{ path('interne_facture_print', {'id' : facture.id} ) }}" target="_blank">
+                            <span class="glyphicon glyphicon-print" infobulle="Imprimer"></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div class="widget-content">
+                    <div class="widget-data">
+
+
+                            N° de Référance: {{ facture.id }}<br>
+
+
+
+
+
+                        {% if facture.statut == 'ouverte' %}
+                            <span class="label label-info">
+                                Ouverte
+                            </span>
+                        {% elseif facture.statut == 'payee' %}
+                            <span class="label label-success">
+                                Payée
+                            </span>
+                        {% else %}
+                        {% endif %}
+
+
+
+
+
+
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2">Résumé de la facture</th>
+                                    <th rowspan="2">Dates</th>
+                                    <th colspan="2">Montants</th>
+
+                                </tr>
+                                <tr>
+
+                                    <th>Emis</th>
+                                    <th>Reçu</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+
+
+
+
+                            {% for creance in facture.creances %}
+                                <tr>
+                                    <td>{{ creance.titre }}</td>
+                                    <td>{{ creance.dateCreation|date("m/d/Y") }} </td>
+                                    <td>{{ creance.montantEmis|number_format(2, '.', ',') }} </td>
+                                    <td>{{ creance.montantRecu|number_format(2, '.', ',') }} </td>
+                                </tr>
+
+                            {% endfor %}
+
+
+                                {% for rappel in facture.rappels %}
+                                    <tr>
+                                        <td>Rappel N°{{ loop.index }}</td>
+                                        <td>{{ rappel.date|date("m/d/Y") }} </td>
+                                        <td>{{ rappel.frais|number_format(2, '.', ',') }} </td>
+                                        <td></td>
+                                    </tr>
+
+                                {% endfor %}
+                                <tr>
+                                    <td>Montant Total</td>
+                                    <td>Payée, le {{ facture.datePayement|date("m/d/Y") }} </td>
+                                    <td>{{ facture.montantTotal|number_format(2, '.', ',') }}</td>
+                                    <td>{{ facture.montantRecu|number_format(2, '.', ',') }}</td>
+                                </tr>
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+
+
+
+                </div>
+            </div>
+    </div>
+
+
+
+    {% endblock %}
+
+    {% block javascript %}
+
+    <script type="text/javascript">
+
+
+    </script>
+
+{% endblock %}

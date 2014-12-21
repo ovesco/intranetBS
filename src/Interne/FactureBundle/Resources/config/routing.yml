@@ -1,0 +1,64 @@
+interne_facture_homepage:
+    path:     /homepage
+    defaults: { _controller: InterneFactureBundle:Default:index }
+
+
+interne_facture:
+    resource: "routing/facture.yml"
+    prefix:   /
+
+interne_facture_model:
+    resource: "routing/model.yml"
+    prefix:   /model
+
+interne_facture_validation:
+    resource: "routing/validation.yml"
+    prefix:   /validation
+
+
+interne_facture_statistics:
+    path:     /statistics
+    defaults: { _controller: InterneFactureBundle:statistics:index }
+
+
+interne_facture_creance:
+    resource: "routing/creance.yml"
+    prefix:   /creance
+
+
+interne_facture_search:
+    resource: "routing/search.yml"
+    prefix:   /search
+
+
+
+interne_facture_liste_add_rappels:
+    path:     /liste/add_rappels_ajax
+    defaults: { _controller: InterneFactureBundle:Liste:addRappelsAjax }
+
+interne_facture_liste_delete:
+    path:     /liste/delete_ajax
+    defaults: { _controller: InterneFactureBundle:Liste:deleteAjax }
+
+interne_facture_liste_payed:
+    path:     /liste/payed_ajax
+    defaults: { _controller: InterneFactureBundle:Liste:payedAjax }
+
+
+
+
+interne_facture_print_ajax:
+    path:     /print/liste_facture
+    defaults: { _controller: InterneFactureBundle:Print:printAjax }
+
+interne_facture_print:
+    path:     /print/{id}
+    defaults: { _controller: InterneFactureBundle:Print:print }
+
+
+
+
+
+
+
+

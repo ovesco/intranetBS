@@ -1,0 +1,21 @@
+{% block membre_famille_value_widget %}
+    {% spaceless %}
+
+        {% if required and empty_value is none and not empty_value_in_choices %}
+            {% set required = false %}
+        {% endif %}
+
+        <div class="field">
+            {{ block('form_label') }}
+            <select class="ui search dropdown" {{ block('widget_attributes') }}>
+
+                {% set options = choices %}
+                {{ block('choice_widget_options') }}
+
+                <option selected value="NOEXIST">Aucune famille trouvée</option>
+
+            </select>
+        </div>
+
+    {% endspaceless %}
+{% endblock membre_famille_value_widget %}

@@ -1,0 +1,115 @@
+{% extends 'layout.html.twig' %}
+
+{% block titre %}Listes{% endblock %}
+
+{% block content %}
+
+    <div class="ui page grid">
+        <div class="row">
+            <div class="column">
+
+                <h1>Listes personnalisées</h1>
+
+                <div class="ui segment">
+                    <p>Les listes dynamiques vous permettent de créer des listes de membres que vous pouvez ensuite exporter ou utiliser un peu partout ailleurs.</p>
+                    <a onclick="addListe(false);" class="ui green tiny button">Créer</a>
+                {% for liste in listing.listes %}
+
+                    <div data-token="{{ liste.token }}" class="ui vertical segment listing-container">
+
+                        <h3 class="ui horizontal divider">
+                            <i class="users icon"></i>
+                            {{ liste.name }}
+                        </h3>
+
+                        <table class="ui table listing-table">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Unité</th>
+                                    <th>Numéro BS</th>
+                                    <th>Naissance</th>
+                                    <th>Options</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for membre in liste.all %}
+                                    <tr data-id="{{ membre.id }}">
+                                        <td>{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</td>
+                                        <td>{% if membre.activeAttribution is not null %}{{ membre.activeAttribution.fonction.nom }} à {{ membre.activeAttribution.groupe.nom }}{% endif %}</td>
+                                        <td>{{ membre.numeroBs }}</td>
+                                        <td>{{ membre.naissance|date('d.m.Y') }}</td>
+                                        <td>
+                                            <a href="{{ path('interne_voir_membre', {membre: membre.id}) }}" class="circular ui mini icon blue button popupable" data-content="Voir la fiche de {{ membre.prenom|capitalize }}"><i class="share icon"></i></a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <div class="ui left floated basic segment">
+                            <a href="{{ path('listing_supprimer_liste', {token: liste.token }) }}" class="ui tiny labeled icon red button">
+                                <i class="remove icon"></i>
+                                Supprimer la liste
+                            </a>
+                        </div>
+
+                        <div class="ui right floated basic segment">
+
+                            <a onclick="removeElementsBySelector(this);" class="ui tiny labeled icon red button">
+                                <i class="remove icon"></i>
+                                Supprimer (<span class="listing-update-{{ liste.token }}">0</span>)
+                            </a>
+
+                            <div class="ui tiny labeled icon dropdown button">
+                                <i class="wizard icon"></i>
+                                Actions
+                                <div class="menu">
+                                    <div class="header">
+                                        Action sur (<span class="listing-update-{{ liste.token }}">0</span>) membres
+                                    </div>
+                                    <div class="item" onclick="showModal('#add-distinctions-modal');">
+                                        Masse de distinctions
+                                    </div>
+                                    <div class="item">
+                                        Masse d'attributions
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="add-liste-modal" class="ui small modal">
+        <i class="close icon"></i>
+        <div class="header">
+            Ajouter une liste
+        </div>
+        <div class="content">
+            <p>Choisissez un nom pour la liste. Si le nom est déjà pris, il sera légèrement modifié</p>
+            <div class="ui left icon input">
+                <input id="new-liste-name" type="text" placeholder="Entrez un nom">
+                <i class="list icon"></i>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui button">Cancel</div>
+            <div onclick="addListe(true);" class="ui button">OK</div>
+        </div>
+    </div>
+
+    {{ render(controller('AppBundle:QueryDataOnload:distinctions')) }}
+
+{% endblock %}
+
+{% block js %}
+{% javascripts '@AppBundle/Resources/public/js/specials/listing_view.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+{% endblock %}

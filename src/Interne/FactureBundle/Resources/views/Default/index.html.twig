@@ -1,0 +1,36 @@
+{% extends "InterneHomeBundle::layout.html.twig" %}
+
+{% block title %}Facture{% endblock %}
+
+
+{% block body %}
+
+
+
+<a href="{{path('interne_facture_search_form')}}">search facture </a><br>
+<a href="{{path('interne_facture_model')}}">model facture </a><br>
+<a href="{{path('interne_facture_validation')}}"> Validation </a><br>
+<a href="{{path('interne_facture_statistics')}}">Stat </a><br>
+<a href="{{path('InterneGlobal_parametre', {'groupe' : 'facture'} )}}">Parametres </a><br>
+
+
+
+TO DO LIST
+<ul>
+    <li>statistique</li>
+    <li></li>
+    <li>l'algo de recherche avec inclusion des onetomany</li>
+    <li>action en masse depuis le formulaire de recherche</li>
+    <li></li>
+    <li>télécharger la librairie pour les graphiques de stat</li>
+    <li></li>
+    <li></li>
+
+
+</ul>
+
+
+    {% include "InterneFactureBundle:Default:modeEmploi.html.twig" %}
+
+
+{% endblock %}

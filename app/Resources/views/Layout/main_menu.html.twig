@@ -1,0 +1,101 @@
+
+<div class="item">
+    <a class="ui logo icon image" href="#">
+        {% image '@AppBundle/Resources/public/images/logo.png' %}
+        <img src="{{ asset_url }}" id="main-logo" alt="Logo" />
+        {% endimage %}
+    </a>
+    <a><b>NetBS</b></a>
+</div>
+
+<div class="item">
+    <div class="ui small inverted icon input">
+        <input id="menu-search" type="text" placeholder="Rechercher">
+        <i class="search icon"></i>
+    </div>
+</div>
+
+<div class="item">
+    <div class="ui small inverted header">Session</div>
+    <div class="menu">
+
+        <a class="item" href="/globals/reset.html">
+            Déconnexion
+
+        </a>
+
+        <a class="item" href="/globals/site.html">
+            Réinitialiser
+        </a>
+
+    </div>
+</div>
+
+<div class="item">
+    <div class="ui small active  inverted header">Intranet</div>
+    <div class="menu">
+
+        <a class="item" href="#">
+            Accueil
+        </a>
+
+        <a class="item" href="#">
+            News
+        </a>
+
+        <a class="item" href="#">
+            Agenda
+        </a>
+
+        <a class="item" href="#">
+            Téléchargement
+        </a>
+
+    </div>
+</div>
+
+<div class="item">
+    <div class="ui small inverted header">Base de donnée</div>
+    <div class="menu">
+
+        <a class="item" href="{{ path('interne_ajouter_membre') }}">
+            Ajouter un membre
+        </a>
+
+        <a class="item" href="#">
+            Rechercher
+        </a>
+
+        <a class="item" href="{{ path('listing_vue_globale') }}">
+            Listes personnalisées
+            <span class="ui mini empty green circular ui label"></span>
+        </a>
+
+    </div>
+</div>
+
+<div class="item">
+    <div class="ui small  inverted header">Unité(s)</div>
+    <div class="menu">
+
+        <a class="item" href="#">
+            Montfort
+        </a>
+
+    </div>
+</div>
+
+<div class="item">
+    <div class="ui small  inverted header">Paramètres</div>
+    <div class="menu">
+
+        <a class="item" href="{{ path('validation_vue_globale') }}">
+            Validation
+        </a>
+
+        <a class="item" href="#">
+            Paramètres avancés
+        </a>
+
+    </div>
+</div>

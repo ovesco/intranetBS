@@ -1,0 +1,80 @@
+{% extends 'form_div_layout.html.twig' %}
+
+{% use 'form_div_layout.html.twig' with form_label as base_form_label %}
+
+
+
+{% block form_row %}
+
+    {{ form_widget(form) }}
+{% endblock form_row %}
+
+
+{# label #}
+{% block form_label -%}
+    {{ block('base_form_label') }}
+{%- endblock form_label %}
+
+
+{# simple widget #}
+{% block form_widget_simple -%}
+
+    <tr>
+        {%- set type = type|default('text') -%}
+        <td>{{ block('form_label') }}</td>
+        <td data-type="text" {{ block('validation_block') }}>{% if value is not empty %}{{ value }}{% endif %}</td>
+    </tr>
+{%- endblock form_widget_simple %}
+
+{# textarea #}
+{% block textarea_widget -%}
+    <tr>
+        <td>{{ block('form_label') }}</td>
+        <td data-type="textarea" {{ block('validation_block') }}>{% if value is not empty %}{{ value }}{% endif %}</td>
+    </tr>
+{%- endblock textarea_widget %}
+
+{% block checkbox_widget -%}
+    <tr>
+        <td>{{ block('form_label') }}</td>
+        <td data-type="select" data-source="boolean" {{ block('validation_block') }}>
+            {% if value is not empty %}
+                {{ value|boolean }}
+            {% endif %}
+        </td>
+    </tr>
+{%- endblock checkbox_widget %}
+
+{# hidden #}
+{% block hidden_widget -%}
+    <input type="hidden" {{ block('widget_attributes') }} value="{% if value is not empty %}{{ value }}{% endif %}" />
+{%- endblock hidden_widget %}
+
+
+
+{% block datepicker_widget -%}
+    <tr>
+        <td>{{ block('form_label') }}</td>
+        <td data-type="datepicker" {{ block('validation_block') }}>{% if value is not empty %}{{ value|date('d.m.Y') }}{% endif %}</td>
+    </tr>
+{%- endblock datepicker_widget %}
+
+
+
+{% block genre_widget -%}
+    <tr>
+        <td>{{ block('form_label') }}</td>
+        <td data-type="select" data-source="gender" {{ block('validation_block') }}>{% if value == 'm' %}Homme{% else %}Femme{% endif %}</td>
+    </tr>
+{%- endblock genre_widget %}
+
+
+{#
+    validation_block
+    Génère les attributs class et data-path
+#}
+{% block validation_block -%}
+
+    {{ block('base_form_label')|validation }}
+
+{%- endblock validation_block %}

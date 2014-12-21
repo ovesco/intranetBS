@@ -1,0 +1,32 @@
+{% extends "InterneHomeBundle::layout.html.twig" %}
+
+{% form_theme modelForm 'InterneFichierBundle:Form:form_template.html.twig' %}
+
+
+{% block title %}Créer un model de facture{% endblock %}
+
+{% block body %}
+
+
+<div class="row">
+
+    <div class="col-lg-6">
+        <form class="form-horizontal" role="form" method="post" {{ form_enctype(modelForm) }}>
+            <div class="widget">
+
+                <div class="widget-title">
+                    <span>Créer un model de facture</span>
+                </div>
+
+                <div class="widget-content">
+
+
+                    {{ form_widget(modelForm) }}
+
+                    <input type="submit" class="btn btn-primary"/>
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

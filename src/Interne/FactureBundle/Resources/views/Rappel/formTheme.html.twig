@@ -1,0 +1,61 @@
+{% block form_row %}
+    {% spaceless %}
+        <div class="form-group form-group-sm">
+            {{ form_label(form) }}
+            <div class="col-sm-8">
+                <div class="well">
+                    {{ form_widget(form) }}
+                </div>
+            </div>
+        </div>
+
+
+
+    {% endspaceless %}
+{% endblock form_row %}
+
+{% block collection_widget %}
+    {% spaceless %}
+
+
+
+
+        <div class="rappelPrototype"  data-prototype="
+        {% filter escape %}
+             {{ _self.widget_perso(form.vars.prototype) }}
+        {% endfilter %}">
+            <table class="table table-bordered" id="rappelTable">
+                <thead>
+                <tr>
+                    <th>Date de création</th>
+                    <th>Frais de rappel</th>
+                </tr>
+                </thead>
+                <tbody>
+                {# on met la boucle for dans la div pour que formulaire comprenne #}
+                {% for rappel in form %}
+                    {{ _self.widget_perso(rappel) }}
+                {% endfor %}
+                </tbody>
+            </table>
+            <a href="#" class="addRappel">Ajouter un rappel</a>
+            <a href="#" class="deleteRappel">Supprimer le dernier rappel</a>
+        </div>
+
+
+
+
+
+
+    {% endspaceless %}
+{% endblock collection_widget %}
+
+{% macro widget_perso(form) %}
+
+    <tr>
+        <td>{{ form(form.date) }}</td>
+        <td>{{ form(form.frais) }}{{ form_rest(form) }}</td>
+    </tr>
+
+{% endmacro %}
+

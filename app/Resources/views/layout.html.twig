@@ -1,0 +1,115 @@
+
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>{% block titre %}{% endblock %} | netBS</title>
+    <meta name="description" content="NetBS | outil de gestion de groupe scout développé par la Brigade de Sauvabelin">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" href="{{ asset('semantic/semantic.min.css') }}">
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700,300&subset=latin,vietnamese' rel='stylesheet' type='text/css'>
+
+    {% stylesheets '@AppBundle/Resources/public/css/*' %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+
+    {% block css %}{% endblock %}
+
+</head>
+<body>
+
+<div id="main-menu" class="ui vertical inverted sidebar menu" id="menu">
+
+    {{ render(controller('AppBundle:Layout:mainMenuGenerate')) }}
+
+</div>
+
+
+<div class="pusher">
+
+    <div id="alerts-bag"></div>
+
+    <header>
+
+        <div>
+            <button class="header-button" id="main-menu-button">
+                <i class="big content icon"></i>
+            </button>
+
+            <div class="header-button dropdown-first-level ui dropdown icon">
+                <i class="big inbox icon"></i>
+                <div class="menu">
+                    <div class="item">
+                        <i class="plus icon"></i>
+                        Nouveau message
+                    </div>
+
+                    <div class="item">
+                        <i class="mail outline icon"></i>
+                        Boite de réception
+                    </div>
+                </div>
+            </div>
+
+            <h4><i class="user icon"></i> <span>netBS - </span>{{ block('titre') }}</h4>
+
+        </div>
+
+        <div class="center-section">
+            <div class="info">
+                <i class="large notched circle loading icon"></i>
+                <p>Message d'information</p>
+            </div>
+        </div>
+
+
+        <div class="right-section">
+
+                <a class="ui blue label"><i class="user icon"></i> Guillaume Hochet</a>
+
+        </div>
+
+    </header>
+
+        {% block content %}{% endblock %}
+
+</div>
+
+<div id="add-attributions-modal" class="ui modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Ajouter des attributions
+    </div>
+    <div class="content">
+        <div class="image">
+            An image can appear on left or an icon
+        </div>
+        <div class="description">
+            A description can appear on the right
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui button">Cancel</div>
+        <div class="ui button">OK</div>
+    </div>
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="{{ asset('semantic/semantic.min.js') }}"></script>
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+
+{% javascripts '@AppBundle/Resources/public/js/alwaysIncluded/*' %}
+<script src="{{ asset_url }}"></script>
+{% endjavascripts %}
+
+{% javascripts '@AppBundle/Resources/public/js/layout.js' %}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+
+{% block js %}{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,459 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Proxies\__CG__\AppBundle\Entity\Fonction;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * Membre
+ * @ORM\Entity
+ * @ORM\Table(name="app_membres")
+ */
+class Membre extends Personne
+{
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var Famille
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Famille", inversedBy="membres")
+     * @ORM\JoinColumn(name="famille_id", referencedColumnName="id")
+     */
+    private $famille;
+
+    /**
+     * @var array
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Attribution", mappedBy="membre", cascade={"persist", "remove"})
+     */
+    private $attributions;
+
+    /**
+     * @var array
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ObtentionDistinction", mappedBy="membre", cascade={"persist", "remove"})
+     */
+    private $distinctions;
+
+    /**
+     * @var date
+     *
+     * @ORM\Column(name="naissance", type="date")
+     */
+    private $naissance;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="numero_bs", type="integer", nullable=true)
+     */
+    private $numeroBs;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numero_avs", type="string", length=255, nullable=true)
+     */
+    private $numeroAvs;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="statut", type="string", length=255, nullable=true)
+     */
+    private $statut;
+
+    /**
+     * @var date
+     *
+     * @ORM\Column(name="inscription", type="date")
+     */
+    private $inscription;
+
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="remarques", type="text", nullable=true)
+     */
+    private $remarques;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="validity", type="integer")
+     */
+    private $validity;
+
+
+    public function __construct()
+    {
+        $this->inscription = new \Datetime();
+        $this->naissance   = new \Datetime();
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set id
+     *
+     * @param integer $id
+     * @return Membre
+     */
+    public function setId($id) {
+
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * Set famille
+     *
+     * @param Famille $famille
+     * @return Membre
+     */
+    public function setFamille($famille)
+    {
+        $this->famille = $famille;
+
+        return $this;
+    }
+
+    /**
+     * Get famille
+     *
+     * @return Famille
+     */
+    public function getFamille()
+    {
+        return $this->famille;
+    }
+
+
+    /**
+     * Get nom
+     *
+     * @return string
+     */
+    public function getNom()
+    {
+
+        if ($this->getFamille() != null)
+            return $this->getFamille()->getNom();
+        else
+            return "Pas dans une famille...";
+    }
+
+
+    /**
+     * Set distinctions
+     *
+     * @param array $distinctions
+     * @return Membre
+     */
+    public function setDistinctions($distinctions)
+    {
+        $this->distinctions = $distinctions;
+
+        return $this;
+    }
+
+    /**
+     * Get distinctions
+     *
+     * @return array
+     */
+    public function getDistinctions()
+    {
+        return $this->distinctions;
+    }
+
+    /**
+     * Set numeroBs
+     *
+     * @param integer $numeroBs
+     * @return Membre
+     */
+    public function setNumeroBs($numeroBs)
+    {
+        $this->numeroBs = $numeroBs;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroBs
+     *
+     * @return integer
+     */
+    public function getNumeroBs()
+    {
+        return $this->numeroBs;
+    }
+
+    /**
+     * Set numeroAvs
+     *
+     * @param string $numeroAvs
+     * @return Membre
+     */
+    public function setNumeroAvs($numeroAvs)
+    {
+        $this->numeroAvs = $numeroAvs;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroAvs
+     *
+     * @return string
+     */
+    public function getNumeroAvs()
+    {
+        return $this->numeroAvs;
+    }
+
+    /**
+     * Set statut
+     *
+     * @param string $statut
+     * @return Membre
+     */
+    public function setStatut($statut)
+    {
+        $this->statut = $statut;
+
+        return $this;
+    }
+
+    /**
+     * Get statut
+     *
+     * @return string
+     */
+    public function getStatut()
+    {
+        return $this->statut;
+    }
+
+
+    /**
+     * Set naissance
+     *
+     * @param \DateTime $naissance
+     * @return Membre
+     */
+    public function setNaissance($naissance)
+    {
+        $this->naissance = $naissance;
+
+        return $this;
+    }
+
+    /**
+     * Get naissance
+     *
+     * @return \DateTime
+     */
+    public function getNaissance()
+    {
+        return $this->naissance;
+    }
+
+    /**
+     * Set inscription
+     *
+     * @param \DateTime $inscription
+     * @return Membre
+     */
+    public function setInscription($inscription)
+    {
+        $this->inscription = $inscription;
+
+        return $this;
+    }
+
+    /**
+     * Get inscription
+     *
+     * @return \DateTime
+     */
+    public function getInscription()
+    {
+        return $this->inscription;
+    }
+
+
+    /**
+     * Add attributions
+     *
+     * @param \AppBundle\Entity\Attribution $attributions
+     * @return Membre
+     */
+    public function addAttribution(\AppBundle\Entity\Attribution $attributions)
+    {
+        $this->attributions[] = $attributions;
+        $attributions->setMembre($this);
+        return $this;
+    }
+
+    /**
+     * Remove attributions
+     *
+     * @param \AppBundle\Entity\Attribution $attributions
+     */
+    public function removeAttribution(\AppBundle\Entity\Attribution $attributions)
+    {
+        $this->attributions->removeElement($attributions);
+    }
+
+    /**
+     * Get attributions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAttributions()
+    {
+        return $this->attributions;
+    }
+
+
+    /**
+     * Get active attributions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActiveAttributions()
+    {
+        $attrs = array();
+        $today = new \Datetime("now");
+
+        foreach($this->attributions as $attr) {
+
+            if($attr->getDateFin() >= $today || $attr->getDateFin() == null)
+                $attrs[] = $attr;
+        }
+
+        return $attrs;
+    }
+
+    /**
+     * Retourne la première attribution active si elle existe, en renvoie une vide sinon pour simplifier l'affichage
+     */
+    public function getActiveAttribution() {
+
+        $today = new \Datetime("now");
+        foreach($this->attributions as $attr) {
+
+            if($attr->getDateFin() >= $today || $attr->getDateFin() == null)
+                return $attr;
+        }
+
+        $empty = new Attribution;
+        $empty->setFonction(new Fonction());
+        $empty->setGroupe(new Groupe());
+
+        return $empty;
+    }
+
+    /**
+     * Set remarques
+     *
+     * @param $remarques
+     * @return Membre
+     */
+    public function setRemarques($remarques)
+    {
+        $this->remarques = $remarques;
+
+        return $this;
+    }
+
+    /**
+     * Get remarques
+     *
+     * @return string
+     */
+    public function getRemarques()
+    {
+        return $this->remarques;
+    }
+
+
+    /**
+     * Add distinction
+     *
+     * @param \AppBundle\Entity\ObtentionDistinction $distinction
+     * @return Membre
+     */
+    public function addDistinction(\AppBundle\Entity\ObtentionDistinction $distinction)
+    {
+        $this->distinctions[] = $distinction;
+        $distinction->setMembre($this);
+        return $this;
+    }
+
+    /**
+     * Remove distinction
+     *
+     * @param \AppBundle\Entity\ObtentionDistinction $distinction
+     */
+    public function removeDistinction(\AppBundle\Entity\ObtentionDistinction $distinction)
+    {
+        $this->distinctions->removeElement($distinction);
+    }
+
+    /**
+     * Retourne l'adresse principale suivant le schéma membre -> famille -> mere -> pere en s'arrêtant
+     * à la première facturable
+     * @return Adresse
+     */
+    public function getAdressePrincipale() {
+
+        //On commence par récupérer la première adresse potentielle
+        $potentiel = null;
+
+        $adresses = array(
+            'membre' => $this->getAdresse(),
+            'famille' => $this->getFamille()->getAdresse(),
+            'mere' => ($this->getFamille()->getMere() == null) ? null : $this->getFamille()->getMere()->getAdresse(),
+            'pere' => ($this->getFamille()->getPere() == null) ? null : $this->getFamille()->getPere()->getAdresse()
+        );
+
+        foreach($adresses as $k => $adresse) {
+
+            if(!is_null($adresse)) {
+
+                if ($adresse->getFacturable() == true) {
+
+                    return array('adresse' => $adresse, 'origine' => $k);
+                }
+
+                if ($potentiel == null)
+                    $potentiel = array('adresse' => $adresse, 'origine' => $k);
+            }
+
+        }
+
+        return $potentiel;
+
+    }
+}

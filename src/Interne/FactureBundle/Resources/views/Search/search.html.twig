@@ -1,0 +1,27 @@
+{% extends "InterneHomeBundle::layout.html.twig" %}
+
+
+{% block title %}Rechercher de factures et de cérances{% endblock %}
+
+{% block body %}
+
+
+
+    {% include "InterneFactureBundle:Search:results.html.twig" with {'factures': factures, 'creances':creances} %}
+
+    {% include "InterneFactureBundle:Search:searchForm.html.twig" with {'formFacture': formFacture, 'formCreance':formCreance} %}
+
+
+
+{% endblock %}
+
+{% block javascript %}
+
+    {% javascripts '@InterneFactureBundle/Resources/public/js/search.js'
+                    '@InterneFactureBundle/Resources/public/js/creance.js'%}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+
+
+{% endblock %}

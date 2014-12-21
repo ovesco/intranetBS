@@ -1,0 +1,74 @@
+
+
+<div class="modal fade" id="modal-add-creance" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+
+                {% if ownerEntity == null %}
+                    <h4 class="modal-title" >Ajouter une créance en masse</h4>
+
+                {% elseif ownerEntity.isClass('Membre') %}
+                    <h4 class="modal-title" >Ajouter une créance au membre</h4>
+
+                {% elseif ownerEntity.isClass('Famille') %}
+                    <h4 class="modal-title" >Ajouter une créance à la famille</h4>
+
+                {% endif %}
+
+
+            </div>
+            <div class="modal-body" style="overflow-y:auto">
+
+                {% form_theme creanceForm 'InterneFichierBundle:Form:form_template.html.twig' %}
+
+                {{ form_start(creanceForm, {'attr': {'id': 'addCreanceForm'}}) }}
+                {{ form_row(creanceForm.titre) }}
+                {{ form_row(creanceForm.remarque) }}
+                {{ form_row(creanceForm.montantEmis) }}
+
+
+
+
+
+                {{ form_rest(creanceForm) }}
+                {{ form_end(creanceForm) }}
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+
+                {% if ownerEntity == null %}
+
+                    <input type="hidden" id="adder-membres-ids">
+
+                    <button type="button" onclick="adderAddCreances();" class="btn btn-primary">Valider</button>
+
+
+
+
+                {% elseif ownerEntity.isClass('Membre') %}
+
+                    <button type="button" onclick="addCreance();" class="btn btn-primary">Valider</button>
+
+
+                {% elseif ownerEntity.isClass('Famille') %}
+
+                    <button type="button" onclick="" class="btn btn-primary">Valider</button>
+
+                {% endif %}
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

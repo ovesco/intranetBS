@@ -1,0 +1,188 @@
+{% for result in results %}
+    <tr>
+        <td>{{ result.factureReceived.id }}</td>
+        <td>{{ result.factureReceived.datePayement|date("d/m/Y") }}</td>
+        <td>{{ result.factureReceived.montantRecu|number_format(2, '.', ',') }}</td>
+
+
+        {% if result.validationStatut == 'NotFound' %}
+            <td colspan="2">Facture inexistante</td>
+            <td></td>
+            <td>
+                <span class="label label-danger">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </span>
+            </td>
+            <td>
+                <button class="btn btn-info btn-xs">
+                    <div data-state="not_found"
+                         onclick="validation(this)">
+                        Ignorer
+                    </div>
+                </button>
+            </td>
+        {% else %}
+            <td>{{ result.factureFound.montantTotal|number_format(2, '.', ',') }}</td>
+
+            {% if result.factureFound.statut == 'ouverte' %}
+                <td>
+                <span class="label label-info">
+                    Ouverte
+                </span>
+                </td>
+            {% elseif result.factureFound.statut == 'payee' %}
+                <td>
+                <span class="label label-success">
+                    Payée
+                </span>
+                </td>
+            {% else %}
+                <td>
+                </td>
+            {% endif %}
+
+            {% if result.validationStatut == 'Found:Valid' %}
+                <td></td>
+                <td>
+                    <span class="label label-success">
+                        <span class="glyphicon glyphicon-ok"></span>
+                    </span>
+                </td>
+                <td>
+                    <button class="btn btn-info  btn-xs">
+                        <div data-idfacture="{{ result.factureFound.id }}"
+                             data-montantrecu="{{ result.factureReceived.montantRecu|number_format(2, '.', ',') }}"
+                             data-datepayement="{{ result.factureReceived.datePayement|date("m/d/Y") }}"
+                             data-state="found_valid"
+                             onclick="validation(this)">
+                            Valider
+                        </div>
+                    </button>
+                </td>
+            {% elseif result.validationStatut == 'Found:Upper' %}
+                <td></td>
+                <td>
+                    <span class="label label-info">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </span>
+                </td>
+                <td>
+                    <button class="btn btn-info btn-xs">
+                        <div data-idfacture="{{ result.factureFound.id }}"
+                             data-montantrecu="{{ result.factureReceived.montantRecu|number_format(2, '.', ',') }}"
+                             data-datepayement="{{ result.factureReceived.datePayement|date("m/d/Y") }}"
+                             data-state="found_upper"
+                             onclick="validation(this)">
+                            Valider
+                        </div>
+                    </button>
+                </td>
+            {% elseif result.validationStatut == 'Found:Lower' %}
+                <td>
+
+                    <table class="table" id="repartitionMontantsTable">
+                        <thead>
+                            <tr>
+                                <td>Titre</td>
+                                <td>Montant</td>
+                                <td>valider</td>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                        {% for creance in result.factureFound.creances %}
+                            <tr>
+                                <td>{{ creance.titre }}</td>
+                                <td>{{ creance.montantEmis|number_format(2, '.', ',') }}</td>
+                                <td><input onchange="modifySolde(this);" type="number" name="{{ creance.id }}" value="0"> </td>
+                            </tr>
+
+                        {% endfor %}
+                        <tr>
+                            <td>Frais de rappel</td>
+                            <td>{{ result.factureFound.fraisRappel|number_format(2, '.', ',') }}</td>
+                            <td><input onchange="modifySolde(this);" type="number" name="frais_rappel" value="0"> </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Montant à répartir</td>
+                            <td class="montantRecu" data-montantrecu="{{ result.factureReceived.montantRecu}}">
+                                {{ result.factureReceived.montantRecu|number_format(2, '.', ',') }}
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+
+
+                </td>
+
+
+                <td>
+                    <span class="label label-danger">
+                        <span class="glyphicon glyphicon-minus"></span>
+                    </span>
+
+                </td>
+                <td>
+
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-info btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            Valider <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="#">
+                                    <div data-idfacture="{{ result.factureFound.id }}"
+                                         data-montantrecu="{{ result.factureReceived.montantRecu }}"
+                                         data-datepayement="{{ result.factureReceived.datePayement|date("m/d/Y") }}"
+                                         data-state="found_lower_valid"
+                                         onclick="validation(this)">
+                                        Valider
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="#">
+                                    <div data-idfacture="{{ result.factureFound.id }}"
+                                         data-montantrecu="{{ result.factureReceived.montantRecu }}"
+                                         data-datepayement="{{ result.factureReceived.datePayement|date("m/d/Y") }}"
+                                         data-state="found_lower_new_facture"
+                                         onclick="validation(this)">
+                                        Valider et crée <br>une facture de <br>complément
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            {% elseif result.validationStatut == 'Found:AlreadyPayed' %}
+                <td></td>
+                <td>
+                    <span class="label label-danger">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </span>
+                </td>
+                <td>
+                    <button class="btn btn-info btn-xs" >
+                        <div data-state="found_already_payed"
+                             onclick="validation(this)">
+                            Ignorer
+                        </div>
+                    </button>
+                </td>
+            {% else %}
+                <td></td>
+                <td></td>
+            {% endif %}
+
+
+        {% endif %}
+
+
+
+
+
+    </tr>
+{% endfor %}
+

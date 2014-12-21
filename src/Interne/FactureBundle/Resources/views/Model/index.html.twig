@@ -1,0 +1,79 @@
+{% extends "InterneHomeBundle::layout.html.twig" %}
+
+{% block title %}Model de facture{% endblock %}
+
+
+{% block body %}
+
+
+
+    <div class="row">
+
+        <div class="col-lg-6">
+            <div class="widget">
+
+                <div class="widget-title">
+                    <span>Liste des models de facture</span>
+                    <div class="widget-toolbar">
+                        <button class="datatables-options">
+                            <a href="{{path('interne_facture_model_create')}}">
+                                Nouveaux model
+                            </a>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="widget-content">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>Titre</th>
+                            <th>Remarque</th>
+                            <th>Montant émis</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+
+                        {% for model in models %}
+
+                            <tr>
+                                <td>
+                                    <a href="{{path('interne_facture_model_update', {'id' : model.id} ) }}">
+                                        <span class="glyphicon glyphicon-pencil" infobulle="Editer"></span>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{{path('interne_facture_model_show', {'id' : model.id} ) }}">
+                                        <span class="glyphicon glyphicon-zoom-in" infobulle="Afficher"></span>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{{path('interne_facture_model_delete', {'id' : model.id} ) }}">
+                                        <span class="glyphicon glyphicon-trash" infobulle="Supprimer"></span>
+                                    </a>
+                                </td>
+                                <td>{{ model.titre }}</td>
+                                <td>{{ model.remarque }}</td>
+                                <td>{{ model.montantEmis }}</td>
+                            </tr>
+
+                        {% endfor %}
+
+
+                        </tbody>
+
+                    </table>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,15 @@
+interne_facture_validation:
+    path:     /
+    defaults: { _controller: InterneFactureBundle:validation:index }
+
+interne_facture_validation_ajax:
+    path:     /ajax
+    defaults: { _controller: InterneFactureBundle:validation:validationAjax }
+
+interne_facture_validation_add_manualy_ajax:
+    path:     /add_manualy_ajax
+    defaults: { _controller: InterneFactureBundle:validation:addManualyAjax }
+
+interne_facture_validation_upload_file_ajax:
+    path:     /upload_file_ajax
+    defaults: { _controller: InterneFactureBundle:validation:uploadFileAjax }

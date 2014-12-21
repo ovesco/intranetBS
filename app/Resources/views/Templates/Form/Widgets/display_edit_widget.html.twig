@@ -1,0 +1,35 @@
+{# simple widget #}
+{% block form_widget_simple -%}
+    <a href="#" {{ block('widget_attributes') }} data-type="text" class="editable">{% if value is not empty %}{{ value }}{% endif %}</a>
+{%- endblock form_widget_simple %}
+
+{% block genre_widget -%}
+    <a {{ block('widget_attributes') }} source="[{value:'m', text:'Homme'},{value:'f', text:'Femme'}]" href="#" data-type="select" class="editable"></a>
+{%- endblock genre_widget -%}
+
+{# choice widget #}
+{% block choice_widget -%}
+    <a {{ block('widget_attributes') }} source="" data-type="select" class="editable"></a>
+{%- endblock choice_widget %}
+
+{# textarea #}
+{% block textarea_widget -%}
+        <a {{ block('widget_attributes') }} data-type="textarea" href="#">{% if value is not empty %}{{ value }}{% endif %}</a>
+    </div>
+{%- endblock textarea_widget %}
+
+{% block checkbox_widget -%}
+        <a href="#" data-type="select" {{ block('widget_attributes') }} source="[{value:0, text:'Nom'},{value:1, text:'Oui'}]" type="checkbox">
+    </div>
+{%- endblock checkbox_widget %}
+
+{# hidden #}
+{% block hidden_widget -%}
+    <input type="hidden" {{ block('widget_attributes') }} value="{% if value is not empty %}{{ value }}{% endif %}" />
+{%- endblock hidden_widget %}
+
+{# datepicker #}
+{% block datepicker_widget -%}
+        <a data-type="date" {{ block('widget_attributes') }} class="editable">{% if value is not empty %}{{ value }}{% endif %}</a>
+    </div>
+{%- endblock datepicker_widget %}

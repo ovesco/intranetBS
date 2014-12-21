@@ -1,0 +1,19 @@
+interne_facture_model:
+    path:     /
+    defaults: { _controller: InterneFactureBundle:model:index }
+
+interne_facture_model_create:
+    path:     /create
+    defaults: { _controller: InterneFactureBundle:model:create }
+
+interne_facture_model_update:
+    path:     /update/{id}
+    defaults: { _controller: InterneFactureBundle:model:update }
+
+interne_facture_model_show:
+    path:     /show/{id}
+    defaults: { _controller: InterneFactureBundle:model:show }
+
+interne_facture_model_delete:
+    path:     /delete/{id}
+    defaults: { _controller: InterneFactureBundle:model:delete }

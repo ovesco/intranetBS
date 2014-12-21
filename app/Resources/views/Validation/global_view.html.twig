@@ -1,0 +1,86 @@
+{% extends 'layout.html.twig' %}
+
+{% block titre %}Validation{% endblock %}
+
+{% block content %}
+
+    <div class="ui page grid">
+        <div class="column">
+            <h1>Gestion des modifications et validation</h1>
+
+            <div class="ui segment">
+                <h3>Eléments modifiés</h3>
+
+                <table class="ui table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Nombre</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for container in containers %}
+                            <tr class="container-row" data-id="{{ container.id }}">
+                                <td>{{ container.class }}</td>
+                                <td>{{ container.modifications|length }}</td>
+                                <td>
+                                    <a href="{{ path('validation_cancel_container', {container: container.id}) }}" class="ui circular mini icon red button popupable" data-content="Tout Supprimer"><i class="remove icon"></i></a>
+                                    <a href="{{ path('validation_approve_container', {container: container.id}) }}" class="ui circular mini icon green button popupable" data-content="Tout valider"><i class="checkmark icon"></i></a>
+                                </td>
+                            </tr>
+                            <tr class="hidden-tr">
+                                <td colspan="3">
+                                    <h4>Modifications liées</h4>
+                                    <table class="ui stripped table">
+                                        <thead>
+                                            <tr>
+                                                <th>Cheminement</th>
+                                                <th>Date</th>
+                                                <th>Modificateur</th>
+                                                <th>Ancienne valeur</th>
+                                                <th>Nouvelle valeur</th>
+                                                <th>Options</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for modif in container.modifications %}
+                                            <tr>
+                                                <td>{{ modif.path }}</td>
+                                                <td>{{ modif.date|date('d.m.Y') }}</td>
+                                                <td></td>
+                                                <td>{{ modif.oldValue|parser('default') }}</td>
+                                                <td>{{ modif.newValue|parser('default') }}</td>
+                                                <td>
+                                                    <a href="{{ path('validation_cancel_modification', {modification:modif.id}) }}" class="ui circular mini icon red button popupable"><i class="remove icon"></i></a>
+                                                    <a href="{{ path('validation_approve_modification', {modification:modif.id}) }}" class="ui circular mini icon green button popupable"><i class="checkmark icon"></i></a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <h3>Eléments ajoutés</h3>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+
+    <script type="text/javascript">
+        $('.container-row').click(function() {
+
+            $(this).toggleClass('selected');
+            $(this).next().toggle();
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,71 @@
+
+{# simple widget #}
+{% block form_widget_simple -%}
+    <div class="field">
+        {%- set type = type|default('text') -%}
+        {{ block('form_label') }}
+        <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+    </div>
+{%- endblock form_widget_simple %}
+
+
+{# choice widget #}
+{% block choice_widget -%}
+    {% if required and empty_value is none and not empty_value_in_choices and not multiple %}
+        {% set required = false %}
+    {% endif %}
+
+    <div class="field">
+        {{ block('form_label') }}
+        <select class="ui dropdown" {{ block('widget_attributes') }}>
+            {% if empty_value is not none -%}
+                <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ empty_value|trans({}, translation_domain) }}</option>
+            {%- endif %}
+            {%- if preferred_choices|length > 0 -%}
+                {% set options = preferred_choices %}
+                {{- block('choice_widget_options') -}}
+                {% if choices|length > 0 and separator is not none -%}
+                    <option disabled="disabled">{{ separator }}</option>
+                {%- endif %}
+            {%- endif -%}
+            {% set options = choices -%}
+            {{- block('choice_widget_options') -}}
+        </select>
+    </div>
+{%- endblock choice_widget %}
+
+{# label #}
+{% block form_label -%}
+    {% if label is not sameas(false) %}
+        {%- if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif -%}
+        {%- if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif -%}
+        {%- if label is empty -%}
+            {% set label = name|humanize %}
+        {%- endif -%}
+        <label {% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label|trans({}, translation_domain) }}</label>
+    {%- endif %}
+{%- endblock form_label %}
+
+{# textarea #}
+{% block textarea_widget -%}
+    <div class="field">
+        {{ block('form_label') }}
+        <textarea {{ block('widget_attributes') }}>{% if value is not empty %}{{ value }}{% endif %}</textarea>
+    </div>
+{%- endblock textarea_widget %}
+
+{% block checkbox_widget -%}
+    <div class="ui checkbox">
+        <input {{ block('widget_attributes') }} type="checkbox">
+        {{ block('form_label') }}
+    </div>
+{%- endblock checkbox_widget %}
+
+{# hidden #}
+{% block hidden_widget -%}
+    <input type="hidden" {{ block('widget_attributes') }} value="{% if value is not empty %}{{ value }}{% endif %}" />
+{%- endblock hidden_widget %}

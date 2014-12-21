@@ -1,0 +1,359 @@
+{% extends 'layout.html.twig' %}
+
+{% block titre %}{{ groupe.nom }}{% endblock %}
+
+{% block content %}
+
+    <div class="ui page grid">
+        <div class="row">
+            <div class="column">
+                <div class="ui segment">
+
+                    {%  if groupe.type.nom|lower == 'troupe'
+                    or groupe.type.nom|lower == 'meute'
+                    or groupe.type.nom|lower == 'clan'
+                    or groupe.type.nom|lower == 'sizaine'
+                    or groupe.type.nom|lower == 'patrouille'
+                    %}
+                        <div class="ui right floated basic segment">
+                            <br/>
+
+                            <div class="ui circular icon top left pointing dropdown mini blue button">
+                                <i class="external link icon"></i>
+                                <div class="menu">
+                                    <div class="header">Exporter</div>
+                                    <div class="item"><i class="file pdf outline icon"></i> Exporter en PDF</div>
+                                    <div class="item"><i class="file excel outline icon"></i> Exporter en Excel</div>
+                                    <div class="item"><i class="grid layout icon"></i> Génerer les étiquettes</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    {% endif %}
+
+                    <h1>{{ groupe.nom|capitalize }}</h1>
+
+                    <div class="ui vertical segment">
+
+                        {% if groupe.parentsRecursive|length > 1 %}
+                            <div class="ui left rail">
+                                <div class="ui segment">
+                                    <h3 class="ui header">Hierarchie</h3>
+                                    <div class="hierarchie-groupe">
+                                        {% for parent in groupe.parentsRecursive %}
+                                            {% if groupe.id != parent.id %}
+                                                <a href="{{ path('interne_voir_groupe', {groupe: parent.id}) }}" class="item">{{ parent.nom }}</a>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {#
+                            EFFECTIFS
+                            =========
+                            Cette partie s'affiche seulement si le type du groupe est 'meute' ou 'troupe'. On affiche alors
+                            les effectifs totaux de l'unité, ainsi que ceux des sous-unités
+                        #}
+                        {% if groupe.type.nom|lower == 'troupe' or groupe.type.nom|lower == 'meute' %}
+
+                            <div class="ui right rail">
+                                <div class="ui segment">
+                                    <h3 class="ui header">Effectifs</h3>
+
+                                    <div class="ui divided list">
+
+                                        <a class="item">
+                                            <div class="right floated ui blue circular label">{{ groupe.membersRecursive|length }}</div>
+                                            <div class="content">
+                                                <p class="header">{{ groupe.nom }}</p>
+                                            </div>
+                                        </a>
+
+                                        {% for enfant in groupe.enfants %}
+                                        <a href="{{ path('interne_voir_groupe', {groupe: enfant.id}) }}" class="item">
+                                            <div class="right floated ui blue circular label">{{ enfant.members|length }}</div>
+                                            <div class="content">
+                                                <p>{{ enfant.nom }}</p>
+                                            </div>
+                                        </a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {#
+                                On affiche également l'EM de la troupe/meute. Pour cela il existe la méthode getEm qui retourne les
+                                chefs dans l'unité. On utilise ensuite le nom du type pour bien afficher les éléments
+                            #}
+                            <div class="ui vertical segment">
+
+                                <div class="ui grid">
+                                    <div class="eight wide column">
+
+                                        <h3>EM supp</h3>
+
+                                        {#
+                                            Le groupe est soit une troupe soit une meute. On peut donc appeler la fonction getEm
+                                            cu = chef d'unité
+                                            cua = adjoint au chef d'unité (CTA, CMA)
+                                        #}
+                                        <table class="ui definition table">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Chef de {{ groupe.type.nom|lower }}</td>
+                                                    <td>
+                                                        {% if groupe.em['cu'] is not null %}
+                                                            {{ groupe.em['cu'].prenom|capitalize }} {{ groupe.em['cu'].nom|capitalize }}
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+
+                                                {% if groupe.em['cua'] is not null %}
+                                                    <tr>
+                                                        <td>Adjoint chef de {{ groupe.type.nom|lower }}</td>
+                                                        <td>{{ groupe.em['cua'].prenom|capitalize }} {{ groupe.em['cua'].nom|capitalize }}</td>
+                                                    </tr>
+                                                {% endif %}
+
+                                                {% for adjoint in groupe.em['adjoints'] %}
+                                                    <tr>
+                                                        <td>Adjoint</td>
+                                                        <td>{{ adjoint.prenom|capitalize }} {{ adjoint.nom|capitalize }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                    <div class="eight wide column">
+
+                                        <h3>Chefs de sous-unités</h3>
+                                        {#
+                                            On affiche également les CP/CS de la troupe/meute
+                                        #}
+                                        {% if groupe.em['c']|length > 0 %}
+                                            <table class="ui definition table">
+                                                <tbody>
+                                                {% for chef in groupe.em['c'] %}
+                                                    <tr>
+                                                        <td>{{ chef.activeAttribution.groupe.nom }}</td>
+                                                        <td>{{ chef.prenom|capitalize }} {{ chef.nom|capitalize }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% else %}
+
+                        {#
+                            PAS UNE MEUTE/TROUPE
+                            ====================
+                            On a pas grand chose a afficher du coup, le chef principal, les effectifs totaux, les sous-groupes
+                            directs.
+                        #}
+                        <div class="ui grid">
+                            <div class="six wide column">
+
+                                <table class="ui definition table">
+                                    <tbody>
+                                    {% if groupe.chef is not null %}
+                                        <tr>
+                                            <td>Chef</td>
+                                            <td><a href="{{ path('interne_voir_membre', {membre:groupe.chef.id}) }}">{{ groupe.chef.prenom|capitalize }} {{ groupe.chef.nom|capitalize }}</a></td>
+                                        </tr>
+                                    {% endif %}
+                                    <tr>
+                                        <td>Type</td>
+                                        <td>{{ groupe.type.nom }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Effectifs directs</td>
+                                        <td>{{ groupe.members|length }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                        {% endif %}
+
+
+                        {#
+                            En fonction du type
+                            On affiche la liste des membres du groupe de manière recusive, avec les groupes enfants
+                         #}
+                        {%  if groupe.type.nom|lower == 'troupe'
+                            or groupe.type.nom|lower == 'meute'
+                            or groupe.type.nom|lower == 'clan'
+                            or groupe.type.nom|lower == 'sizaine'
+                            or groupe.type.nom|lower == 'patrouille'
+                        %}
+                            <div class="ui vertical segment">
+
+                                <h3>Effectifs détaillés</h3>
+                                <table class="ui table" id="effectifs-table">
+                                    <thead>
+                                        <tr>
+                                            <th>nom</th>
+                                            <th>fonction</th>
+                                            <th>naissance</th>
+                                            <th>numéro BS</th>
+                                            <th>options</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for membre in groupe.membersRecursive %}
+                                            <tr data-id="{{ membre.id }}">
+                                                <td>{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</td>
+                                                <td>{{ membre.activeAttribution.fonction.nom }}</td>
+                                                <td>{{ membre.naissance|date('d.m.Y') }}</td>
+                                                <td>{{ membre.numeroBs }}</td>
+                                                <td>
+                                                    <a href="{{ path('interne_voir_membre', {membre:membre.id}) }}" class="circular ui mini icon blue button popupable" data-content="Voir le membre"><i class="share icon"></i></a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+
+                                <div class="ui floating dropdown labeled icon green button">
+                                    <i class="list icon"></i>
+                                    Ajouter (<span class="listing-update">0</span>)
+                                    <div class="menu">
+                                        <div class="header">
+                                            Ajouter à une liste
+                                        </div>
+                                        {% for liste in listing.listes %}
+
+                                        <div class="item" onclick="addToListing('{{ liste.token }}');">
+                                            {{ liste.name }}
+                                            <span class="description">{{ liste.length }}</span>
+                                        </div>
+
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                <div onclick="deselectAll();" class="right floated ui labeled icon button">
+                                    <i class="minus icon"></i>
+                                    Tout désélectionner
+                                </div>
+
+                                <div onclick="selectAll();" class="right floated ui labeled icon button">
+                                    <i class="plus icon"></i>
+                                    Tout sélectionner
+                                </div>
+
+                            </div>
+
+                        {% else %}
+
+                            {#
+                                On affiche les groupes enfants directs pour pouvoir naviguer plus simplement entre les groupes
+                                et avoir quelque chose à afficher
+                            #}
+                            <div class="ui vertical segment">
+
+                                <h3>Groupes enfants</h3>
+
+                                <div class="ui buttons">
+                                    {% for enfant in groupe.enfants %}
+
+                                        <a href="{{ path('interne_voir_groupe', {groupe:enfant.id}) }}" class="ui labeled icon blue basic button">
+                                            <i class="users icon"></i>
+                                            {{ enfant.nom }}
+                                        </a>
+
+                                    {% endfor %}
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+
+        /**
+         * on initialise la datatable des effectifs dans le cas où on doit l'initialiser. On met également en place les
+         * différentes méthodes concernant le listing
+         */
+        var table = $('#effectifs-table').DataTable({
+            "sDom": '<f><"flex"<l><p>>',
+            "oLanguage": {
+                "sEmptyTable": "Aucun résultats",
+                "sSearch": "<span>Rechercher dans la liste :</span> _INPUT_",
+                "oPaginate": { "sFirst": "Suivant", "sLast": "Précédent", "sNext": ">", "sPrevious": "<" }
+            }
+        });
+
+        /**
+         * Si on sélectionne une ligne de la table
+         */
+        $('#effectifs-table').on( 'click', 'tr', function () {
+
+            $(this).toggleClass('selected');
+
+            //On met à jour les endroits où on affiche le nombre de ligne cliquées
+
+            var number = table.rows('.selected').data().length;
+            $('.listing-update').text(number);
+        } );
+
+
+        /**
+         * Permet d'ajouter les éléments sélectionnés au listing.
+         * @param token string le token de la liste choisie
+         */
+        function addToListing(token) {
+
+            var rows  = table.rows('.selected').nodes(),
+                ids   = [];
+
+            $(rows).each(function(i, obj) {
+
+                ids.push($(obj).attr("data-id"));
+            });
+
+            listing.addElements(token, ids);
+        }
+
+        /**
+         * permet de sélectionner tous les membres contenus dans la table datatable initialisée
+         */
+        function selectAll() {
+
+            $('#effectifs-table tr').addClass('selected');
+            var number  = table.rows('.selected').data().length;
+            $('.listing-update').text(number);
+        }
+
+        /**
+         * permet de désélectionner tous les membres contenus dans la table datatable initialisée
+         */
+        function deselectAll() {
+
+            $('#effectifs-table tr').removeClass('selected');
+            $('.listing-update').text(0);
+        }
+
+    </script>
+{% endblock %}

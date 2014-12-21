@@ -1,0 +1,418 @@
+{% form_theme formFacture 'InterneFichierBundle:Form:form_template.html.twig' %}
+{% form_theme formCreance 'InterneFichierBundle:Form:form_template.html.twig' %}
+
+{{ form_start(formFacture, {'attr': {'id': 'searchForm'}}) }}
+
+<div class="modal fade" id="modal-facture-searchForm" aria-hidden="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+            </button>
+
+
+            <h4 class="modal-title" >Effectuer une recherche</h4>
+
+            {{ form_widget(formCreance.searchOption)}}
+
+
+        </div>
+        <div class="modal-body" style="overflow-y:auto">
+
+
+
+
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Recherche sur les éléments de créance</div>
+                <div class="panel-body">
+
+
+                    {{ form_row(formCreance.titre) }}
+                    {{ form_row(formCreance.remarque) }}
+
+
+
+
+                    <div class="searchSwitch">
+                        {{ form_label(formCreance.montantEmis) }}
+                        <div class="optionSearch" >
+                            <div class="input-group">
+                                <table>
+                                    <tbody>
+                                    <tr>
+                                        <td>{{ form_widget(formCreance.montantEmis, { 'attr': {'placeholder': "Fixe"}}) }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-default btn-sm" onclick="searchSwitch(this);">
+                                                Intervale
+                                                <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="optionSearch" hidden>
+                            <div class="input-group">
+                                <table>
+                                    <tbody>
+                                    <tr>
+                                        <td>{{ form_widget(formCreance.montantEmisMaximum, { 'attr': {'placeholder': "De (maximum)"}}) }}</td>
+                                        <td>{{ form_widget(formCreance.montantEmisMinimum, { 'attr': {'placeholder': "à (minimum)"}}) }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-default btn-sm" onclick="searchSwitch(this);">
+                                                Fixe
+                                                <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="searchSwitch">
+                        {{ form_label(formCreance.montantRecu) }}
+                        <div class="optionSearch" >
+                            <div class="input-group">
+                                <table>
+                                    <tbody>
+                                    <tr>
+                                        <td>{{ form_widget(formCreance.montantRecu, { 'attr': {'placeholder': "Fixe"}}) }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-default btn-sm" onclick="searchSwitch(this);">
+                                                Intervale
+                                                <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="optionSearch" hidden>
+                            <div class="input-group">
+                                <table>
+                                    <tbody>
+                                    <tr>
+                                        <td>{{ form_widget(formCreance.montantRecuMaximum, { 'attr': {'placeholder': "De (maximum)"}}) }}</td>
+                                        <td>{{ form_widget(formCreance.montantRecuMinimum, { 'attr': {'placeholder': "à (minimum)"}}) }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-default btn-sm" onclick="searchSwitch(this);">
+                                                Fixe
+                                                <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="searchSwitch">
+                        {{ form_label(formCreance.dateCreation) }}
+                        <div class="optionSearch" >
+                            <div class="input-group">
+                                <table>
+                                    <tbody>
+                                    <tr>
+                                        <td>{{ form_widget(formCreance.dateCreation) }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-default btn-sm" onclick="searchSwitch(this);">
+                                                Intervale
+                                                <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="optionSearch" hidden>
+                            <div class="input-group">
+                                <table>
+                                    <tbody>
+                                    <tr>
+                                        <td>Du</td>
+                                        <td>{{ form_widget(formCreance.dateCreationMinimum) }}</td>
+                                        <td>au</td>
+                                        <td>{{ form_widget(formCreance.dateCreationMaximum) }}</td>
+
+                                        <td>
+                                            <button type="button" class="btn btn-default btn-sm" onclick="searchSwitch(this);">
+                                                Fixe
+                                                <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div onchange="switchFactureForm(this);">
+                        {{ form_row(formCreance.isLinkedToFacture) }}
+                    </div>
+
+
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td>
+                                Membre:
+                            </td>
+                            <td>
+                                {{ form_widget(formCreance.membreNom, { 'attr': {'placeholder': "Nom"}}) }}
+                            </td>
+                            <td>
+                                {{ form_widget(formCreance.membrePrenom, { 'attr': {'placeholder': "Prenom"}}) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                {{ form_label(formCreance.familleNom) }}
+                            </td>
+                            <td>
+                                {{ form_widget(formCreance.familleNom, { 'attr': {'placeholder': "Nom"}}) }}
+                            </td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+
+
+
+                </div>
+            </div>
+
+
+
+
+
+                <div class="panel panel-default" id="searchFactureForm">
+                    <div class="panel-heading">Recherche sur les éléments de facture</div>
+                    <div class="panel-body">
+
+                                    {{ form_row(formFacture.id) }}
+                                    {{ form_row(formFacture.statut) }}
+
+
+
+
+                        <div class="searchSwitch">
+                            {{ form_label(formFacture.montantTotal) }}
+                            <div class="col-sm-8">
+                                <div class="optionSearch" >
+                                    <div class="input-group">
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td>{{ form_widget(formFacture.montantTotal, { 'attr': {'placeholder': "Fixe"}}) }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-default btn-sm" onclick="searchSwitch(this);">
+                                                        Intervale
+                                                        <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="optionSearch" hidden>
+                                    <div class="input-group">
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td>{{ form_widget(formFacture.montantRecuMaximum, { 'attr': {'placeholder': "De (maximum)"}}) }}</td>
+                                                <td>{{ form_widget(formFacture.montantRecuMinimum, { 'attr': {'placeholder': "à (minimum)"}}) }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-default btn-sm" onclick="searchSwitch(this);">
+                                                        Fixe
+                                                        <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="searchSwitch">
+                            {{ form_label(formFacture.montantRecu) }}
+                            <div class="col-sm-8">
+                                <div class="optionSearch" >
+                                    <div class="input-group">
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td>{{ form_widget(formFacture.montantRecu, { 'attr': {'placeholder': "Fixe"}}) }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-default btn-sm" onclick="searchSwitch(this);">
+                                                        Intervale
+                                                        <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="optionSearch" hidden>
+                                    <div class="input-group">
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td>{{ form_widget(formFacture.montantTotalMaximum, { 'attr': {'placeholder': "De (maximum)"}}) }}</td>
+                                                <td>{{ form_widget(formFacture.montantTotalMinimum, { 'attr': {'placeholder': "à (minimum)"}}) }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-default btn-sm" onclick="searchSwitch(this);">
+                                                        Fixe
+                                                        <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="searchSwitch">
+                            {{ form_label(formFacture.datePayement) }}
+                            <div class="col-sm-8">
+                                <div class="optionSearch" >
+                                    <div class="input-group">
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td>{{ form_widget(formFacture.datePayement) }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-default btn-sm" onclick="searchSwitch(this);">
+                                                        Intervale
+                                                        <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="optionSearch" hidden>
+                                    <div class="input-group">
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td>De:</td>
+                                                <td>{{ form_widget(formFacture.datePayementMaximum) }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-default btn-sm" onclick="searchSwitch(this);">
+                                                        Fixe
+                                                        <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>à</td>
+                                                <td>{{ form_widget(formFacture.datePayementMinimum) }}</td>
+                                                <td></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group form-group-sm">
+                            {{ form_label(formFacture.dateCreation) }}
+                            <div class="col-sm-8">
+                                {{ form_widget(formFacture.dateCreation) }}
+                            </div>
+                        </div>
+
+                        {{ form_row(formFacture.nombreRappel) }}
+
+
+                        <div class="searchSwitch">
+                            {{ form_label(formFacture.montantFrais) }}
+                            <div class="optionSearch" >
+                                <div class="input-group">
+                                    <table>
+                                        <tbody>
+                                        <tr>
+                                            <td>{{ form_widget(formFacture.montantFrais, { 'attr': {'placeholder': "Fixe"}}) }}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-default btn-sm" onclick="searchSwitch(this);">
+                                                    Intervale
+                                                    <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="optionSearch" hidden>
+                                <div class="input-group">
+                                    <table>
+                                        <tbody>
+                                        <tr>
+                                            <td>{{ form_widget(formFacture.montantFraisMaximum, { 'attr': {'placeholder': "De (maximum)"}}) }}</td>
+                                            <td>{{ form_widget(formFacture.montantFraisMinimum, { 'attr': {'placeholder': "à (minimum)"}}) }}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-default btn-sm" onclick="searchSwitch(this);">
+                                                    Fixe
+                                                    <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
+                </div>
+
+
+
+
+
+            {{ form_rest(formCreance) }}
+            {{ form_rest(formFacture) }}
+
+
+
+
+
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+            <button type="button" onclick="sendSearch();" class="btn btn-primary">Valider</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+{{ form_end(formFacture) }}

@@ -1,0 +1,80 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/book/service_container.html
+parameters:
+#    parameter_name: value
+
+services:
+    accessor:
+        class: AppBundle\Utils\Accessor\Accessor
+        arguments:
+            - @Property_accessor
+            - @doctrine.orm.entity_manager
+
+    validation:
+        class: AppBundle\Utils\Data\Validation
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @accessor
+            - @parser
+
+    listing:
+        class: AppBundle\Utils\Listing\Lister
+        arguments:
+            - @session
+            - @doctrine.orm.entity_manager
+
+    parser:
+        class: AppBundle\Utils\Accessor\Parser
+        arguments:
+            - @doctrine.orm.entity_manager
+
+
+    # Twig
+    # Extensions twig qui permettent de mettre en place des filtres
+    # personnalisés
+    app.twig.boolean_filter:
+        class: AppBundle\Twig\BooleanFilter
+        tags:
+            - { name: twig.extension }
+
+    app.twig.genre_filter:
+        class: AppBundle\Twig\GenreFilter
+        tags:
+            - { name: twig.extension }
+
+    app.twig.validation_extension:
+        class: AppBundle\Twig\ValidationExtension
+        arguments:
+            - @validation
+            - @parser
+        calls:
+            - [setRequest, [@request_stack]]
+        tags:
+            - { name: twig.extension }
+
+    app.twig.parser_extension:
+            class: AppBundle\Twig\ParserExtension
+            arguments:
+                - @parser
+            tags:
+                - { name: twig.extension }
+
+
+
+    # Types
+    # Ces services sont des FormTypes qui permettent d'accéder
+    # aux types personnalisés plus facilement
+    app.type.datepicker:
+        class: AppBundle\Field\DatePickerType
+        tags:
+            - { name: form.type, alias: datepicker }
+
+    app.type.semantic:
+        class: AppBundle\Field\SemanticType
+        tags:
+            - { name: form.type, alias: semantic }
+
+    app.type.genre:
+        class: AppBundle\Field\GenreType
+        tags:
+            - { name: form.type, alias: genre }
