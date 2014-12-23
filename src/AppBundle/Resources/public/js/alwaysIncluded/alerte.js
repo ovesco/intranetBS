@@ -19,7 +19,10 @@ var alerte = {
      * @param icon string si on veut un icone avec
      * @return integer l'id de l'alerte
      */
-    balance : function(message, type) {
+        /*
+        J'ai renommer la fonction parce que balance c'était pas top ;-)
+         */
+    send : function(message, type, delay) {
 
         var id   = Math.floor((Math.random() * 1000) + 1),
             html = '<div id="' + id + '" class="ui ' + type + ' message"><i onclick="alerte.dismiss(' + id + ');" class="close icon"></i><div class="header">Alerte</div>' +
@@ -28,6 +31,14 @@ var alerte = {
         this.alerts.push(id);
 
         $('#alerts-bag').append(html);
+
+
+
+        //delay de disparition de l'alerte
+        if(typeof(delay) != "undefined")
+        {
+            setTimeout(function(){ $('#' + id).remove(); }, delay);
+        }
 
         return id;
     },

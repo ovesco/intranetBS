@@ -1,0 +1,4 @@
+interne_finances:
+    resource: "@InterneFinancesBundle/Controller/"
+    type:     annotation
+    prefix:   /finances

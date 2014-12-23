@@ -1,3 +1,7 @@
+interne_finances:
+    resource: "@InterneFinancesBundle/Resources/config/routing.yml"
+    prefix:   /
+
 app:
     resource: @AppBundle/Controller/
     type:     annotation
@@ -5,3 +9,4 @@ app:
 
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+

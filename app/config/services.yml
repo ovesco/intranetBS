@@ -28,6 +28,9 @@ services:
         arguments:
             - @doctrine.orm.entity_manager
 
+    pdf:
+        class: AppBundle\Utils\Export\Pdf
+
 
     # Twig
     # Extensions twig qui permettent de mettre en place des filtres
