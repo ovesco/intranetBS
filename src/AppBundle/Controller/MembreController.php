@@ -25,7 +25,7 @@ class MembreController extends Controller {
     /**
      * Affiche la page d'ajout de membre -> Membre/ajouter_membre.html.twig
      * et valide le formulaire si celui-ci est soumis
-     * @Route("ajouter/membre", name="interne_ajouter_membre")
+     * @Route("membre/ajouter", name="interne_ajouter_membre")
      */
     public function ajouterMembreAction(Request $request) {
 
@@ -124,7 +124,7 @@ class MembreController extends Controller {
 
 
     /**
-     * @route("/voir/membre/{membre}", name="interne_voir_membre", requirements={"membre" = "\d+"})
+     * @route("/membre/voir/{membre}", name="interne_voir_membre", requirements={"membre" = "\d+"})
      * @ParamConverter("membre", class="AppBundle:Membre")
      */
     public function voirMembreAction($membre) {
