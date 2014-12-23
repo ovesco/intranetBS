@@ -4,8 +4,13 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 use AppBundle\Entity\Geniteur;
+
+//FinancesBundle
+use Interne\FinancesBundle\Entity\Creance;
+use Interne\FinancesBundle\Entity\Facture;
 
 /**
  * Famille
@@ -79,13 +84,38 @@ class Famille
      */
     private $validity;
 
+    /*
+     * ====== FinancesBundle =======
+     */
+    /**
+     * @var ArryCollection
+     *
+     * @ORM\OneToMany(targetEntity="Interne\FinancesBundle\Entity\Facture",
+     *                mappedBy="famille", cascade={"persist"})
+     */
+    private $factures;
+
+    /**
+     * @var ArryCollection
+     *
+     * @ORM\OneToMany(targetEntity="Interne\FinancesBundle\Entity\Creance",
+     *                mappedBy="famille", cascade={"persist"})
+     */
+    private $creances;
+
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->membres = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->membres = new ArrayCollection();
+
+        /*
+         * FinancesBundle
+         */
+        $this->creances = new ArrayCollection();
+        $this->factures = new ArrayCollection();
     }
 
     /**
@@ -340,4 +370,135 @@ class Famille
     {
         return $this->validity;
     }
+
+    /*
+     * ====== FinancesBundle =======
+     */
+
+    /**
+     * Is classe
+     *
+     * @param string $className
+     * @return boolean
+     */
+    public function isClass($className)
+    {
+        if($className == 'Famille')
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * Set facture
+     *
+     * @param ArrayCollection $factures
+     * @return Famille
+     */
+    public function setFacture(ArrayCollection $factures)
+    {
+        $this->factures = $factures;
+
+        foreach($factures as $facture)
+        {
+            $facture->setFamille($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get facture
+     *
+     * @return ArrayCollection
+     */
+    public function getFactures()
+    {
+        return $this->factures;
+    }
+
+    /**
+     * Add facture
+     *
+     * @param Facture $facture
+     * @return Famille
+     */
+    public function addFacture($facture)
+    {
+        $this->factures[] = $facture;
+        $facture->setFamille($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove facture
+     *
+     * @param Facture $facture
+     * @return Famille
+     */
+    public function removeFacture($facture)
+    {
+        $this->factures->remove($facture);
+        $facture->setFamille(null);
+
+        return $this;
+    }
+
+    /**
+     * Add creance
+     *
+     * @param Creance $creance
+     * @return Famille
+     */
+    public function addCreance($creance)
+    {
+        $this->creances[] = $creance;
+        $creance->setFamille($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove creance
+     *
+     * @param Creance $creance
+     * @return Famille
+     */
+    public function removeCreance($creance)
+    {
+        $this->creances->remove($creance);
+        $creance->setFamille(null);
+
+        return $this;
+    }
+
+    /**
+     * Set creances
+     *
+     * @param ArrayCollection $creances
+     * @return Famille
+     */
+    public function setCreances(ArrayCollection $creances)
+    {
+        $this->creances = $creances;
+
+        foreach($creances as $creance)
+        {
+            $creance->setFamille($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get creances
+     *
+     * @return ArrayCollection
+     */
+    public function getCreances()
+    {
+        return $this->creances;
+    }
+
 }

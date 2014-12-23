@@ -5,6 +5,20 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 
 class AppKernel extends Kernel
 {
+    /*
+     * Surchage pour configurer le time zone dans la base de donnée
+     * Author: Uffer
+     */
+    /**
+     * @param string $environment
+     * @param bool $debug
+     */
+    public function __construct($environment, $debug)
+    {
+        date_default_timezone_set('Europe/London');
+        parent::__construct($environment, $debug);
+    }
+
     public function registerBundles()
     {
         $bundles = array(
@@ -21,6 +35,7 @@ class AppKernel extends Kernel
 
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+            new Interne\FinancesBundle\InterneFinancesBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

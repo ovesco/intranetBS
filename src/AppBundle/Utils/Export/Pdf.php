@@ -47,4 +47,16 @@ class Pdf extends FPDF {
         $response->headers->set('Content-Disposition', $d);
         return $response;
     }
+
+    /*
+     * Surcharge de la fonction pour prendre en charge
+     * les accents du français avec 'utf8_decode'
+     */
+    function Cell($w,$h=0,$txt='',$border=0,$ln=0,$align='',$fill=0,$link='') {
+        parent::Cell($w,$h, utf8_decode($txt), $border,$ln,$align,$fill,$link);
+    }
+
+    function MultiCell($w,$h=0,$txt='',$border=0,$ln=1,$align='',$fill=0,$link='') {
+        parent::MultiCell($w,$h, utf8_decode($txt), $border,$ln,$align,$fill,$link);
+    }
 }

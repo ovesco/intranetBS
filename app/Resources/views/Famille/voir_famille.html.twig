@@ -43,6 +43,8 @@
                                 <div class="active item" data-tab="infos-base">{{ famille.nom|capitalize }}</div>
                                 <div class="item" data-tab="infos-mere">Mère</div>
                                 <div class="item" data-tab="infos-pere">Père</div>
+                                <div class="item" data-tab="finances-creances-factures">Créances et factures</div>
+
                             </div>
                             <div class="ui bottom attached active tab segment" data-tab="infos-base">
 
@@ -150,6 +152,12 @@
                                 </div>
 
                             </div>
+
+                            <div class="ui bottom attached tab segment" data-tab="finances-creances-factures">
+                                {# Insertion de la partie facture et créance pour le membre #}
+                                {% include "InterneFinancesBundle:Externe:interfaceForFamilleOrMembre.html.twig" with {'ownerEntity': famille } %}
+                            </div>
+
                         </div>
                     </div>
 
