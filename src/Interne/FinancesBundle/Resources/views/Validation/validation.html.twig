@@ -1,0 +1,421 @@
+{% extends "layout.html.twig" %}
+
+
+{% block titre %}Validation des factures{% endblock %}
+
+{% block content %}
+
+
+    <div class="ui grid">
+        <div class="row">
+            <div class="column">
+
+                <div class="ui styled accordion">
+                    <div class="title">
+                        <i class="dropdown icon"></i>
+                        Saisie manuelle
+                    </div>
+                    <div class="content">
+                        <form role="form">
+                            <div class="form-group">
+                                <input id="form_num_ref" type="number" class="form-control" placeholder="Num. de référance">
+                                <input id="form_montant_recu" type="number" class="form-control" placeholder="Montant reçu">
+                                <div class="ui button" id="addManualy">
+                                    Valider
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                    <div class="title">
+                        <i class="dropdown icon"></i>
+                        Fichier BVR
+                    </div>
+                    <div class="content">
+
+                        <form role="form">
+                            <div class="form-group">
+                                <input id="form_file" type="file" class="form-control" placeholder="Ficher de type *.V11">
+                                <button class="btn btn-info btn-xs" id="uploadBvrFile">
+                                    Charger
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+
+<div class="row" id="validation_liste_widget" hidden>
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-title">
+                <span>Validation des factures</span>
+            </div>
+            <div class="widget-content">
+                <table class="table table-bordered" id="validationListe">
+                    <thead>
+                    <tr>
+                        <th colspan="3">Payement reçu</th>
+                        <th colspan="2">Dans le systeme (BDD)</th>
+                        <th colspan="3">Validation</th>
+                    </tr>
+                    <tr>
+                        <th>Num. Réf.</th>
+                        <th>Date de payement</th>
+                        <th>Montant Reçu</th>
+                        <th>Montant exigé</th>
+                        <th>Statut</th>
+                        <th>Repartition</th>
+                        <th>Etat</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" id="validation_report_widget" hidden>
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-title">
+                <span>Rapport de validation des factures</span>
+                <div class="widget-toolbar">
+
+                    <button class="widget-options-button" id="show_report_content">Afficher</button>
+                    <button class="widget-options-button" id="hide_report_content" hidden>Fermer</button>
+                </div>
+            </div>
+
+
+            <div class="widget-content" id="report_content" hidden>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th colspan="3">Dans le fichier BVR</th>
+                        <th colspan="3">Dans le systeme (BDD)</th>
+                    </tr>
+                    <tr>
+                        <th>Num. Réf.</th>
+                        <th>Date de payement</th>
+                        <th>Montant Reçu</th>
+                        <th>Montant émis</th>
+                        <th>Titre</th>
+
+                    </tr>
+                    </thead>
+                    <tbody hidden></tbody>
+                    <tbody id="report_already_payed" hidden>
+                        <tr>
+                            <td colspan="5">Factures déjà payées auparavent</td>
+                        </tr>
+                    </tbody>
+                    <tbody id="report_not_found"  hidden>
+                        <tr>
+                            <td colspan="5">Factures non trouvée dans le systeme</td>
+                        </tr>
+                    </tbody>
+                    <tbody id="found_lower_new_facture"  hidden>
+                        <tr>
+                            <td colspan="5">Facture validée avec montant insuffisant et nouvelle facture</td>
+                        </tr>
+                    </tbody>
+                    <tbody id="found_lower_valid"  hidden>
+                        <tr>
+                            <td colspan="5">Facture valide avec montant insuffisant</td>
+                        </tr>
+                    </tbody>
+                    <tbody id="found_valid"  hidden>
+                        <tr>
+                            <td colspan="5">Factures valides</td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+    {% javascripts  '@InterneFinancesBundle/Resources/public/js/validation.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+<script type="text/javascript">
+
+
+
+
+
+    function validation(element){
+
+        $state = $(element).data("state");
+
+        //Enlève les columns de validation pour l'insertion dans le rapport
+        var $line = $(element).closest('tr');
+
+        if($state == 'not_found')
+        {
+            $('td:last',$line).remove();
+            $('td:last',$line).remove();
+            $('td:last',$line).remove();
+            $line.appendTo('#report_not_found');
+            $('#report_not_found').show();
+        }
+        else if($state == 'found_already_payed')
+        {
+            $('td:last',$line).remove();
+            $('td:last',$line).remove();
+            $('td:last',$line).remove();
+            $line.appendTo('#report_already_payed');
+            $('#report_already_payed').show();
+
+        }
+        else
+        {
+            $idFacture = $(element).data("idfacture");
+            $montantRecuFacture = $(element).data("montantrecu");
+            $datePayement = $(element).data("datepayement");
+
+            var data;
+
+            if(($state == 'found_lower_valid') || ($state == 'found_lower_new_facture'))
+            {
+                var creancesIdArray = [];
+                var creancesMontantArray = [];
+
+                $line.find('#repartitionMontantsTable').find('input').each(function(){
+                    var id = $(this).attr("name");
+                    var montant = $(this).val();
+                    creancesIdArray.push(id);
+                    creancesMontantArray.push(montant);
+
+
+                });
+
+                data = { id: $idFacture,
+                    montantRecu: $montantRecuFacture,
+                    datePayement: $datePayement,
+                    state: $state,
+                    creancesIdArray: creancesIdArray,
+                    creancesMontantArray: creancesMontantArray};
+            }
+            else
+            {
+                data = { id: $idFacture,
+                    montantRecu: $montantRecuFacture,
+                    datePayement: $datePayement,
+                    state: $state};
+
+
+
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "",
+                data: data,
+                dataType: 'json',
+                error: function(jqXHR, textStatus, errorThrown) { alert('erreur'); },
+                success: function(JsonResponse) {
+
+                    if($state == 'found_valid')
+                    {
+                        $('td:last',$line).remove();
+                        $('td:last',$line).remove();
+                        $('td:last',$line).remove();
+                        $line.appendTo('#found_valid');
+                        $('#found_valid').show();
+
+                    }
+                    else if($state == 'found_lower_valid')
+                    {
+                        $('td:last',$line).remove();
+                        $('td:last',$line).remove();
+                        $('td:last',$line).remove();
+                        $line.appendTo('#found_lower_valid');
+                        $('#found_lower_valid').show();
+
+                    }
+                    else if($state == 'found_lower_new_facture')
+                    {
+                        $('td:last',$line).remove();
+                        $('td:last',$line).remove();
+                        $('td:last',$line).remove();
+                        $line.appendTo('#found_lower_new_facture');
+                        $('#found_lower_new_facture').show();
+
+                    }
+
+                }
+            });
+
+
+        }
+
+
+        $('#validation_report_widget').show();
+
+
+    }
+
+    function modifySolde(element)
+    {
+        //var solde = $(element).closest('table').find('td.montantRecu').html();
+        var montantrecu = $(element).closest('table').find('td.montantRecu').data('montantrecu');
+        var solde = montantrecu;
+
+        $(element).closest('table').find('input').each(function(){
+            solde = solde - $(this).val();
+        });
+
+        var responseString = '';
+        if(solde == 0){
+            responseString = '<span class="label label-success">'+parseFloat(solde).toFixed(2)+'</span>';
+
+        }
+        else if(solde > 0){
+            responseString = '<span class="label label-info">'+parseFloat(solde).toFixed(2)+'</span>';
+        }
+        else if(solde < 0){
+            responseString = '<span class="label label-danger">'+parseFloat(solde).toFixed(2)+'</span>';
+        }
+
+        $(element).closest('table').find('td.montantRecu').html(responseString);
+
+    }
+
+
+
+
+
+    jQuery(document).ready(function() {
+
+        $('#addManualy').on('click', function(e){
+
+            e.preventDefault();
+
+            $idFacture = $('#form_num_ref').val();
+            $montantRecuFacture = $('#form_montant_recu').val();
+
+
+            if(($idFacture != '') && ($montantRecuFacture != ''))
+            {
+                var data = { id: $idFacture, montantRecu: $montantRecuFacture};
+
+                $.ajax({
+                    type: "POST",
+                    url: "",
+                    data: data,
+                    error: function(jqXHR, textStatus, errorThrown) { alert('erreur'); },
+                    success: function(htmlResponse) {
+
+                        $('#validationListe > tbody:last').append(htmlResponse);
+
+                    }
+                });
+
+                $('#validation_liste_widget').show();
+
+                //petite partie pour remetre le curseur a la bonne place
+                //afin de rentré une nouvelle facture plus rappidement.
+                $('#form_num_ref').focus();
+                $('#form_num_ref').val('');//clear form
+                $('#form_montant_recu').val('');
+
+            }
+            else
+            {
+                //petite partie pour remetre le curseur a la bonne place
+                //afin de rentré une nouvelle facture plus rappidement.
+                $('#form_num_ref').focus();
+                $('#form_num_ref').val('');//clear form
+                $('#form_montant_recu').val('');
+            }
+
+        });
+
+        $('#form_file').change(function(){
+            var file = this.files[0];
+            var name = file.name;
+            var size = file.size;
+            var type = file.type;
+            //Your validation
+            alert(name);
+
+
+        });
+
+        $('#uploadBvrFile').on('click', function(e){
+
+            e.preventDefault();
+
+            var file = $('#form_file')[0].files[0];
+
+            var formData = new FormData();
+            formData.append('file',file);
+
+                $.ajax({
+                    type: "POST",
+                    url: "",
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    error: function(jqXHR, textStatus, errorThrown) { alert('erreur'); },
+                    success: function(htmlResponse) {
+
+                        $('#validationListe > tbody:last').append(htmlResponse);
+
+                    }
+                });
+
+                $('#validation_liste_widget').show();
+
+        });
+        {#Petites fonction pour afficher ou cacher le rapport#}
+        $('#show_report_content').on('click', function(e) {
+            e.preventDefault();
+            $(this).hide();
+            $('#hide_report_content').show();
+            $('#report_content').show();
+        });
+        $('#hide_report_content').on('click', function(e) {
+            e.preventDefault();
+            $(this).hide();
+            $('#show_report_content').show();
+            $('#report_content').hide();
+        });
+
+    });
+
+</script>
+
+{% endblock %}
+
+
+
