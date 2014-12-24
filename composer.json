@@ -22,7 +22,8 @@
         "friendsofsymfony/jsrouting-bundle": "~1.5",
         "itbz/fpdf": "1.7.*",
         "phpoffice/phpexcel": "dev-master",
-        "itbz/fpdi": "dev-master"
+        "itbz/fpdi": "dev-master",
+		"willdurand/faker-bundle": "@stable"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"
