@@ -10,11 +10,23 @@ use Interne\FinancesBundle\Entity\Creance;
 use Interne\FinancesBundle\Form\FactureSearchType;
 use Interne\FinancesBundle\Form\CreanceSearchType;
 use Interne\FinancesBundle\Entity\CreanceRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
+/**
+ * Class SearchController
+ * @package Interne\FinancesBundle\Controller
+ *
+ * @Route("/search")
+ */
 class SearchController extends Controller
 {
 
 
+    /**
+     * @Route("/", name="interne_fiances_search", options={"expose"=true})
+     *
+     * @return Response
+     */
     public function searchAction()
     {
         $facture = new Facture();
@@ -47,13 +59,13 @@ class SearchController extends Controller
             $creance = null;
 
 
-            if ($request->request->has('InterneFactureBundleFactureSearchType')) {
+            if ($request->request->has('InterneFinancesBundleFactureSearchType')) {
 
                 $factureSearchForm->submit($request);
                 $facture = $factureSearchForm->getData();
 
             }
-            if ($request->request->has('InterneFactureBundleCreanceSearchType')) {
+            if ($request->request->has('InterneFincancesBundleCreanceSearchType')) {
 
                 $creanceSearchForm->submit($request);
                 $creance = $creanceSearchForm->getData();
@@ -117,7 +129,7 @@ class SearchController extends Controller
 
             if($searchParameters['creance']['isLinkedToFacture'] == 'yes')
             {
-                $factures = $em->getRepository('InterneFactureBundle:Facture')->findBySearch($facture,$searchParameters);
+                $factures = $em->getRepository('InterneFinacesBundle:Facture')->findBySearch($facture,$searchParameters);
                 foreach($factures as $facture)
                 {
                     foreach($facture->getCreances() as $creance)
@@ -132,7 +144,7 @@ class SearchController extends Controller
                  * On fait une recherche spécifique aux cérances qui ne
                  * sont pas encore liée à des factures.
                  */
-                $creances = $em->getRepository('InterneFactureBundle:Creance')->findBySearch($creance,$searchParameters);
+                $creances = $em->getRepository('InterneFinancesBundle:Creance')->findBySearch($creance,$searchParameters);
             }
 
 
@@ -230,7 +242,7 @@ class SearchController extends Controller
                 $session->set('creances',$newCreancesSession);
             }
 
-            return $this->render('InterneFactureBundle:Search:results.html.twig', array(
+            return $this->render('InterneFinancesBundle:Search:results.html.twig', array(
 
                 'factures' => $session->get('factures'),
                 'creances' => $session->get('creances')
@@ -239,7 +251,7 @@ class SearchController extends Controller
         }
 
 
-        return $this->render('InterneFactureBundle:Search:search.html.twig', array(
+        return $this->render('InterneFinancesBundle:Search:search.html.twig', array(
             'formFacture' => $factureSearchForm->createView(),
             'formCreance' => $creanceSearchForm->createView(),
             'factures' => $session->get('factures'),

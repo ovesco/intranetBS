@@ -1,0 +1,119 @@
+{% extends "layout.html.twig" %}
+
+{% block titre %}Payements{% endblock %}
+
+
+{% block content %}
+
+<div class="ui page grid">
+    <div class="row">
+        <div class="column">
+            <div class="ui segment">
+                <div class="ui grid">
+                    <div class="row">
+                        <div class="eight wide column">
+
+                            <div class="ui styled accordion">
+                                <div class="title">
+                                    <i class="dropdown icon"></i>
+                                    Saisie manuelle
+                                </div>
+                                <div class="content">
+                                    <form role="form">
+                                        <div class="form-group">
+                                            <input id="form_num_ref" type="number" class="form-control" placeholder="Num. de référance">
+                                            <input id="form_montant_recu" type="number" class="form-control" placeholder="Montant reçu">
+                                            <div class="ui button" onclick="addManualy();">
+                                                Valider
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                </div>
+                                <div class="title">
+                                    <i class="dropdown icon"></i>
+                                    Fichier BVR
+                                </div>
+                                <div class="content">
+
+                                    <form role="form">
+                                        <div class="form-group">
+                                            <input id="form_file" type="file" class="form-control" placeholder="Ficher de type *.V11">
+                                            <div class="ui button" onclick="uploadFile();">
+                                                Charger
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="six wide column">
+
+                            <div class="ui modal" id="modalPayementSearchForm">
+                                <i class="close icon"></i>
+                                <div class="header">
+                                    Recherche de payements
+                                </div>
+                                <div class="content">
+                                    {{ form_start(searchForm, {'attr': {'id': 'payementSearchForm'}}) }}
+                                    {{ form_row(searchForm) }}
+                                    {{ form_end(searchForm) }}
+                                    <div class="ui button blue" onclick="sendPayementSearch();">Rechercher</div>
+                                </div>
+                            </div>
+
+                            <div class="ui button" onclick="openSearchForm();">Recherche de payement</div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+
+                            <table class="ui table" id="payementTable">
+                                <thead>
+
+                                <tr>
+                                    <th>Statut</th>
+                                    <th>Facture</th>
+                                    <th>Montant Reçu</th>
+                                    <th>Date de payement</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+                    </div>
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+    {% endblock %}
+
+    {% block js %}
+
+    {% javascripts  '@InterneFinancesBundle/Resources/public/js/payement.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+{% endblock %}

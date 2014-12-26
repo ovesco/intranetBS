@@ -1,57 +1,52 @@
-{% extends "InterneHomeBundle::layout.html.twig" %}
+{% extends "layout.html.twig" %}
 
-{% block title %}Détail de la facture{% endblock %}
+{% block titre %}Facture N°{{ facture.id }}{% endblock %}
 
-{% block body %}
-
-
-<div class="row">
-
-    <div class="col-lg-6">
-            <div class="widget">
-
-                <div class="widget-title">
-                    <span>Détail de la facture</span>
-
-                    <div class="widget-toolbar">
-
-                        <a href="{{path('interne_facture_update', {'id' : facture.id} ) }}">
-                            <span class="glyphicon glyphicon-pencil" infobulle="Editer"></span>
-                        </a>
+{% block content %}
 
 
+<div class="ui grid">
+    <div class="eight wide column">
 
-                        <a href="{{path('interne_facture_delete', {'id' : facture.id} ) }}">
-                            <span class="glyphicon glyphicon-trash" infobulle="Supprimer"></span>
-                        </a>
+        <h4 class="ui header">Détail de la facture N°{{ facture.id }}</h4>
+        <table class="ui definition table">
+            <tbody>
+            <tr>
+                <td>Statut</td>
+                <td>
+                    {% if facture.statut == 'ouverte' %}
+                        <div class="ui label blue">
+                            Ouverte
+                        </div>
+                    {% elseif facture.statut == 'payee' %}
+                        <div class="ui label green">
+                            Payée
+                        </div>
+                    {% else %}
+                    {% endif %}
 
-                        <a href="{{ path('interne_facture_print', {'id' : facture.id} ) }}" target="_blank">
-                            <span class="glyphicon glyphicon-print" infobulle="Imprimer"></span>
-                        </a>
-
-                    </div>
-                </div>
-
-                <div class="widget-content">
-                    <div class="widget-data">
-
-
-                            N° de Référance: {{ facture.id }}<br>
+                </td>
+            </tr>
+            <tr>
+                <td>Date de création</td>
+                <td>{{ facture.dateCreation|date("d/m/Y") }}</td>
+            </tr>
 
 
 
+            <tr>
+                <td>Date de payement</td>
+                <td>
+                    {% if facture.statut == 'payee' %}
+                        {{ facture.datePayement|date("d/m/Y") }}
+                    {% endif %}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-
-                        {% if facture.statut == 'ouverte' %}
-                            <span class="label label-info">
-                                Ouverte
-                            </span>
-                        {% elseif facture.statut == 'payee' %}
-                            <span class="label label-success">
-                                Payée
-                            </span>
-                        {% else %}
-                        {% endif %}
+</div>
 
 
 
@@ -59,7 +54,13 @@
 
 
 
-                        <table class="table table-bordered">
+
+
+
+
+
+
+                        <table class="ui table">
                             <thead>
                                 <tr>
                                     <th rowspan="2">Résumé de la facture</th>
@@ -82,7 +83,7 @@
                             {% for creance in facture.creances %}
                                 <tr>
                                     <td>{{ creance.titre }}</td>
-                                    <td>{{ creance.dateCreation|date("m/d/Y") }} </td>
+                                    <td>{{ creance.dateCreation|date("d/m/Y") }} </td>
                                     <td>{{ creance.montantEmis|number_format(2, '.', ',') }} </td>
                                     <td>{{ creance.montantRecu|number_format(2, '.', ',') }} </td>
                                 </tr>
@@ -95,13 +96,13 @@
                                         <td>Rappel N°{{ loop.index }}</td>
                                         <td>{{ rappel.date|date("m/d/Y") }} </td>
                                         <td>{{ rappel.frais|number_format(2, '.', ',') }} </td>
-                                        <td></td>
+                                        <td>{{ rappel.montantRecu|number_format(2, '.', ',') }}</td>
                                     </tr>
 
                                 {% endfor %}
                                 <tr>
                                     <td>Montant Total</td>
-                                    <td>Payée, le {{ facture.datePayement|date("m/d/Y") }} </td>
+                                    <td> </td>
                                     <td>{{ facture.montantTotal|number_format(2, '.', ',') }}</td>
                                     <td>{{ facture.montantRecu|number_format(2, '.', ',') }}</td>
                                 </tr>

@@ -1,27 +1,25 @@
-{% extends "InterneHomeBundle::layout.html.twig" %}
+{% extends "layout.html.twig" %}
 
 
-{% block title %}Rechercher de factures et de cérances{% endblock %}
+{% block titre %}Rechercher de cérances et de factures{% endblock %}
 
-{% block body %}
+{% block content %}
 
 
 
-    {% include "InterneFactureBundle:Search:results.html.twig" with {'factures': factures, 'creances':creances} %}
+    {% include "InterneFinancesBundle:Search:results.html.twig" with {'factures': factures, 'creances':creances} %}
 
-    {% include "InterneFactureBundle:Search:searchForm.html.twig" with {'formFacture': formFacture, 'formCreance':formCreance} %}
+    {% include "InterneFinancesBundle:Search:searchForm.html.twig" with {'formFacture': formFacture, 'formCreance':formCreance} %}
 
 
 
 {% endblock %}
 
-{% block javascript %}
+{% block js %}
 
-    {% javascripts '@InterneFactureBundle/Resources/public/js/search.js'
-                    '@InterneFactureBundle/Resources/public/js/creance.js'%}
+    {% javascripts '@InterneFinancesBundle/Resources/public/js/search.js'
+                    '@InterneFinancesBundle/Resources/public/js/creance.js'%}
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
-
-
 
 {% endblock %}

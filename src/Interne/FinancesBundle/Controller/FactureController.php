@@ -42,6 +42,20 @@ class FactureController extends Controller
         return new Response();
     }
 
+    /**
+     * @Route("/facture/show/{id}", name="interne_fiances_facture_show")
+     * @param $id
+     * @return Response
+     */
+    public function showAction($id){
+
+        $em = $this->getDoctrine()->getManager();
+        $facture = $em->getRepository('InterneFinancesBundle:Facture')->find($id);
+        return $this->render('InterneFinancesBundle:Facture:show.html.twig',
+            array('facture' => $facture));
+
+    }
+
 
 
 

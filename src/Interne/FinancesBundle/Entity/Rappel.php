@@ -51,6 +51,13 @@ class Rappel
      */
     private $frais;
 
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="montantRecu", type="float")
+     */
+    private $montantRecu;
+
 
     /**
      * Get id
@@ -129,5 +136,28 @@ class Rappel
     public function getFacture()
     {
         return $this->facture;
+    }
+
+    /**
+     * Set montantRecu
+     *
+     * @param float $montantRecu
+     * @return Rappel
+     */
+    public function setMontantRecu($montantRecu)
+    {
+        $this->montantRecu = $montantRecu;
+
+        return $this;
+    }
+
+    /**
+     * Get montantRecu
+     *
+     * @return float
+     */
+    public function getMontantRecu()
+    {
+        return $this->montantRecu;
     }
 }
