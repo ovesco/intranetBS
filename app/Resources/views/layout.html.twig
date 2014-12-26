@@ -17,8 +17,10 @@
 
     {% block css %}{% endblock %}
 
+    {% block headjs %}{% endblock %}
+
 </head>
-<body>
+<body {% block onload %}{% endblock %}>
 
 <div id="main-menu" class="ui vertical inverted sidebar menu" id="menu">
 
@@ -76,6 +78,8 @@
         {% block content %}{% endblock %}
 
 </div>
+
+<div id="server-data" data-yolo="{% if clientData is defined %}{{ clientData }}{% endif %}"></div>
 
 <div id="add-attributions-modal" class="ui modal">
     <i class="close icon"></i>

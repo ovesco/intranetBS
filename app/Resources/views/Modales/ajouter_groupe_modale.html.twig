@@ -1,0 +1,36 @@
+<div id="ajouter-groupe-modale" class="ui modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Ajouter une unité
+    </div>
+
+    <div class="content">
+
+        <form class="ui form" method="post" >
+            <div class="two fields">
+                <div class="field">
+                    <label>Groupe parent</label>
+                    <input readonly="readonly" type="text" id="groupe-name-parent" />
+                    <input type="hidden" name="groupe_id" id="groupe-id-parent" />
+                </div>
+            </div>
+            <div class="two fields">
+                <div class="field">
+                    {{ form_widget(groupeForm.nom) }}
+                </div>
+                <div class="field">
+                    {{ form_widget(groupeForm.type) }}
+                </div>
+
+                {{ form_rest(groupeForm) }}
+            </div>
+
+            <div class="ui field">
+                <input type="submit" class="ui green button" value="Ajouter" />
+            </div>
+        </form>
+    </div>
+    <div class="actions">
+        <div class="ui button">Cancel</div>
+    </div>
+</div>

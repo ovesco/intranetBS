@@ -1,0 +1,130 @@
+{% extends 'layout.html.twig' %}
+
+{% block titre %}Hierarchie globale{% endblock %}
+
+{% block onload %}onload="init()"{% endblock %}
+
+{% block content %}
+
+    <div id="diagram" style="position: relative;">
+        <div id="hierarchie" style="background-color: white; border: solid 1px rgb(220,220,220); width: 96%; height: 700px; margin:auto;box-shadow:0 0 5px rgb(220,220,220)"></div>
+    </div>
+    <p>UTILISER LE CLIC DROIT</p>
+
+    {% include 'Modales/ajouter_groupe_modale.html.twig' %}
+
+{% endblock %}
+
+{% block headjs %}
+    {% javascripts '@AppBundle/Resources/public/js/specials/go.js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+
+        function init() {
+
+            var $ = go.GraphObject.make;  // for conciseness in defining templates
+            myDiagram =
+                    $(go.Diagram, "hierarchie",  // the DIV HTML element
+                            {
+                                initialDocumentSpot: go.Spot.TopCenter,
+                                initialViewportSpot: go.Spot.TopCenter,
+                                layout:  // create a TreeLayout
+                                        $(go.TreeLayout,
+                                                {
+                                                    treeStyle: go.TreeLayout.StyleLastParents,
+                                                    angle: 90,
+                                                    layerSpacing: 40,
+                                                    alternateAngle: 0,
+                                                    alternateAlignment: go.TreeLayout.AlignmentStart,
+                                                    alternateNodeIndent: 15,
+                                                    alternateNodeIndentPastParent: 1,
+                                                    alternateNodeSpacing: 15,
+                                                    alternateLayerSpacing: 30,
+                                                    alternateLayerSpacingParentOverlap: 1,
+                                                    alternatePortSpot: new go.Spot(0, 0.999, 20, 0),
+                                                    alternateChildPortSpot: go.Spot.Left
+                                                })
+                            });
+
+            // define the Node template
+            myDiagram.nodeTemplate =
+                    $(go.Node, "Auto",
+                            { isShadowed: true },
+                            // the outer shape for the node, surrounding the Table
+                            $(go.Shape, "Rectangle",
+                                    { fill: "azure" }),
+
+                            // a table to contain the different parts of the node
+                            $(go.Panel, "Table",
+                                    { margin: 4, maxSize: new go.Size(150, NaN) },
+
+                                    // the two TextBlocks in column 0 both stretch in width
+                                    // but align on the left side
+                                    $(go.RowColumnDefinition,
+                                            {
+                                                column: 0,
+                                                stretch: go.GraphObject.Horizontal,
+                                                alignment: go.Spot.Left
+                                            }
+                                    ),
+
+                                    $(go.TextBlock,
+                                            {
+                                                row: 0, column: 0,
+                                                maxSize: new go.Size(120, NaN),
+                                                margin: 5,
+                                                font: "bold 8pt sans-serif",
+                                                alignment: go.Spot.Top
+                                            },
+                                            new go.Binding("text", "nom")
+                                    )
+
+                            )  // end Table Panel
+                    );  // end Node
+
+            myDiagram.nodeTemplate.contextMenu =
+                    $(go.Adornment, "Vertical",
+                            $("ContextMenuButton",
+                                    $(go.TextBlock, "Aller voir",
+                                            { click: function(e, obj) { redirectToGroupe(obj); } })),
+                            $("ContextMenuButton",
+                                    $(go.TextBlock, "Ajouter un enfant",
+                                            { click: function(e, obj) { addChild(obj); } }))
+                    );
+
+            function redirectToGroupe(obj) {
+
+                var node = obj.part;
+                location.href = Routing.generate("interne_voir_groupe", {groupe: node.data.key});
+            }
+
+            function addChild(obj) {
+
+                var data = obj.part.data;
+
+                jQuery('#groupe-name-parent').val(data.nom);
+                jQuery('#groupe-id-parent').val(data.key);
+                showModal('#ajouter-groupe-modale');
+            }
+
+            // define the Link template, a simple orthogonal line
+            myDiagram.linkTemplate =
+                    $(go.Link, go.Link.Orthogonal,
+                            { selectable: false },
+                            $(go.Shape, { stroke: '#222' } ));  // the default black link shape
+
+            // set up the nodeDataArray, describing each person/position
+            var nodeDataArray = Server.stuff();
+
+            // create the Model with data for the tree, and assign to the Diagram
+            myDiagram.model =
+                    $(go.TreeModel,
+                            { nodeParentKeyProperty: "parent",  // this property refers to the parent node data
+                                nodeDataArray: nodeDataArray });
+        }
+    </script>
+{% endblock %}
