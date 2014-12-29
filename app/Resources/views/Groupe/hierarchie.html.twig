@@ -26,14 +26,15 @@
 
         function init() {
 
-            var $ = go.GraphObject.make;  // for conciseness in defining templates
-            myDiagram =
-                    $(go.Diagram, "hierarchie",  // the DIV HTML element
+            var GO = go.GraphObject.make;
+
+            hierarchieDiagram =
+                    GO(go.Diagram, "hierarchie",  // the DIV HTML element
                             {
                                 initialDocumentSpot: go.Spot.TopCenter,
                                 initialViewportSpot: go.Spot.TopCenter,
                                 layout:  // create a TreeLayout
-                                        $(go.TreeLayout,
+                                        GO(go.TreeLayout,
                                                 {
                                                     treeStyle: go.TreeLayout.StyleLastParents,
                                                     angle: 90,
@@ -51,20 +52,20 @@
                             });
 
             // define the Node template
-            myDiagram.nodeTemplate =
-                    $(go.Node, "Auto",
+            hierarchieDiagram.nodeTemplate =
+                    GO(go.Node, "Auto",
                             { isShadowed: true },
                             // the outer shape for the node, surrounding the Table
-                            $(go.Shape, "Rectangle",
+                            GO(go.Shape, "Rectangle",
                                     { fill: "azure" }),
 
                             // a table to contain the different parts of the node
-                            $(go.Panel, "Table",
+                            GO(go.Panel, "Table",
                                     { margin: 4, maxSize: new go.Size(150, NaN) },
 
                                     // the two TextBlocks in column 0 both stretch in width
                                     // but align on the left side
-                                    $(go.RowColumnDefinition,
+                                    GO(go.RowColumnDefinition,
                                             {
                                                 column: 0,
                                                 stretch: go.GraphObject.Horizontal,
@@ -72,7 +73,7 @@
                                             }
                                     ),
 
-                                    $(go.TextBlock,
+                                    GO(go.TextBlock,
                                             {
                                                 row: 0, column: 0,
                                                 maxSize: new go.Size(120, NaN),
@@ -86,13 +87,18 @@
                             )  // end Table Panel
                     );  // end Node
 
-            myDiagram.nodeTemplate.contextMenu =
-                    $(go.Adornment, "Vertical",
-                            $("ContextMenuButton",
-                                    $(go.TextBlock, "Aller voir",
+            hierarchieDiagram.nodeTemplate.contextMenu =
+                    GO(go.Adornment, "Vertical",
+                            GO("ContextMenuButton",
+                                    GO(go.TextBlock, "Aller voir",
                                             { click: function(e, obj) { redirectToGroupe(obj); } })),
-                            $("ContextMenuButton",
-                                    $(go.TextBlock, "Ajouter un enfant",
+
+                            GO("ContextMenuButton",
+                                    GO(go.TextBlock, "Ajouter un enfant",
+                                            { click: function(e, obj) { addChild(obj); } })),
+
+                            GO("ContextMenuButton",
+                                    GO(go.TextBlock, "Désactiver/Activer",
                                             { click: function(e, obj) { addChild(obj); } }))
                     );
 
@@ -112,17 +118,17 @@
             }
 
             // define the Link template, a simple orthogonal line
-            myDiagram.linkTemplate =
-                    $(go.Link, go.Link.Orthogonal,
+            hierarchieDiagram.linkTemplate =
+                    GO(go.Link, go.Link.Orthogonal,
                             { selectable: false },
-                            $(go.Shape, { stroke: '#222' } ));  // the default black link shape
+                            GO(go.Shape, { stroke: '#222' } ));  // the default black link shape
 
             // set up the nodeDataArray, describing each person/position
             var nodeDataArray = Server.stuff();
 
             // create the Model with data for the tree, and assign to the Diagram
-            myDiagram.model =
-                    $(go.TreeModel,
+            hierarchieDiagram.model =
+                    GO(go.TreeModel,
                             { nodeParentKeyProperty: "parent",  // this property refers to the parent node data
                                 nodeDataArray: nodeDataArray });
         }

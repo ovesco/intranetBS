@@ -26,27 +26,6 @@ class Pdf extends FPDF {
     }
 
 
-    /**
-     * Retourne un objet response formaté pour renvoyer un fichier PDF, avec le fichier PDF courant en contenu
-     * @return Response
-     */
-    public function getResponse() {
-
-        $response = new Response(
-
-            $this->Output(),
-            Response::HTTP_OK,
-            array('content-type' => 'application/pdf')
-        );
-
-        $d = $response->headers->makeDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            'liste.pdf'
-        );
-
-        $response->headers->set('Content-Disposition', $d);
-        return $response;
-    }
 
     /*
      * Surcharge de la fonction pour prendre en charge

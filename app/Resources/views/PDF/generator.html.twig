@@ -1,0 +1,114 @@
+{% extends 'layout.html.twig' %}
+
+{% block titre %}PDF{% endblock %}
+
+{% block content %}
+    <div class="ui grid">
+        <div class="row">
+            <div class="eight wide column">
+                <h1>Génerer un PDF</h1>
+                <div class="ui segment">
+                    <p>
+                        Cet outil vous permet de génerer un fichier PDF personnalisé. Pour ce faire, il vous suffit de choisir
+                        parmi vos listes laquelle vous voulez ajouter au PDF, quelles informations afficher, importer un
+                        en-tête etc. Cliquer ensuite sur le bouton "génerer" affichera le PDF dans la partie de droite.
+                    </p>
+                    <div class="ui divider"></div>
+                    <div class="ui form">
+
+                        <h3>Options</h3>
+                        <div class="two fields">
+                            <div class="field">
+                                <label>Liste de membres</label>
+                                <div class="ui selection dropdown">
+                                    <input type="hidden" name="liste">
+                                    <div class="default text">Liste</div>
+                                    <i class="dropdown icon"></i>
+                                    <div class="menu">
+                                        {% for liste in listing.listes %}
+                                            <div class="item" data-value="{{ liste.token }}">
+                                                {{ liste.name }}
+                                                <span class="description">{{ liste.length }} membres</span>
+                                            </div>
+                                        {% endfor %}
+                                        <div class="divider"></div>
+                                        <div class="item">
+                                            <div class="ui blue empty circular label"></div>
+                                            {{ attribution.groupe.nom }}
+                                            <span class="description">{{ attribution.groupe.membersRecursive|length }} membres</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label>Modèle</label>
+                                <div id="liste-type" class="ui selection dropdown">
+                                    <input type="hidden" name="modele">
+                                    <div class="default text">Choisir un modèle</div>
+                                    <i class="dropdown icon"></i>
+                                    <div class="menu">
+                                        <div class="item" data-value="liste_troupe">Liste de troupe</div>
+                                        <div class="item" data-value="liste_rega">Liste REGA</div>
+                                        <div class="item" data-value="liste_perso">Personnaliser</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>En-Tête</h3>
+                        <p>
+                            Il vous est possible d'inclure un en-tête personnalisé. Le fichier doit être au format PDF. Il
+                            sera ensuite converti en image dans le nouveau fichier. Pour ce faire, il faut préciser à partir
+                            de quel moment le système peut écrire des données pour ne pas écraser l'image.
+                            Y'a pas de solutions miracle, faut tester des valeurs différentes jusqu'à ce que ca marche.
+                        </p>
+                        <div class="two fields">
+                            <div class="field">
+                                <label>En-Tête</label>
+                                <input type="file" name="template" accept="application/pdf" />
+                                <button class="ui mini primary button">Charger</button>
+                            </div>
+                            <div class="field">
+                                <label>Hauteur de l'en-tête</label>
+                                <input type="number" value="300" name="template_height" />
+                            </div>
+                        </div>
+
+                        <div id="liste-type-sections-container">
+                            <section class="type-liste" id="type-liste_troupe">
+                                <h3>Paramètres liste de troupe</h3>
+                            </section>
+                            <section class="type-liste" id="type-liste_rega">
+                                <h3>Paramètres de la liste REGA</h3>
+                            </section>
+                            <section class="type-liste" id="type-liste_perso">
+                                <h3>Paramètres liste personnalisée</h3>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="eight wide column">
+                <object type="application/pdf" data="{{ path('pdf_renderer') }}" style="width:100%;height:800px;border:1px solid rgb(200,200,200);box-shadow:0 0 5px rgb(200,200,200);">
+                    <div class="ui error message"><p>Erreur lors de la génération du PDF</p></div>
+                </object>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+
+    <script type="text/javascript">
+        $('#liste-type').dropdown({
+
+            onChange: function(a){
+
+                $('.type-liste').hide();
+                $('#type-' + a).toggle();
+            }
+        });
+    </script>
+
+{% endblock %}
