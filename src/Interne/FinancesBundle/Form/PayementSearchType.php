@@ -24,6 +24,16 @@ class PayementSearchType extends AbstractType
                                         'found_valid'=>'Validé')))
 
 
+            /*
+             * Données suplémentaires
+             */
+
+            ->add('montantRecuMinimum','number',array('required' => false,'mapped' => false))
+            ->add('montantRecuMaximum','number', array('required' => false,'mapped' => false))
+            ->add('datePayementMaximum','date',array('data'=> null,'required' => false,'mapped' => false))
+            ->add('datePayementMinimum','date',array('data'=> null,'required' => false,'mapped' => false))
+
+
 
 
         ;//fin de la fonction

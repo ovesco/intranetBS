@@ -40,16 +40,23 @@ class Rappel
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date", type="date")
+     * @ORM\Column(name="dateCreation", type="date")
      */
-    private $date;
+    private $dateCreation;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datePayement", type="date", nullable=true)
+     */
+    private $datePayement;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="frais", type="float")
+     * @ORM\Column(name="montantEmis", type="float")
      */
-    private $frais;
+    private $montantEmis;
 
     /**
      * @var float
@@ -70,49 +77,26 @@ class Rappel
     }
 
     /**
-     * Set frais
+     * Set montantEmis
      *
-     * @param float $frais
+     * @param float $montantEmis
      * @return Rappel
      */
-    public function setFrais($frais)
+    public function setMontantEmis($montantEmis)
     {
-        $this->frais = $frais;
+        $this->montantEmis = $montantEmis;
 
         return $this;
     }
 
     /**
-     * Get frais
+     * Get montantEmis
      *
      * @return float
      */
-    public function getFrais()
+    public function getMontantEmis()
     {
-        return $this->frais;
-    }
-
-    /**
-     * Set date
-     *
-     * @param \DateTime $date
-     * @return Rappel
-     */
-    public function setDate($date)
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    /**
-     * Get date
-     *
-     * @return \DateTime 
-     */
-    public function getDate()
-    {
-        return $this->date;
+        return $this->montantEmis;
     }
 
     /**
@@ -160,4 +144,51 @@ class Rappel
     {
         return $this->montantRecu;
     }
+
+    /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     * @return Rappel
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreation
+     *
+     * @return \DateTime
+     */
+    public function getDateCreation()
+    {
+        return $this->dateCreation;
+    }
+
+    /**
+     * Set datePayement
+     *
+     * @param \DateTime $datePayement
+     * @return Rappel
+     */
+    public function setDatePayement($datePayement)
+    {
+        $this->datePayement = $datePayement;
+
+        return $this;
+    }
+
+    /**
+     * Get datePayement
+     *
+     * @return \DateTime
+     */
+    public function getDatePayement()
+    {
+        return $this->datePayement;
+    }
+
 }

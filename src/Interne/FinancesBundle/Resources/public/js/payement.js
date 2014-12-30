@@ -101,6 +101,7 @@ function sendPayementSearch()
         error: function(jqXHR, textStatus, errorThrown) { alerte.send('erreur','danger'); },
         success: function(htmlResponse) {
 
+            $('#payementTable > tbody > tr').remove();
             $('#payementTable > tbody:first').append(htmlResponse);
             $('#modalPayementSearchForm').modal('hide');
 

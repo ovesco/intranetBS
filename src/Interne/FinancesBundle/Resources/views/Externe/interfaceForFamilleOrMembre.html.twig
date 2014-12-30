@@ -28,7 +28,7 @@
                     </tr>
                     <tr>
                         <th>Créances</th>
-                        <th>Frais rappels</th>
+                        <th>Rappels</th>
                         <th>Total</th>
                         <th>Reçu</th>
                         <th></th>
@@ -48,9 +48,9 @@
                                 {% else %}
                                     <td></td>
                                 {% endif %}
-                                <td>{{ facture.montantCreances|number_format(2, '.', ',') }}</td>
-                                <td>{{ facture.fraisRappel|number_format(2, '.', ',') }}</td>
-                                <td>{{ facture.montantTotal|number_format(2, '.', ',') }}</td>
+                                <td>{{ facture.montantEmisCreances|number_format(2, '.', ',') }}</td>
+                                <td>{{ facture.montantEmisRappels|number_format(2, '.', ',') }}</td>
+                                <td>{{ facture.montantEmis|number_format(2, '.', ',') }}</td>
                                 <td>{{ facture.montantRecu|number_format(2, '.', ',') }}</td>
                                 <td>
 

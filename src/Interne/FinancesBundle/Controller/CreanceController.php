@@ -221,7 +221,6 @@ class CreanceController extends Controller
                  * Creation de la nouvelle facture
                  */
                 $facture = new Facture();
-                $facture->setMontantRecu(0);
                 $facture->setDateCreation(new \DateTime());
                 $facture->setStatut('ouverte');
 
@@ -387,7 +386,7 @@ class CreanceController extends Controller
             $creanceAddForm->get('classOwner')->setData('Famille');
         }
 
-        return $this->render('InterneFinancesBundle:Externe:modalForm.html.twig',
+        return $this->render('InterneFinancesBundle:Externe:modalFormCreance.html.twig',
             array('ownerEntity' => $ownerEntity, 'creanceForm' => $creanceAddForm->createView() ));
 
     }

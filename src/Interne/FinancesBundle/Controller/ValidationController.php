@@ -82,10 +82,9 @@ class ValidationController extends Controller
 
 
 
-                $facture = $em->getRepository('InterneFinancesBundle:Facture')->find($idFacture);
+                $facture = $factureRepo->find($idFacture);
 
                 //on met a jour les infos de la facture
-                $facture->setMontantRecu($montantRecu);
                 $facture->setStatut('payee');
                 $facture->setDatePayement($datePayement);
 
@@ -130,12 +129,14 @@ class ValidationController extends Controller
                         foreach($facture->getCreances() as $creance)
                         {
                             $creance->setMontantRecu($creance->getMontantEmis);
+                            $creance->setDatePayement($datePayement);
                         }
 
                         //validationd des rappels de la facture
                         foreach($facture->getRappels() as $rappel)
                         {
                             $rappel->setMontantRecu($rappel->getFrais());
+                            $rappel->setDatePayement($datePayement);
                         }
                         break;
 
@@ -143,20 +144,24 @@ class ValidationController extends Controller
                         foreach($facture->getCreances() as $creance)
                         {
                             $creance->setMontantRecu($creanceRepartition[$creance->getId()]);
+                            $creance->setDatePayement($datePayement);
                         }
                         foreach($facture->getRappels() as $rappel)
                         {
                             $rappel->setMontantRecu($rappelRepartition[$rappel->getId()]);
+                            $rappel->setDatePayement($datePayement);
                         }
                         break;
                     case 'found_lower_valid':
                         foreach($facture->getCreances() as $creance)
                         {
                             $creance->setMontantRecu($creanceRepartition[$creance->getId()]);
+                            $creance->setDatePayement($datePayement);
                         }
                         foreach($facture->getRappels() as $rappel)
                         {
                             $rappel->setMontantRecu($rappelRepartition[$rappel->getId()]);
+                            $rappel->setDatePayement($datePayement);
                         }
                         break;
                     case 'found_lower_new_facture':
@@ -164,6 +169,7 @@ class ValidationController extends Controller
                         {
 
                             $creance->setMontantRecu($creanceRepartition[$creance->getId()]);
+                            $creance->setDatePayement($datePayement);
 
                             /*
                              * dans ce cas de figure, on crée des créances supplémentaires
@@ -202,22 +208,24 @@ class ValidationController extends Controller
                          * On crée une créance de compensation des eventuelles frais de rappel
                          * non payé.
                          */
-                        $fraisNonPaye = 0;
+                        $montantNonPaye = 0;
                         foreach($facture->getRappels() as $rappel)
                         {
                             $montantRecu = $rappelRepartition[$rappel->getId()];
-                            $frais = $rappel->getFrais();
+                            $montantEmis = $rappel->getMontantEmis();
                             $rappel->setMontantRecu($montantRecu);
-                            $fraisNonPaye = $fraisNonPaye + ($frais-$montantRecu);
+                            $rappel->setDatePayement($datePayement);
+                            $montantNonPaye = $montantNonPaye + ($montantEmis-$montantRecu);
                         }
-                        if($fraisNonPaye > 0)
+                        if($montantNonPaye > 0)
                         {
                             $newCreance = new Creance();
                             $newCreance->setTitre('Complément pour frais de rappel');
                             $newCreance->setMembre($creance->getMembre());
                             $newCreance->setFamille($creance->getFamille());
+                            $newCreance->setDateCreation(new \DateTime());
 
-                            $newCreance->setMontantEmis($fraisNonPaye);
+                            $newCreance->setMontantEmis($montantNonPaye);
 
                             $remarque = $creance->getRemarque()
                                 .'Crée en complément de la facture numéro: '
@@ -263,7 +271,7 @@ class ValidationController extends Controller
             {
                 if($factureFound->getStatut() == 'ouverte')
                 {
-                    $montantTotalEmis = $factureFound->getMontantTotal();
+                    $montantTotalEmis = $factureFound->getMontantEmis();
                     $montantRecu = $payement->getMontantRecu();
 
                     if($montantTotalEmis == $montantRecu)

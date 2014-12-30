@@ -45,7 +45,7 @@
                                     <i class="red warning circle icon"></i>
                                 </td>
                                 <td>
-                                    <div class="ui button small blue"
+                                    <div class="ui button small"
                                          data-idPayement="{{ result.payement.id }}"
                                          data-state="not_found"
                                          onclick="validation(this)">
@@ -53,7 +53,7 @@
                                     </div>
                                 </td>
                             {% else %}
-                                <td>{{ result.factureFound.montantTotal|number_format(2, '.', ',') }}</td>
+                                <td>{{ result.factureFound.montantEmis|number_format(2, '.', ',') }}</td>
 
                                 {% if result.factureFound.statut == 'ouverte' %}
                                     <td>

@@ -70,7 +70,7 @@ class Creance
     /**
      * @var string
      *
-     * @ORM\Column(name="remarque", type="text")
+     * @ORM\Column(name="remarque", type="text", nullable=true)
      */
     private $remarque;
 
@@ -82,6 +82,13 @@ class Creance
     private $dateCreation;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datePayement", type="date", nullable=true)
+     */
+    private $datePayement;
+
+    /**
      * @var float
      *
      * @ORM\Column(name="montantEmis", type="float")
@@ -91,7 +98,7 @@ class Creance
     /**
      * @var float
      *
-     * @ORM\Column(name="montantRecu", type="float")
+     * @ORM\Column(name="montantRecu", type="float", nullable=true)
      */
     private $montantRecu;
 
@@ -100,13 +107,7 @@ class Creance
      */
 
 
-    public function __construct()
-    {
-        $this->setDateCreation(new \DateTime());
-        $this->setMontantEmis(0);
-        $this->setMontantRecu(0);
-        $this->setRemarque('');
-    }
+
 
     /**
      * Get id
@@ -185,6 +186,29 @@ class Creance
     public function getDateCreation()
     {
         return $this->dateCreation;
+    }
+
+    /**
+     * Set datePayement
+     *
+     * @param \DateTime $datePayement
+     * @return Creance
+     */
+    public function setDatePayement($datePayement)
+    {
+        $this->datePayement = $datePayement;
+
+        return $this;
+    }
+
+    /**
+     * Get datePayement
+     *
+     * @return \DateTime
+     */
+    public function getDatePayement()
+    {
+        return $this->datePayement;
     }
 
     /**

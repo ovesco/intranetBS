@@ -118,8 +118,17 @@ class PayementController extends Controller
                 $payementSearchForm->submit($request);
                 $payement = $payementSearchForm->getData();
 
+
+                $searchParameters = array(
+                    'montantRecuMaximum' => $payementSearchForm->get('montantRecuMaximum')->getData(),
+                    'montantRecuMinimum' => $payementSearchForm->get('montantRecuMinimum')->getData(),
+                    'datePayementMaximum' => $payementSearchForm->get('datePayementMaximum')->getData(),
+                    'datePayementMinimum' => $payementSearchForm->get('datePayementMinimum')->getData());
+
+
+
                 $em = $this->getDoctrine()->getManager();
-                $payements = $em->getRepository('InterneFinancesBundle:Payement')->findBySearch($payement);
+                $payements = $em->getRepository('InterneFinancesBundle:Payement')->findBySearch($payement,$searchParameters);
 
                 return $this->render('InterneFinancesBundle:Payement:tableLine.html.twig',array('payements'=>$payements));
             }

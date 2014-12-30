@@ -19,6 +19,7 @@ class CreanceSearchType extends AbstractType
             ->add('montantEmis','number',array('label' => 'Montant émis', 'required' => false))
             ->add('montantRecu','number',array('label' => 'Montant reçu', 'required' => false))
             ->add('dateCreation','date',array('label' => 'Date de création','data'=> null,'required' => false))
+            ->add('datePayement','date',array('label' => 'Date de payement','data'=> null,'required' => false))
 
 
             /*
@@ -32,26 +33,11 @@ class CreanceSearchType extends AbstractType
 
             ->add('dateCreationMaximum','date',array('data'=> null,'required' => false,'mapped' => false))
             ->add('dateCreationMinimum','date',array('data'=> null,'required' => false,'mapped' => false))
+            ->add('datePayementMaximum','date',array('data'=> null,'required' => false,'mapped' => false))
+            ->add('datePayementMinimum','date',array('data'=> null,'required' => false,'mapped' => false))
 
+            ->add('isLinkedToFacture','choice',array('label' => 'Lien avec facture ','required' => false, 'mapped' => false,'choices' => array('no' =>'En attente de facturation', 'yes' =>'Faturée')))
 
-            ->add('isLinkedToFacture','choice',array('label' => 'Lien avec facture ','required' => true, 'mapped' => false,'choices' => array('no' =>'En attente de facturation', 'yes' =>'Faturée'),'data' => 'yes'))
-
-            ->add('searchOption', 'choice',
-                array(
-                    'required' => true,
-                    'mapped' => false,
-                    'data' => 'new',
-                    'choices' => array(
-                        'new'   => 'Nouvelle recherche',
-                        'add' => 'Ajouter à la recherche actuelle',
-                        'substract'   => 'Soustraire à la recherche actuelle',
-                )))
-
-
-
-            ->add('membreNom','text', array('label' => 'Nom','required' => false,'mapped' => false))
-            ->add('membrePrenom','text', array('label' => 'Prénom','required' => false,'mapped' => false))
-            ->add('familleNom','text', array('label' => 'Famille','required' => false,'mapped' => false))
             ;//fin de la fonction
 
 

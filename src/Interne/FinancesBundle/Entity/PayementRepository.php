@@ -17,7 +17,7 @@ class PayementRepository extends EntityRepository
      * cette fonction est utilisée par le formulaire de recherche.
      * on crée une requete custom.
      */
-    public function findBySearch($payement)
+    public function findBySearch($payement,$searchParameters = null)
     {
         //on crée un nouvelle requete qui sera custom
         $queryBuilder = $this->createQueryBuilder('payement');
@@ -45,6 +45,32 @@ class PayementRepository extends EntityRepository
         if($parameter != null)
         {
             $queryBuilder->andWhere('payement.state = :state')->setParameter('state', $parameter);
+        }
+
+        if($searchParameters != null) {
+
+            $parameter = $searchParameters['montantRecuMinimum'];
+            if ($parameter != null) {
+                $queryBuilder->andWhere('payement.montantRecu >= :montantRecuMinimum')
+                    ->setParameter('montantRecuMinimum', $parameter);
+            }
+
+            $parameter = $searchParameters['montantRecuMaximum'];
+            if ($parameter != null) {
+                $queryBuilder->andWhere('payement.montantRecu <= :montantRecuMaximum')
+                    ->setParameter('montantRecuMaximum', $parameter);
+            }
+
+            $parameter = $searchParameters['datePayementMaximum'];
+            if ($parameter != null) {
+                $queryBuilder->andWhere('payement.datePayement <= :datePayementMaximum')
+                    ->setParameter('datePayementMaximum', $parameter);
+            }
+            $parameter = $searchParameters['datePayementMinimum'];
+            if ($parameter != null) {
+                $queryBuilder->andWhere('payement.datePayement >= :datePayementMinimum')
+                    ->setParameter('datePayementMinimum', $parameter);
+            }
         }
 
         return $queryBuilder->getQuery()->getResult();

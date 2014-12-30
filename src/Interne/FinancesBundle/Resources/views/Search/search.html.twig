@@ -6,10 +6,11 @@
 {% block content %}
 
 
+    <div class="ui button" onclick="$('#modal-facture-searchForm').modal('show');">Form</div>
 
     {% include "InterneFinancesBundle:Search:results.html.twig" with {'factures': factures, 'creances':creances} %}
 
-    {% include "InterneFinancesBundle:Search:searchForm.html.twig" with {'formFacture': formFacture, 'formCreance':formCreance} %}
+    {% include "InterneFinancesBundle:Search:searchForm.html.twig" with {'searchForm': searchForm} %}
 
 
 

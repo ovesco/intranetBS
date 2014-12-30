@@ -17,13 +17,34 @@ function deleteCreance(element){
         }
     });
 }
+function validateAddCreanceForm()
+{
+
+    var titre = 'InterneFinancesBundle_creanceAddType[titre]';
+
+    var settings = {
+        inline : true,
+        on     : 'blur',
+        onSuccess : addCreance(),
+        titre : {
+            identifier : titre,
+            rules : [{
+                type : 'empty',
+                prompt : 'Please enter a name'
+            }]
+        }
+
+    };
+
+    $('#addCreanceForm .ui .form').form(settings);
+}
+
 
 /*
  * Ajoute une créance à un membre
  *
  * (l'ajout de créance à une liste de membre ne se fait pas ici mais dans adder.js)
  */
-
 function addCreance(){
 
     //on récupère les valeur du formulaire

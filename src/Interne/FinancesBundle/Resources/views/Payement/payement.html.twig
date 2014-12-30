@@ -1,5 +1,9 @@
 {% extends "layout.html.twig" %}
 
+{% form_theme searchForm 'InterneFinancesBundle:Templates:form_template.html.twig' %}
+
+{% import 'InterneFinancesBundle:Templates:form_macro.html.twig' as macros %}
+
 {% block titre %}Payements{% endblock %}
 
 
@@ -19,15 +23,22 @@
                                     Saisie manuelle
                                 </div>
                                 <div class="content">
-                                    <form role="form">
-                                        <div class="form-group">
-                                            <input id="form_num_ref" type="number" class="form-control" placeholder="Num. de référance">
-                                            <input id="form_montant_recu" type="number" class="form-control" placeholder="Montant reçu">
-                                            <div class="ui button" onclick="addManualy();">
-                                                Valider
+                                    <div class="ui form">
+                                        <div class="two fields">
+                                            <div class="field">
+                                                <input id="form_num_ref" type="number" placeholder="Num. de référance">
+                                            </div>
+                                            <div class="field">
+                                                <input id="form_montant_recu" type="number" placeholder="Montant reçu">
                                             </div>
                                         </div>
-                                    </form>
+                                        <div class="ui button tiny" onclick="addManualy();">
+                                            Valider
+                                        </div>
+
+
+
+                                    </div>
 
                                 </div>
                                 <div class="title">
@@ -35,16 +46,14 @@
                                     Fichier BVR
                                 </div>
                                 <div class="content">
-
-                                    <form role="form">
-                                        <div class="form-group">
-                                            <input id="form_file" type="file" class="form-control" placeholder="Ficher de type *.V11">
-                                            <div class="ui button" onclick="uploadFile();">
-                                                Charger
-                                            </div>
+                                    <div class="ui form">
+                                        <div class="field">
+                                            <input id="form_file" type="file" placeholder="Ficher de type *.V11">
                                         </div>
-                                    </form>
-
+                                        <div class="ui button" onclick="uploadFile();">
+                                            Charger
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -60,8 +69,23 @@
                                 </div>
                                 <div class="content">
                                     {{ form_start(searchForm, {'attr': {'id': 'payementSearchForm'}}) }}
-                                    {{ form_row(searchForm) }}
+                                    <div class="ui form">
+
+                                        {{ form_row(searchForm.state) }}
+
+                                        {{ form_row(searchForm.idFacture) }}
+
+                                        {{ macros.input_number_switch(searchForm.montantRecu, searchForm.montantRecuMinimum, searchForm.montantRecuMaximum) }}
+
+                                        {{ macros.input_date_switch(searchForm.datePayement, searchForm.datePayementMinimum, searchForm.datePayementMaximum) }}
+
+                                    </div>
+
+                                    {{ form_rest(searchForm) }}
                                     {{ form_end(searchForm) }}
+
+                                </div>
+                                <div class="actions">
                                     <div class="ui button blue" onclick="sendPayementSearch();">Rechercher</div>
                                 </div>
                             </div>
@@ -112,7 +136,9 @@
 
     {% block js %}
 
-    {% javascripts  '@InterneFinancesBundle/Resources/public/js/payement.js' %}
+    {% javascripts
+        '@InterneFinancesBundle/Resources/public/js/payement.js'
+        '@InterneFinancesBundle/Resources/public/js/form.js'%}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
