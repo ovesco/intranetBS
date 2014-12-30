@@ -31,7 +31,6 @@ services:
     pdf:
         class: AppBundle\Utils\Export\Pdf
 
-
     # Twig
     # Extensions twig qui permettent de mettre en place des filtres
     # personnalisés

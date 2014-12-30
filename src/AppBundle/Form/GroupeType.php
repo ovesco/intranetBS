@@ -12,16 +12,11 @@ class GroupeType extends AbstractType
     {
         $builder
             ->add('nom')
-            ->add('parent', 'entity', array(
-            		
-            		'class'		=> 'AppBundle:Groupe',
-            		'property'	=> 'nom'
-            	))
-	    ->add('type', 'entity', array(
-			
-			'class'		=> 'AppBundle:Type',
-			'property'	=> 'nom'
-	    ))
+            ->add('type', 'semantic', array(
+
+                'class'		=> 'AppBundle:Type',
+                'property'	=> 'nom'
+            ))
         ;
     }
 

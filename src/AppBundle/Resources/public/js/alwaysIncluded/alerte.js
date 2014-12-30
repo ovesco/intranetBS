@@ -19,9 +19,6 @@ var alerte = {
      * @param icon string si on veut un icone avec
      * @return integer l'id de l'alerte
      */
-        /*
-        J'ai renommer la fonction parce que balance c'était pas top ;-)
-         */
     send : function(message, type, delay) {
 
         var id   = Math.floor((Math.random() * 1000) + 1),

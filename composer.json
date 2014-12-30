@@ -23,7 +23,7 @@
         "itbz/fpdf": "1.7.*",
         "phpoffice/phpexcel": "dev-master",
         "itbz/fpdi": "dev-master",
-		"willdurand/faker-bundle": "@stable"
+        "fzaninotto/faker": "1.5.*@dev"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"
