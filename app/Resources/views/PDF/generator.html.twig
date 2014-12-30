@@ -20,7 +20,7 @@
                         <div class="two fields">
                             <div class="field">
                                 <label>Liste de membres</label>
-                                <div class="ui selection dropdown">
+                                <div id="liste-listing" class="ui selection dropdown">
                                     <input type="hidden" name="liste">
                                     <div class="default text">Liste</div>
                                     <i class="dropdown icon"></i>
@@ -32,7 +32,7 @@
                                             </div>
                                         {% endfor %}
                                         <div class="divider"></div>
-                                        <div class="item">
+                                        <div class="item" data-value="groupe__{{ attribution.groupe.id }}">
                                             <div class="ui blue empty circular label"></div>
                                             {{ attribution.groupe.nom }}
                                             <span class="description">{{ attribution.groupe.membersRecursive|length }} membres</span>
@@ -48,7 +48,7 @@
                                     <div class="default text">Choisir un modèle</div>
                                     <i class="dropdown icon"></i>
                                     <div class="menu">
-                                        <div class="item" data-value="liste_troupe">Liste de troupe</div>
+                                        <div class="item" data-value="liste_unite">Liste d'unité</div>
                                         <div class="item" data-value="liste_rega">Liste REGA</div>
                                         <div class="item" data-value="liste_perso">Personnaliser</div>
                                     </div>
@@ -66,8 +66,8 @@
                         <div class="two fields">
                             <div class="field">
                                 <label>En-Tête</label>
-                                <input type="file" name="template" accept="application/pdf" />
-                                <button class="ui mini primary button">Charger</button>
+                                <input type="file" id="pdf-template" name="template" accept="application/pdf" />
+                                <button id="pdf-template-button" class="ui mini primary button">Charger</button>
                             </div>
                             <div class="field">
                                 <label>Hauteur de l'en-tête</label>
@@ -76,23 +76,83 @@
                         </div>
 
                         <div id="liste-type-sections-container">
-                            <section class="type-liste" id="type-liste_troupe">
-                                <h3>Paramètres liste de troupe</h3>
-                            </section>
-                            <section class="type-liste" id="type-liste_rega">
-                                <h3>Paramètres de la liste REGA</h3>
-                            </section>
                             <section class="type-liste" id="type-liste_perso">
-                                <h3>Paramètres liste personnalisée</h3>
+                                <h3>Champs à inclure dans la liste</h3>
+                                <div class="two fields">
+                                    <div class="field">
+                                        <div class="inline field">
+                                            <div id="cb-nom" class="ui checkbox">
+                                                <input type="checkbox">
+                                                <label>Nom</label>
+                                            </div>
+                                        </div>
+                                        <div class="inline field">
+                                            <div id="cb-prenom" class="ui checkbox">
+                                                <input type="checkbox">
+                                                <label>Prénom</label>
+                                            </div>
+                                            <div id="cb-naissance" class="ui checkbox">
+                                                <input type="checkbox">
+                                                <label>Naissance</label>
+                                            </div>
+                                            <div class="inline field">
+                                                <div id="cb-adresse" class="ui checkbox">
+                                                    <input type="checkbox">
+                                                    <label>Adresse</label>
+                                                </div>
+                                            </div>
+                                            <div class="inline field">
+                                                <div id="cb-telephone" class="ui checkbox">
+                                                    <input type="checkbox">
+                                                    <label>Téléphone</label>
+                                                </div>
+                                            </div>
+                                            <div class="inline field">
+                                                <div id="cb-email" class="ui checkbox">
+                                                    <input type="checkbox">
+                                                    <label>E-mail</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="inline field">
+                                            <div id="cb-numeroBs" class="ui checkbox">
+                                                <input type="checkbox">
+                                                <label>Numéro BS</label>
+                                            </div>
+                                        </div>
+                                        <div class="inline field">
+                                            <div id="cb-fonction" class="ui checkbox">
+                                                <input type="checkbox">
+                                                <label>Fonction</label>
+                                            </div>
+                                        </div>
+                                        <div class="inline field">
+                                            <div id="cb-groupe" class="ui checkbox">
+                                                <input type="checkbox">
+                                                <label>Unité actuelle</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </section>
                         </div>
                     </div>
                 </div>
+
+                <button onclick="reloadPDF();" class="ui green button">Recharger</button>
+                <button onclick="emptyPDF();" class="ui teal button">Réinitialiser</button>
             </div>
-            <div class="eight wide column">
-                <object type="application/pdf" data="{{ path('pdf_renderer') }}" style="width:100%;height:800px;border:1px solid rgb(200,200,200);box-shadow:0 0 5px rgb(200,200,200);">
+            <div class="eight wide column" id="yoloswag">
+
+
+                <iframe id="embeded-pdf" src="{{ path('pdf_renderer') }}" style="width:100%;height:800px;border:1px solid rgb(200,200,200);box-shadow:0 0 5px rgb(200,200,200);">
                     <div class="ui error message"><p>Erreur lors de la génération du PDF</p></div>
-                </object>
+                </iframe>
+
+
             </div>
         </div>
     </div>
@@ -109,6 +169,81 @@
                 $('#type-' + a).toggle();
             }
         });
+
+        /*
+         * Gestion de l'upload d'un template PDF
+         */
+        $('#pdf-template-button').click(function() {
+
+            $(this).attr("class", "ui mini primary loading button");
+
+            var input       = document.getElementById('pdf-template'),
+                file        = input.files[0],
+                xhr         = new XMLHttpRequest(),
+                formData    = new FormData();
+
+            formData.append('template', file);
+
+            xhr.open('POST', Routing.generate('pdf_load_template'), true);
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    alerte.send('Template bien uploadé, PDF actualisé automatiquement', 'success', 5000);
+                    reloadPDF();
+                } else {
+                    alerte.send("Erreur lors de l'upload, le fichier est soit trop volumineux, soit pas un PDF", 'error', 5000);
+                }
+            };
+
+            xhr.send(formData);
+
+            $(this).attr("class", "ui mini primary button");
+
+        });
+
+        function reloadPDF() {
+
+            var params = {
+
+                    base        : {
+                        type        : $('#liste-type').dropdown('get value'),
+                        liste       : $('#liste-listing').dropdown('get value'),
+                    },
+                    subParams   : {
+
+                        nom         : $('#cb-nom').checkbox('is checked'),
+                        prenom      : $('#cb-prenom').checkbox('is checked'),
+                        naissance   : $('#cb-naissance').checkbox('is checked'),
+                        adresse     : $('#cb-adresse').checkbox('is checked'),
+                        telephone   : $('#cb-telephone').checkbox('is checked'),
+                        email       : $('#cb-email').checkbox('is checked'),
+                        numeroBs    : $('#cb-numeroBs').checkbox('is checked'),
+                        fonction    : $('#cb-fonction').checkbox('is checked'),
+                        groupe      : $('#cb-groupe').checkbox('is checked')
+                    }
+                };
+
+
+            $.ajax({
+                type : 'GET',
+                data : params,
+                url  : Routing.generate('pdf_generator_update'),
+                /*success: function(data){$('#yoloswag').html(JSON.stringify(data))},
+                error: function(data){$('#yoloswag').html(JSON.stringify(data))}*/
+            });
+
+            document.getElementById('embeded-pdf').contentDocument.location.reload(true);
+        }
+
+        function emptyPDF() {
+
+            $.ajax({
+                type : 'GET',
+                url  : Routing.generate('pdf_generator_reinitialise')
+            });
+
+            reloadPDF();
+        }
     </script>
 
 {% endblock %}
