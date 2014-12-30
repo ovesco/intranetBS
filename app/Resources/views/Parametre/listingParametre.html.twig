@@ -6,79 +6,69 @@
 
 
 {% block content %}
-<div class="ui grid">
+<div class="ui page grid">
     <div class="row">
         <div class="column">
-
+            <div class="ui segment">
 
 
                 <span>Liste des parametres</span>
 
 
-                <table class="ui table">
-                    <thead>
-                        <tr>
-                            <th>Nom du parametre</th>
-                            <th>Valeur</th>
+                <table class="ui definition table">
 
-
-                        </tr>
-
-
-                    </thead>
                     <tbody>
-                            {% for parametre in parametres %}
-                                <tr>
-                                    <td>
-                                        {{ parametre.labelName}}
-                                    </td>
-                                    <td>
-                                        {% if parametre.type == 'string' %}
-                                            <input type="text"
-                                                   id="{{ parametre.name }} "
-                                                   data-id="{{ parametre.id }}"
-                                                   data-type="{{ parametre.type }}"
-                                                   class="formParametre"
-                                                   value="{{ parametre.string}}">
-                                        {% elseif parametre.type == 'number'%}
-                                            <input type="number"
-                                                   id="{{ parametre.name }} "
-                                                   data-id="{{ parametre.id }}"
-                                                   data-type="{{ parametre.type }}"
-                                                   class="formParametre"
-                                                   value="{{ parametre.number}}">
-                                        {% elseif parametre.type == 'text'%}
-                                            {%  spaceless %}
-                                            <textarea
-                                                   id="{{ parametre.name }} "
-                                                   data-id="{{ parametre.id }}"
-                                                   data-type="{{ parametre.type }}"
-                                                   class="formParametre">{{ parametre.text}}</textarea>
-                                            {% endspaceless %}
-                                        {% elseif parametre.type == 'choice'%}
-                                            <select
-                                                   id="{{ parametre.name }} "
-                                                   data-id="{{ parametre.id }}"
-                                                   data-type="{{ parametre.type }}"
-                                                   class="formParametre"
-                                                   value="{{ parametre.choice}}">
-                                                    <option></option>
-                                                    {% for choice in parametre.choices %}
-                                                        <option
-                                                            {% if choice == parametre.choice %}
-                                                                selected="selected"
-                                                            {% endif %}
-                                                            >{{ choice }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                        {% endif%}
-                                    </td>
-                                </tr>
-                            {% endfor %}
+                    {% for parametre in parametres %}
+                        <tr>
+                            <td>
+                                {{ parametre.labelName}}
+                            </td>
+                            <td>
+                                {% if parametre.type == 'string' %}
+                                    <input type="text"
+                                           id="{{ parametre.name }} "
+                                           data-id="{{ parametre.id }}"
+                                           data-type="{{ parametre.type }}"
+                                           class="formParametre"
+                                           value="{{ parametre.string}}">
+                                {% elseif parametre.type == 'number'%}
+                                    <input type="number"
+                                           id="{{ parametre.name }} "
+                                           data-id="{{ parametre.id }}"
+                                           data-type="{{ parametre.type }}"
+                                           class="formParametre"
+                                           value="{{ parametre.number}}">
+                                {% elseif parametre.type == 'text'%}
+                                    {%  spaceless %}
+                                        <textarea
+                                                id="{{ parametre.name }} "
+                                                data-id="{{ parametre.id }}"
+                                                data-type="{{ parametre.type }}"
+                                                class="formParametre">{{ parametre.text}}</textarea>
+                                    {% endspaceless %}
+                                {% elseif parametre.type == 'choice'%}
+                                    <select
+                                            id="{{ parametre.name }} "
+                                            data-id="{{ parametre.id }}"
+                                            data-type="{{ parametre.type }}"
+                                            class="formParametre"
+                                            value="{{ parametre.choice}}">
+                                        <option></option>
+                                        {% for choice in parametre.choices %}
+                                            <option
+                                                    {% if choice == parametre.choice %}
+                                                        selected="selected"
+                                                    {% endif %}
+                                                    >{{ choice }}</option>
+                                        {% endfor %}
+                                    </select>
+                                {% endif%}
+                            </td>
+                        </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
-
-
+            </div>
         </div>
     </div>
 </div>
