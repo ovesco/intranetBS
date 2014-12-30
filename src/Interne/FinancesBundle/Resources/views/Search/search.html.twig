@@ -5,21 +5,33 @@
 
 {% block content %}
 
-
-    <div class="ui button" onclick="$('#modal-facture-searchForm').modal('show');">Form</div>
-
-    {% include "InterneFinancesBundle:Search:results.html.twig" with {'factures': factures, 'creances':creances} %}
-
-    {% include "InterneFinancesBundle:Search:searchForm.html.twig" with {'searchForm': searchForm} %}
+<div class="ui page grid">
+    <div class="row">
+        <div class="column">
+            <div class="ui segment">
 
 
+    <div class="ui button" onclick="$('#modal-facture-searchForm').modal('show');"><i class="search icon"></i>Recherche</div>
+
+                {% include "InterneFinancesBundle:Search:results.html.twig" with {'factures': factures, 'creances':creances} %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "InterneFinancesBundle:Search:searchForm.html.twig" with {'searchForm': searchForm} %}
+
+{% include "InterneFinancesBundle:Modal:modalDisplay.html.twig" %}
 
 {% endblock %}
 
 {% block js %}
 
-    {% javascripts '@InterneFinancesBundle/Resources/public/js/search.js'
-                    '@InterneFinancesBundle/Resources/public/js/creance.js'%}
+    {% javascripts
+    '@InterneFinancesBundle/Resources/public/js/search.js'
+    '@InterneFinancesBundle/Resources/public/js/creance.js'
+    %}
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 

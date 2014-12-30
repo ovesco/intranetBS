@@ -1,0 +1,67 @@
+<div class="header">Détail de la créance</div>
+<div class="content" style="overflow-y:auto">
+    <table class="ui definition table">
+        <tbody>
+            <tr>
+                <td>Titre</td>
+                <td>{{ creance.titre }}</td>
+            </tr>
+            <tr>
+                <td>Remarque</td>
+                <td>{{ creance.remarque }}</td>
+            </tr>
+            <tr>
+                <td>Statut</td>
+                <td>
+                    {% if creance.facture is not empty %}
+                        {% if creance.facture.statut == 'ouverte' %}
+                            <div class="ui label blue">
+                                Ouverte
+                            </div>
+                        {% elseif creance.facture.statut == 'payee' %}
+                            <div class="ui label green">
+                                Payée
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="ui label orange">
+                            En attente de facturation
+                        </div>
+
+                    {% endif %}
+
+                </td>
+            </tr>
+            <tr>
+                <td>Date de création</td>
+                <td>{{ creance.dateCreation|date("d/m/Y") }}</td>
+            </tr>
+
+
+
+            {% if creance.facture is not empty %}
+            <tr>
+                <td>Date de payement</td>
+                <td>
+                    {% if creance.facture.statut == 'payee' %}
+                        {{ creance.datePayement|date("d/m/Y") }}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endif %}
+
+            <tr>
+                <td>Montant émis</td>
+                <td>{{ creance.montantEmis|number_format(2, '.', ',') }}</td>
+            </tr>
+            <tr>
+                <td>Montant reçu</td>
+                <td>{{ creance.montantRecu|number_format(2, '.', ',') }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+
+</div>
+<div class="actions"></div>

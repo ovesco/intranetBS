@@ -84,6 +84,9 @@
                                              onclick="validation(this)">
                                             Valider
                                         </div>
+                                        <div class="ui button small" onclick="openFactureShow({{ result.factureFound.id }});">
+                                            <i class="zoom icon"></i>
+                                        </div>
                                     </td>
                                 {% elseif result.validationStatut == 'Found:Upper' %}
 
@@ -158,11 +161,15 @@
 
 
 
+
                                             </div>
                                         </div>
                                         <div class="ui button"
                                              onclick="openModalRepartition('modal-repartition-{{ result.payement.id }}');">
                                             Repartire la somme
+                                        </div>
+                                        <div class="ui button small" onclick="openFactureShow({{ result.factureFound.id }});">
+                                            <i class="zoom icon"></i>
                                         </div>
 
 
@@ -252,6 +259,9 @@
                                              onclick="openModalRepartition('modal-repartition-{{ result.payement.id }}');">
                                             Repartire la somme
                                         </div>
+                                        <div class="ui button small" onclick="openFactureShow({{ result.factureFound.id }});">
+                                            <i class="zoom icon"></i>
+                                        </div>
                                     </td>
                                 {% elseif result.validationStatut == 'Found:AlreadyPayed' %}
 
@@ -266,11 +276,12 @@
                                              onclick="validation(this)">
                                             Ignorer
                                         </div>
+                                        <div class="ui button small" onclick="openFactureShow({{ result.factureFound.id }});">
+                                            <i class="zoom icon"></i>
+                                        </div>
 
                                     </td>
-                                {% else %}
-                                    <td></td>
-                                    <td></td>
+
                                 {% endif %}
 
 
@@ -303,7 +314,7 @@
 
 
 
-
+{% include "InterneFinancesBundle:Modal:modalDisplay.html.twig" %}
 
 
 {% endblock %}

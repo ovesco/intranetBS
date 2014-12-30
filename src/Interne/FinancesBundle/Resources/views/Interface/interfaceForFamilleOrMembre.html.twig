@@ -1,4 +1,4 @@
-<!-- on stocke les infos du propriétaire pour les récupérer récupérer -->
+<!-- on stocke les infos du propriétaire pour les récupérer -->
 <input type="hidden" value="{{ ownerEntity.id }}" id="ownerEntity-id"/>
 
 {% if ownerEntity.isClass('Membre') %}
@@ -55,16 +55,26 @@
                                 <td>
 
 
-                                    <a onclick="deleteFacture(this);" data-id="{{ facture.id }}">
-                                        <i class="trash icon red"></i>
-                                    </a>
+
 
                                     <a onclick="printFacture(this);" data-id="{{ facture.id }}" target="_blank">
                                         <i class="print icon"></i>
                                     </a>
 
-                                    <a href="{{path('interne_fiances_facture_show',{'id': facture.id })}}" >
+                                    <a onclick="openFactureShow({{ facture.id }});" >
                                         <i class="zoom icon"></i>
+                                    </a>
+
+
+                                    <a onclick="deleteFactureFromInterface(this);"
+                                       data-id="{{ facture.id }}"
+                                       data-owner-id="{{ ownerEntity.id }}"
+                                            {% if ownerEntity.isClass('Membre') %}
+                                        data-owner-type="Membre"
+                                    {% elseif ownerEntity.isClass('Famille') %}
+                                        data-owner-type="Famille"
+                                            {% endif %}>
+                                        <i class="trash icon red"></i>
                                     </a>
 
 
@@ -153,8 +163,19 @@
                                     <td>{{ creance.montantRecu|number_format(2, '.', ',') }}</td>
                                     <td>
 
-                                        <a onclick="deleteCreance(this);" data-id="{{ creance.id }}">
+                                        <a onclick="deleteCreanceFromInterface(this);"
+                                           data-id="{{ creance.id }}"
+                                           data-owner-id="{{ ownerEntity.id }}"
+                                            {% if ownerEntity.isClass('Membre') %}
+                                                data-owner-type="Membre"
+                                            {% elseif ownerEntity.isClass('Famille') %}
+                                                data-owner-type="Famille"
+                                            {% endif %}>
                                             <i class="trash icon red"></i>
+                                        </a>
+
+                                        <a onclick="openCreanceShow({{ creance.id }});" >
+                                            <i class="zoom icon"></i>
                                         </a>
 
 
@@ -177,7 +198,11 @@
                                         <td>{{ creance.remarque }}</td>
                                         <td>{{ creance.montantEmis|number_format(2, '.', ',') }}</td>
                                         <td>{{ creance.montantRecu|number_format(2, '.', ',') }}</td>
-                                        <td></td>
+                                        <td>
+                                            <a onclick="openCreanceShow({{ creance.id }});" >
+                                                <i class="zoom icon"></i>
+                                            </a>
+                                        </td>
 
                                     </tr>
                                 {% endif %}
@@ -197,7 +222,11 @@
                                         <td>{{ creance.remarque }}</td>
                                         <td>{{ creance.montantEmis|number_format(2, '.', ',') }}</td>
                                         <td>{{ creance.montantRecu|number_format(2, '.', ',') }}</td>
-                                        <td></td>
+                                        <td>
+                                            <a onclick="openCreanceShow({{ creance.id }});" >
+                                                <i class="zoom icon"></i>
+                                            </a>
+                                        </td>
 
                                     </tr>
                                 {% endif %}
@@ -225,14 +254,16 @@
 
 
 {# Insertion du fromulaire modal de créance #}
-{{ render(controller('InterneFinancesBundle:Creance:creanceModalForm', { 'ownerEntity': ownerEntity })) }}
+{{ render(controller('InterneFinancesBundle:Interface:creanceModalForm', { 'ownerEntity': ownerEntity })) }}
 
-
+{% include "InterneFinancesBundle:Modal:modalDisplay.html.twig" %}
 
 {% block javascript %}
 
-    {% javascripts  '@InterneFinancesBundle/Resources/public/js/creance.js'
-    '@InterneFinancesBundle/Resources/public/js/facture.js'%}
+    {% javascripts
+    '@InterneFinancesBundle/Resources/public/js/creance.js'
+    '@InterneFinancesBundle/Resources/public/js/facture.js'
+    '@InterneFinancesBundle/Resources/public/js/interfaceMembreFamille.js'%}
     <script src="{{ asset_url }}"></script>
 
     {% endjavascripts %}

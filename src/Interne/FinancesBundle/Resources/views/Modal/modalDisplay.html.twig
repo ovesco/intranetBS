@@ -1,0 +1,64 @@
+<div class="ui modal" id="modal-display" aria-hidden="true">
+
+
+    <i class="close icon"></i>
+    <div class="header"></div>
+    <div class="content" style="overflow-y:auto"></div>
+    <div class="actions"></div>
+
+</div>
+
+
+{% block javascript %}
+
+
+    <script>
+
+        function openCreanceShow(id)
+        {
+            var data = { idCreance: id};
+            $.ajax({
+                type: "POST",
+                url: Routing.generate('interne_fiances_creance_show_ajax'),
+                data: data,
+                error: function(jqXHR, textStatus, errorThrown) { alerte.send('Erreur','danger'); },
+                success: function(htmlResponse) {
+
+                    //rempalce par le nouveau contenu
+                    $('#modal-display').empty();
+                    $('#modal-display').append(htmlResponse);
+                    $('#modal-display').modal('show');
+
+                }
+            });
+
+        }
+
+        function openFactureShow(id)
+        {
+            var data = { idFacture: id};
+            $.ajax({
+                type: "POST",
+                url: Routing.generate('interne_fiances_facture_show_ajax'),
+                data: data,
+                error: function(jqXHR, textStatus, errorThrown) { alerte.send('Erreur','danger'); },
+                success: function(htmlResponse) {
+
+                    //rempalce par le nouveau contenu
+                    $('#modal-display').empty();
+                    $('#modal-display').append(htmlResponse);
+                    $('#modal-display').modal('show');
+
+                }
+            });
+        }
+
+
+    </script>
+
+{% endblock %}
+
+
+
+
+

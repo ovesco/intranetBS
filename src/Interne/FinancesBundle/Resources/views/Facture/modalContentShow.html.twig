@@ -1,0 +1,53 @@
+<div class="header">Détail de la facture N°{{ facture.id }}</div>
+<div class="content" style="overflow-y:auto">
+    <table class="ui definition table">
+        <tbody>
+        <tr>
+            <td>Statut</td>
+            <td>
+                {% if facture.statut == 'ouverte' %}
+                    <div class="ui label blue">
+                        Ouverte
+                    </div>
+                {% elseif facture.statut == 'payee' %}
+                    <div class="ui label green">
+                        Payée
+                    </div>
+                {% else %}
+                {% endif %}
+
+            </td>
+        </tr>
+        <tr>
+            <td>Date de création</td>
+            <td>{{ facture.dateCreation|date("d/m/Y") }}</td>
+        </tr>
+
+
+
+        <tr>
+            <td>Date de payement</td>
+            <td>
+                {% if facture.statut == 'payee' %}
+                    {{ facture.datePayement|date("d/m/Y") }}
+                {% endif %}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="ui table">
+        <tbody>
+            {% for creance in facture.creances %}
+                <tr>
+                    <td>{{ creance.titre }}</td>
+                </tr>
+
+
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+<div class="actions"></div>
+

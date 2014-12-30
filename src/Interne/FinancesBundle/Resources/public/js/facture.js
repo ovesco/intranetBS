@@ -1,30 +1,16 @@
-function deleteFacture(element){
-    var id = $(element).data("id");
+function deleteFacture(id){
+
     var data = { idFacture: id};
+    var success;
     $.ajax({
         type: "POST",
         url: Routing.generate('interne_fiances_facture_delete_ajax'),
         data: data,
-        error: function(jqXHR, textStatus, errorThrown) { alerte.send('Erreur','danger'); },
-        success: function(htmlResponse) {
-
-            //cherche le nouveau contenu
-            $listeCreanceContent = $(htmlResponse).filter('#listeFactureContent');
-
-            //rempalce le nouveau contenu
-            $('#listeFactureContent').replaceWith($listeCreanceContent);
-
-            //cherche le nouveau contenu
-            $listeCreanceContent = $(htmlResponse).filter('#listeCreanceContent');
-
-            //rempalce le nouveau contenu
-            $('#listeCreanceContent').replaceWith($listeCreanceContent);
-
-            alerte.send('Facture supprimée','info',2000);
-
-
-        }
+        async: false, //option utiliée pour retourner la valeur de success en dehors de la requete ajax
+        error: function(jqXHR, textStatus, errorThrown) { success = false; },
+        success: function(htmlResponse) { success = true; }
     });
+    return success;
 }
 
 

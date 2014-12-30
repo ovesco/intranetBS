@@ -36,24 +36,32 @@ class FactureController extends Controller
                 $em->remove($facture);
                 $em->flush();
             }
-            return $this->render('InterneFinancesBundle:Externe:interfaceForFamilleOrMembre.html.twig',
-                array('ownerEntity' => $facture->getOwner()));
+            return new Response();
         }
         return new Response();
     }
 
+
+
     /**
-     * @Route("/facture/show/{id}", name="interne_fiances_facture_show")
-     * @param $id
+     * @Route("/facture/show_ajax", name="interne_fiances_facture_show_ajax", options={"expose"=true})
+     *
      * @return Response
      */
-    public function showAction($id){
+    public function showAjaxAction(){
 
-        $em = $this->getDoctrine()->getManager();
-        $facture = $em->getRepository('InterneFinancesBundle:Facture')->find($id);
-        return $this->render('InterneFinancesBundle:Facture:show.html.twig',
-            array('facture' => $facture));
+        $request = $this->getRequest();
 
+        if($request->isXmlHttpRequest()) {
+
+            $id = $request->request->get('idFacture');
+            $em = $this->getDoctrine()->getManager();
+            $facture = $em->getRepository('InterneFinancesBundle:Facture')->find($id);
+            return $this->render('InterneFinancesBundle:Facture:modalContentShow.html.twig',
+                array('facture' => $facture));
+        }
+
+        return new Response();
     }
 
 

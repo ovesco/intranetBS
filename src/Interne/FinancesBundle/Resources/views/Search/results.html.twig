@@ -1,8 +1,5 @@
 
-<div class="ui page grid">
-    <div class="row">
-        <div class="column">
-            <div class="ui segment">
+
                 <div id="search-infos-context" class="tab-context">
 
                     <div class="ui top attached tabular menu">
@@ -55,8 +52,16 @@
                                                     <td>{{ facture.montantEmis|number_format(2, '.', ',') }}</td>
                                                     <td>{{ facture.montantRecu|number_format(2, '.', ',') }}</td>
                                                     <td>
-                                                        <a class="btn btn-xs btn-danger" onclick="deleteFacture(this);" data-id="{{ facture.id }}">
-                                                            <span class="glyphicon glyphicon-trash" infobulle="Supprimer"></span>
+                                                        <a onclick="" data-id="{{ facture.id }}">
+                                                            <i class="trash icon red"></i>
+                                                        </a>
+
+                                                        <a onclick="" data-id="{{ facture.id }}" target="_blank">
+                                                            <i class="print icon"></i>
+                                                        </a>
+
+                                                        <a onclick="openFactureShow({{ facture.id }});" >
+                                                            <i class="zoom icon"></i>
                                                         </a>
 
 
@@ -157,7 +162,12 @@
                                                             <a class="btn btn-xs btn-danger" onclick="deleteCreance(this);" data-id="{{ creance.id }}">
                                                                 <span class="glyphicon glyphicon-trash" infobulle="Supprimer"></span>
                                                             </a>
+
+
                                                         {% endif %}
+                                                        <a onclick="openCreanceShow({{ creance.id }});" >
+                                                            <i class="zoom icon"></i>
+                                                        </a>
                                                     </td>
                                                 </tr>
 
@@ -179,10 +189,7 @@
                     </div>
 
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 
 
