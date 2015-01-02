@@ -46,11 +46,35 @@ class CreanceController extends Controller
                 $em->flush();
             }
 
-            return $this->render('InterneFinancesBundle:Externe:interfaceForFamilleOrMembre.html.twig',
-                array('ownerEntity' => $creance->getOwner()));
+            return new Response();
         }
+        return new Response();
     }
 
+
+
+
+
+    /**
+     * @Route("/creance/show_ajax", name="interne_fiances_creance_show_ajax", options={"expose"=true})
+     *
+     * @return Response
+     */
+    public function showAjaxAction(){
+
+        $request = $this->getRequest();
+
+        if($request->isXmlHttpRequest()) {
+
+            $id = $request->request->get('idCreance');
+            $em = $this->getDoctrine()->getManager();
+            $creance = $em->getRepository('InterneFinancesBundle:Creance')->find($id);
+            return $this->render('InterneFinancesBundle:Creance:modalContentShow.html.twig',
+                array('creance' => $creance));
+        }
+        return new Response();
+
+    }
 
     /*
      * Ajoute des cérances en masse à la liste de membre (listing)
@@ -151,244 +175,17 @@ class CreanceController extends Controller
             $em->persist($creance);
             $em->flush();
 
-            return $this->render('InterneFinancesBundle:Externe:interfaceForFamilleOrMembre.html.twig',
+            return $this->render('InterneFinancesBundle:Interface:interfaceForFamilleOrMembre.html.twig',
                 array('ownerEntity' => $creance->getOwner()));
 
         }
         return new Response();
     }
 
-    /*
-     * Creation de factures avec une liste de créances (Id).
-     *
-     * Remarque: cette fonction va grouper les factures par unité de
-     * facturation. Cela marche uniquement pour les factures
-     * présente dans la liste d'IDs
-     */
-    /**
-     * @param Array $listeIdCreance
-     */
-    private function createFacture($listeIdCreance)
-    {
 
 
-        /*
-         * On load la base de donnée
-         */
-        $em = $this->getDoctrine()->getManager();
-        $creanceRepo = $em->getRepository('InterneFinancesBundle:Creance');
-
-        /*
-         * On va mettre les créance de la liste dans des facture
-         */
-
-        foreach ($listeIdCreance as $creanceId) {
-            $creance = $creanceRepo->find($creanceId);
-            /*
-             * La fonction va parcourire la liste des creances mais il se peut que
-             * la facturation aie été déjà faite dans une itération précédente.
-             * On va donc s'assurer que la créance n'est pas encore liée à une
-             * facture.
-             */
-            if ($creance->getFacture() == null) {
-                /*
-                 * On commence par regarder si la créance
-                 * appartien à un membre ou une famille.
-                 * Ainsi que déterminer la cible de facturation
-                 */
-                $famille = $creance->getFamille();
-                $membre = $creance->getMembre();
-
-                $cibleFacturation = '';
-
-                if ($famille != null) {
-                    /*
-                     * la créance appartien à une famille
-                     */
-                    $cibleFacturation = 'Famille';
-                } elseif ($membre != null) {
-                    /*
-                     * la cérance appartient à un membre
-                     */
-                    $cibleFacturation = $membre->getEnvoiFacture(); //retourne soit 'Famille' soit 'Membre'
-                    if ($cibleFacturation == 'Famille') {
-                        //on récupère la famille du membre
-                        $famille = $membre->getFamille();
-                    }
-                }
-
-                /*
-                 * Creation de la nouvelle facture
-                 */
-                $facture = new Facture();
-                $facture->setMontantRecu(0);
-                $facture->setDateCreation(new \DateTime());
-                $facture->setStatut('ouverte');
 
 
-                /*
-                 * On procède de manière différente selon
-                 *  la cible de facturation.
-                 */
-
-                switch ($cibleFacturation) {
-
-                    case 'Membre':
-
-                        foreach ($membre->getCreances() as $linkedCreance) {
-                            /*
-                             * On récupère toute les créances du membre
-                             * qui ne sont pas encore facturée
-                             * !!! Et qui apparitennent à la liste !!!
-                             */
-                            if ((!$linkedCreance->isFactured()) && in_array($linkedCreance->getId(), $listeIdCreance)) {
-                                $facture->addCreance($linkedCreance);
-                            }
-                        }
-                        $membre->addFacture($facture);
-
-                        break;
-
-                    case 'Famille':
-
-                        foreach ($famille->getCreances() as $linkedCreance) {
-                            /*
-                             * On récupère toute les créances de la famille
-                             * qui ne sont pas encore facturée
-                             * !!! Et qui apparitennent à la liste !!!
-                             */
-                            if ((!$linkedCreance->isFactured()) && in_array($linkedCreance->getId(), $listeIdCreance)) {
-                                $facture->addCreance($linkedCreance);
-                            }
-                        }
-
-                        foreach ($famille->getMembres() as $membreOfFamille) {
-                            /*
-                             * On recherche des créances chez les
-                             * membre de la famille qui envoie
-                             * leurs facture à la famille
-                             */
-                            if ($membreOfFamille->getEnvoiFacture() == 'Famille') {
-                                foreach ($membreOfFamille->getCreances() as $linkedCreance) {
-                                    /*
-                                     * On récupère toute les créances du membre
-                                     * qui ne sont pas encore facturée
-                                     * !!! Et qui apparitennent à la liste !!!
-                                     */
-                                    if ((!$linkedCreance->isFactured()) && in_array($linkedCreance->getId(), $listeIdCreance)) {
-                                        $facture->addCreance($linkedCreance);
-                                    }
-                                }
-                            }
-                        }
-
-                        $famille->addFacture($facture);
-                        break;
-
-                }
-
-                $em->persist($facture);
-                $em->flush();
-            }
-        }
-    }
-
-    /*
-     * Cette methode permet de facturer une liste de cérance
-     * depuis plusieur page différente.
-     */
-    /**
-     * @Route("/creance/create_facture_ajax", name="interne_fiances_create_factures_ajax", options={"expose"=true})
-     *
-     * @return Response
-     */
-    public function facturationAjaxAction()
-    {
-        $request = $this->getRequest();
-
-        if ($request->isXmlHttpRequest()) {
-
-            /*
-             * On récupère les données
-             */
-            $fromPage = $request->request->get('fromPage');
-            $listeIdCreance = $request->request->get('listeCreance');
-
-            //cération des nouvelles factures
-            $this->createFacture($listeIdCreance);
 
 
-            /*
-             * On load la base de donnée
-             */
-            $em = $this->getDoctrine()->getManager();
-            $creanceRepo = $em->getRepository('InterneFinancesBundle:Creance');
-
-            /*
-             * On charge juste la premier créance
-             * c'est suffisant pour retrouver la
-             * famille ou le membre.
-             */
-            $creance = $creanceRepo->find($listeIdCreance[0]);
-
-
-            //adaptation du rendu selon la provenance
-            if ($fromPage == 'Search') {
-                return new Response();
-            } elseif ($fromPage == 'Membre') {
-
-                return $this->render('InterneFinancesBundle:Externe:interfaceForFamilleOrMembre.html.twig',
-                    array('ownerEntity' => $creance->getOwner()));
-
-
-            } elseif ($fromPage == 'Famille') {
-
-                return $this->render('InterneFinancesBundle:Externe:interfaceForFamilleOrMembre.html.twig',
-                    array('ownerEntity' => $creance->getOwner()));
-
-            }
-
-        }
-        return new Response();
-    }
-
-
-    /*
-     * Crée un rendu twig custum en fonction de la page qui
-     * demande de formulaire (modal) pour l'ajout de créance.
-     *
-     */
-    /**
-     * @param $ownerEntity
-     * @return Response
-     */
-    public function creanceModalFormAction($ownerEntity)
-    {
-        $creance = new Creance();
-
-        $creanceAddForm  = $this->createForm(new CreanceAddType,$creance);
-
-        /*
-         * On récupère les infos du membre ou famille pour construire
-         * le formulaire custum de la page qui le demande..
-         */
-        if($ownerEntity == null)
-        {
-            //si l'entité est null c'est que c'est pour le formulaire de listing
-        }
-        else if($ownerEntity->isClass('Membre'))
-        {
-            $creanceAddForm->get('idOwner')->setData($ownerEntity->getId());
-            $creanceAddForm->get('classOwner')->setData('Membre');
-        }
-        else if($ownerEntity->isClass('Famille'))
-        {
-            $creanceAddForm->get('idOwner')->setData($ownerEntity->getId());
-            $creanceAddForm->get('classOwner')->setData('Famille');
-        }
-
-        return $this->render('InterneFinancesBundle:Externe:modalForm.html.twig',
-            array('ownerEntity' => $ownerEntity, 'creanceForm' => $creanceAddForm->createView() ));
-
-    }
 }

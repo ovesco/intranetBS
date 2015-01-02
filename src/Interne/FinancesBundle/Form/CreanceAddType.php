@@ -24,7 +24,7 @@ class CreanceAddType extends AbstractType
             ->add(
                 'remarque',
                 'textarea',
-                array('label' => 'Remarque', 'required' => false, 'data' => '')
+                array('label' => 'Remarque', 'required' => false)
             )
             ->add(
                 'montantEmis',
@@ -49,19 +49,7 @@ class CreanceAddType extends AbstractType
                 array(  'required' => false,
                         'mapped' => false)
             )
-            /*
-            ->add(
-                'model',
-                'entity',
-                array(
-                    'mapped' => false,
-                    'required' => false,
-                    'class' => 'InterneFactureBundle:Model',
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('model');
-                    },
-        ))
-            */
+
             ;//fin de fonction
 
 

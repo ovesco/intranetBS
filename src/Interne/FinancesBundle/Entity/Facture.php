@@ -71,14 +71,6 @@ class Facture
      * ========== VARIABLES =================
      */
 
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="montantRecu", type="float")
-     */
-    private $montantRecu;
-
     /**
      * @var string
      *
@@ -96,7 +88,7 @@ class Facture
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="datePayement", type="date")
+     * @ORM\Column(name="datePayement", type="date", nullable=true)
      */
     private $datePayement;
 
@@ -108,8 +100,6 @@ class Facture
     public function __construct()
     {
         $this->rappels = new ArrayCollection();
-        $this->setDatePayement(new \DateTime('0000-00-00'));
-        $this->setMontantRecu(0);
         $this->statut = 'ouverte';
 
         $this->creances = new ArrayCollection();
@@ -138,30 +128,6 @@ class Facture
         $this->id = $id;
 
         return $this;
-    }
-
-
-    /**
-     * Set montantRecu
-     *
-     * @param float $montantRecu
-     * @return Facture
-     */
-    public function setMontantRecu($montantRecu)
-    {
-        $this->montantRecu = $montantRecu;
-
-        return $this;
-    }
-
-    /**
-     * Get montantRecu
-     *
-     * @return float 
-     */
-    public function getMontantRecu()
-    {
-        return $this->montantRecu;
     }
 
     /**
@@ -268,22 +234,22 @@ class Facture
     }
 
     /**
-     * Get montantTotal
+     * Get montantEmis
      *
      * @return float
      */
-    public function getMontantTotal()
+    public function getMontantEmis()
     {
 
-        return $this->getMontantCreances() + $this->getFraisRappel();
+        return $this->getMontantEmisCreances() + $this->getMontantEmisRappels();
     }
 
     /**
-     * Get montantCreances
+     * Get montantEmisCreances
      *
      * @return float
      */
-    public function getMontantCreances()
+    public function getMontantEmisCreances()
     {
         $montantCreances = 0;
         foreach($this->creances as $creance)
@@ -294,19 +260,61 @@ class Facture
     }
 
     /**
-     * Get fraisRappel
+     * Get montantEmisRappels
      *
      * @return float
      */
-    public function getFraisRappel()
+    public function getMontantEmisRappels()
     {
-        $fraisRappel = 0;
+        $montantRappel = 0;
         foreach($this->rappels as $rappel)
         {
-            $fraisRappel = $fraisRappel + $rappel->getFrais();
+            $montantRappel = $montantRappel + $rappel->getMontantEmis();
         }
-        return $fraisRappel;
+        return $montantRappel;
     }
+
+    /**
+     * Get montantRecu
+     *
+     * @return float
+     */
+    public function getMontantRecu()
+    {
+
+        return $this->getMontantRecuCreances() + $this->getMontantRecuRappels();
+    }
+
+    /**
+     * Get montantRecuCreances
+     *
+     * @return float
+     */
+    public function getMontantRecuCreances()
+    {
+        $montantCreances = 0;
+        foreach($this->creances as $creance)
+        {
+            $montantCreances = $montantCreances + $creance->getMontantRecu();
+        }
+        return $montantCreances;
+    }
+
+    /**
+     * Get montantRecuRappels
+     *
+     * @return float
+     */
+    public function getMontantRecuRappels()
+    {
+        $montantRappel = 0;
+        foreach($this->rappels as $rappel)
+        {
+            $montantRappel = $montantRappel + $rappel->getMontantRecu();
+        }
+        return $montantRappel;
+    }
+
 
     /**
      * Set datePayement

@@ -17,8 +17,10 @@
 
     {% block css %}{% endblock %}
 
+    {% block headjs %}{% endblock %}
+
 </head>
-<body>
+<body {% block onload %}{% endblock %}>
 
 <div id="main-menu" class="ui vertical inverted sidebar menu" id="menu">
 
@@ -28,6 +30,7 @@
 
 
 <div class="pusher">
+
 
     <div id="alerts-bag"></div>
 
@@ -73,43 +76,38 @@
 
     </header>
 
+    <div id="main-corpus">
         {% block content %}{% endblock %}
+    </div>
+
+    <div id="server-data" data-yolo="{% if clientData is defined %}{{ clientData }}{% endif %}"></div>
 
 </div>
 
-<div id="add-attributions-modal" class="ui modal">
-    <i class="close icon"></i>
-    <div class="header">
-        Ajouter des attributions
-    </div>
-    <div class="content">
-        <div class="image">
-            An image can appear on left or an icon
-        </div>
-        <div class="description">
-            A description can appear on the right
-        </div>
-    </div>
-    <div class="actions">
-        <div class="ui button">Cancel</div>
-        <div class="ui button">OK</div>
-    </div>
-</div>
+{% javascripts
+'%kernel.root_dir%/../vendor/components/jquery/jquery.min.js'
+%}
+<script src="{{ asset_url }}"></script>
+{% endjavascripts %}
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+{#<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>#}
 <script src="{{ asset('semantic/semantic.min.js') }}"></script>
 <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
 <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
 
-{% javascripts '@AppBundle/Resources/public/js/alwaysIncluded/*' %}
+{% javascripts
+'@AppBundle/Resources/public/js/alwaysIncluded/*'
+'@AppBundle/Resources/public/js/layout.js'
+%}
 <script src="{{ asset_url }}"></script>
 {% endjavascripts %}
 
-{% javascripts '@AppBundle/Resources/public/js/layout.js' %}
-<script type="text/javascript" src="{{ asset_url }}"></script>
-{% endjavascripts %}
 
-{% block js %}{% endblock %}
+{% block js %}
+
+
+
+{% endblock %}
 
 </body>
 </html>

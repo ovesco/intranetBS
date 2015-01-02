@@ -1,200 +1,195 @@
-<div class="row" id="factureSearchContent">
-    <div class="col-lg-8">
-        <div class="widget">
-            <div class="widget-title">
-                <span>Factures</span>
-                <div class="widget-toolbar">
-                    <button data-toggle="modal" data-target="#modal-facture-searchForm">Recherche</button>
-                    <div class="btn-group">
-                        <button type="button" data-toggle="dropdown">
-                            Action en masse
-                            <span class="caret">
-                            </span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                            <li>
-                                <a data-toggle="modal" data-target="#modal_add_rappel">
-                                    Ajouter un rappel
-                                </a>
-                            </li>
-                            <li>
-                                <a data-toggle="modal" data-target="#myModal">
-                                    Imprimer
-                                </a>
-                            </li>
-                            <li>
-                                <a id="liste_delete" href="#">
-                                    Supprimer
-                                </a>
-                            </li>
-                        </ul>
+
+
+                <div id="search-infos-context" class="tab-context">
+
+                    <div class="ui top attached tabular menu">
+                        <div class="active item" data-tab="factures">
+                            Factures
+                            <div class="ui green circular label">{{ factures|length }}</div>
+                        </div>
+                        <div class="item" data-tab="creances">
+                            Creances
+                            <div class="ui green circular label">{{ creances|length }}</div>
+                        </div>
+                    </div>
+                    <div class="ui bottom attached active tab segment" data-tab="factures">
+                        <div class="ui grid" id="factureSearchContent">
+                            <div class="row">
+                                <div class="ui button">Action en masse</div>
+                            </div>
+                            <div class="row">
+                                <div class="column">
+                                    <table class="ui table" id="factureSearchTable">
+                                        <thead>
+                                        <tr>
+                                            <th rowspan="2">Num. Réf.</th>
+                                            <th rowspan="2">Statut</th>
+                                            <th colspan="4">Montants</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Créances</th>
+                                            <th>Frais rappels</th>
+                                            <th>Total</th>
+                                            <th>Reçu</th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% if factures is not empty %}
+                                            {% for facture in factures %}
+                                                <tr>
+                                                    <td>N°{{ facture.id }}</td>
+                                                    {% if facture.statut == 'ouverte' %}
+                                                        <td><span class="label label-info">Ouverte</span></td>
+                                                    {% elseif facture.statut == 'payee' %}
+                                                        <td><span class="label label-success">Payée</span></td>
+                                                    {% else %}
+                                                        <td></td>
+                                                    {% endif %}
+                                                    <td>{{ facture.montantEmisCreances|number_format(2, '.', ',') }}</td>
+                                                    <td>{{ facture.montantEmisRappels|number_format(2, '.', ',') }}</td>
+                                                    <td>{{ facture.montantEmis|number_format(2, '.', ',') }}</td>
+                                                    <td>{{ facture.montantRecu|number_format(2, '.', ',') }}</td>
+                                                    <td>
+                                                        <a onclick="" data-id="{{ facture.id }}">
+                                                            <i class="trash icon red"></i>
+                                                        </a>
+
+                                                        <a onclick="" data-id="{{ facture.id }}" target="_blank">
+                                                            <i class="print icon"></i>
+                                                        </a>
+
+                                                        <a onclick="openFactureShow({{ facture.id }});" >
+                                                            <i class="zoom icon"></i>
+                                                        </a>
+
+
+                                                    </td>
+
+                                                </tr>
+                                            {% endfor %}
+                                        {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui bottom attached tab segment" data-tab="creances">
+
+                        <div class="ui grid" id="creanceSearchContent">
+                            <div class="row">
+                                <div class="ui button">Action en masse</div>
+                            </div>
+                            <div class="row">
+                                <div class="column">
+
+                                    <table class="ui table" id="creanceSearchTable">
+                                        <thead>
+                                        <tr>
+                                            <th rowspan="2">
+                                                <input type="checkbox" onclick="selectAllCreances(this);">
+                                            </th>
+                                            <th rowspan="2">Facture</th>
+                                            <th rowspan="2">Propriétaire</th>
+                                            <th rowspan="2">Cible de facturation</th>
+                                            <th rowspan="2">Titre</th>
+
+                                            <th colspan="2">Montants</th>
+                                            <th rowspan="2">Actions</th>
+                                        </tr>
+                                        <tr>
+
+                                            <th>Emis</th>
+                                            <th>Reçu</th>
+
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        {% if creances is not empty %}
+
+                                            {# On commence par les creances non facturée #}
+                                            {% for creance in creances  %}
+
+                                                <tr>
+                                                    <td>
+                                                        {% if creance.facture is not empty %}
+                                                            {% if creance.facture.statut == 'ouverte' %}
+                                                                <span class="label label-info">Ouverte</span>
+                                                            {% elseif creance.facture.statut == 'payee' %}
+                                                                <span class="label label-success">Payée</span>
+                                                            {% endif %}
+
+                                                        {% else %}
+                                                            <input class="selectCreance" type="checkbox" value="{{ creance.id }}">
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        {% if creance.facture is not empty %}
+                                                            N°{{ creance.facture.id }}
+                                                        {% else %}
+                                                            En attente
+                                                        {% endif %}
+
+                                                    </td>
+                                                    <td>
+                                                        {% if creance.getOwner.isClass('Membre') %}
+                                                            {{ creance.membre.prenom }} {{ creance.membre.nom }}
+                                                        {% elseif creance.getOwner.isClass('Famille') %}
+                                                            {{ creance.membre.famille }}
+                                                        {% endif %}
+
+                                                    </td>
+                                                    <td>
+                                                        {% if creance.membre.envoiFacture == 'Membre' %}
+                                                            {{ creance.membre.prenom }} {{ creance.membre.nom }}
+                                                        {% elseif creance.membre.envoiFacture == 'Famille' %}
+                                                            {{ creance.membre.famille }}
+                                                        {% endif %}
+
+                                                    </td>
+                                                    <td>{{ creance.titre }}</td>
+
+                                                    <td>{{ creance.montantEmis|number_format(2, '.', ',') }}</td>
+                                                    <td>{{ creance.montantRecu|number_format(2, '.', ',') }}</td>
+                                                    <td>
+                                                        {% if creance.facture is empty %}
+                                                            <a class="btn btn-xs btn-info">
+                                                                <span class="glyphicon glyphicon-pencil" infobulle="Editer"></span>
+                                                            </a>
+                                                            <a class="btn btn-xs btn-danger" onclick="deleteCreance(this);" data-id="{{ creance.id }}">
+                                                                <span class="glyphicon glyphicon-trash" infobulle="Supprimer"></span>
+                                                            </a>
+
+
+                                                        {% endif %}
+                                                        <a onclick="openCreanceShow({{ creance.id }});" >
+                                                            <i class="zoom icon"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+
+
+                                            {% endfor %}
+
+
+
+                                        {% else %}
+
+                                        {% endif %}
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
-            </div>
-            <div class="widget-content">
-                <table class="datatable" id="factureSearchTable">
-                    <thead>
-                    <tr>
-                        <th rowspan="2">Num. Réf.</th>
-                        <th rowspan="2">Statut</th>
-                        <th colspan="4">Montants</th>
-                        <th>Actions</th>
-                    </tr>
-                    <tr>
-                        <th>Créances</th>
-                        <th>Frais rappels</th>
-                        <th>Total</th>
-                        <th>Reçu</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% if factures is not empty %}
-                        {% for facture in factures %}
-                            <tr>
-                                <td>N°{{ facture.id }}</td>
-                                {% if facture.statut == 'ouverte' %}
-                                    <td><span class="label label-info">Ouverte</span></td>
-                                {% elseif facture.statut == 'payee' %}
-                                    <td><span class="label label-success">Payée</span></td>
-                                {% else %}
-                                    <td></td>
-                                {% endif %}
-                                <td>{{ facture.montantCreances|number_format(2, '.', ',') }}</td>
-                                <td>{{ facture.fraisRappel|number_format(2, '.', ',') }}</td>
-                                <td>{{ facture.montantTotal|number_format(2, '.', ',') }}</td>
-                                <td>{{ facture.montantRecu|number_format(2, '.', ',') }}</td>
-                                <td>
-                                    <a class="btn btn-xs btn-danger" onclick="deleteFacture(this);" data-id="{{ facture.id }}">
-                                        <span class="glyphicon glyphicon-trash" infobulle="Supprimer"></span>
-                                    </a>
-
-                                    <a class="btn btn-xs btn-info" href="{{ path('interne_facture_print', {'id' : facture.id} ) }}" target="_blank">
-                                        <span class="glyphicon glyphicon-print" infobulle="Imprimer"></span>
-                                    </a>
-                                </td>
-
-                            </tr>
-                        {% endfor %}
-                    {% endif %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row" id="creanceSearchContent">
-    <div class="col-lg-8">
-        <div class="widget">
-            <div class="widget-title">
-                <span>Créances</span>
-                <div class="widget-toolbar">
-                    <button data-toggle="modal" data-target="#modal-facture-searchForm">Recherche</button>
-                    <button onclick="createFactureWithSelectedCreances('Search');">Facturer les créances séléctionnées</button>
-                </div>
-            </div>
-            <div class="widget-content" >
-                <table class="datatable" id="creanceSearchTable">
-                    <thead>
-                    <tr>
-                        <th rowspan="2">
-                            <input type="checkbox" onclick="selectAllCreances(this);">
-                        </th>
-                        <th rowspan="2">Facture</th>
-                        <th rowspan="2">Propriétaire</th>
-                        <th rowspan="2">Cible de facturation</th>
-                        <th rowspan="2">Titre</th>
-
-                        <th colspan="2">Montants</th>
-                        <th rowspan="2">Actions</th>
-                    </tr>
-                    <tr>
-
-                        <th>Emis</th>
-                        <th>Reçu</th>
-
-                    </tr>
-                    </thead>
-
-                    <tbody>
-                    {% if creances is not empty %}
-
-                        {# On commence par les creances non facturée #}
-                        {% for creance in creances  %}
-
-                            <tr>
-                                <td>
-                                    {% if creance.facture is not empty %}
-                                        {% if creance.facture.statut == 'ouverte' %}
-                                            <span class="label label-info">Ouverte</span>
-                                        {% elseif creance.facture.statut == 'payee' %}
-                                            <span class="label label-success">Payée</span>
-                                        {% endif %}
-
-                                    {% else %}
-                                        <input class="selectCreance" type="checkbox" value="{{ creance.id }}">
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% if creance.facture is not empty %}
-                                        N°{{ creance.facture.id }}
-                                    {% else %}
-                                        En attente
-                                    {% endif %}
-
-                                </td>
-                                <td>
-                                    {% if creance.getOwner.isClass('Membre') %}
-                                        {{ creance.membre.prenom }} {{ creance.membre.nom }}
-                                    {% elseif creance.getOwner.isClass('Famille') %}
-                                        {{ creance.membre.famille }}
-                                    {% endif %}
-
-                                </td>
-                                <td>
-                                    {% if creance.membre.envoiFacture == 'Membre' %}
-                                        {{ creance.membre.prenom }} {{ creance.membre.nom }}
-                                    {% elseif creance.membre.envoiFacture == 'Famille' %}
-                                        {{ creance.membre.famille }}
-                                    {% endif %}
-
-                                </td>
-                                <td>{{ creance.titre }}</td>
-
-                                <td>{{ creance.montantEmis|number_format(2, '.', ',') }}</td>
-                                <td>{{ creance.montantRecu|number_format(2, '.', ',') }}</td>
-                                <td>
-                                    {% if creance.facture is empty %}
-                                        <a class="btn btn-xs btn-info">
-                                            <span class="glyphicon glyphicon-pencil" infobulle="Editer"></span>
-                                        </a>
-                                        <a class="btn btn-xs btn-danger" onclick="deleteCreance(this);" data-id="{{ creance.id }}">
-                                            <span class="glyphicon glyphicon-trash" infobulle="Supprimer"></span>
-                                        </a>
-                                   {% endif %}
-                                </td>
-                            </tr>
-
-
-                        {% endfor %}
-
-
-
-                    {% else %}
-
-                    {% endif %}
-
-                    </tbody>
-                </table>
 
 
 
 
-
-
-            </div>
-        </div>
-    </div>
-</div>

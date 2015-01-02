@@ -10,7 +10,7 @@ use AppBundle\Entity\Type;
  * Groupe
  *
  * @ORM\Table(name="app_groupes")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\GroupeRepository")
  */
 class Groupe
 {

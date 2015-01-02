@@ -3,6 +3,7 @@
 namespace AppBundle\Utils\Export;
 
 use fpdf\FPDF;
+use fpdi\FPDI;
 use Symfony\Component\BrowserKit\Response;
 
 /**
@@ -10,7 +11,7 @@ use Symfony\Component\BrowserKit\Response;
  * Classe permettant de génerer un fichier PDF. étand FPDF pour fournir différentes méthodes bien pratiques
  * @package AppBundle\Utils\Export
  */
-class Pdf extends FPDF {
+class Pdf extends FPDI {
 
     /**
      * Génère un entête de base sur le fichier PDF
@@ -25,28 +26,71 @@ class Pdf extends FPDF {
         $this->Ln(20);
     }
 
+    /**
+     * Permet de charger un fichier PDF comme template
+     * @param $src
+     * @param $height
+     */
+    public function loadTemplate($src, $height) {
+
+        $pageCount = $this->setSourceFile($src);
+
+        $tplIdx = $this->importPage(1, '/MediaBox');
+        $this->addPage();
+        $this->useTemplate($tplIdx);
+
+        $this->setX($height);
+    }
+
 
     /**
-     * Retourne un objet response formaté pour renvoyer un fichier PDF, avec le fichier PDF courant en contenu
-     * @return Response
+     * La méthode printData permet d'imprimmer un tableau sur le PDF. La méthode va chercher dans le tableau une entrée
+     * "headers" qui indiquera les noms des entêtes des colonnes. Ensuite, la méthode va simplement itérer sur les données
+     * contenues et les imprimmer à la suite
+     * @param array $headers les headers
+     * @param array colWidth contient des indices de largeur compris entre 1 et 10. La méthode va essayer d'équilibrer
+     *                       au mieux les largeurs des colonnes suivant ces indices
+     * @param array $data les données
+     * @param int $top à partir d'ou on commence à écrire sur le PDF
      */
-    public function getResponse() {
+    public function printData(array $headers, array $colWidth, array $data, $top = null) {
 
-        $response = new Response(
+        if(!is_null($top))
+            $this->setX($top);
 
-            $this->Output(),
-            Response::HTTP_OK,
-            array('content-type' => 'application/pdf')
-        );
+        $totalIndices   = 0;
 
-        $d = $response->headers->makeDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            'liste.pdf'
-        );
+        foreach($colWidth as $i)
+            $totalIndices += $i;
 
-        $response->headers->set('Content-Disposition', $d);
-        return $response;
+        $ratio          = $this->w/$totalIndices;
+
+        for($i = 0; $i < count($colWidth); $i++)
+            $colWidth[$i] = $colWidth[$i]*$ratio;
+
+        /*
+         * On imprimme les headers
+         * Ligne stylisée avec une police spéciale
+         */
+        $this->SetFont('arial', 'B', 11);
+        for($i = 0; $i < count($headers); $i++)
+            $this->Cell($colWidth[$i],7,$headers[$i],'B',0,'C');
+
+        $this->ln();
+
+        /*
+         * impression des données
+         * Police de base, on balance en masse
+         */
+        $this->SetFont('arial', '', 11);
+        for($i = 0; $i < count($data); $i++)
+            foreach($data[$i] as $val)
+                $this->Cell($colWidth[$i],7,$val,0,0,'L');
+
+        $this->ln();
+
     }
+
 
     /*
      * Surcharge de la fonction pour prendre en charge

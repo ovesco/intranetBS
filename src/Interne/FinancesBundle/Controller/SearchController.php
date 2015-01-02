@@ -2,6 +2,7 @@
 
 namespace Interne\FinancesBundle\Controller;
 
+use Interne\FinancesBundle\Form\OwnerSearchType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Interne\FinancesBundle\Entity\Rappel;
@@ -10,26 +11,42 @@ use Interne\FinancesBundle\Entity\Creance;
 use Interne\FinancesBundle\Form\FactureSearchType;
 use Interne\FinancesBundle\Form\CreanceSearchType;
 use Interne\FinancesBundle\Entity\CreanceRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
+/**
+ * Class SearchController
+ * @package Interne\FinancesBundle\Controller
+ *
+ * @Route("/search")
+ */
 class SearchController extends Controller
 {
 
 
+    /**
+     * @Route("/", name="interne_fiances_search", options={"expose"=true})
+     *
+     * @return Response
+     */
     public function searchAction()
     {
-        $facture = new Facture();
-        $creance = new Creance();
 
-        //on supprime les valeurs existante à cause du constructeur
-        $creance->setMontantEmis(null);
-        $creance->setMontantRecu(null);
-
-        /*
-         * On crée les formulaires
-         */
-        $factureSearchForm  = $this->createForm(new FactureSearchType, $facture);
-        $creanceSearchForm  = $this->createForm(new CreanceSearchType, $creance);
-
+        $data = array();
+        $searchForm = $this->createFormBuilder($data)
+            ->add('creance', new CreanceSearchType)
+            ->add('facture', new FactureSearchType)
+            ->add('owner',new OwnerSearchType)
+            ->add('searchMethode', 'choice',
+                array(
+                    'required' => true,
+                    'mapped' => false,
+                    'data' => 'new',
+                    'choices' => array(
+                        'new'   => 'Nouvelle recherche',
+                        'add' => 'Ajouter à la recherche actuelle',
+                        'substract'   => 'Soustraire à la recherche actuelle',
+                    )))
+            ->getForm();
 
         /*
          * On récupère la session qui contient la liste des factures/creances des
@@ -37,216 +54,206 @@ class SearchController extends Controller
          */
         $session = $this->getRequest()->getSession();
 
-
-
         $request = $this->getRequest();
 
         if($request->isXmlHttpRequest()) {
 
-            $facture = null;
-            $creance = null;
-
-
-            if ($request->request->has('InterneFactureBundleFactureSearchType')) {
-
-                $factureSearchForm->submit($request);
-                $facture = $factureSearchForm->getData();
-
-            }
-            if ($request->request->has('InterneFactureBundleCreanceSearchType')) {
-
-                $creanceSearchForm->submit($request);
-                $creance = $creanceSearchForm->getData();
-
-            }
-
+            /*
+             * On récupère le formulaire
+             */
+            $searchForm->submit($request);
 
             /*
-             * ce lien est utile pour la recherche sur les facture
+             * On extrait les donnée du formulaire
              */
+            //$creance = new Creance();
+            //$facture = new Facture();
+            $creance = $searchForm->get('creance')->getData();
+            $facture = $searchForm->get('facture')->getData();
+            $searchMethode = $searchForm->get('searchMethode')->getData();
+            $creanceParameters = $this->extractSearchDataCreance($searchForm->get('creance'),$searchForm->get('owner'));
+            $factureParameters = $this->extractSearchDataFacture($searchForm->get('facture'),$searchForm->get('owner'));
+
+
             $facture->addCreance($creance);
 
-            /*
-             * On récupère les éléments de recherche non compris dans la facture.
-             * Tableau contenant les paramètres de recherche suplémentaire
-             */
-            $searchParameters = array(
-                'facture' => array(
-
-                    'nombreRappel' => $factureSearchForm->get('nombreRappel')->getData(),
-
-                    'montantRecuMaximum' => $factureSearchForm->get('montantRecuMaximum')->getData(),
-                    'montantRecuMinimum' => $factureSearchForm->get('montantRecuMinimum')->getData(),
-
-                    'montantTotal' => $factureSearchForm->get('montantTotal')->getData(),
-
-                    'datePayementMaximum' => $factureSearchForm->get('datePayementMaximum')->getData(),
-                    'datePayementMinimum' => $factureSearchForm->get('datePayementMinimum')->getData(),
-                ),
-                'creance' => array(
-
-
-                    'montantEmisMaximum' => $creanceSearchForm->get('montantEmisMaximum')->getData(),
-                    'montantEmisMinimum' => $creanceSearchForm->get('montantEmisMinimum')->getData(),
-                    'montantRecuMaximum' => $creanceSearchForm->get('montantRecuMaximum')->getData(),
-                    'montantRecuMinimum' => $creanceSearchForm->get('montantRecuMinimum')->getData(),
-
-                    'dateCreationMaximum' => $creanceSearchForm->get('dateCreationMaximum')->getData(),
-                    'dateCreationMinimum' => $creanceSearchForm->get('dateCreationMinimum')->getData(),
-
-                    'membreNom' => $creanceSearchForm->get('membreNom')->getData(),
-                    'membrePrenom' => $creanceSearchForm->get('membrePrenom')->getData(),
-
-                    'familleNom' => $creanceSearchForm->get('familleNom')->getData(),
-
-                    'isLinkedToFacture' => $creanceSearchForm->get('isLinkedToFacture')->getData(),
-                    'searchOption' => $creanceSearchForm->get('searchOption')->getData(),
-                )
-
-
-            );
-
-            /*
-             * pour la recherche on utilise la fonction personalisée de
-             * recheche de facture qui se trouve dans factureRepository.php
-             */
             $em = $this->getDoctrine()->getManager();
 
-            $factures = null;
-            $creances = null;
+            $creances = $em->getRepository('InterneFinancesBundle:Creance')->findBySearch($creance,$creanceParameters);
+            $factures = $em->getRepository('InterneFinancesBundle:Facture')->findBySearch($facture,$factureParameters);
 
-            if($searchParameters['creance']['isLinkedToFacture'] == 'yes')
-            {
-                $factures = $em->getRepository('InterneFactureBundle:Facture')->findBySearch($facture,$searchParameters);
-                foreach($factures as $facture)
-                {
-                    foreach($facture->getCreances() as $creance)
-                    {
-                        $creances[] = $creance;
-                    }
-                }
-            }
-            else
-            {
-                /*
-                 * On fait une recherche spécifique aux cérances qui ne
-                 * sont pas encore liée à des factures.
-                 */
-                $creances = $em->getRepository('InterneFactureBundle:Creance')->findBySearch($creance,$searchParameters);
-            }
+            $this->manageSession($creances,$factures,$searchMethode);
 
-
-            /*
-             * Gestion de la session...selon l'option de recherche, on ajoute supprime les factures/creances
-             */
-
-            $option = $searchParameters['creance']['searchOption'];
-
-            if($option == 'new')
-            {
-                /*
-                 * Nouvelle recherche, on met a jour les session avec les nouveaux resultats
-                 */
-                $session->set('factures',$factures);
-                $session->set('creances',$creances);
-            }
-            if($option == 'add')
-            {
-                /*
-                 * On vérifie que les creances/factures trouvée n'existe
-                 * pas déjà dans la liste contenue en session.
-                 */
-                $facturesSession = $session->get('factures');
-                foreach($factures as $facture)
-                {
-                    $found = false;
-                    foreach($facturesSession as $factureSession)
-                    {
-                        if($facture->getId() == $factureSession->getId())
-                            $found = true;
-                    }
-                    if(!$found)
-                    {
-                        array_push($facturesSession,$facture);
-                    }
-                }
-                $session->set('factures',$facturesSession);
-
-                $creancesSession = $session->get('creances');
-                foreach($creances as $creance)
-                {
-                    $found = false;
-                    foreach($creancesSession as $creanceSession)
-                    {
-                        if($creance->getId() == $creanceSession->getId())
-                            $found = true;
-                    }
-                    if(!$found)
-                    {
-                        array_push($creancesSession,$creance);
-                    }
-                }
-                $session->set('creances',$creancesSession);
-            }
-            if($option == 'substract')
-            {
-                /*
-                 * On enleve les creances/factures trouvée de la liste
-                 */
-                $facturesSession = $session->get('factures');
-                $newFactureSession = array();
-
-                foreach($facturesSession as $factureSession)
-                {
-                    $found = false;
-                    foreach($factures as $facture)
-                    {
-                        if($facture->getId() == $factureSession->getId())
-                            $found = true;
-                    }
-                    if(!$found)
-                    {
-                        array_push($newFactureSession,$factureSession);
-                    }
-                }
-                $session->set('factures',$newFactureSession);
-
-                $creancesSession = $session->get('creances');
-                $newCreancesSession = array();
-
-                foreach($creancesSession as $creanceSession)
-                {
-                    $found = false;
-                    foreach($creances as $creance)
-                    {
-                        if($creance->getId() == $creanceSession->getId())
-                            $found = true;
-                    }
-                    if(!$found)
-                    {
-                        array_push($newCreancesSession,$creanceSession);
-                    }
-                }
-                $session->set('creances',$newCreancesSession);
-            }
-
-            return $this->render('InterneFactureBundle:Search:results.html.twig', array(
-
+            return $this->render('InterneFinancesBundle:Search:results.html.twig', array(
                 'factures' => $session->get('factures'),
-                'creances' => $session->get('creances')
+                'creances' => $session->get('creances'),
             ));
 
         }
 
 
-        return $this->render('InterneFactureBundle:Search:search.html.twig', array(
-            'formFacture' => $factureSearchForm->createView(),
-            'formCreance' => $creanceSearchForm->createView(),
+        return $this->render('InterneFinancesBundle:Search:search.html.twig', array(
+            'searchForm' => $searchForm->createView(),
             'factures' => $session->get('factures'),
-            'creances' => $session->get('creances')
+            'creances' => $session->get('creances'),
         ));
 
     }
+
+    private function query()
+    {
+
+    }
+
+    private function searchByLink($creances,$factures)
+    {
+        /*
+         * On commence par rechercher toute les factures
+         * liée a des créance trouvée qui ne sont pas
+         * dans le résultat de la recherche.
+         */
+        foreach($creances as $creance)
+        {
+
+        }
+    }
+
+    private function extractSearchDataCreance($creanceSearchForm,$ownerSearchForm)
+    {
+        return array(
+            'montantEmisMaximum' => $creanceSearchForm->get('montantEmisMaximum')->getData(),
+            'montantEmisMinimum' => $creanceSearchForm->get('montantEmisMinimum')->getData(),
+            'montantRecuMaximum' => $creanceSearchForm->get('montantRecuMaximum')->getData(),
+            'montantRecuMinimum' => $creanceSearchForm->get('montantRecuMinimum')->getData(),
+
+            'dateCreationMaximum' => $creanceSearchForm->get('dateCreationMaximum')->getData(),
+            'dateCreationMinimum' => $creanceSearchForm->get('dateCreationMinimum')->getData(),
+            'datePayementMaximum' => $creanceSearchForm->get('dateCreationMaximum')->getData(),
+            'datePayementMinimum' => $creanceSearchForm->get('dateCreationMinimum')->getData(),
+
+            'isLinkedToFacture' => $creanceSearchForm->get('isLinkedToFacture')->getData(),
+
+            'membreNom' => $ownerSearchForm->get('membreNom')->getData(),
+            'membrePrenom' => $ownerSearchForm->get('membrePrenom')->getData(),
+            'familleNom' => $ownerSearchForm->get('familleNom')->getData(),
+        );
+    }
+
+    private function extractSearchDataFacture($factureSearchForm,$ownerSearchForm)
+    {
+        return array(
+            'nombreRappel' => $factureSearchForm->get('nombreRappel')->getData(),
+
+            'montantRecu' => $factureSearchForm->get('montantRecu')->getData(),
+            'montantRecuMaximum' => $factureSearchForm->get('montantRecuMaximum')->getData(),
+            'montantRecuMinimum' => $factureSearchForm->get('montantRecuMinimum')->getData(),
+
+            'montantEmis' => $factureSearchForm->get('montantRecu')->getData(),
+            'montantEmisMaximum' => $factureSearchForm->get('montantRecuMaximum')->getData(),
+            'montantEmisMinimum' => $factureSearchForm->get('montantRecuMinimum')->getData(),
+
+            'dateCreationMaximum' => $factureSearchForm->get('dateCreationMaximum')->getData(),
+            'dateCreationMinimum' => $factureSearchForm->get('dateCreationMinimum')->getData(),
+
+            'datePayementMaximum' => $factureSearchForm->get('datePayementMaximum')->getData(),
+            'datePayementMinimum' => $factureSearchForm->get('datePayementMinimum')->getData(),
+        );
+    }
+
+    private function manageSession($creances,$factures,$searchMethode)
+    {
+        $session = $this->getRequest()->getSession();
+
+        if($searchMethode == 'new')
+        {
+            /*
+             * Nouvelle recherche, on met a jour les session avec les nouveaux resultats
+             */
+            $session->set('factures',$factures);
+            $session->set('creances',$creances);
+        }
+        if($searchMethode == 'add')
+        {
+            /*
+             * On vérifie que les creances/factures trouvée n'existe
+             * pas déjà dans la liste contenue en session.
+             */
+            $facturesSession = $session->get('factures');
+            foreach($factures as $facture)
+            {
+                $found = false;
+                foreach($facturesSession as $factureSession)
+                {
+                    if($facture->getId() == $factureSession->getId())
+                        $found = true;
+                }
+                if(!$found)
+                {
+                    array_push($facturesSession,$facture);
+                }
+            }
+            $session->set('factures',$facturesSession);
+
+            $creancesSession = $session->get('creances');
+            foreach($creances as $creance)
+            {
+                $found = false;
+                foreach($creancesSession as $creanceSession)
+                {
+                    if($creance->getId() == $creanceSession->getId())
+                        $found = true;
+                }
+                if(!$found)
+                {
+                    array_push($creancesSession,$creance);
+                }
+            }
+            $session->set('creances',$creancesSession);
+        }
+        if($searchMethode == 'substract')
+        {
+            /*
+             * On enleve les creances/factures trouvée de la liste
+             */
+            $facturesSession = $session->get('factures');
+            $newFactureSession = array();
+
+            foreach($facturesSession as $factureSession)
+            {
+                $found = false;
+                foreach($factures as $facture)
+                {
+                    if($facture->getId() == $factureSession->getId())
+                        $found = true;
+                }
+                if(!$found)
+                {
+                    array_push($newFactureSession,$factureSession);
+                }
+            }
+            $session->set('factures',$newFactureSession);
+
+            $creancesSession = $session->get('creances');
+            $newCreancesSession = array();
+
+            foreach($creancesSession as $creanceSession)
+            {
+                $found = false;
+                foreach($creances as $creance)
+                {
+                    if($creance->getId() == $creanceSession->getId())
+                        $found = true;
+                }
+                if(!$found)
+                {
+                    array_push($newCreancesSession,$creanceSession);
+                }
+            }
+            $session->set('creances',$newCreancesSession);
+        }
+
+    }
+
 
 
 

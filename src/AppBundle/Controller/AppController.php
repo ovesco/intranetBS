@@ -3,8 +3,9 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class AppController extends Controller
@@ -28,5 +29,14 @@ class AppController extends Controller
         $validation->validateField('yolo', 'famille.1.pere.prenom');
 
         return new Response('');
+    }
+
+
+    /**
+     * Page qui affiche les statistiques générales
+     * @Route("statistics", name="app_statistics")
+     */
+    public function statisticsAction() {
+
     }
 }
