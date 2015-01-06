@@ -21,7 +21,7 @@ class GroupeController extends Controller
      * @return Response la vue
      *
      * @paramConverter("groupe", class="AppBundle:Groupe")
-     * @route("groupe/voir-groupe/{groupe}", name="interne_voir_groupe", options={"expose"=true})
+     * @route("groupe/voir/{groupe}", name="interne_voir_groupe", options={"expose"=true})
      * @Template("Groupe/voir_groupe.html.twig", vars={"groupe"})
      */
     public function showGroupeAction($groupe) {
