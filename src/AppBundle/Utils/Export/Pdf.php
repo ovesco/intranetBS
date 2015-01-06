@@ -2,6 +2,7 @@
 
 namespace AppBundle\Utils\Export;
 
+use AppBundle\Entity\Adresse;
 use fpdf\FPDF;
 use fpdi\FPDI;
 use Symfony\Component\BrowserKit\Response;
@@ -40,6 +41,90 @@ class Pdf extends FPDI {
         $this->useTemplate($tplIdx);
 
         $this->setX($height);
+    }
+
+    /**
+     * Ajout d'un document PDF à la suite.
+     * @param Pdf $documentToAdd
+     */
+    public function AddPageWithPdf(Pdf $documentToAdd)
+    {
+        //Attribue un nom de fichier aleatoire et temporaire
+        $fileName = 'temporary/pdf_tmp_'.str_shuffle('1234567890').'pdf';
+        //on sauve le fichier dans le dossier temporaire
+        $documentToAdd->Output($fileName,'F');
+
+        //fusion des deux PDF
+        $pageCount = $this->setSourceFile($fileName);
+
+        for($i=0; $i<$pageCount; $i++){
+            $this->AddPage();
+            $tplIdx = $this->importPage($i+1, '/MediaBox');
+            $this->useTemplate($tplIdx);
+        }
+
+        //Supression du fichier temporaire
+        unlink($fileName);
+
+    }
+
+    /*
+     * L'adresse du membre ou de la famille
+     * sera ajoutée au PDF dans l'espace prévu
+     * pour les evelloppes à fenêtres.
+     *
+     * Note: il faut donner un tableau $adressePrincipale en parametre qui est
+     * le résultat des fonctions ->getAdressePrinipale() des Membres et Familles.
+     */
+    /**
+     * @param $adressePrincipale
+     */
+    public function addAdresseEnvoi($adressePrincipale)
+    {
+        $x =  110;
+        $y =  50;
+        $h = 4;
+        $this->SetXY($x,$y);
+        $this->SetFont('Arial','',9);
+
+        $origine = $adressePrincipale['origine'];
+        $adresse = $adressePrincipale['adresse'];
+        $owner = $adressePrincipale['owner'];
+
+
+        if($owner['class'] == 'Membre')
+        {
+            $this->Cell(50,$h,ucfirst($owner['nom']).' '.ucfirst($owner['prenom']));
+        }
+        elseif($owner['class'] == 'Famille')
+        {
+            $this->Cell(50,$h,'Famille '.ucfirst($owner['nom']));
+        }
+        else
+        {
+            //erreur
+        }
+
+        if($adresse->getMethodeEnvoi() == 'Courrier')
+        {
+            $y = $y+$h;
+            $this->SetXY($x,$y);
+            $this->Cell(50,$h,ucfirst($adresse->getRue()));
+            $y = $y+$h;
+            $this->SetXY($x,$y);
+            $this->Cell(50,$h,$adresse->getNpa().' '.ucfirst($adresse->getLocalite()));
+
+        }
+        elseif($adresse->getMethodeEnvoi() == 'Email')
+        {
+            $y = $y+$h;
+            $this->SetXY($x,$y);
+            $this->Cell(50,$h,$adresse->getEmail());
+        }
+        else
+        {
+            $this->MultiCell(50,30,'Adresse non définie');
+        }
     }
 
 

@@ -62,6 +62,25 @@ class Adresse
      */
      private $remarques;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     */
+    private $email;
+
+    /*
+     * La méthode d'envoi determine si la personne va recevoir
+     * sont courrier par email ou par courrier.
+     */
+
+    /**
+     * @var methodeEnvoi
+     *
+     * @ORM\Column(name="methode_envoi", type="string", columnDefinition="ENUM('Email', 'Courrier')")
+     */
+    private $methodeEnvoi;
+
 
     /**
      * Get id
@@ -191,4 +210,51 @@ class Adresse
     public function __toString() {
         return $this->rue.'\n'.$this->npa.' '.$this->localite;
     }
+
+    /**
+     * Set methodeEnvoi
+     *
+     * @param string $methodeEnvoi
+     * @return Adresse
+     */
+    public function setMethodeEnvoi($methodeEnvoi)
+    {
+        $this->methodeEnvoi = $methodeEnvoi;
+
+        return $this;
+    }
+
+    /**
+     * Get methodeEnvoi
+     *
+     * @return string
+     */
+    public function getMethodeEnvoi()
+    {
+        return $this->methodeEnvoi;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     * @return Adresse
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
 }

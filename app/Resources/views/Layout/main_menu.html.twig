@@ -99,23 +99,33 @@
 </div>
 
 <div class="item">
+    <div class="ui small  inverted header">Envois</div>
+    <div class="menu">
+
+        <a class="item" href="{{ path('utils_envoi_liste') }}">
+            Liste des envois
+        </a>
+
+
+    </div>
+</div>
+
+<div class="item">
     <div class="ui small  inverted header">Finances</div>
     <div class="menu">
 
-        <a class="item" href="{{ path('interne_fiances_dev') }}">
-            dev
-        </a>
 
-        <a class="item" href="{{ path('interne_fiances_mode_emploi') }}">
-            Mode d'emploi
-        </a>
+        <a class="item" href="{{path('interne_fiances_mode_emploi') }}">Mode d'emploi</a>
 
+        <a class="item" href="{{path('interne_fiances_search')}}">Recherche</a>
 
         <a  class="item" href="{{path('interne_fiances_payement')}}">Payements</a>
 
-        <a class="item" href="{{ path('interne_finances_validation') }}">Validation des payements</a>
+        <a class="item" href="{{path('interne_finances_validation') }}">Validation des payements</a>
 
         <a class="item" href="{{path('interne_fiances_statistics')}}">Statistiques</a>
+
+        <a class="item" href="{{path('interne_parametre_listing', {'groupe' : 'facture'} )}}">Parametres</a>
 
 
 

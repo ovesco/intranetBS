@@ -119,6 +119,10 @@ class Membre extends Personne
      */
     private $factures;
 
+    /*
+     * Cette propriété détermine si les cérances détenues par ce membre sont facturées
+     * à la famille ou au membre lui même.
+     */
     /**
      * @var envoiFacture
      *
@@ -483,11 +487,21 @@ class Membre extends Personne
 
                 if ($adresse->getFacturable() == true) {
 
-                    return array('adresse' => $adresse, 'origine' => $k);
+                    return array(   'adresse' => $adresse,
+                                    'origine' => $k,
+                                    'owner' => array(   'prenom' => $this->getPrenom(),
+                                                        'nom' => $this->getNom(),
+                                                        'class' => 'Membre',
+                                                    ));
                 }
 
                 if ($potentiel == null)
-                    $potentiel = array('adresse' => $adresse, 'origine' => $k);
+                    $potentiel = array( 'adresse' => $adresse,
+                                        'origine' => $k,
+                                        'owner' => array(   'prenom' => $this->getPrenom(),
+                                                            'nom' => $this->getNom(),
+                                                            'class' => 'Membre',
+                                        ));
             }
 
         }
@@ -535,6 +549,14 @@ class Membre extends Personne
             return true;
         else
             return false;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClass()
+    {
+        return 'Membre';
     }
 
     /**

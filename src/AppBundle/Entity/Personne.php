@@ -46,6 +46,8 @@ abstract class Personne
      */
     private $email;
 
+
+
     /**
      * Set telephone
      *
@@ -160,4 +162,7 @@ abstract class Personne
     {
         return $this->adresse;
     }
+
+
+
 }

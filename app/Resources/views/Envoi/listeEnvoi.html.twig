@@ -1,0 +1,76 @@
+{% extends 'layout.html.twig' %}
+
+{% block titre %}Envois{% endblock %}
+
+{% block content %}
+
+<div class="ui page grid">
+    <div class="row">
+        <div class="column">
+
+            <a class="ui button" target="_blank" href="{{ path('utils_envoi_print_pdf') }}">Obtenir le PDF</a>
+
+            <a class="ui button" href="">Envoyer les mails (todo)</a>
+
+            <a class="ui button" href="{{ path('utils_envoi_clear') }}">Effacer la liste</a>
+
+
+            <table class="ui table">
+                <thead>
+                    <tr>
+                        <th>Cible d'envoi</th>
+                        <th>Description</th>
+                        <th>méthode d'envoi</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for envoi in listeEnvoi.envois %}
+
+                    {% set methodeEnvoi = envoi['owner'].adressePrincipale['adresse'].methodeEnvoi %}
+                    {% if methodeEnvoi == 'Email'%}
+                        {% set adressePrincipale = envoi['owner'].adressePrincipale['adresse'].email %}
+                    {% elseif methodeEnvoi == 'Courrier'%}
+                        {% set adressePrincipale = envoi['owner'].adressePrincipale['adresse'] %}
+                    {% else %}
+                        {% set adressePrincipale = 'sans adresse valide' %}
+                    {% endif %}
+
+
+                    <tr>
+                        <td>
+                            {% if envoi['envoi'].ownerClass == 'Membre' %}
+
+                                {{ envoi['owner'].nom }} {{ envoi['owner'].prenom }}
+
+                            {% elseif envoi['envoi'].ownerClass == 'Famille'%}
+                                Famille {{ envoi['owner'].nom }}
+                            {% else %}
+                                Erreur de class
+                            {% endif %}
+
+                        </td>
+                        <td>{{ envoi['envoi'].description }}  </td>
+                        <td class="popupable" data-content="{{ adressePrincipale }}">
+
+                            {{ envoi['owner'].adressePrincipale['adresse'].methodeEnvoi }}
+
+                        </td>
+                        <td>
+                            <a href="{{ path('utils_envoi_remove_by_token',{ token:envoi['token'] }) }}"
+                               class="popupable" data-content="Annuler l'envoi">
+                                <i class="delete red icon"></i>
+                            </a>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

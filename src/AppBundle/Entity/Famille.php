@@ -84,6 +84,8 @@ class Famille
      */
     private $validity;
 
+
+
     /*
      * ====== FinancesBundle =======
      */
@@ -275,11 +277,18 @@ class Famille
 
                 if ($adresse->getFacturable() == true) {
 
-                    return array('adresse' => $adresse, 'origine' => $k);
+                    return array('adresse' => $adresse, 'origine' => $k,
+                        'owner' => array(
+                            'nom' => $this->getNom(),
+                            'class' => 'Famille',
+                    ));
                 }
 
                 if ($potentiel == null)
-                    $potentiel = array('adresse' => $adresse, 'origine' => $k);
+                    $potentiel = array('adresse' => $adresse, 'origine' => $k,
+                        'owner' => array(
+                            'nom' => $this->getNom(),
+                            'class' => 'Famille',));
             }
 
         }
@@ -387,6 +396,14 @@ class Famille
             return true;
         else
             return false;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClass()
+    {
+        return 'Famille';
     }
 
     /**
@@ -500,5 +517,7 @@ class Famille
     {
         return $this->creances;
     }
+
+
 
 }
