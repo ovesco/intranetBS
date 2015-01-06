@@ -10,6 +10,7 @@ use Interne\FinancesBundle\Entity\Facture;
 use Interne\FinancesBundle\Entity\Parametre;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Utils\Export\Pdf;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Class PrintController
@@ -19,47 +20,28 @@ use AppBundle\Utils\Export\Pdf;
 class PrintController extends Controller
 {
     /**
-     * @Route("/factures_ajax", name="interne_fiances_print_factures_ajax", options={"expose"=true})
+     * @param $id
+     * @Route("/factures/{id}", name="interne_fiances_print_factures", options={"expose"=true})
      * @return Response
      */
-    public function printAjaxAction()
+    public function printAction($id)
     {
-        $request = $this->getRequest();
+        /*
+         * Creation du PDF
+         */
+        $pdf = $this->get('Pdf'); //call service
 
-        if($request->isXmlHttpRequest()) {
-            /*
-             * On récupère la liste d'ids de facture à imprimer
-             */
-            $ids = $request->request->get('idsFacture');
+        $em = $this->getDoctrine()->getManager();
+        $factureRepo = $em->getRepository('InterneFinancesBundle:Facture');
 
-            /*
-             * Creation du PDF
-             */
-            $pdf = $this->get('Pdf'); //call service
+        $facture = $factureRepo->find($id);
+        $pdf = $this->factureToPdf($em,$facture,$pdf);
 
-            $em = $this->getDoctrine()->getManager();
-            $factureRepo = $em->getRepository('InterneFinancesBundle:Facture');
+        $adresse = $facture->getOwner()->getAdressePrincipale();
+        $pdf->addAdresseEnvoi($adresse);
 
+        return $pdf->Output('','I');
 
-
-            foreach($ids as $id)
-            {
-                $facture = $factureRepo->find($id);
-                $pdf = $this->factureToPdf($facture,$pdf);
-            }
-
-
-
-            $fileName = 'Facture_' . $facture->getId() . '.pdf';
-
-
-            //TODO: J'arrive pas a sortir correctement le PDF...
-            $pdf->Output($fileName,'I');
-            //return $pdf->getResponse();
-            return new Response();
-        }
-
-        return new Response();
     }
 
 
@@ -68,17 +50,17 @@ class PrintController extends Controller
      * Création du PDF associé à une facture.
      */
     /**
+     * @param EntityManager $em
      * @param Facture $facture
      * @param Pdf $pdf
      * @return Pdf
      */
-    private function factureToPdf(Facture $facture, Pdf $pdf)
+    public function factureToPdf(EntityManager $em,Facture $facture, Pdf $pdf)
     {
         /*
          * On récupère les parametres nécaissaires
          * a la création de la facture en PDF
          */
-        $em = $this->getDoctrine()->getManager();
         $paramRepo = $em->getRepository('AppBundle:Parametre');
 
         $ccpBvr = $paramRepo->findOneBy(array('name'=>'impression_ccp_bvr'))->getValue();
@@ -91,14 +73,11 @@ class PrintController extends Controller
          * Infos utile de la facture
          */
         $numeroReference = (string)$facture->getId();
-        $montant = (string)$facture->getMontantTotal();
+        $montant = (string)$facture->getMontantEmis();
 
         $title = 'Facture N°'.$facture->getId();
 
-        $adresseFacturation = $facture->getOwnerAdresse();
 
-        //TODO:résoudre ce bug...
-        $adresseFacturation = 'adresse non définie';
 
 
 
@@ -128,13 +107,7 @@ class PrintController extends Controller
         $pdf->SetXY($x,$y);
         $pdf->Cell($cellWidth,$cellHigh,'Lausanne, le ');
 
-        /*
-         * Adresse du membre
-         */
-        $x =  110;
-        $y =  50;
-        $pdf->SetXY($x,$y);
-        $pdf->MultiCell($cellWidth,$cellHigh,$adresseFacturation);
+
 
         /*
          * Titre de la facture
@@ -198,14 +171,14 @@ class PrintController extends Controller
             $pdf->Cell(110,$cellHigh,'Rappel '.$i,'T');
             $pdf->Cell(30,$cellHigh,'date','T');
 
-            $pdf->Cell(20,$cellHigh,number_format($rappel->getFrais(),2),'T');
+            $pdf->Cell(20,$cellHigh,number_format($rappel->getMontantEmis(),2),'T');
             $pdf->ln();
             $i++;
         }
 
         $pdf->Cell(110,$cellHigh,'','T');
         $pdf->Cell(30,$cellHigh,'Tolal:','T');
-        $pdf->Cell(20,$cellHigh,number_format($facture->getMontantTotal(),2).' CHF',1);
+        $pdf->Cell(20,$cellHigh,number_format($facture->getMontantEmis(),2).' CHF',1);
 
 
         if($modePayement == 'BVR')

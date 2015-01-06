@@ -1,0 +1,35 @@
+{% form_theme form 'InterneFinancesBundle:Templates:form_template.html.twig' %}
+
+<div class="header">Ajouter un rappel</div>
+<div class="content" style="overflow-y:auto">
+
+    {{ form_start(form, {'attr': {'id': 'addRappelForm'}}) }}
+
+    <div class="ui form">
+
+        {{ form_row(form.dateCreation) }}
+        {{ form_row(form.montantEmis) }}
+        {{ form_rest(form) }}
+
+    </div>
+
+    {{ form_end(form) }}
+
+</div>
+<div class="actions">
+
+    {% if fromPage == 'interface' %}
+        <div class="ui button blue" onclick="addRappelFromInterface({{ idFacture }},'addRappelForm');">Ajouter</div>
+    {% elseif fromPage == 'search' %}
+        <div class="ui button blue" onclick="addRappelFromSearch({{ idFacture }},'addRappelForm');">Ajouter</div>
+    {% elseif fromPage == 'searchAddToListe' %}
+        <div class="ui button blue" onclick="addRappelToListeFromSearch('addRappelForm');">Ajouter</div>
+    {% elseif fromPage == 'factureShow' %}
+        <div class="ui button blue" onclick="
+                addRappel({{ idFacture }},'addRappelForm');
+                openFactureShow({{ idFacture }});"
+                >Ajouter</div>
+    {% endif %}
+
+</div>
+

@@ -131,7 +131,7 @@
                                                     {% for rappel in result.factureFound.rappels %}
                                                         <tr>
                                                             <td>Rappel N°{{ loop.index }}</td>
-                                                            <td>{{ rappel.frais|number_format(2, '.', ',') }}</td>
+                                                            <td>{{ rappel.montantEmis|number_format(2, '.', ',') }}</td>
                                                             <td><input onchange="modifySolde(this);"
                                                                        type="number"
                                                                        data-id="{{ rappel.id }}"
@@ -215,7 +215,7 @@
                                                     {% for rappel in result.factureFound.rappels %}
                                                         <tr>
                                                             <td>Rappel N°{{ loop.index }}</td>
-                                                            <td>{{ rappel.frais|number_format(2, '.', ',') }}</td>
+                                                            <td>{{ rappel.montantEmis|number_format(2, '.', ',') }}</td>
                                                             <td><input onchange="modifySolde(this);"
                                                                        type="number"
                                                                        data-id="{{ rappel.id }}"

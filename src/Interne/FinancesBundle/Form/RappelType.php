@@ -14,15 +14,15 @@ class RappelType extends AbstractType
     {
         $builder
             ->add(
-                'date',
+                'dateCreation',
                 'date',
                 array('label' => 'Date du rappel',
                     'data' => new \DateTime())
             )
             ->add(
-                'frais',
+                'montantEmis',
                 'number',
-                array(  'label' => 'Frais',
+                array(  'label' => 'Frais de rappel',
                         'required' => false
 
                 )

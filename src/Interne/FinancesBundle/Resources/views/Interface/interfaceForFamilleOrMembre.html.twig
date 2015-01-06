@@ -1,22 +1,53 @@
 <!-- on stocke les infos du propriétaire pour les récupérer -->
-<input type="hidden" value="{{ ownerEntity.id }}" id="ownerEntity-id"/>
+<input type="hidden" value="{{ ownerEntity.id }}" id="owner-entity-id"/>
 
 {% if ownerEntity.isClass('Membre') %}
-    <input type="hidden" value="Membre" id="ownerEntity-type"/>
+    <input type="hidden" value="Membre" id="owner-entity-type"/>
 {% elseif ownerEntity.isClass('Famille') %}
-    <input type="hidden" value="Famille" id="ownerEntity-type"/>
+    <input type="hidden" value="Famille" id="owner-entity-type"/>
 {% endif %}
 
 
-<div class="ui grid" id="listeFactureContent">
-    <div class="row">
-        <div class="column">
-        <h4>Factures</h4>
+<div id="finances-infos-context" class="tab-context">
 
+    <div class="ui top attached tabular menu">
+        <div class="item active" data-tab="finances">
+            Infos
+        </div>
+        <div class="item" data-tab="factures">
+            Factures
+            <div class="ui teal circular label">{{ ownerEntity.factures|length }}</div>
+        </div>
+        <div class="item" data-tab="creances">
+            Creances
+            <div class="ui teal circular label">{{ ownerEntity.creances|length }}</div>
+        </div>
 
+    </div>
+    <div class="ui bottom attached active tab segment" data-tab="finances">
+        <div class="ui grid" id="infoFinanceContent">
+            <div class="row">
+                <div class="column">
+                    {% if ownerEntity.isClass('Membre') %}
 
+                        Les cérances de ce membre sont facturée
 
-                <table class="ui table" id="listeFacturesTable">
+                        {% if ownerEntity.envoiFacture == 'Membre' %}
+                            à lui même.
+                        {% elseif ownerEntity.envoiFacture == 'Famille' %}
+                            à la famille {{ ownerEntity.famille.nom }}
+                        {% endif %}
+
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ui bottom attached tab segment" data-tab="factures">
+        <div class="ui grid" id="listeFactureContent">
+            <div class="row">
+                <div class="column">
+                    <table class="ui table" id="listeFacturesTable">
                     <thead>
                     <tr>
                         <th rowspan="2">Num. Réf.</th>
@@ -55,25 +86,28 @@
                                 <td>
 
 
+                                    {% if facture.statut == 'ouverte' %}
+                                        <a class="popupable"
+                                           onclick="openRappelForm({{ facture.id }},'interface');"
+                                           data-content="Ajouter un rappel">
+                                            <i class="add square icon"></i>
+                                        </a>
+                                    {% endif %}
+
 
 
                                     <a onclick="printFacture(this);" data-id="{{ facture.id }}" target="_blank">
                                         <i class="print icon"></i>
                                     </a>
 
-                                    <a onclick="openFactureShow({{ facture.id }});" >
+                                    <a onclick="openFactureShow({{ facture.id }},'interface');" >
                                         <i class="zoom icon"></i>
                                     </a>
 
 
                                     <a onclick="deleteFactureFromInterface(this);"
                                        data-id="{{ facture.id }}"
-                                       data-owner-id="{{ ownerEntity.id }}"
-                                            {% if ownerEntity.isClass('Membre') %}
-                                        data-owner-type="Membre"
-                                    {% elseif ownerEntity.isClass('Famille') %}
-                                        data-owner-type="Famille"
-                                            {% endif %}>
+                                       >
                                         <i class="trash icon red"></i>
                                     </a>
 
@@ -89,38 +123,26 @@
                     {% endif %}
                     </tbody>
                 </table>
-
-
-
-
+                </div>
+            </div>
         </div>
     </div>
-</div>
-
-
-
-
-<div class="ui grid" id="listeCreanceContent">
+    <div class="ui bottom attached tab segment" data-tab="creances">
+        <div class="ui grid" id="listeCreanceContent">
     <div class="row" >
         <div class="column">
+            <div class="ui right floated basic segment">
 
-            <div class="ui left floated basic segment">
-                <h4>Créances</h4>
-            </div>
+                    {% if ownerEntity.isClass('Membre') %}
+                        <div class="ui button" onclick="openCreancelForm({{ ownerEntity.id }},'Membre','interfaceMembre')">Ajouter une créance</div>
+                    {% elseif ownerEntity.isClass('Famille') %}
+                        <div class="ui button" onclick="openCreancelForm({{ ownerEntity.id }},'Famille','interfaceFamille')">Ajouter une créance</div>
+                    {% endif %}
 
-                <div class="ui right floated basic segment">
-                    <div class="ui button" onclick="openCreanceForm();">Ajouter une créance</div>
-                    <div class="ui button" onclick="createFactureWithSelectedCreances('Membre');">Facturer les créances séléctionnées</div>
+                    <div class="ui button" onclick="createFactureFromInterface();">Facturer les créances séléctionnées</div>
 
                 </div>
-
-
-
-
-
-
-
-                <table class="ui table" id="listeCreanceTable">
+            <table class="ui table" id="listeCreanceTable">
 
                     <thead>
                     <tr>
@@ -165,12 +187,7 @@
 
                                         <a onclick="deleteCreanceFromInterface(this);"
                                            data-id="{{ creance.id }}"
-                                           data-owner-id="{{ ownerEntity.id }}"
-                                            {% if ownerEntity.isClass('Membre') %}
-                                                data-owner-type="Membre"
-                                            {% elseif ownerEntity.isClass('Famille') %}
-                                                data-owner-type="Famille"
-                                            {% endif %}>
+                                           >
                                             <i class="trash icon red"></i>
                                         </a>
 
@@ -241,36 +258,27 @@
                     </tbody>
 
                 </table>
-
-
-
-
-
-
-
         </div>
+    </div>
+</div>
     </div>
 </div>
 
 
-{# Insertion du fromulaire modal de créance #}
-{{ render(controller('InterneFinancesBundle:Interface:creanceModalForm', { 'ownerEntity': ownerEntity })) }}
-
 {% include "InterneFinancesBundle:Modal:modalDisplay.html.twig" %}
+
+
 
 {% block javascript %}
 
     {% javascripts
     '@InterneFinancesBundle/Resources/public/js/creance.js'
     '@InterneFinancesBundle/Resources/public/js/facture.js'
-    '@InterneFinancesBundle/Resources/public/js/interfaceMembreFamille.js'%}
+    '@InterneFinancesBundle/Resources/public/js/interfaceMembreFamille.js'
+    '@InterneFinancesBundle/Resources/public/js/rappel.js'%}
     <script src="{{ asset_url }}"></script>
 
     {% endjavascripts %}
-
-
-
-
 
 
 {% endblock %}

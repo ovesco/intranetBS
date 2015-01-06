@@ -54,14 +54,14 @@ class Rappel
     /**
      * @var float
      *
-     * @ORM\Column(name="montantEmis", type="float")
+     * @ORM\Column(name="montantEmis", type="float", nullable=true)
      */
     private $montantEmis;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="montantRecu", type="float")
+     * @ORM\Column(name="montantRecu", type="float", nullable=true)
      */
     private $montantRecu;
 

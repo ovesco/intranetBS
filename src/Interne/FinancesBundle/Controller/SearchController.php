@@ -83,14 +83,12 @@ class SearchController extends Controller
             $factures = $em->getRepository('InterneFinancesBundle:Facture')->findBySearch($facture,$factureParameters);
 
             $this->manageSession($creances,$factures,$searchMethode);
+            $this->checkSession();
 
-            return $this->render('InterneFinancesBundle:Search:results.html.twig', array(
-                'factures' => $session->get('factures'),
-                'creances' => $session->get('creances'),
-            ));
-
+            return new Response();
         }
 
+        $this->checkSession();
 
         return $this->render('InterneFinancesBundle:Search:search.html.twig', array(
             'searchForm' => $searchForm->createView(),
@@ -100,23 +98,133 @@ class SearchController extends Controller
 
     }
 
-    private function query()
+    /**
+     * @Route("/load_results_ajax", name="interne_fiances_search_load_results_ajax", options={"expose"=true})
+     *
+     * @return Response
+     */
+    public function loadResultsAjaxAction()
     {
+        $request = $this->getRequest();
 
-    }
+        if($request->isXmlHttpRequest()) {
 
-    private function searchByLink($creances,$factures)
-    {
-        /*
-         * On commence par rechercher toute les factures
-         * liée a des créance trouvée qui ne sont pas
-         * dans le résultat de la recherche.
-         */
-        foreach($creances as $creance)
-        {
+            $this->checkSession();
+
+            $session = $this->getRequest()->getSession();
+            return $this->render('InterneFinancesBundle:Search:results.html.twig', array(
+                'factures' => $session->get('factures'),
+                'creances' => $session->get('creances'),
+            ));
 
         }
+        return new Response();
+
     }
+
+    /**
+     * @Route("/out_of_search_ajax", name="interne_fiances_search_out_of_search_ajax", options={"expose"=true})
+     *
+     * @return Response
+     */
+    public function outOfSearchAjaxAction()
+    {
+        $request = $this->getRequest();
+
+        if($request->isXmlHttpRequest()) {
+
+            $id = $request->request->get('id');
+            $type = $request->request->get('type');
+
+            $session = $this->getRequest()->getSession();
+
+            switch($type){
+                case 'facture':
+                    $factures = $session->get('factures');
+                    $newFactures = array();
+                    foreach($factures as $facture)
+                    {
+                        if($facture->getId() != $id)
+                        {
+                            array_push($newFactures,$facture);
+                        }
+                    }
+                    $session->set('factures',$newFactures);
+                    break;
+                case 'creance':
+                    $creances = $session->get('creances');
+                    $newCreances = array();
+                    foreach($creances as $creance)
+                    {
+                        if($creance->getId() != $id)
+                        {
+                            array_push($newCreances,$creance);
+                        }
+                    }
+                    $session->set('creances',$newCreances);
+                    break;
+            }
+
+            $this->checkSession();
+
+            return new Response();
+
+        }
+        return new Response();
+
+    }
+
+
+    /*
+     * Cette fonction permet d'eliminer les factures ou créances qui aurait
+     * été supprimée depuis la dernière sauvegarde dans la session.
+     */
+    private function checkSession()
+    {
+        $session = $this->getRequest()->getSession();
+
+        $em = $this->getDoctrine()->getManager();
+
+        $creanceRepo = $em->getRepository('InterneFinancesBundle:Creance');
+        $factureRepo = $em->getRepository('InterneFinancesBundle:Facture');
+
+        /*
+         * On parcours le tableau pour vérifier que toutes les factures et créance
+         * sont toujours exsistante...car il peut y avoir des suppressions entre temps.
+         */
+        $newFactures = array();
+        $factures = array();
+        if($session->has('factures')) {
+            $factures = $session->get('factures');
+        }
+        foreach($factures as $facture)
+        {
+            $newFacture = $factureRepo->find($facture->getId());
+            if($newFacture != null)
+            {
+                array_push($newFactures,$newFacture);
+            }
+        }
+        $session->set('factures',$newFactures);
+
+        $newCreances = array();
+        $creances = array();
+        if($session->has('creances'))
+        {
+            $creances = $session->get('creances');
+        }
+
+        foreach($creances as $creance)
+        {
+            $newCreance = $creanceRepo->find($creance->getId());
+            if($newCreance != null)
+            {
+                array_push($newCreances,$newCreance);
+            }
+        }
+        $session->set('creances',$newCreances);
+    }
+
 
     private function extractSearchDataCreance($creanceSearchForm,$ownerSearchForm)
     {

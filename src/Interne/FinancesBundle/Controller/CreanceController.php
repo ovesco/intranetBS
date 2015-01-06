@@ -182,6 +182,41 @@ class CreanceController extends Controller
         return new Response();
     }
 
+    /*
+     * Ajoute une cérance à un membre ou une famille
+     */
+    /**
+     * @Route("/creance/get_form_ajax", name="interne_fiances_creance_get_form_ajax", options={"expose"=true})
+     *
+     * @return Response
+     */
+    public function sendFormAjaxAction()
+    {
+        $request = $this->getRequest();
+
+        if ($request->isXmlHttpRequest()) {
+
+            $ownerId = $request->request->get('ownerId');
+            $ownerType = $request->request->get('ownerType');
+            $fromPage = $request->request->get('fromPage');
+
+            $creance = new Creance();
+            $creanceAddForm  = $this->createForm(new CreanceAddType,$creance);
+            $creanceAddForm->get('classOwner')->setData($ownerType);
+            $creanceAddForm->get('idOwner')->setData($ownerId);
+
+
+            return $this->render('InterneFinancesBundle:Creance:modalFormCreance.html.twig',
+                array('creanceForm' => $creanceAddForm->createView(),
+                    'fromPage'=>$fromPage));
+
+
+        }
+        return new Response();
+
+
+    }
+
 
 
 

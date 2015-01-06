@@ -4,16 +4,15 @@
 
 
 {% block content %}
+   {% for facture in factures %}
 
+       {{ facture.id }}
 
+    {% endfor %}
 
+    {{ test }}
 
-
-<a href="{{path('interne_fiances_search')}}">search facture </a><br>
-<a href="{{path('interne_fiances_payement')}}">Payements </a><br>
-<a href="{{path('interne_fiances_statistics')}}">Stat </a><br>
-<a href="{{path('interne_finances_validation')}}"> Validation </a><br>
-<a href="{{path('interne_parametre_listing', {'groupe' : 'facture'} )}}">Parametres </a><br>
+    <br>
 
 
 
@@ -27,8 +26,6 @@ TO DO LIST
     <li>télécharger la librairie pour les graphiques de stat</li>
     <li>validation des formulaire</li>
     <li>date de paiement dans le forumlaire de saisie manuel</li>
-
-
 
 </ul>
 

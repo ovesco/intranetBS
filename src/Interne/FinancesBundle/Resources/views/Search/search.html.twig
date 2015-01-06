@@ -1,7 +1,7 @@
 {% extends "layout.html.twig" %}
 
 
-{% block titre %}Rechercher de cérances et de factures{% endblock %}
+{% block titre %}Recherche de créances et de factures{% endblock %}
 
 {% block content %}
 
@@ -11,7 +11,7 @@
             <div class="ui segment">
 
 
-    <div class="ui button" onclick="$('#modal-facture-searchForm').modal('show');"><i class="search icon"></i>Recherche</div>
+
 
                 {% include "InterneFinancesBundle:Search:results.html.twig" with {'factures': factures, 'creances':creances} %}
 
@@ -31,6 +31,8 @@
     {% javascripts
     '@InterneFinancesBundle/Resources/public/js/search.js'
     '@InterneFinancesBundle/Resources/public/js/creance.js'
+    '@InterneFinancesBundle/Resources/public/js/facture.js'
+    '@InterneFinancesBundle/Resources/public/js/rappel.js'
     %}
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}

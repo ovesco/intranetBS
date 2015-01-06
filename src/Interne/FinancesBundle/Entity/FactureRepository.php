@@ -139,5 +139,48 @@ class FactureRepository extends EntityRepository
 
     }
 
+    public function findFactureOuverteAtDateTime(\DateTime $date)
+    {
+        //on crée un nouvelle requete qui sera custom
+        $queryBuilder = $this->createQueryBuilder('facture');
+
+        $queryBuilder->andWhere('facture.dateCreation <= :dateCreation')
+            ->setParameter('dateCreation', $date);
+
+        $queryBuilder->orWhere('facture.datePayement >= :datePayement')->setParameter('datePayement', $date);
+
+        $queryBuilder->orWhere('facture.datePayement = :datePayement')->setParameter('datePayement', null);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function findFacturePayeeBetweenDates(\DateTime $startDate, \DateTime $endDate)
+    {
+        //on crée un nouvelle requete qui sera custom
+        $queryBuilder = $this->createQueryBuilder('facture');
+        $queryBuilder->andWhere('facture.datePayement >= :startDate')->setParameter('startDate', $startDate);
+        $queryBuilder->andWhere('facture.datePayement <= :endDate')->setParameter('endDate', $endDate);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function test(\DateTime $date)
+    {
+        //on crée un nouvelle requete qui sera custom
+        $queryBuilder = $this->createQueryBuilder('facture');
+
+        $queryBuilder->andWhere('facture.dateCreation <= :dateCreation')
+            ->setParameter('dateCreation', $date);
+
+        $queryBuilder->orWhere('facture.datePayement >= :datePayement')->setParameter('datePayement', $date);
+
+        $queryBuilder->orWhere('facture.datePayement = :datePayement')->setParameter('datePayement', null);
+
+
+
+
+        return $queryBuilder->getQuery()->getScalarResult();
+    }
+
 
 }

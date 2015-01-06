@@ -23,8 +23,6 @@ class StatisticsController extends Controller
      */
     public function indexAction()
     {
-
-
         return $this->render('InterneFinancesBundle:Statistics:panel.html.twig');
     }
 
@@ -59,6 +57,9 @@ class StatisticsController extends Controller
         $graphData = null;
 
         switch($idGraph){
+            /*
+             * Affiche le nombre de facture ouverte en fonction du nombre de rappels.
+             */
             case 0:
 
                 $facture = new Facture();
@@ -67,11 +68,6 @@ class StatisticsController extends Controller
                  * Uniquement facture ouverte
                  */
                 $facture->setStatut('ouverte');
-                /*
-                 * mise a null pour la fonction de recherche
-                 */
-                $facture->setDatePayement(null);
-                $facture->setMontantRecu(null);
 
                 $factures= $factureRepo->findBySearch($facture);
 
@@ -138,6 +134,9 @@ class StatisticsController extends Controller
                 );
 
                 break;
+            /*
+             * Affiche le montant des facture ouverte en fonction du temps
+             */
             case 1:
 
                 $graphData = array(
@@ -150,6 +149,13 @@ class StatisticsController extends Controller
                     )
 
                 );
+
+                break;
+
+            /*
+             * Affiche le montant payé en fonction du temps
+             */
+            case 2:
 
                 break;
 

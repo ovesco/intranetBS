@@ -5,6 +5,9 @@ namespace Interne\FinancesBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
+use Interne\FinancesBundle\Entity\Facture;
+use Interne\FinancesBundle\Entity\FactureRepository;
+
 
 class DefaultController extends Controller
 {
@@ -16,7 +19,15 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('InterneFinancesBundle:Default:index.html.twig');
+
+
+        $em = $this->getDoctrine()->getManager();
+
+        $result = $em->getRepository('InterneFinancesBundle:Facture')->findFactureOuverteAtDateTime(new \DateTime());
+
+        $test = $em->getRepository('InterneFinancesBundle:Creance')->getMontantEmisByFactureId(18);
+
+        return $this->render('InterneFinancesBundle:Default:index.html.twig', array('factures'=>$result, 'test' => $test));
     }
 
     /**

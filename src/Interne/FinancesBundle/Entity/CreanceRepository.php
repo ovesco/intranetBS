@@ -183,4 +183,14 @@ class CreanceRepository extends EntityRepository
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+
+    public function getMontantEmisByFactureId($id)
+    {
+        $queryBuilder = $this->createQueryBuilder('creance')->select('count(creance.montantEmis) as montantEmisTotal');
+
+        $queryBuilder->where('creance.facture_id =: id')->setParameter('id',$id);
+
+        $queryBuilder->getQuery()->getScalarResult();
+    }
 }

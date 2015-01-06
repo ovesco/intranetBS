@@ -74,6 +74,9 @@
                                     <div class="item">
                                         Masse d'attributions
                                     </div>
+                                    <div class="item" onclick="">
+                                        Ajout de créance en masse (todo)
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -105,6 +108,9 @@
     </div>
 
     {{ render(controller('AppBundle:QueryDataOnload:distinctions')) }}
+
+    {# modal pour l'ajout de créances en masse #}
+    {% include "InterneFinancesBundle:Modal:modalDisplay.html.twig" %}
 
 {% endblock %}
 

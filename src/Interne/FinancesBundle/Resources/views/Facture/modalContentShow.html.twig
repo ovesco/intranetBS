@@ -33,21 +33,114 @@
                 {% endif %}
             </td>
         </tr>
+
+        <tr>
+            <td>Propriétaire</td>
+            <td>
+                {% if facture.getOwner.isClass('Membre') %}
+                    {{ facture.membre.prenom }} {{ facture.membre.nom }}
+                {% elseif facture.getOwner.isClass('Famille') %}
+                    {{ facture.famille }}
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>Envoie de la facture</td>
+            <td>
+                Par mail/Par courrier...quel adresse?
+
+            </td>
+        </tr>
+
         </tbody>
     </table>
 
-    <table class="ui table">
+    <table class="ui celled table">
+        <thead>
+        <tr>
+            <th rowspan="2">Créances et Rappels</th>
+            <th colspan="2">Montant</th>
+        </tr>
+        <tr>
+            <th>Emis</th>
+            <th>Reçu</th>
+        </tr>
+        </thead>
         <tbody>
             {% for creance in facture.creances %}
                 <tr>
-                    <td>{{ creance.titre }}</td>
+                    <td>
+                        <b>{{ creance.titre }}</b>
+                        <a onclick="openCreanceShow({{ creance.id }});" >
+                            <i class="zoom icon"></i>
+                        </a>
+
+                        {% if creance.remarque is not empty %}
+                            <br>
+
+                            Remarque: {{ creance.remarque }}
+                        {% endif %}
+                    </td>
+                    <td>{{ creance.montantEmis|number_format(2, '.', ',') }}</td>
+                    {% if creance.montantRecu >= creance.montantEmis %}
+                        <td class="positive">{{ creance.montantRecu|number_format(2, '.', ',') }}</td>
+                    {% else %}
+                        <td class="negative">{{ creance.montantRecu|number_format(2, '.', ',') }}</td>
+                    {% endif %}
                 </tr>
 
 
+
             {% endfor %}
+            {% for rappel in facture.rappels %}
+                <tr>
+                    <td>Rappel N°{{ loop.index }}</td>
+                    <td>{{ rappel.montantEmis|number_format(2, '.', ',') }}</td>
+                    {% if rappel.montantRecu >= rappel.montantEmis %}
+                        <td class="positive">{{ rappel.montantRecu|number_format(2, '.', ',') }}</td>
+                    {% else %}
+                        <td class="negative">{{ rappel.montantRecu|number_format(2, '.', ',') }}</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+
+            <tr>
+                <td class="right aligned">Total</td>
+                <td>{{ facture.montantEmis|number_format(2, '.', ',') }}</td>
+                {% if facture.montantRecu >= facture.montantEmis %}
+                    <td class="positive">{{ facture.montantRecu|number_format(2, '.', ',') }}</td>
+                {% else %}
+                    <td class="negative">{{ facture.montantRecu|number_format(2, '.', ',') }}</td>
+                {% endif %}
+            </tr>
+
         </tbody>
     </table>
 
 </div>
-<div class="actions"></div>
+<div class="actions">
+
+    {% if facture.statut == 'ouverte' %}
+        <div class="ui button blue" onclick="openRappelForm({{ facture.id }},'factureShow');">
+            Ajouter un rappel
+        </div>
+    {% endif %}
+
+    {% if fromPage == 'interface' %}
+        <div class="ui button blue" onclick="
+                deleteFacture({{ facture.id }});
+                reloadContentInterface();
+                modalDisplayClose();">
+            Supprimer
+        </div>
+    {% elseif fromPage == 'search' %}
+        <div class="ui button blue" onclick="
+                deleteFacture({{ facture.id }});
+                loadResults();
+                modalDisplayClose();">
+            Supprimer
+        </div>
+    {% endif %}
+
+</div>
 

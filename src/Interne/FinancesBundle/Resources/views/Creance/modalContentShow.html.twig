@@ -10,10 +10,21 @@
                 <td>Remarque</td>
                 <td>{{ creance.remarque }}</td>
             </tr>
+            {% if creance.facture is not empty %}
+            <tr>
+                <td>Facture</td>
+                <td>
+                    N°{{ creance.facture.id }}
+
+                    <a onclick="openFactureShow({{ creance.facture.id }});" >
+                        <i class="zoom icon"></i>
+                    </a>
+                </td>
+            </tr>
             <tr>
                 <td>Statut</td>
                 <td>
-                    {% if creance.facture is not empty %}
+
                         {% if creance.facture.statut == 'ouverte' %}
                             <div class="ui label blue">
                                 Ouverte
@@ -23,15 +34,21 @@
                                 Payée
                             </div>
                         {% endif %}
-                    {% else %}
-                        <div class="ui label orange">
-                            En attente de facturation
-                        </div>
 
-                    {% endif %}
 
                 </td>
             </tr>
+            {% else %}
+            <tr>
+                <td>Statut</td>
+                <td>
+                    <div class="ui label orange">
+                        En attente de facturation
+                    </div>
+                </td>
+            </tr>
+
+            {% endif %}
             <tr>
                 <td>Date de création</td>
                 <td>{{ creance.dateCreation|date("d/m/Y") }}</td>
@@ -58,6 +75,28 @@
                 <td>Montant reçu</td>
                 <td>{{ creance.montantRecu|number_format(2, '.', ',') }}</td>
             </tr>
+            <tr>
+                <td>Propriétaire</td>
+                <td>
+                    {% if creance.getOwner.isClass('Membre') %}
+                        {{ creance.membre.prenom }} {{ creance.membre.nom }}
+                    {% elseif creance.getOwner.isClass('Famille') %}
+                        {{ creance.famille }}
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>Cible de facturation</td>
+                <td>
+                    {% if creance.membre.envoiFacture == 'Membre' %}
+                        {{ creance.membre.prenom }} {{ creance.membre.nom }}
+                    {% elseif creance.membre.envoiFacture == 'Famille' %}
+                        {{ creance.membre.famille }}
+                    {% endif %}
+                </td>
+            </tr>
+
+
         </tbody>
     </table>
 

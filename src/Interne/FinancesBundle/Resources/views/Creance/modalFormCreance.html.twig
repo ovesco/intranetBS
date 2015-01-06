@@ -1,19 +1,16 @@
 {% form_theme creanceForm 'InterneFinancesBundle:Templates:form_template.html.twig' %}
 
-<div class="ui modal" id="modal-add-creance" aria-hidden="true">
-
-
     <i class="close icon"></i>
     <div class="header">
 
 
-        {% if ownerEntity == null %}
+        {% if fromPage == null %}
             <h4 class="modal-title" >Ajouter une créance en masse</h4>
 
-        {% elseif ownerEntity.isClass('Membre') %}
+        {% elseif fromPage == 'interfaceMembre' %}
             <h4 class="modal-title" >Ajouter une créance au membre</h4>
 
-        {% elseif ownerEntity.isClass('Famille') %}
+        {% elseif fromPage == 'interfaceFamille' %}
             <h4 class="modal-title" >Ajouter une créance à la famille</h4>
 
         {% endif %}
@@ -41,49 +38,27 @@
     </div>
     <div class="actions">
 
-
-        {% if ownerEntity == null %}
-
+        {% if fromPage == null %}
 
 
-            <div class="ui button blue" onclick="adderAddCreances();">Valider</div>
+        {% elseif fromPage == 'interfaceMembre' %}
+            <div class="ui button blue" onclick="addCreanceFromInterface('addCreanceForm')">Ajouter</div>
 
+        {% elseif fromPage == 'interfaceFamille' %}
+            <div class="ui button blue" onclick="addCreanceFromInterface('addCreanceForm')">Ajouter</div>
 
-
-        {% elseif ownerEntity.isClass('Membre') %}
-
-            <div class="ui button blue" onclick="addCreance();">Valider</div>
-
-
-
-
-        {% elseif ownerEntity.isClass('Famille') %}
-
-            <div class="ui button blue" onclick="">Valider</div>
+        {% elseif fromPage == 'listing' %}
+            <div class="ui button blue" onclick="">Ajouter</div>
 
         {% endif %}
+
+
 
 
     </div>
 
 </div>
 
-
-{% block javascript %}
-
-
-    <script>
-
-        function openCreanceForm()
-        {
-            $('#modal-add-creance').modal('show');
-
-        }
-
-
-    </script>
-
-{% endblock %}
 
 
 
