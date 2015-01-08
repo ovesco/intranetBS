@@ -71,7 +71,7 @@
                             </div>
                             <div class="field">
                                 <label>Hauteur de l'en-tête</label>
-                                <input type="number" value="300" name="template_height" />
+                                <input type="number" id="template-height" value="300" name="template_height" />
                             </div>
                         </div>
 
@@ -208,6 +208,7 @@
                     base        : {
                         type        : $('#liste-type').dropdown('get value'),
                         liste       : $('#liste-listing').dropdown('get value'),
+                        height      : $('#template-height').val()
                     },
                     subParams   : {
 

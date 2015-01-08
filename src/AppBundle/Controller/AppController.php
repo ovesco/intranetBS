@@ -25,18 +25,15 @@ class AppController extends Controller
      */
     public function testAction() {
 
-        $validation = $this->get('validation');
-        $validation->validateField('yolo', 'famille.1.pere.prenom');
+        $generator = $this->get('PDFGenerator');
+        $MManager  = $generator->getModelsManager();
+
+        $model     = $MManager->loadModel('liste_de_troupe');
+
+        echo $model->templateDir;
+
+
 
         return new Response('');
-    }
-
-
-    /**
-     * Page qui affiche les statistiques générales
-     * @Route("statistics", name="app_statistics")
-     */
-    public function statisticsAction() {
-
     }
 }

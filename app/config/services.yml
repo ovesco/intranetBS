@@ -31,11 +31,8 @@ services:
     pdf:
         class: AppBundle\Utils\Export\Pdf
 
-    listeEnvoi:
-        class: AppBundle\Utils\Envoi\ListeEnvoi
-        arguments:
-            - @session
-            - @doctrine.orm.entity_manager
+    PDFGenerator:
+            class: AppBundle\PDFGenerator\PDFGenerator
 
     # Twig
     # Extensions twig qui permettent de mettre en place des filtres

@@ -30,17 +30,20 @@ class Pdf extends FPDI {
     /**
      * Permet de charger un fichier PDF comme template
      * @param $src
-     * @param $height
      */
-    public function loadTemplate($src, $height) {
+    public function loadTemplate($src) {
 
         $pageCount = $this->setSourceFile($src);
 
         $tplIdx = $this->importPage(1, '/MediaBox');
         $this->addPage();
         $this->useTemplate($tplIdx);
+    }
 
-        $this->setX($height);
+    public function init($top = 30) {
+
+        $this->addPage();
+        $this->setY($top);
     }
 
     /**
@@ -141,14 +144,14 @@ class Pdf extends FPDI {
     public function printData(array $headers, array $colWidth, array $data, $top = null) {
 
         if(!is_null($top))
-            $this->setX($top);
+            $this->setY($top);
 
         $totalIndices   = 0;
 
         foreach($colWidth as $i)
             $totalIndices += $i;
 
-        $ratio          = $this->w/$totalIndices;
+        $ratio          = 185/$totalIndices;
 
         for($i = 0; $i < count($colWidth); $i++)
             $colWidth[$i] = $colWidth[$i]*$ratio;
@@ -159,7 +162,7 @@ class Pdf extends FPDI {
          */
         $this->SetFont('arial', 'B', 11);
         for($i = 0; $i < count($headers); $i++)
-            $this->Cell($colWidth[$i],7,$headers[$i],'B',0,'C');
+            $this->Cell($colWidth[$i],7,$headers[$i],'B',0,'L');
 
         $this->ln();
 
@@ -168,9 +171,13 @@ class Pdf extends FPDI {
          * Police de base, on balance en masse
          */
         $this->SetFont('arial', '', 11);
-        for($i = 0; $i < count($data); $i++)
-            foreach($data[$i] as $val)
-                $this->Cell($colWidth[$i],7,$val,0,0,'L');
+        for($i = 0; $i < count($data); $i++) {
+
+            foreach ($data[$i] as $val)
+                $this->Cell($colWidth[$i], 7, $val, 0, 0, 'L');
+
+            $this->ln();
+        }
 
         $this->ln();
 

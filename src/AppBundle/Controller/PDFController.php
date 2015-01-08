@@ -58,10 +58,6 @@ class PDFController extends Controller {
 
 
 
-
-
-
-
         /*
          * Chargement du template
          *
@@ -70,7 +66,9 @@ class PDFController extends Controller {
          * Le répertoire temporary peut-être vidé par un administrateur
          */
         if($params['template'] != null)
-            $pdf->loadTemplate(getcwd() . '/temporary/pdf_templates/' . $params['template'], $params['template_height']);
+            $pdf->loadTemplate(getcwd() . '/temporary/pdf_templates/' . $params['template']);
+        else
+            $pdf->init();
 
 
 
@@ -86,12 +84,14 @@ class PDFController extends Controller {
          */
         $membres    = $this->queryListe($params['liste']);
 
-        $data       = array();
+        if(!is_null($membres)) {
 
-        foreach($membres as $m)
-            $data[] = array($m->getPrenom(), $m->getNom(), $m->getNaissance()->format('d.m.Y'));
+            $data = array();
+            foreach ($membres as $m)
+                $data[] = array($m->getPrenom(), $m->getNom(), $m->getNaissance()->format('d.m.Y'));
 
-        $pdf->printData(array('prenom', 'nom', 'naissance'), array(5,8,4), $data);
+            $pdf->printData(array('prenom', 'nom', 'naissance'), array(5, 8, 4), $data, $params['template_height']);
+        }
 
 
 
@@ -147,6 +147,9 @@ class PDFController extends Controller {
         if($base['liste'] != '')
             $current['liste'] = $base['liste'];
 
+        if($base['height'] != '')
+            $current['template_height'] = $base['height'];
+
         foreach($perso as $k => $v)
             $current['fields'][$k] = $v;
 
@@ -184,7 +187,7 @@ class PDFController extends Controller {
         if(count($params) == 2)
             $membres = $this->getDoctrine()->getRepository('AppBundle:Groupe')->find($params[1])->getMembersRecursive();
 
-        else $membres = $this->get('listing')->getByToken($liste);
+        else $membres = $this->get('listing')->getByToken($liste)->getAll();
 
         return $membres;
     }
