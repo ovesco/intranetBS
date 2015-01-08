@@ -12,16 +12,108 @@
                 <div class="ui grid">
                     <div class="row">
                         <div class="ten wide column">
-                            <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-                        </div>
-                        <div class="four wide column">
-                            <div class="ui vertical buttons">
-                                <div class="ui button small" onclick="getGraph(0);">Evolution des rappels</div>
-
-                                <div class="ui button small" onclick="getGraph(1);">Montant ouvert</div>
-                                <div class="ui button small" onclick="">Graph</div>
-                                <div class="ui button small" onclick="">Graph</div>
+                            <div class="ui segment">
+                                <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                             </div>
+
+                        </div>
+                        <div class="six wide column">
+                            <div class="ui styled accordion">
+                                <div class=" title">
+                                    <i onclick="getGraph(0);"
+                                       class="bar chart large blue icon popupable"
+                                        data-content="Afficher"></i>
+                                    <i class="dropdown icon"></i>
+                                    Evolution des rappels
+                                </div>
+                                <div class="content">
+                                    Explication
+
+                                    </div>
+                                <div class="title">
+                                    <i onclick="getGraph(1);"
+                                       class="bar chart large blue icon popupable"
+                                       data-content="Afficher"></i>
+                                    <i class="dropdown icon"></i>
+                                    Créances émises et reçues
+                                </div>
+                                <div class="content">
+                                    <div class="ui message blue">
+                                    Explication
+                                    </div>
+
+                                    <div class="ui form">
+
+                                        <h4 class="ui dividing header">Options du graphique</h4>
+                                            <div class="field">
+                                                <label>Intervale entre les points</label>
+                                                <select class="ui dropdown graph_option">
+                                                    <option name="graph_1_interval" value="P1W">Intervale</option>
+                                                    <option name="graph_1_interval" value="P1D">un jour</option>
+                                                    <option name="graph_1_interval" value="P1W">une semaine</option>
+                                                    <option name="graph_1_interval" value="P1M">un mois</option>
+                                                </select>
+
+                                            </div>
+                                            <div class="field">
+                                                <label>Periode total</label>
+                                                <select class="ui dropdown graph_option">
+                                                    <option name="graph_1_periode" value="P6M">Période</option>
+                                                    <option name="graph_1_periode" value="P1M">un mois</option>
+                                                    <option name="graph_1_periode" value="P3M">trois mois</option>
+                                                    <option name="graph_1_periode" value="P6M">six mois</option>
+                                                    <option name="graph_1_periode" value="P1Y">une année</option>
+                                                    <option name="graph_1_periode" value="P2Y">deux ans</option>
+                                                    <option name="graph_1_periode" value="P3Y">trois ans</option>
+                                                </select>
+                                            </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="title">
+                                    <i onclick="getGraph(2);"
+                                       class="bar chart large blue icon popupable"
+                                       data-content="Afficher"></i>
+                                    <i class="dropdown icon"></i>
+                                    Montant en attente
+                                </div>
+                                <div class="content">
+                                    <div class="ui message blue">
+                                        Explication
+                                    </div>
+
+                                    <div class="ui form">
+
+                                        <h4 class="ui dividing header">Options du graphique</h4>
+                                        <div class="field">
+                                            <label>Intervale entre les points</label>
+                                            <select class="ui dropdown graph_option">
+                                                <option name="graph_2_interval" value="P1W">Intervale</option>
+                                                <option name="graph_2_interval" value="P1D">un jour</option>
+                                                <option name="graph_2_interval" value="P1W">une semaine</option>
+                                                <option name="graph_2_interval" value="P1M">un mois</option>
+                                            </select>
+
+                                        </div>
+                                        <div class="field">
+                                            <label>Periode total</label>
+                                            <select class="ui dropdown graph_option">
+                                                <option name="graph_2_periode" value="P6M">Période</option>
+                                                <option name="graph_2_periode" value="P1M">un mois</option>
+                                                <option name="graph_2_periode" value="P3M">trois mois</option>
+                                                <option name="graph_2_periode" value="P6M">six mois</option>
+                                                <option name="graph_2_periode" value="P1Y">une année</option>
+                                                <option name="graph_2_periode" value="P2Y">deux ans</option>
+                                                <option name="graph_2_periode" value="P3Y">trois ans</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
                         </div>
                     </div>
                 </div>
@@ -45,8 +137,17 @@
 
         function getGraph(idGraph){
 
+            var options = {};
 
-            var data = { idGraph: idGraph };
+            $('.graph_option option:selected').each(function(){
+
+                var name = $(this).attr('name');
+                var value = $(this).val();
+                //options.push(name: value);
+                options[name] = value;
+            })
+
+            var data = { idGraph: idGraph, options:options };
 
             $.ajax({
                 type: "POST",
@@ -63,6 +164,13 @@
 
         jQuery(document).ready(function() {
 
+            $('.ui.accordion')
+                    .accordion()
+            ;
+
+            $('.ui.dropdown')
+                    .dropdown()
+            ;
 
             getGraph(0);
 

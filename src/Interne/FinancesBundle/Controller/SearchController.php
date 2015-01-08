@@ -68,9 +68,11 @@ class SearchController extends Controller
              */
             //$creance = new Creance();
             //$facture = new Facture();
+            $searchMethode = $searchForm->get('searchMethode')->getData();
+
             $creance = $searchForm->get('creance')->getData();
             $facture = $searchForm->get('facture')->getData();
-            $searchMethode = $searchForm->get('searchMethode')->getData();
+
             $creanceParameters = $this->extractSearchDataCreance($searchForm->get('creance'),$searchForm->get('owner'));
             $factureParameters = $this->extractSearchDataFacture($searchForm->get('facture'),$searchForm->get('owner'));
 
@@ -79,7 +81,7 @@ class SearchController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $creances = $em->getRepository('InterneFinancesBundle:Creance')->findBySearch($creance,$creanceParameters);
+            $creances = array();//$em->getRepository('InterneFinancesBundle:Creance')->findBySearch($creance,$creanceParameters);
             $factures = $em->getRepository('InterneFinancesBundle:Facture')->findBySearch($facture,$factureParameters);
 
             $this->manageSession($creances,$factures,$searchMethode);

@@ -17,22 +17,7 @@
     </div>
     <div class="ui bottom attached active tab segment" data-tab="factures">
         <div class="ui grid" id="factureSearchContent">
-            <div class="row">
-                <div class="ui compact menu">
-                    <div class="ui simple dropdown item">
-                        <i class="dropdown icon"></i>
-                        Action en masse
-                        <div class="menu">
-                            <div class="item"><i class="print icon"></i>Imprimer (todo)</div>
-                            <div class="item"><i class="send icon"></i>Envoyer (todo)</div>
-                            <div class="item" onclick="openRappelForm(null,'searchAddToListe')"><i class="add square icon"></i>Ajouter un rappel</div>
-                            <div class="item" onclick="deleteListeFacture();"><i class="trash icon"></i>Supprimer la liste</div>
-                        </div>
-                    </div>
-                </div>
 
-
-            </div>
             <div class="row">
                 <div class="column">
                     <table class="ui table" id="factureSearchTable">
@@ -44,14 +29,28 @@
                             <th rowspan="2">Num. Réf.</th>
                             <th rowspan="2">Statut</th>
                             <th colspan="4">Montants</th>
-                            <th>Actions</th>
+                            <th rowspan="2">
+                                <div class="ui compact menu">
+                                    <div class="ui simple dropdown item">
+                                        <i class="dropdown icon"></i>
+                                        Action en masse
+                                        <div class="menu">
+                                            <div class="item"><i class="print icon"></i>Imprimer (todo)</div>
+                                            <div class="item"><i class="send icon"></i>Envoyer (todo)</div>
+                                            <div class="item" onclick="openRappelForm(null,'searchAddToListe')"><i class="add square icon"></i>Ajouter un rappel</div>
+                                            <div class="item" onclick="deleteListeFacture();"><i class="trash icon"></i>Supprimer la liste</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </th>
                         </tr>
                         <tr>
                             <th>Créances</th>
                             <th>Frais rappels</th>
                             <th>Total</th>
                             <th>Reçu</th>
-                            <th></th>
+
                         </tr>
                         </thead>
                         <tbody>
@@ -74,45 +73,69 @@
                                     <td>{{ facture.montantEmis|number_format(2, '.', ',') }}</td>
                                     <td>{{ facture.montantRecu|number_format(2, '.', ',') }}</td>
                                     <td>
-                                        <a class="popupable"
-                                           data-content="Supprimer la facture"
-                                           onclick="deleteFactureFromSearch({{ facture.id }});">
-                                            <i class="trash icon red"></i>
-                                        </a>
+                                        <div class="ui compact menu">
+                                            <div class="ui simple dropdown item">
+                                                <i class="dropdown icon"></i>
+                                                Actions
+                                                <div class="menu">
 
-                                        <a class="popupable"
-                                           data-content="Imprimer la facture"
-                                           href="{{ path('interne_fiances_print_factures', {'id' : facture.id} ) }}"
-                                           target="_blank">
-                                            <i class="print icon"></i>
-                                        </a>
+                                                    <div class="item"
+                                                       onclick="outOfSearch({{ facture.id }},'facture');" >
+                                                        <i class="delete red icon"></i>
+                                                        Exclure ce résultat
+                                                    </div>
 
-                                        <a class="popupable"
-                                           data-content="Détails de la facture"
-                                           onclick="openFactureShow({{ facture.id }},'search');" >
-                                            <i class="zoom icon"></i>
-                                        </a>
+                                                    <div class="item"
+                                                       onclick="openFactureShow({{ facture.id }},'search');" >
+                                                        <i class="zoom icon"></i>
+                                                        Détails de la facture
+                                                    </div>
 
-                                        {% if facture.statut == 'ouverte' %}
-                                        <a class="popupable"
-                                           data-content="Ajouter un rappel"
-                                           onclick="openRappelForm({{ facture.id }},'search');" >
-                                            <i class="add square icon"></i>
-                                        </a>
+                                                    {% if facture.statut == 'ouverte' %}
+                                                        <div class="item"
+                                                           onclick="openRappelForm({{ facture.id }},'search');" >
+                                                            <i class="add square icon"></i>
+                                                            Ajouter un rappel
+                                                        </div>
 
-                                        <a class="popupable"
-                                           data-content="Envoyer"
-                                           onclick="factureEnvoi({{ facture.id }});" >
-                                            <i class="send icon"></i>
-                                        </a>
+                                                        <div class="item"
+                                                           onclick="factureEnvoi({{ facture.id }});" >
+                                                            <i class="send icon"></i>
+                                                            Envoyer
+                                                        </div>
 
-                                        {% endif %}
+                                                    {% endif %}
 
-                                        <a class="popupable"
-                                           data-content="Exclure ce résultat de la recherche"
-                                           onclick="outOfSearch({{ facture.id }},'facture');" >
-                                            <i class="delete red icon"></i>
-                                        </a>
+                                                    <div class="item">
+                                                        <a
+                                                           href="{{ path('interne_fiances_print_factures', {'id' : facture.id} ) }}"
+                                                           target="_blank">
+                                                            <i class="print icon"></i>
+                                                            Imprimer
+                                                        </a>
+                                                    </div>
+
+
+
+
+
+
+                                                    <div class="item"
+                                                       onclick="deleteFactureFromSearch({{ facture.id }});">
+                                                        <i class="trash icon red"></i>
+                                                        Supprimer
+                                                    </div>
+
+
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
 
 
 
@@ -129,21 +152,6 @@
     </div>
     <div class="ui bottom attached tab segment" data-tab="creances">
 
-        <div class="ui grid" id="creanceSearchContent">
-            <div class="row">
-
-                <div class="ui compact menu">
-                    <div class="ui simple dropdown item">
-                        <i class="dropdown icon"></i>
-                        Action en masse
-                        <div class="menu">
-                            <div class="item" onclick="createFactureFromSearch();"><i class="file text outline icon"></i>Facturer</div>
-                            <div class="item" onclick="deleteListeCreance();"><i class="trash icon"></i>Supprimer la liste</div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
             <div class="row">
                 <div class="column">
 
@@ -160,7 +168,18 @@
                             <th rowspan="2">Titre</th>
 
                             <th colspan="2">Montants</th>
-                            <th rowspan="2">Actions</th>
+                            <th rowspan="2">
+                                <div class="ui compact menu">
+                                    <div class="ui simple dropdown item">
+                                        <i class="dropdown icon"></i>
+                                        Action en masse
+                                        <div class="menu">
+                                            <div class="item" onclick="createFactureFromSearch();"><i class="file text outline icon"></i>Facturer</div>
+                                            <div class="item" onclick="deleteListeCreance();"><i class="trash icon"></i>Supprimer la liste</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th>
                         </tr>
                         <tr>
 
@@ -216,21 +235,37 @@
                                     <td>{{ creance.montantEmis|number_format(2, '.', ',') }}</td>
                                     <td>{{ creance.montantRecu|number_format(2, '.', ',') }}</td>
                                     <td>
-                                        {% if creance.facture is empty %}
 
-                                            <a onclick="deleteCreanceFromSearch({{ creance.id }});" >
-                                                <i class="trash red icon"></i>
-                                            </a>
+                                        <div class="ui compact menu">
+                                            <div class="ui simple dropdown item">
+                                                <i class="dropdown icon"></i>
+                                                Action
+                                                <div class="menu">
+                                                    <div class="item" onclick="openCreanceShow({{ creance.id }});" >
+                                                        <i class="zoom icon"></i>
+                                                        Détails de la créance
+                                                    </div>
+
+                                                    <div class="item" onclick="outOfSearch({{ creance.id }},'creance');" >
+                                                        <i class="delete red icon"></i>
+                                                        Exclure de la recherche
+                                                    </div>
+
+                                                    {% if creance.facture is empty %}
+
+                                                        <div class="item" onclick="deleteCreanceFromSearch({{ creance.id }});" >
+                                                            <i class="trash red icon"></i>
+                                                        </div>
+                                                        Supprimer
 
 
-                                        {% endif %}
-                                        <a onclick="openCreanceShow({{ creance.id }});" >
-                                            <i class="zoom icon"></i>
-                                        </a>
+                                                    {% endif %}
 
-                                        <a onclick="outOfSearch({{ creance.id }},'creance');" >
-                                            <i class="delete red icon"></i>
-                                        </a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
 
                                     </td>
                                 </tr>

@@ -31,11 +31,22 @@ services:
     pdf:
         class: AppBundle\Utils\Export\Pdf
 
+    email:
+        class: AppBundle\Utils\Email\Email
+
     listeEnvoi:
         class: AppBundle\Utils\Envoi\ListeEnvoi
         arguments:
             - @session
             - @doctrine.orm.entity_manager
+
+    parametre:
+        class: AppBundle\Utils\Parametre\Parametres
+        arguments:
+            - @kernel
+
+
+
 
     # Twig
     # Extensions twig qui permettent de mettre en place des filtres

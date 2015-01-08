@@ -50,7 +50,13 @@ class Pdf extends FPDI {
     public function AddPageWithPdf(Pdf $documentToAdd)
     {
         //Attribue un nom de fichier aleatoire et temporaire
-        $fileName = 'temporary/pdf_tmp_'.str_shuffle('1234567890').'pdf';
+        $kernel = $this->get('kernel');
+        $path = $kernel->getRootDir() . '/cache/' . $kernel->getEnvironment().'/temporary_pdf';
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+
+        $fileName = $path.'/pdf_tmp_'.str_shuffle('1234567890').'.pdf';
         //on sauve le fichier dans le dossier temporaire
         $documentToAdd->Output($fileName,'F');
 

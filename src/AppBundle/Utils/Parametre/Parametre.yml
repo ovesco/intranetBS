@@ -1,0 +1,48 @@
+-
+    groupe: finance
+    label: 'Créances et factures'
+    parametres:
+        -
+            name: impression_ccp_bvr
+            label: 'Numéro de compte CCP (BVR)'
+            type: string
+        -
+            name: impression_ccp_bv
+            label: 'Numéro de compte CCP (BV)'
+            type: string
+        -
+            name: impression_texte_facture
+            label: 'Texte sur les factures'
+            type: text
+        -
+            name: impression_affichage_montant
+            label: 'Affichage du montant sur les factures'
+            type: choice
+            options:
+                choices:
+                    - oui
+                    - non
+        -
+            name: impression_mode_payement
+            label: 'Choix du mode de payement'
+            type: choice
+            options:
+                choices:
+                    - BV
+                    - BVR
+-
+    groupe: info_groupe
+    label: 'Information sur le groupe scout'
+    parametres:
+        -
+            name: adresse
+            label: 'Adresse postale'
+            type: text
+-
+    groupe: autre
+    label: 'Un label'
+    parametres:
+        -
+            name: nom
+            label: label
+            type: number

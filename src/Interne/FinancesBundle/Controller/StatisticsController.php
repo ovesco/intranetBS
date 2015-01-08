@@ -39,8 +39,11 @@ class StatisticsController extends Controller
         if ($request->isXmlHttpRequest()) {
 
             $idGraph = $request->request->get('idGraph');
+            $options = $request->request->get('options');
 
-            $graphData = $this->getGraphData($idGraph);
+
+
+            $graphData = $this->getGraphData($idGraph,$options);
 
             return new JsonResponse($graphData);
 
@@ -48,10 +51,11 @@ class StatisticsController extends Controller
         return new JsonResponse();
     }
 
-    private function getGraphData($idGraph)
+    private function getGraphData($idGraph,$options)
     {
         $em = $this->getDoctrine()->getManager();
         $factureRepo = $em->getRepository('InterneFinancesBundle:Facture');
+        $creanceRepo = $em->getRepository('InterneFinancesBundle:Creance');
 
 
         $graphData = null;
@@ -62,33 +66,7 @@ class StatisticsController extends Controller
              */
             case 0:
 
-                $facture = new Facture();
-
-                /*
-                 * Uniquement facture ouverte
-                 */
-                $facture->setStatut('ouverte');
-
-                $factures= $factureRepo->findBySearch($facture);
-
-                $maxNombreRappel = -1;
-                $data = array();
-
-                foreach($factures as $facture)
-                {
-                    $nombreRappel = $facture->getNombreRappels();
-
-                    if($nombreRappel>$maxNombreRappel)
-                    {
-                        for($i = $maxNombreRappel+1; $i <= $nombreRappel; $i++)
-                        {
-                            $data[$i] = 0;
-                        }
-
-                        $maxNombreRappel = $nombreRappel;
-                    }
-                    $data[$nombreRappel]++;
-                }
+                $data = $factureRepo->getNombreRappelArray();
 
                 $categories = [];
                 for($i = 0; $i < count($data); $i++)
@@ -110,7 +88,7 @@ class StatisticsController extends Controller
                         'title' => array(
                             'text'=> 'Nombres de Rappels'
                         ),
-                        'categories' => array($categories)
+                        'categories' => $categories
                     ),
                     'yAxis' => array(
                         'title' => array(
@@ -139,13 +117,90 @@ class StatisticsController extends Controller
              */
             case 1:
 
+                $intervalFormat = $options['graph_1_interval'];
+                $periodeFormat = $options['graph_1_periode'];
+
+
+
+                $interval = new \DateInterval($intervalFormat);//une semaine
+                $intervalTotal = new \DateInterval($periodeFormat);//une année
+                $intervalTotal->invert = 1;
+                $end = new \DateTime();
+
+                $arrayMontantEmis = array();
+                $arrayMontantRecu = array();
+
+
+                $current = new \DateTime();
+                $current->add($intervalTotal);
+
+                while($end > $current)
+                {
+                    $next = clone $current;
+                    $next->add($interval);
+
+                    $montantEmis = $creanceRepo->getMontantEmisBetweenDates($current,$next);
+                    $montantRecu = $creanceRepo->getMontantRecuBetweenDates($current,$next);
+
+                    array_push($arrayMontantEmis,array($next->getTimestamp()*1000,$montantEmis));
+                    array_push($arrayMontantRecu,array($next->getTimestamp()*1000,$montantRecu));
+
+
+                    $current = clone $next;
+                }
+
                 $graphData = array(
+
                     'chart' => array(
-                        'type' => 'bubble',
-                        'zoomType' => 'xy'
+                        'type' => 'spline'
                     ),
                     'title' => array(
-                        'text'=> 'Highcharts Bubbles'
+                        'text'=> 'Créances émises et reçues'
+                    ),
+                    'xAxis' => array(
+                        //'categories' => $arrayDate,
+                        'type'=>'datetime',
+                        'labels'=>array(
+                            'overflow' => 'justify'
+                            )
+
+                    ),
+                    'yAxis' => array(
+                        'title' => array(
+                            'text' => 'Montant'
+                        ),
+                        'min' => 0
+                    ),
+
+
+                    'plotOptions' => array(
+                        'line' => array(
+                            'lineWidth' => 4,
+                            'marker' => array(
+                                'enabled' => false
+                            )
+                        )
+                    ),
+
+
+                    'series' => array(
+                        array(
+                            'name' => 'Créances émises',
+                            'data' => $arrayMontantEmis,
+                            'lineWidth' => 2,
+                            'marker' => array(
+                                'enabled' => false
+                            ),
+                        ),
+
+                        array(
+                            'name' => 'Créances reçu',
+                            'data' => $arrayMontantRecu,
+                            'lineWidth' => 2,
+                            'marker' => array(
+                                'enabled' => false
+                            ),
+                        )
                     )
 
                 );
@@ -156,6 +211,85 @@ class StatisticsController extends Controller
              * Affiche le montant payé en fonction du temps
              */
             case 2:
+
+                $intervalFormat = $options['graph_2_interval'];
+                $periodeFormat = $options['graph_2_periode'];
+
+                $interval = new \DateInterval($intervalFormat);//une semaine
+                $intervalTotal = new \DateInterval($periodeFormat);//une année
+                $intervalTotal->invert = 1;
+                $end = new \DateTime();
+
+                $arrayMontantEmis = array();
+
+
+
+                $current = new \DateTime();
+                $current->add($intervalTotal);
+
+                while($end > $current)
+                {
+                    $next = clone $current;
+                    $next->add($interval);
+
+                    $montantEmis = $creanceRepo->getMontantOuvertAtDate($next);
+
+
+                    array_push($arrayMontantEmis,array($next->getTimestamp()*1000,$montantEmis));
+
+
+
+                    $current = clone $next;
+                }
+
+                $graphData = array(
+
+                    'chart' => array(
+                        'type' => 'spline'
+                    ),
+                    'title' => array(
+                        'text'=> 'Montant en attente de payement'
+                    ),
+                    'xAxis' => array(
+                        //'categories' => $arrayDate,
+                        'type'=>'datetime',
+                        'labels'=>array(
+                            'overflow' => 'justify'
+                        )
+
+                    ),
+                    'yAxis' => array(
+                        'title' => array(
+                            'text' => 'Montant'
+                        ),
+                        'min' => 0
+                    ),
+
+
+                    'plotOptions' => array(
+                        'line' => array(
+                            'lineWidth' => 4,
+                            'marker' => array(
+                                'enabled' => false
+                            )
+                        )
+                    ),
+
+
+                    'series' => array(
+                        array(
+                            'name' => 'Créances non payée',
+                            'data' => $arrayMontantEmis,
+                            'lineWidth' => 2,
+                            'marker' => array(
+                                'enabled' => false
+                            ),
+                        ),
+
+
+                    )
+
+                );
 
                 break;
 

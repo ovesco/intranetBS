@@ -89,28 +89,23 @@ class FactureRepository extends EntityRepository
              * concerne les rappels. Sinon il y a exculusion direct des factures
              * sans rappel.
              */
+            $parameter = $searchParameters['nombreRappel'];
+            if ($parameter != null) {
 
+                if ($parameter != 0) {
 
-            /*
-
-            $queryBuilder //, 'WITH', 'facture.id = rappel.facture');
-            ->addSelect('COUNT(rappel) as nrappel')
-                //->from('InterneFinancesBundle:Rappel','rappel')
-                ->innerJoin('facture.rappels', 'rappel')
-              ->GroupBy('facture')
-                ->having('nrappel = 1');
-            ;
-
-            */
-
-
-          // $queryBuilder->andWhere($queryBuilder->expr()->eq($queryBuilder->expr()->count('facture.rappels'),2));
-
-
+                    $queryBuilder
+                        ->innerJoin('facture.rappels', 'rappel')
+                        ->GroupBy('facture')
+                        ->andHaving('COUNT(rappel) = :nbrappel')
+                        ->setParameter('nbrappel',$parameter);
+                }
+            }
 
         }
 
-
+        if($facture->getCreances()->count() != 0)
+        {
             /*
              * Jointure avec les éléments de recherche contenu dans la partie cérance
              */
@@ -131,6 +126,9 @@ class FactureRepository extends EntityRepository
             }
             //On cherche tout les factures liées aux créances trouvée.
             $queryBuilder->andWhere('creance.id IN (:ids)')->setParameter('ids', array_values($arrayIds));
+        }
+
+
 
 
         return $queryBuilder->getQuery()->getResult();
@@ -139,48 +137,68 @@ class FactureRepository extends EntityRepository
 
     }
 
-    public function findFactureOuverteAtDateTime(\DateTime $date)
+
+    public function findByNombreRappel($nb)
     {
-        //on crée un nouvelle requete qui sera custom
-        $queryBuilder = $this->createQueryBuilder('facture');
-
-        $queryBuilder->andWhere('facture.dateCreation <= :dateCreation')
-            ->setParameter('dateCreation', $date);
-
-        $queryBuilder->orWhere('facture.datePayement >= :datePayement')->setParameter('datePayement', $date);
-
-        $queryBuilder->orWhere('facture.datePayement = :datePayement')->setParameter('datePayement', null);
-
-        return $queryBuilder->getQuery()->getResult();
+        $queryBuilder = $this->createQueryBuilder('facture')
+            ->innerJoin('facture.rappels', 'rappel')
+            ->GroupBy('facture')
+            ->andHaving('COUNT(rappel) = :nb')
+            ->setParameter('nb',$nb);
+        return  $queryBuilder->getQuery()->getResult();
     }
 
-    public function findFacturePayeeBetweenDates(\DateTime $startDate, \DateTime $endDate)
+    public function getNombreRappelArray()
     {
-        //on crée un nouvelle requete qui sera custom
-        $queryBuilder = $this->createQueryBuilder('facture');
-        $queryBuilder->andWhere('facture.datePayement >= :startDate')->setParameter('startDate', $startDate);
-        $queryBuilder->andWhere('facture.datePayement <= :endDate')->setParameter('endDate', $endDate);
+        /*
+         * On commence par chercher le nombre de facture ouvertes.
+         * (avec ou sans rappel)
+         */
+        $queryBuilder = $this->createQueryBuilder('facture')
+            ->andWhere('facture.statut = :statut')
+            ->setParameter('statut', 'ouverte')
+            ->addSelect('COUNT(facture) as nfacture');
+        $result =  $queryBuilder->getQuery()->getResult();
+        $nbFactureOuverte = $result[0]['nfacture'];
 
-        return $queryBuilder->getQuery()->getResult();
+
+        /*
+         * On extrait un tableau contenant le nombre
+         * de rappel de chaque facture.
+         */
+        $queryBuilder = $this->createQueryBuilder('facture')
+            ->andWhere('facture.statut = :statut')
+            ->setParameter('statut', 'ouverte')
+            ->innerJoin('facture.rappels', 'rappel')
+            ->GroupBy('facture')
+            ->addSelect('COUNT(rappel) as nrappel');
+        $resultArray =  $queryBuilder->getQuery()->getResult();
+        $nbFactureWithRappel = count($resultArray);
+
+
+        /*
+         * On formate le tableau de réponse:
+         * index: nombre de rappel
+         * valeur: nombre de facture ayant ce nombre de rappel
+         */
+        $maxNombreRappel = -1;
+        $data = array();
+        foreach($resultArray as $result) {
+            $nombreRappel = $result['nrappel'];
+            if ($nombreRappel > $maxNombreRappel) {
+                for ($i = $maxNombreRappel + 1; $i <= $nombreRappel; $i++) {
+                    $data[$i] = 0;
+                }
+                $maxNombreRappel = $nombreRappel;
+            }
+            $data[$nombreRappel]++;
+        }
+        $data[0] = $nbFactureOuverte-$nbFactureWithRappel;
+
+        return $data;
+
     }
 
-    public function test(\DateTime $date)
-    {
-        //on crée un nouvelle requete qui sera custom
-        $queryBuilder = $this->createQueryBuilder('facture');
-
-        $queryBuilder->andWhere('facture.dateCreation <= :dateCreation')
-            ->setParameter('dateCreation', $date);
-
-        $queryBuilder->orWhere('facture.datePayement >= :datePayement')->setParameter('datePayement', $date);
-
-        $queryBuilder->orWhere('facture.datePayement = :datePayement')->setParameter('datePayement', null);
-
-
-
-
-        return $queryBuilder->getQuery()->getScalarResult();
-    }
 
 
 }

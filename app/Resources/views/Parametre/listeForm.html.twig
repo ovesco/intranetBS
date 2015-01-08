@@ -1,0 +1,125 @@
+{% extends "layout.html.twig" %}
+
+
+
+{% block titre %}Parametres{% endblock %}
+
+
+{% block content %}
+<div class="ui page grid">
+    <div class="row">
+        <div class="column">
+            <div class="ui segment">
+
+                {% for groupe in parametres %}
+
+                    <div class="ui styled accordion">
+                        <div class="title">
+                            <i class="dropdown icon"></i>
+                            {{ groupe.label }}
+                        </div>
+                        <div class="content">
+                            <div class="ui form">
+                                {% for parametre in groupe.parametres %}
+
+                                        <div class="field">
+                                            <label>{{ parametre.label}}</label>
+                                            {% if parametre.type == 'string' %}
+                                                <input type="text"
+                                                       data-parametre="{{ parametre.name }}"
+                                                       data-groupe="{{ groupe.groupe }}"
+                                                       class="formParametre"
+                                                       value="{{ parametre.value}}">
+                                            {% elseif parametre.type == 'number'%}
+                                                <input type="number"
+                                                       data-parametre="{{ parametre.name }}"
+                                                       data-groupe="{{ groupe.groupe }}"
+                                                       class="formParametre"
+                                                       value="{{ parametre.value}}">
+                                            {% elseif parametre.type == 'text'%}
+                                                {%  spaceless %}
+                                                    <textarea
+                                                            data-parametre="{{ parametre.name }}"
+                                                            data-groupe="{{ groupe.groupe }}"
+                                                            class="formParametre">{{ parametre.value}}</textarea>
+                                                {% endspaceless %}
+                                            {% elseif parametre.type == 'choice'%}
+                                                <select
+                                                        data-parametre="{{ parametre.name }}"
+                                                        data-groupe="{{ groupe.groupe }}"
+                                                        class="formParametre"
+                                                        value="{{ parametre.value}}">
+                                                    <option></option>
+                                                    {% for choice in parametre.options.choices %}
+                                                        <option
+                                                                {% if choice == parametre.value %}
+                                                                    selected="selected"
+                                                                {% endif %}
+                                                                >{{ choice }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            {% endif%}
+                                        </div>
+
+
+                                {% endfor %}
+
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+
+        /*
+         * Cette fonction a pour but de faire des modifications en ajax sur les parametres.
+         */
+        $('.formParametre').change(function() {
+
+            var value = $(this).val();
+            var groupe = $(this).data('groupe');
+            var parametre = $(this).data('parametre');
+            var data = {value: value, groupe:groupe, parametre:parametre};
+
+            $.ajax({
+                type: "POST",
+                url: Routing.generate('interne_parametre_update_ajax'),
+                data: data,
+                error: function(jqXHR, textStatus, errorThrown) { alerte.send('Erreur','danger'); },
+                success: function(htmlResponse) {
+                    alerte.send('Modification effectuée','success',2000);
+                }
+            });
+        });
+
+        jQuery(document).ready(function() {
+
+            $('.ui.accordion').accordion();
+
+
+        });
+
+    </script>
+
+
+
+
+
+
+{% endblock %}
+
+
