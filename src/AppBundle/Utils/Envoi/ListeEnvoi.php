@@ -4,15 +4,20 @@ namespace AppBundle\Utils\Envoi;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Templating\EngineInterface;
 
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\Famille;
 use AppBundle\Utils\Export\Pdf;
+use AppBundle\Utils\Email\Email;
+use \Swift_Attachment;
+
 
 class ListeEnvoi {
 
     private $session;
     private $em;
+
 
     /**
      * array d'Envoi
@@ -25,6 +30,7 @@ class ListeEnvoi {
      *
      * @param Session $session
      * @param EntityManager $em
+     *
      */
     public function __construct(Session $session,EntityManager $em) {
 
@@ -66,6 +72,7 @@ class ListeEnvoi {
     {
         $this->envois = null;
         $this->session->remove('ListeEnvoi');
+
     }
 
     /**
@@ -112,47 +119,6 @@ class ListeEnvoi {
 
         return $arrayEnvois;
     }
-
-    /**
-     * Cette fonction crée un Pdf avec tout les courriers à envoyer sous format
-     * papier (méthode: Courrier). Elle supprime de la liste chaque envois qui
-     * a été imprimer en Pdf.
-     *
-     * @param Pdf $pdf
-     * @return Pdf
-     */
-    public function printPdfToCourrier(Pdf $pdf)
-    {
-
-        $arrayEnvois = $this->getEnvois();
-
-        foreach($arrayEnvois as $envoi)
-        {
-            /*
-             * TODO: On peut amélioré cette fonction en regroupant les envois de chaque cible.
-             * TODO: par exemple, une facture et une circulaire à la meme famille pourrait être regroupée.
-             */
-
-
-            $adresse = $envoi['owner']->getAdressePrincipale();
-            $methodeEnvoi = $adresse['adresse']->getMethodeEnvoi();
-
-            $pdfToAdd = $envoi['envoi']->documentPDF;
-
-            if($methodeEnvoi == 'Courrier')
-            {
-                $pdfToAdd->addAdresseEnvoi($adresse);
-                $pdf->AddPageWithPdf($pdfToAdd);
-
-                $this->removeEnvoiByTocken($envoi['token']);
-
-            }
-
-        }
-
-        return $pdf;
-    }
-
 
 
 }

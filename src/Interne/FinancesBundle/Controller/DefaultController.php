@@ -20,14 +20,10 @@ class DefaultController extends Controller
     public function indexAction()
     {
 
+        $test = $this->get('parametre')->getParametres();
 
-        $em = $this->getDoctrine()->getManager();
 
-        $result = $em->getRepository('InterneFinancesBundle:Facture')->findFactureOuverteAtDateTime(new \DateTime());
-
-        $test = $em->getRepository('InterneFinancesBundle:Creance')->getMontantEmisByFactureId(18);
-
-        return $this->render('InterneFinancesBundle:Default:index.html.twig', array('factures'=>$result, 'test' => $test));
+        return $this->render('InterneFinancesBundle:Default:index.html.twig', array('test' => $test));
     }
 
     /**

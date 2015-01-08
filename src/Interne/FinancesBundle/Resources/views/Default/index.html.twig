@@ -4,13 +4,28 @@
 
 
 {% block content %}
-   {% for facture in factures %}
 
-       {{ facture.id }}
 
-    {% endfor %}
+    {% if test is null %}
+        null
+        {% endif %}
 
-    {{ test }}
+
+    <ul>
+{% for groupe in test %}
+    <li>{{ groupe.groupe }}</li>
+    <li>{{ groupe.label }}</li>
+    <li>
+        <ul>
+            {% for param in groupe.parametres %}
+                <li>{{ param.name }} => {{ param.value }}</li>
+            {% endfor %}
+        </ul>
+    </li>
+{% endfor %}
+    </ul>
+
+
 
     <br>
 

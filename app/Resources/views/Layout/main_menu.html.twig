@@ -114,9 +114,6 @@
     <div class="ui small  inverted header">Finances</div>
     <div class="menu">
 
-
-        <a class="item" href="{{path('interne_fiances_mode_emploi') }}">Mode d'emploi</a>
-
         <a class="item" href="{{path('interne_fiances_search')}}">Recherche</a>
 
         <a  class="item" href="{{path('interne_fiances_payement')}}">Payements</a>
@@ -125,9 +122,19 @@
 
         <a class="item" href="{{path('interne_fiances_statistics')}}">Statistiques</a>
 
-        <a class="item" href="{{path('interne_parametre_listing', {'groupe' : 'facture'} )}}">Parametres</a>
 
 
+
+    </div>
+</div>
+
+<div class="item">
+    <div class="ui small  inverted header">Divers</div>
+    <div class="menu">
+
+        <a class="item" href="{{ path('interne_parametres_liste') }}">Paramètres</a>
+
+        <a class="item" href="{{path('interne_fiances_mode_emploi') }}">Mode d'emploi</a>
 
     </div>
 </div>

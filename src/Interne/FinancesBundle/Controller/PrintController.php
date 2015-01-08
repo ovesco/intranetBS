@@ -61,13 +61,13 @@ class PrintController extends Controller
          * On récupère les parametres nécaissaires
          * a la création de la facture en PDF
          */
-        $paramRepo = $em->getRepository('AppBundle:Parametre');
+        $parameters = $this->get('parametre');
 
-        $ccpBvr = $paramRepo->findOneBy(array('name'=>'impression_ccp_bvr'))->getValue();
-        $adresse = $paramRepo->findOneBy(array('name'=>'impression_adresse'))->getValue();
-        $modePayement = $paramRepo->findOneBy(array('name'=>'impression_mode_payement'))->getValue();
-        $texteFacture = $paramRepo->findOneBy(array('name'=>'impression_texte_facture'))->getValue();
-        $affichageMontant = $paramRepo->findOneBy(array('name'=>'impression_affichage_montant'))->getValue();
+        $ccpBvr = $parameters->getValue('finance','impression_ccp_bvr');
+        $adresse = $parameters->getValue('info_groupe','adresse');
+        $modePayement = $parameters->getValue('finance','impression_mode_payement');
+        $texteFacture = $parameters->getValue('finance','impression_texte_facture');
+        $affichageMontant = $parameters->getValue('finance','impression_affichage_montant');
 
         /*
          * Infos utile de la facture

@@ -185,12 +185,65 @@ class CreanceRepository extends EntityRepository
     }
 
 
-    public function getMontantEmisByFactureId($id)
+    public function getMontantOuvertAtDate(\DateTime $date)
     {
-        $queryBuilder = $this->createQueryBuilder('creance')->select('count(creance.montantEmis) as montantEmisTotal');
+        $queryBuilder = $this->createQueryBuilder('creance')
 
-        $queryBuilder->where('creance.facture_id =: id')->setParameter('id',$id);
+        ->andWhere('creance.dateCreation <= :dateCreation')
+        ->setParameter('dateCreation', $date);
 
-        $queryBuilder->getQuery()->getScalarResult();
+        $queryBuilder->andWhere('creance.datePayement is NULL OR creance.datePayement >= :datePayement')
+            ->setParameter('datePayement', $date);
+
+        $queryBuilder->addSelect('SUM(creance.montantEmis) as total');
+
+        $result = $queryBuilder->getQuery()->getScalarResult();
+
+        if($result[0]['total'] == null)
+            return 0;
+        return floatval($result[0]['total']);
     }
+
+    public function getMontantEmisBetweenDates(\DateTime $start, \DateTime $end)
+    {
+        $queryBuilder = $this->createQueryBuilder('creance')
+
+            ->andWhere('creance.dateCreation >= :start')
+            ->setParameter('start', $start)
+
+            ->andWhere('creance.dateCreation <= :end')
+            ->setParameter('end', $end)
+
+            ->addSelect('SUM(creance.montantEmis) as total');
+
+
+        $result = $queryBuilder->getQuery()->getScalarResult();
+
+        if($result[0]['total'] == null)
+            return 0;
+        return floatval($result[0]['total']);
+    }
+
+    public function getMontantRecuBetweenDates(\DateTime $start, \DateTime $end)
+    {
+        $queryBuilder = $this->createQueryBuilder('creance')
+
+            ->andWhere('creance.datePayement >= :start')
+            ->setParameter('start', $start)
+
+            ->andWhere('creance.datePayement <= :end')
+            ->setParameter('end', $end)
+
+            ->addSelect('SUM(creance.montantRecu) as total');
+
+
+        $result = $queryBuilder->getQuery()->getScalarResult();
+
+        if($result[0]['total'] == null)
+            return 0;
+        return floatval($result[0]['total']);
+    }
+
+
+
 }
