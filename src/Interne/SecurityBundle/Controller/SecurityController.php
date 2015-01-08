@@ -3,14 +3,44 @@
 namespace Interne\SecurityBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
+use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\HttpFoundation\Request;
 
 class SecurityController extends Controller
 {
-	/**
-	 * offre la vue qui permet de gérer les roles et fonctions, lier les uns aux autres...
-	 */
-    public function rolesFonctionsAction()
-    {
-        return $this->render('InterneSecurityBundle:Security:roles_fonctions.html.twig');
+
+    /**
+     * Affiche le formulaire de login
+     * @param Request $request la requete
+     * @return Response la vue
+     * @route("/login", name="security_login")
+     */
+    public function loginAction(Request $request) {
+
+        $session = $request->getSession();
+
+        if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR))
+            $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
+
+        else {
+            $error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
+            $session->remove(SecurityContext::AUTHENTICATION_ERROR);
+        }
+
+        return $this->render('Security/login.html.twig', array(
+
+            'last_username' => $session->get(SecurityContext::LAST_USERNAME),
+            'error'         => $error,
+        ));
+    }
+
+    /**
+     * Méthode vide, on l'utilise juste pour que la route ait quelque chose sur lequel pointer
+     * @route("login_check", name="login_check")
+     */
+    public function checkAction(){
+
     }
 }

@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Role
  *
  * @ORM\Table(name="security_roles")
- * @ORM\Entity(repositoryClass="Interne\SecurityBundle\Entity\RoleRepository")
+ * @ORM\Entity
  */
 class Role implements RoleInterface
 {

@@ -36,6 +36,7 @@ class AppKernel extends Kernel
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new Interne\FinancesBundle\InterneFinancesBundle(),
+            new Interne\SecurityBundle\InterneSecurityBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

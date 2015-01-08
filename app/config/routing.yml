@@ -1,11 +1,17 @@
-interne_finances:
-    resource: "@InterneFinancesBundle/Resources/config/routing.yml"
-    prefix:   /
+security:
+    resource: "@InterneSecurityBundle/Controller/"
+    type:     annotation
+    prefix:   / #pas de prefixe parce que l'on y trouve notamment /login pour se connecter
 
 app:
     resource: @AppBundle/Controller/
     type:     annotation
     prefix:   /interne
+
+finances:
+    resource: "@InterneFinancesBundle/Controller/"
+    type:     annotation
+    prefix:   /interne/finances
 
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"

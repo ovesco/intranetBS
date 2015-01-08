@@ -12,7 +12,7 @@ class AppController extends Controller
 {
     /**
      * Page d'accueil de l'application
-     * @Route("/interne", name="interne_homepage")
+     * @Route("", name="interne_homepage")
      */
     public function indexAction()
     {
@@ -24,15 +24,6 @@ class AppController extends Controller
      * @route("test", name="test")
      */
     public function testAction() {
-
-        $generator = $this->get('PDFGenerator');
-        $MManager  = $generator->getModelsManager();
-
-        $model     = $MManager->loadModel('liste_de_troupe');
-
-        echo $model->templateDir;
-
-
 
         return new Response('');
     }

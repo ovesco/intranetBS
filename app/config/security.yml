@@ -1,12 +1,28 @@
 security:
     providers:
-        in_memory:
-            memory: ~
+        insiders:
+            entity:
+                class: Interne\SecurityBundle\Entity\User
+                property: username
+
+    encoders:
+        Interne\SecurityBundle\Entity\User: plaintext
 
     firewalls:
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
 
-        default:
+        # Firewall principal
+        # Sécurise la totalité de l'intranet, c'est-à-dire toute la partie "interne"
+        interne:
+            pattern:   ^/
             anonymous: ~
+            form_login:
+                login_path: /login
+                check_path: /login_check
+
+            logout:
+                path:   /logout
+                target: /
+
+
+    access_control:
+        - { path: ^/interne, roles: ROLE_USER }

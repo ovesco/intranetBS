@@ -84,10 +84,8 @@
 
 </div>
 
-{% javascripts
-'%kernel.root_dir%/../vendor/components/jquery/jquery.min.js'
-%}
-<script src="{{ asset_url }}"></script>
+{% javascripts '%kernel.root_dir%/../vendor/components/jquery/jquery.min.js' %}
+    <script src="{{ asset_url }}"></script>
 {% endjavascripts %}
 
 {#<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>#}
@@ -96,8 +94,8 @@
 <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
 
 {% javascripts
-'@AppBundle/Resources/public/js/alwaysIncluded/*'
-'@AppBundle/Resources/public/js/layout.js'
+    '@AppBundle/Resources/public/js/alwaysIncluded/*'
+    '@AppBundle/Resources/public/js/layout.js'
 %}
 <script src="{{ asset_url }}"></script>
 {% endjavascripts %}

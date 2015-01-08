@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * User
  *
  * @ORM\Table(name="security_users")
- * @ORM\Entity(repositoryClass="Interne\SecurityBundle\Entity\UserRepository")
+ * @ORM\Entity
  */
 class User implements UserInterface, \Serializable
 {
@@ -38,7 +38,7 @@ class User implements UserInterface, \Serializable
     private $password;
 
     /**
-     * @ORM\OneToOne(targetEntity="Interne\FichierBundle\Entity\Membre")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Membre")
      */
     private $membre;
 
@@ -74,8 +74,6 @@ class User implements UserInterface, \Serializable
      */
     public function getSalt()
     {
-        // you *may* need a real salt depending on your encoder
-        // see section on salt below
         return null;
     }
 
@@ -155,7 +153,7 @@ class User implements UserInterface, \Serializable
     /**
      * Get membre
      *
-     * @return \Interne\FichierBundle\Entity\Membre 
+     * @return \AppBundle\Entity\Membre
      */
     public function getMembre()
     {
