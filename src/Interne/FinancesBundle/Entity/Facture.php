@@ -74,7 +74,7 @@ class Facture
     /**
      * @var string
      *
-     * @ORM\Column(name="statut", type="string", length=255)
+     * @ORM\Column(name="statut", type="string", columnDefinition="ENUM('ouverte','payee')")
      */
     private $statut;
 

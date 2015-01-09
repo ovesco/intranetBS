@@ -1,0 +1,104 @@
+{% extends 'layout.html.twig' %}
+
+{% import _self as marcro %}
+
+{% block titre %}{% endblock %}
+
+{% block content %}
+
+<div class="ui page grid">
+    <div class="row">
+        <div class="column">
+            <div class="ui segment">
+                <div id="structure-groupe-context" class="tab-context">
+                    <div class="ui top attached tabular menu">
+                        <div class="active item" data-tab="hierarchie">Hierarchie</div>
+                        <div class="item" data-tab="type">Type de groupes</div>
+                        <div class="item" data-tab="function">Fonctions</div>
+                    </div>
+                    <div class="ui bottom attached active tab segment" data-tab="hierarchie">
+
+                        <div class="ui small button" onclick="addChild(null,'Groupe racine')">
+                            <i class="add icon"></i>
+                            Ajouter un groupe racine
+                        </div>
+
+                        {{ marcro.hierarchie(highestGroupes)}}
+
+                    </div>
+                    <div class="ui bottom attached active tab segment" data-tab="type">
+
+                    </div>
+                    <div class="ui bottom attached active tab segment" data-tab="function">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+{% include 'Modales/ajouter_groupe_modale.html.twig' with {'groupeForm':groupeForm} %}
+
+{% endblock %}
+
+
+
+
+{% macro hierarchie(parents) %}
+    {% if parents %}
+    <div class="ui list">
+        {% for parent in parents %}
+            <div class="item">
+                <i class="top aligned right triangle icon"></i>
+                <div class="content">
+                    <div class="header">{{ parent.nom }} <a class="ui green circular label">{{ parent.getMembersRecursive|length }}</a></div>
+                    {{ parent.type.nom }}
+
+                    <a class="ui tiny button" href="{{ path('interne_voir_groupe', {'groupe':parent.id}) }}">
+                        <i class="zoom icon"></i>
+                    </a>
+                    <div class="ui tiny button" onclick="addChild({{ parent.id }},'{{ parent.nom }}')">
+                        <i class="add icon"></i>
+                    </div>
+
+                    {% if parent.enfants %}
+                        <div class="list">
+                            {{ _self.hierarchie(parent.enfants) }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+
+
+
+            </div>
+
+        {% endfor %}
+    {% endif %}
+    </div>
+{% endmacro %}
+
+
+{% block js %}
+
+    {% javascripts
+    '@AppBundle/Resources/public/js/specials/hierarchie.js'%}
+    <script src="{{ asset_url }}"></script>
+
+    {% endjavascripts %}
+
+
+{% endblock %}
+

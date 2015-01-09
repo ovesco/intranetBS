@@ -9,6 +9,23 @@
             <div class="column">
                 <div class="ui segment">
 
+
+
+                    {% if groupe.parentsRecursive|length > 1 %}
+
+                        <div class="ui segment">
+                            <h3 class="ui header">Groupe parent</h3>
+                            <div class="hierarchie-groupe">
+                                {% for parent in groupe.parentsRecursive %}
+                                    {% if groupe.id != parent.id %}
+                                        <a href="{{ path('interne_voir_groupe', {groupe: parent.id}) }}" class="item">{{ parent.nom }}</a>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                    {% endif %}
+
                     {%  if groupe.type.nom|lower == 'troupe'
                     or groupe.type.nom|lower == 'meute'
                     or groupe.type.nom|lower == 'clan'
@@ -35,20 +52,7 @@
 
                     <div class="ui vertical segment">
 
-                        {% if groupe.parentsRecursive|length > 1 %}
-                            <div class="ui left rail">
-                                <div class="ui segment">
-                                    <h3 class="ui header">Hierarchie</h3>
-                                    <div class="hierarchie-groupe">
-                                        {% for parent in groupe.parentsRecursive %}
-                                            {% if groupe.id != parent.id %}
-                                                <a href="{{ path('interne_voir_groupe', {groupe: parent.id}) }}" class="item">{{ parent.nom }}</a>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
+
 
                         {#
                             EFFECTIFS
@@ -70,6 +74,10 @@
                                                 <p class="header">{{ groupe.nom }}</p>
                                             </div>
                                         </a>
+
+
+
+
 
                                         {% for enfant in groupe.enfants %}
                                         <a href="{{ path('interne_voir_groupe', {groupe: enfant.id}) }}" class="item">
@@ -255,6 +263,8 @@
                             </div>
 
                         {% else %}
+
+
 
                             {#
                                 On affiche les groupes enfants directs pour pouvoir naviguer plus simplement entre les groupes

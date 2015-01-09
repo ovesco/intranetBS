@@ -50,7 +50,7 @@ function openRappelForm(idFacture,fromPage)
     });
 }
 
-function openCreancelForm(ownerId,ownerType,fromPage)
+function openCreanceForm(ownerId,ownerType,fromPage)
 {
     var data = { ownerId: ownerId, ownerType:ownerType, fromPage:fromPage};
     $.ajax({
@@ -67,6 +67,25 @@ function openCreancelForm(ownerId,ownerType,fromPage)
     });
 }
 
+function openSearchForm()
+{
+    var data = null;
+    $.ajax({
+        type: "POST",
+        url: Routing.generate('interne_fiances_search_load_form_ajax'),
+        data: data,
+        error: function(jqXHR, textStatus, errorThrown) { alerte.send('Erreur','danger'); },
+        success: function(htmlResponse) {
+
+            modalDisplayNewContent(htmlResponse);
+            modalDisplayOpen();
+
+            $('.ui.accordion').accordion();
+
+        }
+    });
+}
+
 function modalDisplayClose()
 {
     $('#modal-display').empty();
@@ -78,9 +97,15 @@ function modalDisplayOpen()
     $('#modal-display').modal('show');
 }
 
+function modalDisplayRefresh()
+{
+    $('#modal-display').modal('show');
+}
+
 function modalDisplayNewContent(htmlResponse)
 {
     //rempalce par le nouveau contenu
     $('#modal-display').empty();
     $('#modal-display').append(htmlResponse);
 }
+

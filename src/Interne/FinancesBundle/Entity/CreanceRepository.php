@@ -16,10 +16,24 @@ class CreanceRepository extends EntityRepository
      * cette fonction est utilisée par le formulaire de recherche de facture.
      * on crée une requete custom.
      */
-    public function findBySearch(Creance $creance,$searchParameters = null)
+    /**
+     *
+     *
+     * @param Creance $creance
+     * @param null $searchParameters
+     * @param bool $recursive
+     * @return array
+     */
+    public function findBySearch(Creance $creance,$searchParameters = null,$recursive = false)
     {
         //on crée un nouvelle requete qui sera custom
         $queryBuilder = $this->createQueryBuilder('creance');
+
+        $queryBuilder->leftJoin('Interne\FinancesBundle\Entity\Facture', 'facture', 'WITH', 'creance.facture = facture.id');
+        $queryBuilder->leftJoin('AppBundle\Entity\Membre', 'membre', 'WITH', 'membre.id = creance.membre');
+        $queryBuilder->leftJoin('AppBundle\Entity\Famille', 'familleDuMembre', 'WITH', 'membre.id = membre.famille');
+        $queryBuilder->leftJoin('AppBundle\Entity\Famille', 'famille', 'WITH', 'famille.id = creance.famille');
+
 
         /*
          * Elements de recherche contenu dans le formulaire de creance standard
@@ -59,20 +73,46 @@ class CreanceRepository extends EntityRepository
                 ->setParameter('dateCreation', $parameter);
         }
 
+        $parameter = $creance->getDatePayement();
+        if($parameter != null)
+        {
+            $queryBuilder->andWhere('creance.datePayement = :datePayement')
+                ->setParameter('datePayement', $parameter);
+        }
+
         /*
          *
          * Elements de recherche spécifique qui permet d'affiner la recherche.
          *
          */
 
-        if($searchParameters != null)
+        if($searchParameters['creance'] != null)
         {
 
-            $parameter = $searchParameters['isLinkedToFacture'];
+            $parameter = $searchParameters['creance']['isLinkedToFacture'];
             if ($parameter != null) {
                 if($parameter == 'yes') //donc la créance est liée
                 {
                     $queryBuilder->andWhere($queryBuilder->expr()->isNotNull('creance.facture'));
+
+                    if(($creance->getFacture() != null)&&($recursive == false))
+                    {
+                        //On récupère la créance contenu dans la facture
+                        $facture = $creance->getFacture();
+
+                        //On recherche les créances qui corresponde la créance contenu dans la facture
+                        $factures = $this->getEntityManager()->getRepository('InterneFinancesBundle:Facture')->findBySearch($facture,$searchParameters);
+
+                        //On crée la liste des ids de tout les facture trouvée
+                        $arrayIds = array();
+                        foreach($factures as $facture)
+                        {
+                            array_push($arrayIds,$facture->getId());
+                        }
+                        //On cherche tout les cérances liées aux factures trouvée.
+                        $queryBuilder->andWhere('facture.id IN (:ids)')->setParameter('ids', array_values($arrayIds));
+                    }
+
 
                 }
                 elseif($parameter == 'no')  //donc la cérance n'a pas encore de facture
@@ -86,25 +126,25 @@ class CreanceRepository extends EntityRepository
              * Intervale pour les montants
              */
 
-            $parameter = $searchParameters['montantEmisMinimum'];
+            $parameter = $searchParameters['creance']['montantEmisMinimum'];
             if ($parameter != null) {
                 $queryBuilder->andWhere('creance.montantEmis >= :montantEmisMinimum')
                     ->setParameter('montantEmisMinimum', $parameter);
             }
 
-            $parameter = $searchParameters['montantEmisMaximum'];
+            $parameter = $searchParameters['creance']['montantEmisMaximum'];
             if ($parameter != null) {
                 $queryBuilder->andWhere('creance.montantEmis <= :montantEmisMaximum')
                     ->setParameter('montantEmisMaximum', $parameter);
             }
 
-            $parameter = $searchParameters['montantRecuMinimum'];
+            $parameter = $searchParameters['creance']['montantRecuMinimum'];
             if ($parameter != null) {
                 $queryBuilder->andWhere('creance.montantRecu >= :montantRecuMinimum')
                     ->setParameter('montantRecuMinimum', $parameter);
             }
 
-            $parameter = $searchParameters['montantRecuMaximum'];
+            $parameter = $searchParameters['creance']['montantRecuMaximum'];
             if ($parameter != null) {
                 $queryBuilder->andWhere('creance.montantRecu <= :montantRecuMaximum')
                     ->setParameter('montantRecuMaximum', $parameter);
@@ -114,23 +154,23 @@ class CreanceRepository extends EntityRepository
              * Intervale date de création
              */
 
-            $parameter = $searchParameters['dateCreationMaximum'];
+            $parameter = $searchParameters['creance']['dateCreationMaximum'];
             if ($parameter != null) {
                 $queryBuilder->andWhere('creance.dateCreation <= :dateCreationMaximum')
                     ->setParameter('dateCreationMaximum', $parameter);
             }
-            $parameter = $searchParameters['dateCreationMinimum'];
+            $parameter = $searchParameters['creance']['dateCreationMinimum'];
             if ($parameter != null) {
                 $queryBuilder->andWhere('creance.dateCreation >= :dateCreationMinimum')
                     ->setParameter('dateCreationMinimum', $parameter);
             }
 
-            $parameter = $searchParameters['datePayementMaximum'];
+            $parameter = $searchParameters['creance']['datePayementMaximum'];
             if ($parameter != null) {
                 $queryBuilder->andWhere('creance.datePayement <= :datePayementMaximum')
                     ->setParameter('datePayementMaximum', $parameter);
             }
-            $parameter = $searchParameters['datePayementMinimum'];
+            $parameter = $searchParameters['creance']['datePayementMinimum'];
             if ($parameter != null) {
                 $queryBuilder->andWhere('creance.datePayement >= :datePayementMinimum')
                     ->setParameter('datePayementMinimum', $parameter);
@@ -140,26 +180,24 @@ class CreanceRepository extends EntityRepository
             /*
              * relation avec les membres et famille
              */
-            if(($searchParameters['membreNom'] != null) || ($searchParameters['membrePrenom'] != null) || ($searchParameters['familleNom'] != null))
+            if(($searchParameters['creance']['membreNom'] != null) || ($searchParameters['creance']['membrePrenom'] != null) || ($searchParameters['creance']['familleNom'] != null))
             {
 
-                if(($searchParameters['membreNom'] != null) || ($searchParameters['membrePrenom'] != null))
+                if(($searchParameters['creance']['membreNom'] != null) || ($searchParameters['creance']['membrePrenom'] != null))
                 {
-                    //On lie avec le membre
-                    $queryBuilder->innerJoin('AppBundle\Entity\Membre', 'membre', 'WITH', 'membre.id = creance.membre');
 
-                    $parameter = $searchParameters['membrePrenom'];
+
+                    $parameter = $searchParameters['creance']['membrePrenom'];
                     if ($parameter != null) {
                         $queryBuilder->andWhere($queryBuilder->expr()->like('membre.prenom',$queryBuilder->expr()->literal('%'.$parameter.'%')) );
                     }
 
-                    $parameter = $searchParameters['membreNom'];
+                    $parameter = $searchParameters['creance']['membreNom'];
                     if ($parameter != null) {
 
-                        //On lie avec la famille
-                        $queryBuilder->innerJoin('AppBundle\Entity\Famille', 'famille', 'WITH', 'membre.id = membre.famille');
 
-                        $queryBuilder->andWhere($queryBuilder->expr()->like('famille.nom',$queryBuilder->expr()->literal('%'.$parameter.'%')) );
+                        $queryBuilder->andWhere($queryBuilder->expr()->like('familleDuMembre.nom',$queryBuilder->expr()->literal('%'.$parameter.'%')) );
+
                     }
                 }
                 
@@ -167,12 +205,9 @@ class CreanceRepository extends EntityRepository
                  * lien avec la famille
                  */
 
-                if($searchParameters['familleNom'] != null)
+                if($searchParameters['creance']['familleNom'] != null)
                 {
-                    //On lie avec la famille
-                    $queryBuilder->innerJoin('AppBundle\Entity\Famille', 'famille', 'WITH', 'famille.id = creance.famille');
-
-                    $parameter = $searchParameters['familleNom'];
+                    $parameter = $searchParameters['creance']['familleNom'];
                     if ($parameter != null) {
                         $queryBuilder->andWhere($queryBuilder->expr()->like('famille.nom',$queryBuilder->expr()->literal('%'.$parameter.'%')) );
                     }

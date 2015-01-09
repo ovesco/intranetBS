@@ -21,6 +21,19 @@ class FactureRepository extends EntityRepository
         //on crée un nouvelle requete qui sera custom
         $queryBuilder = $this->createQueryBuilder('facture');
 
+
+        $queryBuilder->leftJoin('Interne\FinancesBundle\Entity\Creance', 'creance', 'WITH', 'facture.id = creance.facture');
+        $queryBuilder->GroupBy('facture');
+        $queryBuilder->leftJoin('Interne\FinancesBundle\Entity\Rappel', 'rappel', 'WITH', 'facture.id = rappel.facture');
+        $queryBuilder->GroupBy('facture');
+
+        $queryBuilder->leftJoin('AppBundle\Entity\Membre', 'membre', 'WITH', 'membre.id = facture.membre');
+        $queryBuilder->GroupBy('facture');
+        $queryBuilder->leftJoin('AppBundle\Entity\Famille', 'familleDuMembre', 'WITH', 'membre.id = membre.famille');
+        $queryBuilder->GroupBy('membre');
+        $queryBuilder->leftJoin('AppBundle\Entity\Famille', 'famille', 'WITH', 'famille.id = facture.famille');
+        $queryBuilder->GroupBy('facture');
+
         /*
          * Elements de recherche contenu dans le formulaire de facture standard
          */
@@ -58,65 +71,113 @@ class FactureRepository extends EntityRepository
          *
          */
 
-        if($searchParameters != null) {
+        if($searchParameters['facture'] != null) {
 
 
-            $parameter = $searchParameters['dateCreationMaximum'];
+            $parameter = $searchParameters['facture']['dateCreationMaximum'];
             if ($parameter != null) {
                 $queryBuilder->andWhere('facture.dateCreation <= :dateCreationMaximum')
                     ->setParameter('dateCreationMaximum', $parameter);
             }
-            $parameter = $searchParameters['dateCreationMinimum'];
+            $parameter = $searchParameters['facture']['dateCreationMinimum'];
             if ($parameter != null) {
                 $queryBuilder->andWhere('facture.dateCreation >= :dateCreationMinimum')
                     ->setParameter('dateCreationMinimum', $parameter);
             }
 
-            $parameter = $searchParameters['datePayementMaximum'];
+            $parameter = $searchParameters['facture']['datePayementMaximum'];
             if ($parameter != null) {
                 $queryBuilder->andWhere('facture.datePayement <= :datePayement')
                     ->setParameter('datePayement', $parameter);
             }
 
-            $parameter = $searchParameters['datePayementMinimum'];
+            $parameter = $searchParameters['facture']['datePayementMinimum'];
             if ($parameter != null) {
                 $queryBuilder->andWhere('facture.datePayement >= :datePayement')
                     ->setParameter('datePayement', $parameter);
             }
 
-            /*
-             * Activer la jointure uniquement si un des parametres de recherche
-             * concerne les rappels. Sinon il y a exculusion direct des factures
-             * sans rappel.
-             */
-            $parameter = $searchParameters['nombreRappel'];
+            $parameter = $searchParameters['facture']['nombreRappel'];
             if ($parameter != null) {
-
-                if ($parameter != 0) {
-
+                if(intval($parameter) > 0)
+                {
                     $queryBuilder
-                        ->innerJoin('facture.rappels', 'rappel')
-                        ->GroupBy('facture')
                         ->andHaving('COUNT(rappel) = :nbrappel')
+                        //->andWhere('SIZE(facture.rappels) = 0');
                         ->setParameter('nbrappel',$parameter);
+                }
+                else
+                {
+                    //$queryBuilder->andWhere('SIZE(facture.rappels) = 0');
+                    $queryBuilder->andWhere($queryBuilder->expr()->isNull('facture.rappels'));
+                }
+
+                //TODO: ne marche par pour une recherche sur 0 rappel
+
+            }
+
+
+
+            if($searchParameters['facture']['membrePrenom'] != null)
+            {
+                $parameter = $searchParameters['facture']['membrePrenom'];
+                if ($parameter != null) {
+                    $queryBuilder->andWhere($queryBuilder->expr()->like('membre.prenom',$queryBuilder->expr()->literal('%'.$parameter.'%')) );
+                }
+            }
+            if($searchParameters['facture']['membreNom'] != null)
+            {
+                $parameter = $searchParameters['facture']['membreNom'];
+                if ($parameter != null) {
+                    $queryBuilder->andWhere($queryBuilder->expr()->like('familleDuMembre.nom',$queryBuilder->expr()->literal('%'.$parameter.'%')) );
+                }
+            }
+            if($searchParameters['facture']['familleNom'] != null)
+            {
+
+                $parameter = $searchParameters['facture']['familleNom'];
+                if ($parameter != null) {
+                    $queryBuilder->andWhere($queryBuilder->expr()->like('famille.nom',$queryBuilder->expr()->literal('%'.$parameter.'%')) );
                 }
             }
 
+            if($searchParameters['facture']['montantEmis'] != null)
+            {
+                $parameter = $searchParameters['facture']['montantEmis'];
+
+                $queryBuilder->andHaving('SUM(creance.montantEmis) + SUM(rappel.montantEmis) = :sum');
+
+                $queryBuilder->setParameter('sum',$parameter);
+
+                //TODO ca marche seulement pour certaine facture...je sais pas pourquoi.
+
+
+            }
+
+
+
+
         }
+
+
+
+
+
+
+
 
         if($facture->getCreances()->count() != 0)
         {
             /*
              * Jointure avec les éléments de recherche contenu dans la partie cérance
              */
-            $queryBuilder->innerJoin('Interne\FinancesBundle\Entity\Creance', 'creance', 'WITH', 'facture.id = creance.facture');
 
             //On récupère la créance contenu dans la facture
             $creances = $facture->getCreances();
             $creance = $creances[0];
 
             //On recherche les créances qui corresponde la créance contenu dans la facture
-            $creances = $this->getEntityManager()->getRepository('InterneFinancesBundle:Creance')->findBySearch($creance);
+            $creances = $this->getEntityManager()->getRepository('InterneFinancesBundle:Creance')->findBySearch($creance,$searchParameters,true);
 
             //On crée la liste des ids de tout les créances trouvée
             $arrayIds = array();

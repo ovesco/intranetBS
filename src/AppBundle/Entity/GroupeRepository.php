@@ -26,4 +26,14 @@ class GroupeRepository extends EntityRepository
 
         return $hierarchie;
     }
+
+    public function findHighestGroupes() {
+
+        $queryBuilder = $this->createQueryBuilder('groupe');
+
+            $queryBuilder->andWhere($queryBuilder->expr()->isNull('groupe.parent'));
+
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

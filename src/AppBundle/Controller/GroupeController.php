@@ -70,4 +70,41 @@ class GroupeController extends Controller
             'groupeForm' => $groupeForm->createView()
         );
     }
+
+    /**
+     * Page qui affiche la hierarchie globale
+     * @Route("groupe/hierarchie_simple", name="groupe_hierarchie_simple")
+     * @Template("Groupe/hierarchieSimple.html.twig")
+     */
+    public function hierarchieSimpleAction(Request $request) {
+
+        $groupeRepo = $this->getDoctrine()->getRepository('AppBundle:Groupe');
+        $hiestGroupes = $groupeRepo->findHighestGroupes();
+
+        $groupe     = new Groupe();
+        $groupeForm = $this->createForm(new GroupeType, $groupe);
+
+
+        /*
+         * On a peut-être tenté d'ajouter un groupe, dans ce cas on va valider le nouveau groupe, puis rediriger vers
+         * la page de celui-ci
+         */
+        $groupeForm->handleRequest($request);
+
+        if ($groupeForm->isValid()) {
+
+            //On récupère le groupe parent
+            $parent = $groupeRepo->find($request->request->get('groupe_id'));
+            $groupe->setParent($parent);
+
+            $this->getDoctrine()->getManager()->persist($groupe);
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirect($this->generateUrl('interne_voir_groupe', array('groupe' => $groupe->getId())));
+        }
+
+
+        return array('highestGroupes' =>$hiestGroupes,'groupeForm'=>$groupeForm->createView());
+    }
+
 }

@@ -4,11 +4,6 @@
 
 
 
-
-<div class="ui modal" id="modal-facture-searchForm">
-
-    <i class="close icon"></i>
-
     <div class="header">
         Effectuer une recherche
     </div>
@@ -22,96 +17,96 @@
             <div class="row">
                 <div class="column">
                     <div class="ui form">
-                        <h4 class="ui dividing header">Méthode de recherche</h4>
 
-                        {{ form_widget(searchForm.searchMethode)}}
 
-                        <h4 class="ui dividing header">Créances</h4>
+                        <div class="field">
+                            <h4 class="ui dividing header">Méthode de recherche</h4>
 
-                        <div class="two fields">
-                            <div class="field">
+                            {{ form_widget(searchForm.searchMethode)}}
+                        </div>
 
-                                {{ form_row(searchForm.creance.isLinkedToFacture, { 'attr': {'onchange': "switchFactureForm(this);"}}) }}
+                        <div class="ui styled accordion">
 
-                                {{ form_row(searchForm.creance.titre) }}
+                            <div class="title active">
+                                <i class="dropdown icon"></i>
+                                Créances
+                            </div>
+                            <div class="content active">
+                                <div class="field">
+                                    {{ form_row(searchForm.creance.isLinkedToFacture, { 'attr': {'onchange': "switchFactureForm(this);"}}) }}
 
-                                {{ macros.input_number_switch(searchForm.creance.montantEmis, searchForm.creance.montantEmisMinimum, searchForm.creance.montantEmisMaximum) }}
+                                    {{ form_row(searchForm.creance.titre) }}
 
-                                {{ macros.input_number_switch(searchForm.creance.montantRecu, searchForm.creance.montantRecuMinimum, searchForm.creance.montantRecuMaximum) }}
+                                    {{ macros.input_number_switch(searchForm.creance.montantEmis, searchForm.creance.montantEmisMinimum, searchForm.creance.montantEmisMaximum) }}
 
+                                    {{ macros.input_number_switch(searchForm.creance.montantRecu, searchForm.creance.montantRecuMinimum, searchForm.creance.montantRecuMaximum) }}
+
+                                    {{ macros.input_date_switch(searchForm.creance.dateCreation, searchForm.creance.dateCreationMinimum, searchForm.creance.dateCreationMaximum) }}
+
+                                    {{ macros.input_date_switch(searchForm.creance.datePayement, searchForm.creance.datePayementMinimum, searchForm.creance.datePayementMaximum) }}
+
+
+                                    {{ form_row(searchForm.creance.remarque) }}
+                                </div>
                             </div>
 
-                            {{ form_row(searchForm.creance.remarque) }}
+                            <div class="title">
+                                <i class="dropdown icon"></i>
+                                Facture
+                            </div>
+                            <div class="content">
+                                <div class="field" >
 
-                        </div>
+                                    <div class="ui message blue" id="searchFactureForm" >
+                                        Les critères de recherche sur les factures n'ont pas d'effet
+                                        si la recherche des créances porte sur les créances "en attente de facturation".
+                                    </div>
 
-                        {{ macros.input_date_switch(searchForm.creance.dateCreation, searchForm.creance.dateCreationMinimum, searchForm.creance.dateCreationMaximum) }}
+                                    {{ form_row(searchForm.facture.id) }}
+                                    {{ form_row(searchForm.facture.statut) }}
 
-                        {{ macros.input_date_switch(searchForm.creance.datePayement, searchForm.creance.datePayementMinimum, searchForm.creance.datePayementMaximum) }}
+                                    {{ macros.input_number_switch(searchForm.facture.montantEmis, searchForm.facture.montantEmisMinimum, searchForm.facture.montantEmisMaximum) }}
 
+                                    {{ macros.input_number_switch(searchForm.facture.montantRecu, searchForm.facture.montantRecuMinimum, searchForm.facture.montantRecuMaximum) }}
 
+                                    {{ macros.input_date_switch(searchForm.facture.dateCreation, searchForm.facture.dateCreationMinimum, searchForm.facture.dateCreationMaximum) }}
+                                    {{ macros.input_date_switch(searchForm.facture.datePayement, searchForm.facture.datePayementMinimum, searchForm.facture.datePayementMaximum) }}
 
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="column">
-                    <div class="ui form" id="searchFactureForm">
-
-                        <h4 class="ui dividing header">Facture</h4>
-
-                        <div class="two fields">
-                            {{ form_row(searchForm.facture.id) }}
-                            {{ form_row(searchForm.facture.statut) }}
-
-                        </div>
-
-
-
-                        {{ macros.input_number_switch(searchForm.facture.montantEmis, searchForm.facture.montantEmisMinimum, searchForm.facture.montantEmisMaximum) }}
-
-                        {{ macros.input_number_switch(searchForm.facture.montantRecu, searchForm.facture.montantRecuMinimum, searchForm.facture.montantRecuMaximum) }}
-
-                        {{ macros.input_date_switch(searchForm.facture.dateCreation, searchForm.facture.dateCreationMinimum, searchForm.facture.dateCreationMaximum) }}
-                        {{ macros.input_date_switch(searchForm.facture.datePayement, searchForm.facture.datePayementMinimum, searchForm.facture.datePayementMaximum) }}
-
-                        {{ form_row(searchForm.facture.nombreRappel) }}
-
-
-
-
-
-
-
-
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="column">
-                    <div class="ui form" id="searchOwnerForm">
-
-                        <h4 class="ui dividing header">Propriétaire</h4>
-                        <div class="two fields">
-                            <div class="field">
-                                <label>Membre</label>
-                                <div class="two fields">
-
-                                    {{ form_row(searchForm.owner.membreNom, { 'attr': {'placeholder': "Nom"}}) }}
-
-                                    {{ form_row(searchForm.owner.membrePrenom, { 'attr': {'placeholder': "Prenom"}}) }}
+                                    {{ form_row(searchForm.facture.nombreRappel) }}
 
                                 </div>
-
                             </div>
 
-                            {{ form_row(searchForm.owner.familleNom, { 'attr': {'placeholder': "Nom"}}) }}
+                            <div class="title">
+                                <i class="dropdown icon"></i>
+                                Propriétaire
+                            </div>
+                            <div class="content">
+                                <div class="field">
+
+                                    {{ form_row(searchForm.owner.membreNom, { 'attr': {'placeholder': "Nom du membre"}}) }}
+
+                                    {{ form_row(searchForm.owner.membrePrenom, { 'attr': {'placeholder': "Prenom du membre"}}) }}
+
+                                    <div class="ui horizontal divider">
+                                        OU
+                                    </div>
+
+                                    {{ form_row(searchForm.owner.familleNom, { 'attr': {'placeholder': "Nom de famille"}}) }}
+
+                                </div>
+                            </div>
 
                         </div>
+
+
+
 
                     </div>
                 </div>
             </div>
+
+
         </div>
 
 
@@ -129,22 +124,6 @@
         <div class="ui button blue" onclick="sendSearch();">Valider</div>
 
     </div>
-
-
-
-</div>
-
-
-
-
-{% javascripts '@InterneFinancesBundle/Resources/public/js/form.js' %}
-    <script src="{{ asset_url }}"></script>
-{% endjavascripts %}
-
-
-
-
-
 
 
 
