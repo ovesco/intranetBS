@@ -3,6 +3,7 @@
 <html>
 
 <head>
+
     <meta charset="utf-8">
     <title>{% block titre %}{% endblock %} | netBS</title>
     <meta name="description" content="NetBS | outil de gestion de groupe scout développé par la Brigade de Sauvabelin">
@@ -11,9 +12,12 @@
     <link rel="stylesheet" href="{{ asset('semantic/semantic.min.css') }}">
     <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700,300&subset=latin,vietnamese' rel='stylesheet' type='text/css'>
 
+
     {% stylesheets '@AppBundle/Resources/public/css/*' %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
+
+
 
     {% block css %}{% endblock %}
 
@@ -22,7 +26,7 @@
 </head>
 <body {% block onload %}{% endblock %}>
 
-<div id="main-menu" class="ui vertical inverted sidebar menu" id="menu">
+<div id="main-menu" class="ui vertical inverted sidebar menu">
 
     {{ render(controller('AppBundle:Layout:mainMenuGenerate')) }}
 
@@ -84,21 +88,25 @@
 
 </div>
 
+
 {% javascripts '%kernel.root_dir%/../vendor/components/jquery/jquery.min.js' %}
     <script src="{{ asset_url }}"></script>
 {% endjavascripts %}
+
 
 {#<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>#}
 <script src="{{ asset('semantic/semantic.min.js') }}"></script>
 <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
 <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
 
+
 {% javascripts
     '@AppBundle/Resources/public/js/alwaysIncluded/*'
     '@AppBundle/Resources/public/js/layout.js'
 %}
-<script src="{{ asset_url }}"></script>
+    <script src="{{ asset_url }}"></script>
 {% endjavascripts %}
+
 
 
 {% block js %}

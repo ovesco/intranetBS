@@ -43,4 +43,12 @@ class SecurityController extends Controller
     public function checkAction(){
 
     }
+
+    /**
+     * Méthode vide, on l'utilise juste pour que la route ait quelque chose sur lequel pointer
+     * @route("logout", name="logout")
+     */
+    public function logoutAction(){
+
+    }
 }
