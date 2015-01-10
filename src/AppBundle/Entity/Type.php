@@ -32,7 +32,7 @@ class Type
      * @ORM\OneToOne(targetEntity="Fonction")
      * @ORM\JoinColumn(name="fonction_id", referencedColumnName="id", nullable=true)
      */
-    private $fonction_chef;
+    private $fonctionChef;
     
     /**
      * @var ArrayCollection 
@@ -116,25 +116,25 @@ class Type
     }
 
     /**
-     * Set fonction_chef
+     * Set fonctionChef
      *
      * @param \AppBundle\Entity\Fonction $fonctionChef
      * @return Type
      */
     public function setFonctionChef(\AppBundle\Entity\Fonction $fonctionChef = null)
     {
-        $this->fonction_chef = $fonctionChef;
+        $this->fonctionChef = $fonctionChef;
 
         return $this;
     }
 
     /**
-     * Get fonction_chef
+     * Get fonctionChef
      *
      * @return \AppBundle\Entity\Fonction 
      */
     public function getFonctionChef()
     {
-        return $this->fonction_chef;
+        return $this->fonctionChef;
     }
 }

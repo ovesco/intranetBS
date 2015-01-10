@@ -36,7 +36,7 @@ class CreanceSearchType extends AbstractType
             ->add('datePayementMaximum','date',array('data'=> null,'required' => false,'mapped' => false))
             ->add('datePayementMinimum','date',array('data'=> null,'required' => false,'mapped' => false))
 
-            ->add('isLinkedToFacture','choice',array('label' => 'Lien avec facture ','required' => false, 'mapped' => false,'choices' => array('no' =>'En attente de facturation', 'yes' =>'Faturée')))
+            ->add('isLinkedToFacture','choice',array('label' => 'Lien avec facture ','required' => true, 'mapped' => false,'choices' => array('no' =>'En attente de facturation', 'yes' =>'Faturée'),'data'=>'yes'))
 
             ;//fin de la fonction
 

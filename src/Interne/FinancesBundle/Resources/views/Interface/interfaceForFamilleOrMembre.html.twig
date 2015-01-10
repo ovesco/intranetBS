@@ -16,11 +16,11 @@
         </div>
         <div class="item" data-tab="factures">
             Factures
-            <div class="ui teal circular label">{{ ownerEntity.factures|length }}</div>
+            <div id="nombreFacture" class="ui teal circular label">{{ ownerEntity.factures|length }}</div>
         </div>
         <div class="item" data-tab="creances">
             Creances
-            <div class="ui teal circular label">{{ ownerEntity.creances|length }}</div>
+            <div id="nombreCreance" class="ui teal circular label">{{ ownerEntity.creances|length }}</div>
         </div>
 
     </div>
@@ -134,9 +134,9 @@
             <div class="ui right floated basic segment">
 
                     {% if ownerEntity.isClass('Membre') %}
-                        <div class="ui button" onclick="openCreancelForm({{ ownerEntity.id }},'Membre','interfaceMembre')">Ajouter une créance</div>
+                        <div class="ui button" onclick="openCreanceForm({{ ownerEntity.id }},'Membre','interfaceMembre')">Ajouter une créance</div>
                     {% elseif ownerEntity.isClass('Famille') %}
-                        <div class="ui button" onclick="openCreancelForm({{ ownerEntity.id }},'Famille','interfaceFamille')">Ajouter une créance</div>
+                        <div class="ui button" onclick="openCreanceForm({{ ownerEntity.id }},'Famille','interfaceFamille')">Ajouter une créance</div>
                     {% endif %}
 
                     <div class="ui button" onclick="createFactureFromInterface();">Facturer les créances séléctionnées</div>

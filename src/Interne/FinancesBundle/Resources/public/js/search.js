@@ -6,7 +6,10 @@ jQuery(document).ready(function() {
         context: $('#search-infos-context')
     });
 
+
+
 });
+
 
 function sendSearch()
 {
@@ -19,7 +22,7 @@ function sendSearch()
         error: function(jqXHR, textStatus, errorThrown) { alerte.send('erreur','danger',4000); },
         success: function(htmlResponse) {
 
-            $('#modal-facture-searchForm').modal('hide');
+            modalDisplayClose();
 
             loadResults();
         }
@@ -53,7 +56,7 @@ function switchFactureForm(element){
 
     var value = $(element).find('option:selected').val();
 
-    if(value == 'no')
+    if(value == 'yes')
     {
         $('#searchFactureForm').hide();
     }

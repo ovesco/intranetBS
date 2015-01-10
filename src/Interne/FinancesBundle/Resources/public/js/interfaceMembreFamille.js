@@ -65,6 +65,18 @@ function reloadContentInterface()
             //rempalce le nouveau contenu
             $('#listeFactureContent').replaceWith($listeFactureContent);
 
+            //cherche le nouveau contenu
+            $nombre = $(htmlResponse).find('#nombreFacture');
+
+            //rempalce le nouveau contenu
+            $('#nombreFacture').replaceWith($nombre);
+
+            //cherche le nouveau contenu
+            $nombre = $(htmlResponse).find('#nombreCreance');
+
+            //rempalce le nouveau contenu
+            $('#nombreCreance').replaceWith($nombre);
+
             //activation du menu
             $('#finances-infos-context .menu .item').tab({
                 context: $('#finances-infos-context')

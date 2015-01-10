@@ -23,6 +23,7 @@ class SearchController extends Controller
 {
 
 
+
     /**
      * @Route("/", name="interne_fiances_search", options={"expose"=true})
      *
@@ -32,21 +33,11 @@ class SearchController extends Controller
     {
 
         $data = array();
-        $searchForm = $this->createFormBuilder($data)
-            ->add('creance', new CreanceSearchType)
-            ->add('facture', new FactureSearchType)
-            ->add('owner',new OwnerSearchType)
-            ->add('searchMethode', 'choice',
-                array(
-                    'required' => true,
-                    'mapped' => false,
-                    'data' => 'new',
-                    'choices' => array(
-                        'new'   => 'Nouvelle recherche',
-                        'add' => 'Ajouter à la recherche actuelle',
-                        'substract'   => 'Soustraire à la recherche actuelle',
-                    )))
-            ->getForm();
+        /*
+         * on crée le formulaire de recherche.
+         *
+         */
+        $searchForm = $this->getSearchForm();
 
         /*
          * On récupère la session qui contient la liste des factures/creances des
@@ -66,25 +57,56 @@ class SearchController extends Controller
             /*
              * On extrait les donnée du formulaire
              */
-            //$creance = new Creance();
-            //$facture = new Facture();
             $searchMethode = $searchForm->get('searchMethode')->getData();
 
             $creance = $searchForm->get('creance')->getData();
             $facture = $searchForm->get('facture')->getData();
 
-            $creanceParameters = $this->extractSearchDataCreance($searchForm->get('creance'),$searchForm->get('owner'));
-            $factureParameters = $this->extractSearchDataFacture($searchForm->get('facture'),$searchForm->get('owner'));
+            //tableau des parametres de recherche supplémentaires aux champs standards
+            $parameters = array();
+            $parameters['creance'] = $this->extractSearchDataCreance($searchForm->get('creance'),$searchForm->get('owner'));
+            $parameters['facture'] = $this->extractSearchDataFacture($searchForm->get('facture'),$searchForm->get('owner'));
 
 
+            /*
+             * On fait le lien entre la cérance et la facture.
+             * C'est important pour la recherche récursive.
+             */
             $facture->addCreance($creance);
 
             $em = $this->getDoctrine()->getManager();
 
-            $creances = array();//$em->getRepository('InterneFinancesBundle:Creance')->findBySearch($creance,$creanceParameters);
-            $factures = $em->getRepository('InterneFinancesBundle:Facture')->findBySearch($facture,$factureParameters);
+            /*
+             * FONCTIONNEMENT DE LA RECHERCHE
+             *
+             * ->findBySearch($creance,$parameters);
+             *
+             * On commence par trouver toute les cérances qui correspondent aux critères de recherche dans creance:findBysearch
+             * Ensuite toujours dans la recherche de créance (creance:findbysearch), on cherche les factures
+             * liée à ces créances (via facture:findBySearch) et qui correspondent donc aussi aux critères de recherche
+             * sur les factures. On extrait les cérances liée à ces factures. On récupère une liste de cérances.
+             *
+             *->findBySearch($facture,$parameters);
+             *
+             * Ensuite on cherche les factures qui correspondents aux critères de recherche dans facture:findBySearch.
+             * Ensuite on cherche les cérances liées à ces factures qui corresponde aux critère de recherche.
+             * Comme on utilise à nouveaux creance:findBySearch dans fracture:findBySearch...il faut
+             * activer l'option recursive pour arreter la boucle. Ceci est donc valable dans le
+             * creance:findBySearch de facture:findBySearch.
+             * On récupère la liste des factures.
+             *
+             */
+            $creances = $em->getRepository('InterneFinancesBundle:Creance')->findBySearch($creance,$parameters);
+            $factures = $em->getRepository('InterneFinancesBundle:Facture')->findBySearch($facture,$parameters);
 
+            /*
+             * manage la session en fonction de la méthode de recherche
+             *
+             */
             $this->manageSession($creances,$factures,$searchMethode);
+            /*
+             * verifie l'intégralité de la session...
+             */
             $this->checkSession();
 
             return new Response();
@@ -98,6 +120,25 @@ class SearchController extends Controller
             'creances' => $session->get('creances'),
         ));
 
+    }
+
+    /**
+     * @Route("/load_form_ajax", name="interne_fiances_search_load_form_ajax", options={"expose"=true})
+     *
+     * @return Response
+     */
+    public function loadSearchFormAjaxAction()
+    {
+        $request = $this->getRequest();
+
+        if($request->isXmlHttpRequest()) {
+
+            return $this->render('InterneFinancesBundle:Search:searchForm.html.twig', array(
+                'searchForm' => $this->getSearchForm()->createView(),
+            ));
+
+        }
+        return new Response();
     }
 
     /**
@@ -125,6 +166,8 @@ class SearchController extends Controller
     }
 
     /**
+     * Enlève un résultat de la recherche
+     *
      * @Route("/out_of_search_ajax", name="interne_fiances_search_out_of_search_ajax", options={"expose"=true})
      *
      * @return Response
@@ -233,13 +276,15 @@ class SearchController extends Controller
         return array(
             'montantEmisMaximum' => $creanceSearchForm->get('montantEmisMaximum')->getData(),
             'montantEmisMinimum' => $creanceSearchForm->get('montantEmisMinimum')->getData(),
+
             'montantRecuMaximum' => $creanceSearchForm->get('montantRecuMaximum')->getData(),
             'montantRecuMinimum' => $creanceSearchForm->get('montantRecuMinimum')->getData(),
 
             'dateCreationMaximum' => $creanceSearchForm->get('dateCreationMaximum')->getData(),
             'dateCreationMinimum' => $creanceSearchForm->get('dateCreationMinimum')->getData(),
-            'datePayementMaximum' => $creanceSearchForm->get('dateCreationMaximum')->getData(),
-            'datePayementMinimum' => $creanceSearchForm->get('dateCreationMinimum')->getData(),
+
+            'datePayementMaximum' => $creanceSearchForm->get('datePayementMaximum')->getData(),
+            'datePayementMinimum' => $creanceSearchForm->get('datePayementMinimum')->getData(),
 
             'isLinkedToFacture' => $creanceSearchForm->get('isLinkedToFacture')->getData(),
 
@@ -258,18 +303,30 @@ class SearchController extends Controller
             'montantRecuMaximum' => $factureSearchForm->get('montantRecuMaximum')->getData(),
             'montantRecuMinimum' => $factureSearchForm->get('montantRecuMinimum')->getData(),
 
-            'montantEmis' => $factureSearchForm->get('montantRecu')->getData(),
-            'montantEmisMaximum' => $factureSearchForm->get('montantRecuMaximum')->getData(),
-            'montantEmisMinimum' => $factureSearchForm->get('montantRecuMinimum')->getData(),
+            'montantEmis' => $factureSearchForm->get('montantEmis')->getData(),
+            'montantEmisMaximum' => $factureSearchForm->get('montantEmisMaximum')->getData(),
+            'montantEmisMinimum' => $factureSearchForm->get('montantEmisMinimum')->getData(),
 
             'dateCreationMaximum' => $factureSearchForm->get('dateCreationMaximum')->getData(),
             'dateCreationMinimum' => $factureSearchForm->get('dateCreationMinimum')->getData(),
 
             'datePayementMaximum' => $factureSearchForm->get('datePayementMaximum')->getData(),
             'datePayementMinimum' => $factureSearchForm->get('datePayementMinimum')->getData(),
+
+            'membreNom' => $ownerSearchForm->get('membreNom')->getData(),
+            'membrePrenom' => $ownerSearchForm->get('membrePrenom')->getData(),
+            'familleNom' => $ownerSearchForm->get('familleNom')->getData(),
         );
     }
 
+    /**
+     * Cette fonction va adapter le résultat de la recherche
+     * en fonction de la méthode de recherche choisie.
+     *
+     * @param $creances
+     * @param $factures
+     * @param $searchMethode
+     */
     private function manageSession($creances,$factures,$searchMethode)
     {
         $session = $this->getRequest()->getSession();
@@ -362,6 +419,30 @@ class SearchController extends Controller
             $session->set('creances',$newCreancesSession);
         }
 
+    }
+
+    private function getSearchForm()
+    {
+        $data = array();
+        /*
+         * on crée le formulaire de recherche.
+         *
+         */
+        return  $this->createFormBuilder($data)
+            ->add('creance', new CreanceSearchType)
+            ->add('facture', new FactureSearchType)
+            ->add('owner',new OwnerSearchType)
+            ->add('searchMethode', 'choice',
+                array(
+                    'required' => true,
+                    'mapped' => false,
+                    'data' => 'new',
+                    'choices' => array(
+                        'new'   => 'Nouvelle recherche',
+                        'add' => 'Ajouter à la recherche actuelle',
+                        'substract'   => 'Soustraire à la recherche actuelle',
+                    )))
+            ->getForm();
     }
 
 
