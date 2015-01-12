@@ -46,7 +46,7 @@ class Attribution
      private $groupe;
      
     /**
-     * @var AppBundle\Entity\Membre $membre
+     * @var Membre $membre
      * 
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Membre", inversedBy="attributions")
      * @ORM\JoinColumn(name="membre_id", referencedColumnName="id")

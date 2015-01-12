@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundleBundle\Form;
+namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -8,15 +8,15 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class FonctionType extends AbstractType
 {
-        /**
+    /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nom')
-            ->add('abreviation')
+            ->add('nom','text')
+            //->add('abreviation','text')
         ;
     }
     
@@ -26,7 +26,7 @@ class FonctionType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundleBundle\Entity\Fonction'
+            'data_class' => 'AppBundle\Entity\Fonction',
         ));
     }
 
@@ -35,6 +35,6 @@ class FonctionType extends AbstractType
      */
     public function getName()
     {
-        return 'appbundle_fonction';
+        return 'AppBundle_fonction';
     }
 }

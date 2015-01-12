@@ -12,6 +12,7 @@ class GroupeType extends AbstractType
     {
         $builder
             ->add('nom')
+            ->add('active','hidden',array('data'=>true))
             ->add('type', 'semantic', array(
 
                 'class'		=> 'AppBundle:Type',

@@ -69,6 +69,17 @@
 {%- endblock genre_widget %}
 
 
+{% block choice_widget -%}
+<tr>
+    <td>{{ block('form_label') }}</td>
+    <td data-type="select" data-source="choices" {{ block('validation_block') }}>
+        <div class="select_choices" hidden>{% set options = choices -%}{{- block('choice_widget_options') -}}</div>
+        {% if value is not empty %}{{ value }}{% endif %}
+    </td>
+</tr>
+{%- endblock choice_widget %}
+
+
 {#
     validation_block
     Génère les attributs class et data-path

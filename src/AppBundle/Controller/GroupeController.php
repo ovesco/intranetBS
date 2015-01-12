@@ -12,6 +12,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Form\FonctionType;
+use AppBundle\Entity\Fonction;
 
 class GroupeController extends Controller
 {
@@ -103,8 +105,18 @@ class GroupeController extends Controller
             return $this->redirect($this->generateUrl('interne_voir_groupe', array('groupe' => $groupe->getId())));
         }
 
+        $fonctions = $this->getDoctrine()->getRepository('AppBundle:Fonction')->findAll();
+        $types = $this->getDoctrine()->getRepository('AppBundle:Type')->findAll();
 
-        return array('highestGroupes' =>$hiestGroupes,'groupeForm'=>$groupeForm->createView());
+        $fonctionForm = $this->createForm(new FonctionType,new Fonction());
+
+        return array(
+            'highestGroupes' =>$hiestGroupes,
+            'groupeForm'=>$groupeForm->createView(),
+            'fonctions' => $fonctions,
+            'types'=>$types,
+            'fonctionForm' => $fonctionForm->createView(),
+            );
     }
 
 }

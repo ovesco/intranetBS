@@ -58,6 +58,16 @@ class Groupe
     private $type;
 
     /**
+     * Determine si le groupe est ouverte ou pas. On ne pourra pas lui ajouter des attibution si
+     * il est fermé.
+     *
+     * @var Boolean $active
+     *
+     * @ORM\Column(name="active", type="boolean")
+     */
+    private $active;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -327,5 +337,29 @@ class Groupe
         }
 
         return null; //renvoie null sinon
+    }
+
+
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     * @return Groupe
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * Is active
+     *
+     * @return boolean
+     */
+    public function isActive()
+    {
+        return $this->active;
     }
 }

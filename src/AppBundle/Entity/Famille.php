@@ -275,7 +275,7 @@ class Famille
 
             if(!is_null($adresse)) {
 
-                if ($adresse->getFacturable() == true) {
+                if ($adresse->isReceivable()) {
 
                     return array('adresse' => $adresse, 'origine' => $k,
                         'owner' => array(

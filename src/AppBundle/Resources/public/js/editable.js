@@ -83,11 +83,11 @@ var editable = {
 
                     //On regarde l'array qui nous a été transmis
                     if(data.length == undefined)
-                        alerte.balance('Modification effectuée avec succès !', 'success');
+                        alerte.alerte('Modification effectuée avec succès !', 'success');
 
                     else {
 
-                        alerte.balance('La modification est enregistrée, mais il manque des informations pour pouvoir la réaliser.', 'info');
+                        alerte.alerte('La modification est enregistrée, mais il manque des informations pour pouvoir la réaliser.', 'info');
                         for(var i = 0; i < data.length; i++)
                             $("td[data-path='" + data[i] + "']").css('background', '#ccf8ff');
 
@@ -98,7 +98,7 @@ var editable = {
                     editable.backup(td);
                 },
                 error: function (data) {
-                    alerte.balance("Erreur lors de la modification, essayez d'actualiser la page et réessayez.", 'error');
+                    alerte.alerte("Erreur lors de la modification, essayez d'actualiser la page et réessayez.", 'error');
                 }
             });
         }
@@ -185,6 +185,9 @@ var editable = {
 
                 else if(options == 'boolean')
                     options_text = '<option value="1">Oui</option><option value="0">Non</option>';
+
+                else if(options == 'choices')
+                    options_text = $(obj).find('.select_choices').html();
 
                 else {
 

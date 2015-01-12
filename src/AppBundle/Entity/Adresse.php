@@ -22,6 +22,20 @@ class Adresse
      */
     private $id;
 
+
+    /*
+     * Cette variable sert à désactiver une adresse lorsqu'on a des retours parce que
+     * l'adresse n'est plus valide.
+     */
+    /**
+     *
+     * @var boolean $validity
+     *
+     * @ORM\Column(name="validity", type="boolean")
+     * @Assert\NotBlank()
+     */
+    private $validity;
+
     /**
      * @var string
      *
@@ -51,9 +65,9 @@ class Adresse
 
     /**
      * @var boolean
-     * @ORM\Column(name="facturable", type="boolean")
+     * @ORM\Column(name="adressable", type="boolean")
      */
-    private $facturable;
+    private $adressable;
     
     /**
      * @var text
@@ -69,6 +83,13 @@ class Adresse
      */
     private $email;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="telephone", type="string", length=255, nullable=true)
+     */
+    private $telephone;
+
     /*
      * La méthode d'envoi determine si la personne va recevoir
      * sont courrier par email ou par courrier.
@@ -81,6 +102,15 @@ class Adresse
      */
     private $methodeEnvoi;
 
+    /**
+     * Is Receivable
+     *
+     * @return bool
+     */
+    public function isReceivable()
+    {
+        return $this->adressable && $this->validity;
+    }
 
     /**
      * Get id
@@ -162,26 +192,26 @@ class Adresse
     }
 
     /**
-     * Set facturable
+     * Set adressable
      *
-     * @param boolean $facturable
+     * @param boolean $adressable
      * @return Adresse
      */
-    public function setFacturable($facturable)
+    public function setAdressable($adressable)
     {
-        $this->facturable = $facturable;
+        $this->adressable = $adressable;
     
         return $this;
     }
 
     /**
-     * Get facturable
+     * Get adressable
      *
      * @return boolean 
      */
-    public function getFacturable()
+    public function getAdressable()
     {
-        return $this->facturable;
+        return $this->adressable;
     }
 
     /**
@@ -256,5 +286,52 @@ class Adresse
     {
         return $this->email;
     }
+
+    /**
+     * Set telephone
+     *
+     * @param string $telephone
+     * @return Adresse
+     */
+    public function setTelephone($telephone)
+    {
+        $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    /**
+     * Get telephone
+     *
+     * @return string
+     */
+    public function getTelephone()
+    {
+        return $this->telephone;
+    }
+
+    /**
+     * Set validity
+     *
+     * @param boolean $validity
+     * @return Adresse
+     */
+    public function setValidity($validity)
+    {
+        $this->validity = $validity;
+
+        return $this;
+    }
+
+    /**
+     * Get validity
+     *
+     * @return boolean
+     */
+    public function getValidity()
+    {
+        return $this->validity;
+    }
+
 
 }

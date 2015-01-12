@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Fonction
@@ -102,16 +103,16 @@ class Fonction
      */
     public function __construct()
     {
-        $this->attribution = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->attribution = new ArrayCollection();
     }
 
     /**
      * Add attribution
      *
-     * @param \AppBundle\Entity\Attribution $attribution
+     * @param Attribution $attribution
      * @return Fonction
      */
-    public function addAttribution(\AppBundle\Entity\Attribution $attribution)
+    public function addAttribution(Attribution $attribution)
     {
         $this->attributions[] = $attribution;
 		$attribution->setFonction($this);
@@ -121,9 +122,9 @@ class Fonction
     /**
      * Remove attribution
      *
-     * @param \AppBundle\Entity\Attribution $attribution
+     * @param Attribution $attribution
      */
-    public function removeAttribution(\AppBundle\Entity\Attribution $attribution)
+    public function removeAttribution(Attribution $attribution)
     {
         $this->attributions->removeElement($attribution);
     }
@@ -131,7 +132,7 @@ class Fonction
     /**
      * Get attribution
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return ArrayCollection
      */
     public function getAttributions()
     {

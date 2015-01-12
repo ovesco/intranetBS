@@ -9,7 +9,7 @@
 
 {# choice widget #}
 {% block choice_widget -%}
-    <a {{ block('widget_attributes') }} source="" data-type="select" class="editable"></a>
+    <a {{ block('widget_attributes') }} data-type="select" class="editable"></a>
 {%- endblock choice_widget %}
 
 {# textarea #}
@@ -19,7 +19,7 @@
 {%- endblock textarea_widget %}
 
 {% block checkbox_widget -%}
-        <a href="#" data-type="select" {{ block('widget_attributes') }} source="[{value:0, text:'Nom'},{value:1, text:'Oui'}]" type="checkbox">
+        <a href="#" data-type="select" {{ block('widget_attributes') }} source="[{value:0, text:'Non'},{value:1, text:'Oui'}]" type="checkbox">
     </div>
 {%- endblock checkbox_widget %}
 

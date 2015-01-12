@@ -1,0 +1,5 @@
+services:
+    finances_statistics:
+        class: Interne\FinancesBundle\Controller\StatisticsController
+        arguments:
+            - @doctrine.orm.entity_manager

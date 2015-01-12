@@ -2,6 +2,7 @@
 
 {% import _self as marcro %}
 
+
 {% block titre %}{% endblock %}
 
 {% block content %}
@@ -28,8 +29,46 @@
                     </div>
                     <div class="ui bottom attached active tab segment" data-tab="type">
 
+                        <table class="ui table">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Fonction Chefs</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                {% for type in types %}
+                                    <tr>
+                                        <td>{{ type.nom }}</td>
+                                        <td>{{ type.fonctionChef.nom }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
                     </div>
                     <div class="ui bottom attached active tab segment" data-tab="function">
+
+                        {{ form_row(fonctionForm) }}
+
+                        <table class="ui table">
+                            <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Abreviation</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {% for fonction in fonctions %}
+                                <tr>
+                                    <td>{{ fonction.nom }}</td>
+                                    <td>{{ fonction.abreviation }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
 
                     </div>
                 </div>
@@ -59,17 +98,32 @@
     <div class="ui list">
         {% for parent in parents %}
             <div class="item">
-                <i class="top aligned right triangle icon"></i>
+                <i class="top aligned long arrow right icon"></i>
                 <div class="content">
-                    <div class="header">{{ parent.nom }} <a class="ui green circular label">{{ parent.getMembersRecursive|length }}</a></div>
-                    {{ parent.type.nom }}
+                    <div class="ui compact menu">
+                        <a class="item" href="{{ path('interne_voir_groupe', {'groupe':parent.id}) }}">
+                            {{ parent.nom }}
 
-                    <a class="ui tiny button" href="{{ path('interne_voir_groupe', {'groupe':parent.id}) }}">
-                        <i class="zoom icon"></i>
-                    </a>
-                    <div class="ui tiny button" onclick="addChild({{ parent.id }},'{{ parent.nom }}')">
-                        <i class="add icon"></i>
+                        </a>
+                        <a class="item">{{ parent.type.nom }}</a>
+                        <a class="item">
+
+                               Effectifs actuel: {{ parent.getMembersRecursive|length }}
+
+                        </a>
+
+                        <a class="item" onclick="addChild({{ parent.id }},'{{ parent.nom }}')> {{ parent.type.nom }}">
+                            <i class="add icon"></i>
+                            {% if parent.active %}
+                                <div class="floating ui green label">Actif</div>
+                            {% else %}
+                                <div class="floating ui red label">Désactivé</div>
+                            {% endif %}
+                        </a>
                     </div>
+
+
+
 
                     {% if parent.enfants %}
                         <div class="list">

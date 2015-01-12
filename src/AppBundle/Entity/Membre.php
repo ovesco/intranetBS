@@ -485,7 +485,7 @@ class Membre extends Personne
 
             if(!is_null($adresse)) {
 
-                if ($adresse->getFacturable() == true) {
+                if ($adresse->isReceivable()) {
 
                     return array(   'adresse' => $adresse,
                                     'origine' => $k,
