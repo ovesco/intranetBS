@@ -124,7 +124,7 @@ class PopulateCommand extends ContainerAwareCommand
 
         $adresse->setLocalite($faker->city);
         $adresse->setNpa($faker->postcode);
-        $adresse->setRue($faker->streetName . $faker->randomDigitNotNull);
+        $adresse->setRue($faker->streetName . ' ' . $faker->randomDigitNotNull);
         $adresse->setRemarques((mt_rand(1,100) > 80) ? $faker->text(120) : null);
         $adresse->setEmail((mt_rand(1,20) > 16) ? $faker->email : null);
         $adresse->setFacturable(  ($facturable == null) ? (  (mt_rand(1,10) > 7) ? true : false  )   : $facturable);
