@@ -11,3 +11,8 @@
 /bin/
 /composer.phar
 /.idea
+/web/css/
+/web/images/
+/web/js/
+/web/PDFTemplates/
+/web/static/
