@@ -18,10 +18,11 @@ security:
             form_login:
                 login_path: /login
                 check_path: /login_check
+                default_target_path: /interne
 
             logout:
                 path:   /logout
-                target: /
+                target: /login
 
 
     access_control:

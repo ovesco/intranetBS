@@ -1,11 +1,11 @@
 
 <div class="item">
     <a class="ui logo icon image" href="#">
-        {#
+
         {% image '@AppBundle/Resources/public/images/logo.png' %}
-        <img src="{{ asset_url }}" id="main-logo" alt="Logo" />
+            <img src="{{ asset_url }}" id="main-logo" alt="Logo" />
         {% endimage %}
-        #}
+
     </a>
     <a><b>NetBS</b></a>
 </div>
@@ -21,7 +21,7 @@
     <div class="ui small inverted header">Session</div>
     <div class="menu">
 
-        <a class="item" href="/globals/reset.html">
+        <a class="item" href="{{ path('logout') }}">
             Déconnexion
 
         </a>

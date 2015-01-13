@@ -1,0 +1,63 @@
+{% extends 'layout.html.twig' %}
+
+{% block titre %}Mon compte{% endblock %}
+
+{% block content %}
+
+    <div class="ui page grid">
+        <div class="column">
+            <h1>Mon compte</h1>
+
+            <div class="ui segment">
+                <div class="ui grid">
+
+                    <div class="eight wide column">
+                        <h4 class="ui header">Informations</h4>
+
+                        <table class="ui definition table">
+                            <tr>
+                                <td>Nom d'utilisateur</td>
+                                <td>{{ app.security.token.user.username }}</td>
+                            </tr>
+                            <tr>
+                                <td>Ma page</td>
+                                <td>
+                                    <a href="{{ path('interne_voir_membre', {membre: app.security.token.user.membre.id}) }}">
+                                        {{ app.security.token.user.membre.prenom|capitalize }}
+                                        {{ app.security.token.user.membre.nom|capitalize }}
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="eight wide column">
+                        <h4 class="ui header">Modifier mon mot de passe</h4>
+                        <form class="ui form" method="post" action="{{ path('security_modify_password') }}">
+                            <div class="field">
+                                <label>Mot de passe actuel</label>
+                                <input type="text" name="current_password" />
+                            </div>
+
+                            <div class="two fields">
+                                <div class="field">
+                                    <label>Nouveau mot de passe</label>
+                                    <input type="text" name="new_password" />
+                                </div>
+                                <div class="field">
+                                    <label>Répeter</label>
+                                    <input type="text" name="repeat_new_password" />
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <button class="ui green button">Valider</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

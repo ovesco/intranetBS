@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ListingController extends Controller
@@ -28,13 +29,14 @@ class ListingController extends Controller
 
     /**
      * Permet de créer une liste
-     * @param $name string le nom de la liste
+     * @param Request $request
      * @return Response redirection vers la page du listing
-     * @route("listing/add-liste/{name}", name="listing_creer_liste", options={"expose"=true})
+     * @route("listing/add-liste", name="listing_creer_liste")
      */
-    public function addListeAction($name) {
+    public function addListeAction(Request $request) {
 
         $listing = $this->get('listing');
+        $name    = $request->request->get('new_liste_name');
         $listing->addListe($name);
         $listing->save();
 

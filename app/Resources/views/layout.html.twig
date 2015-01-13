@@ -13,7 +13,7 @@
     <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700,300&subset=latin,vietnamese' rel='stylesheet' type='text/css'>
 
 
-    {% stylesheets '@AppBundle/Resources/public/css/*' %}
+    {% stylesheets '@AppBundle/Resources/public/css/*' output='css/main.css' %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
 
@@ -66,7 +66,6 @@
 
         <div class="center-section">
             <div class="info">
-                <i class="large notched circle loading icon"></i>
                 <p>Message d'information</p>
             </div>
         </div>
@@ -74,7 +73,7 @@
 
         <div class="right-section">
 
-                <a class="ui blue label"><i class="user icon"></i> Guillaume Hochet</a>
+                <a href="{{ path('security_my_account') }}" class="ui blue label"><i class="user icon"></i> {{ app.security.token.user.membre.prenom|capitalize }} {{ app.security.token.user.membre.nom|capitalize }}</a>
 
         </div>
 
@@ -88,13 +87,14 @@
 
 </div>
 
-
+{#
 {% javascripts '%kernel.root_dir%/../vendor/components/jquery/jquery.min.js' %}
     <script src="{{ asset_url }}"></script>
 {% endjavascripts %}
+#}
 
 
-{#<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>#}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="{{ asset('semantic/semantic.min.js') }}"></script>
 <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
 <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
@@ -103,6 +103,8 @@
 {% javascripts
     '@AppBundle/Resources/public/js/alwaysIncluded/*'
     '@AppBundle/Resources/public/js/layout.js'
+
+    output="js/main.js"
 %}
     <script src="{{ asset_url }}"></script>
 {% endjavascripts %}
@@ -110,9 +112,17 @@
 
 
 {% block js %}
-
-
-
+    <script type="text/javascript">
+        /*
+         * Pour chaque flashbag contenu, sachant qu'ils ne contiennent que des alertes et des messages, on génère
+         * une alerte correspondante
+         */
+        {% for label, flashes in app.session.flashbag.all %}
+            {% for flash in flashes %}
+                alerte.send("{{ flash }}", "{{ label }}");
+            {% endfor %}
+        {% endfor %}
+    </script>
 {% endblock %}
 
 </body>

@@ -29,7 +29,7 @@ class SecurityController extends Controller
             $session->remove(SecurityContext::AUTHENTICATION_ERROR);
         }
 
-        return $this->render('Security/login.html.twig', array(
+        return $this->render('Security/Common/login.html.twig', array(
 
             'last_username' => $session->get(SecurityContext::LAST_USERNAME),
             'error'         => $error,

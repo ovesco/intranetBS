@@ -68,9 +68,7 @@ function copyElementsBySelector(btn) {
 }
 
 /**
- * permet de créer une nouvelle liste dynamique. La fonction peut être appelée de deux manière différentes :
- * - sans trigger elle ouvrira la modale
- * - avec trigger elle ajoutera la liste
+ * permet de créer une nouvelle liste dynamique
  * @param trigger boolean
  */
 function addListe(trigger) {

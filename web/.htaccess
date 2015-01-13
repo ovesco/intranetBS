@@ -54,3 +54,7 @@ DirectoryIndex app.php
         # RedirectTemp cannot be used instead
     </IfModule>
 </IfModule>
+
+<FilesMatch "\.(js|css)$">
+    Header set Cache-Control "max-age=10800"
+</FilesMatch>

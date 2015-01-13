@@ -53,6 +53,11 @@ class Role implements RoleInterface
      * @ORM\Column(name="role", type="string", length=20, unique=true)
      */
     private $role;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Role")
+     */
+    private $parent;
     
     /**
      * @ORM\ManyToMany(targetEntity="User", mappedBy="roles")
@@ -153,5 +158,28 @@ class Role implements RoleInterface
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \Interne\SecurityBundle\Entity\Role $parent
+     * @return Role
+     */
+    public function setParent(\Interne\SecurityBundle\Entity\Role $parent = null)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Interne\SecurityBundle\Entity\Role 
+     */
+    public function getParent()
+    {
+        return $this->parent;
     }
 }

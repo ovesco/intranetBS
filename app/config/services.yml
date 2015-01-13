@@ -97,3 +97,13 @@ services:
         class: AppBundle\Field\GenreType
         tags:
             - { name: form.type, alias: genre }
+
+
+    # Security
+    # On redéfinit le roleHierarchy pour pouvoir les gérer dynamiquement en BDD
+    security.role_hierarchy:
+        class:  Interne\SecurityBundle\Utils\RoleHierarchy
+        public: false
+        arguments:
+            - %security.role_hierarchy.roles%
+            - @doctrine.orm.entity_manager

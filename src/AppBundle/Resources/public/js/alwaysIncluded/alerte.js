@@ -14,10 +14,9 @@ var alerte = {
 
     /**
      * Envoie une alerte simple.
-     * @param title string le titre de l'alerte
      * @param message string le message
      * @param type string le type parmi 'info', 'warning', 'danger', 'success'
-     * @param icon string si on veut un icone avec
+     * @param delay la durée d'affichage
      * @return integer l'id de l'alerte
      */
     send: function (message, type, delay) {

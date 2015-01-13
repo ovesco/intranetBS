@@ -86,6 +86,17 @@ class User implements UserInterface, \Serializable
     }
 
     /**
+     * Set a new password already encoded
+     * @param string $password
+     * @return User
+     */
+    public function setPassword($password) {
+
+        $this->password = $password;
+        return $this;
+    }
+
+    /**
      * @inheritDoc
      */
     public function eraseCredentials()
@@ -145,7 +156,7 @@ class User implements UserInterface, \Serializable
      *
      * @param \Interne\SecurityBundle\Entity\Role roles
      */
-    public function removeUser(\Interne\SecurityBundle\Entity\Role $roles)
+    public function removeRole(\Interne\SecurityBundle\Entity\Role $roles)
     {
         $this->roles->removeElement($roles);
     }
@@ -158,5 +169,16 @@ class User implements UserInterface, \Serializable
     public function getMembre()
     {
         return $this->membre;
+    }
+
+    /**
+     * Set membre
+     * @param \AppBundle\Entity\Membre $membre
+     * @return User
+     */
+    public function setMembre(\AppBundle\Entity\Membre $membre) {
+
+        $this->membre = $membre;
+        return $this;
     }
 }
