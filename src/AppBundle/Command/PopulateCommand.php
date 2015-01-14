@@ -21,7 +21,7 @@ use AppBundle\Entity\Fonction;
 use AppBundle\Entity\Distinction;
 use AppBundle\Entity\Type;
 use AppBundle\Entity\Groupe;
-
+use Interne\FinancesBundle\Entity\Rappel;
 
 class PopulateCommand extends ContainerAwareCommand
 {
@@ -1148,7 +1148,9 @@ class PopulateCommand extends ContainerAwareCommand
         $creance->setDateCreation($this->getRandomDate());
         if($payee)
         {
-            $creance->getMontantRecu(mt_rand(1,300));
+            $montant = mt_rand(1000,3000)/10;
+
+            $creance->setMontantRecu($montant);
             $creance->setDatePayement($datePayement);
         }
         return $creance;
@@ -1163,9 +1165,15 @@ class PopulateCommand extends ContainerAwareCommand
 
         $facture = new Facture();
 
-        $facture->setDateCreation($this->getRandomDate());
+        $dateCreation = $this->getRandomDate();
+        $facture->setDateCreation($dateCreation);
 
-        $datePayement = $this->getRandomDate();
+        $mois = mt_rand(1,24);
+        $jours = mt_rand(1,30);
+        $interval = new \DateInterval('P'.$mois.'M'.$jours.'D');
+
+        $datePayement = clone $dateCreation->add($interval);
+
         $nbCreance = mt_rand(1,3);
         if(mt_rand(0,1) == 1)
         {
@@ -1173,12 +1181,28 @@ class PopulateCommand extends ContainerAwareCommand
             for($n = 0; $n < $nbCreance; $n++) {
                 $facture->addCreance($this->getCreance($owner,true,$datePayement));
             }
+            $facture->setStatut('payee');
+            $facture->setDatePayement($datePayement);
+            for($n = 0; $n < mt_rand(0,6); $n++) {
+                $rappel = new Rappel();
+                $rappel->setMontantEmis(mt_rand(0,5));
+                $rappel->setMontantRecu(mt_rand(0,5));
+                $rappel->setDateCreation($dateCreation);
+                $rappel->setDatePayement($datePayement);
+                $facture->addRappel($rappel);
+            }
         }
         else
         {
             //ouverte
             for($n = 0; $n < $nbCreance; $n++) {
                 $facture->addCreance($this->getCreance($owner));
+            }
+            for($n = 0; $n < mt_rand(0,6); $n++) {
+                $rappel = new Rappel();
+                $rappel->setMontantEmis(mt_rand(0,5));
+                $rappel->setDateCreation($dateCreation);
+                $facture->addRappel($rappel);
             }
         }
         return $facture;
