@@ -138,6 +138,7 @@ class Facture
     */
     public function setStatut($statut)
     {
+
         $this->statut = $statut;
 
         return $this;

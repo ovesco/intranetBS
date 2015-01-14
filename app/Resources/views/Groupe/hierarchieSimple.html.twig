@@ -2,6 +2,7 @@
 
 {% import _self as marcro %}
 
+{% form_theme fonctionForm 'Templates/Form/ajax_edit.html.twig' %}
 
 {% block titre %}{% endblock %}
 
@@ -50,7 +51,7 @@
                     </div>
                     <div class="ui bottom attached active tab segment" data-tab="function">
 
-                        {{ form_row(fonctionForm) }}
+
 
                         <table class="ui table">
                             <thead>
@@ -117,7 +118,7 @@
                             {% if parent.active %}
                                 <div class="floating ui green label">Actif</div>
                             {% else %}
-                                <div class="floating ui red label">Désactivé</div>
+                                <div class="floating ui red label">Inactif</div>
                             {% endif %}
                         </a>
                     </div>

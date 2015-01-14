@@ -15,6 +15,12 @@ use AppBundle\Entity\Famille;
 use AppBundle\Entity\Adresse;
 use AppBundle\Entity\Attribution;
 use AppBundle\Entity\Geniteur;
+use Interne\FinancesBundle\Entity\Facture;
+use Interne\FinancesBundle\Entity\Creance;
+use AppBundle\Entity\Fonction;
+use AppBundle\Entity\Distinction;
+use AppBundle\Entity\Type;
+use AppBundle\Entity\Groupe;
 
 
 class PopulateCommand extends ContainerAwareCommand
@@ -29,7 +35,8 @@ class PopulateCommand extends ContainerAwareCommand
         $this
             ->setName('app:populate')
             ->setDescription('Remplir la base de donnée')
-            ->addArgument('members', InputArgument::REQUIRED, 'Combien de membres souhaitez-vous génerer ?')            //nombre de membres souhaité
+            ->addArgument('action', InputArgument::REQUIRED, 'Quel action souhaitez-vous faire? create: crée l\'arboresance / fill: remplir la base de donnée ')
+            ->addArgument('members', InputArgument::OPTIONAL, 'Combien de membres souhaitez-vous génerer ?')            //nombre de membres souhaité
             ->addArgument('fonction', InputArgument::OPTIONAL, 'Abreviation de la fonction des attributions génerées')  //Abbreviation de la fonction des attributions souhaitées
             ->addArgument('type', InputArgument::OPTIONAL, 'ID du type des groupes des attributions génerées')          //ID du type de groupe souhaité
         ;
@@ -40,84 +47,305 @@ class PopulateCommand extends ContainerAwareCommand
 
         /** @var \Doctrine\ORM\EntityManager $em */
         $em                           = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $action                       = $input->getArgument('action');
         $nombreDeMembresSouhaites     = intval($input->getArgument('members'));
-        $baseFaker                    = \Faker\Factory::create();
-        $frFaker                      = \Faker\Factory::create('fr_FR');
         $fonction                     = $input->getArgument('fonction');
         $type                         = $input->getArgument('type');
 
 
-        /** @var \Symfony\Component\Console\Helper\ProgressHelper $progress */
-        $progress    = $this->getHelperSet()->get('progress');
+        if($action == 'create'){
 
-        $progress->start($output, $nombreDeMembresSouhaites);
-
-        for($i = 0; $i < $nombreDeMembresSouhaites; $i++) {
-
-            /*
-             * En premier lieu, on crée une nouvelle famille. Dans cette famille, on va ajouter entre 1 et 4 gosse,
-             * et entre 1 et 2 parents. Lorsqu'on a choisit le nombre de gosses à ajouter, on va incrémenter le nombre
-             * de membres souhaité en tout pour que ce soit pris en compte
-             */
-            $famille = new Famille();
-            $famille->setNom($baseFaker->lastName);
-            $famille->setAdresse((mt_rand(1,11) > 4) ? $this->getRandomAdresse() : null);
-            $famille->setValidity(mt_rand(0,2));
-            $famille->setTelephone((mt_rand(0,10) > 4) ? $frFaker->phoneNumber : null);
-            $famille->setEmail((mt_rand(1,10) > 7) ? $baseFaker->email : null);
-
-
-            //Ajout des parents
-            $needParent = 0;
-            if(mt_rand(0,10) > 5)  //On lui file une mère
-                $famille->setMere($this->getRandomGeniteur('f'));
-
-            else $needParent += 10;
-
-            if(mt_rand($needParent,10) > 5)  //On lui file un père
-                $famille->setPere($this->getRandomGeniteur('m'));
-
-            /*
-             * Après avoir géré les parents, on va gérer les membres ainsi que leurs attributions respectives
-             * afin qu'ils soient placés dans des groupes de manière efficace
-             */
-            $nbrDeGosses = 0;
-
-            if(($nombreDeMembresSouhaites - $i) < 5)
-                $nbrDeGosses = $nombreDeMembresSouhaites - $i;
-
-            else
-                $nbrDeGosses = mt_rand(1,5);
-
-            $i += $nbrDeGosses;
-
-            for($j = 0; $j < $nbrDeGosses; $j++) {
-
-                $membre = $this->getRandomMember();
-                $membre->addAttribution($this->getRandomAttribution($fonction, $type));
-
-                for($k = 0; $k < mt_rand(0,3); $k++)
-                    $membre->addDistinction($this->getRandomDistinction());
-
-                $famille->addMembre($membre);
+            //on enregistre la liste des distinctions
+            $distinctions = $this->getDistinctions();
+            foreach($distinctions as $dist)
+            {
+                $distinctionInBDD = $em->getRepository('AppBundle:Distinction')->findOneByNom($dist);
+                if($distinctionInBDD == null)
+                {
+                    //création si inexistant
+                    $new = new Distinction();
+                    $new->setNom($dist);
+                    $em->persist($new);
+                }
             }
 
-            $em->persist($famille);
+            //on energistre la liste des fonctions
+            $fonctions = $this->getFonctions();
+            foreach($fonctions as $fonc => $abrev)
+            {
+                $fonctionInBDD = $em->getRepository('AppBundle:Fonction')->findOneByNom($fonc);
+                if($fonctionInBDD == null)
+                {
+                    //création si inexistant
+                    $new = new Fonction();
+                    $new->setNom($fonc);
+                    $new->setAbreviation($abrev);
+                    $em->persist($new);
+                }
+            }
 
-            $progress->advance();
+            //On crée la hierarchie!!!
+            $em->flush();
+            $groupes = $this->getGroupes();
+            $this->createHierarchie($em,null,$groupes);
+
+            //Sauvegarde complète
+            $em->flush();
+
+
+
+
+        }
+        elseif($action == 'fill'){
+
+            /** @var \Symfony\Component\Console\Helper\ProgressHelper $progress */
+            $progress    = $this->getHelperSet()->get('progress');
+
+            $progress->start($output, $nombreDeMembresSouhaites);
+
+            for($i = 0; $i < $nombreDeMembresSouhaites; $i++) {
+
+                /*
+                 * En premier lieu, on crée une nouvelle famille. Dans cette famille, on va ajouter entre 1 et 4 gosse,
+                 * et entre 1 et 2 parents. Lorsqu'on a choisit le nombre de gosses à ajouter, on va incrémenter le nombre
+                 * de membres souhaité en tout pour que ce soit pris en compte
+                 */
+                $famille = new Famille();
+                $famille->setNom($this->getNom());
+                $famille->setAdresse($this->getRandomAdresse(true));
+                $famille->setValidity(mt_rand(0,2));
+                $famille->setTelephone($this->getPhone(true));
+                $famille->setEmail($this->getEmail(true));
+
+
+                //Ajout des parents
+                switch(mt_rand(0,2) == 0){
+                    case 0:
+                        //On lui file une mère
+                        $famille->setMere($this->getRandomGeniteur('f'));
+                        break;
+                    case 1:
+                        //On lui file un père
+                        $famille->setPere($this->getRandomGeniteur('m'));
+                        break;
+                    case 2:
+                        //on donne les deux parent
+                        $famille->setMere($this->getRandomGeniteur('f'));
+                        $famille->setPere($this->getRandomGeniteur('m'));
+                        break;
+                }
+
+
+                /*
+                 * Après avoir géré les parents, on va gérer les membres ainsi que leurs attributions respectives
+                 * afin qu'ils soient placés dans des groupes de manière efficace
+                 */
+                $nbrDeGosses = 0;
+
+                if(($nombreDeMembresSouhaites - $i) < 5)
+                    $nbrDeGosses = $nombreDeMembresSouhaites - $i;
+
+                else
+                    $nbrDeGosses = mt_rand(1,5);
+
+                $i += $nbrDeGosses;
+
+                for($j = 0; $j < $nbrDeGosses; $j++) {
+
+                    $membre = $this->getRandomMember();
+                    $membre->addAttribution($this->getRandomAttribution($fonction, $type));
+
+                    for($k = 0; $k < mt_rand(0,3); $k++)
+                        $membre->addDistinction($this->getRandomDistinction());
+
+
+                    //ajout créance et facture
+                    $nbCreanceEnAttente = mt_rand(1,3);
+                    for($n = 0; $n < $nbCreanceEnAttente; $n++) {
+                        $membre->addCreance($this->getCreance($membre));
+                    }
+                    $nbFacture = mt_rand(1,3);
+                    for($n = 0; $n < $nbFacture; $n++) {
+                        $membre->addFacture($this->getFacture($membre));
+                    }
+
+                    $famille->addMembre($membre);
+                }
+
+                //ajout créance et facture
+                $nbCreanceEnAttente = mt_rand(1,3);
+                for($n = 0; $n < $nbCreanceEnAttente; $n++) {
+                    $famille->addCreance($this->getCreance($famille));
+                }
+                $nbFacture = mt_rand(1,3);
+                for($n = 0; $n < $nbFacture; $n++) {
+                    $famille->addFacture($this->getFacture($famille));
+                }
+
+
+
+
+                $em->persist($famille);
+
+                $progress->advance();
+            }
+
+            $em->flush();
+
+            $progress->finish();
         }
 
-        $em->flush();
 
-        $progress->finish();
+    }
+
+    /**
+     * Cette fonction crée la hierarchie des groupes définit dans la fonction getGroupes.
+     * Elle doit être appelée après la création des fonctions et des disintinctions.
+     *
+     * @param $em
+     * @param $parent
+     * @param $childsGroupes
+     */
+    private function createHierarchie($em,$parent,$childsGroupes){
+
+        foreach($childsGroupes as $name => $groupeData)
+        {
+
+            $groupe = $em->getRepository('AppBundle:Groupe')->findOneByNom($name);
+
+            if($groupe == null)
+            {
+                //création si inexistant
+                $groupe = new Groupe();
+                $groupe->setNom($name);
+            }
+
+            $type = $em->getRepository('AppBundle:Type')->findOneBy(array('nom'=>$groupeData[0]));
+
+            if($type == null)
+            {
+                //création si inexistant
+                $type = new Type();
+                $type->setNom($groupeData[0]);
+            }
+
+            //forcément déjà existant car la création des fonctions et faite avant!
+            $fonctionChef = $em->getRepository('AppBundle:Fonction')->findOneBy(array('abreviation'=>$groupeData[1]));
+
+            $type->setFonctionChef($fonctionChef);
+
+            $groupe->setType($type);
+            $groupe->setParent($parent);
+            $groupe->setActive(true);
+
+            //next sub level
+            $childs = $groupeData[2];
+            $this->createHierarchie($em,$groupe,$childs);
+
+            $em->persist($type);
+            $em->persist($groupe);
+            $em->flush();
+
+        }
+
+    }
+
+    private function getGroupes(){
+
+        $groupes = array(
+            'Brigade de Sauvabelin' => array(
+                'Brigade','CDT', array(
+                    'Eclaireurs' => array(
+                        'Branche','CB', array(
+                            'Berisal'=> array(
+                                'Troupe','CT', array(
+                                    'Faucons'=> array(
+                                        'Patrouille','CP', array()
+                                    ),
+                                    'Cerfs'=> array(
+                                        'Patrouille','CP', array(),
+                                    ),
+                                    'Panthère'=> array(
+                                        'Patrouille','CP', array(),
+                                    ),
+                                ),
+                            ),
+                            'Montfort'=> array(
+                                'Troupe','CT', array(
+                                    'Fregate'=> array(
+                                        'Patrouille','CP', array()
+                                    ),
+                                    'Optimiste'=> array(
+                                        'Patrouille','CP', array(),
+                                    ),
+                                    'Galion'=> array(
+                                        'Patrouille','CP', array(),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                    'Eclaireuses' => array(
+                        'Branche','CB', array(
+                            'Solalex'=> array(
+                                'Troupe','CT', array(
+                                    'Hirondelles'=> array(
+                                        'Patrouille','CP', array()
+                                    ),
+                                    'Daufins'=> array(
+                                        'Patrouille','CP', array(),
+                                    ),
+                                    'Tigresses'=> array(
+                                        'Patrouille','CP', array(),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    )
+                )
+            ),
+            'ADABS' => array(
+                'Anciens','Pres.', array()
+            )
+        );
+
+        return $groupes;
+
+    }
+
+    private function getDistinctions(){
+        return array(
+            'Cravate Bleu',
+            '1er classe',
+            'Badge feu',
+            'Aspirant',
+
+        );
+    }
+
+    private function getFonctions(){
+        return array(
+            'Commandant'=>'CDT',
+            'Chef de Branche'=>'CB',
+            'Chef de Troupe'=>'CT',
+            'Chef de Patrouille'=>'CP',
+            'Chef de Meute'=>'CM',
+            'Chef Louvetaux'=>'CL',
+            'Adjoint'=>'Adj',
+            'Eclaireur'=>'Ecl',
+            'Louveteaux'=>'Lvtx',
+            'Président ADABS'=>'Pres.'
+
+
+        );
     }
 
     /**
      * Génère une adresse bidon
-     * @param boolean $facturable
+     * @param $canBeNull
      * @return Adresse
      */
-    private function getRandomAdresse($facturable = null) {
+    private function getRandomAdresse($canBeNull = false) {
 
         $faker   = \Faker\Factory::create('fr_FR');
         $adresse = new Adresse();
@@ -125,11 +353,17 @@ class PopulateCommand extends ContainerAwareCommand
         $adresse->setLocalite($faker->city);
         $adresse->setNpa($faker->postcode);
         $adresse->setRue($faker->streetName . ' ' . $faker->randomDigitNotNull);
-        $adresse->setRemarques((mt_rand(1,100) > 80) ? $faker->text(120) : null);
-        $adresse->setEmail((mt_rand(1,20) > 16) ? $faker->email : null);
-        $adresse->setFacturable(  ($facturable == null) ? (  (mt_rand(1,10) > 7) ? true : false  )   : $facturable);
+        $adresse->setRemarques($this->getText(100,true));
+        $adresse->setEmail($this->getEmail(true));
+        $adresse->setAdressable( (mt_rand(0,1) == 0) ? true : false );
+        $adresse->setValidity( (mt_rand(0,1) == 0) ? true : false );
+        $adresse->setTelephone($this->getPhone(true));
+        $adresse->setMethodeEnvoi((mt_rand(0,1) == 0) ? 'Email' : 'Courrier');
 
-        return $adresse;
+        if($canBeNull)
+            return (rand(0,1) == 1) ? $adresse : null;
+        else
+            return $adresse;
     }
 
     /**
@@ -140,14 +374,14 @@ class PopulateCommand extends ContainerAwareCommand
     private function getRandomGeniteur($sexe) {
 
         $geniteur = new Geniteur();
-        $baseFaker= \Faker\Factory::create();
 
-        $geniteur->setPrenom(($sexe == 'f') ? \Faker\Provider\fr_FR\Person::firstNameFemale() : \Faker\Provider\fr_FR\Person::firstNameMale());
-        $geniteur->setEmail((mt_rand(1,10) > 6) ? $baseFaker->companyEmail : null);
-        $geniteur->getProfession($this->getProfession());
-        $geniteur->setAdresse((mt_rand(1,10) > 8) ? $this->getRandomAdresse() : null);
+        $geniteur->setPrenom($this->getPrenom($sexe));
+        $geniteur->setEmail($this->getEmail(true));
+        $geniteur->getProfession($this->getProfession(true));
+        $geniteur->setAdresse($this->getRandomAdresse(true));
         $geniteur->setSexe($sexe);
-        $geniteur->setTelephone((mt_rand(0,10) > 7) ? $baseFaker->phoneNumber : null);
+        $geniteur->setTelephone($this->getPhone(true));
+        $geniteur->setIban($this->getIban(true));
 
         return $geniteur;
     }
@@ -164,16 +398,17 @@ class PopulateCommand extends ContainerAwareCommand
         $frFaker   = \Faker\Factory::create('fr_FR');
 
         $membre->setSexe($sexe);
-        $membre->setPrenom(($sexe == 'f') ? \Faker\Provider\fr_FR\Person::firstNameFemale() : \Faker\Provider\fr_FR\Person::firstNameMale());
-        $membre->setEmail((mt_rand(1,10) > 6) ? $frFaker->email : null);
-        $membre->setAdresse((mt_rand(1,100) > 95) ? $this->getRandomAdresse(true) : null);
+        $membre->setPrenom($this->getPrenom($sexe));
+        $membre->setEmail($this->getEmail(true));
+        $membre->setAdresse($this->getRandomAdresse(true));
         $membre->setNaissance($this->getRandomDateNaissance());
         $membre->setInscription($this->getRandomInscription());
         $membre->setValidity(mt_rand(0,2));
-        $membre->setTelephone((mt_rand(0,10) > 3) ? $frFaker->phoneNumber : null);
+        $membre->setTelephone($this->getPhone(true));
         $membre->setNumeroAvs(mt_rand(111111111,999999999));
         $membre->setNumeroBs(mt_rand(0, 99999));
-        $membre->setStatut((mt_rand(1,10) > 5) ? 'swaggé' : 'malheureusement pas swaggé');
+        $membre->setStatut($this->getStatut());
+        $membre->setIban($this->getIban(true));
 
         return $membre;
     }
@@ -257,8 +492,9 @@ class PopulateCommand extends ContainerAwareCommand
     /**
      * Retourne une profession au hasard
      * @return string
+     * @param boolean $canBeNull
      */
-    private function getProfession() {
+    private function getProfession($canBeNull = false) {
 
         $metiers = array(
 
@@ -763,6 +999,189 @@ class PopulateCommand extends ContainerAwareCommand
             "Webplanner",
         );
 
-        return $metiers[mt_rand(0, (count($metiers)-1))];
+        $randIndex = mt_rand(0, (count($metiers)-1));
+
+        if($canBeNull)
+            return (rand(0,1) == 1) ? $metiers[$randIndex] : null;
+        else
+            return $metiers[$randIndex];
     }
+
+    /**
+     * @param bool $canBeNull
+     * @return null|string
+     */
+    private function getNom($canBeNull = false) {
+
+        $baseFaker= \Faker\Factory::create();
+
+        if($canBeNull)
+            return (rand(0,1) == 1) ? $baseFaker->lastName : null;
+        else
+            return $baseFaker->lastName;
+
+    }
+
+    /**
+     * @param $sexe
+     * @param bool $canBeNull
+     * @return mixed|null
+     */
+    private function getPrenom($sexe, $canBeNull = false) {
+
+        if($sexe == 'f')
+            $prenom = \Faker\Provider\fr_FR\Person::firstNameFemale();
+        else
+            $prenom = \Faker\Provider\fr_FR\Person::firstNameMale();
+
+        if($canBeNull)
+            return (rand(0,1) == 1) ? $prenom : null;
+        else
+            return $prenom;
+
+    }
+
+    /**
+     * @param bool $canBeNull
+     * @return null|string
+     */
+    private function getPhone($canBeNull = false){
+
+        $frFaker = \Faker\Factory::create('fr_FR');
+
+        if($canBeNull)
+            return (rand(0,1) == 1) ? $frFaker->phoneNumber : null;
+        else
+            return $frFaker->phoneNumber;
+
+    }
+
+    /**
+     * @param bool $canBeNull
+     * @return null|string
+     */
+    private function getEmail($canBeNull = false){
+
+        $frFaker = \Faker\Factory::create('fr_FR');
+
+        if($canBeNull)
+            return (rand(0,1) == 1) ? $frFaker->email : null;
+        else
+            return $frFaker->email;
+
+    }
+
+    /**
+     * @param bool $canBeNull
+     * @return null|string
+     */
+    private function getIban($canBeNull = false){
+
+        $iban = 'CH'.mt_rand(111111111,999999999);
+
+        if($canBeNull)
+            return (rand(0,1) == 1) ? $iban : null;
+        else
+            return $iban;
+    }
+
+    /**
+     * @param $lenght
+     * @param bool $canBeNull
+     * @return null|string
+     */
+    private function getText($lenght, $canBeNull = false)
+    {
+        $faker   = \Faker\Factory::create('fr_FR');
+        $text = $faker->text($lenght);
+        if($canBeNull)
+            return (rand(0,1) == 1) ? $text : null;
+        else
+            return $text;
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getStatut()
+    {
+        $statut = array('Inscrit','Préinscrit','Désincrit');
+        $randIndex = mt_rand(0, (count($statut)-1));
+        return $statut[$randIndex];
+    }
+
+
+    /**
+     * Retourne une date
+     * @return \Datetime
+     */
+    private function getRandomDate() {
+
+        return new \Datetime( date('Y-m-d h:i:s', mt_rand(1042468808, 1418481608 )) );
+    }
+
+    /**
+     * @param $owner
+     * @param bool $payee
+     * @param null $datePayement
+     * @return Creance
+     */
+    private function getCreance($owner, $payee = false, $datePayement = null){
+
+        $creance = new Creance();
+
+        if($owner->isClass('Membre'))
+        {
+            $creance->setMembre($owner);
+        }
+        if($owner->isClass('Famille'))
+        {
+            $creance->setFamille($owner);
+        }
+
+        $annee = mt_rand(2000,2015);
+        $periode = array('hiver','printemps','été','automne');
+
+        $creance->setTitre((mt_rand(0,1) == 0) ? 'Cotisation '.$annee : 'Camp '.$periode[mt_rand(0,3)].' '.$annee);
+        $creance->setRemarque($this->getText(120,true));
+        $creance->setMontantEmis(mt_rand(1,300));
+        $creance->setDateCreation($this->getRandomDate());
+        if($payee)
+        {
+            $creance->getMontantRecu(mt_rand(1,300));
+            $creance->setDatePayement($datePayement);
+        }
+        return $creance;
+
+    }
+
+    /**
+     * @param $owner
+     * @return Facture
+     */
+    private function getFacture($owner){
+
+        $facture = new Facture();
+
+        $facture->setDateCreation($this->getRandomDate());
+
+        $datePayement = $this->getRandomDate();
+        $nbCreance = mt_rand(1,3);
+        if(mt_rand(0,1) == 1)
+        {
+            //payee
+            for($n = 0; $n < $nbCreance; $n++) {
+                $facture->addCreance($this->getCreance($owner,true,$datePayement));
+            }
+        }
+        else
+        {
+            //ouverte
+            for($n = 0; $n < $nbCreance; $n++) {
+                $facture->addCreance($this->getCreance($owner));
+            }
+        }
+        return $facture;
+    }
+
 }

@@ -46,6 +46,13 @@ abstract class Personne
      */
     private $email;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="iban", type="string", length=255, nullable=true)
+     */
+    private $iban;
+
 
 
     /**
@@ -161,6 +168,29 @@ abstract class Personne
     public function getAdresse()
     {
         return $this->adresse;
+    }
+
+    /**
+     * Set iban
+     *
+     * @param string $iban
+     * @return Membre
+     */
+    public function setIban($iban)
+    {
+        $this->iban = $iban;
+
+        return $this;
+    }
+
+    /**
+     * Get iban
+     *
+     * @return string
+     */
+    public function getIban()
+    {
+        return $this->iban;
     }
 
 

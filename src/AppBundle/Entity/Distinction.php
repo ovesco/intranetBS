@@ -37,7 +37,7 @@ class Distinction
     /**
      * @var text
      * 
-     * @ORM\Column(name="remarques", type="text")
+     * @ORM\Column(name="remarques", type="text", nullable=true)
      */
     private $remarques;
 

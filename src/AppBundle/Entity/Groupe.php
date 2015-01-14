@@ -32,14 +32,14 @@ class Groupe
 
     /**
      * @var Groupe
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Groupe", inversedBy="enfants")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Groupe", inversedBy="enfants", cascade={"persist"})
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
     private $parent;
 
     /**
      * @var ArrayCollection 
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Groupe", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Groupe", mappedBy="parent", cascade={"persist"})
      */
     private $enfants;
 

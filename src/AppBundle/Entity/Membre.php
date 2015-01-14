@@ -99,6 +99,8 @@ class Membre extends Personne
     private $validity;
 
 
+
+
     /*
      * ====== FinancesBundle =======
      */
@@ -694,6 +696,8 @@ class Membre extends Personne
     {
         return $this->envoiFacture;
     }
+
+
 
 
 }

@@ -54,6 +54,15 @@ class MembreType extends AbstractType
             )
 
             ->add(
+                'iban',
+                'text',
+                array(
+                    'label' => 'IBAN',
+                    'required' => false
+                )
+            )
+
+            ->add(
                 'telephone',
                 'text',
                 array(
