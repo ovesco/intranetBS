@@ -1,0 +1,27 @@
+{% extends 'layout.html.twig' %}
+
+{% block titre %}
+Recherche
+{% endblock %}
+
+
+{% block content %}
+<div class="ui page grid">
+    <div class="row">
+        <div class="column">
+            <div class="ui segment">
+
+                <form>
+                    <label for="pattern">Rechercher : </label>
+                    <input type="text" id="pattern" />
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block js %}
+{% endblock %}

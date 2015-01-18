@@ -15,7 +15,7 @@ class AppKernel extends Kernel
      */
     public function __construct($environment, $debug)
     {
-        date_default_timezone_set('Europe/London');
+        date_default_timezone_set('Europe/Zurich');
         parent::__construct($environment, $debug);
     }
 
