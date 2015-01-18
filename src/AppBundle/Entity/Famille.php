@@ -92,7 +92,7 @@ class Famille
     /**
      * @var ArryCollection
      *
-     * @ORM\OneToMany(targetEntity="Interne\FinancesBundle\Entity\Facture",
+     * @ORM\OneToMany(targetEntity="Interne\FinancesBundle\Entity\FactureToFamille",
      *                mappedBy="famille", cascade={"persist"})
      */
     private $factures;
@@ -100,7 +100,7 @@ class Famille
     /**
      * @var ArryCollection
      *
-     * @ORM\OneToMany(targetEntity="Interne\FinancesBundle\Entity\Creance",
+     * @ORM\OneToMany(targetEntity="Interne\FinancesBundle\Entity\CreanceToFamille",
      *                mappedBy="famille", cascade={"persist"})
      */
     private $creances;

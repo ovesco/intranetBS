@@ -5,15 +5,14 @@ namespace Interne\FinancesBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use AppBundle\Entity\Membre;
-use AppBundle\Entity\Famille;
-use AppBundle\Entity\Adresse;
-
 /**
- * Facture
+ * Class Facture
  *
  * @ORM\Table(name="finances_bundle_factures")
  * @ORM\Entity(repositoryClass="Interne\FinancesBundle\Entity\FactureRepository")
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="discriminator", type="string")
+ * @ORM\DiscriminatorMap({"to_membre" = "FactureToMembre", "to_famille" = "FactureToFamille"})
  */
 class Facture
 {
@@ -25,15 +24,6 @@ class Facture
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /*
-     * =========== RELATIONS ===============
-     *
-     * Une facture contient une liste de cérances et une liste de rappels.
-     *
-     * Une facture à un propriétaire, soit un membre, soit une famille.
-     */
-
 
     /**
      * @var ArryCollection
@@ -52,31 +42,11 @@ class Facture
     private $creances;
 
     /**
-     * @var Membre
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Membre", inversedBy="factures")
-     * @ORM\JoinColumn(name="membre_id", referencedColumnName="id")
-     */
-    private $membre;
-
-    /**
-     * @var Famille
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Famille", inversedBy="factures")
-     * @ORM\JoinColumn(name="famille_id", referencedColumnName="id")
-     */
-    private $famille;
-
-    /*
-     * ========== VARIABLES =================
-     */
-
-    /**
      * @var string
      *
      * @ORM\Column(name="statut", type="string", columnDefinition="ENUM('ouverte','payee')")
      */
-    private $statut;
+    private $statut = 'ouverte';
 
     /**
      * @var \DateTime
@@ -100,11 +70,7 @@ class Facture
     public function __construct()
     {
         $this->rappels = new ArrayCollection();
-        $this->statut = 'ouverte';
-
         $this->creances = new ArrayCollection();
-
-
     }
 
     /**
@@ -405,92 +371,5 @@ class Facture
     {
         return $this->creances;
     }
-
-    /**
-     * Set membre
-     *
-     * @param Membre $membre
-     * @return Facture
-     */
-    public function setMembre($membre)
-    {
-        $this->membre = $membre;
-
-        return $this;
-    }
-
-    /**
-     * Get membre
-     *
-     * @return Membre
-     */
-    public function getMembre()
-    {
-        return $this->membre;
-    }
-
-    /**
-     * Set famille
-     *
-     * @param Famille $famille
-     * @return Facture
-     */
-    public function setFamille($famille)
-    {
-        $this->famille = $famille;
-
-        return $this;
-    }
-
-    /**
-     * Get famille
-     *
-     * @return Famille
-     */
-    public function getFamille()
-    {
-        return $this->famille;
-    }
-
-
-    /**
-     * Get ownerAdresse
-     *
-     * @return Adresse
-     */
-    public function getOwnerAdresse()
-    {
-
-        if($this->membre != null)
-        {
-            return $this->membre->getAdressePrincipale();
-        }
-        elseif($this->famille != null)
-        {
-            return $this->famille->getAdresse();
-        }
-        else
-            return null;
-    }
-
-    /*
-     * La facture peut avoir soit un membre, soit une famille comme prorpiétaire.
-     */
-    /**
-     * Get owner
-     */
-    public function getOwner()
-    {
-        if($this->membre != null)
-            return $this->membre;
-        elseif($this->famille != null)
-            return $this->famille;
-        else
-            return null;
-    }
-
-
-
-
 
 }

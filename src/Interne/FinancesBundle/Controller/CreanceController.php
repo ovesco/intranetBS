@@ -2,6 +2,7 @@
 
 namespace Interne\FinancesBundle\Controller;
 
+use Interne\FinancesBundle\Entity\CreanceToMembre;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\DateTime;
@@ -160,23 +161,31 @@ class CreanceController extends Controller
 
 
             $em = $this->getDoctrine()->getManager();
+            $creanceToAdd = null;
             if ($classOwner == 'Membre') {
                 $membre = $em->getRepository('AppBundle:Membre')->find($idOwner);
 
-                $membre->addCreance($creance);
+                $creanceToAdd = new CreanceToMembre();
+                $creanceToAdd->loadFromCreance($creance);
+
+                $membre->addCreance($creanceToAdd);
 
             }
             elseif ($classOwner == 'Famille') {
                 $famille = $em->getRepository('AppBundle:Famille')->find($idOwner);
 
-                $famille->addCreance($creance);
+                $creanceToAdd = new CreanceToFamille();
+                $creanceToAdd->loadFromCreance($creance);
+
+                $famille->addCreance($creanceToAdd);
+
             }
 
-            $em->persist($creance);
+            $em->persist($creanceToAdd);
             $em->flush();
 
             return $this->render('InterneFinancesBundle:Interface:interfaceForFamilleOrMembre.html.twig',
-                array('ownerEntity' => $creance->getOwner()));
+                array('ownerEntity' => $creanceToAdd->getOwner()));
 
         }
         return new Response();

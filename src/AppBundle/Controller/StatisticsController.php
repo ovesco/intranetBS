@@ -9,6 +9,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Interne\FinancesBundle\Entity\FactureRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+use AppBundle\Entity\Membre;
+use AppBundle\Entity\Groupe;
+
 
 
 /**
@@ -68,11 +71,126 @@ class StatisticsController extends Controller
                 return $financesController->getCreancesEmisesRecues($options);
             case 'montant_en_attente':
                 return $financesController->getMontantEnAttente($options);
+            case 'effectifs_pie_charts':
+                return $this->getEffectifsPieCharts();
 
         }
 
+    }
+
+    private function getGroupeData(Groupe $groupeParent, $nbTotalMembre,$niveau,$niveauMax,$series,$color = null)
+    {
+        for($niv = 0; $niv <= $niveauMax; $niv++)
+        {
+            //on commence par crée les series pour chaque niveau
+            if(!isset($series[$niv]))
+            {
+                $series[$niv]['name'] = $niv;
+                $series[$niv]['size'] = ((100/($niveauMax+1))*($niv+1)).'%';
+                $series[$niv]['innerSize'] = ((100/($niveauMax+1))*($niv)).'%';
+                $series[$niv]['data'] = array();
+            }
+        }
+
+
+        //couleur rand
+        if($niveau <= $niveauMax)
+        {
+
+            if($color == null)
+                $color = 'rgba('.mt_rand(0,255).','.mt_rand(0,255).','.mt_rand(0,255).', 1)';
+
+            for($niv = $niveau; $niv <= $niveauMax; $niv++) {
+
+                //effectif direct du groupe.
+                $data = array();
+                $data['name'] = 'Eff. direct '.$groupeParent->getNom();
+                $data['y'] = ((count($groupeParent->getMembers()) / $nbTotalMembre) * 100);
+                $data['color'] = $color;
+                array_push($series[$niv]['data'], $data);
+            }
+
+
+            $color = 'rgba('.mt_rand(0,255).','.mt_rand(0,255).','.mt_rand(0,255).', 1)';
+
+            foreach($groupeParent->getEnfants() as $enfant) {
+                $data = array();
+                $data['name'] = $enfant->getNom();
+                $data['y'] = ((count($enfant->getMembersRecursive()) / $nbTotalMembre) * 100);
+                $data['color'] = $color;
+                array_push($series[$niveau]['data'], $data);
+            }
 
 
 
+            foreach($groupeParent->getEnfants() as $enfant) {
+                $series = $this->getGroupeData($enfant,$nbTotalMembre,$niveau+1,$niveauMax,$series,$color);
+            }
+
+        }
+
+        return $series;
+
+
+
+
+    }
+
+    private function getEffectifsPieCharts(){
+
+        $groupeRepo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Groupe');
+
+        $parentId = null;
+        $groupeParent = new Groupe();
+        if($parentId == null)
+        {
+            $groupes =$groupeRepo->findBy(array('parent'=>$parentId));
+            $groupeParent->setEnfants($groupes);
+
+        }
+        else
+        {
+            $groupeParent = $groupeRepo->find($parentId);
+        }
+
+        $nombreTotalMembre = count($groupeParent->getMembersRecursive());
+
+        $series = array();
+        $data = $this->getGroupeData($groupeParent,$nombreTotalMembre,0,3,$series);
+
+
+
+        $graphData = array(
+
+            'chart' => array(
+                'type' => 'pie'
+            ),
+            'title' => array(
+                'text'=> 'Pie'
+            ),
+            'xAxis' => array(
+                'text'=>'test',
+
+            ),
+            'yAxis' => array(
+                'text' => 'test2',
+            ),
+
+            'tooltip' => array(
+                'valueSufix' => '%',
+            ),
+            'plotOptions' => array(
+                'pie' => array(
+                    'shadow' => false,
+                    'center' => array('50%','50%')
+                )
+            ),
+
+
+            'series' =>   $data
+
+        );
+
+        return $graphData;
     }
 }

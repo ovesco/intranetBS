@@ -74,13 +74,9 @@ class ValidationController extends Controller
             $datePayement = $payement->getDatePayement();
 
 
-
-
             //traitement du payement
             if($state != 'not_found')
             {
-
-
 
                 $facture = $factureRepo->find($idFacture);
 
@@ -129,14 +125,12 @@ class ValidationController extends Controller
                         foreach($facture->getCreances() as $creance)
                         {
                             $creance->setMontantRecu($creance->getMontantEmis);
-                            $creance->setDatePayement($datePayement);
                         }
 
                         //validationd des rappels de la facture
                         foreach($facture->getRappels() as $rappel)
                         {
                             $rappel->setMontantRecu($rappel->getFrais());
-                            $rappel->setDatePayement($datePayement);
                         }
                         break;
 
@@ -144,24 +138,20 @@ class ValidationController extends Controller
                         foreach($facture->getCreances() as $creance)
                         {
                             $creance->setMontantRecu($creanceRepartition[$creance->getId()]);
-                            $creance->setDatePayement($datePayement);
                         }
                         foreach($facture->getRappels() as $rappel)
                         {
                             $rappel->setMontantRecu($rappelRepartition[$rappel->getId()]);
-                            $rappel->setDatePayement($datePayement);
                         }
                         break;
                     case 'found_lower_valid':
                         foreach($facture->getCreances() as $creance)
                         {
                             $creance->setMontantRecu($creanceRepartition[$creance->getId()]);
-                            $creance->setDatePayement($datePayement);
                         }
                         foreach($facture->getRappels() as $rappel)
                         {
                             $rappel->setMontantRecu($rappelRepartition[$rappel->getId()]);
-                            $rappel->setDatePayement($datePayement);
                         }
                         break;
                     case 'found_lower_new_facture':
@@ -169,7 +159,6 @@ class ValidationController extends Controller
                         {
 
                             $creance->setMontantRecu($creanceRepartition[$creance->getId()]);
-                            $creance->setDatePayement($datePayement);
 
                             /*
                              * dans ce cas de figure, on crée des créances supplémentaires

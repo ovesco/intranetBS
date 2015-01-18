@@ -15,13 +15,18 @@ use AppBundle\Entity\Famille;
 use AppBundle\Entity\Adresse;
 use AppBundle\Entity\Attribution;
 use AppBundle\Entity\Geniteur;
-use Interne\FinancesBundle\Entity\Facture;
-use Interne\FinancesBundle\Entity\Creance;
+use Interne\FinancesBundle\Entity\FactureToMembre;
+use Interne\FinancesBundle\Entity\FactureToFamille;
+use Interne\FinancesBundle\Entity\CreanceToMembre;
+use Interne\FinancesBundle\Entity\CreanceToFamille;
 use AppBundle\Entity\Fonction;
 use AppBundle\Entity\Distinction;
 use AppBundle\Entity\Type;
 use AppBundle\Entity\Groupe;
 use Interne\FinancesBundle\Entity\Rappel;
+
+use Interne\SecurityBundle\Entity\Role;
+use Interne\SecurityBundle\Entity\User;
 
 class PopulateCommand extends ContainerAwareCommand
 {
@@ -194,6 +199,34 @@ class PopulateCommand extends ContainerAwareCommand
 
             $progress->finish();
         }
+        elseif($action == 'security')
+        {
+            $membre = new Membre();
+            $role = new Role();
+            $user = new User();
+
+            $membre->setPrenom('Security user');
+            $membre->setSexe('m');
+            $membre->setValidity(0);
+
+            $user->setMembre($membre);
+            $user->setPassword('swag');
+            $user->setUsername('yolo');
+
+            $role->setName('user');
+            $role->setRole('ROLE_USER');
+
+            $role->addUser($user);
+            $user->addRole($role);
+
+            $em->persist($membre);
+            $em->persist($user);
+            $em->persist($role);
+            $em->flush();
+
+
+
+        }
 
 
     }
@@ -227,6 +260,7 @@ class PopulateCommand extends ContainerAwareCommand
                 //création si inexistant
                 $type = new Type();
                 $type->setNom($groupeData[0]);
+                $type->setAffichageEffectifs(true);
             }
 
             //forcément déjà existant car la création des fonctions et faite avant!
@@ -1123,19 +1157,20 @@ class PopulateCommand extends ContainerAwareCommand
     /**
      * @param $owner
      * @param bool $payee
-     * @param null $datePayement
      * @return Creance
      */
-    private function getCreance($owner, $payee = false, $datePayement = null){
+    private function getCreance($owner, $payee = false){
 
-        $creance = new Creance();
+        $creance = null;
 
         if($owner->isClass('Membre'))
         {
+            $creance = new CreanceToMembre();
             $creance->setMembre($owner);
         }
         if($owner->isClass('Famille'))
         {
+            $creance = new CreanceToFamille();
             $creance->setFamille($owner);
         }
 
@@ -1151,7 +1186,6 @@ class PopulateCommand extends ContainerAwareCommand
             $montant = mt_rand(1000,3000)/10;
 
             $creance->setMontantRecu($montant);
-            $creance->setDatePayement($datePayement);
         }
         return $creance;
 
@@ -1163,7 +1197,19 @@ class PopulateCommand extends ContainerAwareCommand
      */
     private function getFacture($owner){
 
-        $facture = new Facture();
+
+        $facture = null;
+
+        if($owner->isClass('Membre'))
+        {
+            $facture = new FactureToMembre();
+            $facture->setMembre($owner);
+        }
+        if($owner->isClass('Famille'))
+        {
+            $facture = new FactureToFamille();
+            $facture->setFamille($owner);
+        }
 
         $dateCreation = $this->getRandomDate();
         $facture->setDateCreation($dateCreation);
@@ -1179,7 +1225,7 @@ class PopulateCommand extends ContainerAwareCommand
         {
             //payee
             for($n = 0; $n < $nbCreance; $n++) {
-                $facture->addCreance($this->getCreance($owner,true,$datePayement));
+                $facture->addCreance($this->getCreance($owner,true));
             }
             $facture->setStatut('payee');
             $facture->setDatePayement($datePayement);
@@ -1188,7 +1234,6 @@ class PopulateCommand extends ContainerAwareCommand
                 $rappel->setMontantEmis(mt_rand(0,5));
                 $rappel->setMontantRecu(mt_rand(0,5));
                 $rappel->setDateCreation($dateCreation);
-                $rappel->setDatePayement($datePayement);
                 $facture->addRappel($rappel);
             }
         }

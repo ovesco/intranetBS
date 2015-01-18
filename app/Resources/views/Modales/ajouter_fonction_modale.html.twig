@@ -1,7 +1,7 @@
-<div id="ajouter-groupe-modale" class="ui small modal">
+<div id="ajouter-fonction-modale" class="ui small modal">
     <i class="close icon"></i>
     <div class="header">
-        Ajouter une unité
+        Ajouter une fonction
     </div>
 
     <div class="content">
@@ -9,21 +9,13 @@
         <form class="ui form" method="post" >
 
             <div class="field">
-                <label>Groupe parent</label>
-                <input readonly="readonly" type="text" id="groupe-name-parent" />
-                <input type="hidden" name="groupe_id" id="groupe-id-parent" />
+                {{ form_widget(form.nom) }}
             </div>
-
 
             <div class="field">
-                {{ form_widget(groupeForm.nom) }}
+                {{ form_widget(form.abreviation) }}
             </div>
-            <div class="field">
-                {{ form_widget(groupeForm.type) }}
-            </div>
-
-            {{ form_rest(groupeForm) }}
-
+            {{ form_rest(form) }}
 
             <div class="ui field">
                 <input type="submit" class="ui green button" value="Ajouter" />

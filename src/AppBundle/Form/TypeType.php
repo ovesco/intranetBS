@@ -12,6 +12,12 @@ class TypeType extends AbstractType
     {
         $builder
             ->add('nom')
+            ->add('fonctionChef', 'semantic', array(
+
+                'class'		=> 'AppBundle:Fonction',
+                'property'	=> 'nom'
+            ))
+            ->add('affichageEffectifs','checkbox',array('label'=>'Affichage des effectifs?'))
         ;
     }
 

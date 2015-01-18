@@ -1,28 +1,22 @@
-<div id="ajouter-groupe-modale" class="ui small modal">
+<div id="ajouter-type-modale" class="ui small modal">
     <i class="close icon"></i>
     <div class="header">
-        Ajouter une unité
+        Ajouter un type de groupe
     </div>
 
     <div class="content">
 
         <form class="ui form" method="post" >
 
-            <div class="field">
-                <label>Groupe parent</label>
-                <input readonly="readonly" type="text" id="groupe-name-parent" />
-                <input type="hidden" name="groupe_id" id="groupe-id-parent" />
-            </div>
-
 
             <div class="field">
-                {{ form_widget(groupeForm.nom) }}
-            </div>
-            <div class="field">
-                {{ form_widget(groupeForm.type) }}
+                {{ form_widget(form.nom) }}
             </div>
 
-            {{ form_rest(groupeForm) }}
+            <div class="field">
+                {{ form_widget(form.fonctionChef) }}
+            </div>
+                {{ form_rest(form) }}
 
 
             <div class="ui field">

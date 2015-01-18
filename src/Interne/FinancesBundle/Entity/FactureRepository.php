@@ -27,12 +27,6 @@ class FactureRepository extends EntityRepository
         $queryBuilder->leftJoin('Interne\FinancesBundle\Entity\Rappel', 'rappel', 'WITH', 'facture.id = rappel.facture');
         $queryBuilder->GroupBy('facture');
 
-        $queryBuilder->leftJoin('AppBundle\Entity\Membre', 'membre', 'WITH', 'membre.id = facture.membre');
-        $queryBuilder->GroupBy('facture');
-        $queryBuilder->leftJoin('AppBundle\Entity\Famille', 'familleDuMembre', 'WITH', 'membre.id = membre.famille');
-        $queryBuilder->GroupBy('membre');
-        $queryBuilder->leftJoin('AppBundle\Entity\Famille', 'famille', 'WITH', 'famille.id = facture.famille');
-        $queryBuilder->GroupBy('facture');
 
         /*
          * Elements de recherche contenu dans le formulaire de facture standard
@@ -118,28 +112,33 @@ class FactureRepository extends EntityRepository
 
 
 
-            if($searchParameters['facture']['membrePrenom'] != null)
+            if(($searchParameters['facture']['membreNom'] != null) || ($searchParameters['facture']['membrePrenom'] != null))
             {
-                $parameter = $searchParameters['facture']['membrePrenom'];
-                if ($parameter != null) {
-                    $queryBuilder->andWhere($queryBuilder->expr()->like('membre.prenom',$queryBuilder->expr()->literal('%'.$parameter.'%')) );
-                }
-            }
-            if($searchParameters['facture']['membreNom'] != null)
-            {
-                $parameter = $searchParameters['facture']['membreNom'];
-                if ($parameter != null) {
-                    $queryBuilder->andWhere($queryBuilder->expr()->like('familleDuMembre.nom',$queryBuilder->expr()->literal('%'.$parameter.'%')) );
-                }
-            }
-            if($searchParameters['facture']['familleNom'] != null)
-            {
+                $nom = $searchParameters['facture']['membreNom'];
+                $prenom = $searchParameters['facture']['membrePrenom'];
 
-                $parameter = $searchParameters['facture']['familleNom'];
-                if ($parameter != null) {
-                    $queryBuilder->andWhere($queryBuilder->expr()->like('famille.nom',$queryBuilder->expr()->literal('%'.$parameter.'%')) );
+                $idArray = $this->getEntityManager()->getRepository('InterneFinancesBundle:FactureToMembre')->findByOwner($nom,$prenom);
+
+                if($idArray != null)
+                {
+                    $queryBuilder->andWhere('facture.id IN (:ids)')->setParameter('ids', array_values($idArray));
+                }
+
+            }
+            elseif($searchParameters['facture']['familleNom'] != null)
+            {
+                $nom = $searchParameters['facture']['familleNom'];
+
+                $idArray = $this->getEntityManager()->getRepository('InterneFinancesBundle:FactureToFamille')->findByOwner($nom);
+
+                if($idArray != null)
+                {
+                    $queryBuilder->andWhere('facture.id IN (:ids)')->setParameter('ids', array_values($idArray));
                 }
             }
+
+
+
 
             if($searchParameters['facture']['montantEmis'] != null)
             {

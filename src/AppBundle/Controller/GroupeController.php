@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Groupe;
+use AppBundle\Entity\Type;
 use AppBundle\Form\GroupeType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Form\FonctionType;
 use AppBundle\Entity\Fonction;
+use AppBundle\Form\TypeType;
 
 class GroupeController extends Controller
 {
@@ -80,42 +82,80 @@ class GroupeController extends Controller
      */
     public function hierarchieSimpleAction(Request $request) {
 
-        $groupeRepo = $this->getDoctrine()->getRepository('AppBundle:Groupe');
-        $hiestGroupes = $groupeRepo->findHighestGroupes();
+        $em = $this->getDoctrine()->getManager();
+        $groupeRepo = $em->getRepository('AppBundle:Groupe');
 
+        //Création des formulaires de la page
         $groupe     = new Groupe();
         $groupeForm = $this->createForm(new GroupeType, $groupe);
 
+        $type = new Type();
+        $typeForm = $this->createForm(new TypeType,$type);
 
-        /*
-         * On a peut-être tenté d'ajouter un groupe, dans ce cas on va valider le nouveau groupe, puis rediriger vers
-         * la page de celui-ci
-         */
-        $groupeForm->handleRequest($request);
+        $fonction = new Fonction();
+        $fonctionForm = $this->createForm(new FonctionType,$fonction);
 
-        if ($groupeForm->isValid()) {
 
-            //On récupère le groupe parent
-            $parent = $groupeRepo->find($request->request->get('groupe_id'));
-            $groupe->setParent($parent);
+        if($request->request->has($groupeForm->getName()))
+        {
+            $groupeForm->handleRequest($request);
 
-            $this->getDoctrine()->getManager()->persist($groupe);
-            $this->getDoctrine()->getManager()->flush();
+            if ($groupeForm->isValid()) {
 
-            return $this->redirect($this->generateUrl('interne_voir_groupe', array('groupe' => $groupe->getId())));
+                //On récupère le groupe parent
+                $parent = $groupeRepo->find($request->request->get('groupe_id'));
+                $groupe->setParent($parent);
+
+                $em->persist($groupe);
+                $em->flush();
+
+                return $this->redirect($this->generateUrl('groupe_hierarchie_simple'));
+            }
         }
 
+        if($request->request->has($typeForm->getName()))
+        {
+            $typeForm->handleRequest($request);
+
+            if ($typeForm->isValid()) {
+
+                $em->persist($type);
+                $em->flush();
+
+                return $this->redirect($this->generateUrl('groupe_hierarchie_simple'));
+            }
+        }
+
+        if($request->request->has($fonctionForm->getName()))
+        {
+            $fonctionForm->handleRequest($request);
+
+            if ($fonctionForm->isValid()) {
+
+                $em->persist($fonction);
+                $em->flush();
+
+                return $this->redirect($this->generateUrl('groupe_hierarchie_simple'));
+            }
+        }
+
+
+        //retourne les groupes parents de toute la structure
+        $hiestGroupes = $groupeRepo->findHighestGroupes();
+
+        //retourne toutes les fonctions et type disponible
         $fonctions = $this->getDoctrine()->getRepository('AppBundle:Fonction')->findAll();
         $types = $this->getDoctrine()->getRepository('AppBundle:Type')->findAll();
 
-        $fonctionForm = $this->createForm(new FonctionType,new Fonction());
+
 
         return array(
-            'highestGroupes' =>$hiestGroupes,
+            'fonctionForm' => $fonctionForm->createView(),
             'groupeForm'=>$groupeForm->createView(),
+            'typeForm' => $typeForm->createView(),
+            'highestGroupes' =>$hiestGroupes,
             'fonctions' => $fonctions,
             'types'=>$types,
-            'fonctionForm' => $fonctionForm->createView(),
             );
     }
 

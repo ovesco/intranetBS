@@ -31,10 +31,10 @@ function sendSearch()
 
 function loadResults()
 {
-    var data = 1;
+
     $.ajax({
         type: "POST",
-        data: data,
+        data: 1,
         url: Routing.generate('interne_fiances_search_load_results_ajax'),
         error: function(jqXHR, textStatus, errorThrown) { alerte.send('erreur','danger',4000); },
         success: function(htmlResponse) {
@@ -50,6 +50,20 @@ function loadResults()
         }
     });
 
+}
+
+function searchSwitch(element){
+
+    $(element).closest('.searchSwitch').find('.optionSearch').each(function(){
+        if($(this).is(':visible'))
+        {
+            $(this).hide();
+        }
+        else
+        {
+            $(this).show();
+        }
+    });
 }
 
 function switchFactureForm(element){

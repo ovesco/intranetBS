@@ -9,7 +9,8 @@ use Doctrine\ORM\EntityManager;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
-use Interne\FinancesBundle\Entity\Facture;
+use Interne\FinancesBundle\Entity\FactureToMembre;
+use Interne\FinancesBundle\Entity\FactureToFamille;
 
 
 /**
@@ -187,33 +188,27 @@ class FactureController extends Controller
                  * appartien à un membre ou une famille.
                  * Ainsi que déterminer la cible de facturation
                  */
-                $famille = $creance->getFamille();
-                $membre = $creance->getMembre();
 
-                $cibleFacturation = '';
 
-                if ($famille != null) {
+                $cibleFacturation = null;
+
+                if($creance->getOwner()->isClass('Famille'))
+                {
                     /*
                      * la créance appartien à une famille
                      */
                     $cibleFacturation = 'Famille';
-                } elseif ($membre != null) {
+                }
+                elseif($creance->getOwner()->isClass('Membre'))
+                {
                     /*
                      * la cérance appartient à un membre
                      */
-                    $cibleFacturation = $membre->getEnvoiFacture(); //retourne soit 'Famille' soit 'Membre'
-                    if ($cibleFacturation == 'Famille') {
-                        //on récupère la famille du membre
-                        $famille = $membre->getFamille();
-                    }
+                    $cibleFacturation = $creance->getOwner()->getEnvoiFacture(); //retourne soit 'Famille' soit 'Membre'
+
                 }
 
-                /*
-                 * Creation de la nouvelle facture
-                 */
-                $facture = new Facture();
-                $facture->setDateCreation(new \DateTime());
-                $facture->setStatut('ouverte');
+
 
 
                 /*
@@ -225,7 +220,13 @@ class FactureController extends Controller
 
                     case 'Membre':
 
-                        foreach ($membre->getCreances() as $linkedCreance) {
+                        /*
+                         * Creation de la nouvelle facture
+                         */
+                        $facture = new FactureToMembre();
+                        $facture->setDateCreation(new \DateTime());
+
+                        foreach ($creance->getOwner()->getCreances() as $linkedCreance) {
                             /*
                              * On récupère toute les créances du membre
                              * qui ne sont pas encore facturée
@@ -235,13 +236,19 @@ class FactureController extends Controller
                                 $facture->addCreance($linkedCreance);
                             }
                         }
-                        $membre->addFacture($facture);
-
+                        $creance->getOwner()->addFacture($facture);
+                        $em->persist($facture);
                         break;
 
                     case 'Famille':
 
-                        foreach ($famille->getCreances() as $linkedCreance) {
+                        /*
+                         * Creation de la nouvelle facture
+                         */
+                        $facture = new FactureToFamille();
+                        $facture->setDateCreation(new \DateTime());
+
+                        foreach ($creance->getOwner()->getCreances() as $linkedCreance) {
                             /*
                              * On récupère toute les créances de la famille
                              * qui ne sont pas encore facturée
@@ -252,7 +259,7 @@ class FactureController extends Controller
                             }
                         }
 
-                        foreach ($famille->getMembres() as $membreOfFamille) {
+                        foreach ($creance->getOwner()->getMembres() as $membreOfFamille) {
                             /*
                              * On recherche des créances chez les
                              * membre de la famille qui envoie
@@ -272,12 +279,13 @@ class FactureController extends Controller
                             }
                         }
 
-                        $famille->addFacture($facture);
+                        $creance->getOwner()->addFacture($facture);
+                        $em->persist($facture);
                         break;
 
                 }
 
-                $em->persist($facture);
+
                 $em->flush();
             }
         }

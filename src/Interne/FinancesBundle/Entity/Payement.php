@@ -26,7 +26,7 @@ class Payement
      *
      * @ORM\Column(name="idFacture", type="integer")
      */
-    private $idFacture;
+    private $idFacture; //n'est pas forcement représentatif d'un ID existant. (state: not_found)
 
     /**
      * @var float
@@ -45,7 +45,7 @@ class Payement
     /**
      * @var string
      *
-     * @ORM\Column(name="state", type="string", length=255)
+     * @ORM\Column(name="state", type="string", columnDefinition="ENUM('not_found','found_lower_valid','found_lower_new_facture','found_upper','waiting')")
      */
     private $state;
 

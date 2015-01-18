@@ -27,11 +27,11 @@
 
                         <div class="ui styled accordion">
 
-                            <div class="title active">
+                            <div class="title">
                                 <i class="dropdown icon"></i>
                                 Créances
                             </div>
-                            <div class="content active">
+                            <div class="content">
                                 <div class="field">
                                     {{ form_row(searchForm.creance.isLinkedToFacture, { 'attr': {'onchange': "switchFactureForm(this);"}}) }}
 
@@ -43,7 +43,6 @@
 
                                     {{ macros.input_date_switch(searchForm.creance.dateCreation, searchForm.creance.dateCreationMinimum, searchForm.creance.dateCreationMaximum) }}
 
-                                    {{ macros.input_date_switch(searchForm.creance.datePayement, searchForm.creance.datePayementMinimum, searchForm.creance.datePayementMaximum) }}
 
 
                                     {{ form_row(searchForm.creance.remarque) }}

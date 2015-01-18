@@ -32,7 +32,6 @@ class SearchController extends Controller
     public function searchAction()
     {
 
-        $data = array();
         /*
          * on crée le formulaire de recherche.
          *
@@ -109,6 +108,8 @@ class SearchController extends Controller
              */
             $this->checkSession();
 
+            //le résultat de la recherche est chargé par la fonction loadResultsAjaxAction
+            //appelée utltérieurment par la page.
             return new Response();
         }
 
@@ -282,9 +283,6 @@ class SearchController extends Controller
 
             'dateCreationMaximum' => $creanceSearchForm->get('dateCreationMaximum')->getData(),
             'dateCreationMinimum' => $creanceSearchForm->get('dateCreationMinimum')->getData(),
-
-            'datePayementMaximum' => $creanceSearchForm->get('datePayementMaximum')->getData(),
-            'datePayementMinimum' => $creanceSearchForm->get('datePayementMinimum')->getData(),
 
             'isLinkedToFacture' => $creanceSearchForm->get('isLinkedToFacture')->getData(),
 

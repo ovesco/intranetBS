@@ -158,6 +158,8 @@ class Groupe
     public function setEnfants($enfants)
     {
         $this->enfants = $enfants;
+        foreach($enfants as $enfant)
+            $enfant->setParent($this);
     
         return $this;
     }
@@ -257,11 +259,15 @@ class Groupe
         $members = array();
         $today   = new \Datetime();
 
-        foreach ($this->getAttributions() as $attribution) {
-            if ($attribution->getDateFin() == null || $attribution->getDateFin() > $today)
-                array_push($members, $attribution->getMembre());
+        if($this->getAttributions() != null)
+        {
+            foreach ($this->getAttributions() as $attribution) {
+                if ($attribution->getDateFin() == null || $attribution->getDateFin() > $today)
+                    array_push($members, $attribution->getMembre());
 
+            }
         }
+
 
         return $members;
 

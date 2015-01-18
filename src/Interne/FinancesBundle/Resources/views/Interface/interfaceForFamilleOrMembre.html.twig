@@ -151,7 +151,6 @@
                         </th>
                         <th colspan="2">Factures liée</th>
                         <th rowspan="2">Titre</th>
-                        <th rowspan="2">Remarque</th>
                         <th colspan="2">Montants</th>
                         <th rowspan="2" >Actions</th>
                     </tr>
@@ -180,7 +179,6 @@
                                     <td></td>
                                     <td><div class="ui orange label">En attente</div></td>
                                     <td>{{ creance.titre }}</td>
-                                    <td>{{ creance.remarque }}</td>
                                     <td>{{ creance.montantEmis|number_format(2, '.', ',') }}</td>
                                     <td>{{ creance.montantRecu|number_format(2, '.', ',') }}</td>
                                     <td>
@@ -212,7 +210,6 @@
                                         <td>N°{{ creance.facture.id }}</td>
                                         <td><div class="ui blue label">Ouverte</div></td>
                                         <td>{{ creance.titre }}</td>
-                                        <td>{{ creance.remarque }}</td>
                                         <td>{{ creance.montantEmis|number_format(2, '.', ',') }}</td>
                                         <td>{{ creance.montantRecu|number_format(2, '.', ',') }}</td>
                                         <td>
@@ -236,7 +233,6 @@
                                         <td>N°{{ creance.facture.id }}</td>
                                         <td><div class="ui green label">Payée</div></td>
                                         <td>{{ creance.titre }}</td>
-                                        <td>{{ creance.remarque }}</td>
                                         <td>{{ creance.montantEmis|number_format(2, '.', ',') }}</td>
                                         <td>{{ creance.montantRecu|number_format(2, '.', ',') }}</td>
                                         <td>

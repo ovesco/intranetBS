@@ -16,7 +16,7 @@ class FonctionType extends AbstractType
     {
         $builder
             ->add('nom','text')
-            //->add('abreviation','text')
+            ->add('abreviation','text')
         ;
     }
     

@@ -109,14 +109,14 @@ class Membre extends Personne
     /**
      * @var ArryCollection
      *
-     * @ORM\OneToMany(targetEntity="Interne\FinancesBundle\Entity\Creance",
+     * @ORM\OneToMany(targetEntity="Interne\FinancesBundle\Entity\CreanceToMembre",
      *                mappedBy="membre", cascade={"persist","remove"})
      */
     private $creances;
     /**
      * @var ArryCollection
      *
-     * @ORM\OneToMany(targetEntity="Interne\FinancesBundle\Entity\Facture",
+     * @ORM\OneToMany(targetEntity="Interne\FinancesBundle\Entity\FactureToMembre",
      *                mappedBy="membre", cascade={"persist","remove"})
      */
     private $factures;
@@ -131,7 +131,7 @@ class Membre extends Personne
      * @ORM\Column(name="envoi_facture", type="string", columnDefinition="ENUM('Famille', 'Membre')")
      *
      */
-    private $envoiFacture;
+    private $envoiFacture = 'Membre';
 
 
     public function __construct()

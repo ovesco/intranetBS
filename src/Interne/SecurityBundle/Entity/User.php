@@ -61,6 +61,10 @@ class User implements UserInterface, \Serializable
         $this->role 	= new ArrayCollection();
     }
 
+    public function setUsername($username){
+        $this->username = $username;
+    }
+
     /**
      * @inheritDoc
      */

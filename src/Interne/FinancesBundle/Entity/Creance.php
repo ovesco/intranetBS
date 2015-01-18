@@ -4,14 +4,15 @@ namespace Interne\FinancesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use AppBundle\Entity\Membre;
-use AppBundle\Entity\Famille;
-
 /**
- * Creance
+ * Class Creance
  *
  * @ORM\Table(name="finances_bundle_creances")
  * @ORM\Entity(repositoryClass="Interne\FinancesBundle\Entity\CreanceRepository")
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="discriminator", type="string")
+ * @ORM\DiscriminatorMap({"to_membre" = "CreanceToMembre", "to_famille" = "CreanceToFamille"})
+ *
  */
 class Creance
 {
@@ -24,89 +25,53 @@ class Creance
      */
     private $id;
 
-    /*
-     * =========== RELATIONS ===============
-     *
-     * Une créance peut avoir un seul propriétaire...soit un membre...soit une famille.
-     *
-     * Les créances peut également appartenir à une facture une fois qu'elle sont "facturée"
-     */
-
-    /**
-     * @var Membre
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Membre", inversedBy="creances")
-     * @ORM\JoinColumn(name="membre_id", referencedColumnName="id")
-     */
-    private $membre;
-
-    /**
-     * @var Famille
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Famille", inversedBy="creances")
-     * @ORM\JoinColumn(name="famille_id", referencedColumnName="id")
-     */
-    private $famille;
-
     /**
      * @var Facture
      *
      * @ORM\ManyToOne(targetEntity="Interne\FinancesBundle\Entity\Facture", inversedBy="creances")
      * @ORM\JoinColumn(name="facture_id", referencedColumnName="id")
      */
-    private $facture;
-
-    /*
-     * ========== VARIABLES =================
-     */
+    protected $facture;
 
     /**
      * @var string
      *
      * @ORM\Column(name="titre", type="string", length=255)
      */
-    private $titre;
+    protected $titre;
 
     /**
      * @var string
      *
      * @ORM\Column(name="remarque", type="text", nullable=true)
      */
-    private $remarque;
+    protected $remarque;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="dateCreation", type="date")
      */
-    private $dateCreation;
+    protected $dateCreation;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="datePayement", type="date", nullable=true)
-     */
-    private $datePayement;
 
     /**
      * @var float
      *
      * @ORM\Column(name="montantEmis", type="float")
      */
-    private $montantEmis;
+    protected $montantEmis;
 
     /**
      * @var float
      *
      * @ORM\Column(name="montantRecu", type="float", nullable=true)
      */
-    private $montantRecu;
+    protected $montantRecu;
 
     /*
      * ========== Fonctions =================
      */
-
-
 
 
     /**
@@ -189,26 +154,19 @@ class Creance
     }
 
     /**
-     * Set datePayement
+     *  Get datePayement
      *
-     * @param \DateTime $datePayement
-     * @return Creance
-     */
-    public function setDatePayement($datePayement)
-    {
-        $this->datePayement = $datePayement;
-
-        return $this;
-    }
-
-    /**
-     * Get datePayement
+     * Retourne la date de payement de la facture qui lui est associée.
+     * (null si la facture n'est pas encore facturée.)
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function getDatePayement()
     {
-        return $this->datePayement;
+        if($this->facture == null)
+            return null;
+        else
+            return $this->facture->getDatePayement();
     }
 
     /**
@@ -280,51 +238,9 @@ class Creance
         return $this->facture;
     }
 
-    /**
-     * Set membre
-     *
-     * @param Membre $membre
-     * @return Creance
-     */
-    public function setMembre($membre)
-    {
-        $this->membre = $membre;
 
-        return $this;
-    }
 
-    /**
-     * Get membre
-     *
-     * @return Membre
-     */
-    public function getMembre()
-    {
-        return $this->membre;
-    }
 
-    /**
-     * Set famille
-     *
-     * @param Famille $famille
-     * @return Creance
-     */
-    public function setFamille($famille)
-    {
-        $this->famille = $famille;
-
-        return $this;
-    }
-
-    /**
-     * Get famille
-     *
-     * @return Famille
-     */
-    public function getFamille()
-    {
-        return $this->famille;
-    }
 
     /*
      * Cette méthode regarde si la créance à une facture et si
@@ -363,22 +279,7 @@ class Creance
             return false;
     }
 
-    /*
-     * Cette fonction retourne le propriétaire de la créance.
-     * Ce ne peut être que un membre ou une famille.
-     */
-    /**
-     * Get owner
-     */
-    public function getOwner()
-    {
-        if($this->membre != null)
-            return $this->membre;
-        elseif($this->famille != null)
-            return $this->famille;
-        else
-            return null;
-    }
+
 
 
 }

@@ -45,13 +45,6 @@ class Rappel
     private $dateCreation;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="datePayement", type="date", nullable=true)
-     */
-    private $datePayement;
-
-    /**
      * @var float
      *
      * @ORM\Column(name="montantEmis", type="float", nullable=true)
@@ -169,26 +162,15 @@ class Rappel
     }
 
     /**
-     * Set datePayement
-     *
-     * @param \DateTime $datePayement
-     * @return Rappel
-     */
-    public function setDatePayement($datePayement)
-    {
-        $this->datePayement = $datePayement;
-
-        return $this;
-    }
-
-    /**
      * Get datePayement
+     *
+     * Retourne la date de payement de la facture qui lui est associée.
      *
      * @return \DateTime
      */
     public function getDatePayement()
     {
-        return $this->datePayement;
+        return $this->facture->getDatePayement();
     }
 
 }

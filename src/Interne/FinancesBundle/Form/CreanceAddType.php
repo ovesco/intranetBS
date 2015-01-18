@@ -43,12 +43,7 @@ class CreanceAddType extends AbstractType
                 array(  'required' => false,
                         'mapped' => false)
             )
-            ->add(
-                'idsMembre',
-                'hidden',
-                array(  'required' => false,
-                        'mapped' => false)
-            )
+            
 
             ;//fin de fonction
 

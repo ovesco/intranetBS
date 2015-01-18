@@ -21,7 +21,11 @@ class PayementSearchType extends AbstractType
             ->add('state','choice',array('label' => 'Lien avec facture ','required' => false,
                     'choices' => array( 'waiting' =>'En attente de validation',
                                         'not_found' =>'Facture inexistante',
-                                        'found_valid'=>'Validé')))
+                                        'found_valid'=>'Facture payée',
+                                        'found_lower_valid'=>'Facture payée avec montant inférieur',
+                                        'found_lower_new_facture'=>'Facture payée avec montant inférieur (et complément exigé)',
+                                        'found_upper'=>'Facture payée avec montant supérieur'
+                    )))
 
 
             /*

@@ -41,6 +41,12 @@ class Type
      */
     private $groupes;
 
+    /**
+     * @var boolean
+     * @ORM\Column(name="affichage_effectifs", type="boolean")
+     */
+    private $affichageEffectifs;
+
 
     /**
      * Get id
@@ -137,4 +143,28 @@ class Type
     {
         return $this->fonctionChef;
     }
+
+    /**
+     * Set affichageEffectifs
+     *
+     * @param boolean $affichageEffectifs
+     * @return Groupe
+     */
+    public function setAffichageEffectifs($affichageEffectifs)
+    {
+        $this->affichageEffectifs = $affichageEffectifs;
+
+        return $this;
+    }
+
+    /**
+     * Is affichageEffectifs
+     *
+     * @return boolean
+     */
+    public function isAffichageEffectifs()
+    {
+        return $this->affichageEffectifs;
+    }
+
 }
