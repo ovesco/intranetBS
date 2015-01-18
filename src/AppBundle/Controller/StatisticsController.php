@@ -2,14 +2,10 @@
 
 namespace AppBundle\Controller;
 
-use Interne\FinancesBundle\Entity\Facture;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Doctrine\Common\Collections\ArrayCollection;
-use Interne\FinancesBundle\Entity\FactureRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use AppBundle\Entity\Membre;
 use AppBundle\Entity\Groupe;
 
 
@@ -73,7 +69,8 @@ class StatisticsController extends Controller
                 return $financesController->getMontantEnAttente($options);
             case 'effectifs_pie_charts':
                 return $this->getEffectifsPieCharts();
-
+            default:
+                return $this->getEffectifsPieCharts();
         }
 
     }
@@ -113,6 +110,7 @@ class StatisticsController extends Controller
 
             $color = 'rgba('.mt_rand(0,255).','.mt_rand(0,255).','.mt_rand(0,255).', 1)';
 
+            /** @var Groupe $enfant */
             foreach($groupeParent->getEnfants() as $enfant) {
                 $data = array();
                 $data['name'] = $enfant->getNom();
