@@ -35,6 +35,7 @@ class AppKernel extends Kernel
 
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+            new FOS\ElasticaBundle\FOSElasticaBundle(),
             new Interne\FinancesBundle\InterneFinancesBundle(),
             new Interne\SecurityBundle\InterneSecurityBundle(),
         );

@@ -16,6 +16,15 @@ Recherche
                     <input type="text" id="pattern" />
                 </form>
 
+                <h2>Resultats</h2>
+
+                <div id="results">
+                    <ul>
+                        {% for result in results %}
+                        <li>{{ result.prenom }} {{ result.nom }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -24,4 +33,31 @@ Recherche
 
 
 {% block js %}
+
+    <script type="text/javascript">
+        $('#pattern').change(function() {
+            var pattern = $('#pattern').val();
+
+            $.ajax({
+                url: Routing.generate('interne_search_ajax_pattern', {pattern: pattern}),
+                type: 'POST',
+                success: function (data) {
+
+                    var html = '';
+
+                    if (data.length <= 0)
+                        html = 'No results';
+
+                    for (var i = 0; i < data.length; i++)
+                        html += '<div class="item">' + data[i].prenom + data[i].nom + '</div>';
+
+                    $('#results').html(html);
+                },
+
+                error: function (data) {
+                    alert(JSON.stringify(data));
+                }
+            });
+        });
+    </script>
 {% endblock %}
