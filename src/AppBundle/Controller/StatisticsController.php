@@ -29,7 +29,7 @@ class StatisticsController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('AppBundle:Statistics:panel.html.twig');
+        return $this->render('AppBundle:statistics:panel.html.twig');
     }
 
 

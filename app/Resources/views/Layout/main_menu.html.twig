@@ -79,9 +79,9 @@
 <div class="item">
     <div class="ui small  inverted header">Unité(s)</div>
     <div class="menu">
-
-        <a class="item" >Mon unité (todo)</a>
-
+        {%  for group in groups %}
+            <a class="item" href="{{ path('interne_voir_groupe', {'groupe' : group.id }) }}">{{ group.nom }}</a>
+        {% endfor %}
     </div>
 </div>
 

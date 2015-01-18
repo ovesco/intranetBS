@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Attribution;
+use AppBundle\Entity\Membre;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -19,6 +21,25 @@ class LayoutController extends Controller
      */
     public function mainMenuGenerateAction()
     {
-        return $this->render('Layout/main_menu.html.twig');
+
+        /** @var Membre $membre */
+        $membre = $this->getUser()->getMembre();
+
+        /** @var Attribution[] $attributions */
+        $attributions = $membre->getActiveAttributions();
+
+        /** @var Groupe[] $groups */
+        $groups = array();
+
+        /** @var Attribution $attribution */
+        foreach($attributions as $attribution) {
+            $groups[] = $attribution->getGroupe();
+        }
+
+
+
+        return $this->render('Layout/main_menu.html.twig', array(
+            'groups' => $groups
+        ));
     }
 }
