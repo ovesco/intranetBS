@@ -1,0 +1,20 @@
+
+
+<table class="ui table" id="effectifs-table">
+    <thead>
+    <tr>
+        <th>Nom</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for famille in familles %}
+        <tr data-id="{{ famille.id }}">
+            <td>{{ famille.nom|capitalize }}</td>
+            <td>
+                <a href="{{ path('interne_voir_famille', {famille:famille.id}) }}" class="circular ui mini icon blue button popupable" data-content="Voir la famille"><i class="share icon"></i></a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

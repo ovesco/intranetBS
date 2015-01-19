@@ -19,11 +19,13 @@ Recherche
                 <h2>Resultats</h2>
 
                 <div id="results">
-                    <ul>
-                        {% for result in results %}
-                        <li>{{ result.prenom }} {{ result.nom }}</li>
-                        {% endfor %}
-                    </ul>
+
+                    <h3>Membres</h3>
+                    <div id="membres" class="ui segment"></div>
+                    <h3>Familles</h3>
+                    <div id="familles" class="ui segment"></div>
+                    <h3>Groupes</h3>
+                    <div id="groupes" class="ui segment"></div>
                 </div>
             </div>
         </div>
@@ -35,23 +37,38 @@ Recherche
 {% block js %}
 
     <script type="text/javascript">
-        $('#pattern').change(function() {
-            var pattern = $('#pattern').val();
+        $('#pattern').on('input', function() {
+            var pattern = '*' + $('#pattern').val() + '*';
 
             $.ajax({
-                url: Routing.generate('interne_search_ajax_pattern', {pattern: pattern}),
-                type: 'POST',
+                url: Routing.generate('interne_search_membres_ajax', {pattern:pattern}),
+                type: 'GET',
                 success: function (data) {
+                    $('#results > #membres').html(data);
+                },
 
-                    var html = '';
+                error: function (data) {
+                    alert(JSON.stringify(data));
+                }
+            });
 
-                    if (data.length <= 0)
-                        html = 'No results';
+            $.ajax({
+                url: Routing.generate('interne_search_familles_ajax', {pattern:pattern}),
+                type: 'GET',
+                success: function (data) {
+                    $('#results > #familles').html(data);
+                },
 
-                    for (var i = 0; i < data.length; i++)
-                        html += '<div class="item">' + data[i].prenom + data[i].nom + '</div>';
+                error: function (data) {
+                    alert(JSON.stringify(data));
+                }
+            });
 
-                    $('#results').html(html);
+            $.ajax({
+                url: Routing.generate('interne_search_groupes_ajax', {pattern:pattern}),
+                type: 'GET',
+                success: function (data) {
+                    $('#results > #groupes').html(data);
                 },
 
                 error: function (data) {

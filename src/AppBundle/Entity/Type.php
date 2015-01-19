@@ -167,4 +167,10 @@ class Type
         return $this->affichageEffectifs;
     }
 
+    /**
+     * @return String
+     */
+    public function __toString() {
+        return $this->getNom();
+    }
 }

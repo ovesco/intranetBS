@@ -138,4 +138,14 @@ class Fonction
     {
         return $this->attributions;
     }
+
+
+    /**
+     *
+     * @return String
+     */
+    public function __toString()
+    {
+        return $this->getNom();
+    }
 }
