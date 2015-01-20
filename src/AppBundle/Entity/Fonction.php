@@ -32,7 +32,7 @@ class Fonction
     /**
      * @var string
      *
-     * @ORM\Column(name="abreviation", type="string", length=255)
+     * @ORM\Column(name="abreviation", type="string", length=255, nullable=true)
      */
     private $abreviation;
 
@@ -41,7 +41,6 @@ class Fonction
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Attribution", mappedBy="fonction")
      */
     private $attributions;
-
 
     /**
      * Get id
@@ -101,9 +100,11 @@ class Fonction
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct($nom = null, $abreviation = null)
     {
         $this->attribution = new ArrayCollection();
+        $this->nom = $nom;
+        $this->abreviation = $abreviation;
     }
 
     /**

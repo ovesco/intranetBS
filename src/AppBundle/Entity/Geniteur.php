@@ -23,6 +23,14 @@ class Geniteur extends Personne
      */
     private $id;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nom", type="string", length=255, nullable=true)
+     * @Assert\NotBlank()
+     * @Assert\Length(min = "2")
+     */
+    private $nom;
     
     /**
      * @var string
@@ -63,5 +71,35 @@ class Geniteur extends Personne
     public function getProfession()
     {
         return $this->profession;
+    }
+
+    /**
+     * Set nom
+     *
+     * @param string $nom
+     * @return Famille
+     */
+    public function setNom($nom)
+    {
+        $this->nom = ucwords($nom);
+
+        return $this;
+    }
+
+    /**
+     * Get nom
+     *
+     * @return string
+     */
+    public function getNom()
+    {
+        if($this->nom == null)
+        {
+
+            //TODO one to one avec famille pour récupérer le nom
+            return null;
+        }
+        else
+            return ucwords($this->nom);
     }
 }

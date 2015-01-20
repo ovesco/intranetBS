@@ -22,12 +22,10 @@ class Adresse
      */
     private $id;
 
-
-    /*
+    /**
      * Cette variable sert à désactiver une adresse lorsqu'on a des retours parce que
      * l'adresse n'est plus valide.
-     */
-    /**
+     *
      *
      * @var boolean $validity
      *

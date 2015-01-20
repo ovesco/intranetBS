@@ -41,29 +41,14 @@ class Famille
     private $adresse;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="telephone", type="string", nullable=true)
-     */
-    protected $telephone;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", nullable=true)
-     */
-    protected $email;
-
-
-    /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Geniteur", cascade={"persist", "remove"}, fetch="EAGER")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Geniteur", mappedBy="famille", cascade={"persist", "remove"}, fetch="EAGER")
      * @ORM\JoinColumn(name="pere_id", referencedColumnName="id")
      */
     private $pere;
 
     /**
      * 
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Geniteur", cascade={"persist", "remove"}, fetch="EAGER")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Geniteur", mappedBy="famille", cascade={"persist", "remove"}, fetch="EAGER")
      * @ORM\JoinColumn(name="mere_id", referencedColumnName="id")
      */
     private $mere;
@@ -309,52 +294,6 @@ class Famille
      */
     public function __toString() {
         return "Les " . $this->getNom() . " de " . $this->getAdresse()->getLocalite(); // . " (" . sizeof($this->getMembres()) . ")";
-    }
-
-    /**
-     * Set telephone
-     *
-     * @param string $telephone
-     * @return Famille
-     */
-    public function setTelephone($telephone)
-    {
-        $this->telephone = $telephone;
-
-        return $this;
-    }
-
-    /**
-     * Get telephone
-     *
-     * @return string 
-     */
-    public function getTelephone()
-    {
-        return $this->telephone;
-    }
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     * @return Famille
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string 
-     */
-    public function getEmail()
-    {
-        return $this->email;
     }
 
     /**

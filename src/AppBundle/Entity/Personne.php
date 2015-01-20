@@ -31,75 +31,12 @@ abstract class Personne
      */
     private $adresse;
 
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="telephone", type="string", length=255, nullable=true)
-     */
-    private $telephone;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=255, nullable=true)
-     */
-    private $email;
-
     /**
      * @var string
      *
      * @ORM\Column(name="iban", type="string", length=255, nullable=true)
      */
     private $iban;
-
-
-
-    /**
-     * Set telephone
-     *
-     * @param string $telephone
-     * @return Personne
-     */
-    public function setTelephone($telephone)
-    {
-        $this->telephone = $telephone;
-
-        return $this;
-    }
-
-    /**
-     * Get telephone
-     *
-     * @return string 
-     */
-    public function getTelephone()
-    {
-        return $this->telephone;
-    }
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     * @return Personne
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string 
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
 
     /**
      * Set prenom
