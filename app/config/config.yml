@@ -115,7 +115,7 @@ swiftmailer:
 # Elasticsearch Configuration
 fos_elastica:
     clients:
-        default: { host: localhost, port: 9200 }
+        default: { host: "%database_host%", port: "%database_port%" }
     indexes:
         search:
             types:
