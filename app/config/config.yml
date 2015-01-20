@@ -111,3 +111,49 @@ swiftmailer:
         type: file
         path: "%kernel.cache_dir%/swiftmailer/spool"
     delivery_address:  dev.sauvabelin@gmail.com # Option de Dév. qui permet de réaiguiller tout les mails sur cette adresse.
+
+# Elasticsearch Configuration
+fos_elastica:
+    clients:
+        default: { host: localhost, port: 9200 }
+    indexes:
+        search:
+            types:
+                membre:
+                    mappings:
+                        prenom: ~
+                        famille: ~
+                        naissance: ~
+                        remarques: ~
+                        numeroBs: ~
+                        sexe: ~
+                        attributions:
+                            type: "nested"
+                            properties:
+                                groupe: ~
+                                fonction: ~
+                    persistence:
+                        driver: orm
+                        model: AppBundle\Entity\Membre
+                        provider: ~
+                        listener: ~
+                        finder: ~
+                famille:
+                    mappings:
+                        nom: ~
+                    persistence:
+                        driver: orm
+                        model: AppBundle\Entity\Famille
+                        provider: ~
+                        listener: ~
+                        finder: ~
+                groupe:
+                    mappings:
+                        nom: ~
+                        type: ~
+                    persistence:
+                        driver: orm
+                        model: AppBundle\Entity\Groupe
+                        provider: ~
+                        listener: ~
+                        finder: ~

@@ -6,8 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use AppBundle\Entity\Geniteur;
-
 //FinancesBundle
 use Interne\FinancesBundle\Entity\Creance;
 use Interne\FinancesBundle\Entity\Facture;
@@ -75,7 +73,7 @@ class Famille
      * ====== FinancesBundle =======
      */
     /**
-     * @var ArryCollection
+     * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Interne\FinancesBundle\Entity\FactureToFamille",
      *                mappedBy="famille", cascade={"persist"})
@@ -83,7 +81,7 @@ class Famille
     private $factures;
 
     /**
-     * @var ArryCollection
+     * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Interne\FinancesBundle\Entity\CreanceToFamille",
      *                mappedBy="famille", cascade={"persist"})
@@ -256,6 +254,10 @@ class Famille
             'pere' => ($this->getPere() == null) ? null : $this->getPere()->getAdresse()
         );
 
+        /**
+         * @var int $k
+         * @var Adresse $adresse
+         */
         foreach($adresses as $k => $adresse) {
 
             if(!is_null($adresse)) {
@@ -293,7 +295,16 @@ class Famille
      * @return string
      */
     public function __toString() {
-        return "Les " . $this->getNom() . " de " . $this->getAdresse()->getLocalite(); // . " (" . sizeof($this->getMembres()) . ")";
+
+        $string = "Les " . $this->getNom();
+
+        if ($this->getAdresse() != NULL)
+            $string .= " de " . $this->getAdresse()->getLocalite();
+
+        // . " (" . sizeof($this->getMembres()) . ")";
+
+        return $string;
+
     }
 
     /**

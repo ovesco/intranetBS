@@ -188,4 +188,5 @@ class Attribution
     {
         return $this->fonction;
     }
+
 }

@@ -41,21 +41,18 @@
                             <h1>{{ groupe.nom|capitalize }}</h1>
                             <h3>{{ groupe.type.nom|capitalize }}</h3>
 
-
-                                <div class="ui circular icon top left pointing dropdown mini blue button">
-                                    <i class="external link icon"></i>
-                                    <div class="menu">
-                                        <div class="header">Exporter</div>
-                                        <div class="item"><i class="file pdf outline icon"></i> Exporter en PDF</div>
-                                        <div class="item"><i class="file excel outline icon"></i> Exporter en Excel</div>
-                                        <div class="item"><i class="grid layout icon"></i> Génerer les étiquettes</div>
-                                    </div>
+                            <div class="ui circular icon top left pointing dropdown mini blue button">
+                                <i class="external link icon"></i>
+                                <div class="menu">
+                                    <div class="header">Exporter</div>
+                                    <div class="item"><i class="file pdf outline icon"></i> Exporter en PDF</div>
+                                    <div class="item"><i class="file excel outline icon"></i> Exporter en Excel</div>
+                                    <div class="item"><i class="grid layout icon"></i> Génerer les étiquettes</div>
                                 </div>
-
+                            </div>
 
 
                             <div class="ui divided list">
-
 
                                 <a class="item">
                                     <div class="right floated ui blue circular label">{{ groupe.members|length }}</div>
@@ -82,9 +79,7 @@
                             </div>
                         </div>
 
-
                     </div>
-
 
 
                     <div class="ui vertical segment">
@@ -99,9 +94,7 @@
 
                     </div>
 
-
-
-                </div></div>
+                </div>
             </div>
         </div>
     </div>
@@ -113,30 +106,9 @@
 {% macro effectifs(groupe,listing) %}
 
     <h3>Effectifs détaillés: {{ groupe.nom|capitalize }} ({{ groupe.type.nom|capitalize }})</h3>
-    <table class="ui table" id="effectifs-table">
-        <thead>
-        <tr>
-            <th>Nom</th>
-            <th>Fonction</th>
-            <th>Naissance</th>
-            <th>Numéro BS</th>
-            <th>Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for membre in groupe.members %}
-            <tr data-id="{{ membre.id }}">
-                <td>{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</td>
-                <td>{{ membre.activeAttribution.fonction.nom }}</td>
-                <td>{{ membre.naissance|date('d.m.Y') }}</td>
-                <td>{{ membre.numeroBs }}</td>
-                <td>
-                    <a href="{{ path('interne_voir_membre', {membre:membre.id}) }}" class="circular ui mini icon blue button popupable" data-content="Voir le membre"><i class="share icon"></i></a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+
+    {% set membres = groupe.members %}
+    {% include ':Membre:liste.html.twig' %}
 
     <div class="ui floating dropdown labeled icon green button">
         <i class="list icon"></i>

@@ -1,0 +1,22 @@
+
+
+<table class="ui table" id="effectifs-table">
+    <thead>
+    <tr>
+        <th>Nom</th>
+        <th>Type</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for groupe in groupes %}
+        <tr data-id="{{ groupe.id }}">
+            <td>{{ groupe.nom|capitalize }}</td>
+            <td>{{ groupe.type|capitalize }}</td>
+            <td>
+                <a href="{{ path('interne_voir_groupe', {groupe:groupe.id}) }}" class="circular ui mini icon blue button popupable" data-content="Voir le groupe"><i class="share icon"></i></a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

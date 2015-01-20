@@ -26,7 +26,7 @@
 
         </a>
 
-        <a class="item" href="/globals/site.html">
+        <a class="item">
             Réinitialiser
         </a>
 
@@ -64,7 +64,7 @@
             Ajouter un membre
         </a>
 
-        <a class="item" href="#">
+        <a class="item" href="{{ path('interne_search') }}">
             Rechercher
         </a>
 
@@ -79,9 +79,9 @@
 <div class="item">
     <div class="ui small  inverted header">Unité(s)</div>
     <div class="menu">
-
-        <a class="item" >Mon unité (todo)</a>
-
+        {%  for group in groups %}
+            <a class="item" href="{{ path('interne_voir_groupe', {'groupe' : group.id }) }}">{{ group.nom }}</a>
+        {% endfor %}
     </div>
 </div>
 

@@ -4,8 +4,6 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use AppBundle\Entity\Type;
-
 /**
  * Groupe
  *
@@ -137,6 +135,7 @@ class Groupe
      */
     public function getParentsRecursive() {
 
+        /** @var Geniteur $parents */
         $parents = array(0 => $this);
         $i       = 0;
 
@@ -367,5 +366,13 @@ class Groupe
     public function isActive()
     {
         return $this->active;
+    }
+
+    /**
+     * @return String
+     */
+    public function __toString()
+    {
+        return $this->getNom();
     }
 }

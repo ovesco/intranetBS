@@ -1,0 +1,80 @@
+{% extends 'layout.html.twig' %}
+
+{% block titre %}
+Recherche
+{% endblock %}
+
+
+{% block content %}
+<div class="ui page grid">
+    <div class="row">
+        <div class="column">
+            <div class="ui segment">
+
+                <form>
+                    <label for="pattern">Rechercher : </label>
+                    <input type="text" id="pattern" />
+                </form>
+
+                <h2>Resultats</h2>
+
+                <div id="results">
+
+                    <h3>Membres</h3>
+                    <div id="membres" class="ui segment"></div>
+                    <h3>Familles</h3>
+                    <div id="familles" class="ui segment"></div>
+                    <h3>Groupes</h3>
+                    <div id="groupes" class="ui segment"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block js %}
+
+    <script type="text/javascript">
+        $('#pattern').on('input', function() {
+            var pattern = '*' + $('#pattern').val() + '*';
+
+            $.ajax({
+                url: Routing.generate('interne_search_membres_ajax', {pattern:pattern}),
+                type: 'GET',
+                success: function (data) {
+                    $('#results > #membres').html(data);
+                },
+
+                error: function (data) {
+                    alert(JSON.stringify(data));
+                }
+            });
+
+            $.ajax({
+                url: Routing.generate('interne_search_familles_ajax', {pattern:pattern}),
+                type: 'GET',
+                success: function (data) {
+                    $('#results > #familles').html(data);
+                },
+
+                error: function (data) {
+                    alert(JSON.stringify(data));
+                }
+            });
+
+            $.ajax({
+                url: Routing.generate('interne_search_groupes_ajax', {pattern:pattern}),
+                type: 'GET',
+                success: function (data) {
+                    $('#results > #groupes').html(data);
+                },
+
+                error: function (data) {
+                    alert(JSON.stringify(data));
+                }
+            });
+        });
+    </script>
+{% endblock %}
