@@ -224,6 +224,8 @@ class PopulateCommand extends ContainerAwareCommand
             $em->persist($role);
             $em->flush();
 
+            echo 'access for:'.$user->getUsername().' created!',PHP_EOL;
+
 
 
         }
