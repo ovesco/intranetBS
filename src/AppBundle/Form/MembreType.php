@@ -61,6 +61,7 @@ class MembreType extends AbstractType
                     'required' => false
                 )
             )
+            /*
 
             ->add(
                 'telephone',
@@ -77,7 +78,7 @@ class MembreType extends AbstractType
                     'required' => false
                 )
             )
-
+*/
             ->add(
                 'remarques',
                 'textarea',

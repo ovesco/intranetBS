@@ -16,8 +16,8 @@ class GeniteurType extends AbstractType
         $builder
             ->add('prenom', 'text', array('required' => false, 'label' => 'Prénom'))
             ->add('profession', 'text', array('required' => false, 'label' => 'Profession'))
-            ->add('telephone', 'text', array( 'label' => 'Téléphone'))
-            ->add('email', 'text', array('label' => 'E-Mail'))
+            //->add('telephone', 'text', array( 'label' => 'Téléphone'))
+            //->add('email', 'text', array('label' => 'E-Mail'))
             ->add('adresse', new AdresseType())
         ;
     }
