@@ -39,7 +39,6 @@ class Geniteur extends Personne
      */
     private $profession;
 
-
     /**
      * Get id
      *

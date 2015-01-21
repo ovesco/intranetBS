@@ -1,5 +1,4 @@
 
-
 <table class="ui table" id="effectifs-table">
     <thead>
     <tr>
@@ -12,7 +11,7 @@
     </tr>
     </thead>
     <tbody>
-    {% for membre in membres %}
+    {% for membre in entityArray %}
         <tr data-id="{{ membre.id }}">
             <td>{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</td>
             <td>{{ membre.activeAttribution.fonction.nom }}</td>

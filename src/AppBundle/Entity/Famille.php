@@ -39,15 +39,13 @@ class Famille
     private $adresse;
 
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Geniteur", mappedBy="famille", cascade={"persist", "remove"}, fetch="EAGER")
-     * @ORM\JoinColumn(name="pere_id", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Geniteur", cascade={"persist", "remove"}, fetch="EAGER")
      */
     private $pere;
 
     /**
      * 
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Geniteur", mappedBy="famille", cascade={"persist", "remove"}, fetch="EAGER")
-     * @ORM\JoinColumn(name="mere_id", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Geniteur", cascade={"persist", "remove"}, fetch="EAGER")
      */
     private $mere;
 

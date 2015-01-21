@@ -65,8 +65,12 @@
         </div>
 
         <div class="center-section">
-            <div class="info">
-                <p>Message d'information</p>
+            <div id="layout-search" class="ui category search">
+                <div class="ui small fluid icon input">
+                    <input id="layout-search-input" class="prompt" type="text" placeholder="Rechercher...">
+                    <i class="search icon"></i>
+                </div>
+                <div class="results"></div>
             </div>
         </div>
 
@@ -100,10 +104,14 @@
 <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
 
 
-{% javascripts
-    '@AppBundle/Resources/public/js/alwaysIncluded/*'
-    '@AppBundle/Resources/public/js/layout.js'
+{% javascripts '@AppBundle/Resources/public/js/alwaysIncluded/*'
+    output="js/main.js"
+%}
+<script src="{{ asset_url }}"></script>
+{% endjavascripts %}
 
+
+{% javascripts '@AppBundle/Resources/public/js/layout.js'
     output="js/main.js"
 %}
     <script src="{{ asset_url }}"></script>
@@ -113,6 +121,22 @@
 
 {% block js %}
     <script type="text/javascript">
+
+        /*
+         * On met en place le petit script tout simple de recherche
+         */
+        var defaultSearchRoute = Routing.generate('interne_search_from_menu', {pattern: "" });
+
+        $('#layout-search')
+                .search({
+                    apiSettings: {
+                        url: defaultSearchRoute + "/{query}"
+                    },
+                    type: 'category'
+                })
+        ;
+
+
         /*
          * Pour chaque flashbag contenu, sachant qu'ils ne contiennent que des alertes et des messages, on génère
          * une alerte correspondante

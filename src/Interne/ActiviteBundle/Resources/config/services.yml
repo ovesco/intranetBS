@@ -1,0 +1,11 @@
+services:
+
+    depensesCategories:
+            class: Interne\ActiviteBundle\Twig\DepenseCategorieFilter
+            tags:
+                - { name: twig.extension }
+
+    depensesCout:
+                class: Interne\ActiviteBundle\Twig\DepensesCoutFilter
+                tags:
+                    - { name: twig.extension }

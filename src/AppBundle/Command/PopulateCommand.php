@@ -119,8 +119,6 @@ class PopulateCommand extends ContainerAwareCommand
                 $famille->setNom($this->getNom());
                 $famille->setAdresse($this->getRandomAdresse(true));
                 $famille->setValidity(mt_rand(0,2));
-                $famille->setTelephone($this->getPhone(true));
-                $famille->setEmail($this->getEmail(true));
 
 
                 //Ajout des parents
@@ -410,11 +408,9 @@ class PopulateCommand extends ContainerAwareCommand
         $geniteur = new Geniteur();
 
         $geniteur->setPrenom($this->getPrenom($sexe));
-        $geniteur->setEmail($this->getEmail(true));
         $geniteur->getProfession($this->getProfession(true));
         $geniteur->setAdresse($this->getRandomAdresse(true));
         $geniteur->setSexe($sexe);
-        $geniteur->setTelephone($this->getPhone(true));
         $geniteur->setIban($this->getIban(true));
 
         return $geniteur;
@@ -433,12 +429,10 @@ class PopulateCommand extends ContainerAwareCommand
 
         $membre->setSexe($sexe);
         $membre->setPrenom($this->getPrenom($sexe));
-        $membre->setEmail($this->getEmail(true));
         $membre->setAdresse($this->getRandomAdresse(true));
         $membre->setNaissance($this->getRandomDateNaissance());
         $membre->setInscription($this->getRandomInscription());
         $membre->setValidity(mt_rand(0,2));
-        $membre->setTelephone($this->getPhone(true));
         $membre->setNumeroAvs(mt_rand(111111111,999999999));
         $membre->setNumeroBs(mt_rand(0, 99999));
         $membre->setStatut($this->getStatut());

@@ -28,6 +28,11 @@ services:
         arguments:
             - @doctrine.orm.entity_manager
 
+    jsonParser:
+        class: AppBundle\Utils\Data\JsonParser
+        arguments:
+            - @router
+
     pdf:
         class: AppBundle\Utils\Export\Pdf
 

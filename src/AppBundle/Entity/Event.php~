@@ -1,0 +1,169 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Event
+ *
+ * @ORM\Table(name="app_events")
+ * @ORM\Entity
+ */
+class Event
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string $className
+     *
+     * @ORM\Column(name="className", type="string")
+     */
+    private $className;
+
+    /**
+     * @var string $eventKey
+     *
+     * @ORM\Column(name="eventKey", type="string")
+     */
+    private $key;
+
+    /**
+     *
+     * @var Membre $throwerMembre
+     *
+     * @ORM\OneToOne(targetEntity="Membre")
+     */
+    private $throwerMembre;
+
+    /**
+     *
+     * @var Membre $concernedMembre
+     *
+     * @ORM\OneToOne(targetEntity="Membre")
+     */
+    private $concernedMembre;
+
+    /**
+     * @var \Datetime $dateCreation
+     *
+     * @ORM\Column(name="dateCreation", type="datetime")
+     */
+    private $dateCreation;
+
+    /**
+     * @var \Datetime $datePeremption
+     *
+     * @ORM\Column(name="datePeremption", type="datetime")
+     */
+    private $datePeremption;
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     * @return Event
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreation
+     *
+     * @return \DateTime 
+     */
+    public function getDateCreation()
+    {
+        return $this->dateCreation;
+    }
+
+    /**
+     * Set datePeremption
+     *
+     * @param \DateTime $datePeremption
+     * @return Event
+     */
+    public function setDatePeremption($datePeremption)
+    {
+        $this->datePeremption = $datePeremption;
+
+        return $this;
+    }
+
+    /**
+     * Get datePeremption
+     *
+     * @return \DateTime 
+     */
+    public function getDatePeremption()
+    {
+        return $this->datePeremption;
+    }
+
+    /**
+     * Set key
+     *
+     * @param string $key
+     * @return Event
+     */
+    public function setKey($key)
+    {
+        $this->key = $key;
+
+        return $this;
+    }
+
+    /**
+     * Get key
+     *
+     * @return string 
+     */
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    /**
+     * Set className
+     *
+     * @param string $className
+     * @return Event
+     */
+    public function setClassName($className)
+    {
+        $this->className = $className;
+
+        return $this;
+    }
+
+    /**
+     * Get className
+     *
+     * @return string 
+     */
+    public function getClassName()
+    {
+        return $this->className;
+    }
+}
