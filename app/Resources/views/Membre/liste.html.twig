@@ -1,0 +1,27 @@
+
+<table class="ui table" id="effectifs-table">
+    <thead>
+    <tr>
+        <th>Nom</th>
+        <th>Fonction</th>
+        <th>Groupe</th>
+        <th>Naissance</th>
+        <th>Numéro BS</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for membre in membres %}
+        <tr data-id="{{ membre.id }}">
+            <td>{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</td>
+            <td>{{ membre.activeAttribution.fonction.nom }}</td>
+            <td>{{ membre.activeAttribution.groupe.nom }}</td>
+            <td>{{ membre.naissance|date('d.m.Y') }}</td>
+            <td>{{ membre.numeroBs }}</td>
+            <td>
+                <a href="{{ path('interne_voir_membre', {membre:membre.id}) }}" class="circular ui mini icon blue button popupable" data-content="Voir le membre"><i class="share icon"></i></a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
