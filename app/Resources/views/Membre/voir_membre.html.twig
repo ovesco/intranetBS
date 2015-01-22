@@ -100,6 +100,12 @@
 
                                             </tbody>
                                         </table>
+
+                                        <div class="ui segment">
+                                            <h4>Attributions actuel</h4>
+                                            {% include "AppBundle:Attribution:listeAttributionActuel.html.twig" with {'attributions':membre.activeAttributions} %}
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -109,6 +115,8 @@
                                         <div class="ui grid">
                                             <div class="row">
                                                 <div class="six wide column">
+
+                                                    <a href="{{ path('interne_voir_famille', {famille:membre.famille.id}) }}">Voir la famille {{ membre.nom|capitalize }}</a>
 
 
                                                         {% include "AppBundle:Contact:show.html.twig" with {'contact':membre.famille.contact} %}
@@ -202,30 +210,8 @@
                                     <div class="row">
                                         <div class="column">
                                             <h4>Attributions</h4>
-                                            <table class="ui table sortable-table">
-                                                <thead>
-                                                    <tr>
-                                                        <th data-sort="string">Fonction</th>
-                                                        <th data-sort="string">Unité</th>
-                                                        <th data-sort="int">Début</th>
-                                                        <th data-sort="int">Fin</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {% for attribution in membre.attributions %}
-                                                        <tr>
-                                                            <td>{{ attribution.fonction.nom }}</td>
-                                                            <td><a href="{{ path('interne_voir_groupe', {groupe:attribution.groupe.id}) }}">{{ attribution.groupe.nom }}</a></td>
-                                                            <td>{{ attribution.dateDebut|date('d.m.Y') }}</td>
-                                                            <td>{{ attribution.dateFin|date('d.m.Y') }}</td>
-                                                            <td>
-                                                                <button href="#" class="circular ui mini icon red button" onclick="removeAttributionOrDistinction(this, {{ membre.id }}, 'Attribution', {{ attribution.id }});"><i class="remove icon"></i></button>
-                                                            </td>
-                                                        </tr>
-                                                    {% endfor %}
-                                                </tbody>
-                                            </table>
+                                            {% include "AppBundle:Attribution:listeAttribution.html.twig" with {'attributions': membre.attributions } %}
+
                                         </div>
                                     </div>
                                 </div>

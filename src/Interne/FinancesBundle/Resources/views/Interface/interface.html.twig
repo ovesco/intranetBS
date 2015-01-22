@@ -50,6 +50,7 @@
 
             {% set patterns = [
                 {'statut':'<div class="ui label green">Payée</div>','equal':'payee'},
+                {'statut':'<div class="ui label blue">Ouverte</div>','equal':'ouverte'},
                 {'id':'N°[data]'}
                                 ] %}
 
@@ -74,7 +75,8 @@
 
             {% set actions = [['voir','Afficher','voir_creance']] %}
 
-            {% set patterns = [ {'facture.id':'N°[data]'}            ] %}
+            {% set patterns = [ {'facture.id':'N°[data]','diff':''},
+                                {'facture.id':'<div class="ui label orange">En attente</div>','equal':''},] %}
 
 
             {% set filters = [

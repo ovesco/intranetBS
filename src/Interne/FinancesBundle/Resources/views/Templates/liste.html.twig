@@ -54,15 +54,19 @@
                             {% set applyPattern = true %}
 
                             {% if pattern['equal']  is defined %}
-                                {% if pattern['equal'] !=  attribute(item, value)%}
+                                {% if pattern['equal'] !=  dataValue%}
                                     {% set applyPattern = false %}
                                 {% endif %}
                             {% elseif pattern['inf']  is defined %}
-                                {% if pattern['inf'] <=  attribute(item, value)%}
+                                {% if pattern['inf'] <=  dataValue%}
                                     {% set applyPattern = false %}
                                 {% endif %}
                             {% elseif pattern['sup']  is defined %}
-                                {% if pattern['sup'] >=  attribute(item, value)%}
+                                {% if pattern['sup'] >=  dataValue%}
+                                    {% set applyPattern = false %}
+                                {% endif %}
+                            {% elseif pattern['diff']  is defined %}
+                                {% if pattern['diff'] ==  dataValue%}
                                     {% set applyPattern = false %}
                                 {% endif %}
                             {% endif %}
