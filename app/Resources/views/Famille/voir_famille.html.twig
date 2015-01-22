@@ -50,7 +50,20 @@
                                 <div class="ui grid">
 
                                     <div class="eight wide column">
-                                        {% include "AppBundle:Contact:showWithForm.html.twig" with {'contact':familleForm.contact} %}
+
+                                        <div class="ui segment">
+
+                                            {% include "AppBundle:CibleEnvoi:cibleEnvoi.html.twig" with
+                                            {'adresseExpedition':famille.adresseExpedition,
+                                            'listeEmailsExpedition':famille.listeEmailsExpedition} %}
+
+                                        </div>
+                                        <div class="ui segment">
+                                            {% include "AppBundle:Contact:showWithForm.html.twig" with {'contact':familleForm.contact} %}
+                                        </div>
+
+
+
                                     </div>
                                 </div>
                                 <h4>Membres aux scouts</h4>

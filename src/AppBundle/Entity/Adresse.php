@@ -22,6 +22,14 @@ class Adresse
      */
     private $id;
 
+    /**
+     * @var Contact
+     *
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Contact", inversedBy="adresse")
+     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
+     */
+    private $contact;
+
 
     /**
      * @var boolean
@@ -149,7 +157,7 @@ class Adresse
      *
      * @return bool
      */
-    public function isExperdiable()
+    public function isExpediable()
     {
         return $this->expediable;
     }
@@ -205,26 +213,26 @@ class Adresse
     }
 
     /**
-     * Set telephone
+     * Set contact
      *
-     * @param string $telephone
+     * @param Contact $contact
      * @return Adresse
      */
-    public function setTelephone($telephone)
+    public function setContact(Contact $contact)
     {
-        $this->telephone = $telephone;
+        $this->contact = $contact;
 
         return $this;
     }
 
     /**
-     * Get telephone
+     * Get contact
      *
-     * @return string
+     * @return Contact
      */
-    public function getTelephone()
+    public function getContact()
     {
-        return $this->telephone;
+        return $this->contact;
     }
 
 

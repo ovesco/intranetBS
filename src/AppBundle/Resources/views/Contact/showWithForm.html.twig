@@ -1,11 +1,20 @@
 <h4>Contact</h4>
 
-{% include "AppBundle:Adresse:showWithForm.html.twig" with {'adresse':contact.adresse} %}
 
-<h5>Emails</h5>
+    {% include "AppBundle:Adresse:showWithForm.html.twig" with {'adresse':contact.adresse} %}
 
-{% for email in contact.emails%}
 
-    {% include "AppBundle:Email:showWithForm.html.twig" with {'email':email} %}
 
-{% endfor %}
+{% if contact.emails|length > 0 %}
+
+    <h5>Emails</h5>
+
+    {% for email in contact.emails%}
+
+        {% include "AppBundle:Email:showWithForm.html.twig" with {'email':email} %}
+
+    {% endfor %}
+
+{% else %}
+    <div class="ui message yellow">Auncune adresse Email</div>
+{% endif %}

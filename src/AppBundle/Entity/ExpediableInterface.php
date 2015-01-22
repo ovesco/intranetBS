@@ -22,5 +22,5 @@ interface ExpediableInterface
      *
      * @return mixed
      */
-    public function getListeEmailsExperdition();
+    public function getListeEmailsExpedition();
 }

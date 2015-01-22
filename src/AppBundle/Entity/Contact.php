@@ -26,7 +26,7 @@ class Contact
 
 
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Adresse", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Adresse", mappedBy="contact", cascade={"persist", "remove"})
      */
     private $adresse;
 
@@ -66,6 +66,7 @@ class Contact
     public function setAdresse(Adresse $adresse = null)
     {
         $this->adresse = $adresse;
+        $adresse->setContact($this);
 
         return $this;
     }

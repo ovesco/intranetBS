@@ -71,31 +71,20 @@
                             <div class="ui bottom attached active tab segment" data-tab="infos-base">
                                 <div class="ui grid">
                                     <div class="eight wide column">
+                                        <div class="ui segment">
 
-                                        {% if false %}{# membre.adresseExpedition is not null #}
+                                            {% include "AppBundle:CibleEnvoi:cibleEnvoi.html.twig" with
+                                                {'adresseExpedition':membre.adresseExpedition,
+                                                'listeEmailsExpedition':membre.listeEmailsExpedition} %}
 
-                                            Adresse à {{ membre.adresseExpedition['origine'] }}
-
-                                            {% include "AppBundle:Adresse:voir.html.twig" with {'adresse': membre.adresseExpedition['adresse']} %}
-
-
-
-                                        {% else %}
-
-                                            <div class="ui yellow icon message">
-                                                <i class="warning icon"></i>
-                                                <div class="content">
-                                                    <p>
-                                                        Aucune adresse n'a été trouvée pour {{ membre.prenom|capitalize }} {{ membre.nom|capitalize }} ni pour sa famille. Veuillez
-                                                        en ajouter une.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <button class="ui green button">Ajouter</button>
-                                        {% endif %}
+                                        </div>
 
 
+
+
+                                        <div class="ui segment">
                                         {% include "AppBundle:Contact:showWithForm.html.twig" with {'contact':membreForm.contact} %}
+                                        </div>
 
                                     </div>
 

@@ -8,15 +8,24 @@
     <div class="ui message">Auncune adresse</div>
 {% endif %}
 
-<h5>Emails</h5>
 
-<table class="ui table">
-    <tbody>
-{% for email in contact.emails%}
 
-    {% include "AppBundle:Email:show.html.twig" with {'email':email} %}
+{% if contact.emails is not null %}
 
-{% endfor %}
+    <h5>Emails</h5>
 
-    </tbody>
-</table>
+    <table class="ui table">
+        <tbody>
+        {% for email in contact.emails%}
+
+            {% include "AppBundle:Email:show.html.twig" with {'email':email} %}
+
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+{% else %}
+    <div class="ui message yellow">Auncune adresse Email</div>
+{% endif %}
+

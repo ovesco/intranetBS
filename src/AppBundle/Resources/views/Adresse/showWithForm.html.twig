@@ -1,5 +1,18 @@
 <h5>Adresse postale</h5>
 
+
+{% if adresse.rue.vars.value == '' %}
+    <div class="ui message yellow">Remplir le champ: Rue</div>
+{% endif %}
+
+{% if adresse.npa.vars.value == '' %}
+    <div class="ui message yellow">Remplir le champ: NPA</div>
+{% endif %}
+
+{% if adresse.localite.vars.value == '' %}
+    <div class="ui message yellow">Remplir le champ: Localité</div>
+{% endif %}
+
 <table class="ui definition table">
     <tbody>
     {{ form_row(adresse) }}

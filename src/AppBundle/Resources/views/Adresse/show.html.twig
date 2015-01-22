@@ -1,24 +1,40 @@
-<table class="ui definition table">
-    <tbody>
-    <tr>
-        <td>Rue</td>
-        <td>{{ adresse.rue }}</td>
-    </tr>
-    <tr>
-        <td>NPA</td>
-        <td>{{ adresse.npa }}</td>
-    </tr>
-    <tr>
-        <td>Localité</td>
-        <td>{{ adresse.localite }}</td>
-    </tr>
-    <tr>
-        <td>Expediable</td>
-        <td>{% if adresse.expediable %}Oui{% else %}Non{% endif %}</td>
-    </tr>
-    <tr>
-        <td>Remarques</td>
-        <td>{{ adresse.remarques }}</td>
-    </tr>
-    </tbody>
-</table>
+{% if adresse.rue is empty %}
+    <div class="ui message yellow">Remplir le champ: Rue</div>
+{% endif %}
+
+{% if adresse.npa is empty %}
+    <div class="ui message yellow">Remplir le champ: NPA</div>
+{% endif %}
+
+{% if adresse.localite is empty %}
+    <div class="ui message yellow">Remplir le champ: Localité</div>
+{% endif %}
+
+    <table class="ui definition table">
+        <tbody>
+        <tr>
+            <td>Rue</td>
+            <td>{{ adresse.rue }}</td>
+        </tr>
+        <tr>
+            <td>NPA</td>
+            <td>{{ adresse.npa }}</td>
+        </tr>
+        <tr>
+            <td>Localité</td>
+            <td>{{ adresse.localite }}</td>
+        </tr>
+        <tr>
+            <td>Expediable</td>
+            <td>{% if adresse.expediable %}Oui{% else %}Non{% endif %}</td>
+        </tr>
+        <tr>
+            <td>Remarques</td>
+            <td>{{ adresse.remarques }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+
+
+

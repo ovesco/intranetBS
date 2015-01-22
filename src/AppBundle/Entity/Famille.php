@@ -35,13 +35,13 @@ class Famille implements ExpediableInterface
     private $membres;
 
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Geniteur", cascade={"persist", "remove"}, fetch="EAGER")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Geniteur",  cascade={"persist", "remove"}, fetch="EAGER")
      */
     private $pere;
 
     /**
      * 
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Geniteur", cascade={"persist", "remove"}, fetch="EAGER")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Geniteur",  cascade={"persist", "remove"}, fetch="EAGER")
      */
     private $mere;
 
@@ -476,14 +476,115 @@ class Famille implements ExpediableInterface
 
     public function getAdresseExpedition()
     {
-        //todo a faire
+        $adresse = $this->getContact()->getAdresse();
+        if(!is_null($adresse))
+        {
+            if ($adresse->isExpediable()) {
+                return array('adresse' => $adresse,
+                    'owner' => array(
+                        'prenom' => null,
+                        'nom' => $this->getNom(),
+                        'class' => 'Famille',
+                    ));
+            }
+        }
+
+        $mere = $this->getMere();
+        if(!is_null($mere))
+        {
+            $adresse = $this->getMere()->getContact()->getAdresse();
+
+            if(!is_null($adresse))
+            {
+                if ($adresse->isExpediable()) {
+                    return array('adresse' => $adresse,
+                        'owner' => array(
+                            'prenom' => $mere->getPrenom(),
+                            'nom' => $this->getNom(),
+                            'class' => 'Famille',
+                        ));
+                }
+            }
+        }
+
+        $pere = $this->getPere();
+        if(!is_null($pere))
+        {
+            $adresse = $this->getMere()->getContact()->getAdresse();
+
+            if(!is_null($adresse))
+            {
+                if ($adresse->isExpediable()) {
+                    return array('adresse' => $adresse,
+                        'owner' => array(
+                            'prenom' => $pere->getPrenom(),
+                            'nom' => $this->getNom(),
+                            'class' => 'Famille',
+                        ));
+                }
+            }
+        }
+
         return null;
     }
 
-    public function getListeEmailsExperdition()
+    public function getListeEmailsExpedition()
     {
-        //todo a faire
-        return null;
+        $liste = array();
+
+
+        $emails = $this->getContact()->getEmails();
+        if(!is_null($emails))
+        {
+            foreach($emails as $email){
+                if($email->isExpediable())
+                {
+                    array_push($liste,$email->getEmail());
+                }
+
+            }
+        }
+
+
+
+        $mere = $this->getMere();
+        if(!is_null($mere))
+        {
+            $emails = $mere->getContact()->getEmails();
+            if(!is_null($emails))
+            {
+                foreach($emails as $email){
+                    if($email->isExpediable())
+                    {
+                        array_push($liste,$email->getEmail());
+                    }
+
+                }
+            }
+        }
+
+
+        $pere = $this->getPere();
+        if(!is_null($pere))
+        {
+            $emails = $pere->getContact()->getEmails();
+            if(!is_null($emails))
+            {
+                foreach($emails as $email){
+                    if($email->isExpediable())
+                    {
+                        array_push($liste,$email->getEmail());
+                    }
+
+                }
+            }
+        }
+
+
+
+
+
+        return $liste;
     }
 
 

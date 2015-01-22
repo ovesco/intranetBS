@@ -1,0 +1,39 @@
+<h3>Cible d'envoi</h3>
+
+{% if (adresseExpedition is not null) or (listeEmailsExpedition is not empty) %}
+
+    <div class="ui segment">
+        <div class="ui top right attached label">Par courrier</div>
+        <div class="ui content">
+            {% if adresseExpedition is not null %}{# adresseExpedition is not null #}
+
+                {{ adresseExpedition['owner']['nom'] }}<br>
+                {{ adresseExpedition['adresse'].rue }}<br>
+                {{ adresseExpedition['adresse'].npa }}
+                {{ adresseExpedition['adresse'].localite }}
+
+            {% else %}
+                <div class="ui yellow icon message">
+                    <i class="warning icon">Aucune adresse postale</i>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="ui segment">
+        <div class="ui top right attached label">Par Email</div>
+        <div class="ui content">
+
+            {% if listeEmailsExpedition is not empty %}
+
+                {% for email in listeEmailsExpedition %}
+                    <a href="mailto:{{ email }}">{{ email }}</a><br>
+                {% endfor %}
+
+            {% else %}
+                <div class="ui yellow icon message">Aucune adresse email.</div>
+            {% endif %}
+        </div>
+    </div>
+{% else %}
+    <div class="ui yellow icon message">Aucune moyen de contact !!!</div>
+{% endif %}

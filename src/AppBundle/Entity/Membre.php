@@ -701,48 +701,145 @@ class Membre extends Personne implements ExpediableInterface
 
     public function getAdresseExpedition()
     {
-        //On commence par récupérer la première adresse potentielle
-        $potentiel = null;
 
-        $adresses = array(
-            'membre' => $this->getContact()->getAdresse(),
-            'famille' => $this->getFamille()->getContact()->getAdresse(),
-            'mere' => ($this->getFamille()->getMere()->getContact()->getAdresse() == null) ? null : $this->getFamille()->getMere()->getContact()->getAdresse(),
-            'pere' => ($this->getFamille()->getPere()->getContact()->getAdresse() == null) ? null : $this->getFamille()->getPere()->getContact()->getAdresse()
-        );
 
-        foreach($adresses as $k => $adresse) {
 
-            if(!is_null($adresse)) {
-
-                if ($adresse->isExpediable()) {
-
-                    return array(   'adresse' => $adresse,
-                        'origine' => $k,
-                        'owner' => array(   'prenom' => $this->getPrenom(),
-                            'nom' => $this->getNom(),
-                            'class' => 'Membre',
-                        ));
-                }
-
-                if ($potentiel == null)
-                    $potentiel = array( 'adresse' => $adresse,
-                        'origine' => $k,
-                        'owner' => array(   'prenom' => $this->getPrenom(),
-                            'nom' => $this->getNom(),
-                            'class' => 'Membre',
-                        ));
+        $adresse = $this->getContact()->getAdresse();
+        if(!is_null($adresse))
+        {
+            if ($adresse->isExpediable()) {
+                return array('adresse' => $adresse,
+                    'owner' => array(
+                        'prenom' => $this->getPrenom(),
+                        'nom' => $this->getNom(),
+                        'class' => 'Membre',
+                    ));
             }
-
         }
 
-        return $potentiel;
+        $adresse = $this->getFamille()->getContact()->getAdresse();
+        if(!is_null($adresse))
+        {
+            if ($adresse->isExpediable()) {
+                return array('adresse' => $adresse,
+                    'owner' => array(
+                        'prenom' => null,
+                        'nom' => $this->getNom(),
+                        'class' => 'Famille',
+                    ));
+            }
+        }
+
+        $mere = $this->getFamille()->getMere();
+        if(!is_null($mere))
+        {
+            $adresse = $this->getFamille()->getMere()->getContact()->getAdresse();
+
+            if(!is_null($adresse))
+            {
+                if ($adresse->isExpediable()) {
+                    return array('adresse' => $adresse,
+                        'owner' => array(
+                            'prenom' => $mere->getPrenom(),
+                            'nom' => $this->getNom(),
+                            'class' => 'Famille',
+                        ));
+                }
+            }
+        }
+
+        $pere = $this->getFamille()->getPere();
+        if(!is_null($pere))
+        {
+            $adresse = $this->getFamille()->getMere()->getContact()->getAdresse();
+
+            if(!is_null($adresse))
+            {
+                if ($adresse->isExpediable()) {
+                    return array('adresse' => $adresse,
+                        'owner' => array(
+                            'prenom' => $pere->getPrenom(),
+                            'nom' => $this->getNom(),
+                            'class' => 'Famille',
+                        ));
+                }
+            }
+        }
+
+
+        //aucune adresse trouvée
+        return null;
     }
 
-    public function getListeEmailsExperdition()
+    public function getListeEmailsExpedition()
     {
-        //todo a faire
-        return null;
+        $liste = array();
+
+        $emails = $this->getContact()->getEmails();
+        if(!is_null($emails))
+        {
+            foreach($emails as $email){
+                if($email->isExpediable())
+                {
+                    array_push($liste,$email->getEmail());
+                }
+
+            }
+        }
+
+
+        $emails = $this->getFamille()->getContact()->getEmails();
+        if(!is_null($emails))
+        {
+            foreach($emails as $email){
+                if($email->isExpediable())
+                {
+                    array_push($liste,$email->getEmail());
+                }
+
+            }
+        }
+
+
+
+        $mere = $this->getFamille()->getMere();
+        if(!is_null($mere))
+        {
+            $emails = $mere->getContact()->getEmails();
+            if(!is_null($emails))
+            {
+                foreach($emails as $email){
+                    if($email->isExpediable())
+                    {
+                        array_push($liste,$email->getEmail());
+                    }
+
+                }
+            }
+        }
+
+
+        $pere = $this->getFamille()->getPere();
+        if(!is_null($pere))
+        {
+            $emails = $pere->getContact()->getEmails();
+            if(!is_null($emails))
+            {
+                foreach($emails as $email){
+                    if($email->isExpediable())
+                    {
+                        array_push($liste,$email->getEmail());
+                    }
+
+                }
+            }
+        }
+
+
+
+
+
+        return $liste;
     }
 
 

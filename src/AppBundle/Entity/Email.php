@@ -110,6 +110,16 @@ class Email
 
 
     /**
+     * is expediable
+     *
+     * @return bool
+     */
+    public function isExpediable()
+    {
+        return $this->expediable;
+    }
+
+    /**
      * Set expediable
      *
      * @param boolean $expediable
