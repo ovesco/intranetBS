@@ -10,18 +10,24 @@
         <th>Action</th>
     </tr>
     </thead>
-    <tbody>
-    {% for membre in entityArray %}
-        <tr data-id="{{ membre.id }}">
-            <td>{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</td>
-            <td>{{ membre.activeAttribution.fonction.nom }}</td>
-            <td>{{ membre.activeAttribution.groupe.nom }}</td>
-            <td>{{ membre.naissance|date('d.m.Y') }}</td>
-            <td>{{ membre.numeroBs }}</td>
-            <td>
-                <a href="{{ path('interne_voir_membre', {membre:membre.id}) }}" class="circular ui mini icon blue button popupable" data-content="Voir le membre"><i class="share icon"></i></a>
-            </td>
-        </tr>
-    {% endfor %}
+    <tbody style="max-height:500px;overflow:auto;">
+    {% if  entityArray|length != 0 %}
+        {% for membre in entityArray %}
+            <tr data-id="{{ membre.id }}">
+                <td>{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</td>
+                <td>{{ membre.activeAttribution.fonction.nom }}</td>
+                <td>{{ membre.activeAttribution.groupe.nom }}</td>
+                <td>{{ membre.naissance|date('d.m.Y') }}</td>
+                <td>{{ membre.numeroBs }}</td>
+                <td>
+                    <a href="{{ path('interne_voir_membre', {membre:membre.id}) }}" class="circular ui mini icon blue button popupable" data-content="Voir le membre"><i class="share icon"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+    <tr>
+        <td colspan="6">Aucune donnée trouvée</td>
+    </tr>
+    {% endif %}
     </tbody>
 </table>
