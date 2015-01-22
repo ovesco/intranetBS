@@ -175,13 +175,12 @@ class StatisticsController extends Controller
             ),
 
             'tooltip' => array(
-                'pointFormat' => '{series.name}: {point.percentage:.2f}%',
+                'valueSufix' => '%',
             ),
             'plotOptions' => array(
                 'pie' => array(
                     'shadow' => false,
                     'center' => array('50%','50%'),
-                    'dataLabels' => array(),
                 )
             ),
 

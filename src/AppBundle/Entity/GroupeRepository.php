@@ -36,4 +36,28 @@ class GroupeRepository extends EntityRepository
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    public function findHierarchie() {
+
+        $groupesRacines = $this->findHighestGroupes();
+
+        foreach($groupesRacines as $groupesRacine) {
+
+        }
+
+
+        foreach($groupes as $groupe) {
+
+            $hierarchie[] = array(
+
+                'nom'    => $groupe->getNom(),
+                'key'    => $groupe->getId(),
+                'parent' => ($groupe->getParent() != null) ? $groupe->getParent()->getId() : 0
+            );
+        }
+
+        return $hierarchie;
+    }
+
+
 }

@@ -1,0 +1,127 @@
+
+
+
+
+{% macro liste(data,headers,columns,actions,patterns,filters) %}
+
+
+<table class="ui table">
+    <thead>
+    {% for header in headers %}
+        <tr>
+            {% for header_item in header %}
+                <th>{{ header_item }}</th>
+            {% endfor %}
+            {% if actions|default(null) is not null %}
+                <th>
+                </th>
+
+            {% endif %}
+        </tr>
+    {% endfor %}
+    </thead>
+    <tbody>
+    {% for item in data %}
+    <tr>
+
+        {% for value in columns %}
+            <td>
+
+                {% set object = item %}
+                {# on splite value au '.' afin de cherche la donnée de manière récursive. #}
+                {%  set keys = value|split('.') %}
+
+
+                {% for key in keys %}
+                    {% if attribute(object, key) is defined %}
+                        {% set object = attribute(object, key) %}
+                    {% else %}
+                        {% set object = null %}
+                    {% endif %}
+                {% endfor %}
+                {% set dataValue = object %}
+
+
+
+                    {% set openBalise = null %}
+                    {% set closeBalise = null %}
+                    {% set printData = true %}
+                    {% set applayedFilter = null %}
+
+                    {% for pattern in patterns %}
+                        {% if pattern[value] is defined %}
+
+                            {% set applyPattern = true %}
+
+                            {% if pattern['equal']  is defined %}
+                                {% if pattern['equal'] !=  attribute(item, value)%}
+                                    {% set applyPattern = false %}
+                                {% endif %}
+                            {% elseif pattern['inf']  is defined %}
+                                {% if pattern['inf'] <=  attribute(item, value)%}
+                                    {% set applyPattern = false %}
+                                {% endif %}
+                            {% elseif pattern['sup']  is defined %}
+                                {% if pattern['sup'] >=  attribute(item, value)%}
+                                    {% set applyPattern = false %}
+                                {% endif %}
+                            {% endif %}
+
+                            {% if applyPattern %}
+                                {%  set balises = pattern[value]|split('[data]') %}
+                                {% if balises|length == 2 %}
+                                    {%  set openBalise = balises[0] %}
+                                    {%  set closeBalise = balises[1] %}
+                                {% else %}
+                                    {%  set openBalise = balises[0] %}
+                                    {% set printData = false %}
+                                {% endif %}
+                            {% endif %}
+
+                        {% endif %}
+                    {% endfor %}
+
+                    {% for filter in filters %}
+                        {% if filter[value] is defined %}
+                            {% set applayedFilter = filter[value] %}
+                        {% endif %}
+                    {% endfor %}
+
+
+                    {# le filtre raw permet d'insérer des balises html #}
+                    {{ openBalise|raw }}
+                    {% if printData %}
+                        {% if applayedFilter is null %}
+                            {{ dataValue }}
+                        {% elseif  applayedFilter == 'number_2'%}
+                            {{ dataValue|number_format(2, '.', ',') }}
+                        {% endif %}
+                    {% endif %}
+                    {# le filtre raw permet d'insérer des balises html #}
+                    {{ closeBalise|raw }}
+
+
+            </td>
+
+        {% endfor %}
+        {% if actions|default(null) is not null %}
+            <td>
+            {% for action in actions %}
+                {% set icon = '' %}
+                {% if action[0] == 'voir' %}
+                    {% set icon = 'zoom' %}
+                {% elseif action[0] == 'delete' %}
+                    {% set icon = 'trash' %}
+                {% endif %}
+                <i id="{{ action[2] }}"class="{{ icon }} icon popupable" data-content="{{ action[1] }}"></i>
+            {% endfor %}
+            </td>
+
+        {% endif %}
+    </tr>
+    {% endfor %}
+    </tbody>
+
+</table>
+{% endmacro %}
+

@@ -84,7 +84,7 @@ class StatisticsController extends Controller
         $creanceRepo = $this->em ->getRepository('InterneFinancesBundle:Creance');
 
         $intervalFormat = $options['interval'];
-        $periodeFormat = $options['periode'];
+        $periodeFormat =  $options['periode'];
 
 
 

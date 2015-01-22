@@ -50,7 +50,7 @@ class InterfaceController extends Controller
 
             }
 
-            return $this->render('InterneFinancesBundle:Interface:interfaceForFamilleOrMembre.html.twig',
+            return $this->render('InterneFinancesBundle:Interface:interface.html.twig',
                 array('ownerEntity' => $owner));
         }
 

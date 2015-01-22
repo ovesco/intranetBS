@@ -208,13 +208,12 @@ class CreanceRepository extends EntityRepository
     {
         $queryBuilder = $this->createQueryBuilder('creance')
 
-        ->andWhere('creance.dateCreation <= :dateCreation')
-        ->setParameter('dateCreation', $date);
-
-        $queryBuilder->andWhere('creance.datePayement is NULL OR creance.datePayement >= :datePayement')
-            ->setParameter('datePayement', $date);
-
-        $queryBuilder->addSelect('SUM(creance.montantEmis) as total');
+            ->leftJoin('Interne\FinancesBundle\Entity\Facture', 'facture', 'WITH', 'creance.facture = facture.id')
+            ->andWhere('creance.dateCreation <= :dateCreation')
+            ->setParameter('dateCreation', $date)
+            ->andWhere('facture.datePayement is NULL OR facture.datePayement >= :datePayement')
+            ->setParameter('datePayement', $date)
+            ->addSelect('SUM(creance.montantEmis) as total');
 
         $result = $queryBuilder->getQuery()->getScalarResult();
 
@@ -247,10 +246,12 @@ class CreanceRepository extends EntityRepository
     {
         $queryBuilder = $this->createQueryBuilder('creance')
 
-            ->andWhere('creance.datePayement >= :start')
+            ->leftJoin('Interne\FinancesBundle\Entity\Facture', 'facture', 'WITH', 'creance.facture = facture.id')
+
+            ->andWhere('facture.datePayement >= :start')
             ->setParameter('start', $start)
 
-            ->andWhere('creance.datePayement <= :end')
+            ->andWhere('facture.datePayement <= :end')
             ->setParameter('end', $end)
 
             ->addSelect('SUM(creance.montantRecu) as total');

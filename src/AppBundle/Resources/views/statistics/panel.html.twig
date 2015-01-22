@@ -54,7 +54,7 @@
                                                 Explication
                                             </div>
 
-                                            <div class="ui form">
+                                            <div id="creances_emises_recues"class="ui form">
 
                                                 <h4 class="ui dividing header">Options du graphique</h4>
                                                 <div class="field">
@@ -95,7 +95,7 @@
                                                 Explication
                                             </div>
 
-                                            <div class="ui form">
+                                            <div id="montant_en_attente" class="ui form">
 
                                                 <h4 class="ui dividing header">Options du graphique</h4>
                                                 <div class="field">
@@ -177,15 +177,19 @@
 
             var options = {};
 
-            $('.graph_option option:selected').each(function(){
+            // le formulaire doit avoir le meme id que le nom du graphique (idGraph).
+            var $form = $('#'+idGraph);
 
+            $form.find('.graph_option option:selected').each(function(){
                 var name = $(this).attr('name');
                 var value = $(this).val();
-                //options.push(name: value);
                 options[name] = value;
             })
 
             var data = { idGraph: idGraph, options:options };
+
+
+
 
             $.ajax({
                 type: "POST",

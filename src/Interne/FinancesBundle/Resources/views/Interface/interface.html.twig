@@ -1,0 +1,101 @@
+{% import "InterneFinancesBundle:Templates:liste.html.twig" as macro %}
+
+
+<!-- on stocke les infos du propriétaire pour les récupérer -->
+<input type="hidden" value="{{ ownerEntity.id }}" id="owner-entity-id"/>
+
+{% if ownerEntity.isClass('Membre') %}
+    <input type="hidden" value="Membre" id="owner-entity-type"/>
+{% elseif ownerEntity.isClass('Famille') %}
+    <input type="hidden" value="Famille" id="owner-entity-type"/>
+{% endif %}
+
+
+<div class="ui grid" id="infoFinanceContent">
+    <div class="row">
+        <div class="column">
+            {% if ownerEntity.isClass('Membre') %}
+
+                Les cérances de ce membre sont facturée
+
+                {% if ownerEntity.envoiFacture == 'Membre' %}
+                    à lui même.
+                {% elseif ownerEntity.envoiFacture == 'Famille' %}
+                    à la famille {{ ownerEntity.famille.nom }}
+                {% endif %}
+
+            {% endif %}
+
+
+
+            <h4>Factures</h4>
+
+            {% set headers = [['','','Montants','','',''],['Num. Réf','Statut','Créances','Rappels','Total','Reçu']]%}
+
+            {% set columns = ['id','statut','montantEmisCreances','montantEmisRappels','montantEmis','montantRecu'] %}
+
+            {% set actions = [['voir','Afficher','voir_facture'],['delete','Supprimer','delete_facture']] %}
+
+            {% set patterns = [
+                {'statut':'<div class="ui label green">Payée</div>','equal':'payee'},
+                {'id':'N°[data]'}
+                                ] %}
+
+
+            {% set filters = [
+                {'montantEmis':'number_2'},
+                {'montantEmisCreances':'number_2'},
+                {'montantEmisRappels':'number_2'},
+                {'montantRecu':'number_2'},
+            ] %}
+
+            {% if ownerEntity.factures is not empty %}
+                {{ macro.liste(ownerEntity.factures,headers,columns,actions,patterns,filters) }}
+            {% endif %}
+
+            <h4>Créances</h4>
+
+
+            {% set headers = [['','','Montants',''],['Facutre','Titre','Emis','Recu']]%}
+
+            {% set columns = ['facture.id','titre','montantEmis','montantRecu'] %}
+
+            {% set actions = [['voir','Afficher','voir_creance']] %}
+
+            {% set patterns = [ {'facture.id':'N°[data]'}            ] %}
+
+
+            {% set filters = [
+                {'montantEmis':'number_2'},
+                {'montantRecu':'number_2'},
+            ] %}
+
+            {% if ownerEntity.factures is not empty %}
+                {{ macro.liste(ownerEntity.creances,headers,columns,actions,patterns,filters) }}
+            {% endif %}
+
+
+
+
+        </div>
+    </div>
+</div>
+
+
+{% include "InterneFinancesBundle:Modal:modalDisplay.html.twig" %}
+
+
+
+{% block javascript %}
+
+    {% javascripts
+    '@InterneFinancesBundle/Resources/public/js/creance.js'
+    '@InterneFinancesBundle/Resources/public/js/facture.js'
+    '@InterneFinancesBundle/Resources/public/js/interfaceMembreFamille.js'
+    '@InterneFinancesBundle/Resources/public/js/rappel.js'%}
+    <script src="{{ asset_url }}"></script>
+
+    {% endjavascripts %}
+
+
+{% endblock %}

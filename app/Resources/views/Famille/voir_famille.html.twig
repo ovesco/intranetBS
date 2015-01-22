@@ -41,8 +41,7 @@
                         <div id="famille-infos-context" class="tab-context">
                             <div class="ui top attached tabular menu">
                                 <div class="active item" data-tab="infos-base">{{ famille.nom|capitalize }}</div>
-                                <div class="item" data-tab="infos-mere">Mère</div>
-                                <div class="item" data-tab="infos-pere">Père</div>
+                                <div class="item" data-tab="infos-parents">Parents</div>
                                 <div class="item" data-tab="finances-creances-factures">Créances et factures</div>
 
                             </div>
@@ -102,56 +101,59 @@
 
                             </div>
 
-                            <div class="ui bottom attached tab segment" data-tab="infos-mere">
+                            <div class="ui bottom attached tab segment" data-tab="infos-parents">
 
-                                <h3>Mère</h3>
+
 
                                 <div class="ui grid">
-                                    <div class="eight wide column">
-                                        <table class="ui definition table">
-                                            <tbody>
-                                            {{ form_row(familleForm.mere.adresse) }}
-                                            </tbody>
-                                        </table>
-                                    </div>
 
-                                    <div class="eight wide column">
-                                        <table class="ui definition table">
-                                            <tbody>
-                                            {{ form_row(familleForm.mere) }}
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                        <div class="eight wide column">
+                                            <h3>Mère</h3>
+                                            <div class="row">
+                                                <table class="ui definition table">
+                                                    <tbody>
+                                                    {{ form_row(familleForm.mere) }}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="row">
+                                                <table class="ui definition table">
+                                                    <tbody>
+                                                    {{ form_row(familleForm.mere.adresse) }}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <div class="eight wide column">
+                                            <h3>Père</h3>
+                                            <div class="row">
+                                                <table class="ui definition table">
+                                                    <tbody>
+                                                    {{ form_row(familleForm.pere) }}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="row">
+                                                <table class="ui definition table">
+                                                    <tbody>
+                                                    {{ form_row(familleForm.pere.adresse) }}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+
+
+
+
+
                                 </div>
 
                             </div>
 
 
-                            <div class="ui bottom attached tab segment" data-tab="infos-pere">
 
-                                <h3>Père</h3>
-
-                                <div class="ui grid">
-                                    <div class="eight wide column">
-                                        <table class="ui definition table">
-                                            <tbody>
-                                            {{ form_row(familleForm.pere.adresse) }}
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <div class="eight wide column">
-                                        <table class="ui definition table">
-                                            <tbody>
-                                            {{ form_row(familleForm.pere) }}
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-                            </div>
 
                             <div class="ui bottom attached tab segment" data-tab="finances-creances-factures">
                                 {# Insertion de la partie facture et créance pour le membre #}

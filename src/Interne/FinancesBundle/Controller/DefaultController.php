@@ -19,8 +19,12 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
+        $em = $this->getDoctrine()->getManager();
+        $facture = $em->getRepository('InterneFinancesBundle:Facture')->find(100);
 
-        $test = $this->get('parametre')->getParametres();
+        $facture2 = $em->getRepository('InterneFinancesBundle:Facture')->find(101);
+
+        $test = array($facture,$facture2);
 
 
         return $this->render('InterneFinancesBundle:Default:index.html.twig', array('test' => $test));

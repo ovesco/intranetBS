@@ -1,9 +1,21 @@
+
+
 jQuery(document).ready(function() {
 
     //activation du menu
     $('#finances-infos-context .menu .item').tab({
         context: $('#finances-infos-context')
     });
+
+
+
+
+
+});
+
+$('#voir_facture').click(function () {
+
+    alert('coucou');
 
 });
 

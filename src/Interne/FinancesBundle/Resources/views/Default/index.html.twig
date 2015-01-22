@@ -6,43 +6,35 @@
 {% block content %}
 
 
-    {% if test is null %}
-        null
-        {% endif %}
+
+    {% import "InterneFinancesBundle:Templates:liste.html.twig" as macro %}
+
+    {% set headers = [['','','Montants','','',''],['Num. Réf','Statut','Créances','Rappels','Total','Reçu']]%}
+
+    {% set columns = ['id','statut','montantEmisCreances','montantEmisRappels','montantEmis','montantRecu'] %}
+
+    {% set actions = [['voir','Afficher','voir_facture'],['delete','Supprimer','delete_facture']] %}
+
+    {% set patterns = [
+    {'statut':'<div class="ui label green">Payée</div>','equal':'payee'},
+    {'id':'N°[data]'}
+    ] %}
 
 
-    <ul>
-{% for groupe in test %}
-    <li>{{ groupe.groupe }}</li>
-    <li>{{ groupe.label }}</li>
-    <li>
-        <ul>
-            {% for param in groupe.parametres %}
-                <li>{{ param.name }} => {{ param.value }}</li>
-            {% endfor %}
-        </ul>
-    </li>
-{% endfor %}
-    </ul>
+    {% set filters = [
+    {'montantEmis':'number_2'},
+    {'montantEmisCreances':'number_2'},
+    {'montantEmisRappels':'number_2'},
+    {'montantRecu':'number_2'},
+    ] %}
+
+    {% if test is not empty %}
+        {{ macro.liste(test,headers,columns,actions,patterns,filters) }}
+    {% endif %}
 
 
 
-    <br>
 
-
-
-TO DO LIST
-<ul>
-    <li>statistique</li>
-    <li></li>
-    <li>l'algo de recherche avec inclusion des onetomany</li>
-    <li>action en masse depuis le formulaire de recherche</li>
-    <li></li>
-    <li>télécharger la librairie pour les graphiques de stat</li>
-    <li>validation des formulaire</li>
-    <li>date de paiement dans le forumlaire de saisie manuel</li>
-
-</ul>
 
 
 
