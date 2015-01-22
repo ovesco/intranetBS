@@ -6,9 +6,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use AppBundle\Entity\Expediable;
+
 //FinancesBundle
-use Interne\FinancesBundle\Entity\Creance;
-use Interne\FinancesBundle\Entity\Facture;
+use Interne\FinancesBundle\Entity\CreanceToFamille;
+use Interne\FinancesBundle\Entity\FactureToFamille;
 
 /**
  * Famille
@@ -16,7 +18,7 @@ use Interne\FinancesBundle\Entity\Facture;
  * @ORM\Table(name="app_familles")
  */
  
-class Famille
+class Famille implements ExpediableInterface
 {
     /**
      * @var integer
@@ -31,12 +33,6 @@ class Famille
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Membre", mappedBy="famille", cascade={"persist", "remove"}, fetch="EAGER")
      */
     private $membres;
-    
-	
-    /**
-     * @orm\OneToOne(targetEntity="AppBundle\Entity\Adresse", cascade={"persist", "remove"}, fetch="EAGER")
-     */
-    private $adresse;
 
     /**
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Geniteur", cascade={"persist", "remove"}, fetch="EAGER")
@@ -64,6 +60,11 @@ class Famille
      * @ORM\Column(name="validity", type="integer")
      */
     private $validity;
+
+    /**
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Contact", cascade={"persist", "remove"})
+     */
+    private $contact;
 
 
 
@@ -224,18 +225,7 @@ class Famille
         $this->membres->removeElement($membres);
     }
 
-    /**
-     * Set adresse
-     *
-     * @param \AppBundle\Entity\Adresse $adresse
-     * @return Famille
-     */
-    public function setAdresse(\AppBundle\Entity\Adresse $adresse = null)
-    {
-        $this->adresse = $adresse;
 
-        return $this;
-    }
 
     /**
      * Get adresse
@@ -281,11 +271,6 @@ class Famille
         return $potentiel;
     }
 
-    public function getAdresse() {
-
-        return $this->adresse;
-    }
-
     /**
      * Doit renvoyer quelque chose qui permet d'identifier (humainement) une famille
      * Le nom n'est pas suffisant p.ex puisqu'il peut y avoir plusieurs famille avec le même nom
@@ -296,8 +281,8 @@ class Famille
 
         $string = "Les " . $this->getNom();
 
-        if ($this->getAdresse() != NULL)
-            $string .= " de " . $this->getAdresse()->getLocalite();
+        if ($this->getContact()->getAdresse() != NULL)
+            $string .= " de " . $this->getContact()->getAdresse() ->getLocalite();
 
         // . " (" . sizeof($this->getMembres()) . ")";
 
@@ -385,10 +370,10 @@ class Famille
     /**
      * Add facture
      *
-     * @param Facture $facture
+     * @param FactureToFamille $facture
      * @return Famille
      */
-    public function addFacture($facture)
+    public function addFacture(FactureToFamille $facture)
     {
         $this->factures[] = $facture;
         $facture->setFamille($this);
@@ -399,10 +384,10 @@ class Famille
     /**
      * Remove facture
      *
-     * @param Facture $facture
+     * @param FactureToFamille $facture
      * @return Famille
      */
-    public function removeFacture($facture)
+    public function removeFacture(FactureToFamille $facture)
     {
         $this->factures->remove($facture);
         $facture->setFamille(null);
@@ -413,10 +398,10 @@ class Famille
     /**
      * Add creance
      *
-     * @param Creance $creance
+     * @param CreanceToFamille $creance
      * @return Famille
      */
-    public function addCreance($creance)
+    public function addCreance(CreanceToFamille $creance)
     {
         $this->creances[] = $creance;
         $creance->setFamille($this);
@@ -427,10 +412,10 @@ class Famille
     /**
      * Remove creance
      *
-     * @param Creance $creance
+     * @param CreanceToFamille $creance
      * @return Famille
      */
-    public function removeCreance($creance)
+    public function removeCreance(CreanceToFamille $creance)
     {
         $this->creances->remove($creance);
         $creance->setFamille(null);
@@ -464,6 +449,41 @@ class Famille
     public function getCreances()
     {
         return $this->creances;
+    }
+
+    /**
+     * Set contact
+     *
+     * @param Contact $contact
+     * @return Famille
+     */
+    public function setContact(Contact $contact = null)
+    {
+        $this->contact = $contact;
+
+        return $this;
+    }
+
+    /**
+     * Get contact
+     *
+     * @return Contact
+     */
+    public function getContact()
+    {
+        return $this->contact;
+    }
+
+    public function getAdresseExpedition()
+    {
+        //todo a faire
+        return null;
+    }
+
+    public function getListeEmailsExperdition()
+    {
+        //todo a faire
+        return null;
     }
 
 

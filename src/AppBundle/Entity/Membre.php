@@ -6,16 +6,18 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 
+
 //FinancesBundle
-Use Interne\FinancesBundle\Entity\Creance;
-Use Interne\FinancesBundle\Entity\Facture;
+Use Interne\FinancesBundle\Entity\CreanceToMembre;
+Use Interne\FinancesBundle\Entity\FactureToMembre;
 
 /**
  * Membre
+ *
  * @ORM\Entity
  * @ORM\Table(name="app_membres")
  */
-class Membre extends Personne
+class Membre extends Personne implements ExpediableInterface
 {
 
     /**
@@ -564,10 +566,10 @@ class Membre extends Personne
     /**
      * Add creance
      *
-     * @param Creance $creance
+     * @param CreanceToMembre $creance
      * @return Membre
      */
-    public function addCreance($creance)
+    public function addCreance(CreanceToMembre $creance)
     {
         $this->creances[] = $creance;
         $creance->setMembre($this);
@@ -578,10 +580,10 @@ class Membre extends Personne
     /**
      * Remove creance
      *
-     * @param Creance $creance
+     * @param CreanceToMembre $creance
      * @return Membre
      */
-    public function removeCreance($creance)
+    public function removeCreance(CreanceToMembre $creance)
     {
         $this->creances->remove($creance);
         $creance->setMembre(null);
@@ -649,10 +651,10 @@ class Membre extends Personne
     /**
      * Add facture
      *
-     * @param Facture $facture
+     * @param FactureToMembre $facture
      * @return Membre
      */
-    public function addFacture($facture)
+    public function addFacture(FactureToMembre $facture)
     {
         $this->factures[] = $facture;
         $facture->setMembre($this);
@@ -663,10 +665,10 @@ class Membre extends Personne
     /**
      * Remove facture
      *
-     * @param Facture $facture
+     * @param FactureToMembre $facture
      * @return Membre
      */
-    public function removeFacture($facture)
+    public function removeFacture(FactureToMembre $facture)
     {
         $this->factures->remove($facture);
         $facture->setMembre(null);
@@ -695,6 +697,52 @@ class Membre extends Personne
     public function getEnvoiFacture()
     {
         return $this->envoiFacture;
+    }
+
+    public function getAdresseExpedition()
+    {
+        //On commence par récupérer la première adresse potentielle
+        $potentiel = null;
+
+        $adresses = array(
+            'membre' => $this->getContact()->getAdresse(),
+            'famille' => $this->getFamille()->getContact()->getAdresse(),
+            'mere' => ($this->getFamille()->getMere()->getContact()->getAdresse() == null) ? null : $this->getFamille()->getMere()->getContact()->getAdresse(),
+            'pere' => ($this->getFamille()->getPere()->getContact()->getAdresse() == null) ? null : $this->getFamille()->getPere()->getContact()->getAdresse()
+        );
+
+        foreach($adresses as $k => $adresse) {
+
+            if(!is_null($adresse)) {
+
+                if ($adresse->isExpediable()) {
+
+                    return array(   'adresse' => $adresse,
+                        'origine' => $k,
+                        'owner' => array(   'prenom' => $this->getPrenom(),
+                            'nom' => $this->getNom(),
+                            'class' => 'Membre',
+                        ));
+                }
+
+                if ($potentiel == null)
+                    $potentiel = array( 'adresse' => $adresse,
+                        'origine' => $k,
+                        'owner' => array(   'prenom' => $this->getPrenom(),
+                            'nom' => $this->getNom(),
+                            'class' => 'Membre',
+                        ));
+            }
+
+        }
+
+        return $potentiel;
+    }
+
+    public function getListeEmailsExperdition()
+    {
+        //todo a faire
+        return null;
     }
 
 

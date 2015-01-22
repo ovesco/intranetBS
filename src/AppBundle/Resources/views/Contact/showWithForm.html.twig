@@ -1,0 +1,11 @@
+<h4>Contact</h4>
+
+{% include "AppBundle:Adresse:showWithForm.html.twig" with {'adresse':contact.adresse} %}
+
+<h5>Emails</h5>
+
+{% for email in contact.emails%}
+
+    {% include "AppBundle:Email:showWithForm.html.twig" with {'email':email} %}
+
+{% endfor %}

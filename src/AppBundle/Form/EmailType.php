@@ -6,27 +6,25 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class ContactType extends AbstractType
+class EmailType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('adresse',new AdresseType())
-            ->add('emails', 'collection', array(
-                // chaque item du tableau sera un champ « email »
-                'type'   => new EmailType()))
+            ->add('email','text',array('required' => false, 'label' => 'Email'))
+            ->add('expediable', 'checkbox',     array('required' => false, 'label' => 'Expediable'))
         ;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Contact'
+            'data_class' => 'AppBundle\Entity\Email'
         ));
     }
 
     public function getName()
     {
-        return 'apprbundle_contacttype';
+        return 'apprbundle_emailtype';
     }
 }

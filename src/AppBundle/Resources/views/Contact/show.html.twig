@@ -1,0 +1,22 @@
+<h4>Contact</h4>
+
+{% if contact.adresse is not null %}
+
+    {% include "AppBundle:Adresse:show.html.twig" with {'adresse':contact.adresse} %}
+
+{% else %}
+    <div class="ui message">Auncune adresse</div>
+{% endif %}
+
+<h5>Emails</h5>
+
+<table class="ui table">
+    <tbody>
+{% for email in contact.emails%}
+
+    {% include "AppBundle:Email:show.html.twig" with {'email':email} %}
+
+{% endfor %}
+
+    </tbody>
+</table>

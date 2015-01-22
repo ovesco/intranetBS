@@ -2,7 +2,10 @@
 
 namespace AppBundle\Command;
 
+use AppBundle\Entity\Contact;
 use AppBundle\Entity\ObtentionDistinction;
+use AppBundle\Entity\Telephone;
+use AppBundle\Utils\Email\Email;
 use ClassesWithParents\F;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -117,7 +120,7 @@ class PopulateCommand extends ContainerAwareCommand
                  */
                 $famille = new Famille();
                 $famille->setNom($this->getNom());
-                $famille->setAdresse($this->getRandomAdresse(true));
+                $famille->setContact($this->getRandomContact());
                 $famille->setValidity(mt_rand(0,2));
 
 
@@ -157,6 +160,7 @@ class PopulateCommand extends ContainerAwareCommand
 
                     $membre = $this->getRandomMember();
                     $membre->addAttribution($this->getRandomAttribution($fonction, $type));
+
 
                     for($k = 0; $k < mt_rand(0,3); $k++)
                         $membre->addDistinction($this->getRandomDistinction());
@@ -384,15 +388,12 @@ class PopulateCommand extends ContainerAwareCommand
         $faker   = \Faker\Factory::create('fr_FR');
         $adresse = new Adresse();
 
+        $adresse->setExpediable( (mt_rand(0,1) == 0) ? true : false );
         $adresse->setLocalite($faker->city);
         $adresse->setNpa($faker->postcode);
         $adresse->setRue($faker->streetName . ' ' . $faker->randomDigitNotNull);
         $adresse->setRemarques($this->getText(100,true));
-        $adresse->setEmail($this->getEmail(true));
-        $adresse->setAdressable( (mt_rand(0,1) == 0) ? true : false );
-        $adresse->setValidity( (mt_rand(0,1) == 0) ? true : false );
-        $adresse->setTelephone($this->getPhone(true));
-        $adresse->setMethodeEnvoi((mt_rand(0,1) == 0) ? 'Email' : 'Courrier');
+
 
         if($canBeNull)
             return (rand(0,1) == 1) ? $adresse : null;
@@ -411,7 +412,7 @@ class PopulateCommand extends ContainerAwareCommand
 
         $geniteur->setPrenom($this->getPrenom($sexe));
         $geniteur->getProfession($this->getProfession(true));
-        $geniteur->setAdresse($this->getRandomAdresse(true));
+        $geniteur->setContact($this->getRandomContact());
         $geniteur->setSexe($sexe);
         $geniteur->setIban($this->getIban(true));
 
@@ -431,7 +432,7 @@ class PopulateCommand extends ContainerAwareCommand
 
         $membre->setSexe($sexe);
         $membre->setPrenom($this->getPrenom($sexe));
-        $membre->setAdresse($this->getRandomAdresse(true));
+        $membre->setContact($this->getRandomContact());
         $membre->setNaissance($this->getRandomDateNaissance());
         $membre->setInscription($this->getRandomInscription());
         $membre->setValidity(mt_rand(0,2));
@@ -1090,7 +1091,7 @@ class PopulateCommand extends ContainerAwareCommand
      * @param bool $canBeNull
      * @return null|string
      */
-    private function getEmail($canBeNull = false){
+    private function getAdresseEmail($canBeNull = false){
 
         $frFaker = \Faker\Factory::create('fr_FR');
 
@@ -1247,6 +1248,57 @@ class PopulateCommand extends ContainerAwareCommand
             }
         }
         return $facture;
+    }
+
+    private function getRandomContact($canBeNull = false)
+    {
+        $contact = new Contact();
+
+        $adresse = $this->getRandomAdresse();
+
+        $contact ->setAdresse($adresse);
+
+        for($n = 0; $n < mt_rand(0,3); $n++) {
+            $email = $this->getRandomEmail();
+            $contact->addEmail($email);
+        }
+
+        for($n = 0; $n < mt_rand(0,3); $n++) {
+            $tel = $this->getRandomTelephone();
+            $contact->addTelephone($tel);
+        }
+
+
+        if($canBeNull)
+            return (rand(0,1) == 1) ? $contact : null;
+        else
+            return $contact;
+
+    }
+
+    private function getRandomEmail($canBeNull = false)
+    {
+        $email = new \AppBundle\Entity\Email();
+        $email->setEmail($this->getAdresseEmail(false));
+        $email->setExpediable((mt_rand(0,1) == 0) ? true : false );
+        $email->setRemarques($this->getText(10,true));
+
+        if($canBeNull)
+            return (rand(0,1) == 1) ? $email : null;
+        else
+            return $email;
+    }
+
+    private function getRandomTelephone($canBeNull = false)
+    {
+        $tel = new Telephone();
+        $tel->setRemarques($this->getText(10,true));
+        $tel->setTelephone($this->getPhone());
+
+        if($canBeNull)
+            return (rand(0,1) == 1) ? $tel : null;
+        else
+            return $tel;
     }
 
 }

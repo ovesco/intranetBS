@@ -50,13 +50,7 @@
                                 <div class="ui grid">
 
                                     <div class="eight wide column">
-                                        <h4>Adresse de la famille</h4>
-
-                                        <table class="ui definition table">
-                                            <tbody>
-                                            {{ form_row(familleForm.adresse) }}
-                                            </tbody>
-                                        </table>
+                                        {% include "AppBundle:Contact:showWithForm.html.twig" with {'contact':familleForm.contact} %}
                                     </div>
                                 </div>
                                 <h4>Membres aux scouts</h4>
@@ -109,37 +103,12 @@
 
                                         <div class="eight wide column">
                                             <h3>Mère</h3>
-                                            <div class="row">
-                                                <table class="ui definition table">
-                                                    <tbody>
-                                                    {{ form_row(familleForm.mere) }}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <div class="row">
-                                                <table class="ui definition table">
-                                                    <tbody>
-                                                    {{ form_row(familleForm.mere.adresse) }}
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                            {% include "AppBundle:Geniteur:showWithForm.html.twig" with {'geniteur':familleForm.mere} %}
                                         </div>
 
                                         <div class="eight wide column">
                                             <h3>Père</h3>
-                                            <div class="row">
-                                                <table class="ui definition table">
-                                                    <tbody>
-                                                    {{ form_row(familleForm.pere) }}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <div class="row">
-                                                <table class="ui definition table">
-                                                    <tbody>
-                                                    {{ form_row(familleForm.pere.adresse) }}
-                                                    </tbody>
-                                                </table>
+                                            {% include "AppBundle:Geniteur:showWithForm.html.twig" with {'geniteur':familleForm.pere} %}
                                             </div>
                                         </div>
 
@@ -157,7 +126,7 @@
 
                             <div class="ui bottom attached tab segment" data-tab="finances-creances-factures">
                                 {# Insertion de la partie facture et créance pour le membre #}
-                                {% include "InterneFinancesBundle:Interface:interfaceForFamilleOrMembre.html.twig" with {'ownerEntity': famille } %}
+                                {% include "InterneFinancesBundle:Interface:interface.html.twig" with {'ownerEntity': famille } %}
                             </div>
 
                         </div>

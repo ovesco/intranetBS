@@ -17,7 +17,7 @@ class FamilleType extends AbstractType
             ->add('nom',        'text', array('required'	=> false, 'label' => 'Nom de famille'))
             ->add('pere',       new GeniteurType, array('required' => false))
             ->add('mere',       new GeniteurType, array('required' => false))
-            ->add('adresse',    new AdresseType())
+            ->add('contact',    new ContactType())
         ;
     }
 

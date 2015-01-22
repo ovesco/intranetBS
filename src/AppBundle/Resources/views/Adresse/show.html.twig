@@ -1,0 +1,24 @@
+<table class="ui definition table">
+    <tbody>
+    <tr>
+        <td>Rue</td>
+        <td>{{ adresse.rue }}</td>
+    </tr>
+    <tr>
+        <td>NPA</td>
+        <td>{{ adresse.npa }}</td>
+    </tr>
+    <tr>
+        <td>Localité</td>
+        <td>{{ adresse.localite }}</td>
+    </tr>
+    <tr>
+        <td>Expediable</td>
+        <td>{% if adresse.expediable %}Oui{% else %}Non{% endif %}</td>
+    </tr>
+    <tr>
+        <td>Remarques</td>
+        <td>{{ adresse.remarques }}</td>
+    </tr>
+    </tbody>
+</table>

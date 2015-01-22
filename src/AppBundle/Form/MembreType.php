@@ -61,24 +61,7 @@ class MembreType extends AbstractType
                     'required' => false
                 )
             )
-            /*
 
-            ->add(
-                'telephone',
-                'text',
-                array(
-                    'required' => false
-                )
-            )
-
-            ->add(
-                'email',
-                'text',
-                array(
-                    'required' => false
-                )
-            )
-*/
             ->add(
                 'remarques',
                 'textarea',
@@ -88,8 +71,8 @@ class MembreType extends AbstractType
             )
 
             ->add(
-                'adresse',
-                new AdresseType()
+                'contact',
+                new ContactType()
             )
 
             ->add(

@@ -72,35 +72,14 @@
                                 <div class="ui grid">
                                     <div class="eight wide column">
 
-                                        {% if membre.adressePrincipale is not null %}
-                                            {% if membre.adressePrincipale['origine'] != 'membre' %}
+                                        {% if false %}{# membre.adresseExpedition is not null #}
 
-                                            <h4 class="ui header">Adresse principale</h4>
-                                            <table class="ui definition table">
-                                                <tbody>
-                                                <tr>
-                                                    <td>Adresse à</td>
-                                                    <td><b>{{ membre.adressePrincipale['origine'] }}</b></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Rue</td>
-                                                    <td>{{ membre.adressePrincipale['adresse'].rue }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>NPA</td>
-                                                    <td>{{ membre.adressePrincipale['adresse'].npa }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Localité</td>
-                                                    <td>{{ membre.adressePrincipale['adresse'].localite }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Remarques</td>
-                                                    <td>{{ membre.adressePrincipale['adresse'].remarques }}</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                            {% endif %}
+                                            Adresse à {{ membre.adresseExpedition['origine'] }}
+
+                                            {% include "AppBundle:Adresse:voir.html.twig" with {'adresse': membre.adresseExpedition['adresse']} %}
+
+
+
                                         {% else %}
 
                                             <div class="ui yellow icon message">
@@ -116,13 +95,7 @@
                                         {% endif %}
 
 
-                                        <h4>Adresse du membre</h4>
-
-                                        <table class="ui definition table">
-                                            <tbody>
-                                                {{ form_row(membreForm.adresse) }}
-                                            </tbody>
-                                        </table>
+                                        {% include "AppBundle:Contact:showWithForm.html.twig" with {'contact':membreForm.contact} %}
 
                                     </div>
 
@@ -147,35 +120,11 @@
                                         <div class="ui grid">
                                             <div class="row">
                                                 <div class="six wide column">
-                                                    <h4>Adresse familiale</h4>
-                                                    {% if membre.famille.adresse is not null %}
-                                                    <table class="ui definition table">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>Rue</td>
-                                                                <td>{{ membre.famille.adresse.rue }}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>NPA</td>
-                                                                <td>{{ membre.famille.adresse.npa }}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Localité</td>
-                                                                <td>{{ membre.famille.adresse.localite }}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Facturable</td>
-                                                                <td>{% if membre.famille.adresse %}Oui{% else %}Non{% endif %}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Remarques</td>
-                                                                <td>{{ membre.famille.adresse.remarques }}</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                    {% else %}
-                                                    <p>Aucune adresse. Vous pouvez en ajouter une depuis la <a href="#">page des {{ membre.nom|capitalize }}</a></p>
-                                                    {% endif %}
+
+
+                                                        {% include "AppBundle:Contact:show.html.twig" with {'contact':membre.famille.contact} %}
+
+
                                                 </div>
                                                 <div class="ten wide column">
                                                     <h4>Frères et soeurs</h4>

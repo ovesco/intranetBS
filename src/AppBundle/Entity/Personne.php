@@ -25,11 +25,10 @@ abstract class Personne
      */
     private $sexe;
 
-
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Adresse", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Contact", cascade={"persist", "remove"})
      */
-    private $adresse;
+    private $contact;
 
     /**
      * @var string
@@ -84,28 +83,7 @@ abstract class Personne
         return $this->sexe;
     }
 
-    /**
-     * Set adresse
-     *
-     * @param \AppBundle\Entity\Adresse $adresse
-     * @return Personne
-     */
-    public function setAdresse(\AppBundle\Entity\Adresse $adresse = null)
-    {
-        $this->adresse = $adresse;
 
-        return $this;
-    }
-
-    /**
-     * Get adresse
-     *
-     * @return \AppBundle\Entity\Adresse 
-     */
-    public function getAdresse()
-    {
-        return $this->adresse;
-    }
 
     /**
      * Set iban
@@ -128,6 +106,29 @@ abstract class Personne
     public function getIban()
     {
         return $this->iban;
+    }
+
+    /**
+     * Set contact
+     *
+     * @param Contact $contact
+     * @return Personne
+     */
+    public function setContact(Contact $contact = null)
+    {
+        $this->contact = $contact;
+
+        return $this;
+    }
+
+    /**
+     * Get contact
+     *
+     * @return Contact
+     */
+    public function getContact()
+    {
+        return $this->contact;
     }
 
 
