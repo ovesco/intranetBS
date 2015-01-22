@@ -16,7 +16,9 @@
                             {% if groupe.id != parent.id %}
                                 <a href="{{ path('interne_voir_groupe', {groupe: parent.id}) }}" class="ui labeled blue basic button">{{ parent.nom }}</a>
 
+                                {% if not loop.last %}
                                 <i class="angle double right icon"></i>
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
                         <div class="ui green button">{{ groupe.nom }}</div>

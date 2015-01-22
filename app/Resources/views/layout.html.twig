@@ -117,36 +117,38 @@
     <script src="{{ asset_url }}"></script>
 {% endjavascripts %}
 
+<script type="text/javascript">
+
+    /*
+     * On met en place le petit script tout simple de recherche
+     */
+    var defaultSearchRoute = Routing.generate('interne_search_from_menu', {pattern: "" });
+
+    $('#layout-search')
+            .search({
+                apiSettings: {
+                    url: defaultSearchRoute + "/{query}"
+                },
+                type: 'category'
+            })
+    ;
+
+
+    /*
+     * Pour chaque flashbag contenu, sachant qu'ils ne contiennent que des alertes et des messages, on génère
+     * une alerte correspondante
+     */
+    {% for label, flashes in app.session.flashbag.all %}
+    {% for flash in flashes %}
+    alerte.send("{{ flash }}", "{{ label }}");
+    {% endfor %}
+    {% endfor %}
+</script>
+
 
 
 {% block js %}
-    <script type="text/javascript">
 
-        /*
-         * On met en place le petit script tout simple de recherche
-         */
-        var defaultSearchRoute = Routing.generate('interne_search_from_menu', {pattern: "" });
-
-        $('#layout-search')
-                .search({
-                    apiSettings: {
-                        url: defaultSearchRoute + "/{query}"
-                    },
-                    type: 'category'
-                })
-        ;
-
-
-        /*
-         * Pour chaque flashbag contenu, sachant qu'ils ne contiennent que des alertes et des messages, on génère
-         * une alerte correspondante
-         */
-        {% for label, flashes in app.session.flashbag.all %}
-            {% for flash in flashes %}
-                alerte.send("{{ flash }}", "{{ label }}");
-            {% endfor %}
-        {% endfor %}
-    </script>
 {% endblock %}
 
 </body>
