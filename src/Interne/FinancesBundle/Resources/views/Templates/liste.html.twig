@@ -4,55 +4,69 @@
 
 {% macro liste(data,headers,columns,actions,patterns,filters) %}
 
-
-<table class="ui table">
-    <thead>
-    {% for header in headers %}
-        <tr>
-            {% for header_item in header %}
-                <th>{{ header_item }}</th>
-            {% endfor %}
-            {% if actions|default(null) is not null %}
-                <th>
-                </th>
-
-            {% endif %}
-        </tr>
-    {% endfor %}
-    </thead>
-    <tbody>
-    {% for item in data %}
-    <tr>
-
-        {% for value in columns %}
-            <td>
-
-                {% set object = item %}
-                {# on splite value au '.' afin de cherche la donnée de manière récursive. #}
-                {%  set keys = value|split('.') %}
+{#  #}
+<div class="data-liste">
+    {# Partie toolbar de la liste #}
+    <div class="data-liste-toolbar">
+        <div class="data-liste-button ui button" data-id="test">test</div>
+    </div>
+    <table class="ui table data-liste-content">
 
 
-                {% for key in keys %}
-                    {% if attribute(object, key) is defined %}
-                        {% set object = attribute(object, key) %}
-                    {% else %}
-                        {% set object = null %}
+
+
+        <thead>
+            {% for header in headers %}
+                <tr>
+                    {% for header_item in header %}
+                        <th>{{ header_item }}</th>
+                    {% endfor %}
+
+                    {# Si aucune actions n'est définie, on n'ajoute pas cette colonne. #}
+                    {% if actions|default(null) is not null %}
+                        <th> </th>
                     {% endif %}
-                {% endfor %}
-                {% set dataValue = object %}
+                </tr>
+            {% endfor %}
+        </thead>
+        <tbody>
+        {% for item in data %}
+            {# On stock l'id de l'objet dans la ligne #}
+            <tr data-id="{{ item.id }}">
 
+                {# on affiche chaque colonne #}
+                {% for value in columns %}
+                    <td>
 
+                    {% set object = item %}
+                    {# on splite value au '.' afin de cherche la donnée de manière récursive. (ex. membre.famille.id) #}
+                    {%  set keys = value|split('.') %}
 
+                    {# Recherche récursive de la valeur à afficher #}
+                    {% for key in keys %}
+                        {% if attribute(object, key) is defined %}
+                            {% set object = attribute(object, key) %}
+                        {% else %}
+                            {% set object = null %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {# on sauve la valeur #}
+                    {% set dataValue = object %}
+
+                    {# Différents paramettre de gestion des balise de patterne et des filtres #}
                     {% set openBalise = null %}
                     {% set closeBalise = null %}
                     {% set printData = true %}
                     {% set applayedFilter = null %}
 
+                    {# Gestion des patterne #}
                     {% for pattern in patterns %}
                         {% if pattern[value] is defined %}
 
                             {% set applyPattern = true %}
 
+                            {# Liste des conditions de patterne possible #}
                             {% if pattern['equal']  is defined %}
                                 {% if pattern['equal'] !=  dataValue%}
                                     {% set applyPattern = false %}
@@ -71,7 +85,9 @@
                                 {% endif %}
                             {% endif %}
 
+                            {# Création des balises en vue de l'application du patterne #}
                             {% if applyPattern %}
+                                {# Si le patterne ne contient pas "[data]“ alors la valeur ne sera pas affichée #}
                                 {%  set balises = pattern[value]|split('[data]') %}
                                 {% if balises|length == 2 %}
                                     {%  set openBalise = balises[0] %}
@@ -85,6 +101,7 @@
                         {% endif %}
                     {% endfor %}
 
+                    {# Recherche des filtre. #}
                     {% for filter in filters %}
                         {% if filter[value] is defined %}
                             {% set applayedFilter = filter[value] %}
@@ -95,7 +112,9 @@
                     {# le filtre raw permet d'insérer des balises html #}
                     {{ openBalise|raw }}
                     {% if printData %}
+                        {# impression de la donnée et éventuellement de son filtre #}
                         {% if applayedFilter is null %}
+                            {# sans filtre #}
                             {{ dataValue }}
                         {% elseif  applayedFilter == 'number_2'%}
                             {{ dataValue|number_format(2, '.', ',') }}
@@ -103,29 +122,26 @@
                     {% endif %}
                     {# le filtre raw permet d'insérer des balises html #}
                     {{ closeBalise|raw }}
+                </td>
 
-
-            </td>
-
-        {% endfor %}
-        {% if actions|default(null) is not null %}
-            <td>
-            {% for action in actions %}
-                {% set icon = '' %}
-                {% if action[0] == 'voir' %}
-                    {% set icon = 'zoom' %}
-                {% elseif action[0] == 'delete' %}
-                    {% set icon = 'trash' %}
-                {% endif %}
-                <i id="{{ action[2] }}"class="{{ icon }} icon popupable" data-content="{{ action[1] }}"></i>
             {% endfor %}
-            </td>
+            {% if actions|default(null) is not null %}
+                <td>
+                    {# Gestiond des actions possible pour chaque ligne #}
+                    {% for action in actions %}
+                        {% set icon_action = action[0] %}
+                        {% set label_action = action[1] %}
+                        {% set event_action = action[2] %}
+                        <i class="data-liste-row-action {{ icon_action }} icon popupable" data-content="{{ label_action }}" data-id="{{ item.id }}" data-event="{{ event_action }}"></i>
+                    {% endfor %}
+                </td>
 
-        {% endif %}
-    </tr>
-    {% endfor %}
-    </tbody>
+            {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
 
-</table>
+    </table>
+</div>
 {% endmacro %}
 

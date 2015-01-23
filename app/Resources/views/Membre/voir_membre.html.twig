@@ -1,5 +1,7 @@
 {% extends 'layout.html.twig' %}
 
+
+
 {% block titre %}
     {{ membre.prenom }} {{ membre.nom }}
 {% endblock %}
@@ -219,8 +221,12 @@
 
 
                             <div class="ui bottom attached tab segment" data-tab="finances-creances-factures">
-                                {# Insertion de la partie facture et créance pour le membre #}
-                                {% include "InterneFinancesBundle:Interface:interface.html.twig" with {'ownerEntity': membre } %}
+                                {# Insertion de la partie facture et créance pour le membre #
+                                {% include "InterneFinancesBundle:Interface:interface.html.twig" with {'ownerEntity': membre } %}#}
+
+                                {% include "InterneFinancesBundle:Interface:interface.html.twig" with {'ownerEntity': membre }%}
+
+
                             </div>
 
                         </div>
@@ -288,6 +294,20 @@
 {% endblock %}
 
 {% block js %}
+
+
+    {# javscript pour l'interface du finance Bundle #}
+    {% javascripts
+    '@InterneFinancesBundle/Resources/public/js/creance.js'
+    '@InterneFinancesBundle/Resources/public/js/facture.js'
+    '@InterneFinancesBundle/Resources/public/js/interface.js'
+    '@InterneFinancesBundle/Resources/public/js/rappel.js'%}
+    <script src="{{ asset_url }}"></script>
+
+    {% endjavascripts %}
+
+
+
 
     {% javascripts '@AppBundle/Resources/public/js/editable.js' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -461,3 +481,4 @@
     </script>
 
 {% endblock %}
+

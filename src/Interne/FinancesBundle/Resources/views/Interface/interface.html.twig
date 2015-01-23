@@ -1,4 +1,6 @@
+
 {% import "InterneFinancesBundle:Templates:liste.html.twig" as macro %}
+
 
 
 <!-- on stocke les infos du propriétaire pour les récupérer -->
@@ -84,7 +86,7 @@
                 {'montantRecu':'number_2'},
             ] %}
 
-            {% if ownerEntity.factures is not empty %}
+            {% if ownerEntity.creances is not empty %}
                 {{ macro.liste(ownerEntity.creances,headers,columns,actions,patterns,filters) }}
             {% endif %}
 
@@ -100,16 +102,5 @@
 
 
 
-{% block javascript %}
-
-    {% javascripts
-    '@InterneFinancesBundle/Resources/public/js/creance.js'
-    '@InterneFinancesBundle/Resources/public/js/facture.js'
-    '@InterneFinancesBundle/Resources/public/js/interfaceMembreFamille.js'
-    '@InterneFinancesBundle/Resources/public/js/rappel.js'%}
-    <script src="{{ asset_url }}"></script>
-
-    {% endjavascripts %}
 
 
-{% endblock %}

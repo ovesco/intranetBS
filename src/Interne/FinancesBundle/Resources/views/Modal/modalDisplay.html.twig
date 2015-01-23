@@ -8,11 +8,14 @@
 
 </div>
 
+{% block js %}
 
 {% javascripts
 '@InterneFinancesBundle/Resources/public/js/modalDisplay.js'
 %}
 <script src="{{ asset_url }}"></script>
 {% endjavascripts %}
+
+{% endblock %}
 
 

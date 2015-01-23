@@ -6,6 +6,24 @@ jQuery(document).ready(function() {
         context: $('#search-infos-context')
     });
 
+    /**
+     * Gestion des évenement envoyé par les liste de créance et de facture.
+     */
+    document.addEventListener('data-liste-event', function (e) {
+
+        switch(e.detail.name){
+            case 'event_voir_facture':
+                openFactureShow(e.detail.data,'search');
+                break;
+            case 'event_delete_facture':
+                //todo a faire
+                break;
+            case 'event_voir_creance':
+                openCreanceShow(e.detail.data,'search');
+                break;
+        }
+
+    }, false);
 
 
 });

@@ -1,4 +1,4 @@
-
+{% import "InterneFinancesBundle:Templates:liste.html.twig" as macro %}
 
 <div id="search-infos-context" class="tab-context">
 
@@ -19,119 +19,54 @@
         <div class="ui grid" id="factureSearchContent">
 
             <div class="row">
-                <div class="column">
-                    <table class="ui table" id="factureSearchTable">
-                        <thead>
-                        <tr>
-                            <th rowspan="2">
-                                <input type="checkbox" onclick="selectAllFacture(this);">
-                            </th>
-                            <th rowspan="2">Num. Réf.</th>
-                            <th rowspan="2">Statut</th>
-                            <th colspan="4">Montants</th>
-                            <th rowspan="2">
-                                <div class="ui compact menu">
-                                    <div class="ui simple dropdown item">
-                                        <i class="dropdown icon"></i>
-                                        Action en masse
-                                        <div class="menu">
-                                            <div class="item"><i class="print icon"></i>Imprimer (todo)</div>
-                                            <div class="item"><i class="send icon"></i>Envoyer (todo)</div>
-                                            <div class="item" onclick="openRappelForm(null,'searchAddToListe')"><i class="add square icon"></i>Ajouter un rappel</div>
-                                            <div class="item" onclick="deleteListeFacture();"><i class="trash icon"></i>Supprimer la liste</div>
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="eight wide column">
 
-                            </th>
-                        </tr>
-                        <tr>
-                            <th>Créances</th>
-                            <th>Frais rappels</th>
-                            <th>Total</th>
-                            <th>Reçu</th>
-
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% if factures is not empty %}
-                            {% for facture in factures %}
-                                <tr>
-                                    <td>
-                                        <input class="selectFacture" type="checkbox" value="{{ facture.id }}"/>
-                                    </td>
-                                    <td>N°{{ facture.id }}</td>
-                                    {% if facture.statut == 'ouverte' %}
-                                        <td><div class="ui label blue">Ouverte</div></td>
-                                    {% elseif facture.statut == 'payee' %}
-                                        <td><div class="ui label green">Payée</div></td>
-                                    {% else %}
-                                        <td></td>
-                                    {% endif %}
-                                    <td>{{ facture.montantEmisCreances|number_format(2, '.', ',') }}</td>
-                                    <td>{{ facture.montantEmisRappels|number_format(2, '.', ',') }}</td>
-                                    <td>{{ facture.montantEmis|number_format(2, '.', ',') }}</td>
-                                    <td>{{ facture.montantRecu|number_format(2, '.', ',') }}</td>
-                                    <td>
-                                        <div class="ui compact menu">
-                                            <div class="ui simple dropdown item">
-                                                <i class="dropdown icon"></i>
-                                                Actions
-                                                <div class="menu">
-
-                                                    <div class="item"
-                                                       onclick="outOfSearch({{ facture.id }},'facture');" >
-                                                        <i class="delete red icon"></i>
-                                                        Exclure ce résultat
-                                                    </div>
-
-                                                    <div class="item"
-                                                       onclick="openFactureShow({{ facture.id }},'search');" >
-                                                        <i class="zoom icon"></i>
-                                                        Détails de la facture
-                                                    </div>
-
-                                                    {% if facture.statut == 'ouverte' %}
-                                                        <div class="item"
-                                                           onclick="openRappelForm({{ facture.id }},'search');" >
-                                                            <i class="add square icon"></i>
-                                                            Ajouter un rappel
-                                                        </div>
-
-                                                        <div class="item"
-                                                           onclick="factureEnvoi({{ facture.id }});" >
-                                                            <i class="send icon"></i>
-                                                            Envoyer
-                                                        </div>
-
-                                                    {% endif %}
-
-                                                    <div class="item">
-                                                        <a
-                                                           href="{{ path('interne_fiances_print_factures', {'id' : facture.id} ) }}"
-                                                           target="_blank">
-                                                            <i class="print icon"></i>
-                                                            Imprimer
-                                                        </a>
-                                                    </div>
+                    {% if factures is not empty %}
 
 
 
+                        {% set headers = [['Num. Réf','Statut']]%}
+
+                        {% set columns = ['id','statut'] %}
+
+                        {% set actions = [['zoom','Afficher','event_voir_facture'],['trash','Supprimer','event_delete_facture']] %}
+
+                        {% set patterns = [
+                        {'statut':'<div class="ui label green">Payée</div>','equal':'payee'},
+                        {'statut':'<div class="ui label blue">Ouverte</div>','equal':'ouverte'},
+                        {'id':'N°[data]'}
+                        ] %}
+
+                        {% set filters = [{}] %}
+
+                        {{ macro.liste(factures,headers,columns,actions,patterns,filters) }}
 
 
+                    {% endif %}
 
-                                                    <div class="item"
-                                                       onclick="deleteFactureFromSearch({{ facture.id }});">
-                                                        <i class="trash icon red"></i>
-                                                        Supprimer
-                                                    </div>
+                </div>
+                <div class="eight wide column">
+
+                    {% if creances is not empty %}
+
+                        {% set headers = [['Facutre','Titre','Emis','Recu']]%}
+
+                        {% set columns = ['facture.id','titre','montantEmis','montantRecu'] %}
+
+                        {% set actions = [['zoom','Afficher','event_voir_creance']] %}
+
+                        {% set patterns = [ {'facture.id':'N°[data]','diff':''},
+                        {'facture.id':'<div class="ui label orange">En attente</div>','equal':''},] %}
 
 
+                        {% set filters = [
+                        {'montantEmis':'number_2'},
+                        {'montantRecu':'number_2'},
+                        ] %}
 
+                        {{ macro.liste(creances,headers,columns,actions,patterns,filters) }}
 
-                                                </div>
-                                            </div>
-                                        </div>
+                    {% endif %}
 
 
 
@@ -139,13 +74,12 @@
 
 
 
-                                    </td>
 
-                                </tr>
-                            {% endfor %}
-                        {% endif %}
-                        </tbody>
-                    </table>
+
+
+
+
+
                 </div>
             </div>
         </div>

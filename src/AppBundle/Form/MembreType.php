@@ -75,6 +75,8 @@ class MembreType extends AbstractType
                 new ContactType()
             )
 
+            ->add('envoiFacture','choice', array('choices' => array('Membre' => 'Membre', 'Famille' => 'Famille')))
+
             ->add(
                 'id',
                 'hidden'

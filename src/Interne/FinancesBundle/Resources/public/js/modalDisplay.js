@@ -28,7 +28,6 @@ function openFactureShow(idFacture,fromPage)
 
             modalDisplayNewContent(htmlResponse);
             modalDisplayOpen();
-
         }
     });
 }

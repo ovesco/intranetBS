@@ -13,11 +13,7 @@ jQuery(document).ready(function() {
 
 });
 
-$('#voir_facture').click(function () {
 
-    alert('coucou');
-
-});
 
 function deleteFactureFromInterface(element){
     var id = $(element).data("id");
