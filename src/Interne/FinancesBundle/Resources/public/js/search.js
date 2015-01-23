@@ -21,6 +21,12 @@ jQuery(document).ready(function() {
             case 'event_voir_creance':
                 openCreanceShow(e.detail.data,'search');
                 break;
+
+            case 'event_masse_delete_facture':
+                //todo
+                alert(e.detail.data);
+                break;
+
         }
 
     }, false);

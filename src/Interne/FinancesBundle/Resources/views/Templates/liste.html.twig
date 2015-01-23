@@ -2,19 +2,52 @@
 
 
 
-{% macro liste(data,headers,columns,actions,patterns,filters) %}
+{% macro liste(data,headers,columns,actions,patterns,filters,toolbar) %}
 
 {#  #}
 <div class="data-liste">
     {# Partie toolbar de la liste #}
-    <div class="data-liste-toolbar">
-        <div class="data-liste-button ui button" data-id="test">test</div>
-    </div>
+    {% if toolbar is not null %}
+        <div class="data-liste-toolbar">
+
+
+            {% if toolbar['search_bar'] is defined %}
+                {% if toolbar['search_bar'] %}
+                    <div class="ui input focus">
+                        <input class="data-liste-search" type="text" placeholder="Rechercher...">
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            {% if toolbar['masse_actions'] is defined %}
+
+                <div class="ui compact menu">
+                    <div class="ui simple dropdown item">
+                        <i class="dropdown icon"></i>
+                        Action sur la liste
+                        <div class="menu">
+                            {% for action in toolbar['masse_actions'] %}
+
+                                {% set icon_action = action[0] %}
+                                {% set label_action = action[1] %}
+                                {% set event_action = action[2] %}
+
+                                <div class="data-liste-button item" data-event="{{ event_action }}"><i class="icon {{ icon_action }}"></i>{{ label_action }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+
+
+            {% endif %}
+
+
+        </div>
+
+    {% endif %}
+
     <table class="ui table data-liste-content">
-
-
-
-
         <thead>
             {% for header in headers %}
                 <tr>

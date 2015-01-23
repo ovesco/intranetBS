@@ -3,6 +3,8 @@
  */
 jQuery(document).ready(function() {
 
+    var listeArray =[];
+
     $('.data-liste').each(function(){
 
         var content = $(this).find('.data-liste-content');
@@ -10,6 +12,8 @@ jQuery(document).ready(function() {
 
         var toolbar = $(this).find('.data-liste-toolbar');
         data_liste.initToolBar(toolbar);
+
+        listeArray.push(data_liste);
 
     });
 
@@ -35,6 +39,9 @@ var data_liste = {
 
         this.table = table;
 
+        //on sauve tout les lignes ici.
+        this.tbody = $(this.table).find('tbody');
+
         this.rows = [];
 
 
@@ -46,7 +53,9 @@ var data_liste = {
 
            var id = $(this).data('id');
 
-           self.rows[id] = 0; //set as inactive
+           self.rows[id] = [];
+           self.rows[id]['selected'] = false;//set as inactive
+           self.rows[id]['hidden'] = false;
 
            $(this).bind({
                click: function() {
@@ -55,11 +64,11 @@ var data_liste = {
                    if($(this).hasClass('active'))
                    {
                        $(this).removeClass('active');
-                       self.rows[id] = 0;//set as inactive
+                       self.rows[id]['selected'] = false;//set as inactive
                    }
                    else{
                        $(this).addClass('active');
-                       self.rows[id] = 1;//set as active
+                       self.rows[id]['selected'] = true;//set as active
                    }
                }
            });
@@ -99,17 +108,26 @@ var data_liste = {
 
         $(toolbar).find('.data-liste-button ').each(function(){
 
-            var id = $(this).data('id');
+            var event = $(this).data('event');
 
-            switch(id) {
-                case 'test':
-                    $(this).bind({
-                        click: function() {
-                            self.getSelectedIds();
-                        }
-                    });
-                    break;
-            }
+            $(this).bind({
+                click: function() {
+                    self.sendEvent(event,self.getSelectedIds());
+                }
+            });
+
+        });
+
+        $(toolbar).find('.data-liste-search ').each(function(){
+
+            $(this).bind({
+                change: function() {
+
+                    var search =
+                    self.showListe();
+                }
+            });
+
         });
 
     },
@@ -123,7 +141,7 @@ var data_liste = {
         var selectedIds = [];
 
         for (var id in this.rows) {
-            if(this.rows[id] == 1)
+            if(this.rows[id]['selected'])
             {
                 selectedIds.push(id);
             }
@@ -139,7 +157,27 @@ var data_liste = {
     sendEvent: function (eventName,eventData) {
         var event = new CustomEvent('data-liste-event', { 'detail': {'name':eventName, 'data':eventData} });
         document.dispatchEvent(event);
+    },
+
+    showListe:function(){
+
+        var self = this;
+
+        $(self.tbody).find('tr').each(function () {
+
+            var id = $(this).data('id');
+
+            if(!self.rows[id]['hidden'])
+            {
+                $(this).hide();
+            }
+
+
+        });
+
     }
+
+
 
 
 

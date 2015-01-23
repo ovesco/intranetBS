@@ -25,6 +25,11 @@
 
 
 
+                        {% set toolbar =
+                            {'masse_actions':[['trash','Supprimer','event_masse_delete_facture']],
+                            'search_bar':true }
+                        %}
+
                         {% set headers = [['Num. Réf','Statut']]%}
 
                         {% set columns = ['id','statut'] %}
@@ -39,7 +44,7 @@
 
                         {% set filters = [{}] %}
 
-                        {{ macro.liste(factures,headers,columns,actions,patterns,filters) }}
+                        {{ macro.liste(factures,headers,columns,actions,patterns,filters,toolbar) }}
 
 
                     {% endif %}
@@ -64,7 +69,7 @@
                         {'montantRecu':'number_2'},
                         ] %}
 
-                        {{ macro.liste(creances,headers,columns,actions,patterns,filters) }}
+                        {{ macro.liste(creances,headers,columns,actions,patterns,filters,null) }}
 
                     {% endif %}
 
