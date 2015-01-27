@@ -55,7 +55,12 @@ class Role implements RoleInterface
     private $role;
 
     /**
-     * @ORM\OneToOne(targetEntity="Role")
+     * @ORM\OneToMany(targetEntity="Role", mappedBy="parent", cascade={"persist"})
+     */
+    private $enfants;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Role", inversedBy="enfants", cascade={"persist"})
      */
     private $parent;
     
@@ -181,5 +186,38 @@ class Role implements RoleInterface
     public function getParent()
     {
         return $this->parent;
+    }
+
+    /**
+     * Add enfants
+     *
+     * @param \Interne\SecurityBundle\Entity\Role $enfants
+     * @return Role
+     */
+    public function addEnfant(\Interne\SecurityBundle\Entity\Role $enfants)
+    {
+        $this->enfants[] = $enfants;
+        $enfants->setParent($this);
+        return $this;
+    }
+
+    /**
+     * Remove enfants
+     *
+     * @param \Interne\SecurityBundle\Entity\Role $enfants
+     */
+    public function removeEnfant(\Interne\SecurityBundle\Entity\Role $enfants)
+    {
+        $this->enfants->removeElement($enfants);
+    }
+
+    /**
+     * Get enfants
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEnfants()
+    {
+        return $this->enfants;
     }
 }

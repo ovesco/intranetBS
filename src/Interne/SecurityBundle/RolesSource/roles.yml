@@ -1,0 +1,19 @@
+admin:
+    role: ROLE_ADMIN
+    nom:  role administrateur
+    enfants:
+        finances:
+            role: ROLE_FINANCES
+            nom: role principale des finances
+            enfants:
+                un_autre_role:
+                    role: ROLE_UN_AUTRE_ROLE
+                    nom:  un autre super role
+                encore_un:
+                    role: ROLE_ENCORE_UN
+                    nom:  encore un autre
+
+        app:
+            role: ROLE_APP
+            nom:  le role principal de l'application
+
