@@ -9,6 +9,23 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Role
  *
+ * ROLE_ADMIN
+ *
+ * full access
+ *
+ * ROLE_USER
+ *
+ * Peut voir sa page personnel ainsi que se(s) groupe(s) actuel(s) et leurs sous groupes.
+ *
+ * ROLE_FINANCE_ADD
+ *
+ * Peut ajouter des créances et les facturer.
+ *
+ * ROLE_FINANCE_GESTION
+ *
+ * Gestion complète de la partie finances.
+ *
+ *
  * @ORM\Table(name="security_roles")
  * @ORM\Entity
  */
@@ -38,7 +55,12 @@ class Role implements RoleInterface
     private $role;
 
     /**
-     * @ORM\OneToOne(targetEntity="Role")
+     * @ORM\OneToMany(targetEntity="Role", mappedBy="parent")
+     */
+    private $enfants;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Role", inversedBy="enfants")
      */
     private $parent;
     
@@ -141,5 +163,28 @@ class Role implements RoleInterface
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \Interne\SecurityBundle\Entity\Role $parent
+     * @return Role
+     */
+    public function setParent(\Interne\SecurityBundle\Entity\Role $parent = null)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Interne\SecurityBundle\Entity\Role 
+     */
+    public function getParent()
+    {
+        return $this->parent;
     }
 }
