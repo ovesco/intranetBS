@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 use Interne\FinancesBundle\Entity\FactureToMembre;
 use Interne\FinancesBundle\Entity\FactureToFamille;
+use fpdf\FPDF;
 
 
 /**
@@ -83,12 +84,11 @@ class FactureController extends Controller
      */
     /**
      * @Route("/create_ajax", name="interne_fiances_facture_create_ajax", options={"expose"=true})
-     *
+     * @param Request $request
      * @return Response
      */
-    public function facturationAjaxAction()
+    public function facturationAjaxAction(Request $request)
     {
-        $request = $this->getRequest();
 
         if ($request->isXmlHttpRequest()) {
 
@@ -100,21 +100,20 @@ class FactureController extends Controller
             //cération des nouvelles factures
             $this->createFacture($listeIdCreance);
 
-            return new Response();
+            return new Response('success');
 
 
         }
-        return new Response();
+        return new Response('error');
     }
 
     /**
      * @Route("/envoi", name="interne_fiances_facture_envoi_ajax", options={"expose"=true})
-     *
+     * @param Request $request
      * @return Response
      */
-    public function factureEnvoiAjaxAction()
+    public function factureEnvoiAjaxAction(Request $request)
     {
-        $request = $this->getRequest();
 
         if ($request->isXmlHttpRequest()) {
 
@@ -129,8 +128,10 @@ class FactureController extends Controller
              * Creation du PDF
              */
             $pdf = $this->get('Pdf'); //call service
-            $printer = new PrintController();
-            $pdf = $printer->factureToPdf($em,$facture,$pdf);
+            //$pdf->addPage();
+            //$printer = new PrintController();
+            //$pdf = $printer->factureToPdf($em,$facture,$pdf);
+
 
             $ownerId = $facture->getOwner()->getId();
             $ownerClass = $facture->getOwner()->getClass();
@@ -139,11 +140,13 @@ class FactureController extends Controller
             $listeEnvoi->addEnvoi($ownerId,$ownerClass,$pdf,'Facture N°'.$idFacture);
             $listeEnvoi->save();
 
-            return new Response();
+
+
+            return new Response('success');
 
 
         }
-        return new Response();
+        return new Response('error');
 
     }
 

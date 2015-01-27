@@ -8,7 +8,7 @@ function deleteCreance(id){
         data: data,
         async: false, //option utiliée pour retourner la valeur de success en dehors de la requete ajax
         error: function(jqXHR, textStatus, errorThrown) { success = false; },
-        success: function(htmlResponse) { success = true; }
+        success: function(response) { success = (response == 'success'); }
     });
     return success;
 }
@@ -30,7 +30,8 @@ function addCreance(idForm){
         data: form,
         async: false, //option utiliée pour retourner la valeur de success en dehors de la requete ajax
         error: function(jqXHR, textStatus, errorThrown) { success = false;  },
-        success: function(htmlResponse) { success = true; }
+        success: function(response) { success = (response == 'success');
+        }
     });
     return success;
 }

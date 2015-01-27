@@ -1,0 +1,26 @@
+{% set toolbar =
+{'masse_actions':[['money','Facturer les cérance','event_masse_facturation_creance']],
+'search_bar':true,
+'selection_buttons':true}
+%}
+
+{% set headers = [['Facutre','Titre','Emis','Recu']]%}
+
+{% set columns = ['facture.id','titre','montantEmis','montantRecu'] %}
+
+{% set actions = [  {'icon':'zoom','label':'Afficher','event':'event_voir_creance'},
+                    {'icon':'trash','label':'Supprimer','event':'event_delete_creance','conditions':[['facture.id','equal','']]}
+                ] %}
+
+{% set patterns = [ {'facture.id':'N°[data]','diff':''},
+{'facture.id':'<div class="ui label orange">En attente</div>','equal':''},] %}
+
+
+{% set filters = [
+{'montantEmis':'number_2'},
+{'montantRecu':'number_2'},
+] %}
+
+{% if ownerEntity.creances is not empty %}
+    {{ macro.liste('liste_creance',ownerEntity.creances,headers,columns,actions,patterns,filters,toolbar) }}
+{% endif %}

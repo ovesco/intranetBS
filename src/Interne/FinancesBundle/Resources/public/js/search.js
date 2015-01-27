@@ -182,20 +182,7 @@ function addRappelToListeFromSearch(idForm)
     alerte.send('Rappel ajouté','info',2000);
 }
 
-function selectAllFacture(box)
-{
-    $('#factureSearchTable').find('input.selectFacture').each(function () {
-        if(box.checked)
-        {
-            this.checked = true;
-        }
-        else
-        {
-            this.checked = false;
-        }
 
-    });
-}
 
 function deleteListeCreance()
 {

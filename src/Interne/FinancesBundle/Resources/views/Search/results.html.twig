@@ -5,11 +5,9 @@
     <div class="ui top attached tabular menu">
         <div class="active item" data-tab="factures">
             Factures
-            <div class="ui green circular label">{{ factures|length }}</div>
         </div>
         <div class="item" data-tab="creances">
             Creances
-            <div class="ui green circular label">{{ creances|length }}</div>
         </div>
         <div class="item">
             <div class="ui button" onclick="openSearchForm();"><i class="search icon"></i>Recherche</div>
@@ -19,73 +17,17 @@
         <div class="ui grid" id="factureSearchContent">
 
             <div class="row">
-                <div class="eight wide column">
+                <div class="column">
 
                     {% if factures is not empty %}
 
-
-
-                        {% set toolbar =
-                            {'masse_actions':[['trash','Supprimer','event_masse_delete_facture']],
-                            'search_bar':true }
-                        %}
-
-                        {% set headers = [['Num. Réf','Statut']]%}
-
-                        {% set columns = ['id','statut'] %}
-
-                        {% set actions = [['zoom','Afficher','event_voir_facture'],['trash','Supprimer','event_delete_facture']] %}
-
-                        {% set patterns = [
-                        {'statut':'<div class="ui label green">Payée</div>','equal':'payee'},
-                        {'statut':'<div class="ui label blue">Ouverte</div>','equal':'ouverte'},
-                        {'id':'N°[data]'}
-                        ] %}
-
-                        {% set filters = [{}] %}
-
-                        {{ macro.liste(factures,headers,columns,actions,patterns,filters,toolbar) }}
-
+                        {% include "InterneFinancesBundle:Search:listeFacture.html.twig" with {'factures':factures}%}
 
                     {% endif %}
 
                 </div>
-                <div class="eight wide column">
-
-                    {% if creances is not empty %}
-
-                        {% set headers = [['Facutre','Titre','Emis','Recu']]%}
-
-                        {% set columns = ['facture.id','titre','montantEmis','montantRecu'] %}
-
-                        {% set actions = [['zoom','Afficher','event_voir_creance']] %}
-
-                        {% set patterns = [ {'facture.id':'N°[data]','diff':''},
-                        {'facture.id':'<div class="ui label orange">En attente</div>','equal':''},] %}
 
 
-                        {% set filters = [
-                        {'montantEmis':'number_2'},
-                        {'montantRecu':'number_2'},
-                        ] %}
-
-                        {{ macro.liste(creances,headers,columns,actions,patterns,filters,null) }}
-
-                    {% endif %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-                </div>
             </div>
         </div>
     </div>
@@ -93,134 +35,11 @@
 
             <div class="row">
                 <div class="column">
+                    {% if creances is not empty %}
 
-                    <table class="ui table" id="creanceSearchTable">
-                        <thead>
-                        <tr>
-                            <th rowspan="2">
-                                <input type="checkbox" onclick="selectAllCreances(this);">
-                            </th>
-                            <th rowspan="2">Statut</th>
-                            <th rowspan="2">Facture</th>
-                            <th rowspan="2">Propriétaire</th>
+                        {% include "InterneFinancesBundle:Search:listeCreance.html.twig" with {'creances':creances}%}
 
-                            <th rowspan="2">Titre</th>
-
-                            <th colspan="2">Montants</th>
-                            <th rowspan="2">
-                                <div class="ui compact menu">
-                                    <div class="ui simple dropdown item">
-                                        <i class="dropdown icon"></i>
-                                        Action en masse
-                                        <div class="menu">
-                                            <div class="item" onclick="createFactureFromSearch();"><i class="file text outline icon"></i>Facturer</div>
-                                            <div class="item" onclick="deleteListeCreance();"><i class="trash icon"></i>Supprimer la liste</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </th>
-                        </tr>
-                        <tr>
-
-                            <th>Emis</th>
-                            <th>Reçu</th>
-
-                        </tr>
-                        </thead>
-
-                        <tbody>
-                        {% if creances is not empty %}
-
-                            {# On commence par les creances non facturée #}
-                            {% for creance in creances  %}
-
-                                <tr>
-                                    <td>
-                                        {% if creance.facture is  empty %}
-                                            <input class="selectCreance" type="checkbox" value="{{ creance.id }}">
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        {% if creance.facture is not empty %}
-                                            {% if creance.facture.statut == 'ouverte' %}
-                                                <div class="ui label blue">Ouverte</div>
-                                            {% elseif creance.facture.statut == 'payee' %}
-                                                <div class="ui label green">Payée</div>
-                                            {% endif %}
-
-                                        {% else %}
-                                            <div class="ui label orange">En attente</div>
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        {% if creance.facture is not empty %}
-                                            N°{{ creance.facture.id }}
-                                        {% else %}
-                                            En attente
-                                        {% endif %}
-
-                                    </td>
-                                    <td>
-                                        {% if creance.getOwner.isClass('Membre') %}
-                                            {{ creance.membre.prenom }} {{ creance.membre.nom }}
-                                        {% elseif creance.getOwner.isClass('Famille') %}
-                                            {{ creance.famille }}
-                                        {% endif %}
-
-                                    </td>
-
-                                    <td>{{ creance.titre }}</td>
-
-                                    <td>{{ creance.montantEmis|number_format(2, '.', ',') }}</td>
-                                    <td>{{ creance.montantRecu|number_format(2, '.', ',') }}</td>
-                                    <td>
-
-                                        <div class="ui compact menu">
-                                            <div class="ui simple dropdown item">
-                                                <i class="dropdown icon"></i>
-                                                Action
-                                                <div class="menu">
-                                                    <div class="item" onclick="openCreanceShow({{ creance.id }});" >
-                                                        <i class="zoom icon"></i>
-                                                        Détails de la créance
-                                                    </div>
-
-                                                    <div class="item" onclick="outOfSearch({{ creance.id }},'creance');" >
-                                                        <i class="delete red icon"></i>
-                                                        Exclure de la recherche
-                                                    </div>
-
-                                                    {% if creance.facture is empty %}
-
-                                                        <div class="item" onclick="deleteCreanceFromSearch({{ creance.id }});" >
-                                                            <i class="trash red icon"></i>
-                                                        </div>
-                                                        Supprimer
-
-
-                                                    {% endif %}
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-
-                                    </td>
-                                </tr>
-
-
-                            {% endfor %}
-
-
-
-                        {% else %}
-
-                        {% endif %}
-
-                        </tbody>
-                    </table>
-
+                    {% endif %}
                 </div>
             </div>
         </div>

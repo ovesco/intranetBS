@@ -20,6 +20,8 @@
 
     {% if fromPage == 'interface' %}
         <div class="ui button blue" onclick="addRappelFromInterface({{ idFacture }},'addRappelForm');">Ajouter</div>
+    {% elseif fromPage == 'interfaceListe' %}
+        <div class="ui button blue" onclick="addRappelToListeFromInterface('addRappelForm');">Ajouter</div>
     {% elseif fromPage == 'search' %}
         <div class="ui button blue" onclick="addRappelFromSearch({{ idFacture }},'addRappelForm');">Ajouter</div>
     {% elseif fromPage == 'searchAddToListe' %}

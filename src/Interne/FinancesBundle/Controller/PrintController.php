@@ -2,7 +2,9 @@
 
 namespace Interne\FinancesBundle\Controller;
 
+use fpdf\FPDF;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Interne\FinancesBundle\Entity\Rappel;
@@ -11,6 +13,7 @@ use Interne\FinancesBundle\Entity\Parametre;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Utils\Export\Pdf;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * Class PrintController
@@ -20,27 +23,76 @@ use Doctrine\ORM\EntityManager;
 class PrintController extends Controller
 {
     /**
-     * @param $id
-     * @Route("/factures/{id}", name="interne_fiances_print_factures", options={"expose"=true})
+     * @param Request $request
+     * @Route("/factures", name="interne_fiances_print_factures", options={"expose"=true})
      * @return Response
      */
-    public function printAction($id)
+    public function printAjaxAction(Request $request)
     {
-        /*
-         * Creation du PDF
-         */
-        $pdf = $this->get('Pdf'); //call service
+        if($request->isXmlHttpRequest()) {
 
-        $em = $this->getDoctrine()->getManager();
-        $factureRepo = $em->getRepository('InterneFinancesBundle:Facture');
+            $id = $request->request->get('idFacture');
 
-        $facture = $factureRepo->find($id);
-        $pdf = $this->factureToPdf($em,$facture,$pdf);
+            /*
+             * Creation du PDF
+             */
+            $pdf = $this->get('Pdf'); //call service
 
-        $adresse = $facture->getOwner()->getAdressePrincipale();
-        $pdf->addAdresseEnvoi($adresse);
+            $em = $this->getDoctrine()->getManager();
+            $factureRepo = $em->getRepository('InterneFinancesBundle:Facture');
 
-        return $pdf->Output('','I');
+            //todo a corriger
+           // $facture = $factureRepo->find($id);
+           // $pdf = $this->factureToPdf($em,$facture,$pdf);
+
+            //Todo a corriger
+            //$adresse = $facture->getOwner()->getAdressePrincipale();
+            //$pdf->addAdresseEnvoi($adresse);
+
+            $pdf->AddPage();
+            $pdf->SetAutoPageBreak(false);
+            $pdf->SetLeftMargin(20);
+            $pdf->SetRightMargin(20);
+
+            $pdf->SetFont('Arial','',9);
+
+            $cellWidth = 50;//ne sert pas vraiment
+            $cellHigh = 4;
+
+            /*
+             * Adresse haut de page
+             */
+            $x =  20;
+            $y =  20;
+            $pdf->SetXY($x,$y);
+            $pdf->MultiCell($cellWidth,$cellHigh,'coucou pdf');
+
+
+
+
+
+
+            $response = new Response();
+
+            $d = $response->headers->makeDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                'foo.pdf'
+            );
+
+            $response->headers->set('Content-Disposition', $d);
+
+            $response->setContent($pdf->output('name.pdf','S'));
+            //$response->headers->set('Content-Type', 'application/force-download'); // modification du content-type pour forcer le téléchargement (sinon le navigateur internet essaie d'afficher le document)
+            //$response->headers->set('Content-disposition', 'attachment; filename='.'coucou.pdf');
+
+
+
+            return $pdf->Output('','I');
+            //return new Response($pdf->output('name.pdf','S'));
+
+        }
+        return new Response();
+
 
     }
 

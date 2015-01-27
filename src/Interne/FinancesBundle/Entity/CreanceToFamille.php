@@ -54,6 +54,11 @@ class CreanceToFamille extends Creance
         return $this->famille;
     }
 
+    /**
+     * Conversion de Creance à CranceToFamille
+     *
+     * @param Creance $creance
+     */
     function loadFromCreance(Creance $creance)
     {
         $this->facture = $creance->facture;
