@@ -6,13 +6,51 @@ admin:
             role: ROLE_FINANCES
             nom: role principale des finances
             enfants:
-                un_autre_role:
-                    role: ROLE_UN_AUTRE_ROLE
-                    nom:  un autre super role
-                encore_un:
-                    role: ROLE_ENCORE_UN
-                    nom:  encore un autre
-
+                creance:
+                    role: ROLE_CREANCE
+                    nom:  Role de géstion des créances
+                    enfants:
+                        creance_show:
+                            role: ROLE_CREANCE_SHOW
+                            nom: Voir les créances
+                        creance_add:
+                            role: ROLE_CREANCE_ADD
+                            nom: Ajout de créances
+                        creance_delete:
+                            role: ROLE_CREANCE_DELETE
+                            nom: Supression de créances
+                        creance_create_factures:
+                            role: ROLE_CREANCE_CREATE_FACTURES
+                            nom: Facturation de créances
+                facture:
+                    role: ROLE_FACTURE
+                    nom:  Role de géstion des factures
+                    enfants:
+                        facture_show:
+                            role: ROLE_FACTURE_SHOW
+                            nom: Voir les créances
+                        facture_delete:
+                            role: ROLE_FACTURE_DELETE
+                            nom: Supression de facture
+                        facture_send:
+                            role: ROLE_FACTURE_SEND
+                            nom: Envoi de facture
+                        facture_print:
+                            role: ROLE_FACTURE_PRINT
+                            nom: Impression de facture
+                        facture_add_rappel:
+                            role: ROLE_FACTURE_ADD_RAPPEL
+                            nom: Ajout de rappels aux factures
+                payement:
+                    role: ROLE_PAYEMENT
+                    nom:  Role de géstion des payement
+                    enfants:
+                        payement_add:
+                            role: ROLE_PAYEMENT_SEND
+                            nom: Ajout de payement
+                        payement_validation:
+                            role: ROLE_PAYEMENT_VALIDATION
+                            nom: Validation des payements
         app:
             role: ROLE_APP
             nom:  le role principal de l'application
