@@ -1,0 +1,45 @@
+{% extends 'layout.html.twig' %}
+
+
+{% block titre %}Fonctions{% endblock %}
+
+{% block content %}
+
+    <div class="ui page grid">
+        <div class="row">
+            <div class="column">
+                <div class="ui segment">
+
+
+                    <div class="ui small button addFonction">
+                        <i class="add icon"></i>
+                        Ajouter une fonction
+                    </div>
+
+                    {% include "AppBundle:Fonction:listeFonctions.html.twig" with {'fonctions': fonctions}  %}
+
+
+
+                    {% include "AppBundle:Fonction:ajouter_fonction_modale.html.twig" with {'form': fonctionForm}  %}
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block js %}
+
+    {% javascripts
+    '@AppBundle/Resources/public/js/Structure/page_gestionFonction.js'%}
+    <script src="{{ asset_url }}"></script>
+
+    {% endjavascripts %}
+
+
+{% endblock %}
+
+

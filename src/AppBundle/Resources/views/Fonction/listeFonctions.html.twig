@@ -1,0 +1,17 @@
+<table class="ui table">
+    <thead>
+    <tr>
+        <th>Nom</th>
+        <th>Abreviation</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    {% for fonction in fonctions %}
+        <tr>
+            <td>{{ fonction.nom }}</td>
+            <td>{{ fonction.abreviation }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

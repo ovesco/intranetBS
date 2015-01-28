@@ -79,6 +79,9 @@ class GroupeController extends Controller
      * Page qui affiche la hierarchie globale
      * @Route("groupe/hierarchie_simple", name="groupe_hierarchie_simple")
      * @Template("Groupe/hierarchieSimple.html.twig")
+     *
+     * @deprecated ne sera bientot plus utiliser
+     *
      */
     public function hierarchieSimpleAction(Request $request) {
 
