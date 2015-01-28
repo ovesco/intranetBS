@@ -13,29 +13,7 @@ function deleteFacture(id){
     return success;
 }
 
-/*
- * Selection/deséléction de toutes les factures d'une table
- */
 
-function selectAllFactures(box)
-{
-    var $table = $(box).closest('.table');
-
-    if(box.checked)
-    {
-        $table.find('input.selectFacture').each(function() {
-            this.checked = true;
-
-        });
-    }
-    else
-    {
-        $table.find('input.selectFacture').each(function() {
-            this.checked = false;
-
-        });
-    }
-}
 
 
 /*
@@ -52,7 +30,7 @@ function createFactureWithListeCreances(listeCreance){
         data: data,
         async: false, //option utiliée pour retourner la valeur de success en dehors de la requete ajax
         error: function(jqXHR, textStatus, errorThrown) { success = false; },
-        success: function(htmlResponse) { success = true;}
+        success: function(response) { success = (response == 'success'); }
     });
 
     return success;
@@ -73,8 +51,38 @@ function factureEnvoi(idFacture){
         data: data,
         async: false, //option utiliée pour retourner la valeur de success en dehors de la requete ajax
         error: function(jqXHR, textStatus, errorThrown) { success = false; },
-        success: function(htmlResponse) { success = true;}
+        success: function(response) { success = (response == 'success');}
     });
-
     return success;
 }
+
+/*
+ * imprimer la facture en pdf
+ */
+function printFacture(id){
+
+    //todo faire que ca télécharge ou mettre dans un nouvelle onglet
+
+    var data = { idFacture: id};
+    var success;
+    $.ajax({
+        type: "POST",
+        url: Routing.generate('interne_fiances_print_factures'),
+        data: data,
+        async: false, //option utiliée pour retourner la valeur de success en dehors de la requete ajax
+        error: function(jqXHR, textStatus, errorThrown) { success = false; },
+        //success: function(pdf) {
+/*
+            var win=window.open('about:blank');
+            with(win.document)
+            {
+                open();
+                write(pdf);
+                close();
+            }
+
+            success = true; }
+  */  });
+    return success;
+}
+

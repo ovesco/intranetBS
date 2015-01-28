@@ -3,8 +3,10 @@
 namespace Interne\FinancesBundle\Controller;
 
 use Interne\FinancesBundle\Entity\CreanceToMembre;
+use Interne\FinancesBundle\Entity\CreanceToFamille;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
@@ -25,12 +27,11 @@ class CreanceController extends Controller
      */
     /**
      * @Route("/creance/delete_ajax", name="interne_fiances_creance_delete_ajax", options={"expose"=true})
-     *
+     * @param Request $request
      * @return Response
      */
-    public function deleteAjaxAction()
+    public function deleteAjaxAction(Request $request)
     {
-        $request = $this->getRequest();
 
         if ($request->isXmlHttpRequest()) {
 
@@ -47,9 +48,9 @@ class CreanceController extends Controller
                 $em->flush();
             }
 
-            return new Response();
+            return new Response('success');
         }
-        return new Response();
+        return new Response('error');
     }
 
 
@@ -138,12 +139,11 @@ class CreanceController extends Controller
      */
     /**
      * @Route("/creance/add_ajax", name="interne_fiances_creance_add_ajax", options={"expose"=true})
-     *
+     * @param Request $request
      * @return Response
      */
-    public function addAjaxAction()
+    public function addAjaxAction(Request $request)
     {
-        $request = $this->getRequest();
 
         if ($request->isXmlHttpRequest()) {
 
@@ -184,11 +184,10 @@ class CreanceController extends Controller
             $em->persist($creanceToAdd);
             $em->flush();
 
-            return $this->render('InterneFinancesBundle:Interface:interfaceForFamilleOrMembre.html.twig',
-                array('ownerEntity' => $creanceToAdd->getOwner()));
+            return new Response('success');;
 
         }
-        return new Response();
+        return new Response('error');
     }
 
     /*

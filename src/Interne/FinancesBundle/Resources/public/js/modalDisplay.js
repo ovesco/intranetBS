@@ -1,3 +1,7 @@
+/**
+ *
+ * @param id
+ */
 function openCreanceShow(id)
 {
     var data = { idCreance: id};
@@ -15,7 +19,11 @@ function openCreanceShow(id)
     });
 
 }
-
+/**
+ *
+ * @param idFacture
+ * @param fromPage
+ */
 function openFactureShow(idFacture,fromPage)
 {
     var data = { idFacture: idFacture, fromPage:fromPage};
@@ -31,7 +39,11 @@ function openFactureShow(idFacture,fromPage)
         }
     });
 }
-
+/**
+ *
+ * @param idFacture
+ * @param fromPage
+ */
 function openRappelForm(idFacture,fromPage)
 {
     var data = { idFacture: idFacture, fromPage:fromPage};
@@ -48,7 +60,12 @@ function openRappelForm(idFacture,fromPage)
         }
     });
 }
-
+/**
+ *
+ * @param ownerId
+ * @param ownerType
+ * @param fromPage
+ */
 function openCreanceForm(ownerId,ownerType,fromPage)
 {
     var data = { ownerId: ownerId, ownerType:ownerType, fromPage:fromPage};
@@ -66,6 +83,9 @@ function openCreanceForm(ownerId,ownerType,fromPage)
     });
 }
 
+/**
+ *
+ */
 function openSearchForm()
 {
     var data = null;

@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Interne\FinancesBundle\Form\RappelType;
 use Interne\FinancesBundle\Entity\Facture;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 
 /**
@@ -21,14 +22,11 @@ class RappelController extends Controller
 
     /**
      * @Route("/get_form_ajax", name="interne_finance_rappel_get_form_ajax", options={"expose"=true})
-     *
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function sendFormAjaxAction()
+    public function sendFormAjaxAction(Request $request)
     {
-
-        $request = $this->getRequest();
-
         if ($request->isXmlHttpRequest()) {
 
             $idFacture = $request->request->get('idFacture');
@@ -50,12 +48,11 @@ class RappelController extends Controller
 
     /**
      * @Route("/add_ajax", name="interne_finance_rappel_add_ajax", options={"expose"=true})
-     *
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function addRappel()
+    public function addRappel(Request $request)
     {
-        $request = $this->getRequest();
 
         if ($request->isXmlHttpRequest()) {
 
@@ -83,10 +80,10 @@ class RappelController extends Controller
             $em->flush();
 
 
-            return new Response();
+            return new Response('success');
 
         }
-        return new Response();
+        return new Response('error');
     }
 
 

@@ -3,6 +3,7 @@
 namespace Interne\FinancesBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -24,12 +25,11 @@ class InterfaceController extends Controller
 
     /**
      * @Route("/reload_ajax", name="interne_fiances_interface_reload_ajax", options={"expose"=true})
-     *
+     * @param Request $request
      * @return Response
      */
-    public function reloadAjaxAction()
+    public function reloadAjaxAction(Request $request)
     {
-        $request = $this->getRequest();
 
         if ($request->isXmlHttpRequest()) {
 

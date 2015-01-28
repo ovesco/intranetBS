@@ -52,6 +52,11 @@ class CreanceToMembre extends Creance
         return $this->membre;
     }
 
+    /**
+     * Conversion de Creance à CranceToMembre
+     *
+     * @param Creance $creance
+     */
     function loadFromCreance(Creance $creance)
     {
         $this->facture = $creance->facture;

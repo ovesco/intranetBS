@@ -1,7 +1,7 @@
-
 {% import "InterneFinancesBundle:Templates:liste.html.twig" as macro %}
 
-
+<!-- temporary storage -->
+<input type="hidden" value="" id="temporary-storage"/>
 
 <!-- on stocke les infos du propriétaire pour les récupérer -->
 <input type="hidden" value="{{ ownerEntity.id }}" id="owner-entity-id"/>
@@ -13,89 +13,49 @@
 {% endif %}
 
 
-<div class="ui grid" id="infoFinanceContent">
+<div class="ui grid">
     <div class="row">
         <div class="column">
-            {% if ownerEntity.isClass('Membre') %}
 
-                Les cérances de ce membre sont facturée
+            <div id="infoFinanceContent">
 
-                {% if ownerEntity.envoiFacture == 'Membre' %}
-                    à lui même.
-                {% elseif ownerEntity.envoiFacture == 'Famille' %}
-                    à la famille {{ ownerEntity.famille.nom }}
-                {% endif %}
+                <div class="ui info message">
+                    <i class="icon send"></i>
+                    {% if ownerEntity.isClass('Membre') %}
 
-            {% endif %}
+                        Les cérances de ce membre sont facturée
 
-            <div class="ui right floated basic segment">
+                        {% if ownerEntity.envoiFacture == 'Membre' %}
+                            à lui même.
+                        {% elseif ownerEntity.envoiFacture == 'Famille' %}
+                            à la famille {{ ownerEntity.famille.nom }}
+                        {% endif %}
 
-                {% if ownerEntity.isClass('Membre') %}
-                    <div class="ui button" onclick="openCreanceForm({{ ownerEntity.id }},'Membre','interfaceMembre')">Ajouter une créance</div>
-                {% elseif ownerEntity.isClass('Famille') %}
-                    <div class="ui button" onclick="openCreanceForm({{ ownerEntity.id }},'Famille','interfaceFamille')">Ajouter une créance</div>
-                {% endif %}
+                    {% endif %}
 
-                <div class="ui button" onclick="createFactureFromInterface();">Facturer les créances séléctionnées</div>
+                </div>
+
+                <h4>Factures</h4>
+
+
+                {% include "InterneFinancesBundle:Interface:listeFacture.html.twig" with {'ownerEntity':ownerEntity}%}
+
+                <h4>Créances</h4>
+
+                <div class="ui right floated basic segment">
+
+                    <div id="interface-add-creance" class="ui button" data-id="{{ ownerEntity.id  }}" data-class="{{ ownerEntity.class }}">Ajouter une créance</div>
+
+                </div>
+
+
+                {% include "InterneFinancesBundle:Interface:listeCreance.html.twig" with {'ownerEntity':ownerEntity}%}
 
             </div>
-
-
-
-            <h4>Factures</h4>
-
-            {% set headers = [['','','Montants','','',''],['Num. Réf','Statut','Créances','Rappels','Total','Reçu']]%}
-
-            {% set columns = ['id','statut','montantEmisCreances','montantEmisRappels','montantEmis','montantRecu'] %}
-
-            {% set actions = [['voir','Afficher','voir_facture'],['delete','Supprimer','delete_facture']] %}
-
-            {% set patterns = [
-                {'statut':'<div class="ui label green">Payée</div>','equal':'payee'},
-                {'statut':'<div class="ui label blue">Ouverte</div>','equal':'ouverte'},
-                {'id':'N°[data]'}
-                                ] %}
-
-
-            {% set filters = [
-                {'montantEmis':'number_2'},
-                {'montantEmisCreances':'number_2'},
-                {'montantEmisRappels':'number_2'},
-                {'montantRecu':'number_2'},
-            ] %}
-
-            {% if ownerEntity.factures is not empty %}
-                {{ macro.liste(ownerEntity.factures,headers,columns,actions,patterns,filters) }}
-            {% endif %}
-
-            <h4>Créances</h4>
-
-
-            {% set headers = [['','','Montants',''],['Facutre','Titre','Emis','Recu']]%}
-
-            {% set columns = ['facture.id','titre','montantEmis','montantRecu'] %}
-
-            {% set actions = [['voir','Afficher','voir_creance']] %}
-
-            {% set patterns = [ {'facture.id':'N°[data]','diff':''},
-                                {'facture.id':'<div class="ui label orange">En attente</div>','equal':''},] %}
-
-
-            {% set filters = [
-                {'montantEmis':'number_2'},
-                {'montantRecu':'number_2'},
-            ] %}
-
-            {% if ownerEntity.creances is not empty %}
-                {{ macro.liste(ownerEntity.creances,headers,columns,actions,patterns,filters) }}
-            {% endif %}
-
-
-
-
         </div>
     </div>
 </div>
+
 
 
 {% include "InterneFinancesBundle:Modal:modalDisplay.html.twig" %}

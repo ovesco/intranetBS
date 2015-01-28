@@ -238,16 +238,11 @@ class Creance
         return $this->facture;
     }
 
-
-
-
-
-    /*
-     * Cette méthode regarde si la créance à une facture et si
-     * cette facture est payée.
-     */
     /**
      * Is payed
+     *
+     * Cette méthode regarde si la créance à une facture et si
+     * cette facture est payée.
      *
      * @return Boolean
      */
@@ -267,7 +262,7 @@ class Creance
     }
 
     /**
-     * Is Factured
+     * Is factured
      *
      * @return Boolean
      */

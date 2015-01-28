@@ -58,6 +58,7 @@ class ListeEnvoi {
         $envoi = new Envoi($ownerId,$ownerClass,$pdf,$description,$this->em);
         //on sauve par clé token dans le tableau
         $this->envois[$envoi->getToken()] = $envoi;
+
     }
 
     /**
