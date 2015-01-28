@@ -37,10 +37,13 @@ class Fonction
     private $abreviation;
 
     /**
-     * @var ArrayCollection 
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Attribution", mappedBy="fonction")
+     * @ORM\ManyToMany(targetEntity="Interne\SecurityBundle\Entity\Role")
+     * @ORM\JoinTable(name="fonctions_roles",
+     *      joinColumns={@ORM\JoinColumn(name="fonction_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
+     *      )
      */
-    private $attributions;
+    private $roles;
 
     /**
      * Get id
@@ -148,5 +151,38 @@ class Fonction
     public function __toString()
     {
         return $this->getNom();
+    }
+
+    /**
+     * Add roles
+     *
+     * @param \Interne\SecurityBundle\Entity\Role $roles
+     * @return Fonction
+     */
+    public function addRole(\Interne\SecurityBundle\Entity\Role $roles)
+    {
+        $this->roles[] = $roles;
+
+        return $this;
+    }
+
+    /**
+     * Remove roles
+     *
+     * @param \Interne\SecurityBundle\Entity\Role $roles
+     */
+    public function removeRole(\Interne\SecurityBundle\Entity\Role $roles)
+    {
+        $this->roles->removeElement($roles);
+    }
+
+    /**
+     * Get roles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRoles()
+    {
+        return $this->roles;
     }
 }

@@ -56,7 +56,7 @@ class Attribution
     /**
      * @var Fonction $fonction
      * 
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Fonction", inversedBy="attributions")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Fonction")
      * @ORM\JoinColumn(name="fonction_id", referencedColumnName="id")
      */
      private $fonction;
