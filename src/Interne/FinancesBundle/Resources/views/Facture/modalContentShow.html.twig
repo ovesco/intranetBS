@@ -120,27 +120,7 @@
 </div>
 <div class="actions">
 
-    {% if facture.statut == 'ouverte' %}
-        <div class="ui button blue" onclick="openRappelForm({{ facture.id }},'factureShow');">
-            Ajouter un rappel
-        </div>
-    {% endif %}
 
-    {% if fromPage == 'interface' %}
-        <div class="ui button blue" onclick="
-                deleteFacture({{ facture.id }});
-                reloadContentInterface();
-                modalDisplayClose();">
-            Supprimer
-        </div>
-    {% elseif fromPage == 'search' %}
-        <div class="ui button blue" onclick="
-                deleteFacture({{ facture.id }});
-                loadResults();
-                modalDisplayClose();">
-            Supprimer
-        </div>
-    {% endif %}
 
 </div>
 

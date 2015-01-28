@@ -30,7 +30,6 @@ class RappelController extends Controller
         if ($request->isXmlHttpRequest()) {
 
             $idFacture = $request->request->get('idFacture');
-            $fromPage = $request->request->get('fromPage');
 
 
             $rappel = new Rappel();
@@ -39,8 +38,7 @@ class RappelController extends Controller
 
             return $this->render('InterneFinancesBundle:Rappel:modalFormRappel.html.twig',
                 array('form' => $rappelForm->createView(),
-                    'idFacture'=> $idFacture,
-                    'fromPage'=>$fromPage));
+                    'idFacture'=> $idFacture));
 
         }
        return new Response();

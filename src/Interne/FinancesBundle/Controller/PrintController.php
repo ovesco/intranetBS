@@ -14,6 +14,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Utils\Export\Pdf;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+
 
 /**
  * Class PrintController
@@ -23,15 +25,14 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 class PrintController extends Controller
 {
     /**
-     * @param Request $request
-     * @Route("/factures", name="interne_fiances_print_factures", options={"expose"=true})
+     * @param $id
+     * @Route("/factures/{id}", name="interne_fiances_print_factures", options={"expose"=true})
      * @return Response
      */
-    public function printAjaxAction(Request $request)
+    public function printAction($id)
     {
-        if($request->isXmlHttpRequest()) {
 
-            $id = $request->request->get('idFacture');
+
 
             /*
              * Creation du PDF
@@ -42,56 +43,16 @@ class PrintController extends Controller
             $factureRepo = $em->getRepository('InterneFinancesBundle:Facture');
 
             //todo a corriger
-           // $facture = $factureRepo->find($id);
-           // $pdf = $this->factureToPdf($em,$facture,$pdf);
+            $facture = $factureRepo->find($id);
+            $pdf = $this->factureToPdf($em,$facture,$pdf);
 
             //Todo a corriger
-            //$adresse = $facture->getOwner()->getAdressePrincipale();
-            //$pdf->addAdresseEnvoi($adresse);
+            $adresse = $facture->getOwner()->getAdresseExpedition();
+            $pdf->addAdresseEnvoi($adresse);
 
-            $pdf->AddPage();
-            $pdf->SetAutoPageBreak(false);
-            $pdf->SetLeftMargin(20);
-            $pdf->SetRightMargin(20);
-
-            $pdf->SetFont('Arial','',9);
-
-            $cellWidth = 50;//ne sert pas vraiment
-            $cellHigh = 4;
-
-            /*
-             * Adresse haut de page
-             */
-            $x =  20;
-            $y =  20;
-            $pdf->SetXY($x,$y);
-            $pdf->MultiCell($cellWidth,$cellHigh,'coucou pdf');
+            return $pdf->Output('Facture N°'.$id.'.pdf','I');
 
 
-
-
-
-
-            $response = new Response();
-
-            $d = $response->headers->makeDisposition(
-                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-                'foo.pdf'
-            );
-
-            $response->headers->set('Content-Disposition', $d);
-
-            $response->setContent($pdf->output('name.pdf','S'));
-            //$response->headers->set('Content-Type', 'application/force-download'); // modification du content-type pour forcer le téléchargement (sinon le navigateur internet essaie d'afficher le document)
-            //$response->headers->set('Content-disposition', 'attachment; filename='.'coucou.pdf');
-
-
-
-            return $pdf->Output('','I');
-            //return new Response($pdf->output('name.pdf','S'));
-
-        }
-        return new Response();
 
 
     }

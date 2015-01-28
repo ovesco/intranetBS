@@ -1,0 +1,114 @@
+{% import 'InterneFinancesBundle:Templates:form_macro.html.twig' as macros %}
+
+
+<div class="header">
+    Repartition de la somme
+</div>
+<div class="content">
+    {{ form_start(form, {'attr': {'id': 'repartitionMontantRecuForm'}}) }}
+    <div class="ui form">
+
+        <table class="ui table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Emis</th>
+                    <th>Recu</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            {% for creance in form.creances %}
+
+                <tr>
+                    <td>{{  creance.titre.vars.value  }}</td>
+                    <td>{{  creance.montantEmis.vars.value|number_format(2, '.', ',')  }}</td>
+                    <td class="montantRecu">{{ form_widget(creance.montantRecu) }}</td>
+                </tr>
+
+            {% endfor %}
+
+            {% for rappel in form.rappels %}
+
+                <tr>
+                    <td>Rappel N°{{ loop.index }}</td>
+                    <td>{{  rappel.montantEmis.vars.value|number_format(2, '.', ',')  }}</td>
+                    <td class="montantRecu">{{ form_widget(rappel.montantRecu) }}</td>
+                </tr>
+
+            {% endfor %}
+
+            <tr>
+                <td>Montant à répartir </td>
+                <td></td>
+                <td><div class="ui blue label" id="montantARepartire">{{ payement.montantRecu|number_format(2, '.', ',') }}</div></td>
+            </tr>
+
+            </tbody>
+        </table>
+
+        <script>
+
+            $('#formActionButtons').hide();
+
+            var totalRecu = {{ payement.montantRecu }};
+
+            var $montantRecu = $('.montantRecu');
+
+            $montantRecu.keyup(function(){
+
+                var montantRepartit = 0;
+
+                $montantRecu.each(function(){
+                    var montant = $(this).find('input').val();
+                    if(montant == ''){
+                        montant = 0;
+                    }
+                    else{
+                        montant = parseInt(montant);
+                    }
+                    montantRepartit = montantRepartit + montant;
+
+                });
+
+
+                $('#montantARepartire').text(parseFloat(totalRecu-montantRepartit).toFixed(2));
+
+                if(montantRepartit == totalRecu)
+                {
+                    $('#formActionButtons').show();
+                }
+                else
+                {
+                    $('#formActionButtons').hide();
+                }
+
+
+            });
+
+
+
+        </script>
+
+
+
+
+    </div>
+
+    <div hidden>{{ form_rest(form) }}</div>
+
+    {{ form_end(form) }}
+
+</div>
+<div class="actions">
+    <div class="ui buttons" id="formActionButtons">
+        <div class="ui button green"  onclick="validationPayement('repartition',{{ payement.id }})">Valider le payement</div>
+
+        {% if facture.montantEmis > payement.montantRecu %}
+            <div class="or" data-text="ou"></div>
+             <div class="ui button green"  onclick="validationPayement('repartition_and_new_facture',{{ payement.id }})">Valider et crée une nouvelle facture</div>
+        {% endif %}
+
+    </div>
+
+</div>

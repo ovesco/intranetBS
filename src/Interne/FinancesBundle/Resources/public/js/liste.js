@@ -4,6 +4,18 @@
 var listeArray =[];
 var nbListe = 0;
 
+/**
+ * Peut être utiliser pour garder une liste d'ids en mémoire par exemple
+ */
+var temporaryStorage;
+
+function setTemporaryStorage(value){
+    temporaryStorage = value;
+}
+function getTemporaryStorage(){
+    return temporaryStorage;
+}
+
 
 
 /**
@@ -112,7 +124,7 @@ function dataListe(liste){
          */
         this.page = 1;
         //Dans le cas ou il y a pas de paging actif.
-        this.paging = this.rows.length;
+        this.paging = this.numberOfRows();
 
         self.initToolBar();
 
@@ -275,7 +287,7 @@ function dataListe(liste){
                     $(this).bind({
                         click: function() {
                             self.page++;
-                            if(self.page >= ((self.rows.length/self.paging)+1))
+                            if(self.page > ((self.numberOfRows()/self.paging)+1))
                             {
                                 self.page--;
                             }
@@ -450,6 +462,23 @@ function dataListe(liste){
             }
 
         }
+    }
+
+    /**
+     * On doit utiliser cette fonction car array.lenght ne marche pas dans cette situation
+     * @returns {number}
+     */
+    this.numberOfRows= function(){
+
+        count = 0;
+        for(i=0;i<this.rows.length;i++){
+            if(this.rows[i] != null)
+            {
+
+                count++;
+            }
+        }
+        return count++;
     }
 
 

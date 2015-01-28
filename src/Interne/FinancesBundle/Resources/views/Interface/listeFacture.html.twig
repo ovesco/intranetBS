@@ -12,7 +12,8 @@
 {% set actions = [  {'icon':'zoom','label':'Afficher','event':'event_voir_facture'},
                     {'icon':'trash','label':'Supprimer','event':'event_delete_facture'},
                     {'icon':'send','label':'Envoyer (todo)','event':'event_send_facture','conditions':[['statut','equal','ouverte']]},
-                    {'icon':'print','label':'Imprimer PDF (todo)','event':'event_print_facture','conditions':[['statut','equal','ouverte']]}
+                    {'icon':'print','label':'Imprimer PDF','event':'event_print_facture','conditions':[['statut','equal','ouverte']]},
+                    {'icon':'plus','label':'Ajouter un rappel','event':'event_add_rappel','conditions':[['statut','equal','ouverte']]}
 ] %}
 
 {% set patterns = [

@@ -139,12 +139,19 @@
 
 {% macro row(row,columns,actions,patterns,filters) %}
 
+    {% if row.id is defined %}
+        {% set rowId = row.id %}
+    {% else %}
+        {% set rowId = null %}
+    {% endif %}
+
     {# On stock l'id de l'objet dans la ligne #}
-    <tr data-id="{{ row.id }}">
+    <tr data-id="{{ rowId }}">
 
         {# On crée un tableau pour sauver les valeurs des colomnes#}
 
-        {% set valuesArray = { 'id': row.id } %}
+
+        {% set valuesArray = { 'id': rowId } %}
 
 
 
@@ -160,6 +167,7 @@
                 {% for key in keys %}
                     {% if attribute(object, key) is defined %}
                         {% set object = attribute(object, key) %}
+
                     {% else %}
                         {% set object = null %}
                     {% endif %}
@@ -235,7 +243,12 @@
                         {{ dataValue }}
                     {% elseif  applayedFilter == 'number_2'%}
                         {{ dataValue|number_format(2, '.', ',') }}
+                    {% elseif  applayedFilter == 'date'%}
+                        {{ dataValue|date("d/m/Y") }}
                     {% endif %}
+
+
+
                 {% endif %}
                 {# le filtre raw permet d'insérer des balises html #}
                 {{ closeBalise|raw }}

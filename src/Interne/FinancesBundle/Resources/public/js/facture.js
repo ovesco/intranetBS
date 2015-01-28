@@ -1,16 +1,13 @@
 function deleteFacture(id){
 
     var data = { idFacture: id};
-    var success;
-    $.ajax({
+    return $.ajax({
         type: "POST",
         url: Routing.generate('interne_fiances_facture_delete_ajax'),
         data: data,
-        async: false, //option utiliée pour retourner la valeur de success en dehors de la requete ajax
-        error: function(jqXHR, textStatus, errorThrown) { success = false; },
-        success: function(htmlResponse) { success = true; }
+        error: function(jqXHR, textStatus, errorThrown) { return false; },
+        success: function(response) { return (response == 'success');}
     });
-    return success;
 }
 
 
@@ -45,15 +42,15 @@ function factureEnvoi(idFacture){
     var success;
     var data = {idFacture:idFacture};
 
-    $.ajax({
+    return $.ajax({
         type: "POST",
         url: Routing.generate('interne_fiances_facture_envoi_ajax'),
         data: data,
-        async: false, //option utiliée pour retourner la valeur de success en dehors de la requete ajax
-        error: function(jqXHR, textStatus, errorThrown) { success = false; },
-        success: function(response) { success = (response == 'success');}
+        //async: false, //option utiliée pour retourner la valeur de success en dehors de la requete ajax
+        error: function(jqXHR, textStatus, errorThrown) { return false; },
+        success: function(response) { return (response == 'success');}
     });
-    return success;
+
 }
 
 /*
@@ -61,28 +58,11 @@ function factureEnvoi(idFacture){
  */
 function printFacture(id){
 
-    //todo faire que ca télécharge ou mettre dans un nouvelle onglet
+    var url = Routing.generate('interne_fiances_print_factures') + '/' + id;
 
-    var data = { idFacture: id};
-    var success;
-    $.ajax({
-        type: "POST",
-        url: Routing.generate('interne_fiances_print_factures'),
-        data: data,
-        async: false, //option utiliée pour retourner la valeur de success en dehors de la requete ajax
-        error: function(jqXHR, textStatus, errorThrown) { success = false; },
-        //success: function(pdf) {
-/*
-            var win=window.open('about:blank');
-            with(win.document)
-            {
-                open();
-                write(pdf);
-                close();
-            }
-
-            success = true; }
-  */  });
-    return success;
+    /*
+     * Ouvre le pdf dans une nouvelle fenetre
+     */
+    window.open(url,'Facture PDF');
 }
 

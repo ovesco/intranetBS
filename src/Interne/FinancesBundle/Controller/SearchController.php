@@ -12,6 +12,7 @@ use Interne\FinancesBundle\Form\FactureSearchType;
 use Interne\FinancesBundle\Form\CreanceSearchType;
 use Interne\FinancesBundle\Entity\CreanceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class SearchController
@@ -26,11 +27,12 @@ class SearchController extends Controller
 
     /**
      * @Route("/", name="interne_fiances_search", options={"expose"=true})
-     *
+     * @param Request $request
      * @return Response
      */
-    public function searchAction()
+    public function searchAction(Request $request)
     {
+        ini_set('memory_limit', '-1'); //avoid memory limit exception!!!
 
         /*
          * on crée le formulaire de recherche.
@@ -42,9 +44,7 @@ class SearchController extends Controller
          * On récupère la session qui contient la liste des factures/creances des
          * recherches précédentes
          */
-        $session = $this->getRequest()->getSession();
-
-        $request = $this->getRequest();
+        $session = $this->get('session');
 
         if($request->isXmlHttpRequest()) {
 
@@ -125,16 +125,14 @@ class SearchController extends Controller
 
     /**
      * @Route("/load_form_ajax", name="interne_fiances_search_load_form_ajax", options={"expose"=true})
-     *
+     * @param Request $request
      * @return Response
      */
-    public function loadSearchFormAjaxAction()
+    public function loadSearchFormAjaxAction(Request $request)
     {
-        $request = $this->getRequest();
-
         if($request->isXmlHttpRequest()) {
 
-            return $this->render('InterneFinancesBundle:Search:searchForm.html.twig', array(
+            return $this->render('InterneFinancesBundle:Search:modalFormSearch.html.twig', array(
                 'searchForm' => $this->getSearchForm()->createView(),
             ));
 
@@ -144,18 +142,17 @@ class SearchController extends Controller
 
     /**
      * @Route("/load_results_ajax", name="interne_fiances_search_load_results_ajax", options={"expose"=true})
-     *
+     * @param Request $request
      * @return Response
      */
-    public function loadResultsAjaxAction()
+    public function loadResultsAjaxAction(Request $request)
     {
-        $request = $this->getRequest();
 
         if($request->isXmlHttpRequest()) {
 
             $this->checkSession();
 
-            $session = $this->getRequest()->getSession();
+            $session = $this->get('session');
             return $this->render('InterneFinancesBundle:Search:results.html.twig', array(
                 'factures' => $session->get('factures'),
                 'creances' => $session->get('creances'),
@@ -170,19 +167,17 @@ class SearchController extends Controller
      * Enlève un résultat de la recherche
      *
      * @Route("/out_of_search_ajax", name="interne_fiances_search_out_of_search_ajax", options={"expose"=true})
-     *
+     * @param Request $request
      * @return Response
      */
-    public function outOfSearchAjaxAction()
+    public function outOfSearchAjaxAction(Request $request)
     {
-        $request = $this->getRequest();
-
         if($request->isXmlHttpRequest()) {
 
             $id = $request->request->get('id');
             $type = $request->request->get('type');
 
-            $session = $this->getRequest()->getSession();
+            $session = $this->get('session');
 
             switch($type){
                 case 'facture':
@@ -227,7 +222,7 @@ class SearchController extends Controller
      */
     private function checkSession()
     {
-        $session = $this->getRequest()->getSession();
+        $session = $this->get('session');
 
         $em = $this->getDoctrine()->getManager();
 
@@ -327,7 +322,7 @@ class SearchController extends Controller
      */
     private function manageSession($creances,$factures,$searchMethode)
     {
-        $session = $this->getRequest()->getSession();
+        $session = $this->get('session');
 
         if($searchMethode == 'new')
         {
