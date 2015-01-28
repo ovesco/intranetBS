@@ -25,9 +25,7 @@
         "phpoffice/phpexcel": "dev-master",
         "itbz/fpdi": "dev-master",
         "fzaninotto/faker": "1.5.*@dev",
-        "components/jquery": "*",
-        "ruflin/Elastica": "dev-master"
-
+        "components/jquery": "*"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

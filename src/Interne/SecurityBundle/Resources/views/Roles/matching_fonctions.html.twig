@@ -1,0 +1,115 @@
+{% extends 'layout.html.twig' %}
+
+{% block titre %}Matching fonctions{% endblock %}
+
+{% block content %}
+
+    <div class="ui page grid">
+        <div class="column">
+            <h1>Fonctions et Droits associés</h1>
+            <div class="ui segment">
+
+                <button onclick="showModal('#ajouter-fonction-modale');" class="ui button">Ajouter une fonction</button>
+
+                <table class="ui celled table">
+                    <thead>
+                    <tr>
+                        <th>Fonction</th>
+                        <th>Abreviation</th>
+                        <th>Droits associés</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for fonction in fonctions %}
+                        <tr>
+                            <td>{{ fonction.nom }}</td>
+                            <td>{{ fonction.abreviation }}</td>
+                            <td>
+                                {% for role in fonction.roles %}
+                                    <div class="ui label">
+                                        {{ role.name }}
+                                        <i onclick="removeRoleFonction({{ fonction.id }}, {{ role.id }});" class="delete icon"></i>
+                                    </div>
+                                {% endfor %}
+
+                                <div onclick='showModalRoles({{ fonction.id }}, "{{ fonction.nom }}");' class="ui mini icon green button"><i class="plus icon"></i></div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="matcher-role-fonction-modale" class="ui small modal">
+        <i class="close icon"></i>
+        <div class="header">
+            Lier un droit à une fonction
+        </div>
+
+        <div class="content">
+
+            <form class="ui form" method="post" >
+
+                <div class="field">
+                    <label>Fonction</label>
+                    <input type="text" disabled id="matching-fonction-name" />
+                </div>
+
+                <div class="field">
+                    <label>Droit à lier</label>
+                    <div class="ui fluid search selection dropdown">
+                        <input type="hidden" name="matching-linked-role">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">Choisir un droit</div>
+                        <div class="menu">
+                            {% for role in roles %}
+                                <div class="item" data-value="{{ role.id }}">{{ role.name }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <input type="hidden" name="matching-fonction-id" value="" id="matching-fonction-id" />
+
+                <div class="ui field">
+                    <input type="submit" class="ui green button" value="Lier" />
+                </div>
+            </form>
+        </div>
+        <div class="actions">
+            <div class="ui button">Annuler</div>
+        </div>
+    </div>
+
+    {% include 'Modales/ajouter_fonction_modale.html.twig' with {'form':fonctionForm} %}
+
+{% endblock %}
+
+{% block js %}
+
+    <script type="text/javascript">
+
+        function showModalRoles(id, nom) {
+
+            $('#matching-fonction-id').val(id);
+            $('#matching-fonction-name').val(nom);
+
+            showModal('#matcher-role-fonction-modale');
+        }
+
+        function removeRoleFonction(fid, rid) {
+
+            var c = confirm("Êtes vous sur de vouloir délier le droit et la fonction ? Les conséquences peuvent être critiques");
+            if(c == true) {
+                location.href = Routing.generate('interne_role_unlink_fonction', {fonction: fid, role: rid});
+            }
+
+        }
+
+    </script>
+
+
+{% endblock %}
