@@ -2,10 +2,14 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Groupe;
+use AppBundle\Entity\Membre;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Interne\SecurityBundle\Annotation\SecureResource;
 
 /**
  * Class AppController
@@ -25,10 +29,13 @@ class AppController extends Controller
 
 
     /**
-     * @route("test", name="test")
+     * @SecureResource(role="ROLE_ADMIN", resource="membre")
+     * @route("test/{membre}/{groupe}", name="test")
+     * @paramConverter("membre", class="AppBundle:Membre")
+     * @paramConverter("groupe", class="AppBundle:Groupe")
      */
-    public function testAction() {
+    public function testAction(Membre $membre, Groupe $groupe) {
 
-        return new Response('');
+        return new Response('sss');
     }
 }
