@@ -1,0 +1,28 @@
+{% import 'InterneFinancesBundle:Templates:form_macro.html.twig' as macros %}
+
+{% form_theme searchForm 'InterneFinancesBundle:Templates:form_template.html.twig' %}
+
+<div class="header">
+    Recherche de payements
+</div>
+<div class="content">
+    {{ form_start(searchForm, {'attr': {'id': 'payementSearchForm'}}) }}
+    <div class="ui form">
+
+        {{ form_row(searchForm.state) }}
+
+        {{ form_row(searchForm.idFacture) }}
+
+        {{ macros.input_number_switch(searchForm.montantRecu, searchForm.montantRecuMinimum, searchForm.montantRecuMaximum) }}
+
+        {{ macros.input_date_switch(searchForm.datePayement, searchForm.datePayementMinimum, searchForm.datePayementMaximum) }}
+
+    </div>
+
+    {{ form_rest(searchForm) }}
+    {{ form_end(searchForm) }}
+
+</div>
+<div class="actions">
+    <div class="ui button blue" onclick="sendPayementSearch();">Rechercher</div>
+</div>

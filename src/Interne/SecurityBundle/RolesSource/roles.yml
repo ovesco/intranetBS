@@ -54,4 +54,9 @@ admin:
         app:
             role: ROLE_APP
             nom:  le role principal de l'application
+            enfants:
+                user:
+                    role: ROLE_USER
+                    nom: Utilisateur (donne accès à l'intranet)
+
 

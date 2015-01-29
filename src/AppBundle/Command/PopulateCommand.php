@@ -204,7 +204,6 @@ class PopulateCommand extends ContainerAwareCommand
         elseif($action == 'security')
         {
             $membre = new Membre();
-            $role = new Role();
             $user = new User();
 
             $membre->setPrenom('Security user');
@@ -212,11 +211,11 @@ class PopulateCommand extends ContainerAwareCommand
             $membre->setValidity(0);
 
             $user->setMembre($membre);
-            $user->setPassword('swag');
-            $user->setUsername('yolo');
+            $user->setPassword('admin');
+            $user->setUsername('admin');
 
-            $role->setName('user');
-            $role->setRole('ROLE_USER');
+
+            $role = $em->getRepository('InterneSecurityBundle:Role')->findOneByRole('ROLE_ADMIN');
 
             $role->addUser($user);
             $user->addRole($role);

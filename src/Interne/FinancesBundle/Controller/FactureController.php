@@ -53,23 +53,19 @@ class FactureController extends Controller
 
     /**
      * @Route("/show_ajax", name="interne_fiances_facture_show_ajax", options={"expose"=true})
-     *
+     * @param Request $request
      * @return Response
      */
-    public function showAjaxAction(){
-
-        $request = $this->getRequest();
+    public function showAjaxAction(Request $request){
 
         if($request->isXmlHttpRequest()) {
 
             $id = $request->request->get('idFacture');
-            $fromPage = $request->request->get('fromPage');
 
             $em = $this->getDoctrine()->getManager();
             $facture = $em->getRepository('InterneFinancesBundle:Facture')->find($id);
             return $this->render('InterneFinancesBundle:Facture:modalContentShow.html.twig',
-                array('facture' => $facture,
-                    'fromPage'=>$fromPage));
+                array('facture' => $facture));
         }
 
         return new Response();

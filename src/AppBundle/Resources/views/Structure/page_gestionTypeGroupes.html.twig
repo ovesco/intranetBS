@@ -1,0 +1,60 @@
+{% extends 'layout.html.twig' %}
+
+
+{% block titre %}Fonctions{% endblock %}
+
+{% block content %}
+
+    <div class="ui page grid">
+        <div class="row">
+            <div class="column">
+                <div class="ui segment">
+
+
+                    <div class="ui small button" onclick="addType()">
+                        <i class="add icon"></i>
+                        Ajouter un type
+                    </div>
+
+                    <table class="ui table">
+                        <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Fonction Chefs</th>
+                            <th>Affichage des effectifs</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for type in types %}
+                            <tr>
+                                <td>{{ type.nom }}</td>
+                                <td>{{ type.fonctionChef.nom }}</td>
+                                <td>
+                                    {% if type.affichageEffectifs %}
+                                        <i class="checkmark green icon"></i>
+                                    {% else %}
+                                        <i class="remove red icon"></i>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+{% endblock %}
+

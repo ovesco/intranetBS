@@ -41,9 +41,13 @@ twig:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
+<<<<<<< HEAD
     bundles:
         - InterneFinancesBundle
         - InterneSecurityBundle
+=======
+    bundles:        [ InterneFinancesBundle, AppBundle]
+>>>>>>> 04d6d4955cac002430dabae1b55dc6e7a68b26ae
     write_to:       %kernel.root_dir%/../web/static/
 
     #java: /usr/bin/java

@@ -1,5 +1,25 @@
 
+{% macro switchScript() %}
+    $(this).closest('.searchSwitch').find('.optionSearch').each(function(){
+        if($(this).is(':visible'))
+            $(this).hide();
+        else
+            $(this).show();
+    });
+
+{% endmacro %}
+
+{% macro switchButton() %}
+    {% import _self as macro %}
+    <div class="mini ui icon button" onclick="{{ macro.switchScript() }}">
+        <i class="exchange icon"></i>
+    </div>
+{% endmacro %}
+
 {% macro input_number_switch(form_value, form_min, form_max) %}
+
+    {% import _self as macro %}
+
     <div class="field">
         <label>{{ form_label(form_value) }}</label>
         <div class="searchSwitch">
@@ -9,10 +29,7 @@
                         <tr>
                             <td>{{ form_widget(form_value, { 'attr': {'placeholder': "Fixe"}}) }}</td>
                             <td>
-                                <div class="ui button tiny" onclick="searchSwitch(this);">
-                                    <i class="exchange icon"></i>
-                                    Intervale
-                                </div>
+                                {{ macro.switchButton() }}
                             </td>
                         </tr>
                     </table>
@@ -24,10 +41,7 @@
                         <tr>
                             <td>{{ form_widget(form_min, { 'attr': {'placeholder': "De (minimum)"}}) }}</td>
                             <td rowspan="2">
-                                <div class="ui button tiny" onclick="searchSwitch(this);">
-                                    <i class="exchange icon"></i>
-                                    Fixe
-                                </div>
+                                {{ macro.switchButton() }}
                             </td>
 
                         </tr>
@@ -44,6 +58,9 @@
 {% endmacro %}
 
 {% macro input_date_switch(form_value, form_min, form_max) %}
+
+    {% import _self as macro %}
+
     <div class="field">
         <label>{{ form_label(form_value) }}</label>
         <div class="searchSwitch">
@@ -53,11 +70,7 @@
                         <tr>
                             <td>{{ form_widget(form_value) }}</td>
                             <td>
-                                <div class="ui button tiny" onclick="searchSwitch(this);">
-                                    <i class="exchange icon"></i>
-                                    Intervale
-
-                                </div>
+                                {{ macro.switchButton() }}
                             </td>
                         </tr>
                     </table>
@@ -70,10 +83,7 @@
                             <td>Du</td>
                             <td>{{ form_widget(form_min) }}</td>
                             <td rowspan="2">
-                                <div class="ui button tiny" onclick="searchSwitch(this);">
-                                    <i class="exchange icon"></i>
-                                    Fixe
-                                </div>
+                                {{ macro.switchButton() }}
                             </td>
                         </tr>
                         <tr>

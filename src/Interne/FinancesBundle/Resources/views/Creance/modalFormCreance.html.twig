@@ -3,25 +3,17 @@
     <i class="close icon"></i>
     <div class="header">
 
+            <h4 class="modal-title" >Ajouter une créance</h4>
 
-        {% if fromPage == null %}
-            <h4 class="modal-title" >Ajouter une créance en masse</h4>
-
-        {% elseif fromPage == 'interfaceMembre' %}
-            <h4 class="modal-title" >Ajouter une créance au membre</h4>
-
-        {% elseif fromPage == 'interfaceFamille' %}
-            <h4 class="modal-title" >Ajouter une créance à la famille</h4>
-
-        {% endif %}
 
 
     </div>
     <div class="content" style="overflow-y:auto">
 
 
+        {% set idForm = 'addCreanceForm' %}
 
-        {{ form_start(creanceForm, {'attr': {'id': 'addCreanceForm'}}) }}
+        {{ form_start(creanceForm, {'attr': {'id': idForm }}) }}
 
         <div class="ui form">
 
@@ -38,16 +30,7 @@
     </div>
     <div class="actions">
 
-        {% if fromPage == null %}
-
-        {% elseif fromPage == 'interface' %}
-            <div class="ui button blue" onclick="addCreanceFromInterface('addCreanceForm')">Ajouter</div>
-
-        {% elseif fromPage == 'listing' %}
-            <div class="ui button blue" onclick="">Ajouter</div>
-
-        {% endif %}
-
+        <div class="ui button blue addCreanceFromModal"  data-form="{{ idForm }}">Ajouter</div>
 
 
 

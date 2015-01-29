@@ -8,24 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Role
- *
- * ROLE_ADMIN
- *
- * full access
- *
- * ROLE_USER
- *
- * Peut voir sa page personnel ainsi que se(s) groupe(s) actuel(s) et leurs sous groupes.
- *
- * ROLE_FINANCE_ADD
- *
- * Peut ajouter des créances et les facturer.
- *
- * ROLE_FINANCE_GESTION
- *
- * Gestion complète de la partie finances.
- *
- *
  * @ORM\Table(name="security_roles")
  * @ORM\Entity
  */

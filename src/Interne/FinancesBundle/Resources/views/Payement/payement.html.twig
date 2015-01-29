@@ -1,131 +1,90 @@
 {% extends "layout.html.twig" %}
 
-{% form_theme searchForm 'InterneFinancesBundle:Templates:form_template.html.twig' %}
 
-{% import 'InterneFinancesBundle:Templates:form_macro.html.twig' as macros %}
+
+
 
 {% block titre %}Payements{% endblock %}
 
 
 {% block content %}
 
-<div class="ui page grid">
-    <div class="row">
-        <div class="column">
-            <div class="ui segment">
-                <div class="ui grid">
-                    <div class="row">
-                        <div class="eight wide column">
+    {% include "InterneFinancesBundle:Modal:modalDisplay.html.twig" %}
 
-                            <div class="ui styled accordion">
-                                <div class="title">
-                                    <i class="dropdown icon"></i>
-                                    Saisie manuelle
-                                </div>
-                                <div class="content">
-                                    <div class="ui form">
-                                        <div class="two fields">
-                                            <div class="field">
-                                                <input id="form_num_ref" type="number" placeholder="Num. de référance">
-                                            </div>
-                                            <div class="field">
-                                                <input id="form_montant_recu" type="number" placeholder="Montant reçu">
-                                            </div>
+
+    <div class="ui page grid">
+        <div class="row">
+            <div class="column">
+                <div class="ui segment">
+
+                    <div id="payement-infos-context" class="tab-context">
+
+                        <div class="ui top attached tabular menu">
+                            <div class="active item" data-tab="validation">
+                                Validation
+                            </div>
+                            <div class="item" data-tab="saisie">
+                                Saisie
+                            </div>
+                            <div class="item" data-tab="recherche">
+                                Recherche
+                            </div>
+                        </div>
+                        <div class="ui bottom attached active tab segment" data-tab="validation">
+                            <div class="ui grid">
+                                <div class="row">
+                                    <div class="column">
+
+                                        <div id="payementsWaitingListe">
+
+                                            {% render url('interne_fiances_payement_waiting_liste') %}
+
                                         </div>
-                                        <div class="ui button tiny" onclick="addManualy();">
-                                            Valider
-                                        </div>
 
 
 
-                                    </div>
 
-                                </div>
-                                <div class="title">
-                                    <i class="dropdown icon"></i>
-                                    Fichier BVR
-                                </div>
-                                <div class="content">
-                                    <div class="ui form">
-                                        <div class="field">
-                                            <input id="form_file" type="file" placeholder="Ficher de type *.V11">
-                                        </div>
-                                        <div class="ui button" onclick="uploadFile();">
-                                            Charger
-                                        </div>
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
+                        <div class="ui bottom attached tab segment" data-tab="saisie">
+                            <div class="ui grid">
+                                <div class="row">
+                                    <div class="column">
 
-                        <div class="six wide column">
-
-                            <div class="ui modal" id="modalPayementSearchForm">
-                                <i class="close icon"></i>
-                                <div class="header">
-                                    Recherche de payements
-                                </div>
-                                <div class="content">
-                                    {{ form_start(searchForm, {'attr': {'id': 'payementSearchForm'}}) }}
-                                    <div class="ui form">
-
-                                        {{ form_row(searchForm.state) }}
-
-                                        {{ form_row(searchForm.idFacture) }}
-
-                                        {{ macros.input_number_switch(searchForm.montantRecu, searchForm.montantRecuMinimum, searchForm.montantRecuMaximum) }}
-
-                                        {{ macros.input_date_switch(searchForm.datePayement, searchForm.datePayementMinimum, searchForm.datePayementMaximum) }}
+                                        {% include "InterneFinancesBundle:Payement:saisie.html.twig" %}
 
                                     </div>
-
-                                    {{ form_rest(searchForm) }}
-                                    {{ form_end(searchForm) }}
-
-                                </div>
-                                <div class="actions">
-                                    <div class="ui button blue" onclick="sendPayementSearch();">Rechercher</div>
                                 </div>
                             </div>
-
-                            <div class="ui button" onclick="openSearchForm();">Recherche de payement</div>
-
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="column">
+                        <div class="ui bottom attached tab segment" data-tab="recherche">
+                            <div class="ui grid">
+                                <div class="row">
+                                    <div class="column">
 
-                            <table class="ui table" id="payementTable">
-                                <thead>
+                                        <div class="ui button openModalPayementSearch">Recherche de payement</div>
 
-                                <tr>
-                                    <th>Statut</th>
-                                    <th>Facture</th>
-                                    <th>Montant Reçu</th>
-                                    <th>Date de payement</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                                        <div id="payementsSearchResults"></div>
 
 
-                                </tbody>
-
-                            </table>
-
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
+                </div>
 
 
 
 
+
+                </div>
             </div>
         </div>
     </div>
-</div>
-
 
 
 
@@ -137,7 +96,9 @@
     {% block js %}
 
     {% javascripts
-        '@InterneFinancesBundle/Resources/public/js/payement.js'%}
+        '@InterneFinancesBundle/Resources/public/js/liste.js'
+        '@InterneFinancesBundle/Resources/public/js/page_payement.js'
+        '@InterneFinancesBundle/Resources/public/js/modal_display.js'%}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 

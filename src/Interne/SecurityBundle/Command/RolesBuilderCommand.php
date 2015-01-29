@@ -33,10 +33,15 @@ class RolesBuilderCommand extends ContainerAwareCommand
         $yaml       = new Parser();
         $value      = $yaml->parse(file_get_contents($file));
 
+        var_dump($value);
+
+
+
         foreach($value as $principal)
             $em->persist($this->buildRole($principal));
 
         $em->flush();
+
 
     }
 
@@ -51,6 +56,7 @@ class RolesBuilderCommand extends ContainerAwareCommand
         $role = new Role();
         $role->setName($infos['nom']);
         $role->setRole($infos['role']);
+
 
         if(isset($infos['enfants']))
             foreach($infos['enfants'] as $enfant)

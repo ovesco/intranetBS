@@ -2,12 +2,18 @@
 
 namespace Interne\FinancesBundle\Controller;
 
+use Interne\FinancesBundle\Entity\CreanceToFamille;
+use Interne\FinancesBundle\Entity\CreanceToMembre;
+use Interne\FinancesBundle\Form\FactureRepartitionType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Interne\FinancesBundle\Entity\Payement;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
 use Interne\FinancesBundle\Form\PayementSearchType;
+use Interne\FinancesBundle\Entity\FactureRepository;
+use Interne\FinancesBundle\Entity\Facture;
 
 /**
  * Class PayementController
@@ -24,19 +30,31 @@ class PayementController extends Controller
      */
     public function indexAction()
     {
-        $payementSearchForm  = $this->createForm(new PayementSearchType);
+        return $this->render('InterneFinancesBundle:Payement:payement.html.twig');
+    }
 
-        return $this->render('InterneFinancesBundle:Payement:payement.html.twig',
-            array('searchForm'=> $payementSearchForm->createView() ));
+    /**
+     * @Route("/waiting_liste", name="interne_fiances_payement_waiting_liste", options={"expose"=true})
+     * @return Response
+     */
+    public function getWaitingListeAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $payements = $em->getRepository('InterneFinancesBundle:Payement')->findByState('waiting');
+
+        $results =  $this->compareWithFactureInBDD($em,$payements);
+
+        return $this->render('InterneFinancesBundle:Payement:waitingListe.html.twig',array('waitingListe'=>$results));
     }
 
 
     /**
      * @Route("/add_manualy", name="interne_fiances_payement_add_manualy", options={"expose"=true})
-     *
-     *
+     * @param Request $request
+     * @return Response
      */
-    public function addManualyAjaxAction()
+    public function addManualyAjaxAction(Request $request)
     {
 
         $request = $this->getRequest();
@@ -46,7 +64,6 @@ class PayementController extends Controller
             $idFacture = $request->request->get('idFacture');
             $montantRecu = $request->request->get('montantRecu');
 
-
             $idFacture = (int)$idFacture; //cast sur int
 
             $payement = new Payement($idFacture,$montantRecu,new \Datetime,'waiting');
@@ -55,13 +72,10 @@ class PayementController extends Controller
             $em->persist($payement);
             $em->flush();
 
+            return new Response('success');
 
-
-            return $this->render('InterneFinancesBundle:Payement:tableLine.html.twig',
-                array('payements'=> array($payement) ));
         }
-
-        return new Response();
+        return new Response('error');
     }
 
     /*
@@ -93,19 +107,35 @@ class PayementController extends Controller
             }
             $em->flush();
 
-            return $this->render('InterneFinancesBundle:Payement:tableLine.html.twig',array('payements'=>$payementsInFile));
+            return new Response();
         }
     }
 
 
     /**
-     * @route("/search", name="interne_fiances_payement_search_ajax", options={"expose"=true})
-     *
+     * @route("/search/get_search_form", name="interne_fiances_payement_get_search_form_ajax", options={"expose"=true})
+     * @param Request $request
      * @return Response
      */
-    public function searchAjaxAction()
+    public function getSearchFormAjaxAction(Request $request)
     {
-        $request = $this->getRequest();
+        if($request->isXmlHttpRequest())
+        {
+            $payementSearchForm  = $this->createForm(new PayementSearchType);
+
+            return $this->render('InterneFinancesBundle:Payement:modalPayementSearchForm.html.twig',
+                array('searchForm'=> $payementSearchForm->createView()));
+        }
+
+    }
+
+    /**
+     * @route("/search", name="interne_fiances_payement_search_ajax", options={"expose"=true})
+     * @param Request $request
+     * @return Response
+     */
+    public function searchAjaxAction(Request $request)
+    {
 
         if($request->isXmlHttpRequest()) {
 
@@ -130,10 +160,49 @@ class PayementController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $payements = $em->getRepository('InterneFinancesBundle:Payement')->findBySearch($payement,$searchParameters);
 
-                return $this->render('InterneFinancesBundle:Payement:tableLine.html.twig',array('payements'=>$payements));
+                $results = array();
+                foreach($payements as $payement)
+                {
+                    $facture = $em->getRepository('InterneFinancesBundle:Facture')->find($payement->getIdFacture());
+                    $results[] = array('id'=>$payement->getId(),'payement'=> $payement, 'facture' => $facture);
+                }
+
+                return $this->render('InterneFinancesBundle:Payement:PayementsListe.html.twig',array('results'=>$results));
             }
         }
         return new Response();
+    }
+
+
+    /**
+     * @route("/repartition_payement", name="interne_fiances_payement_repartition_ajax", options={"expose"=true})
+     * @param Request $request
+     * @return Response
+     */
+    public function getPayementRepartitionFormAjaxAction(Request $request){
+
+        if($request->isXmlHttpRequest()) {
+
+            $idPayement = $request->request->get('idPayement');
+
+            $em = $this->getDoctrine()->getManager();
+            $payement = $em->getRepository('InterneFinancesBundle:Payement')->find($idPayement);
+
+
+            if($payement != null){
+
+                $facture = $em->getRepository('InterneFinancesBundle:Facture')->find($payement->getIdFacture());
+
+
+                $repartitionForm = $this->createForm(new FactureRepartitionType(),$facture);
+
+                return $this->render('InterneFinancesBundle:Payement:modalRepartitionForm.html.twig',
+                    array('form'=>$repartitionForm->createView(),'payement'=>$payement,'facture'=>$facture));
+
+            }
+
+
+        }
     }
 
     private function extractFacturesInFile($file)
@@ -209,6 +278,235 @@ class PayementController extends Controller
         }
 
         return array('payements' => $payementsInFile, 'infos' => $infos);
+    }
+
+    private function compareWithFactureInBDD($em,$payements)
+    {
+        $factureRepository = $em->getRepository('InterneFinancesBundle:Facture');
+
+
+        $results = array();
+
+        foreach($payements as $payement)
+        {
+
+
+            $factureFound = $factureRepository->find($payement->getIdFacture());
+
+            $validationStatut = null;
+
+            if($factureFound != Null)
+            {
+                if($factureFound->getStatut() == 'ouverte')
+                {
+                    $montantTotalEmis = $factureFound->getMontantEmis();
+                    $montantRecu = $payement->getMontantRecu();
+
+                    if($montantTotalEmis == $montantRecu)
+                    {
+                        $validationStatut = 'found_valid';
+                    }
+                    elseif($montantTotalEmis > $montantRecu)
+                    {
+                        $validationStatut = 'found_lower';
+                    }
+                    elseif($montantTotalEmis < $montantRecu)
+                    {
+                        $validationStatut = 'found_upper';
+                    }
+                }
+                else
+                {
+                    /*
+                     * la facture a déjà été payée
+                     */
+                    $validationStatut = 'found_payed';
+                }
+
+
+            }
+            else
+            {
+                $validationStatut = 'not_found';
+            }
+
+            $results[] = array(
+                'id'=>$payement->getId(),
+                'payement' => $payement,
+                'facture' => $factureFound,
+                'statut' => $validationStatut
+            );
+        }
+
+
+
+        return $results;
+    }
+
+    private function repartitionMontantInFacture($request,$facture)
+    {
+        $InterneFinancesBundleFactureRepartitionType = null;
+        $serializedForm = $request->request->get('form');
+        /**
+         * Parse_str va crée le tableau $InterneFinancesBundleFactureRepartitionType
+         */
+        parse_str($serializedForm);
+        $repartitionArray = $InterneFinancesBundleFactureRepartitionType;
+
+
+        //validation des créances de la factures
+        $index = 0;
+        foreach($facture->getCreances() as $creance)
+        {
+            $creance->setMontantRecu($repartitionArray['creances'][$index]['montantRecu']);
+            $index++;
+        }
+
+        //validationd des rappels de la facture
+        $index = 0;
+        foreach($facture->getRappels() as $rappel)
+        {
+            $rappel->setMontantRecu($repartitionArray['rappels'][$index]['montantRecu']);
+            $index++;
+        }
+    }
+
+    /**
+     * @route("/validation", name="interne_finances_payement_validation", options={"expose"=true})
+     * @param Request $request
+     * @return Response
+     */
+    public function validationAjaxAction(Request $request)
+    {
+        if($request->isXmlHttpRequest())
+        {
+
+
+            //on récupère les données du formulaire
+            $idPayement = $request->request->get('idPayement');
+            $action = $request->request->get('action');
+
+            //conversion string to other type
+            $idPayement = intval($idPayement); //cast sur int
+
+            //chargement BDD
+            $em = $this->getDoctrine()->getManager();
+
+            //chargement du payement
+            $payement = $em->getRepository('InterneFinancesBundle:Payement')->find($idPayement);
+
+
+            $results = $this->compareWithFactureInBDD($em,array($payement)); //on analise uniquement ce payement
+            $result = $results[0];//on prend le premier résultat (et le seul)
+
+            $facture = $result['facture'];
+            $statut = $result['statut'];
+            $datePayement = $payement->getDatePayement();
+
+            switch($action){
+                case 'ignore':
+
+                    echo(0);
+                    /*
+                     * c'est les cas: not_found ou found_payed
+                     */
+                    $payement->setState($statut);
+                    break;
+
+                case 'validate':
+                    $payement->setState($statut);
+
+                    $facture->setStatut('payee');
+                    $facture->setDatePayement($datePayement);
+
+                    //validation des créances de la factures
+                    foreach($facture->getCreances() as $creance)
+                    {
+                        $creance->setMontantRecu($creance->getMontantEmis());
+                    }
+
+                    //validation des rappels de la facture
+                    foreach($facture->getRappels() as $rappel)
+                    {
+                        $rappel->setMontantRecu($rappel->getMontantEmis());
+                    }
+
+                    break;
+
+                case 'repartition':
+                    $payement->setState($statut);
+
+                    $facture->setStatut('payee');
+                    $facture->setDatePayement($datePayement);
+                    $this->repartitionMontantInFacture($request,$facture);
+
+
+                    break;
+
+                case 'repartition_and_new_facture':
+                    $payement->setState($statut);
+
+                    $facture->setStatut('payee');
+                    $facture->setDatePayement($datePayement);
+                    $this->repartitionMontantInFacture($request,$facture);
+
+                    /*
+                     * dans ce cas de figure, on crée des créances supplémentaires
+                     * pour compenser le montant exigé
+                     */
+
+
+
+                    foreach($facture->getCreances() as $creance) {
+                        $soldeRestant = $creance->getMontantEmis()-$creance->getMontantRecu();
+                        if($soldeRestant > 0) {
+
+                            $owner = $creance->getOwner();
+
+
+                            $newCreance = null;
+                            if($owner->isClass('Membre')) {
+                                $newCreance = new CreanceToMembre();
+                                $owner->addCreance($newCreance);
+                            }
+                            if($owner->isClass('Famille')) {
+                                $newCreance = new CreanceToFamille();
+                                $owner->addCreance($newCreance);
+                            }
+
+                            $newCreance->setRemarque($creance->getRemarque().' (Crée en complément de la facture numéro: '.$facture->getId().')');
+                            $newCreance->setTitre($creance->getTitre());
+                            $newCreance->setMontantEmis($soldeRestant);
+                            $today = new \DateTime();
+                            $newCreance->setDateCreation($today);
+
+                            $em->persist($newCreance);
+                            $em->flush();
+
+                        }
+
+
+
+                    }
+
+
+
+                break;
+
+
+            }
+
+            $em->flush();
+
+
+            return new Response();
+
+        }
+
+
+        return new Response();
+
+
     }
 
 

@@ -86,54 +86,51 @@ class Pdf extends FPDI {
      * le résultat des fonctions ->getAdressePrinipale() des Membres et Familles.
      */
     /**
-     * @param $adressePrincipale
+     * @param $adresseExpedition
      */
-    public function addAdresseEnvoi($adressePrincipale)
+    public function addAdresseEnvoi($adresseExpedition)
     {
+
         $x =  110;
         $y =  50;
         $h = 4;
         $this->SetXY($x,$y);
         $this->SetFont('Arial','',9);
 
-        $origine = $adressePrincipale['origine'];
-        $adresse = $adressePrincipale['adresse'];
-        $owner = $adressePrincipale['owner'];
+        if($adresseExpedition != null){
+            $adresse = $adresseExpedition['adresse'];
+            $owner = $adresseExpedition['owner'];
 
 
-        if($owner['class'] == 'Membre')
-        {
-            $this->Cell(50,$h,ucfirst($owner['nom']).' '.ucfirst($owner['prenom']));
-        }
-        elseif($owner['class'] == 'Famille')
-        {
-            $this->Cell(50,$h,'Famille '.ucfirst($owner['nom']));
-        }
-        else
-        {
-            //erreur
-        }
+            if($owner['class'] == 'Membre')
+            {
+                $this->Cell(50,$h,ucfirst($owner['nom']).' '.ucfirst($owner['prenom']));
+            }
+            elseif($owner['class'] == 'Famille')
+            {
+                $this->Cell(50,$h,'Famille '.ucfirst($owner['nom']));
+            }
+            else
+            {
+                //erreur
+            }
 
-        if($adresse->getMethodeEnvoi() == 'Courrier')
-        {
             $y = $y+$h;
             $this->SetXY($x,$y);
             $this->Cell(50,$h,ucfirst($adresse->getRue()));
             $y = $y+$h;
             $this->SetXY($x,$y);
             $this->Cell(50,$h,$adresse->getNpa().' '.ucfirst($adresse->getLocalite()));
+        }
+        else{
+            $this->Cell(50,$h,'Aucune adresse trouvée');
+        }
 
-        }
-        elseif($adresse->getMethodeEnvoi() == 'Email')
-        {
-            $y = $y+$h;
-            $this->SetXY($x,$y);
-            $this->Cell(50,$h,$adresse->getEmail());
-        }
-        else
-        {
-            $this->MultiCell(50,30,'Adresse non définie');
-        }
+
+
+
+
+
     }
 
 

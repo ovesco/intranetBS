@@ -195,18 +195,16 @@ class CreanceController extends Controller
      */
     /**
      * @Route("/creance/get_form_ajax", name="interne_fiances_creance_get_form_ajax", options={"expose"=true})
-     *
+     * @param Request $request
      * @return Response
      */
-    public function sendFormAjaxAction()
+    public function sendFormAjaxAction(Request $request)
     {
-        $request = $this->getRequest();
 
         if ($request->isXmlHttpRequest()) {
 
             $ownerId = $request->request->get('ownerId');
             $ownerType = $request->request->get('ownerType');
-            $fromPage = $request->request->get('fromPage');
 
             $creance = new Creance();
             $creanceAddForm  = $this->createForm(new CreanceAddType,$creance);
@@ -215,8 +213,7 @@ class CreanceController extends Controller
 
 
             return $this->render('InterneFinancesBundle:Creance:modalFormCreance.html.twig',
-                array('creanceForm' => $creanceAddForm->createView(),
-                    'fromPage'=>$fromPage));
+                array('creanceForm' => $creanceAddForm->createView()));
 
 
         }
