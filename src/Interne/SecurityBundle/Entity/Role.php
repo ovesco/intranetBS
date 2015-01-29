@@ -220,4 +220,15 @@ class Role implements RoleInterface
     {
         return $this->enfants;
     }
+
+    public function getEnfantsRecursive($main = false) {
+
+        $enfants = $this->getEnfants()->toArray();
+        if($main) $enfants[] = $this;
+
+        foreach($enfants as $r)
+            array_merge($enfants, $r->getEnfantsRecursive());
+
+        return $enfants;
+    }
 }

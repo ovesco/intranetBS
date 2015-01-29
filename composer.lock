@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d848e1e1ba56b5c1d63b213d54fbde4f",
+    "hash": "548be38d57763e8f3d53a23408703a16",
     "packages": [
         {
             "name": "components/jquery",
@@ -2464,6 +2464,7 @@
     "stability-flags": {
         "symfony/assetic-bundle": 20,
         "jms/serializer-bundle": 20,
+        "friendsofsymfony/jsrouting-bundle": 0,
         "phpoffice/phpexcel": 20,
         "itbz/fpdi": 20,
         "fzaninotto/faker": 20

@@ -5,6 +5,7 @@ namespace Interne\SecurityBundle\Controller;
 use AppBundle\Entity\Fonction;
 use AppBundle\Form\FonctionType;
 use Interne\SecurityBundle\Entity\Role;
+use Interne\SecurityBundle\Utils\RolesUtil;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -29,6 +30,7 @@ class RolesController extends Controller
         $em         = $this->getDoctrine()->getManager();
         $roles      = $em->getRepository('InterneSecurityBundle:Role')->findAll();
         $fonctions  = $em->getRepository('AppBundle:Fonction')->findAll();
+        $util       = new RolesUtil();
 
         $fonction = new Fonction();
         $fonctionForm = $this->createForm(new FonctionType(),$fonction);
@@ -63,7 +65,8 @@ class RolesController extends Controller
 
             'roles'         => $roles,
             'fonctions'     => $fonctions,
-            'fonctionForm'  => $fonctionForm->createView()
+            'fonctionForm'  => $fonctionForm->createView(),
+            'clientData'    => json_encode($util->rolesToGOJS($roles))
         ));
     }
 

@@ -2,6 +2,7 @@
 
 namespace Interne\SecurityBundle\Entity;
 
+use Interne\SecurityBundle\Utils\RolesUtil;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="security_users")
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class User implements UserInterface, \Serializable
 {
@@ -51,14 +53,19 @@ class User implements UserInterface, \Serializable
      * @ORM\ManyToMany(targetEntity="Interne\SecurityBundle\Entity\Role", inversedBy="users")
      */
     private $roles;
+
+    /**
+     * @var string
+     * @ORM\Column(name="salt", type="string", length=255)
+     */
+    private $salt;
     
     
 
     public function __construct()
     {
         $this->isActive = true;
-        $this->salt 	= md5(uniqid(null, true));
-        $this->role 	= new ArrayCollection();
+        $this->roles 	= new ArrayCollection();
     }
 
     public function setUsername($username){
@@ -78,7 +85,7 @@ class User implements UserInterface, \Serializable
      */
     public function getSalt()
     {
-        return null;
+        return $this->salt;
     }
 
     /**
@@ -184,5 +191,27 @@ class User implements UserInterface, \Serializable
 
         $this->membre = $membre;
         return $this;
+    }
+
+    /**
+     * On fournit au User les roles qu'il possède au travers de ses attributions
+     * @ORM\PostLoad
+     */
+    public function loadRoles()
+    {
+        $rolesUtil = new RolesUtil();
+        $roles     = array();
+
+        $attributions = $this->getMembre()->getActiveAttributions();
+
+        foreach($attributions as $a) {
+            foreach ($a->getFonction()->getRoles() as $r)
+                $roles = array_merge($roles, $r->getEnfantsRecursive(true));
+        }
+
+        $roles = $rolesUtil->removeDoublons($roles);
+
+        foreach($roles as $r)
+            $this->roles->add($r);
     }
 }

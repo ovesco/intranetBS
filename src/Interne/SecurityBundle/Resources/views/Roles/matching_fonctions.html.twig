@@ -88,6 +88,12 @@
 
 {% endblock %}
 
+{% block headjs %}
+    {% javascripts '@AppBundle/Resources/public/js/specials/go.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
 {% block js %}
 
     <script type="text/javascript">
@@ -103,13 +109,11 @@
         function removeRoleFonction(fid, rid) {
 
             var c = confirm("Êtes vous sur de vouloir délier le droit et la fonction ? Les conséquences peuvent être critiques");
-            if(c == true) {
+            if (c == true) {
                 location.href = Routing.generate('interne_role_unlink_fonction', {fonction: fid, role: rid});
             }
 
         }
-
-    </script>
 
 
 {% endblock %}

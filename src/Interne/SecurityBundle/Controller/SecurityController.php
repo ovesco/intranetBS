@@ -55,37 +55,4 @@ class SecurityController extends Controller
 
     }
 
-    /**
-     * Méthode vide, on l'utilise juste pour que la route ait quelque chose sur lequel pointer
-     * @route("interne/security/test", name="testouille")
-     */
-    public function testouilleAction() {
-
-        $filename   = 'roles.yml';
-        $file       = __DIR__ . '/../RolesSource/' . $filename;
-        $yaml       = new Parser();
-        $value      = $yaml->parse(file_get_contents($file));
-
-
-        $rolePrincipaux = array();
-        foreach($value as $principal)
-            $rolePrincipaux[] = $this->buildRole($principal);
-
-        var_dump($rolePrincipaux);
-
-        return new Response();
-    }
-
-    private function buildRole(array $infos) {
-
-        $role = new Role();
-        $role->setName($infos['nom']);
-        $role->setRole($infos['role']);
-
-        if(isset($infos['enfants']))
-            foreach($infos['enfants'] as $enfant)
-                $role->addEnfant($this->buildRole($enfant));
-
-        return $role;
-    }
 }

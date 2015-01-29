@@ -13,6 +13,7 @@ class RoleHierarchy extends \Symfony\Component\Security\Core\Role\RoleHierarchy
      * On redéfinit le constructeur pour fournir au RoleHierarchy un array de roles qu'on a nous-même créé
      * à partir de la base de donnée
      * @param array $hierarchy
+     * @param \Doctrine\ORM\EntityManager $em
      */
     public function __construct(array $hierarchy, \Doctrine\ORM\EntityManager $em)
     {

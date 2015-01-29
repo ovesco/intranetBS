@@ -122,12 +122,14 @@
     /*
      * On met en place le petit script tout simple de recherche
      */
-    var defaultSearchRoute = Routing.generate('interne_search_from_menu', {pattern: "" });
 
     $('#layout-search')
             .search({
                 apiSettings: {
-                    url: defaultSearchRoute + "/{query}"
+                    url: Routing.generate('interne_main_layout_search'),
+                    data: {
+                        pattern: '{query}'
+                    }
                 },
                 type: 'category'
             })
