@@ -1,27 +1,24 @@
 <?php
 
-namespace Interne\SecurityBundle\Driver;
+namespace Interne\SecurityBundle\Securer\Ressource\Drivers;
 
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
-use Interne\SecurityBundle\Securer\ResourceSecurer;
+use Interne\SecurityBundle\Securer\Ressource\CoreRessourceSecurer;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Interne\SecurityBundle\Annotation\SecureResource;
+use Interne\SecurityBundle\Securer\Ressource\Annotations\SecureRessource;
 
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class SecureResourceDriver
 {
     private $reader;
-    private $em;
     private $securer;
 
-    public function __construct(Reader $reader, EntityManager $em, ResourceSecurer $resourceSecurer)
+    public function __construct(Reader $reader, CoreRessourceSecurer $securer)
     {
         $this->reader  = $reader;
-        $this->em      = $em;
-        $this->securer = $resourceSecurer;
+        $this->securer = $securer;
     }
 
     public function onKernelController(FilterControllerEvent $event)
@@ -34,17 +31,18 @@ class SecureResourceDriver
         if (!is_array($controller = $event->getController()))
             return;
 
-        $object      = new \ReflectionObject($controller[0]);
-        $method      = $object->getMethod($controller[1]);
+
+        $object = new \ReflectionObject($controller[0]);
+        $method = $object->getMethod($controller[1]);
         $annotations = new ArrayCollection();
-        $params      = new ArrayCollection();
+        $params = new ArrayCollection();
 
         foreach ($this->reader->getMethodAnnotations($method) as $configuration) {
 
             //On récupère notre annotation
-            if($configuration instanceof SecureResource)
+            if ($configuration instanceof SecureRessource)
                 $annotations->add($configuration);
-            else if($configuration instanceof \Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter)
+            else if ($configuration instanceof \Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter)
                 $params->add($configuration);
         }
 
@@ -52,34 +50,26 @@ class SecureResourceDriver
          * A ce stade, on a récupéré l'ensemble des secure et des paramsConverters
          * On va donc pour chaque secure rechercher l'objet lié à travers les différents paramsConverters, et les
          * analyser
-         * @var SecureResource $ann
+         * @var SecureRessource $ann
          * @var \Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter $entry
          */
-        foreach($annotations as $ann) {
+        foreach ($annotations as $ann) {
 
             $name = $ann->resource;
 
             $param = $params->filter(
 
-                function($entry) use ($name){
-                    if($entry->getName() == $name) return $entry;
+                function ($entry) use ($name) {
+                    if ($entry->getName() == $name) return $entry;
                 }
 
             )[0];
 
             $entityId = $event->getRequest()->attributes->get('_route_params')[$name];
-            $entity   = $this->em->getRepository($param->getClass())->find($entityId);
+            $entity = $this->em->getRepository($param->getClass())->find($entityId);
 
-
+            $this->securer->grantable($ann->type, $entity, true);
         }
 
-    }
-
-    /**
-     * Construit le role lié à la vérification souhaitée
-     */
-    private function buildRole() {
-
-        $role = 'ROLE_';
     }
 }

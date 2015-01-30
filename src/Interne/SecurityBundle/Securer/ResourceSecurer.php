@@ -32,15 +32,6 @@ class ResourceSecurer {
      */
     public function isAvailableFor($ressource, $type) {
 
-        if(is_null($type) || !in_array($type, $this->params['allowed_actions'])) throw new \Exception("L'action (%s) n'est pas supportée", $type);
-        $user = $this->context->getToken()->getUser();
 
-        //On analyse ensuite la ressource passée en paramètre
-        $classe = explode('\\', \Doctrine\Common\Util\ClassUtils::getRealClass(get_class($ressource)));
-        $classe = $classe[count($classe)-1];
-
-        /*
-         * A partir d'ici on va pouvoir génerer
-         */
     }
 }

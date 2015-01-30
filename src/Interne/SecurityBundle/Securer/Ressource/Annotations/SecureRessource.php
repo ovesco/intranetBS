@@ -1,15 +1,16 @@
 <?php
 
-namespace Interne\SecurityBundle\Annotation;
+namespace Interne\SecurityBundle\Securer\Ressource\Annotations;
 
 use Doctrine\Common\Annotations\Annotation;
 
 /**
  * @Annotation
  */
-class SecureResource extends Annotation
+class SecureRessource extends Annotation
 {
     public $role;
 
     public $resource;
+
 }

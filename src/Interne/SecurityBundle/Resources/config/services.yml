@@ -1,0 +1,16 @@
+parameters:
+    bs_security:
+        ressource_securer:
+            allowed_actions:
+                - add
+                - remove
+                - edit
+                - view
+
+services:
+    SecurerRessourceCore:
+        class: Interne\SecurityBundle\Securer\Ressource\Core
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @security.context
+            - %bs_security%
