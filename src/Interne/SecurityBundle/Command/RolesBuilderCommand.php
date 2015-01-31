@@ -33,9 +33,6 @@ class RolesBuilderCommand extends ContainerAwareCommand
         $yaml       = new Parser();
         $value      = $yaml->parse(file_get_contents($file));
 
-        var_dump($value);
-
-
 
         foreach($value as $principal)
             $em->persist($this->buildRole($principal));
@@ -56,6 +53,7 @@ class RolesBuilderCommand extends ContainerAwareCommand
         $role = new Role();
         $role->setName($infos['nom']);
         $role->setRole($infos['role']);
+        if(isset($infos['desc'])) $role->setDescription($infos['desc']);
 
 
         if(isset($infos['enfants']))

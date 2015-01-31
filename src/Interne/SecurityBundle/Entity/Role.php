@@ -25,16 +25,23 @@ class Role implements RoleInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=30)
+     * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="role", type="string", length=20, unique=true)
+     * @ORM\Column(name="role", type="string", length=255, unique=true)
      */
     private $role;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private $description;
 
     /**
      * @ORM\OneToMany(targetEntity="Role", mappedBy="parent", cascade={"persist"})
@@ -45,14 +52,14 @@ class Role implements RoleInterface
      * @ORM\ManyToOne(targetEntity="Role", inversedBy="enfants", cascade={"persist"})
      */
     private $parent;
-    
+
     /**
      * @ORM\ManyToMany(targetEntity="User", mappedBy="roles")
      */
     private $users;
 
 
-	
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -206,11 +213,35 @@ class Role implements RoleInterface
     public function getEnfantsRecursive($main = false) {
 
         $enfants = $this->getEnfants()->toArray();
-        if($main) $enfants[] = $this;
 
         foreach($enfants as $r)
-            array_merge($enfants, $r->getEnfantsRecursive());
+            $enfants = array_merge($enfants, $r->getEnfantsRecursive());
+
+        if($main) $enfants[] = $this;
 
         return $enfants;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return Role
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 }

@@ -194,13 +194,13 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * On fournit au User les roles qu'il possède au travers de ses attributions
-     * @ORM\PostLoad
+     * Retourne une liste de tous les roles que possède le User, roles liés par attributions également
+     * @return ArrayCollection
      */
-    public function loadRoles()
+    public function getAllRoles()
     {
         $rolesUtil = new RolesUtil();
-        $roles     = array();
+        $roles     = $this->getRoles();
 
         $attributions = $this->getMembre()->getActiveAttributions();
 
@@ -209,9 +209,6 @@ class User implements UserInterface, \Serializable
                 $roles = array_merge($roles, $r->getEnfantsRecursive(true));
         }
 
-        $roles = $rolesUtil->removeDoublons($roles);
-
-        foreach($roles as $r)
-            $this->roles->add($r);
+        return new ArrayCollection($rolesUtil->removeDoublons($roles));
     }
 }

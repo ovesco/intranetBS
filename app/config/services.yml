@@ -111,19 +111,3 @@ services:
         arguments:
             - %security.role_hierarchy.roles%
             - @doctrine.orm.entity_manager
-
-    ResourceSecurer:
-        class: Interne\SecurityBundle\Securer\ResourceSecurer
-        arguments:
-            - @security.context
-            - %bs_security%
-
-    # annotations
-    # On déclare ici nos annotations custom a l'ancienne
-    secureResourceDriver:
-            class: Interne\SecurityBundle\Driver\SecureResourceDriver
-            tags: [{name: kernel.event_listener, event: kernel.controller, method: onKernelController}]
-            arguments:
-                - @annotation_reader
-                - @doctrine.orm.entity_manager
-                - @resourceSecurer

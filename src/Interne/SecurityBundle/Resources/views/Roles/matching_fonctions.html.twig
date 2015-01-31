@@ -9,8 +9,6 @@
             <h1>Fonctions et Droits associés</h1>
             <div class="ui segment">
 
-                <button onclick="showModal('#ajouter-fonction-modale');" class="ui button">Ajouter une fonction</button>
-
                 <table class="ui celled table">
                     <thead>
                     <tr>
@@ -26,7 +24,7 @@
                             <td>{{ fonction.abreviation }}</td>
                             <td>
                                 {% for role in fonction.roles %}
-                                    <div class="ui label">
+                                    <div class="ui label" style="margin-bottom:5px;">
                                         {{ role.name }}
                                         <i onclick="removeRoleFonction({{ fonction.id }}, {{ role.id }});" class="delete icon"></i>
                                     </div>
@@ -43,7 +41,7 @@
         </div>
     </div>
 
-    <div id="matcher-role-fonction-modale" class="ui small modal">
+    <div id="matcher-role-fonction-modale" class="ui fullscreen modal">
         <i class="close icon"></i>
         <div class="header">
             Lier un droit à une fonction
@@ -60,16 +58,21 @@
 
                 <div class="field">
                     <label>Droit à lier</label>
+
+
                     <div class="ui fluid search selection dropdown">
                         <input type="hidden" name="matching-linked-role">
                         <i class="dropdown icon"></i>
                         <div class="default text">Choisir un droit</div>
                         <div class="menu">
                             {% for role in roles %}
-                                <div class="item" data-value="{{ role.id }}">{{ role.name }}</div>
+                                <div class="item" data-value="{{ role.id }}">{{ role.name }}
+                                <span class="description">{{ role.description }}</span>
+                                </div>
                             {% endfor %}
                         </div>
                     </div>
+
                 </div>
 
                 <input type="hidden" name="matching-fonction-id" value="" id="matching-fonction-id" />
@@ -84,14 +87,6 @@
         </div>
     </div>
 
-    {% include 'AppBundle:Fonction:ajouter_fonction_modale.html.twig' with {'form':fonctionForm} %}
-
-{% endblock %}
-
-{% block headjs %}
-    {% javascripts '@AppBundle/Resources/public/js/specials/go.js' %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
 {% endblock %}
 
 {% block js %}
@@ -115,5 +110,6 @@
 
         }
 
+        </script>
 
 {% endblock %}

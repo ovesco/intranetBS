@@ -7,18 +7,20 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Interne\SecurityBundle\Securer\Ressource\CoreRessourceSecurer;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Interne\SecurityBundle\Securer\Ressource\Annotations\SecureRessource;
+use Interne\SecurityBundle\Securer\Annotations\SecureRessource;
 
 
 class SecureResourceDriver
 {
     private $reader;
     private $securer;
+    private $em;
 
-    public function __construct(Reader $reader, CoreRessourceSecurer $securer)
+    public function __construct(Reader $reader, EntityManager $em, CoreRessourceSecurer $securer)
     {
         $this->reader  = $reader;
         $this->securer = $securer;
+        $this->em      = $em;
     }
 
     public function onKernelController(FilterControllerEvent $event)
@@ -29,7 +31,7 @@ class SecureResourceDriver
          * En effet, on ne sécurise pas de ressources dans les services ou ailleurs
          */
         if (!is_array($controller = $event->getController()))
-            return;
+            throw new \Exception("L'annotation @SecureRessource ne peut être utilisée que dans des controllers.");
 
 
         $object = new \ReflectionObject($controller[0]);
@@ -55,7 +57,7 @@ class SecureResourceDriver
          */
         foreach ($annotations as $ann) {
 
-            $name = $ann->resource;
+            $name = $ann->value;
 
             $param = $params->filter(
 
@@ -63,12 +65,14 @@ class SecureResourceDriver
                     if ($entry->getName() == $name) return $entry;
                 }
 
-            )[0];
+            );
+
+            $param = array_values($param->toArray())[0];
 
             $entityId = $event->getRequest()->attributes->get('_route_params')[$name];
             $entity = $this->em->getRepository($param->getClass())->find($entityId);
 
-            $this->securer->grantable($ann->type, $entity, true);
+            $this->securer->grantable($ann->action, $entity, true);
         }
 
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Interne\SecurityBundle\Securer\Ressource\Annotations;
+namespace Interne\SecurityBundle\Securer\Annotations;
 
 use Doctrine\Common\Annotations\Annotation;
 
@@ -9,8 +9,7 @@ use Doctrine\Common\Annotations\Annotation;
  */
 class SecureRessource extends Annotation
 {
-    public $role;
+    public $action;
 
-    public $resource;
-
+    public $ressource;
 }

@@ -3,24 +3,22 @@
 namespace Interne\SecurityBundle\Securer\Ressource;
 use Doctrine\ORM\EntityManager;
 use Interne\SecurityBundle\Securer\Exceptions\IncorrectActionException;
-use Symfony\Component\Security\Core\SecurityContext;
+use Interne\SecurityBundle\Securer\Exceptions\UnknownVerificateurException;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 use Interne\SecurityBundle\Securer\Exceptions\RessourceLockedException;
 
 /**
  * Centre de la sécurité des ressources. Le système récupère des informations, appelle ensuite le vérificateur
  * correspondant
- * @package Interne\SecurityBundle\Securer
  */
 class CoreRessourceSecurer {
 
     private $context;
-    private $em;
     private $params;
 
-    public function __construct(EntityManager $em, SecurityContext $context, $params) {
+    public function __construct(SecurityContextInterface $context, $params) {
 
         $this->context = $context;
-        $this->em      = $em;
         $this->params  = $params['ressource_securer'];
     }
 
@@ -33,22 +31,30 @@ class CoreRessourceSecurer {
      * @return boolean
      * @throws RessourceLockedException
      * @throws IncorrectActionException
+     * @throws UnknownVerificateurException
+     * @throws \Exception
      */
     public function grantable($action, $ressource, $exceptionThrown = false) {
 
-        if(is_null($type) || !in_array($type, $this->params['allowed_actions'])) throw new IncorrectActionException($action, $this->params);
-
-        $user   = $this->context->getToken()->getUser();
+        if(is_null($action) || !in_array($action, $this->params['allowed_actions'])) throw new IncorrectActionException($action, $this->params['allowed_actions']);
+        if(is_null($ressource)) throw new \Exception("La ressource souhaitée est null");
 
         //On analyse ensuite la ressource passée en paramètre
         $classe = explode('\\', \Doctrine\Common\Util\ClassUtils::getRealClass(get_class($ressource)));
         $classe = $classe[count($classe)-1];
 
-        $verificateur = $this->getVerificateur($classe);
+        //On génère le vérificateur
+        $namespace    = 'Interne\\SecurityBundle\\Securer\\Ressource\\Verificateurs\\' . $classe . "Verificateur";
+        if(!class_exists("\\" . $namespace)) throw new UnknownVerificateurException($namespace);
 
-        if($verificateur->verify($ressource, $action, $user)) return true;
+        $verificateur = new $namespace($ressource, $action, $this->context, $this->params);
+
+
+        if($verificateur->verify()) return true;
         else if(!$exceptionThrown) return false;
         else throw $this->buildException($action, $ressource);
+
+
     }
 
     /**
@@ -64,15 +70,5 @@ class CoreRessourceSecurer {
         $exception->ressource = $ressource;
 
         return $exception;
-    }
-
-    /**
-     * Fournis le verificateur correspondant à la ressource que l'on souhaite vérifier
-     * @param $classe
-     */
-    private function getVerificateur($classe) {
-
-        $namespace = 'Interne\\SecurityBundle\\Securer\\Ressource\\Verificateurs\\' . $classe . "Verificateur";
-        return new $namespace();
     }
 }

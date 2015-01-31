@@ -4,7 +4,7 @@ namespace Interne\SecurityBundle\Securer\Exceptions;
 
 class IncorrectActionException extends \Exception {
 
-    public function __constuct($action, $params) {
+    public function __construct($action, $params) {
 
         $message = "L'action '" . $action . "' n'est pas disponible. Actions possibles : ";
         foreach($params as $p)

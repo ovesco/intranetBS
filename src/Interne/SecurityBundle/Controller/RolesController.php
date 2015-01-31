@@ -30,23 +30,6 @@ class RolesController extends Controller
         $em         = $this->getDoctrine()->getManager();
         $roles      = $em->getRepository('InterneSecurityBundle:Role')->findAll();
         $fonctions  = $em->getRepository('AppBundle:Fonction')->findAll();
-        $util       = new RolesUtil();
-
-        $fonction = new Fonction();
-        $fonctionForm = $this->createForm(new FonctionType(),$fonction);
-
-        if($request->request->has($fonctionForm->getName()))
-        {
-            $fonctionForm->handleRequest($request);
-
-            if ($fonctionForm->isValid()) {
-
-                $em->persist($fonction);
-                $em->flush();
-
-                return $this->redirect($this->generateUrl('interne_roles_match_fonctions'));
-            }
-        }
 
         if($request->request->get('matching-fonction-id') != null && $request->request->get('matching-linked-role') != null){ //On a un role à lier à une fonction
 
@@ -65,8 +48,6 @@ class RolesController extends Controller
 
             'roles'         => $roles,
             'fonctions'     => $fonctions,
-            'fonctionForm'  => $fonctionForm->createView(),
-            'clientData'    => json_encode($util->rolesToGOJS($roles))
         ));
     }
 
