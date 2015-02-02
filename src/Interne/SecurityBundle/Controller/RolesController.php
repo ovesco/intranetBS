@@ -5,6 +5,7 @@ namespace Interne\SecurityBundle\Controller;
 use AppBundle\Entity\Fonction;
 use AppBundle\Form\FonctionType;
 use Interne\SecurityBundle\Entity\Role;
+use Interne\SecurityBundle\Utils\RolesUtil;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -30,22 +31,6 @@ class RolesController extends Controller
         $roles      = $em->getRepository('InterneSecurityBundle:Role')->findAll();
         $fonctions  = $em->getRepository('AppBundle:Fonction')->findAll();
 
-        $fonction = new Fonction();
-        $fonctionForm = $this->createForm(new FonctionType(),$fonction);
-
-        if($request->request->has($fonctionForm->getName()))
-        {
-            $fonctionForm->handleRequest($request);
-
-            if ($fonctionForm->isValid()) {
-
-                $em->persist($fonction);
-                $em->flush();
-
-                return $this->redirect($this->generateUrl('interne_roles_match_fonctions'));
-            }
-        }
-
         if($request->request->get('matching-fonction-id') != null && $request->request->get('matching-linked-role') != null){ //On a un role à lier à une fonction
 
             $fonction = $em->getRepository('AppBundle:Fonction')->find($request->request->get('matching-fonction-id'));
@@ -63,7 +48,6 @@ class RolesController extends Controller
 
             'roles'         => $roles,
             'fonctions'     => $fonctions,
-            'fonctionForm'  => $fonctionForm->createView()
         ));
     }
 

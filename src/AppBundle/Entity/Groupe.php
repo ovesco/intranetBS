@@ -173,11 +173,23 @@ class Groupe
     /**
      * Get enfants
      *
-     * @return array 
+     * @return ArrayCollection
      */
     public function getEnfants()
     {
         return $this->enfants;
+    }
+
+    public function getEnfantsRecursive($main = false) {
+
+        $enfants = $this->getEnfants()->toArray();
+
+        foreach($enfants as $g)
+            $enfants = array_merge($enfants, $g->getEnfantsRecursive());
+
+        if($main) $enfants[] = $this;
+
+        return $enfants;
     }
     
     /**

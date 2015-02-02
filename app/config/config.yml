@@ -41,6 +41,9 @@ twig:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
+    bundles:
+        - InterneFinancesBundle
+        - InterneSecurityBundle
     bundles:        [ InterneFinancesBundle, AppBundle]
     write_to:       %kernel.root_dir%/../web/static/
 

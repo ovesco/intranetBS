@@ -7,6 +7,7 @@ namespace AppBundle\Utils\Accessor;
 
 use Doctrine\ORM\EntityManager;
 
+
 class Parser {
 
 

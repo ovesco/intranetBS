@@ -26,4 +26,4 @@ security:
 
 
     access_control:
-        - { path: ^/interne, roles: ROLE_ADMIN}
+        - { path: ^/interne, roles: ROLE_USER}

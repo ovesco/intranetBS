@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Utils\Data\Simplificator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -28,12 +27,13 @@ class SearchController extends Controller
     /**
      * Effectue une recherche complète parmi les membres, groupes et familles
      * Filtre ensuite les 4 premiers résultats par catégorie pour ne pas en avoir trop
-     * @route("menu-search/{pattern}", name="interne_search_from_menu", options={"expose"=true})
-     * @param string $pattern
+     * @Route("layout-search", name="interne_main_layout_search", options={"expose"=true})
+     * @param Request $request
      * @return JsonResponse
      */
-    public function layoutSearchAction($pattern = "") {
+    public function layoutSearchAction(Request $request) {
 
+        $pattern     = $request->request->get('pattern');
         $pattern     = "*" . $pattern . "*";
 
         $limit       = 4;
