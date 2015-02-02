@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 
 
-{% block titre %}Fonctions{% endblock %}
+{% block titre %}Groupe Moldes{% endblock %}
 
 {% block content %}
 
@@ -11,14 +11,12 @@
                 <div class="ui segment">
 
 
-                    <div class="ui small button addFonction">
+                    <div class="ui small button addGroupeModelForm">
                         <i class="add icon"></i>
-                        Ajouter une fonction
+                        Ajouter un groupe model
                     </div>
 
-                    {% include "AppBundle:Fonction:listeFonctions.html.twig" with {'fonctions': fonctions}  %}
-
-
+                    {% include "AppBundle:GroupeModel:listeGroupeModel.html.twig" with {'models': models}  %}
 
 
                 </div>
@@ -27,17 +25,19 @@
     </div>
 
 
+
+
+
 {% endblock %}
 
 {% block js %}
 
     {% javascripts
-    '@AppBundle/Resources/public/js/Structure/page_gestionFonction.js'%}
+    '@AppBundle/Resources/public/js/Structure/page_gestionGroupeModel.js'%}
     <script src="{{ asset_url }}"></script>
 
     {% endjavascripts %}
 
 
 {% endblock %}
-
 

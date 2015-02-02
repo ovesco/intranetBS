@@ -1,0 +1,51 @@
+<table class="ui celled structured table">
+    <thead>
+    <tr>
+        <th>Nom</th>
+        <th>Fonction Chefs</th>
+        <th>Fonctions</th>
+        <th>Affichage des effectifs</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+
+    {% for model in models %}
+        <tr>
+
+            <td>{{ model.nom }}</td>
+            <td>
+                {%  if model.fonctionChef is not empty %}
+                    {{ model.fonctionChef.nom }}
+                {% else %}
+                    Aucune fonction définie
+                {% endif %}
+
+            </td>
+            <td>
+                {%  if model.fonctions is not empty %}
+                    {% for fonction in model.fonctions %}
+                        {{ fonction.nom }}<br>
+
+                    {% endfor %}
+
+                {% else %}
+                    Aucune fonction définie
+                {% endif %}
+
+
+            </td>
+            <td>
+                {% if model.affichageEffectifs %}
+                    <i class="checkmark green icon"></i>
+                {% else %}
+                    <i class="remove red icon"></i>
+                {% endif %}
+            </td>
+            <td>
+                <div class="ui button editGroupeModel" data-id="{{ model.id }}"> edit</div>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

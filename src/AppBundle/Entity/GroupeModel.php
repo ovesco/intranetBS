@@ -3,14 +3,17 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Entity\Groupe;
+use AppBundle\Entity\Fonction;
 
 /**
- * Type
+ * GroupeModel
  *
- * @ORM\Table(name="app_types")
+ * @ORM\Table(name="app_groupe_model")
  * @ORM\Entity
  */
-class Type
+class GroupeModel
 {
     /**
      * @var integer
@@ -30,10 +33,23 @@ class Type
 
     /**
      * @ORM\OneToOne(targetEntity="Fonction")
-     * @ORM\JoinColumn(name="fonction_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="fonctionChef_id", referencedColumnName="id", nullable=true)
      */
     private $fonctionChef;
-    
+
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Fonction")
+     * @ORM\JoinTable(name="app_groupe_model_fonction",
+     *      joinColumns={@ORM\JoinColumn(name="groupe_model_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="fonction_id", referencedColumnName="id")}
+     *      )
+     *
+     *
+     */
+    private $fonctions;
+
+
     /**
      * @var ArrayCollection 
      * 
@@ -80,21 +96,23 @@ class Type
     {
         return $this->nom;
     }
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->groupes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->groupes = new ArrayCollection();
+        $this->fonctions = new ArrayCollection();
     }
 
     /**
      * Add groupes
      *
-     * @param \AppBundle\Entity\Groupe $groupes
+     * @param Groupe $groupes
      * @return Type
      */
-    public function addGroupe(\AppBundle\Entity\Groupe $groupes)
+    public function addGroupe(Groupe $groupes)
     {
         $this->groupes[] = $groupes;
 
@@ -104,9 +122,9 @@ class Type
     /**
      * Remove groupes
      *
-     * @param \AppBundle\Entity\Groupe $groupes
+     * @param Groupe $groupes
      */
-    public function removeGroupe(\AppBundle\Entity\Groupe $groupes)
+    public function removeGroupe(Groupe $groupes)
     {
         $this->groupes->removeElement($groupes);
     }
@@ -114,7 +132,7 @@ class Type
     /**
      * Get groupes
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return ArrayCollection
      */
     public function getGroupes()
     {
@@ -124,10 +142,10 @@ class Type
     /**
      * Set fonctionChef
      *
-     * @param \AppBundle\Entity\Fonction $fonctionChef
+     * @param Fonction $fonctionChef
      * @return Type
      */
-    public function setFonctionChef(\AppBundle\Entity\Fonction $fonctionChef = null)
+    public function setFonctionChef(Fonction $fonctionChef = null)
     {
         $this->fonctionChef = $fonctionChef;
 
@@ -137,7 +155,7 @@ class Type
     /**
      * Get fonctionChef
      *
-     * @return \AppBundle\Entity\Fonction 
+     * @return Fonction
      */
     public function getFonctionChef()
     {
@@ -168,9 +186,63 @@ class Type
     }
 
     /**
+     * Get affichageEffectifs
+     *
+     * @return boolean
+     */
+    public function getAffichageEffectifs()
+    {
+        return $this->affichageEffectifs;
+    }
+
+    /**
      * @return String
      */
     public function __toString() {
         return $this->getNom();
     }
+
+    /**
+     * Add fonction
+     *
+     * @param Fonction $fonction
+     * @return Type
+     */
+    public function addFonction(Fonction $fonction)
+    {
+        $this->fonctions[] = $fonction;
+
+        return $this;
+    }
+
+    /**
+     * Remove fonction
+     *
+     * @param Fonction $fonction
+     */
+    public function removeFonction(Fonction $fonction)
+    {
+        $this->groupes->removeElement($fonction);
+    }
+
+    /**
+     * Get fonctions
+     *
+     * @return ArrayCollection
+     */
+    public function getFonctions()
+    {
+        return $this->fonctions;
+    }
+
+    /**
+     * Set fonctions
+     *
+     * @param $fonctions
+     */
+    public function setFonctions($fonctions)
+    {
+        $this->fonctions = $fonctions;
+    }
+
 }

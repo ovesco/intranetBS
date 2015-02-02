@@ -24,7 +24,7 @@ use Interne\FinancesBundle\Entity\CreanceToMembre;
 use Interne\FinancesBundle\Entity\CreanceToFamille;
 use AppBundle\Entity\Fonction;
 use AppBundle\Entity\Distinction;
-use AppBundle\Entity\Type;
+use AppBundle\Entity\GroupeModel;
 use AppBundle\Entity\Groupe;
 use Interne\FinancesBundle\Entity\Rappel;
 
@@ -217,6 +217,13 @@ class PopulateCommand extends ContainerAwareCommand
 
             $role = $em->getRepository('InterneSecurityBundle:Role')->findOneByRole('ROLE_ADMIN');
 
+            if($role == null)
+            {
+                $role = new Role();
+                $role->setRole('ROLE_ADMIN');
+                $role->setName('Admin');
+            }
+
             $role->addUser($user);
             $user->addRole($role);
 
@@ -256,22 +263,22 @@ class PopulateCommand extends ContainerAwareCommand
                 $groupe->setNom($name);
             }
 
-            $type = $em->getRepository('AppBundle:Type')->findOneBy(array('nom'=>$groupeData[0]));
+            $model = $em->getRepository('AppBundle:GroupeModel')->findOneBy(array('nom'=>$groupeData[0]));
 
-            if($type == null)
+            if($model == null)
             {
                 //création si inexistant
-                $type = new Type();
-                $type->setNom($groupeData[0]);
-                $type->setAffichageEffectifs(true);
+                $model = new GroupeModel();
+                $model->setNom($groupeData[0]);
+                $model->setAffichageEffectifs(true);
             }
 
             //forcément déjà existant car la création des fonctions et faite avant!
             $fonctionChef = $em->getRepository('AppBundle:Fonction')->findOneBy(array('abreviation'=>$groupeData[1]));
 
-            $type->setFonctionChef($fonctionChef);
+            $model->setFonctionChef($fonctionChef);
 
-            $groupe->setType($type);
+            $groupe->setGroupeModel($model);
             $groupe->setParent($parent);
             $groupe->setActive(true);
 
@@ -279,7 +286,7 @@ class PopulateCommand extends ContainerAwareCommand
             $childs = $groupeData[2];
             $this->createHierarchie($em,$groupe,$childs);
 
-            $em->persist($type);
+            $em->persist($model);
             $em->persist($groupe);
             $em->flush();
 
@@ -449,7 +456,7 @@ class PopulateCommand extends ContainerAwareCommand
      * @param id $type l'id du type de groupe souhaité
      * @return Attribution
      */
-    private function getRandomAttribution($fonction = null, $type = null) {
+    private function getRandomAttribution($fonction = null, $model = null) {
 
         /** @var \Doctrine\ORM\EntityManager $em */
         $em          = $this->getContainer()->get('doctrine.orm.entity_manager');
@@ -466,12 +473,12 @@ class PopulateCommand extends ContainerAwareCommand
 
         if($this->listeGroupes == null) {
 
-            if($type == null)
+            if($model == null)
                 $this->listeGroupes = $em->getRepository('AppBundle:Groupe')->findAll();
 
             else {
-                $type = $em->getRepository('AppBundle:Type')->find($type);
-                $this->listeGroupes = $em->getRepository('AppBundle:Groupe')->findByType($type);
+                $model = $em->getRepository('AppBundle:GroupeModel')->find($model);
+                $this->listeGroupes = $em->getRepository('AppBundle:Groupe')->findBy(array('groupeModel'=>$model));
             }
         }
 

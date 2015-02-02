@@ -2,7 +2,9 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use AppBundle\Entity\GroupeReference;
 
 /**
  * Groupe
@@ -29,6 +31,8 @@ class Groupe
     private $nom;
 
     /**
+     *
+     *
      * @var Groupe
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Groupe", inversedBy="enfants", cascade={"persist"})
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
@@ -36,6 +40,7 @@ class Groupe
     private $parent;
 
     /**
+     *
      * @var ArrayCollection 
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Groupe", mappedBy="parent", cascade={"persist"})
      */
@@ -49,11 +54,11 @@ class Groupe
     private $attributions;
 
     /**
-     * @var Type $type
+     * @var GroupeModel $groupeModel
      * 
-     * @ORM\ManyToOne(targetEntity="Type", inversedBy="groupes", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="GroupeModel", inversedBy="groupes", cascade={"persist"})
      */
-    private $type;
+    private $groupeModel;
 
     /**
      * Determine si le groupe est ouverte ou pas. On ne pourra pas lui ajouter des attibution si
@@ -163,6 +168,8 @@ class Groupe
         return $this;
     }
 
+
+
     /**
      * Get enfants
      *
@@ -230,26 +237,26 @@ class Groupe
     }
 
     /**
-     * Set type
+     * Set groupeModel
      *
-     * @param \AppBundle\Entity\Type $type
+     * @param GroupeModel $groupeModel
      * @return Groupe
      */
-    public function setType(\AppBundle\Entity\Type $type = null)
+    public function setGroupeModel(GroupeModel $groupeModel = null)
     {
-        $this->type = $type;
-	    $type->addGroupe($this);
+        $this->groupeModel = $groupeModel;
+        $groupeModel->addGroupe($this);
         return $this;
     }
 
     /**
-     * Get type
+     * Get groupeModel
      *
-     * @return \AppBundle\Entity\Type 
+     * @return GroupeModel
      */
-    public function getType()
+    public function getGroupeModel()
     {
-        return $this->type;
+        return $this->groupeModel;
     }
 
     public function getMembers()
@@ -284,50 +291,6 @@ class Groupe
         return $members;
     }
 
-    /**
-     * Renvoie un array contenant les membres qui composent l'EM d'une troupe ou d'une meute. Si cette méthode est appelée
-     * depuis ailleurs qu'une troupe ou une meute, elle soulèvera une exception
-     * @throws \Exception si groupe n'est ni une troupe ni une meute
-     * @return array l'em de l'unité
-     */
-    public function getEm() {
-
-        if(strtolower($this->getType()->getNom()) != 'meute' && strtolower($this->getType()->getNom()) != 'troupe')
-            throw new \Exception($this->getNom() . " n'est pas une troupe !");
-
-        $em = array('cu' => null, 'cua' => null, 'adjoints' => array(), 'c' => array());
-
-        foreach($this->getMembersRecursive() as $k => $m) {
-
-            if(
-                strtolower($m->getActiveAttribution()->getFonction()->getAbreviation()) == 'ct' ||
-                strtolower($m->getActiveAttribution()->getFonction()->getAbreviation()) == 'cm'
-            ) {
-                $em['cu'] = $m;
-            }
-
-            else if(
-                strtolower($m->getActiveAttribution()->getFonction()->getAbreviation()) == 'cta' ||
-                strtolower($m->getActiveAttribution()->getFonction()->getAbreviation()) == 'cma'
-            ) {
-                $em['cua'] = $m;
-            }
-
-            else if(strtolower($m->getActiveAttribution()->getFonction()->getAbreviation()) == 'adj') {
-
-                $em['adjoints'][] = $m;
-            }
-
-            else if(
-                strtolower($m->getActiveAttribution()->getFonction()->getAbreviation()) == 'cp' ||
-                strtolower($m->getActiveAttribution()->getFonction()->getAbreviation()) == 'cs'
-            ) {
-                $em['c'][] = $m;
-            }
-        }
-
-        return $em;
-    }
 
     /**
      * Retourne le chef du groupe si il y en a un. Se base sur la fonction liée au type du groupe
@@ -337,7 +300,7 @@ class Groupe
 
         foreach($this->getMembers() as $m) {
 
-            if($m->getActiveAttribution()->getFonction() == $this->getType()->getFonctionChef())
+            if($m->getActiveAttribution()->getFonction() == $this->getGroupeReference()->getFonctionChef())
                 return $m;
         }
 

@@ -11,13 +11,20 @@ class GroupeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('parent','entity', array(
+                'class'		=> 'AppBundle:Groupe',
+                'property'	=> 'nom',
+                'label' => 'Groupe parent',
+                'required'=> false,
+                'empty_value'  => 'Groupe racine'
+            ))
             ->add('nom')
             ->add('active','hidden',array('data'=>true))
-            ->add('type', 'semantic', array(
-
-                'class'		=> 'AppBundle:Type',
+            ->add('groupeModel', 'entity', array(
+                'class'		=> 'AppBundle:GroupeModel',
                 'property'	=> 'nom'
             ))
+
         ;
     }
 

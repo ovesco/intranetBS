@@ -17,6 +17,12 @@ use AppBundle\Form\FonctionType;
 use AppBundle\Entity\Fonction;
 use AppBundle\Form\TypeType;
 
+/**
+ * Class GroupeController
+ * @package AppBundle\Controller
+ *
+ * @Route("/groupe")
+ */
 class GroupeController extends Controller
 {
 
@@ -25,8 +31,8 @@ class GroupeController extends Controller
      * @return Response la vue
      *
      * @paramConverter("groupe", class="AppBundle:Groupe")
-     * @route("groupe/voir/{groupe}", name="interne_voir_groupe", options={"expose"=true})
-     * @Template("Groupe/voir_groupe.html.twig", vars={"groupe"})
+     * @route("/voir/{groupe}", name="interne_voir_groupe", options={"expose"=true})
+     * @Template("AppBundle:Groupe:voir_groupe.html.twig", vars={"groupe"})
      */
     public function showGroupeAction($groupe) {
 
@@ -37,129 +43,114 @@ class GroupeController extends Controller
     }
 
     /**
-     * Page qui affiche la hierarchie globale
-     * @Route("groupe/hierarchie", name="groupe_hierarchie")
-     * @Template("Groupe/hierarchie.html.twig")
+     * @Route("/edit/{groupe}", name="groupe_edit", options={"expose"=true})
+     *
+     * @param Request $request
+     * @param Groupe $groupe
+     * @return Response
+     * @ParamConverter("groupe", class="AppBundle:Groupe")
      */
-    public function hierarchieAction(Request $request) {
+    public function editGroupeAction(Groupe $groupe,Request $request)
+    {
 
-        $groupeRepo = $this->getDoctrine()->getRepository('AppBundle:Groupe');
-        $hierarchie = $groupeRepo->findJSONHierarchie();
+        //$editedGroupe = new Groupe();
+        $editedGroupeForm = $this->createForm(new GroupeType(),$groupe);
 
-        $groupe     = new Groupe();
-        $groupeForm = $this->createForm(new GroupeType, $groupe);
+        $editedGroupeForm->handleRequest($request);
+
+        if($editedGroupeForm->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+
+            //$groupe->setNom($editedGroupe->getNom());
 
 
-        /*
-         * On a peut-être tenté d'ajouter un groupe, dans ce cas on va valider le nouveau groupe, puis rediriger vers
-         * la page de celui-ci
-         */
-        $groupeForm->handleRequest($request);
+            $em->flush();
 
-        if ($groupeForm->isValid()) {
-
-            //On récupère le groupe parent
-            $parent = $groupeRepo->find($request->request->get('groupe_id'));
-            $groupe->setParent($parent);
-
-            $this->getDoctrine()->getManager()->persist($groupe);
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirect($this->generateUrl('interne_voir_groupe', array('groupe' => $groupe->getId())));
         }
 
-
-        return array(
-            'clientData' => json_encode($hierarchie),
-            'groupeForm' => $groupeForm->createView()
-        );
+        return $this->redirect($this->generateUrl('structure_hierarchie_groupe'));
     }
+
+
 
     /**
-     * Page qui affiche la hierarchie globale
-     * @Route("groupe/hierarchie_simple", name="groupe_hierarchie_simple")
-     * @Template("Groupe/hierarchieSimple.html.twig")
+     * @Route("/add", name="groupe_add", options={"expose"=true})
      *
-     * @deprecated ne sera bientot plus utiliser
-     *
+     * @param Request $request
+     * @return Response
      */
-    public function hierarchieSimpleAction(Request $request) {
+    public function addGroupeAction(Request $request)
+    {
+        $newGroupe = new Groupe();
+        $newGroupeForm = $this->createForm(new GroupeType(),$newGroupe);
 
-        $em = $this->getDoctrine()->getManager();
-        $groupeRepo = $em->getRepository('AppBundle:Groupe');
+        $newGroupeForm->handleRequest($request);
 
-        //Création des formulaires de la page
-        $groupe     = new Groupe();
-        $groupeForm = $this->createForm(new GroupeType, $groupe);
-
-        $type = new Type();
-        $typeForm = $this->createForm(new TypeType,$type);
-
-        $fonction = new Fonction();
-        $fonctionForm = $this->createForm(new FonctionType,$fonction);
-
-
-        if($request->request->has($groupeForm->getName()))
+        if($newGroupeForm->isValid())
         {
-            $groupeForm->handleRequest($request);
-
-            if ($groupeForm->isValid()) {
-
-                //On récupère le groupe parent
-                $parent = $groupeRepo->find($request->request->get('groupe_id'));
-                $groupe->setParent($parent);
-
-                $em->persist($groupe);
-                $em->flush();
-
-                return $this->redirect($this->generateUrl('groupe_hierarchie_simple'));
-            }
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($newGroupe);
+            $em->flush();
         }
 
-        if($request->request->has($typeForm->getName()))
-        {
-            $typeForm->handleRequest($request);
-
-            if ($typeForm->isValid()) {
-
-                $em->persist($type);
-                $em->flush();
-
-                return $this->redirect($this->generateUrl('groupe_hierarchie_simple'));
-            }
-        }
-
-        if($request->request->has($fonctionForm->getName()))
-        {
-            $fonctionForm->handleRequest($request);
-
-            if ($fonctionForm->isValid()) {
-
-                $em->persist($fonction);
-                $em->flush();
-
-                return $this->redirect($this->generateUrl('groupe_hierarchie_simple'));
-            }
-        }
-
-
-        //retourne les groupes parents de toute la structure
-        $hiestGroupes = $groupeRepo->findHighestGroupes();
-
-        //retourne toutes les fonctions et type disponible
-        $fonctions = $this->getDoctrine()->getRepository('AppBundle:Fonction')->findAll();
-        $types = $this->getDoctrine()->getRepository('AppBundle:Type')->findAll();
-
-
-
-        return array(
-            'fonctionForm' => $fonctionForm->createView(),
-            'groupeForm'=>$groupeForm->createView(),
-            'typeForm' => $typeForm->createView(),
-            'highestGroupes' =>$hiestGroupes,
-            'fonctions' => $fonctions,
-            'types'=>$types,
-            );
+        return $this->redirect($this->generateUrl('structure_hierarchie_groupe'));
     }
+
+
+    /**
+     * @Route("/get_form_modale", name="groupe_get_form_modale", options={"expose"=true})
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function getGroupeFormAjaxAction(Request $request)
+    {
+        if($request->isXmlHttpRequest())
+        {
+
+            $em = $this->getDoctrine()->getManager();
+            /*
+             * On récupère les infos dans la requete
+             */
+            $idParent = $request->request->get('idParent');
+            $idGroupe = $request->request->get('idGroupe');
+
+
+            $groupeParent = $em->getRepository('AppBundle:Groupe')->find($idParent);
+            $groupe = $em->getRepository('AppBundle:Groupe')->find($idGroupe);
+
+            if($groupe == null)
+            {
+                /*
+                 * ajout d'un nouveaux groupe
+                 */
+                $groupe = new Groupe();
+                $groupe->setParent($groupeParent);
+
+                $groupeForm = $this->createForm(new GroupeType(),$groupe,
+                    array('action' => $this->generateUrl('groupe_add')));
+
+                return $this->render('AppBundle:Groupe:groupe_modale_form.html.twig',array('form'=>$groupeForm->createView()));
+
+            }
+            else
+            {
+                /*
+                 * Modification d'un groupe existant
+                 */
+                $groupeForm = $this->createForm(new GroupeType(),$groupe,
+                    array('action' => $this->generateUrl('groupe_edit',array('groupe'=>$idGroupe))));
+
+                return $this->render('AppBundle:Groupe:groupe_modale_form.html.twig',array('form'=>$groupeForm->createView()));
+            }
+
+
+
+
+        }
+        return new Response();
+    }
+
 
 }

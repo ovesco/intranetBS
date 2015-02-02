@@ -1,8 +1,9 @@
-<table class="ui table">
+<table class="ui celled structured table">
     <thead>
     <tr>
         <th>Nom</th>
         <th>Abreviation</th>
+        <th></th>
     </tr>
     </thead>
     <tbody>
@@ -11,7 +12,11 @@
         <tr>
             <td>{{ fonction.nom }}</td>
             <td>{{ fonction.abreviation }}</td>
+            <td>
+                <div class="ui button editFonction" data-id="{{ fonction.id }}">edit</div>
+            </td>
         </tr>
+
     {% endfor %}
     </tbody>
 </table>

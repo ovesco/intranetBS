@@ -150,7 +150,6 @@ fos_elastica:
                 groupe:
                     mappings:
                         nom: ~
-                        type: ~
                     persistence:
                         driver: orm
                         model: AppBundle\Entity\Groupe

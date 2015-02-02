@@ -1,0 +1,34 @@
+<div id="ajouter-fonction-modale" class="ui small modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Ajouter une fonction
+    </div>
+
+    <div class="content">
+
+        {{ form_start(form,{'attr': {'class': 'ui form'}}) }}
+
+        {{ form_widget(form.nom) }}
+
+        {{ form_widget(form.abreviation) }}
+
+        {{ form_rest(form) }}
+
+        {% if form.nom.vars.value == '' %}
+            {%  set buttonText = 'Ajouter' %}
+        {% else %}
+            {%  set buttonText = 'Modifier' %}
+        {% endif %}
+
+        <div class="ui field">
+            <input type="submit" class="ui green button" value="{{ buttonText }}" />
+        </div>
+
+
+        {{ form_end(form) }}
+
+    </div>
+    <div class="actions">
+        <div class="ui button">Annuler</div>
+    </div>
+</div>

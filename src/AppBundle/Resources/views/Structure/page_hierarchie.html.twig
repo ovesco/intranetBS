@@ -12,7 +12,7 @@
                 <div class="ui segment">
 
 
-                    <div class="ui small button" onclick="addChild(null,'Groupe racine')">
+                    <div class="ui small button addGroupeRacine">
                         <i class="add icon"></i>
                         Ajouter un groupe racine
                     </div>
@@ -33,6 +33,17 @@
 
 {% endblock %}
 
+{% block js %}
+
+    {% javascripts
+    '@AppBundle/Resources/public/js/Structure/page_hierarchie.js'%}
+    <script src="{{ asset_url }}"></script>
+
+    {% endjavascripts %}
+
+
+{% endblock %}
+
 
 
 
@@ -43,27 +54,39 @@
             <div class="item">
                 <i class="top aligned long arrow right icon"></i>
                 <div class="content">
-                    <div class="ui compact menu">
-                        <a class="item" href="{{ path('interne_voir_groupe', {'groupe':parent.id}) }}">
-                            {{ parent.nom }}
+                    <table class="ui table">
+                        <tr>
+                            <td>
+                                <a href="{{ path('interne_voir_groupe', {'groupe':parent.id}) }}">
+                                    {{ parent.nom }}
+                                </a>
+                            </td>
+                            <td>{{ parent.groupeModel.nom }}</td>
+                            <td>
+                                {% if parent.active %}
+                                    <div class="ui label">Actif</div>
+                                {% else %}
+                                    <div class="ui label">Inactif</div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="ui mini icon button addChildGroupe" data-id="{{ parent.id }}">
+                                    <i class="add icon"></i>
+                                </div>
+                                <div class="ui mini icon button editGroupe" data-id="{{ parent.id }}">
+                                    <i class="configure icon"></i>
+                                </div>
+                            </td>
 
-                        </a>
-                        <a class="item">{{ parent.type.nom }}</a>
-                        <a class="item">
 
-                            Effectifs actuel: (trop lourd pour le chargement){#{{ parent.getMembersRecursive|length }}#}
 
-                        </a>
 
-                        <a class="item" onclick="addChild({{ parent.id }},'{{ parent.nom }}')> {{ parent.type.nom }}">
-                            <i class="add icon"></i>
-                            {% if parent.active %}
-                                <div class="floating ui green label">Actif</div>
-                            {% else %}
-                                <div class="floating ui red label">Inactif</div>
-                            {% endif %}
-                        </a>
-                    </div>
+
+                        </tr>
+
+
+
+                    </table>
 
                     {% if parent.enfants %}
                         <div class="list">

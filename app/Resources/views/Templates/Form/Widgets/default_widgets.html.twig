@@ -15,6 +15,8 @@
         {% set required = false %}
     {% endif %}
 
+    {% if not multiple %}
+
     <div class="field">
         {{ block('form_label') }}
         <select class="ui dropdown" {{ block('widget_attributes') }}>
@@ -32,7 +34,33 @@
             {{- block('choice_widget_options') -}}
         </select>
     </div>
+
+    {%  else  %}
+        <div class="field">
+            {{ block('form_label') }}
+            <select class="select2" multiple {{ block('widget_attributes') }}>
+                {% if empty_value is not none -%}
+                    <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ empty_value|trans({}, translation_domain) }}</option>
+                {%- endif %}
+                {%- if preferred_choices|length > 0 -%}
+                    {% set options = preferred_choices %}
+                    {{- block('choice_widget_options') -}}
+                    {% if choices|length > 0 and separator is not none -%}
+                        <option disabled="disabled">{{ separator }}</option>
+                    {%- endif %}
+                {%- endif -%}
+                {% set options = choices -%}
+                {{- block('choice_widget_options') -}}
+            </select>
+        </div>
+
+
+    {% endif %}
+
+
 {%- endblock choice_widget %}
+
+
 
 {# label #}
 {% block form_label -%}
