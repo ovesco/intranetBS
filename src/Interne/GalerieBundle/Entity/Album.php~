@@ -1,0 +1,170 @@
+<?php
+
+namespace Interne\GalerieBundle\Entity;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Interne\GalerieBundle\Utils\Photo;
+
+/**
+ * Album
+ *
+ * @ORM\Table(name="galerie_albums")
+ * @ORM\Entity
+ */
+class Album
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nom", type="string", length=255)
+     */
+    private $nom;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="repertoire", type="string", length=255)
+     */
+    private $repertoire;
+
+    /**
+     * @var \datetime
+     *
+     * @ORM\Column(name="dateCreation", type="datetime")
+     */
+    private $dateCreation;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Dossier", inversedBy="albums", fetch="EAGER")
+     */
+    private $dossier;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\Column(name="photos", type="array")
+     */
+    private $photos;
+
+    public function __construct() {
+
+        $this->photos = new ArrayCollection();
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set nom
+     *
+     * @param string $nom
+     * @return Album
+     */
+    public function setNom($nom)
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * Get nom
+     *
+     * @return string 
+     */
+    public function getNom()
+    {
+        return $this->nom;
+    }
+
+    /**
+     * Set photos
+     *
+     * @param array $photos
+     * @return Album
+     */
+    public function setPhotos($photos)
+    {
+        $this->photos = $photos;
+
+        return $this;
+    }
+
+    /**
+     * Get photos
+     *
+     * @return array 
+     */
+    public function getPhotos()
+    {
+        return $this->photos;
+    }
+
+    public function addPhoto(Photo $photo) {
+
+        $this->photos[] = $photo;
+    }
+
+    /**
+     * Set dossier
+     *
+     * @param \Interne\GalerieBundle\Entity\Dossier $dossier
+     * @return Album
+     */
+    public function setDossier(\Interne\GalerieBundle\Entity\Dossier $dossier = null)
+    {
+        $this->dossier = $dossier;
+
+        return $this;
+    }
+
+    /**
+     * Get dossier
+     *
+     * @return \Interne\GalerieBundle\Entity\Dossier 
+     */
+    public function getDossier()
+    {
+        return $this->dossier;
+    }
+
+    /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     * @return Album
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreation
+     *
+     * @return \DateTime 
+     */
+    public function getDateCreation()
+    {
+        return $this->dateCreation;
+    }
+}

@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <title>{% block titre %}{% endblock %} | GalerieBS</title>
+    <meta name="description" content="Galerie photos de la Brigade de Sauvabelin">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" href="{{ asset('semantic/semantic.min.css') }}">
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700,300&subset=latin,vietnamese' rel='stylesheet' type='text/css'>
+
+    {% stylesheets '@InterneGalerieBundle/Resources/public/css/galerie.css' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+
+
+    {% block css %}{% endblock %}
+
+
+
+</head>
+
+<body>
+
+<header>
+
+    <a href="{{ path('public_galerie_accueil') }}">
+        <img src="{{ asset('bundles/app/images/logo.png') }}" />
+        <h1>Galerie BS</h1>
+    </a>
+
+</header>
+
+{% block content %}{% endblock %}
+
+
+<script src="{{ asset('assetic/jquery.js') }}"></script>
+<script src="{{ asset('semantic/semantic.min.js') }}"></script>
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+
+<script type="text/javascript">
+
+    $('.foldum').dimmer({
+        on: 'hover'
+    });
+
+</script>
+
+{% block js %}{% endblock %}
+
+</body>
+
+</html>

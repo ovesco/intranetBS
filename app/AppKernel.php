@@ -36,6 +36,7 @@ class AppKernel extends Kernel
             new FOS\ElasticaBundle\FOSElasticaBundle(),
 
             new Interne\FinancesBundle\InterneFinancesBundle(),
+            new Interne\GalerieBundle\InterneGalerieBundle(),
             new Interne\SecurityBundle\InterneSecurityBundle(),
             new AppBundle\AppBundle(),
         );

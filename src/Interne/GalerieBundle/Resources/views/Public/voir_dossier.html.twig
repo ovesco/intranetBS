@@ -1,0 +1,52 @@
+{% extends 'InterneGalerieBundle:Public:galerie_layout.html.twig' %}
+
+{% block titre %}{{ dossier.nom }}{% endblock %}
+
+{% block content %}
+
+<div class="ui page grid">
+    <div class="column">
+        <h1 style="margin-top:40px;">{{ dossier.nom }}</h1>
+
+        <div class="ui segment">
+
+            {% include 'InterneGalerieBundle:Public/Basics:breadcrumb.html.twig' %}
+
+            {% if dossier.enfants|length > 0 %}
+            <h3>Répertoires</h3>
+
+            <div class="ui grid">
+            {% for dossier in dossier.enfants %}
+
+                <div class="three wide column">
+                {% include 'InterneGalerieBundle:Public/Basics:folder.html.twig' %}
+                </div>
+
+            {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if dossier.albums|length > 0 %}
+                <h3>Albums</h3>
+
+                <div class="ui grid">
+                    {% for album in dossier.albums %}
+
+                        <div class="three wide column" style="z-index:0;">
+                            {% include 'InterneGalerieBundle:Public/Basics:album.html.twig' %}
+                        </div>
+
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if dossier.albums|length == 0 and dossier.enfants|length == 0 %}
+                <div class="ui info message">
+                    <div class="content">Rien à afficher pour l'instant !</div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
