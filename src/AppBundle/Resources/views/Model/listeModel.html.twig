@@ -43,7 +43,9 @@
                 {% endif %}
             </td>
             <td>
-                <div class="ui button editGroupeModel" data-id="{{ model.id }}"> edit</div>
+                <div class="ui mini icon button popupable editModel" data-id="{{ model.id }}" data-content="Modifier le model">
+                    <i class="configure icon"></i>
+                </div>
             </td>
         </tr>
     {% endfor %}

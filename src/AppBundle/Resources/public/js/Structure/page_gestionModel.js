@@ -1,20 +1,20 @@
-$('.addGroupeModelForm').click(function(){
-    displayModalGroupeModelForm(null);
+$('.addModelForm').click(function(){
+    displayModaleModelForm(null);
 });
 
-$('.editGroupeModel').click(function(){
+$('.editModel').click(function(){
     var id = $(this).data('id');
-    displayModalGroupeModelForm(id);
+    displayModaleModelForm(id);
 });
 
 
-function displayModalGroupeModelForm(idGroupeModel){
+function displayModaleModelForm(idModel){
 
     //on récupère les valeur du formulaire
-    var data = {idGroupeModel:idGroupeModel};
+    var data = {idModel:idModel};
     $.ajax({
         type: "POST",
-        url: Routing.generate('groupe_model_get_form_modale'),
+        url: Routing.generate('model_get_form_modale'),
         data: data,
         error: function(jqXHR, textStatus, errorThrown) {   },
         success: function(response) {

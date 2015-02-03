@@ -13,7 +13,9 @@
             <td>{{ fonction.nom }}</td>
             <td>{{ fonction.abreviation }}</td>
             <td>
-                <div class="ui button editFonction" data-id="{{ fonction.id }}">edit</div>
+                <div class="ui mini icon button popupable editFonction" data-id="{{ fonction.id }}" data-content="Modifier la fonction">
+                    <i class="configure icon"></i>
+                </div>
             </td>
         </tr>
 

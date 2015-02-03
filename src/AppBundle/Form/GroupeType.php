@@ -20,8 +20,8 @@ class GroupeType extends AbstractType
             ))
             ->add('nom')
             ->add('active','hidden',array('data'=>true))
-            ->add('groupeModel', 'entity', array(
-                'class'		=> 'AppBundle:GroupeModel',
+            ->add('model', 'entity', array(
+                'class'		=> 'AppBundle:Model',
                 'property'	=> 'nom'
             ))
 

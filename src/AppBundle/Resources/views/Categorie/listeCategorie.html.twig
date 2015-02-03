@@ -1,0 +1,29 @@
+<table class="ui celled structured table">
+    <thead>
+    <tr>
+        <th>Nom</th>
+        <th>Description</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+
+    {% for categorie in categories %}
+        <tr>
+
+            <td>{{ categorie.nom }}</td>
+            <td>
+                {{ categorie.description }}
+
+            </td>
+
+
+            <td>
+                <div class="ui mini icon button popupable editCategorie" data-id="{{ categorie.id }}" data-content="Modifier la catégorie">
+                    <i class="configure icon"></i>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

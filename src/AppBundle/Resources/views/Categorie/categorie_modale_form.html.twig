@@ -1,7 +1,16 @@
-<div id="groupe-modale" class="ui small modal">
+{% if form.nom.vars.value == '' %}
+    {%  set header = 'Ajouter une catégorie' %}
+    {%  set buttonText = 'Ajouter' %}
+{% else %}
+    {%  set header = 'Modifier une catégorie' %}
+    {%  set buttonText = 'Modifier' %}
+{% endif %}
+
+
+<div id="form_categorie_modale" class="ui small modal">
     <i class="close icon"></i>
     <div class="header">
-        Ajouter une unité
+        {{ header }}
     </div>
 
     <div class="content">
@@ -9,30 +18,22 @@
         {{ form_start(form,{'attr': {'class': 'ui form'}}) }}
 
 
-        {{ form_widget(form.parent) }}
-
 
         {{ form_widget(form.nom) }}
 
 
-        {{ form_widget(form.model) }}
+        {{ form_widget(form.description) }}
+
 
 
         {{ form_rest(form) }}
 
-
-        {% if form.nom.vars.value == '' %}
-            {%  set buttonText = 'Ajouter' %}
-        {% else %}
-            {%  set buttonText = 'Modifier' %}
-        {% endif %}
 
         <div class="ui field">
             <input type="submit" class="ui green button" value="{{ buttonText }}" />
         </div>
 
         {{ form_end(form) }}
-
 
     </div>
     <div class="actions">

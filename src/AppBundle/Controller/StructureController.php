@@ -29,30 +29,24 @@ class StructureController extends Controller
     /**
      * Page qui affiche la hierarchie des groupes
      *
-     * @Route("/hierarchie", name="structure_hierarchie_groupe", options={"expose"=true})
+     * @Route("/gestion_groupe", name="structure_gestion_groupe", options={"expose"=true})
      * @param Request $request
      * @return Response
      *
      */
-    public function hierarchieAction(Request $request)
+    public function gestionGroupeAction(Request $request)
     {
 
         $em = $this->getDoctrine()->getManager();
 
         $hiestGroupes = $em->getRepository('AppBundle:Groupe')->findHighestGroupes();
 
-        return $this->render('AppBundle:Structure:page_hierarchie.html.twig', array(
+        return $this->render('AppBundle:Structure:page_gestionGroupe.html.twig', array(
             'highestGroupes' => $hiestGroupes
         ));
 
 
     }
-
-
-
-
-
-
 
 
     /**
@@ -81,96 +75,43 @@ class StructureController extends Controller
     /**
      * Page qui affiche les models de groupes
      *
-     * @Route("/gestion_groupe_model", name="structure_gestion_groupe_model", options={"expose"=true})
+     * @Route("/gestion_model", name="structure_gestion_model", options={"expose"=true})
      * @param Request $request
      * @return Response
      *
      */
-    public function gestionGroupeModelAction(Request $request) {
+    public function gestionModelAction(Request $request) {
 
         $em = $this->getDoctrine()->getManager();
 
-        if($request->isXmlHttpRequest())
-        {
 
-            /*
-             * On envoie le formulaire en modal
-             */
-            $id = $request->request->get('idGroupeModel');
+        //retourne toutes les fonctions
+        $models = $em->getRepository('AppBundle:Model')->findAll();
 
-            $model = null;
-            $modelForm = null;
-            if($id == null)
-            {
-                /*
-                 * Ajout
-                 */
-                $model = new GroupeModel();
-                $modelForm = $this->createForm(new GroupeModelType(),$model);
-            }
-            else
-            {
-                $model = $em->getRepository('AppBundle:GroupeModel')->find($id);
-                $modelForm = $this->createForm(new GroupeModelType(),$model);
-                $modelForm->get('savedName')->setData($model->getNom()); //formulaire pour l'update de type, il contient le nom
-            }
-
-            return $this->render('AppBundle:GroupeModel:groupe_model_modale_form.html.twig',array('form'=>$modelForm->createView()));
-
-        }
-        else
-        {
-            /*
-             * Soit la page est demandée, soit un formulaire est soumis
-             */
-            $model = new GroupeModel();
-            $modelForm = $this->createForm(new GroupeModelType,$model);
-
-            if($request->request->has($modelForm->getName()))
-            {
-                $modelForm->handleRequest($request);
-
-                if ($modelForm->isValid()) {
+        return $this->render('AppBundle:Structure:page_gestionModel.html.twig',array(
+            'models' =>$models));
 
 
-                    $oldName = $modelForm->get('savedName')->getData();
+    }
 
-                    $mdoelInDB = $em->getRepository('AppBundle:GroupeModel')->findOneBy(array('nom'=>$oldName));
+    /**
+     * Page qui affiche les categorie de groupes
+     *
+     * @Route("/gestion_categorie", name="structure_gestion_categorie", options={"expose"=true})
+     * @param Request $request
+     * @return Response
+     *
+     */
+    public function gestionCategorieAction(Request $request) {
 
-                    if($mdoelInDB == null)
-                    {
-                        /*
-                         * Nouveaux type
-                         */
-                        $em->persist($model);
-                    }
-                    else
-                    {
-                        /*
-                         * Update d'un type
-                         * On copie les infos dans l'objet déjà existant
-                         */
-                        $mdoelInDB->setNom($model->getNom());
-                        $mdoelInDB->setFonctionChef($model->getFonctionChef());
-                        $mdoelInDB->setFonctions($model->getFonctions());
-                        $mdoelInDB->setAffichageEffectifs($model->isAffichageEffectifs());
+        $em = $this->getDoctrine()->getManager();
 
 
-                    }
-                    $em->flush();
+        //retourne toutes les fonctions
+        $categories = $em->getRepository('AppBundle:Categorie')->findAll();
 
-                    return $this->redirect($this->generateUrl('structure_gestion_groupe_model'));
-                }
-            }
-
-            //retourne toutes les fonctions
-            $models = $em->getRepository('AppBundle:GroupeModel')->findAll();
-
-            return $this->render('AppBundle:Structure:page_gestionGroupeModel.html.twig',array(
-                'models' =>$models));
-        }
-
-
+        return $this->render('AppBundle:Structure:page_gestionCategorie.html.twig',array(
+            'categories' =>$categories));
 
 
     }

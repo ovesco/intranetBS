@@ -24,7 +24,7 @@ use Interne\FinancesBundle\Entity\CreanceToMembre;
 use Interne\FinancesBundle\Entity\CreanceToFamille;
 use AppBundle\Entity\Fonction;
 use AppBundle\Entity\Distinction;
-use AppBundle\Entity\GroupeModel;
+use AppBundle\Entity\Model;
 use AppBundle\Entity\Groupe;
 use Interne\FinancesBundle\Entity\Rappel;
 
@@ -263,12 +263,12 @@ class PopulateCommand extends ContainerAwareCommand
                 $groupe->setNom($name);
             }
 
-            $model = $em->getRepository('AppBundle:GroupeModel')->findOneBy(array('nom'=>$groupeData[0]));
+            $model = $em->getRepository('AppBundle:Model')->findOneBy(array('nom'=>$groupeData[0]));
 
             if($model == null)
             {
                 //création si inexistant
-                $model = new GroupeModel();
+                $model = new Model();
                 $model->setNom($groupeData[0]);
                 $model->setAffichageEffectifs(true);
             }
@@ -278,7 +278,7 @@ class PopulateCommand extends ContainerAwareCommand
 
             $model->setFonctionChef($fonctionChef);
 
-            $groupe->setGroupeModel($model);
+            $groupe->setModel($model);
             $groupe->setParent($parent);
             $groupe->setActive(true);
 
@@ -453,7 +453,7 @@ class PopulateCommand extends ContainerAwareCommand
     /**
      * Génère une attribution aléatoire
      * @param string $fonction l'abreviation de la fonction
-     * @param id $type l'id du type de groupe souhaité
+     * @param $model l'id du groupe model de groupe souhaité
      * @return Attribution
      */
     private function getRandomAttribution($fonction = null, $model = null) {

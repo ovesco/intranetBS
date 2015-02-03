@@ -4,16 +4,14 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use AppBundle\Entity\Groupe;
-use AppBundle\Entity\Fonction;
 
 /**
- * GroupeModel
+ * Model
  *
- * @ORM\Table(name="app_groupe_model")
+ * @ORM\Table(name="app_model")
  * @ORM\Entity
  */
-class GroupeModel
+class Model
 {
     /**
      * @var integer
@@ -40,14 +38,15 @@ class GroupeModel
 
     /**
      * @ORM\ManyToMany(targetEntity="Fonction")
-     * @ORM\JoinTable(name="app_groupe_model_fonction",
-     *      joinColumns={@ORM\JoinColumn(name="groupe_model_id", referencedColumnName="id")},
+     * @ORM\JoinTable(name="app_model_fonction",
+     *      joinColumns={@ORM\JoinColumn(name="model_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="fonction_id", referencedColumnName="id")}
      *      )
      *
      *
      */
     private $fonctions;
+
 
 
     /**
@@ -78,7 +77,7 @@ class GroupeModel
      * Set nom
      *
      * @param string $nom
-     * @return Type
+     * @return Model
      */
     public function setNom($nom)
     {
@@ -110,7 +109,7 @@ class GroupeModel
      * Add groupes
      *
      * @param Groupe $groupes
-     * @return Type
+     * @return Model
      */
     public function addGroupe(Groupe $groupes)
     {
@@ -143,7 +142,7 @@ class GroupeModel
      * Set fonctionChef
      *
      * @param Fonction $fonctionChef
-     * @return Type
+     * @return Model
      */
     public function setFonctionChef(Fonction $fonctionChef = null)
     {
@@ -206,7 +205,7 @@ class GroupeModel
      * Add fonction
      *
      * @param Fonction $fonction
-     * @return Type
+     * @return Model
      */
     public function addFonction(Fonction $fonction)
     {

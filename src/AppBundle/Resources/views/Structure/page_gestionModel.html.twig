@@ -1,25 +1,23 @@
 {% extends 'layout.html.twig' %}
 
 
-{% block titre %}Fonctions{% endblock %}
+{% block titre %}Modèles{% endblock %}
 
 {% block content %}
 
     <div class="ui page grid">
         <div class="row">
             <div class="column">
-                <h3>Gestion des fonctions</h3>
+                <h3>Gestion des modèles</h3>
                 <div class="ui segment">
 
 
-                    <div class="ui small button addFonction">
+                    <div class="ui small button addModelForm">
                         <i class="add icon"></i>
-                        Ajouter une fonction
+                        Ajouter un model
                     </div>
 
-                    {% include "AppBundle:Fonction:listeFonctions.html.twig" with {'fonctions': fonctions}  %}
-
-
+                    {% include "AppBundle:Model:listeModel.html.twig" with {'models': models}  %}
 
 
                 </div>
@@ -28,17 +26,19 @@
     </div>
 
 
+
+
+
 {% endblock %}
 
 {% block js %}
 
     {% javascripts
-    '@AppBundle/Resources/public/js/Structure/page_gestionFonction.js'%}
+    '@AppBundle/Resources/public/js/Structure/page_gestionModel.js'%}
     <script src="{{ asset_url }}"></script>
 
     {% endjavascripts %}
 
 
 {% endblock %}
-
 

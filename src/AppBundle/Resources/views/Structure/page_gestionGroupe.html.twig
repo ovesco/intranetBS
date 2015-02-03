@@ -1,23 +1,26 @@
 {% extends 'layout.html.twig' %}
 
+{% import 'AppBundle:Groupe:macro_hierarchie_groupe.html.twig' as macro %}
 
-{% block titre %}Fonctions{% endblock %}
+{% block titre %}Groupes{% endblock %}
 
 {% block content %}
 
     <div class="ui page grid">
         <div class="row">
             <div class="column">
-                <h3>Gestion des fonctions</h3>
+                <h3>Gestion des groupes</h3>
                 <div class="ui segment">
 
 
-                    <div class="ui small button addFonction">
+                    <div class="ui small button addGroupeRacine">
                         <i class="add icon"></i>
-                        Ajouter une fonction
+                        Ajouter un groupe racine
                     </div>
 
-                    {% include "AppBundle:Fonction:listeFonctions.html.twig" with {'fonctions': fonctions}  %}
+
+
+                    {{ macro.hierarchie(highestGroupes)}}
 
 
 
@@ -28,17 +31,24 @@
     </div>
 
 
+
+
+
 {% endblock %}
 
 {% block js %}
 
     {% javascripts
-    '@AppBundle/Resources/public/js/Structure/page_gestionFonction.js'%}
+    '@AppBundle/Resources/public/js/Structure/page_gestionGroupe.js'%}
     <script src="{{ asset_url }}"></script>
 
     {% endjavascripts %}
 
 
 {% endblock %}
+
+
+
+
 
 

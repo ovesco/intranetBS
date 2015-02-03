@@ -4,7 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use AppBundle\Entity\GroupeReference;
+use AppBundle\Entity\Model;
 
 /**
  * Groupe
@@ -54,11 +54,11 @@ class Groupe
     private $attributions;
 
     /**
-     * @var GroupeModel $groupeModel
+     * @var Model $model
      * 
-     * @ORM\ManyToOne(targetEntity="GroupeModel", inversedBy="groupes", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Model", inversedBy="groupes", cascade={"persist"})
      */
-    private $groupeModel;
+    private $model;
 
     /**
      * Determine si le groupe est ouverte ou pas. On ne pourra pas lui ajouter des attibution si
@@ -249,26 +249,26 @@ class Groupe
     }
 
     /**
-     * Set groupeModel
+     * Set model
      *
-     * @param GroupeModel $groupeModel
+     * @param Model $model
      * @return Groupe
      */
-    public function setGroupeModel(GroupeModel $groupeModel = null)
+    public function setModel(Model $model = null)
     {
-        $this->groupeModel = $groupeModel;
-        $groupeModel->addGroupe($this);
+        $this->model = $model;
+        $model->addGroupe($this);
         return $this;
     }
 
     /**
-     * Get groupeModel
+     * Get model
      *
-     * @return GroupeModel
+     * @return Model
      */
-    public function getGroupeModel()
+    public function getModel()
     {
-        return $this->groupeModel;
+        return $this->model;
     }
 
     public function getMembers()

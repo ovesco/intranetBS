@@ -1,0 +1,44 @@
+{% macro hierarchie(parents) %}
+    {% if parents %}
+        <ul>
+        {% for parent in parents %}
+            <div class="ui divider"></div>
+            <li type="none">
+
+
+                <a href="{{ path('interne_voir_groupe', {'groupe':parent.id}) }}">
+                    {{ parent.nom }}
+                </a>
+                {{ parent.model.nom }}
+                {% if parent.active %}
+                    <div class="ui label mini green">Actif</div>
+                {% else %}
+                    <div class="ui label mini red">Inactif</div>
+                {% endif %}
+
+                <div class="mini icon ui buttons">
+                    <div class="ui button addChildGroupe popupable" data-id="{{ parent.id }}" data-content="Ajouter un sous groupe">
+                        <i class="add icon"></i>
+                    </div>
+                    <div class="ui button editGroupe popupable" data-id="{{ parent.id }}" data-content="Modifier ce groupe">
+                        <i class="configure icon"></i>
+                    </div>
+                </div>
+
+
+
+
+
+
+                {% if parent.enfants %}
+                    <ul>
+                        {{ _self.hierarchie(parent.enfants) }}
+                    </ul>
+                {% endif %}
+
+
+            </li>
+        {% endfor %}
+    {% endif %}
+    </ul>
+{% endmacro %}

@@ -2,14 +2,13 @@
 
 namespace AppBundle\Form;
 
-use AppBundle\Entity\FonctionRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 
 
-class GroupeModelType extends AbstractType
+class ModelType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -36,12 +35,12 @@ class GroupeModelType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\GroupeModel'
+            'data_class' => 'AppBundle\Entity\Model'
         ));
     }
 
     public function getName()
     {
-        return 'appbundle_groupeModelType';
+        return 'appbundle_ModelType';
     }
 }

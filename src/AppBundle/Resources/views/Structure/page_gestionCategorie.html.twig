@@ -1,22 +1,23 @@
 {% extends 'layout.html.twig' %}
 
 
-{% block titre %}Groupe Moldes{% endblock %}
+{% block titre %}Catégories{% endblock %}
 
 {% block content %}
 
     <div class="ui page grid">
         <div class="row">
             <div class="column">
+                <h3>Gestion des catégories</h3>
                 <div class="ui segment">
 
 
-                    <div class="ui small button addGroupeModelForm">
+                    <div class="ui small button addCategorieForm">
                         <i class="add icon"></i>
-                        Ajouter un groupe model
+                        Ajouter une catégories
                     </div>
 
-                    {% include "AppBundle:GroupeModel:listeGroupeModel.html.twig" with {'models': models}  %}
+                    {% include "AppBundle:Categorie:listeCategorie.html.twig" with {'categories': categories}  %}
 
 
                 </div>
@@ -33,7 +34,7 @@
 {% block js %}
 
     {% javascripts
-    '@AppBundle/Resources/public/js/Structure/page_gestionGroupeModel.js'%}
+    '@AppBundle/Resources/public/js/Structure/page_gestionCategorie.js'%}
     <script src="{{ asset_url }}"></script>
 
     {% endjavascripts %}

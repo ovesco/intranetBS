@@ -44,7 +44,7 @@ assetic:
     bundles:
         - InterneFinancesBundle
         - InterneSecurityBundle
-    bundles:        [ InterneFinancesBundle, AppBundle]
+        - AppBundle
     write_to:       %kernel.root_dir%/../web/static/
 
     #java: /usr/bin/java
