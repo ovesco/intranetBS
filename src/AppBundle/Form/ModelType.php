@@ -27,6 +27,13 @@ class ModelType extends AbstractType
             ))
             ->add('affichageEffectifs','checkbox',array('label'=>'Affichage des effectifs?','required'=>false))
 
+            ->add('categories', 'entity', array(
+                'class'		=> 'AppBundle:Categorie',
+                'property'	=> 'nom',
+                'multiple'=>true,
+                'expanded'=>false,
+                'required'=>false,
+            ))
         ;
 
 

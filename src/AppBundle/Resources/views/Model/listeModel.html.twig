@@ -4,6 +4,7 @@
         <th>Nom</th>
         <th>Fonction Chefs</th>
         <th>Fonctions</th>
+        <th>Categories</th>
         <th>Affichage des effectifs</th>
         <th></th>
     </tr>
@@ -31,6 +32,19 @@
 
                 {% else %}
                     Aucune fonction définie
+                {% endif %}
+
+
+            </td>
+            <td>
+                {%  if model.categories is not empty %}
+                    {% for categorie in model.categories %}
+                        {{ categorie.nom }}<br>
+
+                    {% endfor %}
+
+                {% else %}
+                    Aucune catégorie définie
                 {% endif %}
 
 

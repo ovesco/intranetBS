@@ -47,6 +47,21 @@ class Model
      */
     private $fonctions;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Categorie", inversedBy="models")
+     */
+    private $categories;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->groupes = new ArrayCollection();
+        $this->fonctions = new ArrayCollection();
+        $this->categories = new ArrayCollection();
+    }
+
 
 
     /**
@@ -96,14 +111,7 @@ class Model
         return $this->nom;
     }
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->groupes = new ArrayCollection();
-        $this->fonctions = new ArrayCollection();
-    }
+
 
     /**
      * Add groupes
@@ -243,5 +251,50 @@ class Model
     {
         $this->fonctions = $fonctions;
     }
+
+    /**
+     * Add categorie
+     *
+     * @param Categorie $categorie
+     * @return Model
+     */
+    public function addCategorie(Categorie $categorie)
+    {
+        $this->categories[] = $categorie;
+
+        return $this;
+    }
+
+    /**
+     * Remove categorie
+     *
+     * @param Categorie $categorie
+     */
+    public function removeCategorie(Categorie $categorie)
+    {
+        $this->categories->removeElement($categorie);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return ArrayCollection
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * Set categories
+     *
+     * @param $categories
+     */
+    public function setCategories($categories)
+    {
+        $this->categories = $categories;
+    }
+
+
 
 }

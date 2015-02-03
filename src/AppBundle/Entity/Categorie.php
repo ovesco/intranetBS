@@ -37,26 +37,26 @@ class Categorie
     private $description;
 
 
-    /*
+
     /**
-     * @ORM\ManyToMany(targetEntity="GroupeModel")
-     * @ORM\JoinTable(name="app_groupe_type_groupe_model",
-     *      joinColumns={@ORM\JoinColumn(name="groupe_type_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="groupe_model_id", referencedColumnName="id")}
+     * @ORM\ManyToMany(targetEntity="Model", mappedBy="categories")
+     * @ORM\JoinTable(name="app_categorie_model",
+     *      joinColumns={@ORM\JoinColumn(name="categorie_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="model_id", referencedColumnName="id")}
      *      )
      *
      *
-     *
-    private $groupeModels;
+     */
+    private $models;
 
-    */
+
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        //$this->$groupeModels = new ArrayCollection();
+        $this->models = new ArrayCollection();
     }
 
 
@@ -117,25 +117,45 @@ class Categorie
     }
 
     /**
-     * Set groupeModels
+     * Add model
      *
-     * @param string $groupeModels
-     * @return GroupeType
+     * @param Model $model
+     * @return Categorie
      */
-    public function setGroupeModels($groupeModels)
+    public function addModel(Model $model)
     {
-        $this->groupeModels = $groupeModels;
+        $this->models[] = $model;
 
         return $this;
     }
 
     /**
-     * Get groupeModels
+     * Remove model
      *
-     * @return string 
+     * @param Model $model
      */
-    public function getGroupeModels()
+    public function removeModel(Model $model)
     {
-        return $this->groupeModels;
+        $this->models->removeElement($model);
+    }
+
+    /**
+     * Get models
+     *
+     * @return ArrayCollection
+     */
+    public function getModels()
+    {
+        return $this->models;
+    }
+
+    /**
+     * Set models
+     *
+     * @param $models
+     */
+    public function setModels($models)
+    {
+        $this->models = $models;
     }
 }
