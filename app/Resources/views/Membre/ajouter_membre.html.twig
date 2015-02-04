@@ -27,10 +27,6 @@
                                 {{ form_widget(membreForm.naissance) }}
                             </div>
 
-                            <div class="two fields">
-                                {{ form_widget(membreForm.telephone) }}
-                                {{ form_widget(membreForm.email) }}
-                            </div>
 
                             <div class="two fields">
                                 {{ form_widget(membreForm.numeroAvs) }}
@@ -53,10 +49,6 @@
                                 {{ form_widget(familleForm.mere.prenom) }}
                                 {{ form_widget(familleForm.mere.profession) }}
                             </div>
-                            <div class="two fields">
-                                {{ form_widget(familleForm.mere.telephone) }}
-                                {{ form_widget(familleForm.mere.email) }}
-                            </div>
                             <h4 class="ui horizontal header divider">
                                 <i class="male icon"></i>
                                 Père
@@ -66,12 +58,10 @@
                                 {{ form_widget(familleForm.pere.prenom) }}
                                 {{ form_widget(familleForm.pere.profession) }}
                             </div>
-                            <div class="two fields">
-                                {{ form_widget(familleForm.pere.telephone) }}
-                                {{ form_widget(familleForm.pere.email) }}
-                            </div>
 
                         </div>
+
+                        {#
                         <div id="adresse-segment" class="ui vertical segment">
                             <h3>Adresse(s)</h3>
                             <div id="adresses-context">
@@ -85,12 +75,12 @@
                                     <div class="ui grid">
                                         <div class="eight wide column">
                                             <div class="three fields">
-                                                
+
                                                     {{ form_widget(familleForm.adresse.rue) }}
                                                     {{ form_widget(familleForm.adresse.npa) }}
                                                     {{ form_widget(familleForm.adresse.localite) }}
                                             </div>
-                                            
+
                                             {{ form_widget(familleForm.adresse.facturable) }}
                                             {{ form_widget(familleForm.adresse.remarques) }}
 
@@ -109,12 +99,12 @@
                                     <div class="ui grid">
                                         <div class="eight wide column">
                                             <div class="three fields">
-                                                
+
                                                     {{ form_widget(membreForm.adresse.rue) }}
                                                     {{ form_widget(membreForm.adresse.npa) }}
                                                     {{ form_widget(membreForm.adresse.localite) }}
                                             </div>
-                                           
+
                                             {{ form_widget(membreForm.adresse.facturable) }}
                                             {{ form_widget(membreForm.adresse.remarques) }}
                                         </div>
@@ -132,12 +122,12 @@
                                     <div class="ui grid">
                                         <div class="eight wide column">
                                             <div class="three fields">
-                                                
+
                                                     {{ form_widget(familleForm.pere.adresse.rue) }}
                                                     {{ form_widget(familleForm.pere.adresse.npa) }}
                                                     {{ form_widget(familleForm.pere.adresse.localite) }}
                                             </div>
-                                            
+
                                             {{ form_widget(familleForm.pere.adresse.facturable) }}
                                             {{ form_widget(familleForm.pere.adresse.remarques) }}
 
@@ -155,12 +145,12 @@
                                     <div class="ui grid">
                                         <div class="eight wide column">
                                             <div class="three fields">
-                                                
+
                                                     {{ form_widget(familleForm.mere.adresse.rue) }}
                                                     {{ form_widget(familleForm.mere.adresse.npa) }}
                                                     {{ form_widget(familleForm.mere.adresse.localite) }}
                                             </div>
-                                            
+
                                             {{ form_widget(familleForm.mere.adresse.facturable) }}
                                             {{ form_widget(familleForm.mere.adresse.remarques) }}
 
@@ -176,6 +166,7 @@
                                 </div>
                             </div>
                         </div>
+                        #}
                         <div class="ui vertical segment">
                             <div id="first-form-buttons" class="ui buttons">
                                 <div class="ui teal button">Vérifier</div>

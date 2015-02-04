@@ -251,19 +251,14 @@ class Dossier
      */
     public function getImage() {
 
-        $hasPicto = false;
+        foreach($this->getAlbums() as $a)
+            if($a->getImage() != null)
+                return $a->getImage();
 
-        if(count($this->getAlbums()) != 0) {
-            foreach($this->getAlbums() as $a) {
 
-                if($a->getImage() != null)
-                    return $a->getImage();
-            }
-        }
 
-        if(!$hasPicto)
-            foreach($this->getEnfants() as $enfant)
-                return $enfant->getImage();
+        foreach($this->getEnfants() as $enfant)
+            if($enfant->getImage() != null) return $enfant->getImage();
 
         return null;
 

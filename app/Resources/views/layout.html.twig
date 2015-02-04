@@ -105,17 +105,13 @@
 <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
 
 
-{% javascripts '@AppBundle/Resources/public/js/alwaysIncluded/*'
+{% javascripts
+    '@AppBundle/Resources/public/js/alwaysIncluded/*'
+    '@AppBundle/Resources/public/js/layout.js'
+
     output="js/main.js"
 %}
 <script src="{{ asset_url }}"></script>
-{% endjavascripts %}
-
-
-{% javascripts '@AppBundle/Resources/public/js/layout.js'
-    output="js/main.js"
-%}
-    <script src="{{ asset_url }}"></script>
 {% endjavascripts %}
 
 <script type="text/javascript">

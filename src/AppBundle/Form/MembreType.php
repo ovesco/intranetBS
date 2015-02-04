@@ -46,10 +46,14 @@ class MembreType extends AbstractType
 
             ->add(
                 'numeroAvs',
-                'text',
+                'number',
                 array(
                     'label' => 'Numéro AVS',
-                    'required' => false
+                    'required' => false,
+                    'attr' => array(
+                        'data-formatter' => 'true',
+                        'data-pattern'   => '{{9999999999999}}'
+                    )
                 )
             )
 
@@ -58,7 +62,11 @@ class MembreType extends AbstractType
                 'text',
                 array(
                     'label' => 'IBAN',
-                    'required' => false
+                    'required' => false,
+                    'attr'  => array(
+                        'data-formatter' => 'true',
+                        'data-pattern'   => '{{aa}} {{99}} {{99999}} {{************}}'
+                    )
                 )
             )
 

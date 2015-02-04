@@ -15,5 +15,5 @@
 /web/images/
 /web/js/
 /web/PDFTemplates/
-/web/static/
-/web/galerie/photos/
+/web/static/*
+/web/galerie/photos/*

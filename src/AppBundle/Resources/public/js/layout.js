@@ -40,3 +40,17 @@ $('.datatable').dataTable();
 
 //select2
 $('.select2').select2();
+
+/**
+ * scan la page à la recherche de pattern à respecter pour tous les inputs type="text"
+ */
+
+$("input[data-formatter=true]").each(function() {
+
+    var pattern = $(this).attr("data-pattern");
+
+    $(this).formatter({
+        persistent: true,
+        pattern: pattern
+    });
+});
