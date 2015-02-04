@@ -59,6 +59,8 @@ class ListeEnvoi {
         //on sauve par clé token dans le tableau
         $this->envois[$envoi->getToken()] = $envoi;
 
+        //on sauve la liste
+        $this->save();
     }
 
     /**
@@ -78,8 +80,19 @@ class ListeEnvoi {
 
     /**
      * @param $token
+     * @return mixed
      */
-    public function removeEnvoiByTocken($token)
+    public function getEnvoiByToken($token)
+    {
+        $envoi =  $this->envois[$token];
+        return $this->reconstructEnvoi($envoi);
+
+    }
+
+    /**
+     * @param $token
+     */
+    public function removeEnvoiByToken($token)
     {
         unset($this->envois[$token]);
     }
@@ -98,27 +111,41 @@ class ListeEnvoi {
     public function getEnvois()
     {
         $arrayEnvois = array();
-
         foreach($this->envois as $envoi)
         {
-            $owner = null;
+            array_push($arrayEnvois,$this->reconstructEnvoi($envoi));
+        }
+        return $arrayEnvois;
+    }
 
-            if($envoi->ownerClass == 'Membre')
-            {
-                $owner = $this->em->getRepository('AppBundle:Membre')->find($envoi->ownerId);
-            }
-            elseif($envoi->ownerClass == 'Famille')
-            {
-                $owner = $this->em->getRepository('AppBundle:Famille')->find($envoi->ownerId);
-            }
 
-            $data = array('envoi'=>$envoi,'owner'=>$owner,'token' => $envoi->getToken());
+    /**
+     * Cette méthode renvoie un envoi avec en plus les Membres/Familles
+     * qui sont propriétaire de l'envoi.
+     * On accède par clé au tableau renvoyé par cette méthode.
+     *
+     * 'envoi' l'objet d'envoi.
+     * 'owner' le Membre ou la Famille proprétaire de l'envoi, on peut connaitre la class avec un getClass() sur l'objet.
+     * 'token' le token de l'envoi.
+     *
+     * @param $envoi
+     * @return array
+     */
+    private function reconstructEnvoi($envoi)
+    {
 
-            array_push($arrayEnvois,$data);
+        $owner = null;
+
+        if($envoi->ownerClass == 'Membre')
+        {
+            $owner = $this->em->getRepository('AppBundle:Membre')->find($envoi->ownerId);
+        }
+        elseif($envoi->ownerClass == 'Famille')
+        {
+            $owner = $this->em->getRepository('AppBundle:Famille')->find($envoi->ownerId);
         }
 
-
-        return $arrayEnvois;
+        return array('envoi'=>$envoi,'owner'=>$owner,'token' => $envoi->getToken());
     }
 
 

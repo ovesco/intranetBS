@@ -11,7 +11,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 use Interne\FinancesBundle\Entity\FactureToMembre;
 use Interne\FinancesBundle\Entity\FactureToFamille;
-use fpdf\FPDF;
+use Interne\FinancesBundle\Entity\Facture;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 
 /**
@@ -120,21 +121,19 @@ class FactureController extends Controller
             $em = $this->getDoctrine()->getManager();
             $facture = $em->getRepository('InterneFinancesBundle:Facture')->find($idFacture);
 
+
             /*
              * Creation du PDF
              */
-            $pdf = $this->get('Pdf'); //call service
-            //$pdf->addPage();
-            //$printer = new PrintController();
-            //$pdf = $printer->factureToPdf($em,$facture,$pdf);
-
+            $printer = $this->get('finances_printer');
+            $pdf = $printer->factureToPdf($facture);
 
             $ownerId = $facture->getOwner()->getId();
             $ownerClass = $facture->getOwner()->getClass();
 
             $listeEnvoi = $this->get('listeEnvoi');
             $listeEnvoi->addEnvoi($ownerId,$ownerClass,$pdf,'Facture N°'.$idFacture);
-            $listeEnvoi->save();
+
 
 
 
@@ -143,6 +142,28 @@ class FactureController extends Controller
 
         }
         return new Response('error');
+
+    }
+
+    /**
+     * @param Facture $facture
+     * @Route("/print/{facture}", name="interne_fiances_facture_print", options={"expose"=true})
+     * @return Response
+     * @ParamConverter("facture", class="InterneFinancesBundle:Facture")
+     */
+    public function printAction(Facture $facture)
+    {
+
+        $printer = $this->get('finances_printer');
+        $pdf = $printer->factureToPdf($facture);
+
+        /*
+         * Ajout de l'adresse
+         */
+        $adresse = $facture->getOwner()->getAdresseExpedition();
+        $pdf->addAdresseEnvoi($adresse);
+
+        return $pdf->Output('Facture N°'.$facture->getId().'.this->pdf','I');
 
     }
 

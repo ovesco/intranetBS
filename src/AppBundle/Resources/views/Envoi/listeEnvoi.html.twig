@@ -1,0 +1,105 @@
+{% extends 'layout.html.twig' %}
+{% import _self as macro %}
+
+{% block titre %}Envois{% endblock %}
+
+{% block content %}
+
+<div class="ui page grid">
+    <div class="row">
+        <div class="column">
+
+
+            <a class="ui button" href="{{ path('utils_envoi_clear') }}">Effacer la liste</a>
+
+            <div class="ui button envoisProcess">Procéder aux envois</div>
+
+            <table class="ui celled structured table">
+                <thead>
+                    <tr>
+                        <th>Cible d'envoi</th>
+                        <th>Courrier</th>
+                        <th>Email</th>
+                        <th>Description</th>
+
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for envoi in listeEnvoi.envois %}
+
+                    <tr>
+                        <td>
+                            {% if  envoi['owner'].class == 'Membre' %}
+                                {{ envoi['owner'].prenom }} {{ envoi['owner'].nom }}
+                            {% elseif envoi['owner'].class == 'Famille'%}
+                                Famille {{ envoi['owner'].nom }}
+                            {% endif %}
+
+                            </td>
+                        <td>
+
+
+                            {% if envoi['owner'].adresseExpedition is not null%}
+
+                                <div class="mini ui icon button popupable" data-html="
+                                    {% include 'AppBundle:Adresse:showFormatPostal.html.twig' with {'adresseExpedition':envoi['owner'].adresseExpedition} %}">
+                                    <i class="mail outline icon"></i>
+                                </div>
+
+                            {% endif %}
+                        </td>
+                        <td>
+
+                            {% if envoi['owner'].listeEmailsExpedition is not empty %}
+
+                                <div class="mini ui button popupable" data-html="
+                                    {% for origine,email in envoi['owner'].listeEmailsExpedition %}
+                                        {{ email }} ({{ origine }}) <br>
+                                    {% endfor %}
+                                    ">
+                                    @
+                                </div>
+
+                            {% endif %}
+
+                        </td>
+                        <td>{{ envoi['envoi'].description }}  </td>
+
+                        <td>
+
+                            <div class="mini ui red icon button removeByToken" data-token="{{ envoi['token'] }}">
+                                <i class="delete icon"></i>
+                            </div>
+
+
+                        </td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <i class="mail outline icon"></i>: Envoi par courrier / @ : Envoi par e-mail
+
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+    {% javascripts
+    '@AppBundle/Resources/public/js/Envoi/page_envoi.js'%}
+    <script src="{{ asset_url }}"></script>
+
+    {% endjavascripts %}
+
+
+{% endblock %}
+
+
+
+

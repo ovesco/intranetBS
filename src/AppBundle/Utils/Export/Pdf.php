@@ -14,6 +14,14 @@ use Symfony\Component\BrowserKit\Response;
  */
 class Pdf extends FPDI {
 
+    private $kernel;
+
+    public function __construct($krenel)
+    {
+        parent::__construct();
+        $this->kernel = $krenel;
+    }
+
     /**
      * Génère un entête de base sur le fichier PDF
      */
@@ -53,8 +61,7 @@ class Pdf extends FPDI {
     public function AddPageWithPdf(Pdf $documentToAdd)
     {
         //Attribue un nom de fichier aleatoire et temporaire
-        $kernel = $this->get('kernel');
-        $path = $kernel->getRootDir() . '/cache/' . $kernel->getEnvironment().'/temporary_pdf';
+        $path = $this->kernel->getRootDir() . '/cache/' . $this->kernel->getEnvironment().'/temporary_pdf';
         if (!file_exists($path)) {
             mkdir($path, 0777, true);
         }
@@ -77,15 +84,16 @@ class Pdf extends FPDI {
 
     }
 
-    /*
+
+    /**
      * L'adresse du membre ou de la famille
      * sera ajoutée au PDF dans l'espace prévu
      * pour les evelloppes à fenêtres.
      *
-     * Note: il faut donner un tableau $adressePrincipale en parametre qui est
-     * le résultat des fonctions ->getAdressePrinipale() des Membres et Familles.
-     */
-    /**
+     * Note: il faut donner un tableau $adresseExpedition en parametre qui est
+     * le résultat des fonctions ->getAdresseExpedition() des Membres et Familles.
+     *
+     *
      * @param $adresseExpedition
      */
     public function addAdresseEnvoi($adresseExpedition)
@@ -102,13 +110,21 @@ class Pdf extends FPDI {
             $owner = $adresseExpedition['owner'];
 
 
-            if($owner['class'] == 'Membre')
+            if($owner['type'] == 'Membre')
             {
                 $this->Cell(50,$h,ucfirst($owner['nom']).' '.ucfirst($owner['prenom']));
             }
-            elseif($owner['class'] == 'Famille')
+            elseif($owner['type'] == 'Famille')
             {
                 $this->Cell(50,$h,'Famille '.ucfirst($owner['nom']));
+            }
+            elseif($owner['type'] == 'Mere')
+            {
+                $this->Cell(50,$h,ucfirst($owner['nom']).' '.ucfirst($owner['prenom']));
+            }
+            elseif($owner['type'] == 'Pere')
+            {
+                $this->Cell(50,$h,ucfirst($owner['nom']).' '.ucfirst($owner['prenom']));
             }
             else
             {
@@ -125,12 +141,16 @@ class Pdf extends FPDI {
         else{
             $this->Cell(50,$h,'Aucune adresse trouvée');
         }
+    }
 
-
-
-
-
-
+    public function tagInTopRight($string)
+    {
+        $x =  170;
+        $y =  10;
+        $h = 4;
+        $this->SetXY($x,$y);
+        $this->SetFont('Arial','',8);
+        $this->Cell(30,$h,$string);
     }
 
 

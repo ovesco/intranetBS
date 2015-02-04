@@ -39,7 +39,7 @@ class JsonParser {
 
                 'title'         => $entity->getNom(),
                 'url'           => $this->router->generate('interne_voir_famille', array('famille' => $entity->getId())),
-                'description'   => ($entity->getAdressePrincipale() == null) ? 'Aucune adresse trouvée' : "de " . $entity->getAdressePrincipale()['adresse']->getLocalite()
+                'description'   => ($entity->getAdresseExpedition() == null) ? 'Aucune adresse trouvée' : "de " . $entity->getAdresseExpedition()['adresse']->getLocalite()
             );
         }
 

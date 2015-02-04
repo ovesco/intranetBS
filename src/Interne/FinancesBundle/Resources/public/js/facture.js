@@ -58,7 +58,7 @@ function factureEnvoi(idFacture){
  */
 function printFacture(id){
 
-    var url = Routing.generate('interne_fiances_print_factures') + '/' + id;
+    var url = Routing.generate('interne_fiances_facture_print') + '/' + id;
 
     /*
      * Ouvre le pdf dans une nouvelle fenetre

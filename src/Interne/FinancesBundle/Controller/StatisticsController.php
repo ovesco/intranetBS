@@ -26,7 +26,7 @@ class StatisticsController extends Controller
     public function getEvolutionRappels()
     {
 
-        $factureRepo = $this->em ->getRepository('InterneFinancesBundle:Facture');
+        $factureRepo = $this->em->getRepository('InterneFinancesBundle:Facture');
 
         $data = $factureRepo->getNombreRappelArray();
 

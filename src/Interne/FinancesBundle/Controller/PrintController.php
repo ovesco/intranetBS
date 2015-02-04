@@ -2,14 +2,12 @@
 
 namespace Interne\FinancesBundle\Controller;
 
-use fpdf\FPDF;
+use AppBundle\Utils\Parametre\Parametres;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Interne\FinancesBundle\Entity\Rappel;
 use Interne\FinancesBundle\Entity\Facture;
-use Interne\FinancesBundle\Entity\Parametre;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Utils\Export\Pdf;
 use Doctrine\ORM\EntityManager;
@@ -20,67 +18,41 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 /**
  * Class PrintController
  * @package Interne\FinancesBundle\Controller
- * @Route("/print")
  */
 class PrintController extends Controller
 {
-    /**
-     * @param $id
-     * @Route("/factures/{id}", name="interne_fiances_print_factures", options={"expose"=true})
-     * @return Response
-     */
-    public function printAction($id)
-    {
 
+    private $em;
+    private  $parametres;
+    private $pdf;
 
+    public function __construct(EntityManager $em, Parametres $parametres, Pdf $pdf){
 
-            /*
-             * Creation du PDF
-             */
-            $pdf = $this->get('Pdf'); //call service
-
-            $em = $this->getDoctrine()->getManager();
-            $factureRepo = $em->getRepository('InterneFinancesBundle:Facture');
-
-            //todo a corriger
-            $facture = $factureRepo->find($id);
-            $pdf = $this->factureToPdf($em,$facture,$pdf);
-
-            //Todo a corriger
-            $adresse = $facture->getOwner()->getAdresseExpedition();
-            $pdf->addAdresseEnvoi($adresse);
-
-            return $pdf->Output('Facture N°'.$id.'.pdf','I');
-
-
-
-
+        $this->em = $em;
+        $this->parametres = $parametres;
+        $this->pdf = $pdf;
     }
 
-
-
-    /*
-     * Création du PDF associé à une facture.
-     */
     /**
-     * @param EntityManager $em
+     * Cette facture appose le contenu d'une facture sur le document PDF
+     * qui lui est passé en argument.
+     *
      * @param Facture $facture
-     * @param Pdf $pdf
      * @return Pdf
      */
-    public function factureToPdf(EntityManager $em,Facture $facture, Pdf $pdf)
+    public function factureToPdf(Facture $facture)
     {
         /*
          * On récupère les parametres nécaissaires
          * a la création de la facture en PDF
          */
-        $parameters = $this->get('parametre');
 
-        $ccpBvr = $parameters->getValue('finance','impression_ccp_bvr');
-        $adresse = $parameters->getValue('info_groupe','adresse');
-        $modePayement = $parameters->getValue('finance','impression_mode_payement');
-        $texteFacture = $parameters->getValue('finance','impression_texte_facture');
-        $affichageMontant = $parameters->getValue('finance','impression_affichage_montant');
+
+        $ccpBvr = $this->parametres->getValue('finance','impression_ccp_bvr');
+        $adresse = $this->parametres->getValue('info_groupe','adresse');
+        $modePayement = $this->parametres->getValue('finance','impression_mode_payement');
+        $texteFacture = $this->parametres->getValue('finance','impression_texte_facture');
+        $affichageMontant = $this->parametres->getValue('finance','impression_affichage_montant');
 
         /*
          * Infos utile de la facture
@@ -90,16 +62,12 @@ class PrintController extends Controller
 
         $title = 'Facture N°'.$facture->getId();
 
+        $this->pdf->AddPage();
+        $this->pdf->SetAutoPageBreak(false);
+        $this->pdf->SetLeftMargin(20);
+        $this->pdf->SetRightMargin(20);
 
-
-
-
-        $pdf->AddPage();
-        $pdf->SetAutoPageBreak(false);
-        $pdf->SetLeftMargin(20);
-        $pdf->SetRightMargin(20);
-
-        $pdf->SetFont('Arial','',9);
+        $this->pdf->SetFont('Arial','',9);
 
         $cellWidth = 50;//ne sert pas vraiment
         $cellHigh = 4;
@@ -109,94 +77,105 @@ class PrintController extends Controller
          */
         $x =  20;
         $y =  20;
-        $pdf->SetXY($x,$y);
-        $pdf->MultiCell($cellWidth,$cellHigh,$adresse);
+        $this->pdf->SetXY($x,$y);
+        $this->pdf->MultiCell($cellWidth,$cellHigh,$adresse);
 
         /*
          * Date
          */
         $x = 130;
         $y =  20;
-        $pdf->SetXY($x,$y);
-        $pdf->Cell($cellWidth,$cellHigh,'Lausanne, le ');
+        $this->pdf->SetXY($x,$y);
+        $this->pdf->Cell($cellWidth,$cellHigh,'Lausanne, le ');
 
 
 
         /*
          * Titre de la facture
          */
-        $pdf->SetFont('Arial','B',9);
+        $this->pdf->SetFont('Arial','B',9);
 
         $x = 20;
         $y =  70;
-        $pdf->SetXY($x,$y);
-        $pdf->Cell(140,$cellHigh,$title);
+        $this->pdf->SetXY($x,$y);
+        $this->pdf->Cell(140,$cellHigh,$title);
 
         //retour à la ligne
-        $pdf->ln();
-        $pdf->ln();
+        $this->pdf->ln();
+        $this->pdf->ln();
 
         /*
         * Texte d'intro
         */
-        $pdf->SetFont('Arial','',9);
-        $pdf->write($cellHigh,$texteFacture);
+        $this->pdf->SetFont('Arial','',9);
+        $this->pdf->write($cellHigh,$texteFacture);
 
 
         //retour à la ligne
-        $pdf->ln();
-        $pdf->ln();
+        $this->pdf->ln();
+        $this->pdf->ln();
 
 
         /*
          * Tableau facture
          */
-        $pdf->SetFont('Arial','B',9);
-        $pdf->Cell(110,$cellHigh,'');
-        $pdf->Cell(30,$cellHigh,'Date');
-        $pdf->Cell(20,$cellHigh,'Montant');
-        $pdf->ln();
-        $pdf->SetFont('Arial','',9);
+        $this->pdf->SetFont('Arial','B',9);
+        $this->pdf->Cell(110,$cellHigh,'');
+        $this->pdf->Cell(30,$cellHigh,'Date');
+        $this->pdf->Cell(20,$cellHigh,'Montant');
+        $this->pdf->ln();
+        $this->pdf->SetFont('Arial','',9);
 
 
         foreach($facture->getCreances() as $creance)
         {
-            $pdf->SetFont('Arial','B',9);
-            $pdf->Cell(110,$cellHigh,$creance->getTitre(),'T');
-            $pdf->SetFont('Arial','',9);
-            //$pdf->Cell(30,$cellHigh,$creance->getDateCreation(),1);
-            $pdf->Cell(30,$cellHigh,'date','T');
-            $pdf->Cell(20,$cellHigh,number_format($creance->getMontantEmis(),2),'T');
+            $proprietaire = null;
+            if($creance->getOwner()->isClass('Membre'))
+            {
+                $proprietaire = $creance->getOwner()->getPrenom().' '.$creance->getOwner()->getNom();
+            }
+            else
+            {
+                $proprietaire = 'Famille '.$creance->getOwner()->getNom();
+            }
 
-            $pdf->ln();
+            $titre = $proprietaire.' - '.$creance->getTitre();
+
+            $this->pdf->SetFont('Arial','B',9);
+            $this->pdf->Cell(110,$cellHigh,$titre,'T');
+            $this->pdf->SetFont('Arial','',9);
+            $this->pdf->Cell(30,$cellHigh,'date','T');
+            $this->pdf->Cell(20,$cellHigh,number_format($creance->getMontantEmis(),2),'T');
+
+            $this->pdf->ln();
 
             $remarque = $creance->getRemarque();
             if($remarque != null)
             {
-                $pdf->Cell(20,$cellHigh,'Remarque:');
-                $pdf->MultiCell(90,$cellHigh,$remarque);
+                $this->pdf->Cell(20,$cellHigh,'Remarque:');
+                $this->pdf->MultiCell(90,$cellHigh,$remarque);
             }
         }
 
         $i=1;
         foreach($facture->getRappels() as $rappel)
         {
-            $pdf->Cell(110,$cellHigh,'Rappel '.$i,'T');
-            $pdf->Cell(30,$cellHigh,'date','T');
+            $this->pdf->Cell(110,$cellHigh,'Rappel N°'.$i,'T');
+            $this->pdf->Cell(30,$cellHigh,'date','T');
 
-            $pdf->Cell(20,$cellHigh,number_format($rappel->getMontantEmis(),2),'T');
-            $pdf->ln();
+            $this->pdf->Cell(20,$cellHigh,number_format($rappel->getMontantEmis(),2),'T');
+            $this->pdf->ln();
             $i++;
         }
 
-        $pdf->Cell(110,$cellHigh,'','T');
-        $pdf->Cell(30,$cellHigh,'Tolal:','T');
-        $pdf->Cell(20,$cellHigh,number_format($facture->getMontantEmis(),2).' CHF',1);
+        $this->pdf->Cell(110,$cellHigh,'','T');
+        $this->pdf->Cell(30,$cellHigh,'Tolal:','T');
+        $this->pdf->Cell(20,$cellHigh,number_format($facture->getMontantEmis(),2).' CHF',1);
 
 
         if($modePayement == 'BVR')
         {
-            $pdf = $this->insertBvr($pdf,$adresse,$ccpBvr,$numeroReference,$affichageMontant,$montant);
+            $this->pdf = $this->insertBvr($adresse,$ccpBvr,$numeroReference,$affichageMontant,$montant);
         }
         elseif($modePayement == 'BV')
         {
@@ -207,7 +186,7 @@ class PrintController extends Controller
 
         }
 
-        return $pdf;
+        return $this->pdf;
 
     }
 
@@ -260,11 +239,10 @@ class PrintController extends Controller
 
     }
 
-    /*
-     * Ajouter un BVR
-     */
+
     /**
-     * @param $pdf
+     * Ajouter un BVR
+     *
      * @param $adresse
      * @param $ccp
      * @param $numeroReference
@@ -272,7 +250,7 @@ class PrintController extends Controller
      * @param $montant
      * @return mixed
      */
-    private function insertBvr($pdf,$adresse,$ccp,$numeroReference,$affichageMontant,$montant)
+    private function insertBvr($adresse,$ccp,$numeroReference,$affichageMontant,$montant)
     {
 
         /*
@@ -291,18 +269,18 @@ class PrintController extends Controller
         /*
          * ligne de controle
          */
-        $pdf->Line($xStart,$yStart,$xStart+5,$yStart);
-        $pdf->Line($xStart+60,$yStart,$xStart+60,$yStart+5);
-        $pdf->Line($xStart+205,$yStart,$xStart+210,$yStart);
-        $pdf->Line($xStart+118,$yStart+80,$xStart+124,$yStart+80);
-        $pdf->Line($xStart+121,$yStart+75,$xStart+121,$yStart+80);
+        $this->pdf->Line($xStart,$yStart,$xStart+5,$yStart);
+        $this->pdf->Line($xStart+60,$yStart,$xStart+60,$yStart+5);
+        $this->pdf->Line($xStart+205,$yStart,$xStart+210,$yStart);
+        $this->pdf->Line($xStart+118,$yStart+80,$xStart+124,$yStart+80);
+        $this->pdf->Line($xStart+121,$yStart+75,$xStart+121,$yStart+80);
 
 
 
         $cellWidth = 50;//ne sert pas vraiment
         $cellHigh = 4;
 
-        $pdf->SetFont('Arial', '', 9);
+        $this->pdf->SetFont('Arial', '', 9);
 
 
         /*
@@ -310,16 +288,16 @@ class PrintController extends Controller
          */
         $x = $xStart + 5;
         $y = $yStart + 10;
-        $pdf->SetXY($x,$y);
-        $pdf->MultiCell($cellWidth,$cellHigh,$adresse);
+        $this->pdf->SetXY($x,$y);
+        $this->pdf->MultiCell($cellWidth,$cellHigh,$adresse);
 
         /*
          * compte récépissé
          */
         $x = $xStart + 28;
         $y = $yStart+42;
-        $pdf->SetXY($x,$y);
-        $pdf->Cell($cellWidth,$cellHigh,$ccp);
+        $this->pdf->SetXY($x,$y);
+        $this->pdf->Cell($cellWidth,$cellHigh,$ccp);
 
         /*
          * num. référence récépissé
@@ -327,24 +305,24 @@ class PrintController extends Controller
         $codeLine = $this->creatLineCode($numeroReference,'numRef');
         $x = $xStart + 5;
         $y = $yStart+60;
-        $pdf->SetXY($x,$y);
-        $pdf->Cell($cellWidth,$cellHigh,$codeLine);
+        $this->pdf->SetXY($x,$y);
+        $this->pdf->Cell($cellWidth,$cellHigh,$codeLine);
 
         /*
          * Adresse virement
          */
         $x = $xStart + 65;
         $y = $yStart + 10;
-        $pdf->SetXY($x,$y);
-        $pdf->MultiCell($cellWidth,$cellHigh,$adresse);
+        $this->pdf->SetXY($x,$y);
+        $this->pdf->MultiCell($cellWidth,$cellHigh,$adresse);
 
         /*
          * compte virement
          */
         $x = $xStart + 89;
         $y = $yStart+42;
-        $pdf->SetXY($x,$y);
-        $pdf->Cell($cellWidth,$cellHigh,$ccp);
+        $this->pdf->SetXY($x,$y);
+        $this->pdf->Cell($cellWidth,$cellHigh,$ccp);
 
         /*
          * num. référance virement
@@ -352,39 +330,39 @@ class PrintController extends Controller
         $codeLine = $this->creatLineCode($numeroReference,'numRef');
         $x = $xStart + 130;
         $y = $yStart+38;
-        $pdf->SetXY($x,$y);
-        $pdf->Cell($cellWidth,$cellHigh,$codeLine);
+        $this->pdf->SetXY($x,$y);
+        $this->pdf->Cell($cellWidth,$cellHigh,$codeLine);
 
         /*
          * code BVR en bas de coupon
          */
-        $pdf->SetFont('Arial', '', 11);
+        $this->pdf->SetFont('Arial', '', 11);
 
         $codeLine = $this->creatLineCode($numeroReference,'code',$ccp);
         $x = $xStart+68;
         $y = $yStart+85;
-        $pdf->SetXY($x,$y);
-        $pdf->Cell($cellWidth,$cellHigh,$codeLine);
+        $this->pdf->SetXY($x,$y);
+        $this->pdf->Cell($cellWidth,$cellHigh,$codeLine);
 
         if($affichageMontant == 'Oui')
         {
             /*
              * Montant sur le BVR
              */
-            $pdf->SetFont('Arial', '', 9);
+            $this->pdf->SetFont('Arial', '', 9);
 
             $x = $xStart+50;
             $y = $yStart+50;
-            $pdf->SetXY($x,$y);
-            $pdf->Cell($cellWidth,$cellHigh,number_format($montant,2));
+            $this->pdf->SetXY($x,$y);
+            $this->pdf->Cell($cellWidth,$cellHigh,number_format($montant,2));
 
             $x = $xStart+90;
             $y = $yStart+50;
-            $pdf->SetXY($x,$y);
-            $pdf->Cell($cellWidth,$cellHigh,number_format($montant,2));
+            $this->pdf->SetXY($x,$y);
+            $this->pdf->Cell($cellWidth,$cellHigh,number_format($montant,2));
         }
 
-        return $pdf;
+        return $this->pdf;
 
     }
 

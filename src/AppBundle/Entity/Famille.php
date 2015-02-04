@@ -228,50 +228,6 @@ class Famille implements ExpediableInterface
 
 
     /**
-     * Get adresse
-     *
-     * @return \AppBundle\Entity\Adresse
-     */
-    public function getAdressePrincipale()
-    {
-        $potentiel = null;
-
-        $adresses = array(
-            'famille' => $this->getAdresse(),
-            'mere' => ($this->getMere() == null) ? null : $this->getMere()->getAdresse(),
-            'pere' => ($this->getPere() == null) ? null : $this->getPere()->getAdresse()
-        );
-
-        /**
-         * @var int $k
-         * @var Adresse $adresse
-         */
-        foreach($adresses as $k => $adresse) {
-
-            if(!is_null($adresse)) {
-
-                if ($adresse->isReceivable()) {
-
-                    return array('adresse' => $adresse, 'origine' => $k,
-                        'owner' => array(
-                            'nom' => $this->getNom(),
-                            'class' => 'Famille',
-                    ));
-                }
-
-                if ($potentiel == null)
-                    $potentiel = array('adresse' => $adresse, 'origine' => $k,
-                        'owner' => array(
-                            'nom' => $this->getNom(),
-                            'class' => 'Famille',));
-            }
-
-        }
-
-        return $potentiel;
-    }
-
-    /**
      * Doit renvoyer quelque chose qui permet d'identifier (humainement) une famille
      * Le nom n'est pas suffisant p.ex puisqu'il peut y avoir plusieurs famille avec le même nom
      *
@@ -539,7 +495,7 @@ class Famille implements ExpediableInterface
             foreach($emails as $email){
                 if($email->isExpediable())
                 {
-                    array_push($liste,$email->getEmail());
+                    $liste['Famille'] = $email->getEmail();
                 }
 
             }
@@ -556,7 +512,7 @@ class Famille implements ExpediableInterface
                 foreach($emails as $email){
                     if($email->isExpediable())
                     {
-                        array_push($liste,$email->getEmail());
+                        $liste['Mère'] = $email->getEmail();
                     }
 
                 }
@@ -573,7 +529,7 @@ class Famille implements ExpediableInterface
                 foreach($emails as $email){
                     if($email->isExpediable())
                     {
-                        array_push($liste,$email->getEmail());
+                        $liste['Père'] = $email->getEmail();
                     }
 
                 }

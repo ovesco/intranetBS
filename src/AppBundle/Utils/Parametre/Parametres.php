@@ -20,7 +20,7 @@ use Symfony\Component\Yaml\Parser;
  * On utilise se service principalement pour acceder à un parametre à la fois
  * avec la fonction:
  *
- * $param = $this->get('parametre')->getValue($groupe,$name);
+ * $param = $this->get('parametres')->getValue($groupe,$name);
  *
  * Notes: les parametres sont classé par groupe et nom dans le fichier Parametre.yml
  *
@@ -57,8 +57,10 @@ class Parametres
          */
         foreach($this->parametres as $groupe)
         {
+
             foreach($groupe['parametres'] as $parametre)
             {
+
 
                 $valuePath = $this->path.'/values/'.$groupe['groupe'].'_'.$parametre['name'].'.txt';
                 if (!file_exists($valuePath)) {
@@ -146,7 +148,7 @@ class Parametres
     public function save()
     {
         $dumper = new Dumper();
-        $yaml = $dumper->dump($this->parametres,10);
+        $yaml = $dumper->dump($this->parametres,3);
         file_put_contents($this->path.'/Parametre.yml', $yaml);
     }
 

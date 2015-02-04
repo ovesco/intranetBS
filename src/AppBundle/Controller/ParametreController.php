@@ -21,17 +21,17 @@ class ParametreController extends Controller
 
     /**
      * @Route("/liste", name="interne_parametres_liste")
-     * @Template("Parametre/listeForm.html.twig")
+     * @Template("AppBundle:Parametre:listeForm.html.twig")
      *
      * @return Response
      */
     public  function listeParametresAction()
     {
-        $parametres = $this->get('parametre')->getParametres();
+        $parametres = $this->get('parametres')->getParametres();
 
         //remet en form le fichier parametre.yml...
         //TODO: on peut enlever ca une fois le dév terminer.
-        $this->get('parametre')->save();
+        $this->get('parametres')->save();
 
         return array('parametres' => $parametres);
     }
@@ -54,7 +54,7 @@ class ParametreController extends Controller
             $value = $request->request->get('value');
             $parametre = $request->request->get('parametre');
 
-            $this->get('parametre')->setValue($groupe,$parametre,$value);
+            $this->get('parametres')->setValue($groupe,$parametre,$value);
 
             return new Response();
 

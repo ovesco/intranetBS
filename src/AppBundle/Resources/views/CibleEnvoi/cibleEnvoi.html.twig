@@ -5,12 +5,10 @@
     <div class="ui segment">
         <div class="ui top right attached label">Par courrier</div>
         <div class="ui content">
-            {% if adresseExpedition is not null %}{# adresseExpedition is not null #}
 
-                {{ adresseExpedition['owner']['nom'] }}<br>
-                {{ adresseExpedition['adresse'].rue }}<br>
-                {{ adresseExpedition['adresse'].npa }}
-                {{ adresseExpedition['adresse'].localite }}
+            {% if adresseExpedition is not null %}
+
+                {% include 'AppBundle:Adresse:showFormatPostal.html.twig' with {'adresseExpedition':adresseExpedition} %}
 
             {% else %}
                 <div class="ui yellow icon message">
@@ -25,8 +23,8 @@
 
             {% if listeEmailsExpedition is not empty %}
 
-                {% for email in listeEmailsExpedition %}
-                    <a href="mailto:{{ email }}">{{ email }}</a><br>
+                {% for origine,email in listeEmailsExpedition %}
+                    <a href="mailto:{{ email }}">{{ email }}</a> ({{ origine }}) <br>
                 {% endfor %}
 
             {% else %}

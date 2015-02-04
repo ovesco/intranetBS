@@ -468,51 +468,6 @@ class Membre extends Personne implements ExpediableInterface
         $this->distinctions->removeElement($distinction);
     }
 
-    /**
-     * Retourne l'adresse principale suivant le schéma membre -> famille -> mere -> pere en s'arrêtant
-     * à la première facturable
-     * @return Adresse
-     */
-    public function getAdressePrincipale() {
-
-        //On commence par récupérer la première adresse potentielle
-        $potentiel = null;
-
-        $adresses = array(
-            'membre' => $this->getAdresse(),
-            'famille' => $this->getFamille()->getAdresse(),
-            'mere' => ($this->getFamille()->getMere() == null) ? null : $this->getFamille()->getMere()->getAdresse(),
-            'pere' => ($this->getFamille()->getPere() == null) ? null : $this->getFamille()->getPere()->getAdresse()
-        );
-
-        foreach($adresses as $k => $adresse) {
-
-            if(!is_null($adresse)) {
-
-                if ($adresse->isReceivable()) {
-
-                    return array(   'adresse' => $adresse,
-                                    'origine' => $k,
-                                    'owner' => array(   'prenom' => $this->getPrenom(),
-                                                        'nom' => $this->getNom(),
-                                                        'class' => 'Membre',
-                                                    ));
-                }
-
-                if ($potentiel == null)
-                    $potentiel = array( 'adresse' => $adresse,
-                                        'origine' => $k,
-                                        'owner' => array(   'prenom' => $this->getPrenom(),
-                                                            'nom' => $this->getNom(),
-                                                            'class' => 'Membre',
-                                        ));
-            }
-
-        }
-
-        return $potentiel;
-
-    }
 
     /**
      * Set validity
@@ -702,8 +657,6 @@ class Membre extends Personne implements ExpediableInterface
     public function getAdresseExpedition()
     {
 
-
-
         $adresse = $this->getContact()->getAdresse();
         if(!is_null($adresse))
         {
@@ -712,7 +665,7 @@ class Membre extends Personne implements ExpediableInterface
                     'owner' => array(
                         'prenom' => $this->getPrenom(),
                         'nom' => $this->getNom(),
-                        'class' => 'Membre',
+                        'type' => 'Membre',
                     ));
             }
         }
@@ -725,7 +678,7 @@ class Membre extends Personne implements ExpediableInterface
                     'owner' => array(
                         'prenom' => null,
                         'nom' => $this->getNom(),
-                        'class' => 'Famille',
+                        'type' => 'Famille',
                     ));
             }
         }
@@ -742,7 +695,7 @@ class Membre extends Personne implements ExpediableInterface
                         'owner' => array(
                             'prenom' => $mere->getPrenom(),
                             'nom' => $this->getNom(),
-                            'class' => 'Famille',
+                            'type' => 'Mere',
                         ));
                 }
             }
@@ -760,7 +713,7 @@ class Membre extends Personne implements ExpediableInterface
                         'owner' => array(
                             'prenom' => $pere->getPrenom(),
                             'nom' => $this->getNom(),
-                            'class' => 'Famille',
+                            'type' => 'Pere',
                         ));
                 }
             }
@@ -781,7 +734,7 @@ class Membre extends Personne implements ExpediableInterface
             foreach($emails as $email){
                 if($email->isExpediable())
                 {
-                    array_push($liste,$email->getEmail());
+                    $liste['Membre'] = $email->getEmail();
                 }
 
             }
@@ -794,7 +747,7 @@ class Membre extends Personne implements ExpediableInterface
             foreach($emails as $email){
                 if($email->isExpediable())
                 {
-                    array_push($liste,$email->getEmail());
+                    $liste['Famille'] = $email->getEmail();
                 }
 
             }
@@ -811,7 +764,7 @@ class Membre extends Personne implements ExpediableInterface
                 foreach($emails as $email){
                     if($email->isExpediable())
                     {
-                        array_push($liste,$email->getEmail());
+                        $liste['Mère'] = $email->getEmail();
                     }
 
                 }
@@ -828,7 +781,7 @@ class Membre extends Personne implements ExpediableInterface
                 foreach($emails as $email){
                     if($email->isExpediable())
                     {
-                        array_push($liste,$email->getEmail());
+                        $liste['Père'] = $email->getEmail();
                     }
 
                 }

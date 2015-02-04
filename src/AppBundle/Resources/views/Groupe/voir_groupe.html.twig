@@ -22,7 +22,10 @@
                             {% endif %}
                         {% endfor %}
                         <div class="ui green button">{{ groupe.nom }}</div>
-                        <i class="angle double right icon"></i>
+
+                        {% if groupe.enfants is not empty %}
+                            <i class="angle double right icon"></i>
+                        {% endif %}
 
                         {% for enfant in groupe.enfants %}
 
@@ -38,7 +41,7 @@
                     <div class="ui vertical segment">
                         <div class="ui segment">
                             <h1>{{ groupe.nom|capitalize }}</h1>
-                            <h3>{{ groupe.groupeModel.nom|capitalize }}</h3>
+                            <h3>{{ groupe.model.nom|capitalize }}</h3>
 
                             <div class="ui circular icon top left pointing dropdown mini blue button">
                                 <i class="external link icon"></i>
@@ -85,7 +88,7 @@
 
                         {{ macro.effectifs(groupe,listing) }}
 
-                        {% if groupe.groupeModel.affichageEffectifs %}
+                        {% if groupe.model.affichageEffectifs %}
                             {% for enfant in groupe.enfants %}
                                 {{ macro.effectifs(enfant,listing) }}
                             {% endfor %}
@@ -104,7 +107,7 @@
 
 {% macro effectifs(groupe,listing) %}
 
-    <h3>Effectifs détaillés: {{ groupe.nom|capitalize }} ({{ groupe.groupeModel.nom|capitalize }})</h3>
+    <h3>Effectifs détaillés: {{ groupe.nom|capitalize }} ({{ groupe.model.nom|capitalize }})</h3>
 
     {% set membres = groupe.members %}
     {% include ':Membre:liste.html.twig' %}

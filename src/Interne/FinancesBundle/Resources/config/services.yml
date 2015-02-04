@@ -3,3 +3,10 @@ services:
         class: Interne\FinancesBundle\Controller\StatisticsController
         arguments:
             - @doctrine.orm.entity_manager
+
+    finances_printer:
+        class: Interne\FinancesBundle\Controller\PrintController
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @parametres
+            - @pdf

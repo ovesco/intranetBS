@@ -34,6 +34,8 @@ services:
 
     pdf:
         class: AppBundle\Utils\Export\Pdf
+        arguments:
+            - @kernel
 
     email:
         class: AppBundle\Utils\Email\Email
@@ -44,7 +46,7 @@ services:
             - @session
             - @doctrine.orm.entity_manager
 
-    parametre:
+    parametres:
         class: AppBundle\Utils\Parametre\Parametres
         arguments:
             - @kernel
