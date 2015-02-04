@@ -1,0 +1,73 @@
+{% extends 'InterneGalerieBundle:Public:galerie_layout.html.twig' %}
+
+{% block titre %}Accueil{% endblock %}
+
+{% block content %}
+
+    <div class="ui grid" style="width:95%;margin:auto;overflow:hidden;">
+
+        <div class="six wide column">
+
+            <h2>Derniers albums ajoutés</h2>
+
+
+            <div class="ui feed">
+
+                {% for album in derniersAlbums %}
+
+                    {% if album.dossier.fullLocked == false %}
+                        <div class="event">
+
+                            <div class="content">
+                                <div class="summary">
+                                    {% if album.dossier.groupe %}{{ album.dossier.groupe.nom|capitalize }}{% else %}La Brigade{% endif %}
+                                    a ajouté
+                                    <a href="{{ path('public_galerie_voir_album', {album: album.id}) }}">{{ album.nom }}</a>
+                                    avec {{ album.photos|length }} photos.
+                                    <div class="date">
+                                        Le {{ album.dateCreation|date('d.m.Y') }}
+                                    </div>
+                                </div>
+
+                                {% if album.photos is not empty %}
+                                    <div class="extra images">
+                                        {% if album.photos|length > 4 %}{% set maxPictos = 3 %}{% else %}{% set maxPictos = album.photos|length %}{% endif %}
+
+                                        {% for i in 0..maxPictos %}
+                                            <a href="{{ path('public_galerie_voir_album', {album: album.id}) }}"><img src="{{ asset(album.photos[i].thumbnailPath) }}"></a>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="ui divider"></div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+        </div>
+
+        <div class="ten wide column">
+
+            <h2>Répertoires</h2>
+
+            <div class="ui grid">
+
+                {% for dossier in dossiers %}
+
+                    <div class="three wide column">
+
+                        {% include 'InterneGalerieBundle:Public/Basics:folder.html.twig' %}
+
+                    </div>
+
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -44,6 +44,7 @@ assetic:
     bundles:
         - InterneFinancesBundle
         - InterneSecurityBundle
+        - InterneGalerieBundle
         - AppBundle
     write_to:       %kernel.root_dir%/../web/static/
 

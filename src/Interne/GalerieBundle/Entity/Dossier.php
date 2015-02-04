@@ -1,0 +1,286 @@
+<?php
+
+namespace Interne\GalerieBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * Dossier
+ *
+ * @ORM\Table(name="galerie_dossiers")
+ * @ORM\Entity
+ */
+class Dossier
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nom", type="string", length=255)
+     * @assert\NotBlank()
+     */
+    private $nom;
+
+    /**
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Groupe")
+     * @ORM\JoinColumn(name="groupe_id", referencedColumnName="id", nullable=true)
+     */
+    private $groupe;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Dossier", inversedBy="enfants")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
+     */
+    private $parent;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Dossier", mappedBy="parent")
+     */
+    private $enfants;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Album", mappedBy="dossier", cascade={"persist", "remove"})
+     */
+    private $albums;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="locked", type="boolean")
+     */
+    private $locked;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->albums = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set nom
+     *
+     * @param string $nom
+     * @return Dossier
+     */
+    public function setNom($nom)
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * Get nom
+     *
+     * @return string 
+     */
+    public function getNom()
+    {
+        return $this->nom;
+    }
+
+    /**
+     * Set groupe
+     *
+     * @param \AppBundle\Entity\Groupe $groupe
+     * @return Dossier
+     */
+    public function setGroupe(\AppBundle\Entity\Groupe $groupe = null)
+    {
+        $this->groupe = $groupe;
+
+        return $this;
+    }
+
+    /**
+     * Get groupe
+     *
+     * @return \AppBundle\Entity\Groupe 
+     */
+    public function getGroupe()
+    {
+        return $this->groupe;
+    }
+
+    /**
+     * Add albums
+     *
+     * @param \Interne\GalerieBundle\Entity\Album $albums
+     * @return Dossier
+     */
+    public function addAlbum(\Interne\GalerieBundle\Entity\Album $albums)
+    {
+        $this->albums[] = $albums;
+        $albums->setDossier($this);
+        return $this;
+    }
+
+    /**
+     * Remove albums
+     *
+     * @param \Interne\GalerieBundle\Entity\Album $albums
+     */
+    public function removeAlbum(\Interne\GalerieBundle\Entity\Album $albums)
+    {
+        $this->albums->removeElement($albums);
+    }
+
+    /**
+     * Get albums
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAlbums()
+    {
+        return $this->albums;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \Interne\GalerieBundle\Entity\Dossier $parent
+     * @return Dossier
+     */
+    public function setParent(\Interne\GalerieBundle\Entity\Dossier $parent = null)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Interne\GalerieBundle\Entity\Dossier 
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Add enfants
+     *
+     * @param \Interne\GalerieBundle\Entity\Dossier $enfants
+     * @return Dossier
+     */
+    public function addEnfant(\Interne\GalerieBundle\Entity\Dossier $enfants)
+    {
+        $this->enfants[] = $enfants;
+
+        return $this;
+    }
+
+    /**
+     * Remove enfants
+     *
+     * @param \Interne\GalerieBundle\Entity\Dossier $enfants
+     */
+    public function removeEnfant(\Interne\GalerieBundle\Entity\Dossier $enfants)
+    {
+        $this->enfants->removeElement($enfants);
+    }
+
+    /**
+     * Get enfants
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEnfants()
+    {
+        return $this->enfants;
+    }
+
+    /**
+     * Set locked
+     *
+     * @param boolean $locked
+     * @return Dossier
+     */
+    public function setLocked($locked)
+    {
+        $this->locked = $locked;
+
+        return $this;
+    }
+
+    /**
+     * Get locked
+     *
+     * @return boolean 
+     */
+    public function getLocked()
+    {
+        return $this->locked;
+    }
+
+    public function getEnfantsRecursive() {
+
+        $enfants = $this->getEnfants()->toArray();
+
+        foreach($enfants as $e)
+            $enfants = array_merge($enfants, $e->getEnfantsRecursive());
+
+        return $enfants;
+    }
+
+    /**
+     * Cette méthode va récupérer la première image issue d'un album qu'elle peut trouver
+     */
+    public function getImage() {
+
+        $hasPicto = false;
+
+        if(count($this->getAlbums()) != 0) {
+            foreach($this->getAlbums() as $a) {
+
+                if($a->getImage() != null)
+                    return $a->getImage();
+            }
+        }
+
+        if(!$hasPicto)
+            foreach($this->getEnfants() as $enfant)
+                return $enfant->getImage();
+
+        return null;
+
+    }
+
+    public function getFullLocked() {
+
+        $current = $this;
+
+        do {
+
+            if($current->getLocked()) return true;
+            else
+                $current = $current->getParent();
+
+        } while($current != null);
+
+        return false;
+    }
+}

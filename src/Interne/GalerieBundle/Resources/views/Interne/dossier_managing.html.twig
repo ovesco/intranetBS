@@ -1,0 +1,188 @@
+{% extends 'layout.html.twig' %}
+
+{% block titre %}{{ dossier.nom }} / galerie{% endblock %}
+
+
+{% block css %}
+    {% stylesheets
+        '@AppBundle/Resources/public/css/dropzone.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="ui page grid">
+        <div class="column">
+
+            <h1>Dossier {{ dossier.nom }}</h1>
+
+            <div class="ui segment">
+
+                <h3>Etat</h3>
+
+                <table class="ui definition table">
+                    <tbody>
+                        <tr>
+                            <td>Statut</td>
+                            <td>
+                                {% if dossier.locked %}Verouillé{% else %}Disponible{% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Albums</td>
+                            <td>{{ dossier.albums|length }}</td>
+                        </tr>
+                        {% if dossier.groupe %}
+                        <tr>
+                            <td>Lié à</td>
+                            <td><a href="{{ path('interne_voir_groupe', {groupe:dossier.groupe.id}) }}">{{ dossier.groupe.nom }}</a></td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+
+                <h3>Albums</h3>
+
+                <table class="ui table">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Photos</th>
+                            <th>Date de création</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for album in dossier.albums %}
+                            <tr>
+                                <td>{{ album.nom }}</td>
+                                <td>{{ album.photos|length }}</td>
+                                <td>{{ album.dateCreation|date('d.m.Y') }}</td>
+                                <td>
+                                    <a title="Ajouter des photos" onclick="addPhotoModale({{ album.id }});" class="ui mini icon circular green button"><i class="photo icon"></i></a>
+                                    <a title="Gestion des photos" onclick="managePhotosModale({{ album.id }});" class="ui mini icon circular yellow button"><i class="ellipsis horizontal icon"></i></a>
+                                    <a href="{{ path('interne_galerie_dossier_supprimer_album', {album:album.id}) }}" title="Supprimer l'album" onclick="return confirm('Etes vous sur de vouloir supprimer cet album ?');" class="ui mini icon circular red button"><i class="remove icon"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                {% if dossier.locked != true %}<button onclick="showModal('#add-album-modale');" class="ui right floated tiny labeled icon blue button"><i class="plus icon"></i>Nouvel album</button>{% endif %}
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+    {% if dossier.locked != true %}
+    <div id="add-album-modale" class="ui small modal">
+        <i class="close icon"></i>
+        <div class="header">
+            Nouvel album
+        </div>
+        <div class="content">
+            <div class="ui message">
+                <div class="content">N'ajoutez pas de date (année) dans le nom, ca se fait automatiquement</div>
+            </div>
+            <form method="post" class="ui form" action="{{ path('interne_galerie_dossier_nouvel_album', {dossier: dossier.id}) }}">
+                <div class="field">
+                    {{ form_widget(albumForm.nom) }}
+                </div>
+
+                {{ form_rest(albumForm) }}
+
+                <button class="ui green button">Ajouter l'album</button>
+            </form>
+        </div>
+        <div class="actions">
+            <div class="ui button">Cancel</div>
+        </div>
+    </div>
+    {% endif %}
+
+
+
+
+
+    <div id="add-photos-modale" class="ui modal">
+        <i class="close icon"></i>
+        <div class="header">
+            Ajouter des photos
+        </div>
+        <div class="content">
+            <div class="ui blue message">
+                <div class="header">Attention</div>
+                <div class="content">Ne fermez pas la petite fenêtre avant que tout le processus soit terminé !</div>
+            </div>
+            <form enctype="multipart/form-data" class="dropzone" action="{{ path('interne_galerie_album_add_photos') }}" method="post" name="dropzone_photo_form" id="dropzone-photo-form">
+                <input type="hidden" name="album-id" id="album-id"/>
+            </form>
+        </div>
+    </div>
+
+
+
+
+    <div id="manage-photos-modale" class="ui modal">
+        <i class="close icon"></i>
+        <div class="header">
+            Gérer les photos d'un album
+        </div>
+        <div class="content">
+           <div id="manage-photos-view"></div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+{% block js %}
+
+    {% javascripts '@AppBundle/Resources/public/js/specials/dropzone.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script type="text/javascript">
+
+        function addPhotoModale(id) {
+
+            $('#album-id').val(id);
+            showModal('#add-photos-modale');
+        }
+
+        function managePhotosModale(id) {
+
+            $.ajax({
+
+                url: Routing.generate('interne_galerie_dossier_manage_album_view', {album:id}),
+                type: 'POST',
+                success:function(d) {
+
+                    $('#manage-photos-view').html(d);
+                    showModal('#manage-photos-modale');
+                }
+            })
+        }
+
+
+        Dropzone.options.dropzonePhotoForm = {
+
+            maxFilesize: 1,
+            acceptedFiles: 'image/*',
+            init:function() {
+                this.on('queuecomplete', function() {location.reload();});
+            }
+
+        };
+
+    </script>
+
+{% endblock %}

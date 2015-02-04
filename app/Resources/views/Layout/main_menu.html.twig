@@ -70,11 +70,18 @@
 </div>
 
 <div class="item">
-    <div class="ui small  inverted header">Unité(s)</div>
+    <div class="ui small  inverted header">Unité{% if groups|length > 1 %}s{% endif %}</div>
     <div class="menu">
         {%  for group in groups %}
             <a class="item" href="{{ path('interne_voir_groupe', {'groupe' : group.id }) }}">{{ group.nom }}</a>
         {% endfor %}
+    </div>
+</div>
+
+<div class="item">
+    <div class="ui small  inverted header">Galerie</div>
+    <div class="menu">
+        <a class="item" href="{{ path('galerie_interne_global_managing') }}">Administration générale</a>
     </div>
 </div>
 

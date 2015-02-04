@@ -13,5 +13,8 @@ finances:
     type:     annotation
     prefix:   /interne/finances
 
+galerie:
+    resource: "@InterneGalerieBundle/Resources/config/routing.yml"
+
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
