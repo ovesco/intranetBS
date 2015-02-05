@@ -53,9 +53,22 @@ class ListeEnvoi {
      * @param Pdf $pdf
      * @param null $description
      */
-    public function addEnvoi($ownerId,$ownerClass, Pdf $pdf, $description = null)
+    public function addEnvoiWithPdf($ownerId,$ownerClass, Pdf $pdf, $description = null)
     {
-        $envoi = new Envoi($ownerId,$ownerClass,$pdf,$description,$this->em);
+        $pdfPath = $pdf->saveInTemporaryFolder();
+        $this->addEnvoiWithPath($ownerId,$ownerClass,$pdfPath, $description);
+
+    }
+
+    /**
+     * @param $ownerId
+     * @param $ownerClass
+     * @param $pdfPath
+     * @param null $description
+     */
+    public function addEnvoiWithPath($ownerId,$ownerClass,$pdfPath, $description = null)
+    {
+        $envoi = new Envoi($ownerId,$ownerClass,$pdfPath,$description,$this->em);
         //on sauve par clé token dans le tableau
         $this->envois[$envoi->getToken()] = $envoi;
 
@@ -73,8 +86,13 @@ class ListeEnvoi {
 
     public function clearEnvois()
     {
-        $this->envois = null;
+
         $this->session->remove('ListeEnvoi');
+        foreach($this->envois as $envoi)
+        {
+            unlink($envoi->documentPdfPath);
+        }
+        $this->envois = null;
 
     }
 

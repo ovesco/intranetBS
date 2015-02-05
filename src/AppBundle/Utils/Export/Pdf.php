@@ -27,7 +27,8 @@ class Pdf extends FPDI {
      */
     public function defaultHeader() {
 
-        $this->Image('bundles/app/images/main_logo.png',10,6,17,17);
+        //todo à corriger
+        //$this->Image('bundles/app/images/main_logo.png',10,6,17,17);
         $this->SetFont('Arial','',12);
 
         $this->Cell(20);
@@ -48,6 +49,19 @@ class Pdf extends FPDI {
         $this->useTemplate($tplIdx);
     }
 
+    public function loadTemplateWithMuliPage($src) {
+
+        $pageCount = $this->setSourceFile($src);
+
+        for ($i = 1; $i <= $pageCount; $i++) {
+            $tplIdx = $this->importPage($i);
+            $this->AddPage();
+            $this->useTemplate($tplIdx);
+        }
+    }
+
+
+
     public function init($top = 30) {
 
         $this->addPage();
@@ -60,29 +74,167 @@ class Pdf extends FPDI {
      */
     public function AddPageWithPdf(Pdf $documentToAdd)
     {
-        //Attribue un nom de fichier aleatoire et temporaire
-        $path = $this->kernel->getRootDir() . '/cache/' . $this->kernel->getEnvironment().'/temporary_pdf';
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
-        }
 
-        $fileName = $path.'/pdf_tmp_'.str_shuffle('1234567890').'.pdf';
+
+
+        $fileName = $this->getTemporaryFileName();
         //on sauve le fichier dans le dossier temporaire
         $documentToAdd->Output($fileName,'F');
 
         //fusion des deux PDF
         $pageCount = $this->setSourceFile($fileName);
 
-        for($i=0; $i<$pageCount; $i++){
+        for($i=1; $i<=$pageCount; $i++){
             $this->AddPage();
-            $tplIdx = $this->importPage($i+1, '/MediaBox');
+            $tplIdx = $this->importPage($i);
             $this->useTemplate($tplIdx);
         }
 
         //Supression du fichier temporaire
         unlink($fileName);
+    }
+
+    /**
+     * @param $arrayOfPath
+     */
+    public function fusionOfDocuments($arrayOfPath)
+    {
+        foreach($arrayOfPath as $path)
+        {
+            $this->loadTemplateWithMuliPage($path);
+            unlink($path);
+        }
+    }
+
+    /**
+     * @param $pageNumber
+     * @param Pdf $pagePdf
+     * @return Pdf
+     */
+    public function replacePage($pageNumber,Pdf $pagePdf)
+    {
+        $clone = clone $this;
+
+        $fileNameThis = $clone->saveInTemporaryFolder();
+        $fileNamePage = $pagePdf->saveInTemporaryFolder();
+
+        //on sauve les fichiers dans le dossier temporaire
+        $pagePdf->Output($fileNamePage,'F');
+        $clone->Output($fileNameThis,'F');
+
+
+        $resultPdf = new self($this->kernel);
+
+
+        $pageCount = $resultPdf->setSourceFile($fileNameThis);
+
+
+
+        for ($i = 1; $i <= $pageCount; $i++) {
+
+
+            if($pageNumber == $i){
+                //on modifie le fichier source
+                $resultPdf->setSourceFile($fileNamePage);
+                $tplIdx = $resultPdf->importPage(1);
+                $resultPdf->AddPage();
+                $resultPdf->useTemplate($tplIdx);
+
+                // on remet le bon fichier source
+                $resultPdf->setSourceFile($fileNameThis);
+            }
+            else{
+                $tplIdx = $resultPdf->importPage($i);
+                $resultPdf->AddPage();
+                $resultPdf->useTemplate($tplIdx);
+            }
+
+
+        }
+
+
+
+        //Supression du fichier temporaire
+        unlink($fileNameThis);
+        unlink($fileNamePage);
+
+        return $resultPdf;
 
     }
+
+    /**
+     * @param $pageNumber
+     * @return Pdf
+     */
+    public function getPage($pageNumber)
+    {
+
+        //nouvelle instance
+        $pageToReturn = new self($this->kernel);
+
+        //clone du document actuelle
+        $clone = clone $this;
+
+        $fileName = $this->getTemporaryFileName();
+
+
+
+        //on sauve le fichier dans le dossier temporaire
+        $clone->Output($fileName,'F');
+
+
+
+
+        $pageToReturn->setSourceFile($fileName);
+
+
+
+        $pageToReturn->AddPage();
+        $tplIdx = $pageToReturn->importPage($pageNumber);
+        $pageToReturn->useTemplate($tplIdx);
+
+        //Supression du fichier temporaire
+        unlink($fileName);
+
+        return $pageToReturn;
+    }
+
+    /**
+     * @return string
+     */
+    public function saveInTemporaryFolder()
+    {
+        $fileName = $this->getTemporaryFileName();
+        $this->Output($fileName,'F');
+        return $fileName;
+    }
+
+    /**
+     * @param $fileName
+     * @param $kernel
+     * @return Pdf
+     */
+    public static function getInTemporaryFolder($fileName,$kernel)
+    {
+        $document = new self($kernel);
+        $document->loadTemplateWithMuliPage($fileName);
+        //unlink($fileName);
+        return $document;
+    }
+
+
+    private function getTemporaryFileName()
+    {
+        //Attribue un nom de fichier aleatoire et temporaire
+        $path = $this->kernel->getRootDir() . '/cache/' . $this->kernel->getEnvironment().'/temporary_pdf';
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+
+        return $path.'/pdf_tmp_'.str_shuffle('1234567890abcdefghijk').'.pdf';
+    }
+
+
 
 
     /**

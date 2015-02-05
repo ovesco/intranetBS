@@ -12,6 +12,12 @@
                 <div class="ui segment">
 
                     <div class="ui vertical segment">
+
+
+
+                        <div class="ui button effectuerEnvoi" data-id="{{ groupe.id }}">Envoyer un document</div>
+
+
                         {% for parent in groupe.parentsRecursive %}
                             {% if groupe.id != parent.id %}
                                 <a href="{{ path('interne_voir_groupe', {groupe: parent.id}) }}" class="ui labeled blue basic button">{{ parent.nom }}</a>
@@ -145,70 +151,12 @@
 {% endmacro %}
 
 {% block js %}
-    <script type="text/javascript">
 
-        /**
-         * on initialise la datatable des effectifs dans le cas où on doit l'initialiser. On met également en place les
-         * différentes méthodes concernant le listing
-         */
-        var table = $('#effectifs-table').DataTable({
-            "sDom": '<f><"flex"<l><p>>',
-            "oLanguage": {
-                "sEmptyTable": "Aucun résultats",
-                "sSearch": "<span>Rechercher dans la liste :</span> _INPUT_",
-                "oPaginate": { "sFirst": "Suivant", "sLast": "Précédent", "sNext": ">", "sPrevious": "<" }
-            }
-        });
+    {% javascripts
+    '@AppBundle/Resources/public/js/Groupe/page_voir_groupe.js'
+    '@AppBundle/Resources/public/js/Envoi/display_form_envoi_document.js'%}
+    <script src="{{ asset_url }}"></script>
 
-        /**
-         * Si on sélectionne une ligne de la table
-         */
-        $('#effectifs-table').on( 'click', 'tr', function () {
+    {% endjavascripts %}
 
-            $(this).toggleClass('selected');
-
-            //On met à jour les endroits où on affiche le nombre de ligne cliquées
-
-            var number = table.rows('.selected').data().length;
-            $('.listing-update').text(number);
-        } );
-
-
-        /**
-         * Permet d'ajouter les éléments sélectionnés au listing.
-         * @param token string le token de la liste choisie
-         */
-        function addToListing(token) {
-
-            var rows  = table.rows('.selected').nodes(),
-                ids   = [];
-
-            $(rows).each(function(i, obj) {
-
-                ids.push($(obj).attr("data-id"));
-            });
-
-            listing.addElements(token, ids);
-        }
-
-        /**
-         * permet de sélectionner tous les membres contenus dans la table datatable initialisée
-         */
-        function selectAll() {
-
-            $('#effectifs-table tr').addClass('selected');
-            var number  = table.rows('.selected').data().length;
-            $('.listing-update').text(number);
-        }
-
-        /**
-         * permet de désélectionner tous les membres contenus dans la table datatable initialisée
-         */
-        function deselectAll() {
-
-            $('#effectifs-table tr').removeClass('selected');
-            $('.listing-update').text(0);
-        }
-
-    </script>
 {% endblock %}

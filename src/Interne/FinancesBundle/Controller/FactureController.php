@@ -132,7 +132,7 @@ class FactureController extends Controller
             $ownerClass = $facture->getOwner()->getClass();
 
             $listeEnvoi = $this->get('listeEnvoi');
-            $listeEnvoi->addEnvoi($ownerId,$ownerClass,$pdf,'Facture N°'.$idFacture);
+            $listeEnvoi->addEnvoiWithPdf($ownerId,$ownerClass,$pdf,'Facture N°'.$idFacture);
 
 
 

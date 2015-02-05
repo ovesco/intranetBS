@@ -29,9 +29,9 @@ class Envoi {
 
     /**
      * Contient le document à envoyer (sans l'adresse, elle sera ajoutée plus tard)
-     * @var Pdf
+     * @var string
      */
-    public $documentPDF;
+    public $documentPdfPath;
 
     /**
      * Contient une breve description de l'envoie (ex: Facture, document)
@@ -51,11 +51,11 @@ class Envoi {
         return md5($this->ownerId.$this->ownerClass.$this->description);
     }
 
-    public function __construct($ownerId,$ownerClass,Pdf $pdf,$description,EntityManager $em) {
+    public function __construct($ownerId,$ownerClass,$pdfPath,$description,EntityManager $em) {
 
         $this->ownerId = $ownerId;
         $this->ownerClass = $ownerClass;
-        $this->documentPDF = $pdf;
+        $this->documentPdfPath = $pdfPath;
         $this->description = $description;
 
     }
