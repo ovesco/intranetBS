@@ -167,9 +167,7 @@
                                                 </div>
 
                                             </div>
-                                        </div>
 
-                                        <div class="ui styled accordion">
                                             <div class=" title">
                                                 <i onclick="getGraph('evolution_effectifs');"
                                                    class="bar chart large blue icon popupable"
@@ -192,6 +190,15 @@
                                                             {% for groupe in groupes %}
                                                                 <option name="groupe" value="{{ groupe.id }}">{{ groupe.nom }}</option>
                                                             {% endfor %}
+                                                        </select>
+
+                                                    </div>
+
+                                                    <div class="field">
+                                                        <label>Avec/sans les sous groupes</label>
+                                                        <select class="ui dropdown graph_option_choices">
+                                                            <option name="childs" value="without_childs">Sans les sous groupes</option>
+                                                            <option name="childs" value="with_childs">Avec les sous groupes</option>
                                                         </select>
 
                                                     </div>

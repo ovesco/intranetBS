@@ -214,9 +214,37 @@ class StatisticsController extends Controller
         $intervalFormat = $options['interval'];
         $periodeFormat =  $options['periode'];
         $parentId = $options['groupe'];
+        $childsOptions= $options['childs'];
 
-        $childId = $groupeRepo->getArrayOfChildIdsRecursive($parentId);
-        array_push($childId,$parentId);
+
+        $ids= array();
+
+        if(($parentId == '') or ($parentId == null))
+        {
+            $groupes =$groupeRepo->findBy(array('parent'=>null));
+            foreach($groupes as $groupe)
+            {
+                array_push($ids,$groupe->getId());
+                if($childsOptions == 'with_childs'){
+                    $idsChild = $groupeRepo->getArrayOfChildIdsRecursive($groupe->getId());
+                    $ids = array_merge($ids,$idsChild);
+                }
+            }
+
+        }
+        else{
+            array_push($ids,$parentId);
+
+            if($childsOptions == 'with_childs'){
+                $idsChild = $groupeRepo->getArrayOfChildIdsRecursive($parentId);
+                $ids = array_merge($ids,$idsChild);
+            }
+        }
+
+
+
+
+
 
         $interval = new \DateInterval($intervalFormat);
         $intervalTotal = new \DateInterval($periodeFormat);
@@ -225,7 +253,7 @@ class StatisticsController extends Controller
 
         $data = array();
 
-        foreach($childId as $id)
+        foreach($ids as $id)
         {
             $groupe = $groupeRepo->find($id);
 
@@ -268,7 +296,7 @@ class StatisticsController extends Controller
                 'type' => 'spline'
             ),
             'title' => array(
-                'text'=> 'Créances émises et reçues'
+                'text'=> 'Evolution des effectifs'
             ),
             'xAxis' => array(
                 'type'=>'datetime',
@@ -282,6 +310,9 @@ class StatisticsController extends Controller
                     'text' => 'Montant'
                 ),
                 'min' => 0
+            ),
+            'tooltip' => array(
+                'pointFormat' => '<b>{point.y} pers.</b>',
             ),
 
 
