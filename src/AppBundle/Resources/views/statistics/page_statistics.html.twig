@@ -59,7 +59,7 @@
                                                     <h4 class="ui dividing header">Options du graphique</h4>
                                                     <div class="field">
                                                         <label>Intervale entre les points</label>
-                                                        <select class="ui dropdown graph_option">
+                                                        <select class="ui dropdown graph_option_choices">
                                                             <option name="interval" value="P1W">Intervale</option>
                                                             <option name="interval" value="P1D">un jour</option>
                                                             <option name="interval" value="P1W">une semaine</option>
@@ -69,7 +69,7 @@
                                                     </div>
                                                     <div class="field">
                                                         <label>Periode total</label>
-                                                        <select class="ui dropdown graph_option">
+                                                        <select class="ui dropdown graph_option_choices">
                                                             <option name="periode" value="P6M">Période</option>
                                                             <option name="periode" value="P1M">un mois</option>
                                                             <option name="periode" value="P3M">trois mois</option>
@@ -100,7 +100,7 @@
                                                     <h4 class="ui dividing header">Options du graphique</h4>
                                                     <div class="field">
                                                         <label>Intervale entre les points</label>
-                                                        <select class="ui dropdown graph_option">
+                                                        <select class="ui dropdown graph_option_choices">
                                                             <option name="interval" value="P1W">Intervale</option>
                                                             <option name="interval" value="P1D">un jour</option>
                                                             <option name="interval" value="P1W">une semaine</option>
@@ -110,7 +110,7 @@
                                                     </div>
                                                     <div class="field">
                                                         <label>Periode total</label>
-                                                        <select class="ui dropdown graph_option">
+                                                        <select class="ui dropdown graph_option_choices">
                                                             <option name="periode" value="P6M">Période</option>
                                                             <option name="periode" value="P1M">un mois</option>
                                                             <option name="periode" value="P3M">trois mois</option>
@@ -136,10 +136,91 @@
                                                    class="bar chart large blue icon popupable"
                                                    data-content="Afficher"></i>
                                                 <i class="dropdown icon"></i>
-                                                pie
+                                                Effectifs Actuels (gâteau)
                                             </div>
                                             <div class="content">
-                                                Explication
+                                                <div class="ui message blue">
+                                                    Explication
+                                                </div>
+
+                                                <div id="effectifs_pie_charts" class="ui form">
+
+                                                    <h4 class="ui dividing header">Options du graphique</h4>
+                                                    <div class="field">
+                                                        <label>Groupe</label>
+                                                        <select class="ui search dropdown graph_option_choices">
+                                                            <option name="groupe" value="">Tout les groupes</option>
+                                                            {% for groupe in groupes %}
+                                                                <option name="groupe" value="{{ groupe.id }}">{{ groupe.nom }}</option>
+                                                            {% endfor %}
+                                                        </select>
+
+                                                    </div>
+                                                    <div class="field">
+                                                        <label>Nombre de niveau (sous-groupe)</label>
+
+                                                        <input type="number" class="graph_option_number" name="nb_niveau" value="1">
+
+                                                    </div>
+
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="ui styled accordion">
+                                            <div class=" title">
+                                                <i onclick="getGraph('evolution_effectifs');"
+                                                   class="bar chart large blue icon popupable"
+                                                   data-content="Afficher"></i>
+                                                <i class="dropdown icon"></i>
+                                                Evolution des effectifs
+                                            </div>
+                                            <div class="content">
+                                                <div class="ui message blue">
+                                                    Explication
+                                                </div>
+
+                                                <div id="evolution_effectifs" class="ui form">
+
+                                                    <h4 class="ui dividing header">Options du graphique</h4>
+                                                    <div class="field">
+                                                        <label>Groupe</label>
+                                                        <select class="ui search dropdown graph_option_choices">
+                                                            <option name="groupe" value="">Tout les groupes</option>
+                                                            {% for groupe in groupes %}
+                                                                <option name="groupe" value="{{ groupe.id }}">{{ groupe.nom }}</option>
+                                                            {% endfor %}
+                                                        </select>
+
+                                                    </div>
+
+                                                    <div class="field">
+                                                        <label>Intervale entre les points</label>
+                                                        <select class="ui dropdown graph_option_choices">
+                                                            <option name="interval" value="P1W">Intervale</option>
+                                                            <option name="interval" value="P1D">un jour</option>
+                                                            <option name="interval" value="P1W">une semaine</option>
+                                                            <option name="interval" value="P1M">un mois</option>
+                                                        </select>
+
+                                                    </div>
+                                                    <div class="field">
+                                                        <label>Periode total</label>
+                                                        <select class="ui dropdown graph_option_choices">
+                                                            <option name="periode" value="P6M">Période</option>
+                                                            <option name="periode" value="P1M">un mois</option>
+                                                            <option name="periode" value="P3M">trois mois</option>
+                                                            <option name="periode" value="P6M">six mois</option>
+                                                            <option name="periode" value="P1Y">une année</option>
+                                                            <option name="periode" value="P2Y">deux ans</option>
+                                                            <option name="periode" value="P3Y">trois ans</option>
+                                                        </select>
+                                                    </div>
+
+
+                                                </div>
 
                                             </div>
                                         </div>

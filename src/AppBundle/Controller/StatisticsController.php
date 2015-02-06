@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 use AppBundle\Entity\Groupe;
 
@@ -25,19 +26,19 @@ class StatisticsController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('AppBundle:statistics:page_statistics.html.twig');
+        $groupes = $this->getDoctrine()->getManager()->getRepository('AppBundle:Groupe')->findAll();
+
+        return $this->render('AppBundle:statistics:page_statistics.html.twig',array('groupes'=>$groupes));
     }
 
 
     /**
      * @Route("/get_graph_ajax", name="interne_fiances_statistics_get_graph", options={"expose"=true})
-     *
+     * @param Request $request
      * @return JsonResponse
      */
-    public function getGraphicsAjaxAction()
+    public function getGraphicsAjaxAction(Request $request)
     {
-        $request = $this->getRequest();
-
         if ($request->isXmlHttpRequest()) {
 
             $idGraph = $request->request->get('idGraph');
@@ -68,15 +69,20 @@ class StatisticsController extends Controller
             case 'montant_en_attente':
                 return $financesController->getMontantEnAttente($options);
             case 'effectifs_pie_charts':
-                return $this->getEffectifsPieCharts();
+                return $this->getEffectifsPieCharts($options);
+            case 'evolution_effectifs':
+                return $this->getEvolutionEffectifChart($options);
             default:
-                return $this->getEffectifsPieCharts();
+                return $this->getEffectifsPieCharts($options);
         }
 
     }
 
-    private function getGroupeData(Groupe $groupeParent, $nbTotalMembre,$niveau,$niveauMax,$series,$color = null)
+    private function getGroupeData($groupeRepo,Groupe $groupeParent, $nbTotalMembre,$niveau,$niveauMax,$series,$color = null)
     {
+
+        $niveauMax = $niveauMax-1;
+
         for($niv = 0; $niv <= $niveauMax; $niv++)
         {
             //on commence par crée les series pour chaque niveau
@@ -90,9 +96,11 @@ class StatisticsController extends Controller
         }
 
 
-        //couleur rand
+
         if($niveau <= $niveauMax)
         {
+
+            $effectifDirect = $groupeRepo->findNumberOfMembreAtDate($groupeParent->getId());
 
             if($color == null)
                 $color = 'rgba('.mt_rand(0,255).','.mt_rand(0,255).','.mt_rand(0,255).', 1)';
@@ -101,8 +109,8 @@ class StatisticsController extends Controller
 
                 //effectif direct du groupe.
                 $data = array();
-                $data['name'] = 'Eff. direct '.$groupeParent->getNom();
-                $data['y'] = ((count($groupeParent->getMembers()) / $nbTotalMembre) * 100);
+                $data['name'] = 'Eff. direct '.$groupeParent->getNom().' ('.$effectifDirect.' pers.)';
+                $data['y'] = (($effectifDirect / $nbTotalMembre) * 100);
                 $data['color'] = $color;
                 array_push($series[$niv]['data'], $data);
             }
@@ -110,21 +118,19 @@ class StatisticsController extends Controller
 
             $color = 'rgba('.mt_rand(0,255).','.mt_rand(0,255).','.mt_rand(0,255).', 1)';
 
-            /** @var Groupe $enfant */
+
             foreach($groupeParent->getEnfants() as $enfant) {
+                $effectif = $groupeRepo->findNumberOfMembreAtDateRecursive($enfant->getId());
                 $data = array();
-                $data['name'] = $enfant->getNom();
-                $data['y'] = ((count($enfant->getMembersRecursive()) / $nbTotalMembre) * 100);
+                $data['name'] = $enfant->getNom().' ('.$effectif.' pers.)';
+                $data['y'] = (($effectif / $nbTotalMembre) * 100);
                 $data['color'] = $color;
                 array_push($series[$niveau]['data'], $data);
             }
 
-
-
             foreach($groupeParent->getEnfants() as $enfant) {
-                $series = $this->getGroupeData($enfant,$nbTotalMembre,$niveau+1,$niveauMax,$series,$color);
+                $series = $this->getGroupeData($groupeRepo,$enfant,$nbTotalMembre,$niveau+1,$niveauMax+1,$series,$color);
             }
-
         }
 
         return $series;
@@ -134,27 +140,37 @@ class StatisticsController extends Controller
 
     }
 
-    private function getEffectifsPieCharts(){
+    private function getEffectifsPieCharts($options){
 
         $groupeRepo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Groupe');
 
-        $parentId = null;
+
+        $parentId = $options['groupe'];
+        $nb_niveau = $options['nb_niveau'];
+
         $groupeParent = new Groupe();
-        if($parentId == null)
+        $nombreTotalMembre = null;
+
+        if(($parentId == '') or ($parentId == null))
         {
-            $groupes =$groupeRepo->findBy(array('parent'=>$parentId));
+            $groupes =$groupeRepo->findBy(array('parent'=>null));
             $groupeParent->setEnfants($groupes);
+            foreach($groupes as $groupe)
+            {
+                $nombreTotalMembre = $nombreTotalMembre + $groupeRepo->findNumberOfMembreAtDateRecursive($groupe->getId());
+            }
 
         }
         else
         {
             $groupeParent = $groupeRepo->find($parentId);
+            $nombreTotalMembre = $groupeRepo->findNumberOfMembreAtDateRecursive($groupeParent->getId());
         }
 
-        $nombreTotalMembre = count($groupeParent->getMembersRecursive());
 
         $series = array();
-        $data = $this->getGroupeData($groupeParent,$nombreTotalMembre,0,3,$series);
+        $data = $this->getGroupeData($groupeRepo,$groupeParent,$nombreTotalMembre,0,$nb_niveau,$series);
+
 
 
 
@@ -164,28 +180,122 @@ class StatisticsController extends Controller
                 'type' => 'pie'
             ),
             'title' => array(
-                'text'=> 'Pie'
+                'text'=> ($groupeParent->getNom() == null ? 'Groupes racines' : $groupeParent->getNom())
             ),
-            'xAxis' => array(
-                'text'=>'test',
 
-            ),
-            'yAxis' => array(
-                'text' => 'test2',
-            ),
+
+
 
             'tooltip' => array(
-                'valueSufix' => '%',
+                'pointFormat' => '<b>{point.percentage:.2f}%</b>',
             ),
             'plotOptions' => array(
                 'pie' => array(
                     'shadow' => false,
                     'center' => array('50%','50%'),
+                    'dataLabels' => array('enabled'=> false),
+
+                )
+            ),
+            'series' =>   $data
+        );
+
+        return $graphData;
+    }
+
+
+    private function getEvolutionEffectifChart($options)
+    {
+        $groupeRepo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Groupe');
+
+        /*
+         * Récupération des options
+         */
+        $intervalFormat = $options['interval'];
+        $periodeFormat =  $options['periode'];
+        $parentId = $options['groupe'];
+
+        $childId = $groupeRepo->getArrayOfChildIdsRecursive($parentId);
+        array_push($childId,$parentId);
+
+        $interval = new \DateInterval($intervalFormat);
+        $intervalTotal = new \DateInterval($periodeFormat);
+        $intervalTotal->invert = 1;
+        $end = new \DateTime();
+
+        $data = array();
+
+        foreach($childId as $id)
+        {
+            $groupe = $groupeRepo->find($id);
+
+            $arrayEffectif = array();
+
+            $current = new \DateTime();
+            $current->add($intervalTotal);
+
+            while($end > $current)
+            {
+                $next = clone $current;
+                $next->add($interval);
+
+                $effectif = $groupeRepo->findNumberOfMembreAtDateRecursive($id,$current);
+                array_push($arrayEffectif,array($current->getTimestamp()*1000,$effectif));
+
+                $current = clone $next;
+            }
+
+
+            $groupeData = array(
+                'name' => $groupe->getNom(),
+                'data' => $arrayEffectif,
+                'lineWidth' => 2,
+                'marker' => array(
+                    'enabled' => false
+                ),
+            );
+
+            array_push($data,$groupeData);
+
+        }
+
+
+
+
+        $graphData = array(
+
+            'chart' => array(
+                'type' => 'spline'
+            ),
+            'title' => array(
+                'text'=> 'Créances émises et reçues'
+            ),
+            'xAxis' => array(
+                'type'=>'datetime',
+                'labels'=>array(
+                    'overflow' => 'justify'
+                )
+
+            ),
+            'yAxis' => array(
+                'title' => array(
+                    'text' => 'Montant'
+                ),
+                'min' => 0
+            ),
+
+
+            'plotOptions' => array(
+                'line' => array(
+                    'lineWidth' => 4,
+                    'marker' => array(
+                        'enabled' => false
+                    )
                 )
             ),
 
 
-            'series' =>   $data
+            'series' => $data
 
         );
 

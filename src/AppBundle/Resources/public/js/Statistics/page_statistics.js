@@ -5,11 +5,17 @@ function getGraph(idGraph){
     // le formulaire doit avoir le meme id que le nom du graphique (idGraph).
     var $form = $('#'+idGraph);
 
-    $form.find('.graph_option option:selected').each(function(){
+    $form.find('.graph_option_choices option:selected').each(function(){
         var name = $(this).attr('name');
-        var value = $(this).val();
-        options[name] = value;
-    })
+        options[name] = $(this).val();;
+
+    });
+
+    $form.find('.graph_option_number').each(function(){
+        var name = $(this).attr('name');
+        options[name] = $(this).val();;
+
+    });
 
     var data = { idGraph: idGraph, options:options };
 

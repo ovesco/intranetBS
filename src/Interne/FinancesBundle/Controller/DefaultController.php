@@ -19,12 +19,12 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $facture = $em->getRepository('InterneFinancesBundle:Facture')->find(100);
+        $groupeRepo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Groupe');
 
-        $facture2 = $em->getRepository('InterneFinancesBundle:Facture')->find(101);
 
-        $test = array($facture,$facture2);
+        $test = $groupeRepo->getArrayOfChildIdsRecursive(4);
+
+        var_dump($test);
 
 
         return $this->render('InterneFinancesBundle:Default:index.html.twig', array('test' => $test));

@@ -88,8 +88,8 @@ class StatisticsController extends Controller
 
 
 
-        $interval = new \DateInterval($intervalFormat);//une semaine
-        $intervalTotal = new \DateInterval($periodeFormat);//une année
+        $interval = new \DateInterval($intervalFormat);
+        $intervalTotal = new \DateInterval($periodeFormat);
         $intervalTotal->invert = 1;
         $end = new \DateTime();
 
