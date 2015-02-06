@@ -131,11 +131,11 @@ fos_elastica:
                         remarques: ~
                         numeroBs: ~
                         sexe: ~
-                        attributions:
-                            type: "nested"
-                            properties:
-                                groupe: ~
-                                fonction: ~
+                        # attributions:
+                           #  type: "nested"
+                           #  properties:
+                              #   groupe: ~
+                               #  fonction: ~
                     persistence:
                         driver: orm
                         model: AppBundle\Entity\Membre

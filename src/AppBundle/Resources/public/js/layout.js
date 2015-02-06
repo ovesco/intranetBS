@@ -54,3 +54,18 @@ $("input[data-formatter=true]").each(function() {
         pattern: pattern
     });
 });
+
+/**
+ * On met en place le petit script tout simple de recherche
+ *
+ * La recherche se fait en méthode GET donc on passe la variable dans l'URL.
+ *
+ */
+$('#layout-search')
+    .search({
+        apiSettings: {
+            url: Routing.generate('interne_main_layout_search')+'?pattern={query}'
+        },
+        type: 'category'
+    })
+;

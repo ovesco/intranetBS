@@ -116,22 +116,6 @@
 
 <script type="text/javascript">
 
-    /*
-     * On met en place le petit script tout simple de recherche
-     */
-
-    $('#layout-search')
-            .search({
-                apiSettings: {
-                    url: Routing.generate('interne_main_layout_search'),
-                    data: {
-                        pattern: '{query}'
-                    }
-                },
-                type: 'category'
-            })
-    ;
-
 
     /*
      * Pour chaque flashbag contenu, sachant qu'ils ne contiennent que des alertes et des messages, on génère
