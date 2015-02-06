@@ -19,14 +19,9 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        $groupeRepo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Groupe');
 
 
-        $test = $groupeRepo->getArrayOfChildIdsRecursive(4);
-
-        var_dump($test);
-
-
+        $test = null;
         return $this->render('InterneFinancesBundle:Default:index.html.twig', array('test' => $test));
     }
 

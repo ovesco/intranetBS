@@ -29,6 +29,8 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    globals:
+        parametreService: "@parametres"
     form:
         resources:
             - 'Templates/Form/Widgets/default_widgets.html.twig'

@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Request;
 
 
 /**
@@ -42,11 +43,11 @@ class ParametreController extends Controller
      */
     /**
      * @Route("/update_ajax", name="interne_parametre_update_ajax", options={"expose"=true})
+     * @param Request $request
      * @return Response
      */
-    public function updateAjaxAction()
+    public function updateAjaxAction(Request $request)
     {
-        $request = $this->getRequest();
 
         if($request->isXmlHttpRequest()) {
 

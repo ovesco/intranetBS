@@ -1,20 +1,21 @@
--
-    groupe: finance
-    label: 'Créances et factures'
-    parametres:
-        - { name: impression_ccp_bvr, label: 'Numéro de compte CCP (BVR)', type: string }
-        - { name: impression_ccp_bv, label: 'Numéro de compte CCP (BV)', type: string }
-        - { name: impression_texte_facture, label: 'Texte sur les factures', type: text }
-        - { name: impression_affichage_montant, label: 'Affichage du montant sur les factures', type: choice, options: { choices: [oui, non] } }
-        - { name: impression_mode_payement, label: 'Choix du mode de payement', type: choice, options: { choices: [BV, BVR] } }
--
-    groupe: info_groupe
+info_groupe:
     label: 'Information sur le groupe scout'
     parametres:
-        - { name: adresse, label: 'Adresse postale', type: text }
-        - { name: nom, label: 'Nom du groupe scout', type: string }
--
-    groupe: service_mailer
+        nom: { type: string, label: 'Nom du groupe scout', default: 'Brigade de Sauvabelin' }
+        adresse: { type: text, label: 'Adresse postale', default: 'Adresse du groupe (à modifier)' }
+service_mailer:
     label: 'Service de email automatique'
     parametres:
-        - { name: noReplyEmail, label: 'Adresse mail d''envoi automatique (ex. no_reply@...)', type: string }
+        noReplyEmail: { type: string, label: 'Adresse mail d envoi automatique (ex. no_reply@...)', default: to@modify.ch }
+finance:
+    label: 'Créances et factures'
+    parametres:
+        impression_ccp_bvr: { type: string, label: 'Numéro de compte CCP (BVR)', default: 10-1915-8 }
+        impression_ccp_bv: { type: string, label: 'Numéro de compte CCP (BV)', default: 10-1915-8 }
+        impression_texte_facture: { type: text, label: 'Texte sur les factures', default: 'Text à écrire!!!' }
+        impression_affichage_montant: { type: choice, label: 'Affichage du montant sur les factures', options: { choices: [oui, non] }, default: non }
+        impression_mode_payement: { type: choice, label: 'Choix du mode de payement', options: { choices: [BV, BVR] }, default: BVR }
+intranet:
+    label: 'Paramètres généraux du site'
+    parametres:
+        nom: { type: string, label: 'Nom de l intranet', default: Intranet }

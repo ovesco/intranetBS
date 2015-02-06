@@ -30,7 +30,7 @@ use Symfony\Component\Yaml\Parser;
 class Parametres
 {
 
-    public $parametres;
+    public $groupesOfParametres; //fichier de config parsé
     private $kernel;
     private $path;
 
@@ -45,26 +45,33 @@ class Parametres
          */
         $yaml = new Parser();
         try {
-            $this->parametres = $yaml->parse(file_get_contents($this->path.'/Parametre.yml'));
+            $this->groupesOfParametres = $yaml->parse(file_get_contents($this->path.'/Parametre.yml'));
         } catch (ParseException $e) {
             printf("Unable to parse the YAML string: %s", $e->getMessage());
         }
-
 
         /*
          * On controle ici que la hierarchie des fichiers existe.
          * Si il manque un fichier, on l'ajoute.
          */
-        foreach($this->parametres as $groupe)
+        foreach($this->groupesOfParametres as $groupeName => $groupe)
         {
-
-            foreach($groupe['parametres'] as $parametre)
+            foreach($groupe['parametres'] as $parameterName => $parametre)
             {
 
+                $dirPath = $this->path.'/values';
+                if (!file_exists($dirPath)) {
+                    mkdir($dirPath, 0777, true);
+                }
 
-                $valuePath = $this->path.'/values/'.$groupe['groupe'].'_'.$parametre['name'].'.txt';
+
+                $valuePath = $dirPath.'/'.$groupeName.'_'.$parameterName.'.txt';
+
                 if (!file_exists($valuePath)) {
                     $file = fopen($valuePath, "w");
+                    if(isset($parametre['default'])){
+                        fwrite($file,$parametre['default']);
+                    }
                     fclose($file);
                 }
 
@@ -74,22 +81,33 @@ class Parametres
     }
 
     /**
+     * @param $groupe
+     * @param $name
+     * @return null|string
+     */
+    public function getType($groupe,$name)
+    {
+        return $this->groupesOfParametres[$groupe]['parametres'][$name]['type'];
+    }
+
+    /**
      * retourne un tableau avec tout les parametres
      *
      * @return mixed
      */
     public function getParametres()
     {
-        $parameters = $this->parametres;
+        $parameters = $this->groupesOfParametres;
         foreach($parameters as $k_groupe => $groupe)
         {
-            foreach($groupe['parametres'] as $k_parametre => $parametre)
+            foreach($parameters[$k_groupe]['parametres'] as $k_parametre => $parametre)
             {
-                $value = $this->getValue($groupe['groupe'],$parametre['name']);
+                $value = $this->getValue($k_groupe,$k_parametre);
 
                 $parameters[$k_groupe]['parametres'][$k_parametre]['value'] = $value;
             }
         }
+
         return $parameters;
     }
 
@@ -102,6 +120,7 @@ class Parametres
      */
     public function getValue($groupe,$name)
     {
+
 
         $valuePath = $this->path.'/values/'.$groupe.'_'.$name.'.txt';
 
@@ -124,6 +143,9 @@ class Parametres
         }
 
         return null;
+
+
+
     }
 
     /**
@@ -148,8 +170,9 @@ class Parametres
     public function save()
     {
         $dumper = new Dumper();
-        $yaml = $dumper->dump($this->parametres,3);
+        $yaml = $dumper->dump($this->groupesOfParametres,3);
         file_put_contents($this->path.'/Parametre.yml', $yaml);
     }
+
 
 }

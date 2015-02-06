@@ -11,7 +11,7 @@
         <div class="column">
             <div class="ui segment">
 
-                {% for groupe in parametres %}
+                {% for groupeName,groupe in parametres %}
 
                     <div class="ui styled accordion">
                         <div class="title">
@@ -20,33 +20,33 @@
                         </div>
                         <div class="content">
                             <div class="ui form">
-                                {% for parametre in groupe.parametres %}
+                                {% for name,parametre in groupe.parametres %}
 
                                         <div class="field">
                                             <label>{{ parametre.label}}</label>
                                             {% if parametre.type == 'string' %}
                                                 <input type="text"
-                                                       data-parametre="{{ parametre.name }}"
-                                                       data-groupe="{{ groupe.groupe }}"
+                                                       data-parametre="{{ name}}"
+                                                       data-groupe="{{ groupeName }}"
                                                        class="formParametre"
                                                        value="{{ parametre.value}}">
                                             {% elseif parametre.type == 'number'%}
                                                 <input type="number"
-                                                       data-parametre="{{ parametre.name }}"
-                                                       data-groupe="{{ groupe.groupe }}"
+                                                       data-parametre="{{ name }}"
+                                                       data-groupe="{{ groupeName }}"
                                                        class="formParametre"
                                                        value="{{ parametre.value}}">
                                             {% elseif parametre.type == 'text'%}
                                                 {%  spaceless %}
                                                     <textarea
-                                                            data-parametre="{{ parametre.name }}"
-                                                            data-groupe="{{ groupe.groupe }}"
+                                                            data-parametre="{{ name }}"
+                                                            data-groupe="{{ groupeName }}"
                                                             class="formParametre">{{ parametre.value}}</textarea>
                                                 {% endspaceless %}
                                             {% elseif parametre.type == 'choice'%}
                                                 <select
-                                                        data-parametre="{{ parametre.name }}"
-                                                        data-groupe="{{ groupe.groupe }}"
+                                                        data-parametre="{{ name }}"
+                                                        data-groupe="{{ groupeName }}"
                                                         class="formParametre"
                                                         value="{{ parametre.value}}">
                                                     <option></option>
