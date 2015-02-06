@@ -28,7 +28,7 @@ class EnvoiController extends Controller{
      * Genere la page principale d'action sur les envois
      *
      * @route("/liste", name="utils_envoi_liste")
-     * @Template("AppBundle:Envoi:listeEnvoi.html.twig")
+     * @Template("AppBundle:Envoi:page_listeEnvoi.html.twig")
      * @return Response
      */
     public function listeAction()
@@ -41,7 +41,7 @@ class EnvoiController extends Controller{
 
     /**
      * @route("/clear", name="utils_envoi_clear")
-     * @Template("AppBundle:Envoi:listeEnvoi.html.twig")
+     * @Template("AppBundle:Envoi:page_listeEnvoi.html.twig")
      * @return Response
      */
     public function clearAction()
@@ -55,7 +55,7 @@ class EnvoiController extends Controller{
     /**
      * @param $token
      * @route("/remove_token/{token}", name="utils_envoi_remove_by_token", options={"expose"=true})
-     * @Template("AppBundle:Envoi:listeEnvoi.html.twig")
+     * @Template("AppBundle:Envoi:page_listeEnvoi.html.twig")
      * @return Response
      */
     public function removeByToken($token)

@@ -28,7 +28,7 @@ class QueryDataOnloadController extends Controller {
 
         $distinctions = $this->getDoctrine()->getRepository('AppBundle:Distinction')->findAll();
 
-        return $this->render('Modales/distinctions.html.twig', array(
+        return $this->render('AppBundle:Distinction:modale_form_distinctions.html.twig', array(
 
             'distinctions' => $distinctions
         ));

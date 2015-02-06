@@ -22,7 +22,7 @@ class ParametreController extends Controller
 
     /**
      * @Route("/liste", name="interne_parametres_liste")
-     * @Template("AppBundle:Parametre:listeForm.html.twig")
+     * @Template("AppBundle:Parametre:page_parametre_liste_and_edit.html.twig")
      *
      * @return Response
      */

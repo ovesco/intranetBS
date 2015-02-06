@@ -44,7 +44,7 @@ class RolesController extends Controller
         }
 
 
-        return $this->render('InterneSecurityBundle:Roles:matching_fonctions.html.twig', array(
+        return $this->render('InterneSecurityBundle:Roles:page_matching_fonctions.html.twig', array(
 
             'roles'         => $roles,
             'fonctions'     => $fonctions,

@@ -1,10 +1,10 @@
-{% extends 'layout.html.twig' %}
+{% extends 'AppBundle:Layout:layout.html.twig' %}
 
 {% block titre %}
     {{ famille.nom|capitalize }}
 {% endblock %}
 
-{% form_theme familleForm 'Templates/Form/ajax_edit.html.twig' %}
+{% form_theme familleForm 'AppBundle:Templates:Form:ajax_edit.html.twig' %}
 
 {% block content %}
 

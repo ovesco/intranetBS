@@ -11,23 +11,23 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class SearchController
  * @package AppBundle\Controller
- * @route("search/")
+ * @route("/search")
  */
 class SearchController extends Controller
 {
     /**
      * Affiche la page permettant de lancer une recherche
-     * @Route("search", name="interne_search")
+     * @Route("/search", name="interne_search")
      */
     public function indexAction()
     {
-        return $this->render('Search/search.html.twig');
+        return $this->render('AppBundle:Search:search.html.twig');
     }
 
     /**
      * Effectue une recherche complète parmi les membres, groupes et familles
      * Filtre ensuite les 4 premiers résultats par catégorie pour ne pas en avoir trop
-     * @Route("layout-search", name="interne_main_layout_search", options={"expose"=true})
+     * @Route("/layout-search", name="interne_main_layout_search", options={"expose"=true})
      * @param Request $request
      * @return JsonResponse
      */
@@ -74,7 +74,7 @@ class SearchController extends Controller
      * et le retourne. Ca permet d'éviter d'avoir à sérializer des données en Json et tout
      * @param Request $request
      * @return Response
-     * @route("advanced-search", name="interne_search_advanced", options={"expose"=true})
+     * @route("/advanced-search", name="interne_search_advanced", options={"expose"=true})
      */
     public function advancedSearchAction(Request $request) {
 

@@ -8,19 +8,24 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class ListingController
+ * @package AppBundle\Controller
+ * @route("/listing")
+ */
 class ListingController extends Controller
 {
     /**
      * Permet d'avoir une vue d'ensemble des listes dynamiques disponibles
      * @return Response la vue
-     * @route("listing/vue-globale", name="listing_vue_globale")
+     * @route("/vue-globale", name="listing_vue_globale")
      */
     public function listingDashboardAction() {
 
 
         $listing = $this->get('listing');
 
-        return $this->render('Listing/full_listing_view.html.twig', array(
+        return $this->render('AppBundle:Listing:page_full_listing_view.html.twig', array(
 
             'listing' => $listing
         ));
@@ -31,7 +36,7 @@ class ListingController extends Controller
      * Permet de créer une liste
      * @param Request $request
      * @return Response redirection vers la page du listing
-     * @route("listing/add-liste", name="listing_creer_liste")
+     * @route("/add-liste", name="listing_creer_liste")
      */
     public function addListeAction(Request $request) {
 
@@ -48,7 +53,7 @@ class ListingController extends Controller
      * Permet de supprimer une liste du listing
      * @param $token string le token de la liste
      * @return Response redirection vers la page du listing
-     * @route("listing/remove-liste/{token}", name="listing_supprimer_liste", options={"expose"=true})
+     * @route("/remove-liste/{token}", name="listing_supprimer_liste", options={"expose"=true})
      */
     public function removeListeAction($token) {
 
@@ -65,7 +70,7 @@ class ListingController extends Controller
      * @param $token string le token de la liste
      * @param $ids array les membres à virer
      * @return Response Json vide
-     * @route("listing/remove-membres-id/{token}/{ids}", name="listing_supprimer_membres_par_id", options={"expose"=true})
+     * @route("/remove-membres-id/{token}/{ids}", name="listing_supprimer_membres_par_id", options={"expose"=true})
      */
     public function removeFromListingByIds($token, $ids) {
 
@@ -82,7 +87,7 @@ class ListingController extends Controller
      * @param $token string le token de la liste
      * @param $ids array les membres à ajouter
      * @return Response Json vide
-     * @route("listing/add-membres-id/{token}/{ids}", name="listing_ajouter_membres_par_id", options={"expose"=true})
+     * @route("/add-membres-id/{token}/{ids}", name="listing_ajouter_membres_par_id", options={"expose"=true})
      */
     public function addToListingByIds($token, $ids) {
 

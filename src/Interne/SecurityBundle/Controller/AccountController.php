@@ -19,11 +19,11 @@ class AccountController extends Controller
 {
     /**
      * Affiche la page de gestion de compte
-     * @route("my", name="security_my_account")
+     * @route("my_account", name="security_my_account")
      */
     public function myAccountAction(){
 
-        return $this->render('Security/Account/my_account.html.twig');
+        return $this->render('InterneSecurityBundle:Account:page_my_account.html.twig');
     }
 
 

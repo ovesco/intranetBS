@@ -20,12 +20,17 @@ use AppBundle\Form\MembreInfosScoutesType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+/**
+ * Class MembreController
+ * @package AppBundle\Controller
+ * @route("/membre")
+ */
 class MembreController extends Controller {
 
     /**
-     * Affiche la page d'ajout de membre -> Membre/ajouter_membre.html.twig
+     * Affiche la page d'ajout de membre -> Membre/page_ajouter_membre.html.twig
      * et valide le formulaire si celui-ci est soumis
-     * @Route("membre/ajouter", name="interne_ajouter_membre")
+     * @Route("/ajouter", name="interne_ajouter_membre")
      */
     public function ajouterMembreAction(Request $request) {
 
@@ -91,7 +96,7 @@ class MembreController extends Controller {
             return $this->redirect($this->generateUrl('interne_voir_membre', array('membre' => $membre->getId())));
         }
 
-        return $this->render('Membre/ajouter_membre.html.twig', array(
+        return $this->render('AppBundle:Membre:page_ajouter_membre.html.twig', array(
 
             'membreForm'        => $membreForm->createView(),
             'membreFamilleForm' => $membreFamilleForm->createView(),
@@ -109,7 +114,7 @@ class MembreController extends Controller {
      * @param $property la proprieté à atteindre
      * @return mixed proprieté
      *
-     * @route("ajax/membre/get-property/{membre}/{property}", name="interne_ajax_membre_get_property", options={"expose"=true})
+     * @route("ajax/get-property/{membre}/{property}", name="interne_ajax_membre_get_property", options={"expose"=true})
      * @ParamConverter("membre", class="AppBundle:Membre")
      */
     public function getMembrePropertyAction(Membre $membre, $property) {
@@ -124,7 +129,7 @@ class MembreController extends Controller {
 
 
     /**
-     * @route("/membre/voir/{membre}", name="interne_voir_membre", requirements={"membre" = "\d+"})
+     * @route("/voir/{membre}", name="interne_voir_membre", requirements={"membre" = "\d+"})
      * @ParamConverter("membre", class="AppBundle:Membre")
      */
     public function voirMembreAction($membre) {
@@ -134,7 +139,7 @@ class MembreController extends Controller {
         $membreForm         = $this->createForm(new MembreType, $membre);
         $infosScoutesForm   = $this->createForm(new MembreInfosScoutesType, $membre);
 
-        return $this->render('Membre/voir_membre.html.twig', array(
+        return $this->render('AppBundle:Membre:page_voir_membre.html.twig', array(
 
                 'membre'            => $membre,
                 'listing'           => $this->get('listing'),
@@ -158,7 +163,7 @@ class MembreController extends Controller {
      * @param $type string 'attribution' ou 'distinction'
      * @param $obj int l'id de l'attribution ou distinction
      * @return jsonresponse
-     * @route("membre/ajax/remove-attribution-or-distinction/{membre}/{type}/{obj}", name="interne_ajax_membre_remove_attr_dist", options={"expose"=true})
+     * @route("/ajax/remove-attribution-or-distinction/{membre}/{type}/{obj}", name="interne_ajax_membre_remove_attr_dist", options={"expose"=true})
      * @ParamConverter("membre", class="AppBundle:Membre")
      */
     public function removeAttributionOrDistinctionAction(Membre $membre, $type, $obj) {
@@ -183,7 +188,7 @@ class MembreController extends Controller {
      * Vérifie si un numéro BS est déjà attribué ou pas
      * @param $numero le numéro BS
      * @return boolean
-     * @route("membre/ajax/verify-numero-bs/{numero}", name="interne_membre_ajax_verify_numero_bs", options={"expose"=true}, requirements={"numero" = "\d+"})
+     * @route("/ajax/verify-numero-bs/{numero}", name="interne_membre_ajax_verify_numero_bs", options={"expose"=true}, requirements={"numero" = "\d+"})
      */
     public function isNumeroBsTakenAction($numero) {
 
@@ -201,7 +206,7 @@ class MembreController extends Controller {
      * @return jsonresponse
      * @ParamConverter("membre", class="AppBundle:Membre")
      * @ParamConverter("famille", class="AppBundle:Famille")
-     * @route("membre/ajax/modify-famille/{membre}/{famille}", name="membre_modify_famille", options={"expose"=true})
+     * @route("/ajax/modify-famille/{membre}/{famille}", name="membre_modify_famille", options={"expose"=true})
      */
     public function modifyFamilleAction(Membre $membre, Famille $famille) {
 

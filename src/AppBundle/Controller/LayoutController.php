@@ -38,7 +38,7 @@ class LayoutController extends Controller
 
 
 
-        return $this->render('Layout/main_menu.html.twig', array(
+        return $this->render('AppBundle:Layout:main_menu.html.twig', array(
             'groups' => $groups
         ));
     }

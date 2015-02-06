@@ -40,7 +40,7 @@ class Famille implements ExpediableInterface
     private $pere;
 
     /**
-     * 
+     *
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Geniteur",  cascade={"persist", "remove"}, fetch="EAGER")
      */
     private $mere;

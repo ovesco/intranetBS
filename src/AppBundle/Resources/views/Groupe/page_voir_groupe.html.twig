@@ -1,4 +1,4 @@
-{% extends 'layout.html.twig' %}
+{% extends 'AppBunlde:Layout:layout.html.twig' %}
 
 {% import _self as macro %}
 
@@ -116,7 +116,7 @@
     <h3>Effectifs détaillés: {{ groupe.nom|capitalize }} ({{ groupe.model.nom|capitalize }})</h3>
 
     {% set membres = groupe.members %}
-    {% include ':Membre:liste.html.twig' %}
+    {% include 'AppBundle:Membre:liste.html.twig' %}
 
     <div class="ui floating dropdown labeled icon green button">
         <i class="list icon"></i>

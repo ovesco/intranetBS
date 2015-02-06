@@ -17,6 +17,11 @@ use AppBundle\Entity\Famille;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class FamilleController
+ * @package AppBundle\Controller
+ * @route("/famille")
+ */
 class FamilleController extends Controller {
 
 
@@ -25,8 +30,8 @@ class FamilleController extends Controller {
      * @return Response la vue
      *
      * @paramConverter("famille", class="AppBundle:Famille")
-     * @route("famille/voir/{famille}", name="interne_voir_famille")
-     * @Template("Famille/voir_famille.html.twig")
+     * @route("/voir/{famille}", name="interne_voir_famille")
+     * @Template("AppBundle:Famille:page_voir_famille.html.twig")
      */
     public function showFamilleAction($famille) {
 
@@ -46,7 +51,7 @@ class FamilleController extends Controller {
      * @param $property la proprieté à atteindre
      * @return mixed proprieté
      *
-     * @route("famille/ajax/get-property/{famille}/{property}", name="interne_ajax_famille_get_property", options={"expose"=true})
+     * @route("/ajax/get-property/{famille}/{property}", name="interne_ajax_famille_get_property", options={"expose"=true})
      * @ParamConverter("famille", class="AppBundle:Famille")
      */
     public function getFamillePropertyAction(Famille $famille, $property) {
@@ -60,7 +65,7 @@ class FamilleController extends Controller {
 
     /**
      * Retourne la liste de toutes les familles disponibles sous la forme d'un objet JSON
-     * @route("famille/ajax/get-familles-as-json", name="interne_ajax_get_familles_as_json", options={"expose"=true})
+     * @route("/ajax/get-familles-as-json", name="interne_ajax_get_familles_as_json", options={"expose"=true})
      */
     public function getFamillesAsJson() {
 
@@ -86,7 +91,7 @@ class FamilleController extends Controller {
      * @param $famille Famille la famille
      * @return mixed proprieté
      *
-     * @route("ajax/famille/get-adresses/{famille}", name="interne_ajax_famille_get_adresses", options={"expose"=true})
+     * @route("ajax/get-adresses/{famille}", name="interne_ajax_famille_get_adresses", options={"expose"=true})
      * @ParamConverter("famille", class="AppBundle:Famille")
      */
     public function getFamilleAdressesAction(Famille $famille) {
