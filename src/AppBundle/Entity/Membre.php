@@ -422,6 +422,25 @@ class Membre extends Personne implements ExpediableInterface
     }
 
     /**
+     * Retourne un tableau de groupe ou le membre est actuellemnt.
+     * @return Groupe[]
+     */
+    public function getActiveGroupes()
+    {
+        /** @var Attribution[] $attributions */
+        $attributions = $this->getActiveAttributions();
+
+        /** @var Groupe[] $groups */
+        $groups = array();
+
+        /** @var Attribution $attribution */
+        foreach($attributions as $attribution) {
+            $groups[] = $attribution->getGroupe();
+        }
+        return $groups;
+    }
+
+    /**
      * Set remarques
      *
      * @param $remarques

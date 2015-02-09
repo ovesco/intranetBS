@@ -1,48 +1,31 @@
 
 <div class="item">
-    <a class="ui logo icon image" href="#">
+    <a class="ui logo icon image" href="{{ path('interne_homepage') }}">
 
         {% image '@AppBundle/Resources/public/images/logo.png' %}
             <img src="{{ asset_url }}" id="main-logo" alt="Logo" />
         {% endimage %}
 
     </a>
-    <a><b>{{ parametreService.getValue('intranet','nom') }}</b></a>
+    <a href="{{ path('interne_homepage') }}" ><b>{{ parametreService.getValue('intranet','nom') }}</b></a>
 </div>
 
-<div class="item">
-    <div class="ui small inverted header">Session</div>
-    <div class="menu">
-
-        <a class="item" href="{{ path('logout') }}">
-            Déconnexion
-
-        </a>
-
-        <a class="item">
-            Réinitialiser
-        </a>
-
-    </div>
-</div>
 
 <div class="item">
     <div class="ui small active  inverted header">Intranet</div>
     <div class="menu">
 
-        <a class="item" href="#">
-            Accueil
-        </a>
 
-        <a class="item" href="#">
+
+        <a class="item" href="{{ path('interne_organisation_default') }}">
             News
         </a>
 
-        <a class="item" href="#">
+        <a class="item" href="{{ path('interne_organisation_agenda_show') }}">
             Agenda
         </a>
 
-        <a class="item" href="#">
+        <a class="item" href="{{ path('interne_organisation_default') }}">
             Téléchargement
         </a>
 
@@ -70,7 +53,7 @@
 </div>
 
 <div class="item">
-    <div class="ui small  inverted header">Unité{% if groups|length > 1 %}s{% endif %}</div>
+    <div class="ui small  inverted header">Groupe{% if groups|length > 1 %}s{% endif %}</div>
     <div class="menu">
         {%  for group in groups %}
             <a class="item" href="{{ path('interne_voir_groupe', {'groupe' : group.id }) }}">{{ group.nom }}</a>

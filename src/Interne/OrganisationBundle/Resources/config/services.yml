@@ -1,0 +1,4 @@
+services:
+#    interne_organisation.example:
+#        class: Interne\OrganisationBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

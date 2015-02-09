@@ -25,21 +25,9 @@ class LayoutController extends Controller
         /** @var Membre $membre */
         $membre = $this->getUser()->getMembre();
 
-        /** @var Attribution[] $attributions */
-        $attributions = $membre->getActiveAttributions();
-
-        /** @var Groupe[] $groups */
-        $groups = array();
-
-        /** @var Attribution $attribution */
-        foreach($attributions as $attribution) {
-            $groups[] = $attribution->getGroupe();
-        }
-
-
 
         return $this->render('AppBundle:Layout:main_menu.html.twig', array(
-            'groups' => $groups
+            'groups' => $membre->getActiveGroupes()
         ));
     }
 }
