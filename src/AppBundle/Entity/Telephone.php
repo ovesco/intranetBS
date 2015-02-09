@@ -46,6 +46,11 @@ class Telephone
      */
     private $remarques;
 
+    public function __construct($telephone = null)
+    {
+        $this->telephone = $telephone;
+    }
+
     /**
      * Get id
      *
@@ -103,28 +108,7 @@ class Telephone
     }
 
 
-    /**
-     * Set expediable
-     *
-     * @param boolean $expediable
-     * @return Telephone
-     */
-    public function setExpediable($expediable)
-    {
-        $this->expediable = $expediable;
 
-        return $this;
-    }
-
-    /**
-     * Get expediable
-     *
-     * @return boolean
-     */
-    public function getExpediable()
-    {
-        return $this->expediable;
-    }
 
     /**
      * Set remarques

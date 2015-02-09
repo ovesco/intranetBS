@@ -4,15 +4,17 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use AppBundle\Entity\Personne;
 
 /**
  * Geniteur
  *
  * @ORM\Table(name="app_geniteurs")
  * @ORM\Entity
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="discriminator", type="string")
+ * @ORM\DiscriminatorMap({"pere" = "Pere", "mere" = "Mere"})
  */
-class Geniteur extends Personne
+abstract class Geniteur extends Personne
 {
     /**
      * @var integer
@@ -32,7 +34,7 @@ class Geniteur extends Personne
      * @Assert\NotBlank()
      * @Assert\Length(min = "2")
      */
-    private $nom;
+    protected $nom;
     
     /**
      * @var string
@@ -90,17 +92,12 @@ class Geniteur extends Personne
     /**
      * Get nom
      *
+     * On a besoin du lien avec la famille pour connaitre le nom du Geniteur.
+     * Donc se fait dans les class filles.
+     *
      * @return string
      */
-    public function getNom()
-    {
-        if($this->nom == null)
-        {
+    abstract public function getNom();
 
-            //TODO one to one avec famille pour récupérer le nom
-            return null;
-        }
-        else
-            return ucwords($this->nom);
-    }
+
 }

@@ -35,13 +35,15 @@ class Famille implements ExpediableInterface
     private $membres;
 
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Geniteur",  cascade={"persist", "remove"}, fetch="EAGER")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Pere", mappedBy="famille", cascade={"persist", "remove"}, fetch="EAGER")
+     * @ORM\JoinColumn(name="pere_id", referencedColumnName="id")
      */
     private $pere;
 
     /**
      *
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Geniteur",  cascade={"persist", "remove"}, fetch="EAGER")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Mere", mappedBy="famille", cascade={"persist", "remove"}, fetch="EAGER")
+     * @ORM\JoinColumn(name="mere_id", referencedColumnName="id")
      */
     private $mere;
 
@@ -238,7 +240,7 @@ class Famille implements ExpediableInterface
         $string = "Les " . $this->getNom();
 
         if ($this->getContact()->getAdresse() != NULL)
-            $string .= " de " . $this->getContact()->getAdresse() ->getLocalite();
+            $string .= " de " . $this->getContact()->getAdresse()->getLocalite();
 
         // . " (" . sizeof($this->getMembres()) . ")";
 
@@ -448,7 +450,7 @@ class Famille implements ExpediableInterface
         $mere = $this->getMere();
         if(!is_null($mere))
         {
-            $adresse = $this->getMere()->getContact()->getAdresse();
+            $adresse = $mere->getContact()->getAdresse();
 
             if(!is_null($adresse))
             {
@@ -466,7 +468,7 @@ class Famille implements ExpediableInterface
         $pere = $this->getPere();
         if(!is_null($pere))
         {
-            $adresse = $this->getPere()->getContact()->getAdresse();
+            $adresse = $pere->getContact()->getAdresse();
 
             if(!is_null($adresse))
             {

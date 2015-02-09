@@ -422,6 +422,25 @@ class Membre extends Personne implements ExpediableInterface
     }
 
     /**
+     * Retourne un tableau de groupe ou le membre est actuellemnt.
+     * @return Groupe[]
+     */
+    public function getActiveGroupes()
+    {
+        /** @var Attribution[] $attributions */
+        $attributions = $this->getActiveAttributions();
+
+        /** @var Groupe[] $groups */
+        $groups = array();
+
+        /** @var Attribution $attribution */
+        foreach($attributions as $attribution) {
+            $groups[] = $attribution->getGroupe();
+        }
+        return $groups;
+    }
+
+    /**
      * Set remarques
      *
      * @param $remarques
@@ -686,7 +705,7 @@ class Membre extends Personne implements ExpediableInterface
         $mere = $this->getFamille()->getMere();
         if(!is_null($mere))
         {
-            $adresse = $this->getFamille()->getMere()->getContact()->getAdresse();
+            $adresse = $mere->getContact()->getAdresse();
 
             if(!is_null($adresse))
             {
@@ -704,7 +723,7 @@ class Membre extends Personne implements ExpediableInterface
         $pere = $this->getFamille()->getPere();
         if(!is_null($pere))
         {
-            $adresse = $this->getFamille()->getPere()->getContact()->getAdresse();
+            $adresse = $pere->getContact()->getAdresse();
 
             if(!is_null($adresse))
             {

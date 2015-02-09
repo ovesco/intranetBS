@@ -4,14 +4,19 @@ namespace AppBundle\Command;
 
 use AppBundle\Entity\Adresse;
 use AppBundle\Entity\Attribution;
+use AppBundle\Entity\Categorie;
+use AppBundle\Entity\Contact;
 use AppBundle\Entity\Distinction;
+use AppBundle\Entity\Email;
 use AppBundle\Entity\Fonction;
-use AppBundle\Entity\Geniteur;
+use AppBundle\Entity\Pere;
+use AppBundle\Entity\Mere;
 use AppBundle\Entity\Groupe;
 use AppBundle\Entity\Famille;
 use AppBundle\Entity\Membre;
+use AppBundle\Entity\Model;
 use AppBundle\Entity\ObtentionDistinction;
-use AppBundle\Entity\Type;
+use AppBundle\Entity\Telephone;
 use ClassesWithParents\F;
 use Interne\FinancesBundle\Entity\CreanceToMembre;
 use Interne\FinancesBundle\Entity\CreanceToFamille;
@@ -72,7 +77,7 @@ class FichierBsCommand extends ContainerAwareCommand
         }
         elseif($action == 'prepare') {
             /*
-             * A utiliser avec l'action "load" (cree les tables de lien)
+             * A utiliser avant l'action "load" (cree les tables de lien)
              */
             foreach($this->linkTables as $table)
                 $this->createLinkTable($table);
@@ -100,8 +105,8 @@ class FichierBsCommand extends ContainerAwareCommand
                 {
                     //création de la fonction
                     $fonction = new Fonction(utf8_encode($result['nom']),utf8_encode($result['abreviation']));
-                    $em->persist($fonction);
-                    $em->flush();
+                    $this->em->persist($fonction);
+                    $this->em->flush();
 
                     //on sauve le lien
                     $this->setLink('link_fonction',$fonction->getId(),$result['id']);
@@ -110,6 +115,7 @@ class FichierBsCommand extends ContainerAwareCommand
                     //echo 'Fonction id:'. $result['id'].' (new id: '.$fonction->getId().') => done',PHP_EOL;
                 }
             }
+            $this->em->clear();
             echo 'Chargement des Attributions (fonction dans AppBundle) => ok',PHP_EOL;
 
             /*
@@ -129,30 +135,29 @@ class FichierBsCommand extends ContainerAwareCommand
             {
                 if(!$this->isAlreadySet('link_groupe_racine',$result['id']))
                 {
-                    $fonction = new Fonction('A mofifier','A modifier');
-                    $type = new Type();
-                    $type->setNom('A modifier');
-                    $type->setFonctionChef($fonction);
-                    $type->setAffichageEffectifs(true);
-                    $em->persist($fonction);
-                    $em->persist($type);
+                    //$fonction = new Fonction('A mofifier','A modifier');
+                    $model = new Model();
+                    $model->setNom('A modifier');
+                    //$model->setFonctionChef($fonction);
+                    $model->setAffichageEffectifs(true);
+                    //$em->persist($fonction);
+                    $this->em->persist($model);
 
                     $groupe = new Groupe();
                     $groupe->setNom($result['nom']);
                     $groupe->setActive(true);
                     $groupe->setParent(null);//groupe racine
-                    $groupe->setType($type);
+                    $groupe->setModel($model);
 
-                    $em->persist($groupe);
-                    $em->flush();
+                    $this->em->persist($groupe);
+                    $this->em->flush();
 
                     //on sauve le lien
                     $this->setLink('link_groupe_racine',$groupe->getId(),$result['id']);
                 }
 
             }
-
-
+            $this->em->clear();
             echo 'Chargement des groupe racines => ok',PHP_EOL;
 
 
@@ -168,21 +173,24 @@ class FichierBsCommand extends ContainerAwareCommand
             /*
              * Recupération de la branche si déjà existante
              */
-            $type = null;
-            $type = $em->getRepository('AppBundle:Type')->findOneBy(array('nom'=>'Branche'));
+            $model = null;
+            $model = $this->em->getRepository('AppBundle:Model')->findOneBy(array('nom'=>'Branche'));
 
-            if($type == null)
+            if($model == null)
             {
                 /*
                  * Creation du type Branche
                  */
                 $fonction = new Fonction('Chef de branche','CB');
-                $type = new Type();
-                $type->setNom('Branche');
-                $type->setFonctionChef($fonction);
-                $type->setAffichageEffectifs(true);
-                $em->persist($fonction);
-                $em->persist($type);
+                $model = new Model();
+                $categorie = new Categorie('Branche');
+                $model->setNom('Branche');
+                $model->setFonctionChef($fonction);
+                $model->setAffichageEffectifs(true);
+                $model->addCategorie($categorie);
+                $this->em->persist($fonction);
+                $this->em->persist($model);
+                $this->em->persist($categorie);
             }
 
 
@@ -194,23 +202,22 @@ class FichierBsCommand extends ContainerAwareCommand
                 if(!$this->isAlreadySet('link_groupe_branche',$result['id']))
                 {
                     $newId = $this->getByOld('link_groupe_racine',1);//groupe racine BS
-                    $groupeRacine = $em->getRepository('AppBundle:Groupe')->find($newId);
+                    $groupeRacine = $this->em->getRepository('AppBundle:Groupe')->find($newId);
 
                     $groupe = new Groupe();
                     $groupe->setNom(utf8_encode($result['nom']));
                     $groupe->setActive(true);
                     $groupe->setParent($groupeRacine);//groupe racine BS
-                    $groupe->setType($type);
-                    $em->persist($groupe);
-                    $em->flush();
+                    $groupe->setModel($model);
+                    $this->em->persist($groupe);
+                    $this->em->flush();
 
                     //on sauve le lien
                     $this->setLink('link_groupe_branche',$groupe->getId(),$result['id']);
                 }
 
             }
-
-
+            $this->em->clear();
             echo 'Chargement des Branches => ok',PHP_EOL;
 
             /*
@@ -225,21 +232,24 @@ class FichierBsCommand extends ContainerAwareCommand
 
 
             //Récupération de l'unité si existante
-            $type = null;
-            $type = $em->getRepository('AppBundle:Type')->findOneBy(array('nom'=>'Unité'));
+            $model = null;
+            $model = $this->em->getRepository('AppBundle:Model')->findOneBy(array('nom'=>'Unité'));
 
-            if($type == null)
+            if($model == null)
             {
                 /*
                  * Creation du type Unité
                  */
                 $fonction = new Fonction('Chef d\'unité','CU');
-                $type = new Type();
-                $type->setNom('Unité');
-                $type->setFonctionChef($fonction);
-                $type->setAffichageEffectifs(true);
-                $em->persist($fonction);
-                $em->persist($type);
+                $model = new Model();
+                $categorie = new Categorie('Unité');
+                $model->setNom('Unité');
+                $model->setFonctionChef($fonction);
+                $model->setAffichageEffectifs(true);
+                $model->addCategorie($categorie);
+                $this->em->persist($categorie);
+                $this->em->persist($fonction);
+                $this->em->persist($model);
             }
 
 
@@ -257,17 +267,15 @@ class FichierBsCommand extends ContainerAwareCommand
                     $groupe->setNom(utf8_encode($result['nom']));
                     $groupe->setActive(true);
                     $groupe->setParent($branche);
-                    $groupe->setType($type);
-                    $em->persist($groupe);
-                    $em->flush();
+                    $groupe->setModel($model);
+                    $this->em->persist($groupe);
+                    $this->em->flush();
 
                     //on sauve le lien
                     $this->setLink('link_groupe_unite',$groupe->getId(),$result['id']);
                 }
 
             }
-
-
             echo 'Chargement des unités => ok',PHP_EOL;
 
             /*
@@ -290,8 +298,8 @@ class FichierBsCommand extends ContainerAwareCommand
                     $distinction = new Distinction();
                     $distinction->setNom(utf8_encode($result['nom']));
                     $distinction->setRemarques(utf8_encode($result['remarque']));
-                    $em->persist($distinction);
-                    $em->flush();
+                    $this->em->persist($distinction);
+                    $this->em->flush();
 
                     //on sauve le lien
                     $this->setLink('link_distinction',$distinction->getId(),$result['id']);
@@ -302,6 +310,7 @@ class FichierBsCommand extends ContainerAwareCommand
                 }
             }
             echo PHP_EOL,'Chargement des distinctions => ok',PHP_EOL;
+            $this->em->clear();
 
             /*
              * Chargement des familles
@@ -328,18 +337,20 @@ class FichierBsCommand extends ContainerAwareCommand
                         $adresse->setRue(utf8_encode($result['rue']));
                         $adresse->setNpa(utf8_encode($result['npa']));
                         $adresse->setLocalite(utf8_encode($result['ville']));
-                        $adresse->setAdressable(true);
-                        $adresse->setValidity(true);
-                        $adresse->setMethodeEnvoi('Courrier');
+                        $adresse->setExpediable(true);
+
+                        $contact = new Contact();
+                        $contact->setAdresse($adresse);
 
                         $famille = new Famille();
                         $famille->setNom(utf8_encode($result['nom']));
                         $famille->setValidity(0);
-                        $famille->setAdresse($adresse);
+                        $famille->setContact($contact);
 
-                        $em->persist($adresse);
-                        $em->persist($famille);
-                        $em->flush();
+                        $this->em->persist($adresse);
+                        $this->em->persist($contact);
+                        $this->em->persist($famille);
+                        $this->em->flush();
 
                         //on sauve le lien
                         $this->setLink('link_famille',$famille->getId(),$result['id']);
@@ -353,6 +364,7 @@ class FichierBsCommand extends ContainerAwareCommand
 
             }
             $executionTime = (microtime(true) - $start);
+            $this->em->clear();
             echo PHP_EOL,'Chargement des familles => ok => exexution: '.$executionTime.'[s]',PHP_EOL;
 
 
@@ -437,7 +449,7 @@ class FichierBsCommand extends ContainerAwareCommand
                         $mere = null;
                         if($result['prenom_pere'] != null)
                         {
-                            $pere = new Geniteur();
+                            $pere = new Pere();
                             $pere->setNom(utf8_encode($result['nom_pere']));
                             $pere->setPrenom(utf8_encode($result['prenom_pere']));
                             $pere->setSexe('m');
@@ -445,12 +457,14 @@ class FichierBsCommand extends ContainerAwareCommand
                         }
                         if($result['prenom_mere'] != null)
                         {
-                            $mere = new Geniteur();
+                            $mere = new Mere();
                             $mere->setNom(utf8_encode($result['nom_mere']));
                             $mere->setPrenom(utf8_encode($result['prenom_mere']));
                             $mere->setSexe('f');
                             $mere->setProfession(utf8_encode($result['profession_mere']));
                         }
+
+
 
 
 
@@ -463,6 +477,10 @@ class FichierBsCommand extends ContainerAwareCommand
                             $famille = new Famille(); //donc nouvelle famille
                             $famille->setNom(utf8_encode($result['nom']));
                             $famille->setValidity(0);
+
+                            $contactFamille = new Contact();
+                            $famille->setContact($contactFamille);
+                            $this->em->persist($contactFamille);
 
                             // on sauve les géniteurs si ils ont été crée
                             if($pere != null)
@@ -482,7 +500,7 @@ class FichierBsCommand extends ContainerAwareCommand
                         {
                             $newId = $this->getByOld('link_famille',$result['famille']);
 
-                            $famille = $em->getRepository('AppBundle:Famille')->find($newId);
+                            $famille = $this->em->getRepository('AppBundle:Famille')->find($newId);
 
                             //si on ne trouve pas la famille
                             if($famille == null)
@@ -516,6 +534,7 @@ class FichierBsCommand extends ContainerAwareCommand
                         }
 
 
+
                         //on crée le lien
                         $famille->addMembre($membre);
 
@@ -547,29 +566,32 @@ class FichierBsCommand extends ContainerAwareCommand
                         $adresse->setRue(utf8_encode($result['rue']));
                         $adresse->setNpa(utf8_encode($result['npa']));
                         $adresse->setLocalite(utf8_encode($result['ville']));
+                        $adresse->setExpediable(true);
 
-                        $adresse->setEmail(utf8_encode($result['email']));
+                        $contact = new Contact();
+                        $contact->setAdresse($adresse);
+                        if(($result['email'] != null) && ($result['email'] != ''))
+                        {
+                            $contact->addEmail(new Email(utf8_encode($result['email'])));
+                        }
+
+
 
                         //on sauve le téléphone avec une priorité sur les numéros de natel
-                        if($result['tel'] != null)
-                            $adresse->setTelephone(utf8_encode($result['tel']));
-                        elseif($result['natel'] != null)
-                            $adresse->setTelephone(utf8_encode($result['natel']));
+                        if(($result['tel'] != null) && ($result['tel'] != '') )
+                            $contact->addTelephone(new Telephone(utf8_encode($result['tel'])));
+                        if(($result['natel'] != null) && ($result['natel'] != '') )
+                            $contact->addTelephone(new Telephone(utf8_encode($result['natel'])));
 
-                        //propriétés par défaut
-                        $adresse->setAdressable(true);
-                        $adresse->setValidity(true);
-                        $adresse->setMethodeEnvoi('Courrier');
+
 
                         //on ajoute l'adresse au membre
-                        $membre->setAdresse($adresse);
-
+                        $membre->setContact($contact);
 
 
                         $this->em->persist($membre);
-                        $this->em->persist($adresse);
+                        $this->em->persist($contact);
                         $this->em->flush();
-
 
 
                         $this->setLink('link_membre',$membre->getId(),$result['id']);
@@ -579,6 +601,7 @@ class FichierBsCommand extends ContainerAwareCommand
                             $start = microtime(true);
                             echo PHP_EOL, $membre->getId() . ': 100 membres ajouté => exexution: ' . $executionTime . '[s]', PHP_EOL;
                         }
+
 
 
 
@@ -643,8 +666,8 @@ class FichierBsCommand extends ContainerAwareCommand
                         $link->setObtention(new \DateTime($result['date']));
                         $link->setDistinction($distinction);
                         $link->setMembre($membre);
-                        $em->persist($link);
-                        $em->flush();
+                        $this->em->persist($link);
+                        $this->em->flush();
 
                         $this->setLink('link_membre_distinctions',$link->getId(),$result['id']);
 
@@ -667,7 +690,7 @@ class FichierBsCommand extends ContainerAwareCommand
                 }
             }
 
-
+            $this->em->clear();
             echo PHP_EOL,'Chargement des distinctions <=> membres => ok',PHP_EOL;
 
 
@@ -761,23 +784,26 @@ class FichierBsCommand extends ContainerAwareCommand
             /*
              * Recupération du type patrouille si déjà existante
              */
-            $type = null;
-            $type = $em->getRepository('AppBundle:Type')->findOneBy(array('nom'=>'Patrouille'));
+            $model = null;
+            $model = $em->getRepository('AppBundle:Model')->findOneBy(array('nom'=>'Patrouille'));
 
-            if($type == null)
+            if($model == null)
             {
                 /*
                  * Creation du type Branche
                  */
-                $type = new Type();
-                $type->setNom('Patrouille');
+                $model = new Model();
+                $categorie = new Categorie('Sous-unité');
+                $model->setNom('Patrouille');
 
+                $model->addCategorie($categorie);
                 $newId = $this->getByOld('link_fonction',49); //49 = index CP
                 $fonction = $em->getRepository('AppBundle:Fonction')->find($newId);
 
-                $type->setFonctionChef($fonction);
-                $type->setAffichageEffectifs(true);
-                $em->persist($type);
+                $model->setFonctionChef($fonction);
+                $model->setAffichageEffectifs(true);
+                $this->em->persist($categorie);
+                $this->em->persist($model);
                 $em->flush();
             }
 
@@ -797,7 +823,7 @@ class FichierBsCommand extends ContainerAwareCommand
 
                             $patrouille = new Groupe();
                             $patrouille->setNom($nomPatrouille);
-                            $patrouille->setType($type);
+                            $patrouille->setModel($model);
                             $patrouille->setActive(true);
 
                             $newId = $this->getByOld('link_groupe_unite',$idUnite); //49 = index CP
@@ -1105,180 +1131,9 @@ class FichierBsCommand extends ContainerAwareCommand
             }
 
         }
-        elseif($action == 'test')
-        {
-            /*
-            * Chargement du lien attribution/membre
-            */
-            $sql = 'SELECT
-                        membres_attributions.id_membres_attribution,
-                        membres_attributions.id_attribution,
-                        membres_attributions.id_membre,
-                        membres_attributions.id_unite,
-                        membres_attributions.date_debut_membres_attribution,
-                        membres_attributions.date_fin_membres_attribution,
-                        membres_attributions.remarques_membres_attribution
-                    FROM membres_attributions';
-            $rsm = new ResultSetMapping();
-            $rsm->addScalarResult('id_membres_attribution', 'id');
-            $rsm->addScalarResult('id_attribution', 'id_attribution');
-            $rsm->addScalarResult('id_membre', 'id_membre');
-            $rsm->addScalarResult('id_unite', 'id_unite');
-            $rsm->addScalarResult('date_debut_membres_attribution', 'debut');
-            $rsm->addScalarResult('date_fin_membres_attribution', 'fin');
-            $rsm->addScalarResult('remarques_membres_attribution', 'remarque');
-            $results = $fichierEm->createNativeQuery($sql,$rsm)->getResult();
+        elseif($action == 'test') {
 
 
-            /*
-             * Reconsitution du systeme de patrouille
-             *
-             * On se base sur la féréquance des nom de patrouille
-             * dans le champ de remarque.
-             *
-             */
-            $occurances = array();
-            foreach($results as $key => $result)
-            {
-                //on commence par éliminer tout les champs de remarque inutile
-                $idUnite = $result['id_unite'];
-
-                $remarque = strtolower($result['remarque']);
-                $remarque = iconv('LATIN1', 'ASCII//TRANSLIT', $remarque);
-                $remarque = iconv('UTF-8', 'ASCII//IGNORE', $remarque);
-
-                $tofind = '\'';
-                $replac = '_';
-                $remarque = strtr($remarque,$tofind,$replac);
-                $tofind = '`';
-                $replac = '_';
-                $remarque = strtr($remarque,$tofind,$replac);
-
-
-                if(($remarque != '') and ($remarque != '-'))
-                {
-
-
-                    echo $remarque,PHP_EOL;
-
-                    //on rempli un tableau d'occurance
-                    if(isset($occurances[$idUnite]))
-                    {
-                        /*
-                         * On regarde si une remarque précédente possède une similarité...
-                         * Si c'est le cas, on ajoute une occurance à celle ci.
-                         */
-                        $saved = false;
-                        foreach($occurances[$idUnite] as $remarqueAlreadySaved => $nbOccurance)
-                        {
-                            if(!$saved)
-                            {
-                                similar_text($remarque,$remarqueAlreadySaved,$percent);
-                                if($percent > 50) //valeur choisie...ca marche bien.
-                                {
-                                    $occurances[$idUnite][$remarqueAlreadySaved] = $nbOccurance + 1;
-                                    $saved = true;
-                                }
-                            }
-                        }
-                        if(!$saved)
-                        {
-                            if(isset($occurances[$idUnite][$remarque]))
-                            {
-                                $occurances[$idUnite][$remarque] = $occurances[$idUnite][$remarque] + 1;
-                            }
-                            else
-                            {
-                                $occurances[$idUnite][$remarque] = 1;
-                            }
-                        }
-
-                    }
-                    else{
-                        $occurances[$idUnite] = array();
-                        $occurances[$idUnite][$remarque] = 1;
-                    }
-                    $results[$key]['remarque'] = $remarque;
-
-                }
-                else
-                {
-                    $results[$key]['remarque'] = null; // mise à nul de la remarque sans importance.
-                }
-
-            }
-
-            /*
-             * Recupération du type patrouille si déjà existante
-             */
-            $type = null;
-            $type = $em->getRepository('AppBundle:Type')->findOneBy(array('nom'=>'Patrouille'));
-
-            if($type == null)
-            {
-                /*
-                 * Creation du type Branche
-                 */
-                $type = new Type();
-                $type->setNom('Patrouille');
-
-                $newId = $this->getByOld('link_fonction',49); //49 = index CP
-                $fonction = $em->getRepository('AppBundle:Fonction')->find($newId);
-
-                $type->setFonctionChef($fonction);
-                $type->setAffichageEffectifs(true);
-                $em->persist($type);
-                $em->flush();
-            }
-
-
-
-            /*
-             * Création des patrouilles en se basant sur les occurances.
-             */
-            foreach($occurances as $idUnite => $listeOccurances)
-            {
-                foreach($listeOccurances as $nomPatrouille => $nb)
-                {
-                    if($nb > 3) //si le nombre d'occurance est suffisant, on crée la patrouile
-                    {
-                        if($this->isAlreadySet('link_groupe_unite',$idUnite))
-                        {
-
-                            $patrouille = new Groupe();
-                            $patrouille->setNom($nomPatrouille);
-                            $patrouille->setType($type);
-                            $patrouille->setActive(true);
-
-                            $newId = $this->getByOld('link_groupe_unite',$idUnite); //49 = index CP
-                            $groupeParent = $em->getRepository('AppBundle:Groupe')->find($newId);
-
-                            $existingPatrouille = false;
-                            foreach($groupeParent->getEnfants() as $child)
-                            {
-                                echo $child->getNom(),' == ',$patrouille->getNom(),PHP_EOL;
-                                if($child->getNom() == ucwords($nomPatrouille))
-                                {
-                                    $existingPatrouille = true;
-                                }
-
-                            }
-
-                            if(!$existingPatrouille)
-                            {
-                                echo 'SAUVE:',$patrouille->getNom(),PHP_EOL;
-                                $patrouille->setParent($groupeParent);
-                                $em->persist($patrouille);
-                                $em->flush();
-                            }
-
-                        }
-                    }
-                }
-            }
-
-
-            echo PHP_EOL,'Chargement des patrouilles => ok',PHP_EOL;
         }
 
     }

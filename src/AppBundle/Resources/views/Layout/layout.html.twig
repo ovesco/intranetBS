@@ -78,7 +78,17 @@
         <div class="right-section">
 
                 <a class="ui teal label"><i class="database icon"></i> Listes</a>
-                <a href="{{ path('security_my_account') }}" class="ui blue label"><i class="user icon"></i> {{ app.security.token.user.membre.prenom|capitalize }} {{ app.security.token.user.membre.nom|capitalize }}</a>
+
+            <div class="ui selection dropdown">
+                {{ app.security.token.user.membre.prenom|capitalize }} {{ app.security.token.user.membre.nom|capitalize }} <i class="dropdown icon"></i>
+                <div class="menu">
+                    <a class="item" href="{{ path('security_my_account') }}" ><i class="user icon"></i>Mon compte</a>
+                    <a class="item" href="{{ path('logout') }}" ><i class="delete icon"></i>Déconnexion</a>
+                </div>
+            </div>
+
+
+
 
         </div>
 

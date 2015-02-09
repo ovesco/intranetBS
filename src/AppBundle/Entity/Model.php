@@ -261,7 +261,7 @@ class Model
     public function addCategorie(Categorie $categorie)
     {
         $this->categories[] = $categorie;
-
+        $categorie->addModel($this);
         return $this;
     }
 
@@ -290,9 +290,13 @@ class Model
      *
      * @param $categories
      */
-    public function setCategories($categories)
+    public function setCategories(ArrayCollection $categories)
     {
         $this->categories = $categories;
+        foreach ($categories as $categorie) {
+            $categorie->addModel($this);
+        }
+
     }
 
 

@@ -1,3 +1,8 @@
+interne_organisation:
+    resource: "@InterneOrganisationBundle/Controller/"
+    type:     annotation
+    prefix:   /interne/organisation
+
 security:
     resource: "@InterneSecurityBundle/Controller/"
     type:     annotation

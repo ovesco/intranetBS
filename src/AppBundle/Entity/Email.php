@@ -52,6 +52,12 @@ class Email
      */
     private $remarques;
 
+    public function __construct($email = null, $expediable = false)
+    {
+        $this->email = $email;
+        $this->expediable = $expediable;
+    }
+
     /**
      * Get id
      *

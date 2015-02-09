@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>Connection | netBS</title>
-    <meta name="description" content="NetBS | outil de gestion de groupe scout développé par la Brigade de Sauvabelin">
+    <meta name="description" content="Outil de gestion de groupe scout développé par la Brigade de Sauvabelin">
     <meta name=viewport content="width=device-width, initial-scale=1">
     <meta name="mobile-web-app-capable" content="yes">
 
@@ -108,7 +108,7 @@
             <img src="{{ asset('bundles/app/images/logo.png') }}" alt="logo" />
         </header>
 
-        <p id="title">netBS | Connection</p>
+        <p id="title">{{ parametreService.getValue('intranet','nom') }} | Connection</p>
         <div id="inputs">
             <input type="text" id="username" placeholder="username" name="_username" value="{{ last_username }}" />
             <input type="password" placeholder="mot de passe" id="password" name="_password" />
