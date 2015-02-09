@@ -79,11 +79,11 @@ doctrine:
                 charset:  UTF8
                 mapping_types:
                     enum: string
-            fichier:
+            fichier: # connexion aux table de l'ancien fichier...
                 driver:   "%database_driver%"
                 host:     "%database_host%"
                 port:     "%database_port%"
-                dbname:   "%database_name%"
+                dbname:   fichier
                 user:     "%database_user%"
                 password: "%database_password%"
 

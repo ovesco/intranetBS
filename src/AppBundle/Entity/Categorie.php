@@ -54,8 +54,9 @@ class Categorie
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct($nom = null)
     {
+        $this->nom = $nom;
         $this->models = new ArrayCollection();
     }
 

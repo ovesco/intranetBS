@@ -240,7 +240,7 @@ class Famille implements ExpediableInterface
         $string = "Les " . $this->getNom();
 
         if ($this->getContact()->getAdresse() != NULL)
-            $string .= " de " . $this->getContact()->getAdresse() ->getLocalite();
+            $string .= " de " . $this->getContact()->getAdresse()->getLocalite();
 
         // . " (" . sizeof($this->getMembres()) . ")";
 
@@ -450,7 +450,7 @@ class Famille implements ExpediableInterface
         $mere = $this->getMere();
         if(!is_null($mere))
         {
-            $adresse = $this->getMere()->getContact()->getAdresse();
+            $adresse = $mere->getContact()->getAdresse();
 
             if(!is_null($adresse))
             {
@@ -468,7 +468,7 @@ class Famille implements ExpediableInterface
         $pere = $this->getPere();
         if(!is_null($pere))
         {
-            $adresse = $this->getMere()->getContact()->getAdresse();
+            $adresse = $pere->getContact()->getAdresse();
 
             if(!is_null($adresse))
             {
