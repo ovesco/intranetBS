@@ -466,7 +466,7 @@ class Famille implements ExpediableInterface
         $pere = $this->getPere();
         if(!is_null($pere))
         {
-            $adresse = $this->getMere()->getContact()->getAdresse();
+            $adresse = $this->getPere()->getContact()->getAdresse();
 
             if(!is_null($adresse))
             {

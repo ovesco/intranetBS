@@ -704,7 +704,7 @@ class Membre extends Personne implements ExpediableInterface
         $pere = $this->getFamille()->getPere();
         if(!is_null($pere))
         {
-            $adresse = $this->getFamille()->getMere()->getContact()->getAdresse();
+            $adresse = $this->getFamille()->getPere()->getContact()->getAdresse();
 
             if(!is_null($adresse))
             {
