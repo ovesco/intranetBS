@@ -27,6 +27,8 @@ use AppBundle\Entity\Distinction;
 use AppBundle\Entity\Model;
 use AppBundle\Entity\Groupe;
 use Interne\FinancesBundle\Entity\Rappel;
+use AppBundle\Entity\Pere;
+use AppBundle\Entity\Mere;
 
 use Interne\SecurityBundle\Entity\Role;
 use Interne\SecurityBundle\Entity\User;
@@ -128,16 +130,16 @@ class PopulateCommand extends ContainerAwareCommand
                 switch(mt_rand(0,2) == 0){
                     case 0:
                         //On lui file une mère
-                        $famille->setMere($this->getRandomGeniteur('f'));
+                        $famille->setMere($this->getRandomMere());
                         break;
                     case 1:
                         //On lui file un père
-                        $famille->setPere($this->getRandomGeniteur('m'));
+                        $famille->setPere($this->getRandomPere());
                         break;
                     case 2:
                         //on donne les deux parent
-                        $famille->setMere($this->getRandomGeniteur('f'));
-                        $famille->setPere($this->getRandomGeniteur('m'));
+                        $famille->setMere($this->getRandomMere('f'));
+                        $famille->setPere($this->getRandomPere('m'));
                         break;
                 }
 
@@ -407,19 +409,34 @@ class PopulateCommand extends ContainerAwareCommand
             return $adresse;
     }
 
+
     /**
-     * Retourne un géniteur aléatoire
-     * @param string $sexe le sexe du géniteur
-     * @return Geniteur
+     * @return Pere
      */
-    private function getRandomGeniteur($sexe) {
+    private function getRandomPere() {
 
-        $geniteur = new Geniteur();
+        $geniteur = new Pere();
 
-        $geniteur->setPrenom($this->getPrenom($sexe));
+        $geniteur->setPrenom($this->getPrenom('m'));
         $geniteur->getProfession($this->getProfession(true));
         $geniteur->setContact($this->getRandomContact());
-        $geniteur->setSexe($sexe);
+        $geniteur->setSexe('m');
+        $geniteur->setIban($this->getIban(true));
+
+        return $geniteur;
+    }
+
+    /**
+     * @return Mere
+     */
+    private function getRandomMere() {
+
+        $geniteur = new Mere();
+
+        $geniteur->setPrenom($this->getPrenom('f'));
+        $geniteur->getProfession($this->getProfession(true));
+        $geniteur->setContact($this->getRandomContact());
+        $geniteur->setSexe('f');
         $geniteur->setIban($this->getIban(true));
 
         return $geniteur;
