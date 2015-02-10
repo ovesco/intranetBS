@@ -53,9 +53,22 @@
 
         <div class="row">
             <div class="five wide column">
-                <div class="ui segment">
-                    Mon unité
+                <div class="ui piled segment">
+                    <h4 class="ui header">Dernières News</h4>
+                    {% if lastNews is not empty %}
 
+                    {% set news = lastNews[0] %}
+                    <b>{{ news.subject|capitalize }}</b><br>
+
+                    {{ news.content|length > 100 ? news.content|slice(0, 100) ~ '...' : news.content  }} <br>
+
+
+                        <br>
+
+
+
+                    <a class="item" href="{{ path('interne_organisation_news_show') }}">Voir les toutes News</a>
+                    {% endif %}
                 </div>
             </div>
 

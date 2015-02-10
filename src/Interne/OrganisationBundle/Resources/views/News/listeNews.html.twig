@@ -1,0 +1,16 @@
+{% for news in listeNews %}
+    <div class="one_news ui message">
+
+        <div class="header">
+            {{ news.subject|capitalize }}
+        </div>
+
+        {{ news.date|date("m/d/Y") }}
+
+        {{ news.author is null ? '' :', par ' ~ news.author.prenom|capitalize ~' '~  news.author.nom|capitalize}}
+
+        <br>
+
+        {{ news.content|length > 15 ? news.content|slice(0, 15) ~ '...' : news.content  }}<br>
+    </div>
+{% endfor %}

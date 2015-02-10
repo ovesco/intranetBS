@@ -1,0 +1,47 @@
+{% extends 'AppBundle:Layout:layout.html.twig' %}
+
+{% block titre %}News{% endblock %}
+
+{% block content %}
+
+    <div class="ui page grid">
+
+        <div class="row">
+            <div class="column">
+                <div class="ui segment">
+
+                    <div class="addNews ui button">Ajouter une news</div>
+
+                    <div id="newsContainer" class="ui segment">
+
+                        {% include 'InterneOrganisationBundle:News:listeNews.html.twig' with {'listeNews':listeNews} %}
+
+
+
+
+
+                        <div id="newsLoader" class="ui inverted dimmer">
+                            <div class="ui text loader">Loading</div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block js %}
+
+    {% javascripts
+    '@InterneOrganisationBundle/Resources/public/js/page_news.js'%}
+    <script src="{{ asset_url }}"></script>
+
+    {% endjavascripts %}
+
+{% endblock %}

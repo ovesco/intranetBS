@@ -1,0 +1,28 @@
+<div id="form_news_modale" class="ui small modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Publier une nouvelle
+    </div>
+
+    <div class="content">
+
+        {{ form_start(form,{'attr': {'class': 'ui form'}}) }}
+
+        {{ form_widget(form.subject) }}
+
+        {{ form_widget(form.content) }}
+
+        {{ form_rest(form) }}
+
+
+        <div class="ui field">
+            <input type="submit" class="ui green button" value="Publier" />
+        </div>
+
+        {{ form_end(form) }}
+
+    </div>
+    <div class="actions">
+        <div class="ui button">Annuler</div>
+    </div>
+</div>

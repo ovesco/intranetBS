@@ -19,15 +19,10 @@ class AppController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('AppBundle:Homepage:page_homepage.html.twig');
+        $em = $this->getDoctrine()->getManager();
+        $lastNews = $em->getRepository('InterneOrganisationBundle:News')->findForPaging(0,1);
+
+        return $this->render('AppBundle:Homepage:page_homepage.html.twig', array('lastNews'=>$lastNews));
     }
 
-
-    /**
-     * @route("test", name="test")
-     */
-    public function testAction() {
-
-        return new Response('');
-    }
 }

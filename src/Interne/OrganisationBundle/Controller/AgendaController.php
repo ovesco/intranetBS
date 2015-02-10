@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 /**
- * Class DefaultController
+ * Class AgendaController
  * @package Interne\OrganisationBundle\Controller
  * @route("/agenda")
  */
