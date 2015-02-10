@@ -37,7 +37,6 @@ class SearchController extends Controller
         $pattern     = "*" . $pattern . "*";
 
 
-
         $limit       = 4;
         $jsonParser  = $this->get('jsonParser');
 
@@ -45,9 +44,6 @@ class SearchController extends Controller
         $familles    = array_slice($this->searchFamilles($pattern), 0, $limit);
         $groupes     = array_slice($this->searchGroupes($pattern), 0, $limit);
         $returned    = array();
-
-        echo(count($membres));
-
 
 
         $returned['results']['category1']['name'] = 'membres';
