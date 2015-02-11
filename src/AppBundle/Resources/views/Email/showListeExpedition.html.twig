@@ -1,0 +1,9 @@
+{% if listeEmailsExpedition is not empty %}
+
+    {% for origine,email in listeEmailsExpedition %}
+        <a href="mailto:{{ email }}">{{ email }}</a> ({{ origine }}) <br>
+    {% endfor %}
+
+{% else %}
+    <div class="ui yellow icon message">Aucune adresse email.</div>
+{% endif %}

@@ -2,36 +2,37 @@
 
 {% if (adresseExpedition is not null) or (listeEmailsExpedition is not empty) %}
 
-    <div class="ui segment">
-        <div class="ui top right attached label">Par courrier</div>
-        <div class="ui content">
-
+    <div class="ui grid">
+        <div class="row">
             {% if adresseExpedition is not null %}
+                <div class="six wide column">
 
-                {% include 'AppBundle:Adresse:showFormatPostal.html.twig' with {'adresseExpedition':adresseExpedition} %}
+                    <div class="ui segment">
+                        <div class="ui top right attached label"><i class="mail outline icon"></i>Par courrier</div>
+                        <div class="ui content">
 
-            {% else %}
-                <div class="ui yellow icon message">
-                    <i class="warning icon">Aucune adresse postale</i>
+                            {% include 'AppBundle:Adresse:showFormatPostal.html.twig' with {'adresseExpedition':adresseExpedition} %}
+
+                        </div>
+                    </div>
+
+                </div>
+            {% endif %}
+            {% if adresseExpedition is not null %}
+                <div class="ten wide column">
+                    <div class="ui segment">
+                        <div class="ui top right attached label">@ Par Email</div>
+                        <div class="ui content">
+
+                            {% include 'AppBundle:Email:showListeExpedition.html.twig' with {'listeEmailsExpedition':listeEmailsExpedition} %}
+
+                        </div>
+                    </div>
                 </div>
             {% endif %}
         </div>
     </div>
-    <div class="ui segment">
-        <div class="ui top right attached label">Par Email</div>
-        <div class="ui content">
 
-            {% if listeEmailsExpedition is not empty %}
-
-                {% for origine,email in listeEmailsExpedition %}
-                    <a href="mailto:{{ email }}">{{ email }}</a> ({{ origine }}) <br>
-                {% endfor %}
-
-            {% else %}
-                <div class="ui yellow icon message">Aucune adresse email.</div>
-            {% endif %}
-        </div>
-    </div>
 {% else %}
     <div class="ui yellow icon message">Aucune moyen de contact !!!</div>
 {% endif %}

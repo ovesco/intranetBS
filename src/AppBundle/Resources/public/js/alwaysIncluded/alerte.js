@@ -15,14 +15,14 @@ var alerte = {
     /**
      * Envoie une alerte simple.
      * @param message string le message
-     * @param type string le type parmi 'info', 'warning', 'danger', 'success'
+     * @param type string le type parmi 'info', 'warning', 'error', 'success'
      * @param delay la durée d'affichage
      * @return integer l'id de l'alerte
      */
     send: function (message, type, delay) {
 
         var id = Math.floor((Math.random() * 1000) + 1),
-            html = '<div id="' + id + '" class="ui ' + type + ' message"><i onclick="alerte.dismiss(' + id + ');" class="close icon"></i><div class="header">Alerte</div>' +
+            html = '<div id="' + id + '" class="ui ' + type + ' small message"><i onclick="alerte.dismiss(' + id + ');" class="close icon"></i><div class="header">Alerte</div>' +
                 '<p>' + message + '</p></div></div>';
 
         this.alerts.push(id);

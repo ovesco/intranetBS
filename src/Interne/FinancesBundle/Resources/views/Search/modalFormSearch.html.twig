@@ -2,13 +2,13 @@
 
 {% import 'InterneFinancesBundle:Templates:form_macro.html.twig' as macros %}
 
+<div class="ui fullscreen modal" id="modal-display" aria-hidden="true">
 
-
-<div class="header">
+    <div class="header">
     Effectuer une recherche
 </div>
 
-<div class="content">
+    <div class="content">
     {{ form_start(searchForm, {'attr': {'id': 'searchForm'}}) }}
 
     <script>
@@ -125,8 +125,8 @@
             </div>
 
 
-        </div>
-    </div>
+
+
 
 
 
@@ -137,11 +137,12 @@
 
 </div>
 
-<div class="actions">
+    <div class="actions">
 
 
     <div class="ui button blue" onclick="sendSearch();">Valider</div>
 
+</div>
 </div>
 
 

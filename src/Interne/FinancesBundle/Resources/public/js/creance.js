@@ -1,66 +1,85 @@
-function deleteCreance(id){
+function deleteCreance(id,reload){
+
+    //default value
+    reload = typeof reload !== 'undefined' ? reload : true;
 
     var data = { idCreance: id};
-    var success;
     $.ajax({
         type: "POST",
         url: Routing.generate('interne_fiances_creance_delete_ajax'),
         data: data,
-        async: false, //option utiliée pour retourner la valeur de success en dehors de la requete ajax
-        error: function(jqXHR, textStatus, errorThrown) { success = false; },
-        success: function(response) { success = (response == 'success'); }
+        error: function(jqXHR, textStatus, errorThrown) {
+            alerte.send('Erreur lors de la suppresion','error');
+        },
+        success: function(response) {
+            if(response == 'success')
+            {
+                if(reload)
+                {
+                    reloadPage();
+                }
+            }
+            else
+            {
+                alerte.send('Erreur lors de la suppresion','error');
+            }
+        }
     });
-    return success;
 }
 
+function deleteListeCreance(idArray)
+{
+    idArray.forEach(function(id){ deleteCreance(id,false); });
+    reloadPage();
+}
 
-/*
- * Ajoute une créance à un Membre ou une Famille
+/**
  *
- *
+ * @param idForm
  */
 function addCreance(idForm){
 
     //on récupère les valeur du formulaire
     var form = $('#'+idForm).serialize();
-    var success;
     $.ajax({
         type: "POST",
         url: Routing.generate('interne_fiances_creance_add_ajax'),
         data: form,
-        async: false, //option utiliée pour retourner la valeur de success en dehors de la requete ajax
-        error: function(jqXHR, textStatus, errorThrown) { success = false;  },
-        success: function(response) { success = (response == 'success');
+        error: function(jqXHR, textStatus, errorThrown) {
+            reloadPage();
+        },
+        success: function(response) {
+            alerte.send('Erreur lors de la création de la créance','error');
+
         }
     });
-    return success;
 }
 
-
-/*
- * Selection/deséléction de toutes les créances d'une table
+/**
+ *
+ * @param id
  */
-
-function selectAllCreances(box)
+function openCreanceShow(id)
 {
-    var $table = $(box).closest('.table');
+    var data = { idCreance: id};
+    var url = Routing.generate('interne_fiances_creance_show_ajax');
 
-    if(box.checked)
-    {
-        $table.find('input.selectCreance').each(function() {
-            this.checked = true;
-        });
-    }
-    else
-    {
-        $table.find('input.selectCreance').each(function() {
-            this.checked = false;
-
-        });
-    }
+    getModal(data,url);
 }
 
+/**
+ *
+ * @param ownerId
+ * @param ownerType
+ */
+function openCreanceForm(ownerId,ownerType)
+{
+    var data = { ownerId: ownerId, ownerType:ownerType};
+    var url = Routing.generate('interne_fiances_creance_get_form_ajax');
 
+    getModal(data,url);
+
+}
 
 
 

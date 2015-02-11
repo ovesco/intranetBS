@@ -51,7 +51,6 @@ class RappelController extends Controller
      */
     public function addRappel(Request $request)
     {
-
         if ($request->isXmlHttpRequest()) {
 
             //On récupère les données du formulaire
@@ -74,10 +73,7 @@ class RappelController extends Controller
                 $facture->addRappel($rappel);
             }
 
-
             $em->flush();
-
-
             return new Response('success');
 
         }

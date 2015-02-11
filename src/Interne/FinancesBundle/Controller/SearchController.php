@@ -115,7 +115,7 @@ class SearchController extends Controller
 
         $this->checkSession();
 
-        return $this->render('InterneFinancesBundle:Search:search.html.twig', array(
+        return $this->render('InterneFinancesBundle:Search:page_search.html.twig', array(
             'searchForm' => $searchForm->createView(),
             'factures' => $session->get('factures'),
             'creances' => $session->get('creances'),

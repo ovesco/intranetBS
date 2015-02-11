@@ -11,13 +11,13 @@ jQuery(document).ready(function() {
                 openFactureShow(e.detail.data);
                 break;
             case 'event_delete_facture':
-                deleteFactureFromPage(e.detail.data);
+                deleteFacture(e.detail.data);
                 break;
             case 'event_voir_creance':
                 openCreanceShow(e.detail.data,'interface');
                 break;
             case 'event_delete_creance':
-                deleteCreanceFromPage(e.detail.data);
+                deleteCreance(e.detail.data);
                 break;
 
             case 'event_send_facture':
@@ -33,7 +33,7 @@ jQuery(document).ready(function() {
                 break;
 
             case 'event_masse_facturation_creance':
-                createFactureFromPage(e.detail.data);
+                createFactureWithListeCreances(e.detail.data);
                 break;
 
             case 'event_masse_ajout_rappel':
@@ -41,7 +41,10 @@ jQuery(document).ready(function() {
                 openRappelForm(null);
                 break;
             case 'event_masse_delete_facture':
-                deleteListeFactureFromPage(e.detail.data);
+                deleteListeFacture(e.detail.data);
+                break;
+            case 'event_masse_delete_creance':
+                deleteListeCreance(e.detail.data);
                 break;
 
 

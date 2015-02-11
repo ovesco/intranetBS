@@ -30,7 +30,7 @@ class PayementController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('InterneFinancesBundle:Payement:payement.html.twig');
+        return $this->render('InterneFinancesBundle:Payement:page_payement.html.twig');
     }
 
     /**

@@ -1,5 +1,6 @@
-<div class="header">Détail de la facture N°{{ facture.id }}</div>
-<div class="content" style="overflow-y:auto">
+<div class="ui small modal" id="modal-display" aria-hidden="true">
+    <div class="header">Détail de la facture N°{{ facture.id }}</div>
+    <div class="content" style="overflow-y:auto">
     <table class="ui definition table">
         <tbody>
         <tr>
@@ -47,7 +48,26 @@
         <tr>
             <td>Envoie de la facture</td>
             <td>
-                Par mail/Par courrier...quel adresse?
+
+                <div class="ui segment">
+                    <div class="ui top right attached label"><i class="mail outline icon"></i>Par courrier</div>
+                    <div class="ui content">
+
+                        {% include 'AppBundle:Adresse:showFormatPostal.html.twig' with {'adresseExpedition':facture.getOwner.adresseExpedition} %}
+
+                    </div>
+                </div>
+
+
+
+                <div class="ui segment">
+                    <div class="ui top right attached label">@ Par Email</div>
+                    <div class="ui content">
+
+                        {% include 'AppBundle:Email:showListeExpedition.html.twig' with {'listeEmailsExpedition':facture.getOwner.listeEmailsExpedition} %}
+
+                    </div>
+                </div>
 
             </td>
         </tr>
@@ -118,9 +138,10 @@
     </table>
 
 </div>
-<div class="actions">
+    <div class="actions">
 
 
 
 </div>
 
+</div>

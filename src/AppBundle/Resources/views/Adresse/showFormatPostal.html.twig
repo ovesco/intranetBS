@@ -1,17 +1,22 @@
+{% if adresseExpedition is not null %}
 
+    {% if  adresseExpedition['owner']['type'] == 'Membre' %}
+        {% set cible =  adresseExpedition['owner']['prenom']|capitalize ~' '~ adresseExpedition['owner']['nom']|capitalize  %}
+    {% elseif  adresseExpedition['owner']['type'] == 'Famille'%}
+        {% set cible =  'Famille ' ~ adresseExpedition['owner']['nom']|capitalize  %}
+    {% elseif  adresseExpedition['owner']['type'] == 'Mere'%}
+        {% set cible =  adresseExpedition['owner']['prenom']|capitalize ~' ' ~ adresseExpedition['owner']['nom']|capitalize  %}
+    {% elseif  adresseExpedition['owner']['type'] == 'Pere'%}
+        {% set cible =  adresseExpedition['owner']['prenom']|capitalize ~' ' ~ adresseExpedition['owner']['nom']|capitalize  %}
+    {% endif %}
 
-{% if  adresseExpedition['owner']['type'] == 'Membre' %}
-    {% set cible =  adresseExpedition['owner']['prenom']|capitalize ~' '~ adresseExpedition['owner']['nom']|capitalize  %}
-{% elseif  adresseExpedition['owner']['type'] == 'Famille'%}
-    {% set cible =  'Famille ' ~ adresseExpedition['owner']['nom']|capitalize  %}
-{% elseif  adresseExpedition['owner']['type'] == 'Mere'%}
-    {% set cible =  adresseExpedition['owner']['prenom']|capitalize ~' ' ~ adresseExpedition['owner']['nom']|capitalize  %}
-{% elseif  adresseExpedition['owner']['type'] == 'Pere'%}
-    {% set cible =  adresseExpedition['owner']['prenom']|capitalize ~' ' ~ adresseExpedition['owner']['nom']|capitalize  %}
+    {{ cible }}<br>
+    {{ adresseExpedition['adresse'].rue }}<br>
+    {{ adresseExpedition['adresse'].npa }}
+    {{ adresseExpedition['adresse'].localite }}
+
+{% else %}
+    <div class="ui yellow icon message">
+        <i class="warning icon">Aucune adresse postale</i>
+    </div>
 {% endif %}
-
-{{ cible }}<br>
-{{ adresseExpedition['adresse'].rue }}<br>
-{{ adresseExpedition['adresse'].npa }}
-{{ adresseExpedition['adresse'].localite }}
-

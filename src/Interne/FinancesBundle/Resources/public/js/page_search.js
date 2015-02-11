@@ -4,6 +4,19 @@ jQuery(document).ready(function() {
 
 });
 
+
+/**
+ *
+ */
+function openSearchForm()
+{
+    var data = null;
+    var url = Routing.generate('interne_fiances_search_load_form_ajax');
+
+    getModal(data,url);
+
+}
+
 function initPage(){
     //activation du menu
     $('#search-infos-context .menu .item').tab({
@@ -21,10 +34,8 @@ function sendSearch()
         type: "POST",
         url: Routing.generate('interne_fiances_search'),
         data: data,
-        error: function() { alerte.send('erreur','danger',4000); },
+        error: function() { alerte.send('Erreur lors de la recherche','error',4000); },
         success: function() {
-
-            modalDisplayClose();
 
             reloadPage();
         }

@@ -21,7 +21,7 @@ class SearchController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('AppBundle:Search:search.html.twig');
+        return $this->render('AppBundle:Search:page_search.html.twig');
     }
 
     /**
