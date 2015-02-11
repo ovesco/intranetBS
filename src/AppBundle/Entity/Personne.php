@@ -26,7 +26,7 @@ abstract class Personne
     private $sexe;
 
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Contact", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Contact", cascade={"persist", "remove"}, fetch="EAGER")
      */
     private $contact;
 

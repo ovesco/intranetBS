@@ -232,6 +232,7 @@ class Famille implements ExpediableInterface
     /**
      * Doit renvoyer quelque chose qui permet d'identifier (humainement) une famille
      * Le nom n'est pas suffisant p.ex puisqu'il peut y avoir plusieurs famille avec le même nom
+     * du coup on renvoie la localité derrière
      *
      * @return string
      */

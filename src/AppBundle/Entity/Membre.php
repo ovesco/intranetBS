@@ -32,7 +32,7 @@ class Membre extends Personne implements ExpediableInterface
     /**
      * @var Famille
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Famille", inversedBy="membres")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Famille", inversedBy="membres", fetch="EAGER")
      * @ORM\JoinColumn(name="famille_id", referencedColumnName="id")
      */
     private $famille;
@@ -201,7 +201,6 @@ class Membre extends Personne implements ExpediableInterface
      */
     public function getNom()
     {
-
         if ($this->getFamille() != null)
             return $this->getFamille()->getNom();
         else

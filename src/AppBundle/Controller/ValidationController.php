@@ -19,9 +19,7 @@ class ValidationController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        return $this->render('Validation/global_view.html.twig', array(
-
-
+        return $this->render('AppBundle:Validation:global_view.html.twig', array(
             'containers' => $em->getRepository('AppBundle:ModificationsContainer')->findAll()
         ));
     }
@@ -78,7 +76,7 @@ class ValidationController extends Controller
      * Approuve une modification
      * @param Modification $modification
      * @return Response
-     * @route("validation/approve/modification/{modification}", name="validation_approve_modification")
+     * @route("validation/modification/approve/{modification}", name="validation_ajax_approve_modification", options={"expose"=true})
      * @ParamConverter("modification", class="AppBundle:Modification")
      */
     public function approveModification($modification) {
@@ -87,19 +85,19 @@ class ValidationController extends Controller
         $em->remove($modification);
         $em->flush();
 
-        return $this->redirect($this->generateUrl('validation_vue_globale'));
+        return new JsonResponse(true);
     }
 
     /**
      * Annule une modification, vérifie la stabilité des données après coup
      * @param Modification $modification
      * @return Response
-     * @route("validation/cancel/modification/{modification}", name="validation_cancel_modification")
+     * @route("validation/modification/cancel/{modification}", name="validation_ajax_cancel_modification", options={"expose"=true})
      * @ParamConverter("modification", class="AppBundle:Modification")
      */
     public function cancelModification($modification) {
 
         $this->get('validation')->cancelModification($modification);
-        return $this->redirect($this->generateUrl('validation_vue_globale'));
+        return new JsonResponse(true);
     }
 }

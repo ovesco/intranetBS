@@ -45,15 +45,16 @@
                                         </thead>
                                         <tbody>
                                         {% for modif in container.modifications %}
-                                            <tr>
+                                            <tr id="{{ modif.id }}">
                                                 <td>{{ modif.path }}</td>
                                                 <td>{{ modif.date|date('d.m.Y') }}</td>
                                                 <td></td>
                                                 <td>{{ modif.oldValue|parser('default') }}</td>
                                                 <td>{{ modif.newValue|parser('default') }}</td>
-                                                <td>
-                                                    <a href="{{ path('validation_cancel_modification', {modification:modif.id}) }}" class="ui circular mini icon red button popupable"><i class="remove icon"></i></a>
-                                                    <a href="{{ path('validation_approve_modification', {modification:modif.id}) }}" class="ui circular mini icon green button popupable"><i class="checkmark icon"></i></a>
+                                                <td id="actions">
+                                                    <a id="modification_reject" class="ui circular mini icon red button popupable"><i class="remove icon"></i></a>
+                                                    <a id="modification_accept" class="ui circular mini icon green button popupable"><i class="checkmark icon"></i></a>
+                                                    <a id="modification_pending" class="ui mini popupable" style="visibility:hidden"><i class="circle notched loading icon"></i></a>
                                                 </td>
                                             </tr>
                                         {% endfor %}
@@ -80,6 +81,50 @@
 
             $(this).toggleClass('selected');
             $(this).next().toggle();
+        });
+
+        /* Accept modification */
+        $('#modification_accept').click(function() {
+
+            $(this).parent().children('#modification_pending').attr("style", "");
+            var row = $(this).closest('tr');
+            var id = row.attr('id');
+
+            $.ajax({
+                url: Routing.generate('validation_ajax_approve_modification', {modification: id }),
+                type: 'GET',
+                success: function(data) {
+                    row.remove();
+                    alerte.send("Modification approuvée", 'info', 2000);
+                },
+                error: function(data) {
+                    alerte.send("Erreur lors de l'approbation, essayez d'actualiser la page et réessayez.", 'error');
+                    row.children('#modification_pending').attr("style", "visibility:hidden");
+                }
+            });
+
+        });
+
+        /* Reject modification */
+        {#href="{{ path('validation_ajax_cancel_modification', {modification:modif.id}) }}"#}
+        $('#modification_reject').click(function() {
+
+            $(this).parent().children('#modification_pending').attr("style", "");
+            var row = $(this).closest('tr');
+            var id = row.attr('id');
+
+            $.ajax({
+                url: Routing.generate('validation_ajax_cancel_modification', {modification: id }),
+                type: 'GET',
+                success: function(data) {
+                    row.remove();
+                    alerte.send("Modification rejetée", 'info', 2000);
+                },
+                error: function(data) {
+                    alerte.send("Erreur lors du rejet, essayez d'actualiser la page et réessayez.", 'error');
+                    row.children('#modification_pending').attr("style", "visibility:hidden");
+                }
+            });
         });
     </script>
 
