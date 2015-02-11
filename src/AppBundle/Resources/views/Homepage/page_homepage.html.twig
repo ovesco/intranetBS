@@ -40,7 +40,7 @@
 
 
                         {%  for groupe in groupes %}
-                            <a class="item" href="{{ path('interne_voir_groupe', {'groupe' : groupe.id }) }}">{{ group.nom }}</a>
+                            <a class="item" href="{{ path('interne_voir_groupe', {'groupe' : groupe.id }) }}">{{ groupe.nom }}</a>
                         {% endfor %}
                     {% else %}
                         Vous n'êtes dans aucun groupe actuellement.

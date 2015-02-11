@@ -280,7 +280,7 @@ class Groupe
         if($this->getAttributions() != null)
         {
             foreach ($this->getAttributions() as $attribution) {
-                if ($attribution->getDateFin() == null || $attribution->getDateFin() > $today)
+                if ($attribution->getDateFin() == null || $attribution->getDateFin() >= $today)
                     array_push($members, $attribution->getMembre());
 
             }

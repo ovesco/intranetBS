@@ -1,3 +1,16 @@
+/**
+ * Permet de générer un identifiant unique
+ * @returns {string}
+ */
+function guid() {
+    var d = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (d + Math.random()*16)%16 | 0;
+        d = Math.floor(d/16);
+        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+    });
+    return uuid;
+};
 
 /**
  * Alert.js
@@ -15,14 +28,14 @@ var alerte = {
     /**
      * Envoie une alerte simple.
      * @param message string le message
-     * @param type string le type parmi 'info', 'warning', 'error', 'success'
-     * @param delay la durée d'affichage
+     * @param type string le type parmi 'info', 'warning', 'danger', 'success'
+     * @param delay la durée d'affichage (en ms)
      * @return integer l'id de l'alerte
      */
     send: function (message, type, delay) {
 
-        var id = Math.floor((Math.random() * 1000) + 1),
-            html = '<div id="' + id + '" class="ui ' + type + ' small message"><i onclick="alerte.dismiss(' + id + ');" class="close icon"></i><div class="header">Alerte</div>' +
+        var id = guid(),
+            html = '<div id="' + id + '" class="ui ' + type + ' message"><i onclick="alerte.dismiss(' + id + ');" class="close icon"></i><div class="header">Alerte</div>' +
                 '<p>' + message + '</p></div></div>';
 
         this.alerts.push(id);
