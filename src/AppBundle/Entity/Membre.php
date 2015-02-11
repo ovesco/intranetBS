@@ -17,7 +17,7 @@ Use Interne\FinancesBundle\Entity\FactureToMembre;
  * @ORM\Entity
  * @ORM\Table(name="app_membres")
  */
-class Membre extends Personne implements ExpediableInterface
+class Membre extends Personne implements ExpediableInterface, ClassInterface
 {
 
     /**
