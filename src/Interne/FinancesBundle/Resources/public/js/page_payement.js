@@ -58,6 +58,25 @@ function initPage(){
 
 }
 
+
+
+function openPayementSearchForm()
+{
+    var data = null;
+    var url = Routing.generate('interne_fiances_payement_get_search_form_ajax');
+
+    getModal(data,url);
+}
+
+
+function openPayementRepartitionForm(idPayement)
+{
+    var data = {idPayement: idPayement};
+    var url = Routing.generate('interne_fiances_payement_repartition_ajax');
+
+    getModal(data,url);
+}
+
 function sendPayementSearch()
 {
     var data = $('#payementSearchForm').serialize();

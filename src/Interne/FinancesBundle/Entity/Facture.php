@@ -14,7 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\DiscriminatorColumn(name="discriminator", type="string")
  * @ORM\DiscriminatorMap({"to_membre" = "FactureToMembre", "to_famille" = "FactureToFamille"})
  */
-class Facture
+abstract class Facture implements OwnerInterface
 {
     /**
      * @var integer
@@ -72,6 +72,11 @@ class Facture
         $this->rappels = new ArrayCollection();
         $this->creances = new ArrayCollection();
     }
+
+    /**
+     * @return mixed
+     */
+    abstract public function getOwner();
 
     /**
      * Get id

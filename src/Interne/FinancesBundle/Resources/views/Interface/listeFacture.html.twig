@@ -1,6 +1,7 @@
 {% set toolbar =
 {'masse_actions':[['plus','Ajouter un rappel','event_masse_ajout_rappel'],
-['send','Envoyer les factures (todo)','event_masse_send_facture']],
+['send','Envoyer les factures','event_masse_send_facture'],
+['trash','Supprimer','event_masse_delete_facture']],
 'search_bar':true,
 'selection_buttons':true}
 %}
@@ -13,7 +14,7 @@
                     {'icon':'trash','label':'Supprimer','event':'event_delete_facture'},
                     {'icon':'send','label':'Envoyer (todo)','event':'event_send_facture','conditions':[['statut','equal','ouverte']]},
                     {'icon':'print','label':'Imprimer PDF','event':'event_print_facture','conditions':[['statut','equal','ouverte']]},
-                    {'icon':'plus','label':'Ajouter un rappel','event':'event_add_rappel','conditions':[['statut','equal','ouverte']]}
+                    {'icon':'alarm outline','label':'Ajouter un rappel','event':'event_add_rappel','conditions':[['statut','equal','ouverte']]}
 ] %}
 
 {% set patterns = [

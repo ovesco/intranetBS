@@ -1,35 +1,65 @@
-function addRappel(idFacture,idForm){
+function addRappel(idFacture,idForm,reload,loader){
 
-    var form = $('#'+idForm).serialize()+'&idFacture='+idFacture;
-    var data = form;
-    var success;
+    //default value
+    reload = typeof reload !== 'undefined' ? reload : true;
+    loader = typeof loader !== 'undefined' ? loader : null;
+
+    var data = $('#'+idForm).serialize()+'&idFacture='+idFacture;
     $.ajax({
         type: "POST",
         url: Routing.generate('interne_finance_rappel_add_ajax'),
         data: data,
-        async: false, //option utiliée pour retourner la valeur de success en dehors de la requete ajax
-        error: function(jqXHR, textStatus, errorThrown) { success = false; },
-        success: function(response) { success = (response == 'success');}
+        error: function(jqXHR, textStatus, errorThrown) {
+            alerte.send('Erreur lors de l\'ajout d\'un rappel','error');
+        },
+        success: function(response) {
+            if(response == 'success')
+            {
+                if(reload){
+                    reloadPage();
+                }
+                if(loader != null){
+                    loader.increment();
+                }
+            }
+            else
+            {
+                alerte.send('Erreur lors de l\'ajout d\'un rappel','error');
+            }
+
+        }
     });
-    return success;
 }
 
 /**
  *
- * @param idArray
  * @param idForm
  * @returns {boolean}
  */
-function addRappelToListeOfFacture(idArray,idForm)
+function addRappelToListeOfFacture(idForm)
 {
+    var idArray = getTemporaryStorage();
 
-    var success = true;
+    var loader = new Loader(idArray.length,'Ajout de rappel en masse');
 
-    for(i = 0; i < idArray.length; i++)
-    {
-        success = success && addRappel(idArray[i],idForm);
-    }
 
-    return success;
+    idArray.forEach(function(id){
+        addRappel(id,idForm,false,loader);
 
+    });
+
+    reloadPage();
+}
+
+/**
+ *
+ * @param idFacture
+ * @param option
+ */
+function openRappelForm(idFacture,option)
+{
+    var data = { idFacture: idFacture , option:option};
+    var url = Routing.generate('interne_finance_rappel_get_form_ajax');
+
+    getModal(data,url);
 }

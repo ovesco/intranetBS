@@ -18,7 +18,7 @@ use Interne\FinancesBundle\Entity\FactureToFamille;
  * @ORM\Table(name="app_familles")
  */
  
-class Famille implements ExpediableInterface
+class Famille implements ExpediableInterface, ClassInterface
 {
     /**
      * @var integer

@@ -1,26 +1,33 @@
 {% form_theme form 'InterneFinancesBundle:Templates:form_template.html.twig' %}
 
 {% set idForm  = 'addRappelForm' %}
+<div class="ui small modal" id="modal-display-rappel-form" aria-hidden="true">
+    <div class="header">Ajouter un rappel</div>
+    <div class="content" style="overflow-y:auto">
 
-<div class="header">Ajouter un rappel</div>
-<div class="content" style="overflow-y:auto">
+        {{ form_start(form, {'attr': {'id': idForm}}) }}
 
-    {{ form_start(form, {'attr': {'id': idForm}}) }}
+        <div class="ui form">
 
-    <div class="ui form">
+            {{ form_row(form.dateCreation) }}
+            {{ form_row(form.montantEmis) }}
+            {{ form_rest(form) }}
 
-        {{ form_row(form.dateCreation) }}
-        {{ form_row(form.montantEmis) }}
-        {{ form_rest(form) }}
+        </div>
+
+        {{ form_end(form) }}
 
     </div>
+    <div class="actions">
 
-    {{ form_end(form) }}
+        {% if idFacture == '' %}
+            <div class="ui button blue" onclick="addRappelToListeOfFacture('{{ idForm }}')" >Ajouter</div>
+        {% else %}
+            <div class="ui button blue" onclick="addRappel({{ idFacture }},'{{ idForm }}')" >Ajouter</div>
+        {% endif %}
 
+
+    </div>
 </div>
-<div class="actions">
 
-    <div class="ui button blue addRappelFromModal" data-id="{{ idFacture }}" data-form="{{ idForm }}">Ajouter</div>
-
-</div>
 
