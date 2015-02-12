@@ -30,6 +30,10 @@ class AttributionType extends AbstractType
             		'class'		=> 'AppBundle:Fonction',
             		'property'	=> 'nom'
             	))
+            ->add('remarques', 'text', array(
+
+                    'required'	=> false,
+            ))
         ;
     }
 

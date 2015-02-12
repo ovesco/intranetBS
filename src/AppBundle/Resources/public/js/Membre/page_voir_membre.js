@@ -2,6 +2,22 @@ $('#membre-infos-context .menu .item').tab({
     context: $('#membre-infos-context')
 });
 
+$('#ajouter-distinction').click(function() {
+    getModal($(this).data('id'), Routing.generate('obtention-distinction_get_modal'));
+})
+
+$('#ajouter-attribution').click(function() {
+    //getModal($(this).data('id'), Routing.generate('obtention-attribution_get_modal'));
+})
+
+$('#modifier-famille').click(function() {
+    modifyFamilleTriggered();
+});
+
+$('#modifier-numero-bs').click(function() {
+    showModal('#membre-edit-numero-bs');
+});
+
 $('.editable').click(function() {
 
     editable.init($(this));

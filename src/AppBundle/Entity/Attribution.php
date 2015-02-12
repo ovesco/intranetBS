@@ -60,8 +60,15 @@ class Attribution
      * @ORM\JoinColumn(name="fonction_id", referencedColumnName="id")
      */
      private $fonction;
-    
-    
+
+    /**
+     * @var String
+     *
+     * @ORM\Column(name="remarques", type="text", nullable=true)
+     */
+    private $remarques;
+
+
 
 
     /**
@@ -188,5 +195,23 @@ class Attribution
     {
         return $this->fonction;
     }
+
+
+    /**
+     * @return String
+     */
+    public function getRemarques()
+    {
+        return $this->remarques;
+    }
+
+    /**
+     * @param String $remarques
+     */
+    public function setRemarques($remarques)
+    {
+        $this->remarques = $remarques;
+    }
+
 
 }

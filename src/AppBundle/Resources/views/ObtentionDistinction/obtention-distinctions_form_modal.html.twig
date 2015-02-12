@@ -1,4 +1,4 @@
-<div id="add-distinctions-modal" class="ui small modal">
+<div id="modal-add-obtentions-distinctions" class="ui small modal">
     <i class="close icon"></i>
     <div class="header">
         Ajout de distinction(s)
@@ -6,7 +6,7 @@
     <div class="content">
 
         <b>Choisir des distinctions à ajouter</b>
-        <select id="distinctions-select" class="select2" multiple>
+        <select id="distinction-select" class="select2" multiple>
             {% for distinction in distinctions %}
                 <option value="{{ distinction.id }}">{{ distinction.nom }}</option>
             {% endfor %}

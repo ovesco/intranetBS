@@ -47,13 +47,13 @@
                             <div class="menu">
 
                                 <div class="header">Ajouter</div>
-                                <div class="item"><i class="star icon"></i> Des distinctions</div>
-                                <div class="item"><i class="tags icon"></i> Des attributions</div>
+                                <div id="ajouter-distinction" data-id="{{ membre.id }}" class="item"><i class="star icon"></i>Des distinctions</div>
+                                <div id="ajouter-attribution" data-id="{{ membre.id }}" class="item"><i class="tags icon"></i>Des attributions</div>
                                 <div class="ui divider"></div>
 
                                 <div class="header">Options avancées</div>
-                                <div class="item" onclick="modifyFamilleTriggered();"><i class="sitemap icon"></i> Modifier la famille</div>
-                                <div class="item" onclick="showModal('#membre-edit-numero-bs');"><i class="privacy icon"></i> Modifier le numéro BS</div>
+                                <div id="#modifier-famille" class="item"><i class="sitemap icon"></i>Modifier la famille</div>
+                                <div id="#modifier-numero-bs" class="item"><i class="privacy icon"></i>Modifier le numéro BS</div>
                             </div>
                         </div>
 
@@ -75,9 +75,9 @@
                                     <div class="eight wide column">
                                         <div class="ui segment">
 
-                                            {% include "AppBundle:CibleEnvoi:cibleEnvoi.html.twig" with
-                                                {'adresseExpedition':membre.adresseExpedition,
-                                                'listeEmailsExpedition':membre.listeEmailsExpedition} %}
+                                            {#{% include "AppBundle:CibleEnvoi:cibleEnvoi.html.twig" with#}
+                                                {#{'adresseExpedition':membre.adresseExpedition,#}
+                                                {#'listeEmailsExpedition':membre.listeEmailsExpedition} %}#}
 
                                         </div>
 
@@ -302,7 +302,6 @@
     '@InterneFinancesBundle/Resources/public/js/facture.js'
     '@InterneFinancesBundle/Resources/public/js/rappel.js'
     '@InterneFinancesBundle/Resources/public/js/page_interface.js'
-    '@InterneFinancesBundle/Resources/public/js/modal_display.js'
     '@InterneFinancesBundle/Resources/public/js/event_catcher.js'
     '@InterneFinancesBundle/Resources/public/js/liste.js'%}
     <script src="{{ asset_url }}"></script>

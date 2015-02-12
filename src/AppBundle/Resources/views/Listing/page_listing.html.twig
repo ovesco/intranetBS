@@ -48,7 +48,7 @@
                         </table>
 
                         <div class="ui left floated basic segment">
-                            <a href="{{ path('listing_supprimer_liste', {token: liste.token }) }}" class="ui tiny labeled icon red button">
+                            <a href="{{ path('listing_remove', {token: liste.token }) }}" class="ui tiny labeled icon red button">
                                 <i class="remove icon"></i>
                                 Supprimer la liste
                             </a>
@@ -68,13 +68,13 @@
                                     <div class="header">
                                         Action sur (<span class="listing-update-{{ liste.token }}">0</span>) membres
                                     </div>
-                                    <div class="item" onclick="showModal('#add-distinctions-modal');">
+                                    <div id="add_distinction" class="item">
                                         Masse de distinctions
                                     </div>
-                                    <div class="item">
+                                    <div id="add_attribution" class="item">
                                         Masse d'attributions
                                     </div>
-                                    <div class="item" onclick="">
+                                    <div id="add_creances" class="item" onclick="">
                                         Ajout de créance en masse (todo)
                                     </div>
                                 </div>
@@ -95,7 +95,7 @@
             Ajouter une liste
         </div>
         <div class="content">
-            <form method="post" action="{{ path('listing_creer_liste') }}">
+            <form method="post" action="{{ path('listing_add') }}">
                 <p>Choisissez un nom pour la liste. Si le nom est déjà pris, il sera légèrement modifié</p>
                 <div class="ui left icon input">
                     <input id="new-liste-name" type="text" name="new_liste_name" placeholder="Entrez un nom">
@@ -110,10 +110,6 @@
         </div>
     </div>
 
-    {{ render(controller('AppBundle:QueryDataOnload:distinctions')) }}
-
-    {# modal pour l'ajout de créances en masse #}
-    {% include "InterneFinancesBundle:Modal:modalDisplay.html.twig" %}
 
 {% endblock %}
 

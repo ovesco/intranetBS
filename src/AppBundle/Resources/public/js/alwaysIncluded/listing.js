@@ -11,7 +11,7 @@ var listing = {
     create: function (name) {
 
         $.ajax({
-            url: Routing.generate('listing_creer_liste', {name: name}),
+            url: Routing.generate('listing_add', {name: name}),
             type: 'GET',
             success: function () {
                 return true;
@@ -29,7 +29,7 @@ var listing = {
     remove: function (token) {
 
         $.ajax({
-            url: Routing.generate('listing_supprimer_liste', {token: token}),
+            url: Routing.generate('listing_remove', {token: token}),
             type: 'GET',
             success: function () {
                 return true;
@@ -48,10 +48,10 @@ var listing = {
     addElements: function (token, ids) {
 
         $.ajax({
-            url: Routing.generate('listing_ajouter_membres_par_id', {token: token, ids: ids}),
+            url: Routing.generate('listing_add_members_by_id', {token: token, ids: ids}),
             type: 'GET',
             success: function () {
-                alerte.balance('Element(s) ajouté(s) avec succès', 'info');
+                alerte.send('Element(s) ajouté(s) avec succès', 'info');
             },
             error: function (data) {
                 alert("Erreur lors de l'ajout des membres");
@@ -67,10 +67,10 @@ var listing = {
     removeElements: function (token, ids) {
 
         $.ajax({
-            url: Routing.generate('listing_supprimer_membres_par_id', {token: token, ids: ids}),
+            url: Routing.generate('listing_remove_members_by_id', {token: token, ids: ids}),
             type: 'GET',
             success: function () {
-                alerte.balance('Element(s) supprimé(s) avec succès', 'info');
+                alerte.send('Element(s) supprimé(s) avec succès', 'info');
             },
             error: function (data) {
                 alert("Erreur lors de la suppression des membres");

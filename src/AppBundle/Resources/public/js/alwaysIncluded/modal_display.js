@@ -1,5 +1,4 @@
-function getModal(data,url)
-{
+function getModal(data, url) {
      $.ajax({
         type: "POST",
         url: url,
