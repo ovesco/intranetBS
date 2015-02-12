@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Membre;
 use AppBundle\Entity\ObtentionDistinction;
 use AppBundle\Form\ObtentionDistinctionType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -35,33 +36,32 @@ class ObtentionDistinctionController extends Controller
             /*
              * On envoie le formulaire en modal
              */
-            $id = $request->request->get('idObtentionDistinction');
 
-            $distinctions = $this->getDoctrine()->getRepository('AppBundle:Distinction')->findAll();
+            $idMembre = $request->request->get('idMembre');
+            $idObtentionDistinction = $request->request->get('idObtentionDistinction');
 
             $obtention = null;
             $obtentionForm = null;
-            if ($id == null) {
+            if ($idObtentionDistinction == null) {
                 /*
                  * Ajout
                  */
                 $obtention = new ObtentionDistinction();
                 $obtentionForm = $this->createForm(new ObtentionDistinctionType(), $obtention,
-                    array('action' => $this->generateUrl('obtention-distinction_add')));
+                    array('action' => $this->generateUrl('obtention-distinction_add', array('member'=>$idMembre))));
 
             } else {
                 /*
                  * Modification
                  */
                 //TODO: pas testé
-                $obtention = $em->getRepository('AppBundle:ObtentionDistinction')->find($id);
+                $obtention = $em->getRepository('AppBundle:ObtentionDistinction')->find($idObtentionDistinction);
                 $obtentionForm = $this->createForm(new ObtentionDistinctionType(), $obtention,
-                    array('action' => $this->generateUrl('obtention-distinction_edit',array('obtention'=>$id))));
+                    array('action' => $this->generateUrl('obtention-distinction_edit', array('obtention'=>$idObtentionDistinction))));
 
             }
 
             return $this->render('AppBundle:ObtentionDistinction:obtention-distinctions_form_modal.html.twig', array(
-                    'distinctions' => $distinctions,
                     'form' => $obtentionForm->createView())
             );
 
@@ -72,12 +72,30 @@ class ObtentionDistinctionController extends Controller
     /**
      * @Route("/add", name="obtention-distinction_add", options={"expose"=true})
      *
+     * @param Membre $member
      * @param Request $request
      * @return Response
+     * @ParamConverter("member", class="AppBundle:Membre")
      */
-    public function addObtentionDistinctionAction(Request $request)
+    public function addObtentionDistinctionAction(Membre $member, Request $request)
     {
         //TODO: ajouter l'obtenition
+        $newObtention = new ObtentionDistinction();
+        $newObtentionForm = $this->createForm(new ObtentionDistinctionType(), $newObtention);
+        $newObtentionForm->handleRequest($request);
+
+        $newObtention->setMembre($member);
+
+        if($newObtentionForm->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($newObtention);
+            $em->flush();
+
+            return new Response(true);
+        }
+
+        return new Response(false);
     }
 
     /**
@@ -86,7 +104,7 @@ class ObtentionDistinctionController extends Controller
      * @param Request $request
      * @param ObtentionDistinction $obtention
      * @return Response
-     * @ParamConverter("obtention-distinction", class="AppBundle:ObtentionDistinction")
+     * @ParamConverter("obtention", class="AppBundle:ObtentionDistinction")
      */
     public function editObtentionDistinction(ObtentionDistinction $obtention, Request $request)
     {

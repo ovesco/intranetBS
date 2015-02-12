@@ -3,11 +3,13 @@ $('#membre-infos-context .menu .item').tab({
 });
 
 $('#ajouter-distinction').click(function() {
-    getModal($(this).data('id'), Routing.generate('obtention-distinction_get_modal'));
+    var idMembre = { idMembre: $(this).data('idMembre') };
+    getModal(idMembre, Routing.generate('obtention-distinction_get_modal'));
 })
 
 $('#ajouter-attribution').click(function() {
-    //getModal($(this).data('id'), Routing.generate('obtention-attribution_get_modal'));
+    var idMembre = { idMembre: $(this).data('idMembre') };
+    getModal(idMembre, Routing.generate('attribution_get_modal'));
 })
 
 $('#modifier-famille').click(function() {

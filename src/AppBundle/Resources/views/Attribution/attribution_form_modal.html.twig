@@ -1,13 +1,13 @@
-{% if form.nom.vars.value == '' %}
-    {%  set header = 'Ajouter une fonction' %}
+{% if form.dateDebut.vars.value == '' %}
+    {%  set header = 'Ajouter une attribution' %}
     {%  set buttonText = 'Ajouter' %}
 {% else %}
-    {%  set header = 'Modifier une fonction' %}
+    {%  set header = 'Modifier une attribution' %}
     {%  set buttonText = 'Modifier' %}
 {% endif %}
 
 
-<div id="ajouter-fonction-modale" class="ui small modal">
+<div id="modal-add-attribution" class="ui small modal">
     <i class="close icon"></i>
     <div class="header">
         {{ header }}
@@ -18,7 +18,6 @@
         {{ form_start(form,{'attr': {'class': 'ui form'}}) }}
 
         {{ form_rest(form) }}
-
 
 
         <div class="ui field">
