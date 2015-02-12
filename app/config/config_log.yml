@@ -1,0 +1,45 @@
+# Monolog configuration
+services:
+    monolog.formatter.session_request:
+        class: Monolog\Formatter\LineFormatter
+        arguments:
+            - "[%%datetime%%] [%%extra.token%%] %%channel%%.%%level_name%%: %%message%%\n"
+
+    monolog.processor.session_request:
+        class: AppBundle\Utils\Log\SessionRequestProcessor
+        arguments:
+            - @session
+        tags:
+            - { name: monolog.processor, method: processRecord }
+
+    # This is our data logger service, it has a special class
+    data_logger:
+        class: AppBundle\Utils\Log\DataLogger
+        arguments:
+         - @logger
+         - @security.context
+        tags:
+            - { name: monolog.logger, channel: data_logger }
+
+    # This binds the onFLush doctrine event on our data logging listener
+    data.change.listener:
+        class: AppBundle\EventListener\LogOnChangeListener
+        tags:
+            - { name: doctrine.event_listener, event: onFlush }
+
+monolog:
+    channels:
+        - app_logger
+    handlers:
+        app:
+            type: stream
+            path: "%kernel.root_dir%/logs/app.log"
+            level: info
+            channels: app_logger
+            formatter: monolog.formatter.session_request
+        data:
+            type: stream
+            path: "%kernel.root_dir%/logs/data.log"
+            level: info
+            channels: data_logger
+            formatter: monolog.formatter.session_request

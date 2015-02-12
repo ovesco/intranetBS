@@ -149,6 +149,16 @@ class Membre extends Personne implements ExpediableInterface
     }
 
     /**
+     * Représentation string du membre
+     * On ajoute le numéro BS pour le log de données sur lequel on effectuera des recherches
+     *
+     * @return string
+     */
+    public function __toString() {
+        return $this->getPrenom() . ' ' . $this->getNom() . ' (' . $this->getNumeroBs() . ')';
+    }
+
+    /**
      * Get id
      *
      * @return integer
