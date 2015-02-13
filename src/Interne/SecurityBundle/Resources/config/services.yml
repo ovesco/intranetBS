@@ -1,62 +1,27 @@
 parameters:
-    bs_security:
-        ressource_securer:
-            allowed_actions:
-                - add
-                - remove
-                - modif
-                - view
-            portee:
-                1: ALL
-                2: PARENT
-                3: GROUPE
-                4: SELF
 
 services:
 
-    # Securité
+    security.access.membre_voter:
+        class:      Interne\SecurityBundle\Voters\MembreVoter
+        public:     false
+        tags:
+            - { name: security.voter }
 
-    securer:
-        class: Interne\SecurityBundle\Securer\Securer
-        arguments:
-            - @CoreRessourceSecurer
-            - @CoreRoleSecurer
+    security.access.famille_voter:
+        class:      Interne\SecurityBundle\Voters\FamilleVoter
+        public:     false
+        tags:
+            - { name: security.voter }
 
-    # Sécurité des ressources
-    # les services suivants sont utilisés dans la sécurisation de ressources données
-    CoreRessourceSecurer:
-        class: Interne\SecurityBundle\Securer\Ressource\CoreRessourceSecurer
-        arguments:
-            - @security.context
-            - %bs_security%
+    security.access.groupe_voter:
+        class:      Interne\SecurityBundle\Voters\GroupeVoter
+        public:     false
+        tags:
+            - { name: security.voter }
 
-    SecureRessourceDriver:
-        class: Interne\SecurityBundle\Securer\Ressource\Drivers\SecureResourceDriver
-        tags: [{name: kernel.event_listener, event: kernel.controller, method: onKernelController}]
-        arguments:
-            - @annotation_reader
-            - @doctrine.orm.entity_manager
-            - @CoreRessourceSecurer
-
-    # role
-    # Sécurité basique par filtrage de role
-    CoreRoleSecurer:
-        class: Interne\SecurityBundle\Securer\Role\CoreRoleSecurer
-        arguments:
-            - @security.context
-
-    SecureRoleDriver:
-            class: Interne\SecurityBundle\Securer\Role\Drivers\SecureRoleDriver
-            tags: [{name: kernel.event_listener, event: kernel.controller, method: onKernelController}]
-            arguments:
-                - @annotation_reader
-                - @CoreRoleSecurer
-
-    #twig
-    securer.twig.securer_extension:
-            class: Interne\SecurityBundle\Securer\Twig\SecurerExtension
-            tags:
-                - { name: twig.extension }
-            arguments:
-                - @CoreRessourceSecurer
-                - @CoreRoleSecurer
+    security.access.role_hierarchy_voter:
+        class:      Interne\SecurityBundle\Voters\RoleHierarchyVoter
+        public:     false
+        tags:
+            - { name: security.voter }

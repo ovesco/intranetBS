@@ -11,11 +11,24 @@ use Interne\SecurityBundle\Entity\Role;
 class RolesUtil {
 
     /**
+     * Récupère la totalité des roles parmi ceux passés en paramètres, c'est-à-dire
+     * en suivant la hierarchie
+     */
+    public function getAllRoles(array $roles) {
+
+        $return = array();
+        foreach($roles as $role)
+            $return = array_merge($return, $role->getEnfantsRecursive(true));
+
+        return self::removeDoublons($return);
+    }
+
+    /**
      * Supprimme les doublons parmi les roles passés en paramètre
      * @param array $roles
      * @return array
      */
-    public function removeDoublons(array $roles) {
+    public static function removeDoublons(array $roles) {
 
         $returned = array();
 
@@ -24,6 +37,19 @@ class RolesUtil {
                 $returned[] = $r;
 
         return $returned;
+    }
+
+    /**
+     * Retourne un array de roles string a partir de roles objet
+     */
+    public function getRolesAsString(array $roles) {
+
+        $r = array();
+
+        foreach($roles as $role)
+            $r[] = $role->getRole();
+
+        return $r;
     }
 
     /**
