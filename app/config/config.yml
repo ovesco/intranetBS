@@ -2,6 +2,9 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
+    - { resource: config_search.yml }
+    - { resource: config_log.yml }
+
 
 framework:
     #esi:             ~
@@ -65,6 +68,7 @@ assetic:
     assets:
         jquery: %kernel.root_dir%/../vendor/components/jquery/jquery.min.js
 
+
 # Doctrine Configuration
 doctrine:
     dbal:
@@ -118,48 +122,3 @@ swiftmailer:
         type: file
         path: "%kernel.cache_dir%/swiftmailer/spool"
     delivery_address:  dev.sauvabelin@gmail.com # Option de Dév. qui permet de réaiguiller tout les mails sur cette adresse.
-
-# Elasticsearch Configuration
-fos_elastica:
-    clients:
-        default: { host: "%database_host%", port: "%database_port%" }
-    indexes:
-        search:
-            types:
-                membre:
-                    mappings:
-                        prenom: ~
-                        famille: ~
-                        naissance: ~
-                        remarques: ~
-                        numeroBs: ~
-                        sexe: ~
-                        attributions:
-                            type: "nested"
-                            properties:
-                                groupe: ~
-                                fonction: ~
-                    persistence:
-                        driver: orm
-                        model: AppBundle\Entity\Membre
-                        provider: ~
-                        listener: ~
-                        finder: ~
-                famille:
-                    mappings:
-                        nom: ~
-                    persistence:
-                        driver: orm
-                        model: AppBundle\Entity\Famille
-                        provider: ~
-                        listener: ~
-                        finder: ~
-                groupe:
-                    mappings:
-                        nom: ~
-                    persistence:
-                        driver: orm
-                        model: AppBundle\Entity\Groupe
-                        provider: ~
-                        listener: ~
-                        finder: ~

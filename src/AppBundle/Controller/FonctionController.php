@@ -2,17 +2,12 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Groupe;
 use AppBundle\Entity\GroupeModel;
 use AppBundle\Form\GroupeModelType;
-use AppBundle\Form\GroupeType;
-use Doctrine\Common\Collections\ArrayCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Form\FonctionType;

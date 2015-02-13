@@ -1,0 +1,44 @@
+# Elasticsearch Configuration
+fos_elastica:
+    clients:
+        default: { host: "%database_host%", port: "%database_port%" }
+    indexes:
+        search:
+            types:
+                membre:
+                    mappings:
+                        prenom: ~
+                        famille: ~
+                        naissance: ~
+                        remarques: ~
+                        numeroBs: ~
+                        sexe: ~
+                        attributions:
+                            type: "nested"
+                            properties:
+                                groupe: ~
+                                fonction: ~
+                    persistence:
+                        driver: orm
+                        model: AppBundle\Entity\Membre
+                        provider: ~
+                        listener: ~
+                        finder: ~
+                famille:
+                    mappings:
+                        nom: ~
+                    persistence:
+                        driver: orm
+                        model: AppBundle\Entity\Famille
+                        provider: ~
+                        listener: ~
+                        finder: ~
+                groupe:
+                    mappings:
+                        nom: ~
+                    persistence:
+                        driver: orm
+                        model: AppBundle\Entity\Groupe
+                        provider: ~
+                        listener: ~
+                        finder: ~

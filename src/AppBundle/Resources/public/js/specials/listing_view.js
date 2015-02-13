@@ -36,6 +36,18 @@ $('.listing-table tbody').on( 'click', 'tr', function () {
 } );
 
 
+$('#add_distinction').click(function() {
+    //TODO: get all ids
+    //var idMembre = { idMembre: $(this).data('idMembre') };
+    getModal(null, Routing.generate('obtention-distinction_get_modal'));
+});
+
+$('#add_attribution').click(function() {
+    getModal(null, Routing.generate('attribution_get_modal'));
+});
+
+
+
 /**
  * cette fonction est appelée lorsqu'on veut supprimer un ou plusieurs éléments de la liste
  * @param btn le bouton qui a cliqué. On peut ainsi facilement récupérer les IDs
@@ -82,3 +94,4 @@ function addListe(trigger) {
         setTimeout(function(){ alert("Liste ajoutée, la page va s'actualiser"); location.reload();}, 1000);
     }
 }
+
