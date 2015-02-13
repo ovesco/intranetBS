@@ -1,0 +1,48 @@
+{% extends 'form_div_layout.html.twig' %}
+
+{% use 'form_div_layout.html.twig' with form_label as base_form_label %}
+
+
+
+{% block form_row %}
+
+    {{ form_widget(form) }}
+{% endblock form_row %}
+
+
+{# label #}
+{% block form_label -%}
+    {{ block('base_form_label') }}
+{%- endblock form_label %}
+
+
+{# simple widget #}
+{% block form_widget_simple -%}
+
+        {%- set type = type|default('text') -%}
+        <div data-type="text" {{ block('validation_block') }}>{% if value is not empty %}{{ value }}{% endif %}</div>
+
+{%- endblock form_widget_simple %}
+
+
+
+{% block checkbox_widget -%}
+    <div data-type="select" data-source="expediable" {{ block('validation_block') }}>
+        {% if value is not empty %}
+            {{ value }}
+        {% endif %}
+    </div>
+{%- endblock checkbox_widget %}
+
+
+
+
+{#
+    validation_block
+    Génère les attributs class et data-path
+#}
+{% block validation_block -%}
+
+    {{ block('base_form_label')|validation }}
+
+{%- endblock validation_block %}

@@ -62,6 +62,11 @@ services:
         tags:
             - { name: twig.extension }
 
+    app.twig.expediable_filter:
+            class: AppBundle\Twig\ExpediableFilter
+            tags:
+                - { name: twig.extension }
+
     app.twig.genre_filter:
         class: AppBundle\Twig\GenreFilter
         tags:

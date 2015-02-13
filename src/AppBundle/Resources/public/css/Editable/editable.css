@@ -1,28 +1,28 @@
-table .editable {
+.editable {
     color: #5a5a5a
 }
 
-table .editable:hover {
+.editable:hover {
     background: #fbf8d2
 }
 
-table .editable.currently-edited {
+.editable.currently-edited {
     background: #fbf8d2
 }
 
-table .no-editable {
+.no-editable {
     background: #ffddd6
 }
 
-table .selected td {
+.selected td {
     background: #d1e6e3
 }
 
-table .editable-content-container {
+.editable-content-container {
     padding: 0
 }
 
-table .editable-content-container input, table .editable-content-container select {
+.editable-content-container input, .editable-content-container select {
     padding: 3px;
     background: white;
     border-radius: 2px;

@@ -14,7 +14,7 @@ use AppBundle\Entity\Famille;
 use AppBundle\Form\MembreType;
 use AppBundle\Form\FamilleType;
 use AppBundle\Form\MembreFamilleType;
-use AppBundle\Form\MembreInfosScoutesType;
+use AppBundle\Form\VoirMembreType;
 
 
 use Symfony\Component\HttpFoundation\Response;
@@ -134,9 +134,7 @@ class MembreController extends Controller {
      */
     public function voirMembreAction($membre) {
 
-
-
-        $membreForm         = $this->createForm(new MembreType, $membre);
+        $membreForm         = $this->createForm(new VoirMembreType, $membre);
 
         return $this->render('AppBundle:Membre:page_voir_membre.html.twig', array(
 

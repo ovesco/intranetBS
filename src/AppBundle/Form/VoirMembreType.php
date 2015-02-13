@@ -17,12 +17,9 @@ use AppBundle\Field\GenreType;
 use AppBundle\Field\DatePickerType;
 
 
-class MembreType extends AbstractType
+class VoirMembreType extends AbstractType
 {
 
-    /**
-     * Formulaire pour ajouter un membre, gestion automatique de la détection de famille
-     */
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -70,7 +67,11 @@ class MembreType extends AbstractType
 
             ->add('envoiFacture','choice', array('choices' => array('Membre' => 'Membre', 'Famille' => 'Famille')))
 
+            ->add('numeroBs', 'text',array('label' => 'Numéro BS'))
+            ->add('inscription','datepicker',array('label' => 'Inscription'))
+            ->add('statut','text',array('label' => 'Statut'))
 
+            ->add('famille',new FamilleType())
 
             ->add(
                 'id',

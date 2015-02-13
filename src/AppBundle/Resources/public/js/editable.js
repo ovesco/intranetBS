@@ -186,6 +186,9 @@ var editable = {
                 else if(options == 'boolean')
                     options_text = '<option value="1">Oui</option><option value="0">Non</option>';
 
+                else if(options == 'expediable')
+                    options_text = '<option value="1">Courrier à cettte adresse</option><option value="0">Aucun courrier à cette adresse</option>';
+
                 else if(options == 'choices')
                     options_text = $(obj).find('.select_choices').html();
 
