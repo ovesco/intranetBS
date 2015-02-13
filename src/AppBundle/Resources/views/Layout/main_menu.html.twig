@@ -1,153 +1,154 @@
+<div id="main-menu" class="ui vertical inverted sidebar menu">
+    <div class="item">
+        <a class="ui logo icon image" href="{{ path('interne_homepage') }}">
 
-<div class="item">
-    <a class="ui logo icon image" href="{{ path('interne_homepage') }}">
+            {% image '@AppBundle/Resources/public/images/logo.png' %}
+                <img src="{{ asset_url }}" id="main-logo" alt="Logo" />
+            {% endimage %}
 
-        {% image '@AppBundle/Resources/public/images/logo.png' %}
-            <img src="{{ asset_url }}" id="main-logo" alt="Logo" />
-        {% endimage %}
-
-    </a>
-    <a href="{{ path('interne_homepage') }}" ><b>{{ parametreService.getValue('intranet','nom') }}</b></a>
-</div>
-
-
-<div class="item">
-    <div class="ui small active  inverted header">Intranet</div>
-    <div class="menu">
-
-
-
-        <a class="item" href="{{ path('interne_organisation_news_show') }}">
-            News
         </a>
-
-        <a class="item" href="{{ path('interne_organisation_agenda_show') }}">
-            Agenda
-        </a>
-
-        <a class="item" href="{{ path('interne_organisation_default') }}">
-            Téléchargement
-        </a>
-
+        <a href="{{ path('interne_homepage') }}" ><b>{{ parametreService.getValue('intranet','nom') }}</b></a>
     </div>
-</div>
 
-<div class="item">
-    <div class="ui small inverted header">Base de donnée</div>
-    <div class="menu">
 
-        <a class="item" href="{{ path('interne_ajouter_membre') }}">
-            Ajouter un membre
-        </a>
+    <div class="item">
+        <div class="ui small active  inverted header">Intranet</div>
+        <div class="menu">
 
-        <a class="item" href="{{ path('interne_search') }}">
-            Rechercher
-        </a>
 
-        <a class="item" href="{{ path('listing_vue_globale') }}">
-            Listes personnalisées
-            <span class="ui mini empty green circular ui label"></span>
-        </a>
 
+            <a class="item" href="{{ path('interne_organisation_news_show') }}">
+                News
+            </a>
+
+            <a class="item" href="{{ path('interne_organisation_agenda_show') }}">
+                Agenda
+            </a>
+
+            <a class="item" href="{{ path('interne_organisation_default') }}">
+                Téléchargement
+            </a>
+
+        </div>
     </div>
-</div>
 
-<div class="item">
-    <div class="ui small  inverted header">Groupe{% if groups|length > 1 %}s{% endif %}</div>
-    <div class="menu">
-        {%  for group in groups %}
-            <a class="item" href="{{ path('interne_voir_groupe', {'groupe' : group.id }) }}">{{ group.nom }}</a>
-        {% endfor %}
+    <div class="item">
+        <div class="ui small inverted header">Base de donnée</div>
+        <div class="menu">
+
+            <a class="item" href="{{ path('interne_ajouter_membre') }}">
+                Ajouter un membre
+            </a>
+
+            <a class="item" href="{{ path('interne_search') }}">
+                Rechercher
+            </a>
+
+            <a class="item" href="{{ path('listing_vue_globale') }}">
+                Listes personnalisées
+                <span class="ui mini empty green circular ui label"></span>
+            </a>
+
+        </div>
     </div>
-</div>
 
-<div class="item">
-    <div class="ui small  inverted header">Galerie</div>
-    <div class="menu">
-        <a class="item" href="{{ path('galerie_interne_global_managing') }}">Administration générale</a>
+    <div class="item">
+        <div class="ui small  inverted header">Groupe{% if groups|length > 1 %}s{% endif %}</div>
+        <div class="menu">
+            {%  for group in groups %}
+                <a class="item" href="{{ path('interne_voir_groupe', {'groupe' : group.id }) }}">{{ group.nom }}</a>
+            {% endfor %}
+        </div>
     </div>
-</div>
 
-<div class="item">
-    <div class="ui small  inverted header">Structure</div>
-    <div class="menu">
-
-   {#
-        <a class="item" href="{{ path('hierarchie') }}">Hierarchie du groupe(JS)</a>
-    #}
-
-        <a class="item" href="{{ path('structure_gestion_groupe') }}">Gestion des groupes</a>
-
-        <a class="item" href="{{ path('structure_gestion_fonctions') }}">Gestion des fonctions</a>
-
-        <a class="item" href="{{ path('structure_gestion_model') }}">Gestion des modèles</a>
-
-        <a class="item" href="{{ path('structure_gestion_categorie') }}">Gestion des Categories</a>
-
-
-
+    <div class="item">
+        <div class="ui small  inverted header">Galerie</div>
+        <div class="menu">
+            <a class="item" href="{{ path('galerie_interne_global_managing') }}">Administration générale</a>
+        </div>
     </div>
-</div>
 
-<div class="item">
-    <div class="ui small  inverted header">Paramètres</div>
-    <div class="menu">
+    <div class="item">
+        <div class="ui small  inverted header">Structure</div>
+        <div class="menu">
 
-        <a class="item" href="{{ path('validation_vue_globale') }}">
-            Validation
-        </a>
+       {#
+            <a class="item" href="{{ path('hierarchie') }}">Hierarchie du groupe(JS)</a>
+        #}
 
-        <a class="item" href="#">
-            Paramètres avancés
-        </a>
+            <a class="item" href="{{ path('structure_gestion_groupe') }}">Gestion des groupes</a>
 
+            <a class="item" href="{{ path('structure_gestion_fonctions') }}">Gestion des fonctions</a>
+
+            <a class="item" href="{{ path('structure_gestion_model') }}">Gestion des modèles</a>
+
+            <a class="item" href="{{ path('structure_gestion_categorie') }}">Gestion des Categories</a>
+
+
+
+        </div>
     </div>
-</div>
 
-<div class="item">
-    <div class="ui small  inverted header">Sécurité</div>
-    <div class="menu">
+    <div class="item">
+        <div class="ui small  inverted header">Paramètres</div>
+        <div class="menu">
 
-        <a class="item" href="{{ path('interne_roles_match_fonctions') }}">
-            Matching droits - fonctions
-        </a>
+            <a class="item" href="{{ path('validation_vue_globale') }}">
+                Validation
+            </a>
 
+            <a class="item" href="#">
+                Paramètres avancés
+            </a>
+
+        </div>
     </div>
-</div>
 
-<div class="item">
-    <div class="ui small  inverted header">Mes envois</div>
-    <div class="menu">
+    <div class="item">
+        <div class="ui small  inverted header">Sécurité</div>
+        <div class="menu">
 
-        <a class="item" href="{{ path('utils_envoi_liste') }}">
-            Liste des envois
-        </a>
+            <a class="item" href="{{ path('interne_roles_match_fonctions') }}">
+                Matching droits - fonctions
+            </a>
 
-
+        </div>
     </div>
-</div>
 
-<div class="item">
-    <div class="ui small  inverted header">Finances</div>
-    <div class="menu">
+    <div class="item">
+        <div class="ui small  inverted header">Mes envois</div>
+        <div class="menu">
 
-        <a class="item" href="{{path('interne_fiances_search')}}">Recherche</a>
+            <a class="item" href="{{ path('utils_envoi_liste') }}">
+                Liste des envois
+            </a>
 
-        <a  class="item" href="{{path('interne_fiances_payement')}}">Payements</a>
 
-
+        </div>
     </div>
-</div>
 
-<div class="item">
-    <div class="ui small  inverted header">Divers</div>
-    <div class="menu">
+    <div class="item">
+        <div class="ui small  inverted header">Finances</div>
+        <div class="menu">
 
-        <a class="item" href="{{ path('interne_parametres_liste') }}">Paramètres</a>
+            <a class="item" href="{{path('interne_fiances_search')}}">Recherche</a>
 
-        <a class="item" href="{{path('interne_fiances_mode_emploi') }}">Mode d'emploi</a>
+            <a  class="item" href="{{path('interne_fiances_payement')}}">Payements</a>
 
-        <a class="item" href="{{path('app_bundle_statistics')}}">Statistiques</a>
 
+        </div>
+    </div>
+
+    <div class="item">
+        <div class="ui small  inverted header">Divers</div>
+        <div class="menu">
+
+            <a class="item" href="{{ path('interne_parametres_liste') }}">Paramètres</a>
+
+            <a class="item" href="{{path('interne_fiances_mode_emploi') }}">Mode d'emploi</a>
+
+            <a class="item" href="{{path('app_bundle_statistics')}}">Statistiques</a>
+
+        </div>
     </div>
 </div>

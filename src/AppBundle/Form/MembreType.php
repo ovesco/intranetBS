@@ -28,25 +28,10 @@ class MembreType extends AbstractType
     {
         $builder
 
-            ->add(
-                'prenom',
-                'text',
-                array('label' => 'Prénom')
-            )
-
-            ->add(
-                'naissance',
-                'datepicker'
-            )
-
-            ->add(
-                'sexe',
-                'genre'
-            )
-
-            ->add(
-                'numeroAvs',
-                'number',
+            ->add('prenom','text',array('label' => 'Prénom'))
+            ->add('naissance','datepicker')
+            ->add('sexe','genre')
+            ->add('numeroAvs','number',
                 array(
                     'label' => 'Numéro AVS',
                     'required' => false,
@@ -84,6 +69,10 @@ class MembreType extends AbstractType
             )
 
             ->add('envoiFacture','choice', array('choices' => array('Membre' => 'Membre', 'Famille' => 'Famille')))
+
+            ->add('numeroBs', 'text',array('label' => 'Numéro BS'))
+            ->add('inscription','datepicker',array('label' => 'Inscription'))
+            ->add('statut','text',array('label' => 'Statut'))
 
             ->add(
                 'id',

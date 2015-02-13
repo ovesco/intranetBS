@@ -1,0 +1,8 @@
+#alerts-bag {
+    position: fixed;
+    width: 600px;
+    top: 30px;
+    left: calc(100% - 630px);
+    z-index: 10000
+}
+

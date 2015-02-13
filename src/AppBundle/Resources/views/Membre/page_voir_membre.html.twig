@@ -7,289 +7,50 @@
 {% endblock %}
 
 {% form_theme membreForm       ':Templates/Form:ajax_edit.html.twig' %}
-{% form_theme infosScoutesForm ':Templates/Form:ajax_edit.html.twig' %}
 
 {% block content %}
 
     <div class="ui page grid">
-        <div class="row">
-            <div class="column">
-                <div class="ui segment">
 
-                    <div class="ui right floated basic segment">
-                        <br/>
 
-                        {% if membre.validity == 0 %}
-                            <a class="circular ui mini icon red button popupable" data-content="Données non vérifiées"><i class="warning icon"></i></a>
-                        {% elseif membre.validity == 1 %}
-                            <a class="circular ui mini icon yellow button popupable" data-content="Certaines données sont non vérifiées"><i class="warning icon"></i></a>
-                        {% elseif membre.validity == 2 %}
-                            <a class="circular ui mini icon green button popupable" data-content="Données vérifiées"><i class="checkmark icon"></i></a>
-                        {% endif %}
 
-                        <div class="ui circular icon top left pointing dropdown mini green button">
-                            <i class="list icon"></i>
-                            <div class="menu">
-                                <div class="header">Ajouter à une liste</div>
-                                {% for liste in listing.listes %}
-                                    <div class="item" onclick="addToListing({{ membre.id }}, '{{ liste.token }}', this);">
-                                        {% if liste.contains(membre.id) %}<div class="ui green empty circular label"></div>
-                                        {% else %}<div class="ui yellow empty circular label"></div>{% endif %}
-                                        {{ liste.name }}
-                                        <span class="description">{{ liste.length }}</span>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </div>
+        <div class="column">
 
-                        <div class="ui circular icon top left pointing dropdown mini blue button">
-                            <i class="wrench icon"></i>
-                            <div class="menu">
+            <h1>{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</h1>
+            <h2>Information sur le membre</h2>
 
-                                <div class="header">Ajouter</div>
-                                <div class="item"><i class="star icon"></i> Des distinctions</div>
-                                <div class="item"><i class="tags icon"></i> Des attributions</div>
-                                <div class="ui divider"></div>
+            <div class="row ui segment">
 
-                                <div class="header">Options avancées</div>
-                                <div class="item" onclick="modifyFamilleTriggered();"><i class="sitemap icon"></i> Modifier la famille</div>
-                                <div class="item" onclick="showModal('#membre-edit-numero-bs');"><i class="privacy icon"></i> Modifier le numéro BS</div>
-                            </div>
-                        </div>
+                {% include "AppBundle:Membre:voir_infos_membre.html.twig" with {'membreForm':membreForm, 'membre':membre, } %}
 
+            </div>
+
+            <h2>Factures et créances</h2>
+
+            <div class="row ui segment">
+
+                {% include "InterneFinancesBundle:Interface:interface.html.twig" with {'ownerEntity': membre }%}
+
+
+
+                <div class="ui close right rail">
+                    <div class="ui secondary vertical following fluid accordion menu">
+                        <div class="item">coucou</div>
                     </div>
 
-                    <h1>{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</h1>
-
-                    <div class="ui vertical segment">
-
-                        <div id="membre-infos-context" class="tab-context">
-                            <div class="ui top attached tabular menu">
-                                <div class="active item" data-tab="infos-base">{{ membre.prenom|capitalize }}</div>
-                                <div class="item" data-tab="infos-famille">Famille {{ membre.nom|capitalize }}</div>
-                                <div class="item" data-tab="infos-scoutes">Infos scoutes</div>
-                                <div class="item" data-tab="finances-creances-factures">Créances et factures</div>
-                            </div>
-                            <div class="ui bottom attached active tab segment" data-tab="infos-base">
-                                <div class="ui grid">
-                                    <div class="eight wide column">
-                                        <div class="ui segment">
-
-                                            {% include "AppBundle:CibleEnvoi:cibleEnvoi.html.twig" with
-                                                {'adresseExpedition':membre.adresseExpedition,
-                                                'listeEmailsExpedition':membre.listeEmailsExpedition} %}
-
-                                        </div>
-
-
-
-
-                                        <div class="ui segment">
-                                        {% include "AppBundle:Contact:showWithForm.html.twig" with {'contact':membreForm.contact} %}
-                                        </div>
-
-                                    </div>
-
-                                    <div class="eight wide column">
-                                        <h4>Informations sur le membre</h4>
-                                        <table class="ui definition table">
-                                            <tbody>
-                                                <tr>
-                                                    <td>Nom</td>
-                                                    <td><a href="{{ path('interne_voir_famille', {famille:membre.famille.id}) }}">{{ membre.nom|capitalize }}</a></td>
-                                                </tr>
-                                                {{ form_row(membreForm) }}
-
-                                            </tbody>
-                                        </table>
-
-                                        <div class="ui segment">
-                                            <h4>Attributions actuel</h4>
-                                            {% include "AppBundle:Attribution:listeAttributionActuel.html.twig" with {'attributions':membre.activeAttributions} %}
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ui bottom attached tab segment" data-tab="infos-famille">
-                                <div class="ui grid">
-                                    <div class="column" id="adresse-membre">
-                                        <div class="ui grid">
-                                            <div class="row">
-                                                <div class="six wide column">
-
-                                                    <a href="{{ path('interne_voir_famille', {famille:membre.famille.id}) }}">Voir la famille {{ membre.nom|capitalize }}</a>
-
-
-                                                        {% include "AppBundle:Contact:show.html.twig" with {'contact':membre.famille.contact} %}
-
-
-                                                </div>
-                                                <div class="ten wide column">
-                                                    <h4>Frères et soeurs</h4>
-                                                    <table class="ui table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th></th>
-                                                                <th>Fonction</th>
-                                                                <th>Unité</th>
-                                                                <th></th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {% for gosse in  membre.famille.membres %}
-
-                                                                {% if gosse.id != membre.id %}
-                                                                <tr>
-                                                                    <td><b>{{ gosse.prenom }}</b></td>
-                                                                    {% if gosse.activeAttribution is not null %}
-                                                                        <td>
-                                                                            {{ gosse.activeAttribution.fonction.abreviation }}
-                                                                        </td>
-                                                                        <td>
-                                                                            {{ gosse.activeAttribution.groupe.nom }}
-                                                                        </td>
-                                                                    {% else %}
-                                                                        <td>Aucune donnée</td>
-                                                                        <td></td>
-                                                                    {% endif %}
-                                                                    <td>
-                                                                        <a href="{{ path('interne_voir_membre', {'membre': gosse.id }) }}" class="circular tiny ui icon teal button"><i class="share icon"></i></a>
-                                                                    </td>
-                                                                </tr>
-                                                                {% endif %}
-                                                            {% endfor %}
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ui bottom attached tab segment" data-tab="infos-scoutes">
-                                <div class="ui grid">
-                                    <div class="row">
-                                        <div class="eight wide column">
-                                            <table class="ui definition table">
-                                                <tbody>
-                                                    <tr>
-                                                        <td>Numéro BS</td>
-                                                        <td>{{ membre.numeroBs }}</td>
-                                                    </tr>
-                                                    {{ form_row(infosScoutesForm.inscription) }}
-                                                    {{ form_row(infosScoutesForm.statut) }}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="eight wide column">
-                                            <h4 class="ui header">Distinctions</h4>
-                                            <table class="ui table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Nom</th>
-                                                        <th>Date</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {% for obtention in membre.distinctions %}
-                                                        <tr>
-                                                            <td>{{ obtention.distinction.nom }}</td>
-                                                            <td>{{ obtention.obtention|date('d.m.Y') }}</td>
-                                                            <td>
-                                                                <button href="#" data-content="{{ obtention.distinction.remarques }}" class="circular ui mini icon blue button popupable"><i class="info icon"></i></button>
-                                                                <button href="#" class="circular ui mini icon red button"><i class="remove icon" onclick="removeAttributionOrDistinction(this, {{ membre.id }}, 'ObtentionDistinction', {{ obtention.id }});"></i></button>
-                                                            </td>
-                                                        </tr>
-                                                    {% endfor %}
-                                                </tbody>
-                                            </table>
-
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="column">
-                                            <h4>Attributions</h4>
-                                            {% include "AppBundle:Attribution:listeAttribution.html.twig" with {'attributions': membre.attributions } %}
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="ui bottom attached tab segment" data-tab="finances-creances-factures">
-                                {# Insertion de la partie facture et créance pour le membre #
-                                {% include "InterneFinancesBundle:Interface:interface.html.twig" with {'ownerEntity': membre } %}#}
-
-                                {% include "InterneFinancesBundle:Interface:interface.html.twig" with {'ownerEntity': membre }%}
-
-
-                            </div>
-
-                        </div>
-
-                    </div>
                 </div>
+
+
+
+
+
+
+
             </div>
         </div>
 
     </div>
 
-    <div id="popup-container"></div>
-
-    <div id="membre-edit-numero-bs" class="ui small modal">
-        <i class="close icon"></i>
-        <div class="header">
-            Modifier le numéro BS
-        </div>
-        <div class="content">
-            <p>Numéro BS actuel : <b>{{ membre.numeroBs }}</b></p>
-
-            <div class="ui action input">
-                <input id="new-numero-bs-input" type="number" placeholder="Nouveau numéro" />
-                <div onclick="verifyNumeroBs()" id="button-verify-numero-bs" class="ui teal right labeled icon button">
-                    <i class="search icon"></i>
-                    Vérifier
-                </div>
-            </div>
-
-        </div>
-        <div class="actions">
-            <div class="ui red button">Annuler</div>
-            <div id="validate-modf-numero-bs" onclick="modifiyNumeroBs({{ membre.id }});" class="ui green disabled button">Modifier</div>
-        </div>
-    </div>
-
-    <div id="membre-edit-famille" class="ui small modal">
-        <i class="close icon"></i>
-        <div class="header">
-            Modifier la famille
-        </div>
-        <div class="content">
-            <p>Famille actuelle : <b>{{ membre.nom }}</b></p>
-
-            <div class="ui action input">
-                <div id="famille-membre-modif-dropdown" class="ui fluid search selection dropdown">
-                    <input type="hidden" name="country">
-                    <i class="dropdown icon"></i>
-                    <div class="default text">Choisir une nouvelle famille</div>
-                    <div class="menu" id="update-famille-membre-select">
-                    </div>
-                </div>
-                <div onclick="modifyFamille();" class="ui teal right labeled icon button">
-                    <i class="checkmark icon"></i>
-                    Valider
-                </div>
-            </div>
-
-        </div>
-        <div class="actions">
-            <div class="ui button">Fermer</div>
-        </div>
-    </div>
 
 {% endblock %}
 

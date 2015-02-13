@@ -137,22 +137,14 @@ class MembreController extends Controller {
 
 
         $membreForm         = $this->createForm(new MembreType, $membre);
-        $infosScoutesForm   = $this->createForm(new MembreInfosScoutesType, $membre);
 
         return $this->render('AppBundle:Membre:page_voir_membre.html.twig', array(
 
                 'membre'            => $membre,
                 'listing'           => $this->get('listing'),
                 'membreForm'        => $membreForm->createView(),
-                'infosScoutesForm'  => $infosScoutesForm->createView()
             )
         );
-
-        /*
-
-        var_dump($this->get('app.twig.validation_extension')->validationFilter('"appbundle_membre_prenom"'));
-        return new Response('');
-        */
 
     }
 

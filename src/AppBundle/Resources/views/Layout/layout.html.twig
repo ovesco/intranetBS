@@ -1,149 +1,79 @@
-
 <!doctype html>
 <html>
 
-<head>
-
-    <meta charset="utf-8">
-    <title>{% block titre %}{% endblock %}</title>
-    <meta name="description" content="NetBS | outil de gestion de groupe scout développé par la Brigade de Sauvabelin">
-    <meta name=viewport content="width=device-width, initial-scale=1">
-    <meta name="mobile-web-app-capable" content="yes">
-    <link rel="stylesheet" href="{{ asset('semantic/semantic.min.css') }}">
-    <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700,300&subset=latin,vietnamese' rel='stylesheet' type='text/css'>
-
-
-    {% stylesheets '@AppBundle/Resources/public/css/*' output='css/main.css' %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
+    <head>
+        <meta charset="utf-8">
+        <title>{% block titre %}{% endblock %}</title>
+        <meta name="description" content="Outil de gestion de groupe scout développé par la Brigade de Sauvabelin">
+        <meta name=viewport content="width=device-width, initial-scale=1">
+        <meta name="mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="{{ asset('semantic/semantic.min.css') }}">
+        <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700,300&subset=latin,vietnamese' rel='stylesheet' type='text/css'>
 
 
+        {% stylesheets '@AppBundle/Resources/public/css/Layout/*' output='css/layout.css' %}
+            <link rel="stylesheet" href="{{ asset_url }}" />
+        {% endstylesheets %}
 
-    {% block css %}{% endblock %}
+        {% block css %}{% endblock %}
 
-    {% block headjs %}{% endblock %}
-
-</head>
-<body {% block onload %}{% endblock %}>
-
-<div id="main-menu" class="ui vertical inverted sidebar menu">
-
-    {{ render(controller('AppBundle:Layout:mainMenuGenerate')) }}
-
-</div>
+        {% block headjs %}{% endblock %}
+    </head>
 
 
-<div class="pusher">
+    <body class="pushable">
 
 
-    <div id="alerts-bag"></div>
+        {{ render(controller('AppBundle:Layout:mainMenuGenerate')) }}
 
-    <header>
 
-        <div>
-            <button class="header-button" id="main-menu-button">
-                <i class="big content icon"></i>
-            </button>
+        {% include 'AppBundle:Layout:top_menu.html.twig' %}
 
-            <div class="header-button dropdown-first-level ui dropdown icon">
-                <i class="big inbox icon"></i>
-                <div class="menu">
-                    <div class="item">
-                        <i class="plus icon"></i>
-                        Nouveau message
-                    </div>
 
-                    <div class="item">
-                        <i class="mail outline icon"></i>
-                        Boite de réception
-                    </div>
-                </div>
+        <div class="pusher">
+
+            <div id="alerts-bag"></div>
+
+            <div id="main-container">
+                {% block content %}{% endblock %}
             </div>
 
-            <h4>{{ block('titre') }}</h4>
+            {# todo c'est quoi ce yolo!!#}
+            <div id="server-data" data-yolo="{% if clientData is defined %}{{ clientData }}{% endif %}"></div>
 
         </div>
 
-        <div class="center-section">
-            <div id="layout-search" class="ui category search">
-                <div class="ui small fluid icon input">
-                    <input id="layout-search-input" class="prompt" type="text" placeholder="Rechercher...">
-                    <i class="search icon"></i>
-                </div>
-                <div class="results"></div>
-            </div>
-        </div>
+
+        <script src="{{ asset('assetic/jquery.js') }}"></script>
+        <script src="{{ asset('semantic/semantic.min.js') }}"></script>
+        <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+        <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
 
 
-        <div class="right-section">
+        {% javascripts
+            '@AppBundle/Resources/public/js/alwaysIncluded/*'
+            '@AppBundle/Resources/public/js/layout.js'
 
-                <a class="ui teal label"><i class="database icon"></i> Listes</a>
+            output="js/main.js"
+        %}
+        <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
 
-            <div class="ui selection dropdown">
-                {{ app.security.token.user.membre.prenom|capitalize }} {{ app.security.token.user.membre.nom|capitalize }} <i class="dropdown icon"></i>
-                <div class="menu">
-                    <a class="item" href="{{ path('security_my_account') }}" ><i class="user icon"></i>Mon compte</a>
-                    <a class="item" href="{{ path('logout') }}" ><i class="delete icon"></i>Déconnexion</a>
-                </div>
-            </div>
-
-
-
-
-        </div>
-
-    </header>
-
-    <div id="main-corpus">
-        {% block content %}{% endblock %}
-    </div>
-
-    {# todo c'est quoi ce yolo!!#}
-    <div id="server-data" data-yolo="{% if clientData is defined %}{{ clientData }}{% endif %}"></div>
-
-</div>
-
-{#
-{% javascripts '%kernel.root_dir%/../vendor/components/jquery/jquery.min.js' %}
-    <script src="{{ asset_url }}"></script>
-{% endjavascripts %}
-#}
-
-
-<script src="{{ asset('assetic/jquery.js') }}"></script>
-<script src="{{ asset('semantic/semantic.min.js') }}"></script>
-<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
-<script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
-
-
-{% javascripts
-    '@AppBundle/Resources/public/js/alwaysIncluded/*'
-    '@AppBundle/Resources/public/js/layout.js'
-
-    output="js/main.js"
-%}
-<script src="{{ asset_url }}"></script>
-{% endjavascripts %}
-
-<script type="text/javascript">
-
-
-    /*
-     * Pour chaque flashbag contenu, sachant qu'ils ne contiennent que des alertes et des messages, on génère
-     * une alerte correspondante
-     */
-    {% for label, flashes in app.session.flashbag.all %}
-    {% for flash in flashes %}
-    alerte.send("{{ flash }}", "{{ label }}");
-    {% endfor %}
-    {% endfor %}
-</script>
+        <script type="text/javascript">
+            /*
+             * Pour chaque flashbag contenu, sachant qu'ils ne contiennent que des alertes et des messages, on génère
+             * une alerte correspondante
+             */
+            {% for label, flashes in app.session.flashbag.all %}
+                {% for flash in flashes %}
+                    alerte.send("{{ flash }}", "{{ label }}");
+                {% endfor %}
+            {% endfor %}
+        </script>
 
 
 
-{% block js %}
+        {% block js %}{% endblock %}
 
-{% endblock %}
-
-</body>
+    </body>
 </html>

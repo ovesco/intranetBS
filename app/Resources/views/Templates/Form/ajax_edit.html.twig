@@ -21,7 +21,7 @@
 
     <tr>
         {%- set type = type|default('text') -%}
-        <td>{{ block('form_label') }}</td>
+        <td class="collapsing">{{ block('form_label') }}</td>
         <td data-type="text" {{ block('validation_block') }}>{% if value is not empty %}{{ value }}{% endif %}</td>
     </tr>
 {%- endblock form_widget_simple %}
@@ -29,14 +29,14 @@
 {# textarea #}
 {% block textarea_widget -%}
     <tr>
-        <td>{{ block('form_label') }}</td>
+        <td class="collapsing">{{ block('form_label') }}</td>
         <td data-type="textarea" {{ block('validation_block') }}>{% if value is not empty %}{{ value }}{% endif %}</td>
     </tr>
 {%- endblock textarea_widget %}
 
 {% block checkbox_widget -%}
     <tr>
-        <td>{{ block('form_label') }}</td>
+        <td class="collapsing">{{ block('form_label') }}</td>
         <td data-type="select" data-source="boolean" {{ block('validation_block') }}>
             {% if value is not empty %}
                 {{ value|boolean }}
@@ -54,7 +54,7 @@
 
 {% block datepicker_widget -%}
     <tr>
-        <td>{{ block('form_label') }}</td>
+        <td class="collapsing">{{ block('form_label') }}</td>
         <td data-type="datepicker" {{ block('validation_block') }}>{% if value is not empty %}{{ value|date('d.m.Y') }}{% endif %}</td>
     </tr>
 {%- endblock datepicker_widget %}
@@ -63,7 +63,7 @@
 
 {% block genre_widget -%}
     <tr>
-        <td>{{ block('form_label') }}</td>
+        <td class="collapsing">{{ block('form_label') }}</td>
         <td data-type="select" data-source="gender" {{ block('validation_block') }}>{% if value == 'm' %}Homme{% else %}Femme{% endif %}</td>
     </tr>
 {%- endblock genre_widget %}
@@ -71,7 +71,7 @@
 
 {% block choice_widget -%}
 <tr>
-    <td>{{ block('form_label') }}</td>
+    <td class="collapsing">{{ block('form_label') }}</td>
     <td data-type="select" data-source="choices" {{ block('validation_block') }}>
         <div class="select_choices" hidden>{% set options = choices -%}{{- block('choice_widget_options') -}}</div>
         {% if value is not empty %}{{ value }}{% endif %}

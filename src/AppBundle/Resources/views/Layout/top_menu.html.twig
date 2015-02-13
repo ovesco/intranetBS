@@ -1,0 +1,26 @@
+<div id=top-menu" class="ui fixed inverted menu">
+    <div class="container">
+        <div class="left menu">
+            <div class="item" id="main-menu-button">
+                <i class="content icon"></i>Menu
+            </div>
+        </div>
+        <div class="right menu">
+            <div class="item">
+                <div id="layout-search" class="ui small fluid icon input">
+                    <input id="layout-search-input" class="prompt" type="text" placeholder="Rechercher...">
+                    <i class="search icon"></i>
+                </div>
+                <div class="results"></div>
+
+            </div>
+            <div class="ui dropdown item">
+                {{ app.security.token.user.membre.prenom|capitalize }} {{ app.security.token.user.membre.nom|capitalize }} <i class="dropdown icon"></i>
+                <div class="menu">
+                    <a class="item" href="{{ path('security_my_account') }}" ><i class="user icon"></i>Mon compte</a>
+                    <a class="item" href="{{ path('logout') }}" ><i class="delete icon"></i>Déconnexion</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
