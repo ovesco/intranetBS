@@ -1,7 +1,8 @@
 <h3><i class="mail outline icon"></i> Envoi par courrier</h3>
 
-<div class="ui steps">
-    <div class="step">
+<div class="ui steps" id="liste-adresses">
+
+    <div class="step" id="adresse-membre">
 
         <div class="content">
             <div class="title">Adresse du membre</div>
@@ -11,10 +12,17 @@
 
                 {% include 'AppBundle:Adresse:adresse_ajax_edit_form.html.twig' with {'adresse':membreForm.contact.adresse } %}
 
+                <div class="ui toggle checkbox">
+                    <input type="checkbox">
+                </div>
+
+
+
+
             </div>
         </div>
     </div>
-    <div class="active step">
+    <div class="step" id="adresse-famille">
         <div class="content">
             <div class="title">Adresse familliale</div>
             <div class="description">
@@ -23,25 +31,32 @@
 
                 {% include 'AppBundle:Adresse:adresse_ajax_edit_form.html.twig' with {'adresse':membreForm.famille.contact.adresse} %}
 
+
+
+
             </div>
         </div>
     </div>
-    <div class="disabled step">
+    <div class="disabled step" id="adresse-mere">
         <div class="content">
             <div class="title">Adresse de la mère</div>
             <div class="description">
 
                 {% include 'AppBundle:Adresse:adresse_ajax_edit_form.html.twig' with {'adresse':membreForm.famille.mere.contact.adresse} %}
 
+
+
             </div>
         </div>
     </div>
-    <div class="disabled step">
+    <div class="disabled step" id="adresse-pere">
         <div class="content">
             <div class="title">Adresse du père</div>
             <div class="description">
 
                 {% include 'AppBundle:Adresse:adresse_ajax_edit_form.html.twig' with {'adresse':membreForm.famille.pere.contact.adresse} %}
+
+
 
             </div>
         </div>

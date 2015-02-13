@@ -14,18 +14,22 @@ use Interne\FinancesBundle\Form\CreanceAddType;
 use Interne\FinancesBundle\Entity\Creance;
 use AppBundle\Entity\Membre;
 use Interne\FinancesBundle\Entity\Facture;
+use AppBundle\Utils\Listing\Liste;
+use AppBundle\Utils\Listing\Lister;
+use AppBundle\Entity\Groupe;
 
 
 
 
 class CreanceController extends Controller
 {
-    /*
+    /**
+     *
      * Supprime une cérance en ajax.
      * Ne supprime que les cérances qui sont pas encore
      * liée a une facture.
-     */
-    /**
+     *
+     *
      * @Route("/creance/delete_ajax", name="interne_fiances_creance_delete_ajax", options={"expose"=true})
      * @param Request $request
      * @return Response
@@ -59,12 +63,10 @@ class CreanceController extends Controller
 
     /**
      * @Route("/creance/show_ajax", name="interne_fiances_creance_show_ajax", options={"expose"=true})
-     *
+     * @param Request $request
      * @return Response
      */
-    public function showAjaxAction(){
-
-        $request = $this->getRequest();
+    public function showAjaxAction(Request $request){
 
         if($request->isXmlHttpRequest()) {
 
@@ -83,11 +85,11 @@ class CreanceController extends Controller
      *
      */
     /**
+     * @param Request $request
      * @return Response
      */
-    public function addCreanceToListingAjaxAction()
+    public function addCreanceToListingAjaxAction(Request $request)
     {
-        $request = $this->getRequest();
 
         if ($request->isXmlHttpRequest()) {
 
@@ -220,6 +222,93 @@ class CreanceController extends Controller
         return new Response();
 
 
+    }
+
+
+    /**
+     * @Route("/creance/ajout_en_masse", name="interne_fiances_creance_ajout_en_masse", options={"expose"=true})
+     * @param Request $request
+     * @return Response
+     */
+    public function pageAjoutCreanceEnMasseAction(Request $request)
+    {
+
+        /** @var Lister $listing */
+        $listing = $this->get('listing');
+        $arrayOfListe = $listing->getListes();
+
+        $choices = array();
+
+        /** @var Liste $liste */
+        foreach($arrayOfListe as $liste)
+        {
+            $choices[$liste->getToken()] = $liste->name;
+        }
+
+        $ajoutForm = $this->createFormBuilder()
+            ->add('creance',new CreanceAddType())
+            ->add('groupes', 'entity', array(
+                'class'		=> 'AppBundle:Groupe',
+                'property'	=> 'nom',
+                'multiple'=>true,
+                'expanded'=>false,
+                'required'=>false,
+            ))
+            ->add('listes','choice',array(
+                'choices'=>$choices,
+                'multiple'=>true,
+                'expanded'=>false,
+                'required'=>false,
+            ))
+            ->getForm();
+
+
+        $ajoutForm->handleRequest($request);
+
+        if ($ajoutForm->isValid()) {
+
+
+            $em = $this->getDoctrine()->getManager();
+
+            $groupes = $ajoutForm->get('groupes')->getData();
+            $listes = $ajoutForm->get('listes')->getData();
+            /** @var Creance $creance */
+            $creance = $ajoutForm->get('creance')->getData();
+            /** @var Groupe $groupe */
+            foreach($groupes as $groupe)
+            {
+                foreach($groupe->getMembersRecursive() as $membre)
+                {
+                    $creanceToMembre = new CreanceToMembre();
+                    $creanceToMembre->loadFromCreance($creance);
+                    $creanceToMembre->setDateCreation(new \DateTime());
+                    $creanceToMembre->setMembre($membre);
+
+                    $em->persist($creanceToMembre);
+
+
+                }
+            }
+
+            foreach($listes as $token)
+            {
+                $liste = $listing->getByToken($token);
+                foreach($liste->getAll() as $membre)
+                {
+                    $creanceToMembre = new CreanceToMembre();
+                    $creanceToMembre->loadFromCreance($creance);
+                    $creanceToMembre->setDateCreation(new \DateTime());
+                    $creanceToMembre->setMembre($membre);
+
+                    $em->persist($creanceToMembre);
+                }
+            }
+            $em->flush();
+
+        }
+
+        return $this->render('InterneFinancesBundle:Creance:page_ajout_creance_en_masse.html.twig',
+            array('ajoutForm'=>$ajoutForm->createView()));
     }
 
 
