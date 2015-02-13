@@ -35,7 +35,21 @@
             <div id="alerts-bag"></div>
 
             <div id="main-container">
-                {% block content %}{% endblock %}
+                <div class="ui page grid">
+                    <div class="column">
+
+                        <div class="ui close right rail">
+                            <div class="ui sticky fixed top">
+                                <div id="page-menu" class="ui secondary vertical following fluid menu">
+                                    {% block page_menu %}{% endblock %}
+                                </div>
+                            </div>
+                        </div>
+
+                        {% block content %}{% endblock %}
+
+                    </div>
+                </div>
             </div>
 
             {# todo c'est quoi ce yolo!!#}

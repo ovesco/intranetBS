@@ -8,16 +8,32 @@
 
 {% form_theme membreForm       ':Templates/Form:ajax_edit.html.twig' %}
 
+
+{% block page_menu %}
+
+    <a class="item" href="#membre">{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</a>
+    <a class="item" href="#infos">Informations</a>
+    <a class="item" href="#finances">Factures & créances</a>
+    <a class="item" href="#">coucou</a>
+
+
+{% endblock %}
+
 {% block content %}
 
-    <div class="ui page grid">
 
 
 
-        <div class="column">
 
-            <h1>{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</h1>
-            <h2>Information sur le membre</h2>
+
+
+
+
+
+
+            <h1>{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}<a class="anchor" id="membre"></a></h1>
+            <h2>Information sur le membre<a class="anchor" id="infos"></a></h2>
+
 
             <div class="row ui segment">
 
@@ -25,7 +41,7 @@
 
             </div>
 
-            <h2>Factures et créances</h2>
+            <h2>Factures et créances<a class="anchor" id="finances"></a></h2>
 
             <div class="row ui segment">
 
@@ -33,12 +49,6 @@
 
 
 
-                <div class="ui close right rail">
-                    <div class="ui secondary vertical following fluid accordion menu">
-                        <div class="item">coucou</div>
-                    </div>
-
-                </div>
 
 
 
@@ -47,9 +57,7 @@
 
 
             </div>
-        </div>
 
-    </div>
 
 
 {% endblock %}
