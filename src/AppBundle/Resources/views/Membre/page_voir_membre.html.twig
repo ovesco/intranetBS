@@ -9,54 +9,56 @@
 {% form_theme membreForm       ':Templates/Form:ajax_edit.html.twig' %}
 
 
-{% block page_menu %}
-
-    <a class="item" href="#membre">{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</a>
-    <a class="item" href="#infos">Informations</a>
-    <a class="item" href="#finances">Factures & créances</a>
-    <a class="item" href="#">coucou</a>
-
-
-{% endblock %}
-
 {% block content %}
+<div class="ui page grid">
+    <div class="column">
 
-
-
-
-
-
-
-
-
-
-
-            <h1>{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}<a class="anchor" id="membre"></a></h1>
-            <h2>Information sur le membre<a class="anchor" id="infos"></a></h2>
-
-
-            <div class="row ui segment">
-
-                {% include "AppBundle:Membre:voir_infos_membre.html.twig" with {'membreForm':membreForm, 'membre':membre, } %}
-
+    <div class="ui close right rail">
+        <div class="ui sticky fixed top">
+            <div id="page-menu" class="ui secondary vertical following fluid menu">
+                <a class="item" href="#membre">{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</a>
+                <a class="item" href="#infos-membre">Informations</a>
+                <a class="item" href="#contact">Contact</a>
+                <a class="item" href="#infos-scout">Information scouts</a>
+                <a class="item" href="#finances">Factures & créances</a>
             </div>
+        </div>
+    </div>
 
-            <h2>Factures et créances<a class="anchor" id="finances"></a></h2>
 
-            <div class="row ui segment">
-
-                {% include "InterneFinancesBundle:Interface:interface.html.twig" with {'ownerEntity': membre }%}
-
+    <h1>{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}<a class="anchor" id="membre"></a></h1>
 
 
 
+    <h2>Information sur le membre<a class="anchor" id="infos-membre"></a></h2>
+    <div class="row ui segment">
 
+        {% include "AppBundle:Membre:voir_infos_membre.html.twig" with {'membreForm':membreForm, 'membre':membre, } %}
 
+    </div>
 
+    <h2>Contact<a class="anchor" id="contact"></a></h2>
+    <div class="row ui segment">
 
+        {% include "AppBundle:Membre:voir_contact.html.twig" with {'membreForm':membreForm, 'membre':membre, } %}
 
+    </div>
 
-            </div>
+    <h2>Informations scouts<a class="anchor" id="infos-scout"></a></h2>
+    <div class="row ui segment">
+
+        {% include "AppBundle:Membre:voir_infos_scouts.html.twig" with {'membre':membre, } %}
+
+    </div>
+
+    <h2>Factures et créances<a class="anchor" id="finances"></a></h2>
+    <div class="row ui segment">
+
+        {% include "InterneFinancesBundle:Interface:interface.html.twig" with {'ownerEntity': membre }%}
+
+    </div>
+    </div>
+</div>
 
 
 

@@ -11,7 +11,11 @@
         <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700,300&subset=latin,vietnamese' rel='stylesheet' type='text/css'>
 
 
-        {% stylesheets '@AppBundle/Resources/public/css/Layout/*' output='css/layout.css' %}
+        {% stylesheets
+        '@AppBundle/Resources/public/css/Layout/*'
+        '@AppBundle/Resources/public/css/Editable/*'
+
+        output='css/layout.css' %}
             <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
 
@@ -35,21 +39,13 @@
             <div id="alerts-bag"></div>
 
             <div id="main-container">
-                <div class="ui page grid">
-                    <div class="column">
 
-                        <div class="ui close right rail">
-                            <div class="ui sticky fixed top">
-                                <div id="page-menu" class="ui secondary vertical following fluid menu">
-                                    {% block page_menu %}{% endblock %}
-                                </div>
-                            </div>
-                        </div>
+
+
 
                         {% block content %}{% endblock %}
 
-                    </div>
-                </div>
+
             </div>
 
             {# todo c'est quoi ce yolo!!#}
