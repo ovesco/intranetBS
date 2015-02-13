@@ -1,6 +1,28 @@
 {% form_theme adresse  ':Templates/Form:ajax_edit_adresse.html.twig' %}
 
-{{ form_row(adresse.expediable)  }}<br>
-{{ form_row(adresse.rue)  }}<br>
-{{ form_row(adresse.npa)  }}
-{{ form_row(adresse.localite)  }}
+{% set validity = false %}
+
+{% if (adresse.rue.vars.value is not null) and (adresse.npa.vars.value is not null) and (adresse.localite.vars.value is not null) %}
+    {% set validity = true %}
+{% endif %}
+
+<div class="ui grid">
+    <div class="column">
+
+        <div class="row">
+            {{ form_row(adresse.rue)  }}
+
+        </div>
+
+        <div class="row">
+
+            {{ form_row(adresse.npa)  }} {{ form_row(adresse.localite)  }}
+        </div>
+
+
+            {{ form_row(adresse.expediable)  }}
+
+    </div>
+
+
+</div>
