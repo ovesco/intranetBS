@@ -11,7 +11,6 @@ security:
     firewalls:
 
         # Firewall principal
-        # Sécurise la totalité de l'intranet, c'est-à-dire toute la partie "interne"
         interne:
             pattern:   ^/
             anonymous: ~
