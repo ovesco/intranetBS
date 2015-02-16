@@ -2,7 +2,7 @@
 
 <div class="ui steps" id="liste-adresses">
 
-    <div class="step" id="adresse-membre">
+    <div class="step adresse" id="adresse-membre">
 
         <div class="content">
             <div class="title">Adresse du membre</div>
@@ -12,7 +12,7 @@
 
                 {% include 'AppBundle:Adresse:adresse_ajax_edit_form.html.twig' with {'adresse':membreForm.contact.adresse } %}
 
-                <div class="ui toggle checkbox">
+                <div class="ui toggle checkbox" id="membre">
                     <input type="checkbox">
                 </div>
 
@@ -22,7 +22,7 @@
             </div>
         </div>
     </div>
-    <div class="step" id="adresse-famille">
+    <div class="step adresse" id="adresse-famille">
         <div class="content">
             <div class="title">Adresse familliale</div>
             <div class="description">
@@ -37,7 +37,7 @@
             </div>
         </div>
     </div>
-    <div class="disabled step" id="adresse-mere">
+    <div class="disabled step adresse" id="adresse-mere">
         <div class="content">
             <div class="title">Adresse de la mère</div>
             <div class="description">
@@ -49,7 +49,7 @@
             </div>
         </div>
     </div>
-    <div class="disabled step" id="adresse-pere">
+    <div class="disabled step adresse" id="adresse-pere">
         <div class="content">
             <div class="title">Adresse du père</div>
             <div class="description">
