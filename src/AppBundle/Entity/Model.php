@@ -67,7 +67,7 @@ class Model
     /**
      * @var ArrayCollection 
      * 
-     * @ORM\OneToMany(targetEntity="Groupe", mappedBy="type", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Groupe", mappedBy="model", cascade={"persist"})
      */
     private $groupes;
 

@@ -35,14 +35,14 @@ class Famille implements ExpediableInterface, ClassInterface
     private $membres;
 
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Pere", cascade={"persist", "remove"}, fetch="EAGER")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Pere", mappedBy="famille", cascade={"persist", "remove"}, fetch="EAGER")
      * @ORM\JoinColumn(name="pere_id", referencedColumnName="id")
      */
     private $pere;
 
     /**
      *
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Mere", cascade={"persist", "remove"}, fetch="EAGER")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Mere", mappedBy="famille", cascade={"persist", "remove"}, fetch="EAGER")
      * @ORM\JoinColumn(name="mere_id", referencedColumnName="id")
      */
     private $mere;

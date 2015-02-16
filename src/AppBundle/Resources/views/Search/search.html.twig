@@ -56,8 +56,6 @@ Recherche
                 </div>
 
             </div>
-
-            <div class="ui segment" id="debug"></div>
         </div>
     </div>
 </div>
@@ -82,13 +80,10 @@ Recherche
                     type: 'POST',
                     data: {type: type, pattern: pattern},
                     success: function (data) {
-
-                        alert(JSON.stringify(data));
                         $('#results').html(data);
                     },
 
                     error: function (data) {
-
                         $('#debug').html(data.responseText);
                     }
                 });
