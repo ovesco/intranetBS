@@ -20,8 +20,10 @@ services:
         tags:
             - { name: security.voter }
 
-    security.access.role_hierarchy_voter:
+    security.access.role_voter:
         class:      Interne\SecurityBundle\Voters\RoleHierarchyVoter
         public:     false
         tags:
             - { name: security.voter }
+        arguments:
+            - @doctrine.orm.entity_manager

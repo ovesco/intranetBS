@@ -31,13 +31,10 @@ class AppController extends Controller
      */
     public function testAction() {
 
-        $groupe= $this->getDoctrine()->getManager()->getRepository('AppBundle:Groupe')->find(2);
-
-        if($this->get('security.context')->isGranted('edit', $groupe)) {
+        if($this->get('security.context')->isGranted('ROLE_FINANCES'))
             echo 'pass';
-        }
 
-        return new Response();
+        return new Response('<body></body>');
     }
 
 }

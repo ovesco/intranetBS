@@ -7,7 +7,7 @@ var Server = {
 
     data: null,
     div: '#server-data',
-    attr: 'data-yolo',
+    attr: 'data-client',
 
 
     /**

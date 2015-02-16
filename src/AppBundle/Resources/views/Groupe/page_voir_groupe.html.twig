@@ -9,84 +9,115 @@
     <div class="ui page grid">
         <div class="row">
             <div class="column">
+
+                <div class="ui close right rail">
+                    <div class="ui sticky fixed top">
+                        <div id="page-menu" class="ui secondary vertical following fluid menu">
+
+                            {% for enfant in groupe.enfants %}
+                                <a class="item" href="#{{ enfant.nom }}">{{ enfant.nom }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
                 <div class="ui segment">
 
                     <div class="ui vertical segment">
 
+                        <div class="ui breadcrumb">
+                            {% for parent in groupe.parentsRecursive %}
+                                {% if groupe.id != parent.id %}
+                                    <a href="{{ path('interne_voir_groupe', {groupe: parent.id}) }}" class="section">{{ parent.nom }}</a>
 
-
-                        <div class="ui button effectuerEnvoi" data-id="{{ groupe.id }}">Envoyer un document</div>
-
-
-                        {% for parent in groupe.parentsRecursive %}
-                            {% if groupe.id != parent.id %}
-                                <a href="{{ path('interne_voir_groupe', {groupe: parent.id}) }}" class="ui labeled blue basic button">{{ parent.nom }}</a>
-
-                                {% if not loop.last %}
-                                <i class="angle double right icon"></i>
+                                    {% if not loop.last %}
+                                        <i class="right chevron icon divider"></i>
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
-                        {% endfor %}
-                        <div class="ui green button">{{ groupe.nom }}</div>
+                            {% endfor %}
 
-                        {% if groupe.enfants is not empty %}
-                            <i class="angle double right icon"></i>
-                        {% endif %}
+                            <div class="active section">{{ groupe.nom }}</div>
 
-                        {% for enfant in groupe.enfants %}
-
-                            <a href="{{ path('interne_voir_groupe', {groupe:enfant.id}) }}" class="ui labeled icon blue basic button">
-                                <i class="users icon"></i>
-                                {{ enfant.nom }}
-                            </a>
-
-                        {% endfor %}
+                        </div>
 
                     </div>
 
-                    <div class="ui vertical segment">
-                        <div class="ui segment">
-                            <h1>{{ groupe.nom|capitalize }}</h1>
-                            <h3>{{ groupe.model.nom|capitalize }}</h3>
+                    <h1>{{ groupe.model.nom|capitalize }} de {{ groupe.nom|capitalize }}</h1>
 
-                            <div class="ui circular icon top left pointing dropdown mini blue button">
-                                <i class="external link icon"></i>
-                                <div class="menu">
-                                    <div class="header">Exporter</div>
-                                    <div class="item"><i class="file pdf outline icon"></i> Exporter en PDF</div>
-                                    <div class="item"><i class="file excel outline icon"></i> Exporter en Excel</div>
-                                    <div class="item"><i class="grid layout icon"></i> Génerer les étiquettes</div>
+                    <div class="ui grid">
+                        <div class="row">
+
+
+
+                            <div class="twelve wide column">
+                                <div class="ui vertical">
+                                    <div class="ui segment">
+
+
+                                        <div class="ui three column aligned relaxed fitted stackable grid">
+                                            <div class="column">
+
+                                                <p>Exporter</p>
+                                                <div class="ui vertical basic buttons">
+                                                    <div class="ui button" id="export-liste-pdf"><i class="file pdf icon outline"></i>PDF</div>
+                                                    <div class="ui button" id="export-liste-excel"><i class="file excel icon outline"></i>Excel</div>
+                                                    <div class="ui button" id="export-etiquettes"><i class="grid layout icon"></i>Etiquettes</div>
+                                                    <div class="ui button" id="export-rega"><i class="grid layout icon"></i>Liste REGA</div>
+                                                </div>
+                                            </div>
+
+                                            <div class="column">
+
+                                                <p>Outils</p>
+                                                <div class="ui vertical basic buttons">
+                                                    <div class="ui button" id=""><i class="child icon"></i>Ajouter un membre</div>
+                                                    <div class="ui button" id=""><i class="send icon"></i>Envoyer un document</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="four wide column">
+
+                                <div class="ui vertical">
+                                    <div class="ui segment">
+
+                                        <div class="ui divided list">
+
+                                            <a class="item">
+                                                <div class="right floated ui blue circular label">{{ groupe.members|length }}</div>
+                                                <div class="content">
+                                                    <p>Effectifs direct</p>
+                                                </div>
+                                            </a>
+
+                                            {% for enfant in groupe.enfants %}
+                                                <a href="{{ path('interne_voir_groupe', {groupe: enfant.id}) }}" class="item">
+                                                    <div class="right floated ui blue circular label">{{ enfant.membersRecursive|length }}</div>
+                                                    <div class="content">
+                                                        <p>{{ enfant.nom }}</p>
+                                                    </div>
+                                                </a>
+                                            {% endfor %}
+
+                                            <a class="item">
+                                                <div class="right floated ui blue circular label">{{ groupe.membersRecursive|length }}</div>
+                                                <div class="content">
+                                                    <p class="header">Effectifs total</p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
-
-
-                            <div class="ui divided list">
-
-                                <a class="item">
-                                    <div class="right floated ui blue circular label">{{ groupe.members|length }}</div>
-                                    <div class="content">
-                                        <p>Effectifs direct</p>
-                                    </div>
-                                </a>
-
-                                {% for enfant in groupe.enfants %}
-                                    <a href="{{ path('interne_voir_groupe', {groupe: enfant.id}) }}" class="item">
-                                        <div class="right floated ui blue circular label">{{ enfant.membersRecursive|length }}</div>
-                                        <div class="content">
-                                            <p>{{ enfant.nom }}</p>
-                                        </div>
-                                    </a>
-                                {% endfor %}
-
-                                <a class="item">
-                                    <div class="right floated ui blue circular label">{{ groupe.membersRecursive|length }}</div>
-                                    <div class="content">
-                                        <p class="header">Effectifs total</p>
-                                    </div>
-                                </a>
-                            </div>
                         </div>
-
                     </div>
 
 
@@ -113,7 +144,8 @@
 
 {% macro effectifs(groupe,listing) %}
 
-    <h3>Effectifs détaillés: {{ groupe.nom|capitalize }} ({{ groupe.model.nom|capitalize }})</h3>
+    <a class="anchor active" id="{{ groupe.nom }}"></a>
+    <h2>{{ groupe.nom|capitalize }} ({{ groupe.model.nom|capitalize }})</h2>
 
     {% set membres = groupe.members %}
     {% include 'AppBundle:Membre:liste.html.twig' %}
@@ -143,7 +175,7 @@
 
     <div onclick="selectAll();" class="right floated ui labeled icon button">
         <i class="plus icon"></i>
-        Tout sélectionner
+        Tout séléctionner
     </div>
 
 

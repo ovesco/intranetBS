@@ -1,7 +1,6 @@
 <?php
 
 namespace Interne\SecurityBundle\Utils;
-use AppBundle\Entity\Attribution;
 use Interne\SecurityBundle\Entity\Role;
 
 /**

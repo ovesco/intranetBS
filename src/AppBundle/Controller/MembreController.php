@@ -134,7 +134,7 @@ class MembreController extends Controller {
      */
     public function voirMembreAction($membre) {
 
-        $membreForm         = $this->createForm(new VoirMembreType, $membre);
+        $membreForm = $this->createForm(new VoirMembreType(), $membre);
 
         return $this->render('AppBundle:Membre:page_voir_membre.html.twig', array(
 

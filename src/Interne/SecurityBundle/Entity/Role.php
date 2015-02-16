@@ -44,12 +44,12 @@ class Role implements RoleInterface
     private $description;
 
     /**
-     * @ORM\OneToMany(targetEntity="Role", mappedBy="parent", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Role", mappedBy="parent", cascade={"persist"}, fetch="EAGER")
      */
     private $enfants;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Role", inversedBy="enfants", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Role", inversedBy="enfants", cascade={"persist"}, fetch="EAGER")
      */
     private $parent;
 

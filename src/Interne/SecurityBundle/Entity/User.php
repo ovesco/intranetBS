@@ -2,6 +2,7 @@
 
 namespace Interne\SecurityBundle\Entity;
 
+use Interne\SecurityBundle\Utils\RolesUtil;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -142,6 +143,7 @@ class User implements UserInterface, \Serializable
     public function getRoles()
     {
         $roles = $this->roles->toArray();
+
         foreach($this->getMembre()->getActiveAttributions() as $attr)
             foreach($attr->getFonction()->getRoles() as $r)
                 $roles[] = $r;

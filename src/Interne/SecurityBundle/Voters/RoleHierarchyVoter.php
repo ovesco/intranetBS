@@ -9,19 +9,40 @@ use Doctrine\ORM\EntityManager;
 
 class RoleHierarchyVoter extends RoleVoter {
 
-    public function __construct($prefix = 'ROLE_') {
+    private $em;
 
-        parent::__construct($prefix);
+    public function __construct(EntityManager $em) {
+
+        $this->em = $em;
+        parent::__construct();
     }
-
     /**
      * {@inheritdoc}
      */
     protected function extractRoles(TokenInterface $token) {
 
-        $util  = new RolesUtil();
-        $roles = $util->removeDoublons($util->getAllRoles($token->getUser()->getRoles()));
+        $roles    = $token->getRoles();
+        $corrects = array();
 
-        return $roles;
+        foreach($roles as $role)
+            $corrects = array_merge($corrects, $this->em->getRepository('InterneSecurityBundle:Role')->find($role->getId())->getEnfantsRecursive(true));
+
+        return self::removeDoublons($corrects);
+    }
+
+    /**
+     * Supprimme les doublons parmi les roles passés en paramètre
+     * @param array $roles
+     * @return array
+     */
+    private static function removeDoublons(array $roles) {
+
+        $returned = array();
+
+        foreach($roles as $r)
+            if(!in_array($r, $returned))
+                $returned[] = $r;
+
+        return $returned;
     }
 }
