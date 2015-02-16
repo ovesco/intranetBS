@@ -25,16 +25,12 @@
 {%- endblock form_widget_simple %}
 
 
+{# hidden #}
+{% block hidden_widget -%}
 
-{% block checkbox_widget -%}
-    <div data-type="select" data-source="expediable" {{ block('validation_block') }}>
-        {% if value is not empty %}
-            {{ value }}
-        {% endif %}
-    </div>
-{%- endblock checkbox_widget %}
+    <div style="display: none" data-type="text" {{ block('validation_block') }}>{% if value is not empty %}{{ value }}{% endif %}</div>
 
-
+{%- endblock hidden_widget %}
 
 
 {#
