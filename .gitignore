@@ -17,3 +17,4 @@
 /web/PDFTemplates/
 /web/static/*
 /web/galerie/photos/*
+/src/AppBundle/Utils/Parmetre/values/*
