@@ -19,6 +19,15 @@ class Pere extends Geniteur
     private $famille;
 
     /**
+     * Constructor
+     *
+     */
+    public function __construct()
+    {
+        $this->setSexe(Personne::HOMME);
+    }
+
+    /**
      * Set famille
      *
      * @param Famille $famille

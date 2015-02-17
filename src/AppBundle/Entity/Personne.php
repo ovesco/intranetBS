@@ -10,6 +10,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 abstract class Personne
 {
 
+    const HOMME = 'homme';
+    const FEMME = 'femme';
+
     /**
      * @var string
      * @Assert\NotBlank()
@@ -21,7 +24,7 @@ abstract class Personne
     /**
      * @var string
      *
-     * @ORM\Column(name="sexe", type="string", length=255)
+     * @ORM\Column(name="sexe", type="string", columnDefinition="ENUM('Personne::HOMME', 'Personne::FEMME')")
      */
     private $sexe;
 
