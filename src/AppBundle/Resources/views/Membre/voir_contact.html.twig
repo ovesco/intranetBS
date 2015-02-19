@@ -27,7 +27,7 @@
             <div class="title">Adresse familliale</div>
             <div class="description">
 
-                Famille {{ membre.famille.nom|capitalize }}
+                Famille {{ membre.nom|capitalize }}
 
                 {% include 'AppBundle:Adresse:adresse_ajax_edit_form.html.twig' with {'adresse':membreForm.famille.contact.adresse} %}
 

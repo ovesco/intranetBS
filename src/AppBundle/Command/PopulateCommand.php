@@ -65,6 +65,7 @@ class PopulateCommand extends ContainerAwareCommand
 
         if($action == 'create'){
 
+            echo 1;
             //on enregistre la liste des distinctions
             $distinctions = $this->getDistinctions();
             foreach($distinctions as $dist)
@@ -79,6 +80,7 @@ class PopulateCommand extends ContainerAwareCommand
                 }
             }
 
+            echo 2;
             //on energistre la liste des fonctions
             $fonctions = $this->getFonctions();
             foreach($fonctions as $fonc => $abrev)
@@ -94,6 +96,7 @@ class PopulateCommand extends ContainerAwareCommand
                 }
             }
 
+            echo 3;
             //On crée la hierarchie!!!
             $em->flush();
             $groupes = $this->getGroupes();
@@ -101,7 +104,7 @@ class PopulateCommand extends ContainerAwareCommand
 
             //Sauvegarde complète
             $em->flush();
-
+            echo 4;
 
 
 
@@ -226,7 +229,6 @@ class PopulateCommand extends ContainerAwareCommand
                 $role->setName('Admin');
             }
 
-            $role->addUser($user);
             $user->addRole($role);
 
             $em->persist($membre);
@@ -494,8 +496,8 @@ class PopulateCommand extends ContainerAwareCommand
                 $this->listeGroupes = $em->getRepository('AppBundle:Groupe')->findAll();
 
             else {
-                $model = $em->getRepository('AppBundle:GroupeModel')->find($model);
-                $this->listeGroupes = $em->getRepository('AppBundle:Groupe')->findBy(array('groupeModel'=>$model));
+                $model = $em->getRepository('AppBundle:Model')->find($model);
+                $this->listeGroupes = $em->getRepository('AppBundle:Groupe')->findBy(array('model'=>$model));
             }
         }
 

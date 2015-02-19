@@ -49,20 +49,16 @@ class Role implements RoleInterface
     private $enfants;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Role", inversedBy="enfants", cascade={"persist"}, fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="Role", inversedBy="enfants", cascade={"persist"})
+     * @ORM\JoinColumn(name="role_id", referencedColumnName="id", nullable=true)
      */
     private $parent;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="roles")
-     */
-    private $users;
 
 
 
     public function __construct()
     {
-        $this->users = new ArrayCollection();
+        $this->enfants = new ArrayCollection();
     }
 
     /**
@@ -119,39 +115,6 @@ class Role implements RoleInterface
     public function getRole()
     {
         return $this->role;
-    }
-
-    /**
-     * Add users
-     *
-     * @param \Interne\SecurityBundle\Entity\User $users
-     * @return Role
-     */
-    public function addUser(\Interne\SecurityBundle\Entity\User $users)
-    {
-        $this->users[] = $users;
-        
-        return $this;
-    }
-
-    /**
-     * Remove users
-     *
-     * @param \Interne\SecurityBundle\Entity\User $users
-     */
-    public function removeUser(\Interne\SecurityBundle\Entity\User $users)
-    {
-        $this->users->removeElement($users);
-    }
-
-    /**
-     * Get users
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getUsers()
-    {
-        return $this->users;
     }
 
     /**

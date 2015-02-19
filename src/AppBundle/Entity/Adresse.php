@@ -74,7 +74,7 @@ class Adresse
      private $remarques;
 
 
-    public function __construct($rue, $npa, $localite, $expediable = true)
+    public function __construct($rue = '', $npa = null, $localite = '', $expediable = true)
     {
         $this->rue = $rue;
         $this->npa = $npa;

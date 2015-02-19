@@ -50,7 +50,11 @@ class User implements UserInterface, \Serializable
     private $isActive;
     
     /**
-     * @ORM\ManyToMany(targetEntity="Interne\SecurityBundle\Entity\Role", inversedBy="users")
+     * @ORM\ManyToMany(targetEntity="Interne\SecurityBundle\Entity\Role")
+     * @ORM\JoinTable(name="roles_users",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
+     *      )
      */
     private $roles;
     
