@@ -27,3 +27,4 @@ services:
             - { name: security.voter }
         arguments:
             - @doctrine.orm.entity_manager
+            - @session

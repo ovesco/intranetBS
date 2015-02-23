@@ -15,6 +15,15 @@ class SecurityController extends Controller
 {
 
     /**
+     * Petite redirection vers la page de login
+     * @route("", name="security_redirect_login")
+     */
+    public function baseIndexAction() {
+
+        return $this->redirect($this->generateUrl('security_login'));
+    }
+
+    /**
      * Affiche le formulaire de login
      * @param Request $request la requete
      * @return Response la vue

@@ -34,12 +34,12 @@ class RolesBuilderCommand extends ContainerAwareCommand
         $value      = $yaml->parse(file_get_contents($file));
 
 
+
         foreach($value as $principal)
             $em->persist($this->buildRole($principal));
 
+
         $em->flush();
-
-
     }
 
 
