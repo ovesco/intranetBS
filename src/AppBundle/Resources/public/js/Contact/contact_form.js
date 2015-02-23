@@ -3,7 +3,7 @@ $(document).ready(function(){
 });
 
 
-$("input").change(function(){
+$(".contact_adresse").change(function(){
     AdresseHighlight();
 });
 
@@ -11,7 +11,7 @@ $("input").change(function(){
 
 function AdresseHighlight()
 {
-    $('.adresse').each(function(){
+    $('.contact_adresse').each(function(){
 
         var adresseBlock = this;
 

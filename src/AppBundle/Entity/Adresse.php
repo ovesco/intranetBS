@@ -73,6 +73,16 @@ class Adresse
      */
      private $remarques;
 
+
+    public function __construct($rue, $npa, $localite, $expediable = true)
+    {
+        $this->rue = $rue;
+        $this->npa = $npa;
+        $this->localite = $localite;
+        $this->expediable = $expediable;
+    }
+
+
     /**
      * Get id
      *

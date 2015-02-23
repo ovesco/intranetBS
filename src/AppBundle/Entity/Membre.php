@@ -32,7 +32,7 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
     /**
      * @var Famille
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Famille", inversedBy="membres", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Famille", inversedBy="membres", cascade={"persist"}, fetch="EAGER")
      * @ORM\JoinColumn(name="famille_id", referencedColumnName="id")
      */
     private $famille;
@@ -146,6 +146,8 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
          */
         $this->creances = new ArrayCollection();
         $this->factures = new ArrayCollection();
+
+        $this->validity = true;
     }
 
     /**

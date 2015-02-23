@@ -113,7 +113,7 @@ class PayementController extends Controller
 
 
     /**
-     * @route("/search/get_search_form", name="interne_fiances_payement_get_search_form_ajax", options={"expose"=true})
+     * @route("/search/get-form", name="interne_fiances_payement_get_search_form_ajax", options={"expose"=true})
      * @param Request $request
      * @return Response
      */
@@ -484,29 +484,17 @@ class PayementController extends Controller
                             $em->flush();
 
                         }
-
-
-
                     }
-
-
 
                 break;
 
-
             }
-
             $em->flush();
 
-
             return new Response();
-
         }
 
-
         return new Response();
-
-
     }
 
 

@@ -56,7 +56,7 @@ class Groupe
     /**
      * @var Model $model
      * 
-     * @ORM\ManyToOne(targetEntity="Model", inversedBy="groupes", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Model", inversedBy="groupes", cascade={"persist"})
      */
     private $model;
 

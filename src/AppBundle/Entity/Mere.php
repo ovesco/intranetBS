@@ -19,6 +19,15 @@ class Mere extends Geniteur
     private $famille;
 
     /**
+     * Constructor
+     *
+     */
+    public function __construct()
+    {
+        $this->setSexe(Personne::FEMME);
+    }
+
+    /**
      * Set famille
      *
      * @param Famille $famille

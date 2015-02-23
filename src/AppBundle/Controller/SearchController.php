@@ -21,7 +21,7 @@ class SearchController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('AppBundle:Search:page_search.html.twig');
+        return $this->render('AppBundle:Search:search.html.twig');
     }
 
     /**
@@ -81,7 +81,7 @@ class SearchController extends Controller
         $results    = $this->$method($pattern);
         //$returned   = array();
 
-        return $this->render('Search/ReturnedTables/' . $type . '_table.html.twig', array('entityArray' => $results));
+        return $this->render('@App/Membre/liste.html.twig', array('membres' => $results));
 
         /*
         foreach($results as $entity) {
