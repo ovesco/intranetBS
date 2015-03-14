@@ -35,6 +35,7 @@ class RoleHierarchyVoter extends RoleVoter {
          */
         $session = $this->session;
 
+
         if(!$session->has(self::$sessionAttribute)
             || ($session->get(self::$sessionAttribute) == null)
             || !($session->get(self::$expirationAttribute) > new \Datetime('now'))) {
@@ -47,7 +48,7 @@ class RoleHierarchyVoter extends RoleVoter {
             $newToken = new \Datetime();
             $newToken->setTimestamp(time() + self::$expirationTime);
 
-            $session->set(self::$sessionAttribute, $this->fetchRoles($token));
+            $session->set(self::$sessionAttribute, $this->fetchRoles($token->getRoles()));
             $session->set(self::$expirationAttribute, $newToken);
 
         }
@@ -59,17 +60,15 @@ class RoleHierarchyVoter extends RoleVoter {
 
     /**
      * Fetch la hierarchie des roles à partir de la BDD
-     * @param TokenInterface $token
+     * @param array $roles
      * @return array
      */
-    private function fetchRoles($token) {
-
-        $roles    = $token->getRoles();
+    public function fetchRoles($roles) {
 
         $corrects = array();
 
         foreach($roles as $role)
-            $corrects = array_merge($corrects, $this->em->getRepository('InterneSecurityBundle:Role')->find($role->getId())->getEnfantsRecursive(true));
+            $corrects = array_merge($corrects, $role->getEnfantsRecursive(true));
 
 
         return self::removeDoublons($corrects);

@@ -56,5 +56,5 @@ DirectoryIndex app.php
 </IfModule>
 
 <FilesMatch "\.(js|css)$">
-    Header set Cache-Control "max-age=10800"
+    # Header set Cache-Control "max-age=10800"
 </FilesMatch>

@@ -36,16 +36,4 @@ class AppController extends Controller
         return $this->render('AppBundle:Homepage:page_homepage.html.twig',
             array('lastNews'=>$lastNews, 'groupes'=>$groupes));
     }
-
-    /**
-     * @Route("test", name="interne_app_test")
-     */
-    public function testAction() {
-
-        if($this->get('security.context')->isGranted('ROLE_FINANCES'))
-            echo 'pass';
-
-        return new Response('<body></body>');
-    }
-
 }
