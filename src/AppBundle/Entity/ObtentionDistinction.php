@@ -24,9 +24,9 @@ class ObtentionDistinction
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="obtention", type="date", nullable=false)
+     * @ORM\Column(name="date", type="date", nullable=false)
      */
-    private $obtention;
+    private $date;
 
     /**
      * @var Distinction $distinctions
@@ -55,26 +55,26 @@ class ObtentionDistinction
     }
 
     /**
-     * Set obtention
+     * Set date
      *
-     * @param \DateTime $obtention
+     * @param \DateTime $date
      * @return ObtentionDistinction
      */
-    public function setObtention($obtention)
+    public function setDate($date)
     {
-        $this->obtention = $obtention;
+        $this->date = $date;
     
         return $this;
     }
 
     /**
-     * Get obtention
+     * Get date
      *
      * @return \DateTime 
      */
-    public function getObtention()
+    public function getDate()
     {
-        return $this->obtention;
+        return $this->date;
     }
 
     /**

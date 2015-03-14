@@ -38,8 +38,14 @@
         </div>
 
         <div class="eleven wide column">
-            <h4>Attributions actuel</h4>
+            <h4>Attributions</h4>
             {% include "AppBundle:Attribution:listeAttributionActuel.html.twig" with {'attributions':membre.activeAttributions} %}
+            <div id="ajouter-attribution" data-idMembre="{{ membre.id }}" class="ui button">Ajouter</div>
+
+            <h4>Distinctions</h4>
+            {% include "AppBundle:ObtentionDistinction:listeObtentionDistinction.html.twig" with {'distinctions': membre.distinctions } %}
+            <div id="ajouter-distinction" data-idMembre="{{ membre.id }}" class="ui button">Ajouter</div>
+
         </div>
 
     </div>

@@ -15,7 +15,7 @@ class ObtentionDistinctionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('obtention', 'text', array(
+            ->add('date', 'text', array(
             	
             		'attr'	=> array('class'	=> 'datepicker')
             	))

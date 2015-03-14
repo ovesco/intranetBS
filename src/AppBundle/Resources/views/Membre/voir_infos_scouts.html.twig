@@ -8,27 +8,7 @@
 
         <div class="six wide column">
             <h4 class="ui header">Distinctions</h4>
-            <table class="ui table">
-                <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Date</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for obtention in membre.distinctions %}
-                    <tr>
-                        <td>{{ obtention.distinction.nom }}</td>
-                        <td>{{ obtention.obtention|date('d.m.Y') }}</td>
-                        <td>
-                            <button href="#" data-content="{{ obtention.distinction.remarques }}" class="circular ui mini icon blue button popupable"><i class="info icon"></i></button>
-                            <button href="#" class="circular ui mini icon red button"><i class="remove icon" onclick="removeAttributionOrDistinction(this, {{ membre.id }}, 'ObtentionDistinction', {{ obtention.id }});"></i></button>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            {% include "AppBundle:ObtentionDistinction:listeObtentionDistinction.html.twig" with {'distinctions': membre.distinctions } %}
 
         </div>
     </div>

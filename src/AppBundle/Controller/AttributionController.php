@@ -47,6 +47,7 @@ class AttributionController extends Controller
              * Ajout
              */
             $attribution = new Attribution();
+            $attribution->setMembre($idMembre);
             $attributionForm = $this->createForm(new AttributionType(), $attribution,
                 array('action' => $this->generateUrl('attribution_add', array('member'=>$idMembre))));
 
@@ -75,14 +76,12 @@ class AttributionController extends Controller
      * @param Membre $member
      * @param Request $request
      * @return Response
-     * @ParamConverter("member", class="AppBundle:Membre")
      */
-    public function addAttributionAction(Membre $member, Request $request)
+    public function addAttributionAction(Request $request)
     {
+
         $newAttribution = new Attribution();
         $newAttributionForm = $this->createForm(new AttributionType(), $newAttribution);
-
-        $newAttribution->setMembre($member);
 
         $newAttributionForm->handleRequest($request);
 

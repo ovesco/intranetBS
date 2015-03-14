@@ -16,13 +16,13 @@ use Symfony\Component\HttpFoundation\Response;
  * Class ObtentionDistinctionController
  * @package AppBundle\Controller
  *
- * @Route("/obtention-distinction")
+ * @Route("/date-distinction")
  */
 class ObtentionDistinctionController extends Controller
 {
 
     /**
-     * @Route("/get-modal", name="obtention-distinction_get_modal", options={"expose"=true})
+     * @Route("/get-modal", name="date-distinction_get_modal", options={"expose"=true})
      *
      * @param Request $request
      * @return Response
@@ -70,7 +70,7 @@ class ObtentionDistinctionController extends Controller
 
 
     /**
-     * @Route("/add", name="obtention-distinction_add", options={"expose"=true})
+     * @Route("/add", name="date-distinction_add", options={"expose"=true})
      *
      * @param Membre $member
      * @param Request $request
@@ -99,16 +99,16 @@ class ObtentionDistinctionController extends Controller
     }
 
     /**
-     * @Route("/edit/{obtention-distinction}", name="obtention-distinction_edit", options={"expose"=true})
+     * @Route("/edit/{date-distinction}", name="date-distinction_edit", options={"expose"=true})
      *
      * @param Request $request
      * @param ObtentionDistinction $obtention
      * @return Response
-     * @ParamConverter("obtention", class="AppBundle:ObtentionDistinction")
+     * @ParamConverter("date", class="AppBundle:ObtentionDistinction")
      */
     public function editObtentionDistinction(ObtentionDistinction $obtention, Request $request)
     {
-        //TODO: modifier une obtention (ou peut-être ne veut-on que les supprimer ?)
+        //TODO: modifier une date (ou peut-être ne veut-on que les supprimer ?)
     }
 
     //TODO : remove

@@ -1,0 +1,21 @@
+<table class="ui table">
+    <thead>
+    <tr>
+        <th>Nom</th>
+        <th>Date</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for date in distinctions %}
+        <tr>
+            <td>{{ date.distinction.nom }}</td>
+            <td>{{ date.date|date('d.m.Y') }}</td>
+            <td>
+                <button href="#" data-content="{{ date.distinction.remarques }}" class="circular ui mini icon blue button popupable"><i class="info icon"></i></button>
+                <button href="#" data-content="Supprimer" class="circular ui mini icon red button popupable"><i class="remove icon" onclick="removeAttributionOrDistinction(this, {{ membre.id }}, 'ObtentionDistinction', {{ date.id }});"></i></button>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

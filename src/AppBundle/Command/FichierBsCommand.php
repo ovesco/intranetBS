@@ -663,7 +663,7 @@ class FichierBsCommand extends ContainerAwareCommand
                         $distinction = $em->getRepository('AppBundle:Distinction')->find($newId);
 
                         $link = new ObtentionDistinction();
-                        $link->setObtention(new \DateTime($result['date']));
+                        $link->setDate(new \DateTime($result['date']));
                         $link->setDistinction($distinction);
                         $link->setMembre($membre);
                         $this->em->persist($link);
