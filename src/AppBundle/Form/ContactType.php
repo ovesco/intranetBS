@@ -15,6 +15,10 @@ class ContactType extends AbstractType
             ->add('emails', 'collection', array(
                 // chaque item du tableau sera un champ « email »
                 'type'   => new EmailType()))
+
+            ->add('telephones', 'collection', array(
+                // chaque item du tableau sera un champ « email »
+                'type'   => new TelephoneType()))
         ;
     }
 

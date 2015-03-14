@@ -9,7 +9,13 @@
         <div class="row">
             <div class="five wide column">
                 <div class="ui segment">
-                    Mon unité
+                    <h3>Mes groupes</h3>
+
+                    <div class="ui list">
+                        {%  for groupe in groupes %}
+                            <a class="item" href="{{ path('interne_voir_groupe', {'groupe' : groupe.id }) }}">{{ groupe.nom }}</a>
+                        {% endfor %}
+                    </div>
 
                 </div>
             </div>

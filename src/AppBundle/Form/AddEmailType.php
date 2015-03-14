@@ -6,14 +6,14 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class EmailType extends AbstractType
+class AddEmailType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('email','text',array('required' => false, 'label' => 'Email'))
-            ->add('remarques','textarea',array('required' => false, 'label' => 'Remarque'))
-            ->add('expediable', 'hidden',     array('required' => false, 'label' => 'Expediable'))
+            ->add('remarques','text',array('required' => false, 'label' => 'Remarque'))
+            ->add('contact_id','hidden',array('mapped'=> false))
         ;
     }
 
@@ -26,6 +26,6 @@ class EmailType extends AbstractType
 
     public function getName()
     {
-        return 'apprbundle_emailtype';
+        return 'apprbundle_addemailtype';
     }
 }

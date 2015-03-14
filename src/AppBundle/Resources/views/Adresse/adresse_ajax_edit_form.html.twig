@@ -9,20 +9,25 @@
 <div class="ui grid">
     <div class="column">
 
-        <div class="row">
+        <div class="row" style="min-height: 1.2em;">
             {{ form_row(adresse.rue)  }}
 
         </div>
 
-        <div class="row">
+        <div class="row" style="min-height: 1.2em;">
 
-            {{ form_row(adresse.npa)  }} {{ form_row(adresse.localite)  }}
+            {{ form_row(adresse.npa)  }}
+        </div>
+
+        <div class="row" style="min-height: 1.2em;">
+
+             {{ form_row(adresse.localite)  }}
         </div>
 
 
-            <div class="expediable">
-                {{ form_row(adresse.expediable)  }}
-            </div>
+        <div class="expediable">
+            {{ form_row(adresse.expediable)  }}
+        </div>
 
     </div>
 

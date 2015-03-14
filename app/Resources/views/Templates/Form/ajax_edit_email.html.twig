@@ -24,11 +24,9 @@
 
 {%- endblock form_widget_simple %}
 
-
-{# hidden #}
 {% block hidden_widget -%}
 
-    <div style="" data-type="text" {{ block('validation_block') }}>
+    <div style="display: none" data-type="text" {{ block('validation_block') }}>
         {% if value is not empty %}
             {% if value %}
                 1
@@ -38,6 +36,12 @@
         {% endif %}</div>
 
 {%- endblock hidden_widget %}
+
+{# textarea #}
+{% block textarea_widget -%}
+    {%- set type = type|default('text') -%}
+    <div data-type="textarea" {{ block('validation_block') }}>{% if value is not empty %}{{ value }}{% endif %}</div>
+{%- endblock textarea_widget %}
 
 
 {#

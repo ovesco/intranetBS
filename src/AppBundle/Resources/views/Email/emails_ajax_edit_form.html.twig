@@ -1,0 +1,35 @@
+{% form_theme emails  ':Templates/Form:ajax_edit_email.html.twig' %}
+
+<div class="ui grid">
+
+
+    <div class="column">
+        {% for email in emails %}
+        <div class="row">
+
+
+
+            <div class="contact_emails_item">
+
+                <div class="ui checkbox" style="float: left">
+                    <input type="checkbox" name="email_expediable">
+                </div>
+
+                <div style="float: left">{{ form_row(email.email)  }}  </div>
+
+
+
+                <div style="display: none" class="expediable">
+                    {{ form_row(email.expediable)  }}
+                </div>
+
+            </div>
+
+
+        </div>
+        {% endfor %}
+    </div>
+
+
+
+</div>

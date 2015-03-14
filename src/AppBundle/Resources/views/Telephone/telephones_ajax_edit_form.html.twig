@@ -1,0 +1,17 @@
+{% form_theme telephones  ':Templates/Form:ajax_edit_telephone.html.twig' %}
+
+<div class="ui grid">
+
+    <div class="column">
+        {% for telephone in telephones %}
+            <div class="row" style="min-height: 2em">
+
+                {{ form_row(telephone.telephone)  }}
+
+            </div>
+        {% endfor %}
+    </div>
+
+
+
+</div>

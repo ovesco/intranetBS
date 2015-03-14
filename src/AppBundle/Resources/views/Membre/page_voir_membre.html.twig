@@ -40,7 +40,7 @@
     <h2>Contact<a class="anchor" id="contact"></a></h2>
     <div class="row ui segment">
 
-        {% include "AppBundle:Membre:voir_contact.html.twig" with {'membreForm':membreForm, 'membre':membre, } %}
+        {% include "AppBundle:Contact:voir_contact.html.twig" with {'membreForm':membreForm, 'membre':membre, } %}
 
     </div>
 
@@ -86,6 +86,7 @@
     '@AppBundle/Resources/public/js/editable.js'
     '@AppBundle/Resources/public/js/specials/validation_popup_generation.js'
     '@AppBundle/Resources/public/js/Membre/page_voir_membre.js'
+    '@AppBundle/Resources/public/js/Contact/contact_form.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

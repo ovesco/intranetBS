@@ -1,0 +1,29 @@
+<div id="email-modale" class="ui small modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Ajouter une adresse email
+    </div>
+
+    <div class="content">
+
+        {{ form_start(form,{'attr': {'class': 'ui form'}}) }}
+
+
+        {{ form_widget(form.email) }}
+
+        {{ form_widget(form.remarques)  }}
+
+
+
+        <div class="ui field">
+            <input type="submit" class="ui green button" value="Ajouter" />
+        </div>
+
+        {{ form_end(form) }}
+
+
+    </div>
+    <div class="actions">
+        <div class="ui button">Annuler</div>
+    </div>
+</div>

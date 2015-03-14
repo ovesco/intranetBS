@@ -6,26 +6,24 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class EmailType extends AbstractType
+class TelephoneType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email','text',array('required' => false, 'label' => 'Email'))
-            ->add('remarques','textarea',array('required' => false, 'label' => 'Remarque'))
-            ->add('expediable', 'hidden',     array('required' => false, 'label' => 'Expediable'))
+            ->add('telephone','text',array('required' => false, 'label' => 'Numéro'))
         ;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Email'
+            'data_class' => 'AppBundle\Entity\Telephone'
         ));
     }
 
     public function getName()
     {
-        return 'apprbundle_emailtype';
+        return 'apprbundle_telephonetype';
     }
 }
