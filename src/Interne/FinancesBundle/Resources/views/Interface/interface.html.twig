@@ -20,15 +20,13 @@
             <div id="infoFinanceContent">
 
                 <div class="ui info message">
-                    <i class="icon send"></i>
                     {% if ownerEntity.isClass('Membre') %}
-
-                        Les cérances de ce membre sont facturée
-
                         {% if ownerEntity.envoiFacture == 'Membre' %}
-                            à lui même.
+                            <i class="icon user"></i>
+                            Les créances de ce membre lui sont directement facturées
                         {% elseif ownerEntity.envoiFacture == 'Famille' %}
-                            à la famille {{ ownerEntity.famille.nom }}
+                            <i class="icon users"></i>
+                            Les créances de ce membre sont facturée à la famille {{ ownerEntity.famille.nom }}
                         {% endif %}
 
                     {% endif %}

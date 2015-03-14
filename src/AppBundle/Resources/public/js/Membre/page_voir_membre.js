@@ -4,7 +4,7 @@ $('#membre-infos-context .menu .item').tab({
 
 $('#ajouter-distinction').click(function() {
     var idMembre = { idMembre: $(this).data('idMembre') };
-    getModal(idMembre, Routing.generate('obtention-distinction_get_modal'));
+    getModal(idMembre, Routing.generate('date-distinction_get_modal'));
 })
 
 $('#ajouter-attribution').click(function() {

@@ -39,7 +39,7 @@ $('.listing-table tbody').on( 'click', 'tr', function () {
 $('#add_distinction').click(function() {
     //TODO: get all ids
     //var idMembre = { idMembre: $(this).data('idMembre') };
-    getModal(null, Routing.generate('obtention-distinction_get_modal'));
+    getModal(null, Routing.generate('date-distinction_get_modal'));
 });
 
 $('#add_attribution').click(function() {

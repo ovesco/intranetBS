@@ -30,9 +30,14 @@ class AttributionType extends AbstractType
             		'class'		=> 'AppBundle:Fonction',
             		'property'	=> 'nom'
             	))
+            ->add('membre', 'entity', array(
+
+                'class'		=> 'AppBundle:Membre',
+                'property'	=> 'id'
+            ))
             ->add('remarques', 'textarea', array(
 
-                    'required'	=> false,
+                'required'	=> false,
             ))
         ;
     }

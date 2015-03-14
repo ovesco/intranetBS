@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /** 
@@ -10,8 +11,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 abstract class Personne
 {
 
-    const HOMME = 'homme';
-    const FEMME = 'femme';
+    const HOMME = 'HOMME';
+    const FEMME = 'FEMME';
 
     /**
      * @var string
@@ -71,6 +72,9 @@ abstract class Personne
      */
     public function setSexe($sexe)
     {
+        if($sexe != Personne::HOMME && $sexe != Personne::FEMME)
+            throw new Exception("Le sexe doit être " . Personne::HOMME . " ou " . Personne::FEMME);
+
         $this->sexe = $sexe;
 
         return $this;

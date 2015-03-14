@@ -9,8 +9,3 @@ function getModal(data, url) {
         }
     });
 }
-
-
-
-
-

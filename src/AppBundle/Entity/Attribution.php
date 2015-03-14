@@ -84,7 +84,7 @@ class Attribution
     /**
      * Set dateDebut
      *
-     * @param string $dateDebut
+     * @param \DateTime $dateDebut
      * @return Attribution
      */
     public function setDateDebut($dateDebut)

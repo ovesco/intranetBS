@@ -44,13 +44,6 @@
 
     </div>
 
-    <h2>Informations scouts<a class="anchor" id="infos-scout"></a></h2>
-    <div class="row ui segment">
-
-        {% include "AppBundle:Membre:voir_infos_scouts.html.twig" with {'membre':membre, } %}
-
-    </div>
-
     <h2>Factures et créances<a class="anchor" id="finances"></a></h2>
     <div class="row ui segment">
 
@@ -63,6 +56,14 @@
 
 
 {% endblock %}
+
+
+{% block css %}
+    {% stylesheets '@AppBundle/Resources/public/css/Membre/membre.css' filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
 
 {% block js %}
 

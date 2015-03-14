@@ -4,34 +4,34 @@ var editable = {
 
     /**
      * Appelée lorsque l'on a cliqué sur un champs modifiable
-     * @param obj le td cliqué
+     * @param l'élément cliqué
      */
-    init: function(obj) {
+    init: function(property) {
 
-        if(!$(obj).hasClass('currently-edited')) {
-            $(obj).addClass('currently-edited');
-            $(obj).attr('data-saved', $(obj).text());
+        if(!$(property).hasClass('currently-edited')) {
+            $(property).addClass('currently-edited');
+            $(property).attr('data-saved', $(property).text());
 
-            $(obj).html(editable.getInput(obj));
+            $(property).html(editable.getInput(property));
 
-            $(obj).find('input').focus();
+            $(property).find('input').focus();
 
             /* Apply modification on ENTER */
-            $(obj).bind("enterKey", function(e){
+            $(property).bind("enterKey", function(e){
 
-                if ($(obj).find('.edited-input').is('textarea')) // omit texfields, ENTER is new line
+                if ($(property).find('.edited-input').is('textarea')) // omit texfields, ENTER is new line
                     return;
 
-                editable.apply(obj);
+                editable.apply(property);
             });
 
             /* Abort modification on ESC */
-            $(obj).bind("escKey", function(e){
-                editable.abort(obj);
+            $(property).bind("escKey", function(e){
+                editable.abort(property);
             });
 
             /* Raise event depending on key pressed */
-            $(obj).keyup(function(e){
+            $(property).keyup(function(e){
                 var keyCode = (event.keyCode ? event.keyCode : event.which);
 
                 switch(keyCode) {
@@ -45,7 +45,7 @@ var editable = {
                 }
             });
 
-            $(obj).focusout(function(e) {
+            $(property).focusout(function(e) {
                 //TODO: il faut gérer le focus out : demander à l'utilisateur s'il veut annuler ou sauver
             });
         }
@@ -61,20 +61,20 @@ var editable = {
      */
     applyClick: function(btn) {
 
-        editable.apply($(btn).parents('td'));
+        editable.apply($(btn).parent().parent());
     },
 
 
-    apply: function(td) {
+    apply: function(property) {
 
-        var saved = $(td).attr('data-saved'),
-            path  = $(td).attr('data-path'),
-            current = $(td).find('.edited-input').val();
+        var saved = $(property).attr('data-saved'),
+            path  = $(property).attr('data-path'),
+            current = $(property).find('.edited-input').val();
 
 
         if(current != undefined && saved !== current) {
 
-            var dataType  = $(td).parent().parent().attr('data-type');
+            var dataType  = $(property).parent().parent().attr('data-type');
 
             $.ajax({
                 url: Routing.generate('interne_ajax_app_modify_property', {path: path, value: current}),
@@ -83,28 +83,28 @@ var editable = {
 
                     //On regarde l'array qui nous a été transmis
                     if(data.length == undefined)
-                        alerte.alerte('Modification effectuée avec succès !', 'success');
+                        alerte.send('Modification effectuée avec succès !', 'success');
 
                     else {
 
-                        alerte.alerte('La modification est enregistrée, mais il manque des informations pour pouvoir la réaliser.', 'info');
+                        alerte.send('La modification est enregistrée, mais il manque des informations pour pouvoir la réaliser.', 'info');
                         for(var i = 0; i < data.length; i++)
-                            $("td[data-path='" + data[i] + "']").css('background', '#ccf8ff');
+                            $("[data-path='" + data[i] + "']").css('background', '#ccf8ff');
 
                     }
 
-                    $(td).attr('data-saved', current);
+                    $(property).attr('data-saved', current);
 
-                    editable.backup(td);
+                    editable.restore(property);
                 },
                 error: function (data) {
-                    alerte.alerte("Erreur lors de la modification, essayez d'actualiser la page et réessayez.", 'error');
+                    alerte.send("Erreur lors de la modification, essayez d'actualiser la page et réessayez.", 'error');
                 }
             });
         }
 
         else
-            editable.abort(td);
+            editable.abort(property);
     },
 
 
@@ -114,18 +114,18 @@ var editable = {
      * @param btn le bouton cliqué
      */
     abortClick: function(btn) {
-      editable.abort($(btn).parents('td'));
+      editable.abort($(btn).parent().parent());
     },
 
 
 
-    abort: function(td) {
+    abort: function(property) {
 
         /*
          * le setTimeOut est nécessaire, car le bouton annuler se trouve à l'intérieure du TD, du coup, si on le mettait
          * pas, l'état de modification serait instantanément appelé, et on ne pourrait ainsi rien annuler
          */
-        setTimeout(function() {editable.backup(td);}, 100);
+        setTimeout(function() {editable.restore(property);}, 100);
     },
 
 
@@ -133,14 +133,14 @@ var editable = {
 
     /**
      * Backup permet de faire revenir le TD à son état initial A PARTIR DES DONNEES QU'IL CONTIENT. Dans le cas d'une modification
-     * on va modifier l'attribut data-save puis appeler backup.
-     * @param td l'élément td
+     * on va modifier l'attribut data-save puis appeler restore.
+     * @param property l'élément editable
      */
-    backup: function(td) {
+    restore: function(property) {
 
-        $(td).empty();
-        $(td).text($(td).attr('data-saved'));
-        $(td).removeClass('currently-edited');
+        $(property).empty();
+        $(property).text($(property).attr('data-saved'));
+        $(property).removeClass('currently-edited');
     },
 
 
@@ -149,13 +149,13 @@ var editable = {
 
     /**
      * Retourne l'input qui sera affiché pour modifier la donnée
-     * @param obj l'objet cliqué duquel on récupère les informations
+     * @param property l'objet cliqué duquel on récupère les informations
      * @return string l'objet input
      */
-    getInput : function(obj) {
+    getInput : function(property) {
 
-        var type  = $(obj).attr('data-type'),                   //Récupération du type
-            brut  = $(obj).text(),                              //récupération du contenu initial
+        var type  = $(property).attr('data-type'),                   //Récupération du type
+            brut  = $(property).text(),                              //récupération du contenu initial
             input = '<div class="editable-content-container">'; //initialisation de l'input
 
         switch (type) {
@@ -177,7 +177,7 @@ var editable = {
              */
             case 'select':
 
-                var options      = $(obj).attr('data-source'),
+                var options      = $(property).attr('data-source'),
                     options_text = '';
 
                 if(options == 'genre')
@@ -188,7 +188,7 @@ var editable = {
 
 
                 else if(options == 'choices')
-                    options_text = $(obj).find('.select_choices').html();
+                    options_text = $(property).find('.select_choices').html();
 
                 else {
 
