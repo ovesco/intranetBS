@@ -1,5 +1,135 @@
 {% import _self as self %}
 
+{% set familleForm = membreForm.famille %}
+{% set mereForm = membreForm.famille.mere %}
+{% set pereForm = membreForm.famille.pere %}
+
+{% set famille = membre.famille %}
+
+{% set arrayOfContact = [{'type':'Membre','contact': membre, 'contactForm':membreForm }, {'type':'Famille','contact':famille,'contactForm':familleForm }] %}
+
+{% if membre.famille.mere is not null %}
+    {% set mere = membre.famille.mere %}
+    {% set arrayOfContact = arrayOfContact|merge([{'type':'Mère','contact': mere, 'contactForm':mereForm}]) %}
+{% endif %}
+
+{% if membre.famille.pere is defined %}
+    {% set pere = membre.famille.pere %}
+    {% set arrayOfContact = arrayOfContact|merge([{'type':'Père','contact': pere, 'contactForm':pereForm}]) %}
+{% endif %}
+
+
+
+<div class="ui grid">
+
+
+
+    {% for contact in arrayOfContact %}
+
+        <div class="row">
+            <div class="one wide column">
+
+                {% set type = contact['type'] %}
+                {% if type == 'Membre' %}
+                    <i class="big user icon"></i>
+                {% elseif type == 'Famille'%}
+                    <i class="big home icon"></i>
+                {% elseif type == 'Mère'%}
+                    <i class="big female icon"></i>
+                {% elseif type == 'Père'%}
+                    <i class="big male icon"></i>
+                {% endif %}
+
+
+            </div>
+            <div class="four wide column">
+
+                <div class="ui segment">
+                    <div class="ui right corner label"><i class="mail outline icon"></i></div>
+
+
+                    {% include 'AppBundle:Adresse:adresse_ajax_edit_form.html.twig' with {'adresse':contact['contactForm'].contact.adresse } %}
+
+                </div>
+
+
+
+            </div>
+            <div class="six wide column">
+
+                <div class="ui segment">
+                    <div class="ui right corner label"><i class="at icon"></i></div>
+
+                    {% include 'AppBundle:Email:emails_ajax_edit_form.html.twig' with {'emails':contact['contactForm'].contact.emails } %}
+
+                </div>
+            </div>
+            <div class="five wide column">
+
+                <div class="ui segment">
+                    <div class="ui right corner label"><i class="call icon"></i></div>
+
+                    {% include 'AppBundle:Telephone:telephones_ajax_edit_form.html.twig' with {'telephones':contact['contactForm'].contact.telephones } %}
+
+                </div>
+
+
+            </div>
+        </div>
+    {% endfor %}
+
+
+
+</div>
+
+
+{#
+<div class="ui celled grid">
+
+    <div class="row">
+        <div class="one wide column"></div>
+        <div class="five wide column"><i class="mail outline icon"></i></div>
+        <div class="five wide column">@</div>
+        <div class="five wide column"><i class="call icon"></i></div>
+    </div>
+
+    {% for contact in arrayOfContact %}
+
+        <div class="row">
+            <div class="one wide column">
+                <div style="height: 100px">
+                    <div style="line-height: 100px;transform: rotate(-90deg);">
+                        {{ contact['type'] }}
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="five wide column">
+
+                {% include 'AppBundle:Adresse:adresse_ajax_edit_form.html.twig' with {'adresse':contact['contactForm'].contact.adresse } %}
+
+            </div>
+            <div class="five wide column">
+
+                {% include 'AppBundle:Email:emails_ajax_edit_form.html.twig' with {'emails':contact['contactForm'].contact.emails } %}
+
+            </div>
+            <div class="five wide column">
+
+                {% include 'AppBundle:Telephone:telephones_ajax_edit_form.html.twig' with {'telephones':contact['contactForm'].contact.telephones } %}
+
+            </div>
+        </div>
+    {% endfor %}
+
+
+
+</div>
+#}
+
+
+
 
 <h3><i class="mail outline icon"></i> Envoi par courrier</h3>
 
@@ -82,7 +212,7 @@
 
 
 <div class="ui four column grid" id="liste-emails">
-
+    <div class="row">
     <div class="column contact_emails" id="emails-membre">
 
             <h4>@ Membre {{ self.add_email_button(membre ) }}</h4>
@@ -119,6 +249,7 @@
         {% include 'AppBundle:Email:emails_ajax_edit_form.html.twig' with {'emails':membreForm.famille.pere.contact.emails } %}
 
 
+    </div>
     </div>
 </div>
 
