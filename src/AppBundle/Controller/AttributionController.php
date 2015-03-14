@@ -66,14 +66,12 @@ class AttributionController extends Controller
                 'form' => $attributionForm->createView())
         );
 
-        //}
     }
 
 
     /**
      * @Route("/add", name="attribution_add", options={"expose"=true})
      *
-     * @param Membre $member
      * @param Request $request
      * @return Response
      */

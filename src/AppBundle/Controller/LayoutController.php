@@ -21,13 +21,19 @@ class LayoutController extends Controller
      */
     public function mainMenuGenerateAction()
     {
-
         /** @var Membre $membre */
-        $membre = $this->getUser()->getMembre();
+        // FIXME : le suer devrait être validé en amont
+        if ($this->getUser() != null) {
+            $membre = $this->getUser()->getMembre();
+            $groupes = $membre->getActiveGroupes();
+        }
+        else {
+            $groupes = array();
+        }
 
 
         return $this->render('AppBundle:Layout:main_menu.html.twig', array(
-            'groups' => $membre->getActiveGroupes()
+            'groups' => $groupes
         ));
     }
 }
