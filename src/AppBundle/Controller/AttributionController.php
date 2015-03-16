@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -47,9 +48,12 @@ class AttributionController extends Controller
              * Ajout
              */
             $attribution = new Attribution();
-            $attribution->setMembre($idMembre);
+
+            if($idMembre != null)
+                $attribution->setMembre($em->getRepository('AppBundle:Membre')->find($idMembre));
+
             $attributionForm = $this->createForm(new AttributionType(), $attribution,
-                array('action' => $this->generateUrl('attribution_add', array('member'=>$idMembre))));
+                array('action' => $this->generateUrl('attribution_add')));
 
         } else {
             /*
@@ -58,12 +62,13 @@ class AttributionController extends Controller
             //TODO: pas testé
             $attribution = $em->getRepository('AppBundle:Attribution')->find($idAttribution);
             $attributionForm = $this->createForm(new AttributionType(), $attribution,
-                array('action' => $this->generateUrl('attribution_edit', array('attribution'=>$idAttribution))));
+                array('action' => $this->generateUrl('attribution_edit')));
 
         }
 
         return $this->render('AppBundle:Attribution:attribution_form_modal.html.twig', array(
-                'form' => $attributionForm->createView())
+            'form' => $attributionForm->createView(),
+            'postform' => $attributionForm)
         );
 
     }
@@ -89,10 +94,13 @@ class AttributionController extends Controller
             $em->persist($newAttribution);
             $em->flush();
 
-            return new Response(true);
+            return new JsonResponse(true);
         }
 
-        return new Response(false);
+        return $this->render('AppBundle:Attribution:attribution_form_modal.html.twig', array(
+            'form' => $newAttributionForm->createView(),
+            'postform' => $newAttributionForm)
+    );
     }
 
     /**

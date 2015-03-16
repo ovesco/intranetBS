@@ -106,6 +106,11 @@ class Distinction
         $this->setNom($name);
     }
 
+    public function __toString()
+    {
+        return $this->getNom();
+    }
+
     /**
      * Add obtentionDistinctions
      *

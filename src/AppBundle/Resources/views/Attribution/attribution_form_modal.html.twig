@@ -1,4 +1,4 @@
-{% if form.dateDebut.vars.value == '' %}
+{% if form.id is not defined %}
     {%  set header = 'Ajouter une attribution' %}
     {%  set buttonText = 'Ajouter' %}
 {% else %}
@@ -9,14 +9,23 @@
 {% form_theme form '@App/Templates/form_template.html.twig' %}
 
 <div id="modal-add-attribution" class="ui small modal">
-    <i class="close icon"></i>
     <div class="header">
         {{ header }}
     </div>
 
     <div class="content">
 
-        {{ form_start(form,{'attr': {'class': 'ui form'}}) }}
+        <div id="message-box" class="ui icon message">
+            <i class="exclamation icon"></i>
+            <div class="content">
+                <div class="header"></div>
+                <p id="messages"></p>
+            </div>
+        </div>
+
+        {{ form_errors(form) }}
+
+        {{ form_start(form, {'attr': {'class': 'ui form'}}) }}
 
         {{ form_rest(form) }}
 
@@ -32,4 +41,64 @@
     <div class="actions">
         <div class="ui button">Annuler</div>
     </div>
+
+
+    <script>
+        function postForm( $form, callback ){
+
+            /*
+             * Get all form values
+             */
+            var values = {};
+            $.each( $form.serializeArray(), function(i, field) {
+                values[field.name] = field.value;
+            });
+
+            $('#message-box').hide();
+
+            /*
+             * Throw the form values to the server!
+             */
+            $.ajax({
+                type        : $form.attr( 'method' ),
+                url         : $form.attr( 'action' ),
+                data        : values,
+                success     : function(data) {
+
+                    if(data == true)
+                        location.reload();
+                    else
+                        $('#modal-add-attribution').parent().html(data);
+
+                },
+                error       : function(xhr, ajaxOptions, thrownError) {
+                    $('#message-box .header').html("Erreur lors de l'envoi du formulaire");
+                    $('#message-box #messages').html("Détails : " + xhr.status + " / " + thrownError);
+                    $('#message-box').addClass('error');
+                    $('#message-box').show();
+                }
+            });
+        }
+
+        $(document).ready(function(){
+
+            $('#message-box').hide();
+
+            var forms = [
+                '[ name="{{ form.vars.full_name }}"]'
+            ];
+
+            $( forms.join(',') ).submit( function( e ){
+                e.preventDefault();
+
+                postForm( $(this), function( response ){
+                });
+
+                return false;
+            });
+
+        });
+
+    </script>
+
 </div>
