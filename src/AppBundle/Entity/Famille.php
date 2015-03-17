@@ -6,7 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use AppBundle\Entity\Expediable;
+use AppBundle\Entity\Pere;
+use AppBundle\Entity\Mere;
+use AppBundle\Entity\Geniteur;
 
 //FinancesBundle
 use Interne\FinancesBundle\Entity\CreanceToFamille;
@@ -139,13 +141,16 @@ class Famille implements ExpediableInterface, ClassInterface
     /**
      * Set pere
      *
-     * @param \AppBundle\Entity\Geniteur
+     * @param Pere $pere
      * @return Famille
      */
-    public function setPere( \AppBundle\Entity\Geniteur $pere = null)
+    public function setPere($pere = null)
     {
         $this->pere = $pere;
-
+        if($pere != null)
+        {
+            $pere->setFamille($this);
+        }
         return $this;
     }
 
@@ -162,12 +167,16 @@ class Famille implements ExpediableInterface, ClassInterface
     /**
      * Set mere
      *
-     * @param  \AppBundle\Entity\Geniteur
+     * @param  Mere $mere
      * @return Famille
      */
-    public function setMere( \AppBundle\Entity\Geniteur $mere = null)
+    public function setMere($mere = null)
     {
         $this->mere = $mere;
+        if($mere != null)
+        {
+            $mere->setFamille($this);
+        }
         return $this;
     }
 

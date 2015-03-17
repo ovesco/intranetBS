@@ -1,12 +1,108 @@
 {% extends 'AppBundle:Layout:layout.html.twig' %}
 
 {% block titre %}
-    {{ famille.nom|capitalize }}
+    Famille {{ famille.nom|capitalize }}
 {% endblock %}
 
-{% form_theme familleForm 'AppBundle:Templates:Form:ajax_edit.html.twig' %}
+{% form_theme familleForm ':Templates/Form:ajax_edit.html.twig' %}
 
 {% block content %}
+
+    <div class="ui page grid">
+
+        <div class="column">
+
+            <h1>Les {{ famille.nom|capitalize }}</h1>
+
+
+
+            <h2>Membres aux scouts</h2>
+            <div class="ui segment">
+                <table class="ui table">
+                    <thead>
+                    <tr>
+                        <th>Prénom</th>
+                        <th>Unité</th>
+                        <th>Date de naissance</th>
+                        <th>Numéro BS</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for membre in famille.membres %}
+                        <tr>
+                            <td><a href="{{ path('interne_voir_membre', {membre:membre.id}) }}">{{ membre.prenom|capitalize }}</a></td>
+                            <td>{{ membre.activeAttribution.fonction.nom }} - {{ membre.activeAttribution.groupe.nom }}</td>
+                            <td>{{ membre.naissance|date('d.m.Y') }}</td>
+                            <td>{{ membre.numeroBs }}</td>
+                            <td>
+                                <a href="{{ path('interne_voir_membre', {membre:membre.id}) }}" class="circular ui mini blue icon button">
+                                    <i class="share icon"></i>
+                                </a>
+
+                                <a class="ui circular icon top left pointing dropdown mini green button">
+                                    <i class="list icon"></i>
+                                    <div class="menu">
+                                        <div class="header">Ajouter à une liste</div>
+                                        {% for liste in listing.listes %}
+                                            <div onclick="listing.addElements('{{ liste.token }}', {{ membre.id }});" class="item">{{ liste.name }}</div>
+                                        {% endfor %}
+                                    </div>
+                                </a>
+
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+
+            <h2>Les parents<a class="anchor" id="parents"></a></h2>
+            <div class="ui segment">
+                <div class="ui grid">
+
+
+
+                        <div class="eight wide column">
+                            <h3>Mère</h3>
+                            {% include "AppBundle:Geniteur:showWithForm.html.twig" with {'geniteur':familleForm.mere} %}
+                        </div>
+
+                        <div class="eight wide column">
+                            <h3>Père</h3>
+
+                            {% include "AppBundle:Geniteur:showWithForm.html.twig" with {'geniteur':familleForm.pere} %}
+                        </div>
+
+
+
+
+                </div>
+
+            </div>
+
+            <h2>Contact<a class="anchor" id="contact"></a></h2>
+            <div class="ui segment">
+
+                {% include "AppBundle:Contact:voir_contact_famille.html.twig" with {'familleForm':familleForm, 'famille':famille, } %}
+
+            </div>
+
+            <h2>Factures et créances<a class="anchor" id="finances"></a></h2>
+            <div class="ui segment">
+
+                {# Insertion de la partie facture et créance pour le membre #}
+                {% include "InterneFinancesBundle:Interface:interface.html.twig" with {'ownerEntity': famille } %}
+
+            </div>
+
+
+
+        </div>
+
+    </div>
+{#
 
     <div class="ui page grid">
         <div class="row">
@@ -53,58 +149,17 @@
 
                                         <div class="ui segment">
 
-                                            {% include "AppBundle:CibleEnvoi:cibleEnvoi.html.twig" with
-                                            {'adresseExpedition':famille.adresseExpedition,
-                                            'listeEmailsExpedition':famille.listeEmailsExpedition} %}
 
                                         </div>
                                         <div class="ui segment">
-                                            {% include "AppBundle:Contact:showWithForm.html.twig" with {'contact':familleForm.contact} %}
+
                                         </div>
 
 
 
                                     </div>
                                 </div>
-                                <h4>Membres aux scouts</h4>
 
-                                <table class="ui table">
-                                    <thead>
-                                        <tr>
-                                            <th>Prénom</th>
-                                            <th>Unité</th>
-                                            <th>Date de naissance</th>
-                                            <th>Numéro BS</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for membre in famille.membres %}
-                                            <tr>
-                                                <td><a href="{{ path('interne_voir_membre', {membre:membre.id}) }}">{{ membre.prenom|capitalize }}</a></td>
-                                                <td>{{ membre.activeAttribution.fonction.nom }} - {{ membre.activeAttribution.groupe.nom }}</td>
-                                                <td>{{ membre.naissance|date('d.m.Y') }}</td>
-                                                <td>{{ membre.numeroBs }}</td>
-                                                <td>
-                                                    <a href="{{ path('interne_voir_membre', {membre:membre.id}) }}" class="circular ui mini blue icon button">
-                                                        <i class="share icon"></i>
-                                                    </a>
-
-                                                    <a class="ui circular icon top left pointing dropdown mini green button">
-                                                        <i class="list icon"></i>
-                                                        <div class="menu">
-                                                            <div class="header">Ajouter à une liste</div>
-                                                            {% for liste in listing.listes %}
-                                                                <div onclick="listing.addElements('{{ liste.token }}', {{ membre.id }});" class="item">{{ liste.name }}</div>
-                                                            {% endfor %}
-                                                        </div>
-                                                    </a>
-
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
 
                             </div>
 
@@ -113,6 +168,8 @@
 
 
                                 <div class="ui grid">
+
+                                    {#
 
                                         <div class="eight wide column">
                                             <h3>Mère</h3>
@@ -137,9 +194,9 @@
 
 
 
+
                             <div class="ui bottom attached tab segment" data-tab="finances-creances-factures">
-                                {# Insertion de la partie facture et créance pour le membre #}
-                                {% include "InterneFinancesBundle:Interface:interface.html.twig" with {'ownerEntity': famille } %}
+                                {# Insertion de la partie facture et créance pour le membre
                             </div>
 
                         </div>
@@ -151,6 +208,8 @@
     </div>
 
     <div id="popup-container"></div>
+
+    #}
 
 
 {% endblock %}
@@ -170,9 +229,7 @@
 
 
     <script type="text/javascript">
-        $('#famille-infos-context .menu .item').tab({
-            context: $('#famille-infos-context')
-        });
+
 
 
         //Appel de l'editable

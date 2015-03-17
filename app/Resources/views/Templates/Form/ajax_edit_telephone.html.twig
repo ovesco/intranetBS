@@ -25,6 +25,12 @@
 {%- endblock form_widget_simple %}
 
 
+{# textarea #}
+{% block textarea_widget -%}
+    {%- set type = type|default('text') -%}
+    <div data-type="textarea" {{ block('validation_block') }}>{% if value is not empty %}{{ value }}{% endif %}</div>
+{%- endblock textarea_widget %}
+
 {#
     validation_block
     Génère les attributs class et data-path

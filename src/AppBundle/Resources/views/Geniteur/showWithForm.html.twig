@@ -1,11 +1,13 @@
-<div class="row">
+
     <table class="ui definition table">
         <tbody>
         {{ form_row(geniteur.prenom) }}
         {{ form_row(geniteur.profession) }}
         </tbody>
     </table>
-</div>
+
+{#
 <div class="row">
     {% include "AppBundle:Contact:showWithForm.html.twig" with {'contact':geniteur.contact} %}
 </div>
+#}
