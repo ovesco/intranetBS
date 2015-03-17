@@ -29,6 +29,11 @@
 
         {{ form_rest(form) }}
 
+        <div id="progress-bar" class="ui indicating progress">
+            <div class="bar"></div>
+            <div class="label">Ajout des attributions en cours...</div>
+        </div>
+
 
         <div class="ui field">
             <input type="submit" class="ui green button" value="{{ buttonText }}" />
@@ -50,38 +55,95 @@
              * Get all form values
              */
             var values = {};
+            var iterators = [];
             $.each( $form.serializeArray(), function(i, field) {
-                values[field.name] = field.value;
+
+                /* Si le champ est défini comme "multi", l'utiliser comme un itérateur
+                *  il faudra éxécuter le formulaire pour chacun de ces élément */
+                if($("input[name='"+field.name+"']").data('multi') == true)
+                    iterators.push({fieldName: field.name, fieldValues: field.value});
+                else
+                    values[field.name] = field.value;
             });
 
             $('#message-box').hide();
+            $('#progress-bar').show();
+            $('#progress-bar').progress('reset');
 
-            /*
-             * Throw the form values to the server!
-             */
-            $.ajax({
-                type        : $form.attr( 'method' ),
-                url         : $form.attr( 'action' ),
-                data        : values,
-                success     : function(data) {
+            /* Calcule le nombre total d'opérations à effectuer pour la progress bar */
+            nbOperationsDone = 0;
+            nbOperations = 1;
+            if(iterators.length > 0) {
+                $(iterators).each(function() {
+                    nbOperations *= this.fieldValues.split(',').length;
+                });
+            }
 
-                    if(data == true)
-                        location.reload();
-                    else
-                        $('#modal-add-attribution').parent().html(data);
+            postFormValues($form, iterators, values);
+        }
 
-                },
-                error       : function(xhr, ajaxOptions, thrownError) {
-                    $('#message-box .header').html("Erreur lors de l'envoi du formulaire");
-                    $('#message-box #messages').html("Détails : " + xhr.status + " / " + thrownError);
-                    $('#message-box').addClass('error');
-                    $('#message-box').show();
+        function postFormValues($form, iterators, values) {
+
+            /* S'il y a des champs multi */
+            if(iterators.length > 0) {
+
+                /* Extrait le premier itérateur */
+                var iterator = iterators.shift();
+
+                /* Extrait chaque valeur */
+                var fieldValues = iterator.fieldValues.split(',');
+
+                /* Pur chacune des valeur de la liste */
+                for(var i=0; i<fieldValues.length; i++) {
+
+                    /* Définir la valeur pour l'appel récusrsif */
+                    values[iterator.fieldName] = fieldValues[i];
+
+                    /* On effectue l'appel récursif (l'iétrateur actuel est déjà extrait) */
+                    postFormValues($form, iterators, values);
                 }
-            });
+
+            }
+
+            /* S'il n'y a pas de champ multi */
+            else {
+
+                /*
+                 * Throw the form values to the server!
+                 */
+                $.ajax({
+                    type        : $form.attr( 'method' ),
+                    url         : $form.attr( 'action' ),
+                    data        : values,
+                    success     : function(data) {
+
+                        if(data == true) {
+                            nbOperationsDone++;
+                            console.log(nbOperationsDone);
+                            $('#progress-bar').progress({value:nbOperationsDone, total:nbOperations});
+
+                            if (nbOperationsDone == nbOperations)
+                                location.reload();
+                        }
+                        else
+                            $('#modal-add-attribution').parent().html(data);
+
+                    },
+                    error       : function(xhr, ajaxOptions, thrownError) {
+                        $('#message-box .header').html("Erreur lors de l'envoi du formulaire");
+                        $('#message-box #messages').html("Détails : " + xhr.status + " / " + thrownError);
+                        $('#message-box').addClass('error');
+                        $('#message-box').show();
+                    }
+                });
+            }
+
+
         }
 
         $(document).ready(function(){
 
+            $('#progress-bar').hide();
             $('#message-box').hide();
 
             var forms = [

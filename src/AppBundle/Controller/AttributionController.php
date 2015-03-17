@@ -31,8 +31,6 @@ class AttributionController extends Controller
     public function getAttributionFormAjaxAction(Request $request)
     {
 
-        //if ($request->isXmlHttpRequest()) {
-
         $em = $this->getDoctrine()->getManager();
         /*
          * On envoie le formulaire en modal
@@ -41,6 +39,8 @@ class AttributionController extends Controller
         $idMembre = $request->request->get('idMembre');
         $idAttribution = $request->request->get('idAttribution');
 
+        $multiMembre = false;
+        $multiMembreIds = null;
         $attribution = null;
         $attributionForm = null;
         if ($idAttribution == null) {
@@ -49,11 +49,22 @@ class AttributionController extends Controller
              */
             $attribution = new Attribution();
 
-            if($idMembre != null)
-                $attribution->setMembre($em->getRepository('AppBundle:Membre')->find($idMembre));
+            if($idMembre !== null) {
+                if( is_array($idMembre) ) {
+                    $multiMembre = true;
+                    $multiMembreIds = implode(",", $idMembre);
+                } else {
+                    $attribution->setMembre($em->getRepository('AppBundle:Membre')->find($idMembre));
+                }
+            }
 
-            $attributionForm = $this->createForm(new AttributionType(), $attribution,
-                array('action' => $this->generateUrl('attribution_add')));
+            $attributionForm = $this->createForm(new AttributionType(), $attribution, array(
+                'action'    => $this->generateUrl('attribution_add'),
+                'attr'      => array(
+                    'multiMembre'       => $multiMembre,
+                    'multiMembreIds'    => $multiMembreIds
+                )
+            ));
 
         } else {
             /*
@@ -99,8 +110,7 @@ class AttributionController extends Controller
 
         return $this->render('AppBundle:Attribution:attribution_form_modal.html.twig', array(
             'form' => $newAttributionForm->createView(),
-            'postform' => $newAttributionForm)
-    );
+            'postform' => $newAttributionForm));
     }
 
     /**
