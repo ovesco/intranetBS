@@ -1,0 +1,104 @@
+{% import _self as self %}
+
+<div class="ui grid">
+
+
+
+    {% for contactInfo in arrayOfContact %}
+
+        {% set type = contactInfo['type'] %}
+        {% set owner = contactInfo['contact'] %}
+        {% set form = contactInfo['contactForm'] %}
+
+        <div class="row">
+            <div class="one wide column">
+
+                {% if type == 'Membre' %}
+                    <i class="big user icon popupable" data-content="Contact du membre"></i>
+                {% elseif type == 'Famille'%}
+                    <i class="big home icon popupable" data-content="Contact de la famille"></i>
+                {% elseif type == 'Mère'%}
+                    <i class="big female icon popupable" data-content="Contact de la mère"></i>
+                {% elseif type == 'Père'%}
+                    <i class="big male icon popupable" data-content="Contact du père"></i>
+                {% endif %}
+
+
+            </div>
+            <div class="four wide column">
+
+                <div class="ui contact_adresse segment">
+                    <div class="ui right corner label"><i class="mail outline icon"></i></div>
+
+
+
+                    {% if (type == 'Membre') or (type == 'Mère') or (type == 'Père') %}
+                        {{ owner.nom }} {{ owner.prenom }}
+                    {% elseif type == 'Famille'%}
+                        Famille {{ owner.nom }}
+                    {% endif %}
+
+
+                    {% include 'AppBundle:Adresse:adresse_ajax_edit_form.html.twig' with {'adresse':form.contact.adresse } %}
+
+                    <div class="ui toggle checkbox" id="{{ owner.contact.adresse.id }}">
+                        <input type="checkbox">
+                    </div>
+
+                </div>
+
+
+
+            </div>
+            <div class="seven wide column">
+
+                <div class="ui segment">
+                    <div class="ui right corner label"><i class="at icon"></i></div>
+
+                    {{ self.add_email_button(owner) }}
+
+                    {% include 'AppBundle:Email:emails_ajax_edit_form.html.twig' with {'emails':form.contact.emails } %}
+
+
+
+                </div>
+            </div>
+            <div class="four wide column">
+
+                <div class="ui segment">
+                    <div class="ui right corner label"><i class="call icon"></i></div>
+
+                    {{ self.add_telephone_button(owner) }}
+
+                    {% include 'AppBundle:Telephone:telephones_ajax_edit_form.html.twig' with {'telephones':form.contact.telephones } %}
+
+                </div>
+
+
+            </div>
+        </div>
+    {% endfor %}
+
+
+
+</div>
+
+
+
+{% macro add_telephone_button(owner) %}
+    {% if owner is not null %}
+        {% set contact_id = owner.contact.id %}
+        {% if contact_id is not null %}
+            <i class="contact_add_telephone ui blue add square icon" data-id="{{ contact_id}}"></i>
+        {% endif %}
+    {% endif %}
+{% endmacro %}
+
+{% macro add_email_button(owner) %}
+    {% if owner is not null %}
+        {% set contact_id = owner.contact.id %}
+        {% if contact_id is not null %}
+            <i class="contact_add_email ui blue add square icon" data-id="{{ contact_id}}"></i>
+        {% endif %}
+    {% endif %}
+{% endmacro %}

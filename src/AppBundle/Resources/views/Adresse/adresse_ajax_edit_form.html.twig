@@ -1,10 +1,13 @@
 {% form_theme adresse  ':Templates/Form:ajax_edit_adresse.html.twig' %}
 
 
-            {{ form_row(adresse.rue)  }}
-            {{ form_row(adresse.npa)  }}
-            {{ form_row(adresse.localite)  }}
-            {{ form_row(adresse.expediable)  }}
+{{ form_row(adresse.rue)  }}
+{{ form_row(adresse.npa)  }}
+{{ form_row(adresse.localite)  }}
+
+<div class="expediable">
+    {{ form_row(adresse.expediable)  }}
+</div>
 
 
 
