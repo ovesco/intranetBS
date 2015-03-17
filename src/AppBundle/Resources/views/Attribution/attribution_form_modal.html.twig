@@ -58,28 +58,63 @@
             var iterators = [];
             $.each( $form.serializeArray(), function(i, field) {
 
-                /* Si le champ est défini comme "multi", l'utiliser comme un itérateur
-                *  il faudra éxécuter le formulaire pour chacun de ces élément */
-                if($("input[name='"+field.name+"']").data('multi') == true)
-                    iterators.push({fieldName: field.name, fieldValues: field.value});
-                else
+//                /* Si le champ est défini comme "multi", l'utiliser comme un itérateur
+//                *  il faudra éxécuter le formulaire pour chacun de ces élément */
+//                if($("input[name='"+field.name+"']").data('multi') == true)
+//                    iterators.push({fieldName: field.name, fieldValues: field.value});
+//                else
                     values[field.name] = field.value;
             });
 
             $('#message-box').hide();
-            $('#progress-bar').show();
-            $('#progress-bar').progress('reset');
+//            $('#progress-bar').show();
+//            $('#progress-bar').progress('reset');
 
             /* Calcule le nombre total d'opérations à effectuer pour la progress bar */
-            nbOperationsDone = 0;
-            nbOperations = 1;
-            if(iterators.length > 0) {
-                $(iterators).each(function() {
-                    nbOperations *= this.fieldValues.split(',').length;
-                });
-            }
+//            nbOperationsDone = 0;
+//            nbOperations = 1;
+//            if(iterators.length > 0) {
+//                $(iterators).each(function() {
+//                    nbOperations *= this.fieldValues.split(',').length;
+//                });
+//            }
 
-            postFormValues($form, iterators, values);
+//            postFormValues($form, iterators, values);
+
+
+            /*
+             * Throw the form values to the server!
+             */
+            $.ajax({
+                type        : $form.attr( 'method' ),
+                url         : $form.attr( 'action' ),
+                data        : values,
+                success     : function(data) {
+
+                    if(data == true) {
+//                        nbOperationsDone++;
+//                        console.log(nbOperationsDone);
+//                        $('#progress-bar').progress({value:nbOperationsDone, total:nbOperations});
+//
+//                        if (nbOperationsDone == nbOperations)
+                        location.reload();
+                    }
+                    else {
+                        $("[id^=modal-]").remove();
+                        $(data).modal('show');
+                        $('#message-box .header').html("Erreur lors de l'envoi du formulaire");
+                        $('#message-box').addClass('error');
+                        $('#message-box').show();
+                    }
+
+                },
+                error       : function(xhr, ajaxOptions, thrownError) {
+                    $('#message-box .header').html("Erreur lors de l'envoi du formulaire");
+                    $('#message-box #messages').html("Détails : " + xhr.status + " / " + thrownError);
+                    $('#message-box').addClass('error');
+                    $('#message-box').show();
+                }
+            });
         }
 
         function postFormValues($form, iterators, values) {
