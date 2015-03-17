@@ -1,7 +1,15 @@
+{% if form.nom.vars.value == '' %}
+    {%  set header = 'Ajouter un groupe' %}
+    {%  set buttonText = 'Ajouter' %}
+{% else %}
+    {%  set header = 'Modifier un groupe' %}
+    {%  set buttonText = 'Modifier' %}
+{% endif %}
+
 <div id="groupe-modale" class="ui small modal">
     <i class="close icon"></i>
     <div class="header">
-        Ajouter une unité
+        {{ header }}
     </div>
 
     <div class="content">
@@ -19,13 +27,6 @@
 
 
         {{ form_rest(form) }}
-
-
-        {% if form.nom.vars.value == '' %}
-            {%  set buttonText = 'Ajouter' %}
-        {% else %}
-            {%  set buttonText = 'Modifier' %}
-        {% endif %}
 
         <div class="ui field">
             <input type="submit" class="ui green button" value="{{ buttonText }}" />

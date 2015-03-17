@@ -47,6 +47,7 @@ class ObtentionDistinctionController extends Controller
                  * Ajout
                  */
                 $obtention = new ObtentionDistinction();
+                $obtention->setMembre($em->getRepository('AppBundle:Membre')->find($idMembre));
                 $obtentionForm = $this->createForm(new ObtentionDistinctionType(), $obtention,
                     array('action' => $this->generateUrl('obtention-distinction_add', array('member'=>$idMembre))));
 

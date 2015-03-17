@@ -16,14 +16,14 @@ class ObtentionDistinctionType extends AbstractType
     {
         $builder
             ->add('date', 'text', array(
-            	
-            		'attr'	=> array('class'	=> 'datepicker')
-            	))
+                'attr'	=> array('class' => 'datepicker')
+            ))
             ->add('distinction', 'entity', array(
-            	
-            		'class'		=> 'AppBundle:Distinction',
-            		'property'	=> 'nom'
-            	))
+                'class'		=> 'AppBundle:Distinction'
+            ))
+            ->add('membre', 'entity', array(
+                'class'		=> 'AppBundle:Membre'
+            ))
         ;
     }
     

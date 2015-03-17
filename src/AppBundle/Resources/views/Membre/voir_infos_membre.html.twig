@@ -39,10 +39,10 @@
 
         <div class="ten wide column">
             {% include "AppBundle:Attribution:listeAttributionActuel.html.twig" with {'attributions':membre.attributions} %}
-            <div id="ajouter-attribution" data-idMembre="{{ membre.id }}" class="ui button">Ajouter</div>
+            <div id="ajouter-attribution" data-membre="{{ membre.id }}" class="ui button">Ajouter</div>
 
             {% include "AppBundle:ObtentionDistinction:listeObtentionDistinction.html.twig" with {'distinctions': membre.distinctions } %}
-            <div id="ajouter-distinction" data-idMembre="{{ membre.id }}" class="ui button">Ajouter</div>
+            <div id="ajouter-distinction" data-membre="{{ membre.id }}" class="ui button">Ajouter</div>
 
         </div>
 

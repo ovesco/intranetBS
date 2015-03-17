@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,8 +31,6 @@ class AttributionController extends Controller
     public function getAttributionFormAjaxAction(Request $request)
     {
 
-        //if ($request->isXmlHttpRequest()) {
-
         $em = $this->getDoctrine()->getManager();
         /*
          * On envoie le formulaire en modal
@@ -40,6 +39,8 @@ class AttributionController extends Controller
         $idMembre = $request->request->get('idMembre');
         $idAttribution = $request->request->get('idAttribution');
 
+        $multiMembre = false;
+        $multiMembreIds = null;
         $attribution = null;
         $attributionForm = null;
         if ($idAttribution == null) {
@@ -47,9 +48,23 @@ class AttributionController extends Controller
              * Ajout
              */
             $attribution = new Attribution();
-            $attribution->setMembre($idMembre);
-            $attributionForm = $this->createForm(new AttributionType(), $attribution,
-                array('action' => $this->generateUrl('attribution_add', array('member'=>$idMembre))));
+
+            if($idMembre !== null) {
+                if( is_array($idMembre) ) {
+                    $multiMembre = true;
+                    $multiMembreIds = implode(",", $idMembre);
+                } else {
+                    $attribution->setMembre($em->getRepository('AppBundle:Membre')->find($idMembre));
+                }
+            }
+
+            $attributionForm = $this->createForm(new AttributionType(), $attribution, array(
+                'action'    => $this->generateUrl('attribution_add'),
+                'attr'      => array(
+                    'multiMembre'       => $multiMembre,
+                    'multiMembreIds'    => $multiMembreIds
+                )
+            ));
 
         } else {
             /*
@@ -58,12 +73,13 @@ class AttributionController extends Controller
             //TODO: pas testé
             $attribution = $em->getRepository('AppBundle:Attribution')->find($idAttribution);
             $attributionForm = $this->createForm(new AttributionType(), $attribution,
-                array('action' => $this->generateUrl('attribution_edit', array('attribution'=>$idAttribution))));
+                array('action' => $this->generateUrl('attribution_edit')));
 
         }
 
         return $this->render('AppBundle:Attribution:attribution_form_modal.html.twig', array(
-                'form' => $attributionForm->createView())
+            'form' => $attributionForm->createView(),
+            'postform' => $attributionForm)
         );
 
     }
@@ -89,10 +105,12 @@ class AttributionController extends Controller
             $em->persist($newAttribution);
             $em->flush();
 
-            return new Response(true);
+            return new JsonResponse(true);
         }
 
-        return new Response(false);
+        return $this->render('AppBundle:Attribution:attribution_form_modal.html.twig', array(
+            'form' => $newAttributionForm->createView(),
+            'postform' => $newAttributionForm));
     }
 
     /**
