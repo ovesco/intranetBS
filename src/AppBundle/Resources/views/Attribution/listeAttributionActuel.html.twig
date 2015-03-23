@@ -3,6 +3,8 @@
     <tr>
         <th>Fonction</th>
         <th>Unité</th>
+        <th>Depuis</th>
+        <th>Jusqu'à</th>
         <th></th>
     </tr>
     </thead>
@@ -11,10 +13,9 @@
         <tr>
             <td>{{ attribution.fonction.nom }}</td>
             <td><a href="{{ path('interne_voir_groupe', {groupe:attribution.groupe.id}) }}">{{ attribution.groupe.nom }}</a></td>
-
-            <td>
-                <div class="circular ui mini icon red button popupable" data-content="Terminer"><i class="remove icon"></i></div>
-            </td>
+            <td>{{ attribution.datedebut|date('d.m.Y') }}</td>
+            <td>{{ attribution.datefin|date('d.m.Y') }}</td>
+            <td><div class="circular ui mini icon red button popupable" data-content="Terminer"><i class="remove icon"></i></div></td>
         </tr>
     {% endfor %}
     </tbody>

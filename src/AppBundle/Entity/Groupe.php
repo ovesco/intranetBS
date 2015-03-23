@@ -73,9 +73,12 @@ class Groupe
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct($nom = "")
     {
         $this->enfants = new \Doctrine\Common\Collections\ArrayCollection();
+
+        $this->nom = $nom;
+        $this->active = true;
     }
 
     /**

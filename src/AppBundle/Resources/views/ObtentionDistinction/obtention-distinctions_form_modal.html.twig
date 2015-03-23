@@ -1,4 +1,4 @@
-{% if form.obtention.vars.value == '' %}
+{% if form.date.vars.value == '' %}
     {%  set header = 'Ajouter une distinction' %}
     {%  set buttonText = 'Ajouter' %}
 {% else %}
@@ -9,7 +9,6 @@
 {% form_theme form '@App/Templates/form_template.html.twig' %}
 
 <div id="modal-add-obtentions-distinctions" class="ui small modal">
-    <i class="close icon"></i>
     <div class="header">
         {{ header }}
     </div>
@@ -33,33 +32,3 @@
         <div class="ui button">Annuler</div>
     </div>
 </div>
-
-
-{#<div id="modal-add-obtentions-distinctions" class="ui small modal">#}
-    {#<i class="close icon"></i>#}
-    {#<div class="header">#}
-        {#Ajout de distinction(s)#}
-    {#</div>#}
-    {#<div class="content">#}
-
-        {#<b>Choisir des distinctions à ajouter</b>#}
-        {#<select id="distinction-select" class="select2" multiple>#}
-            {#{% for distinction in distinctions %}#}
-                {#<option value="{{ distinction.id }}">{{ distinction.nom }}</option>#}
-            {#{% endfor %}#}
-        {#</select>#}
-
-        {#<div class="ui divider"></div>#}
-
-        {#<div class="ui input">#}
-            {#<b>Date d'ajout</b>#}
-            {#<input type="text" class="datepicker" />#}
-        {#</div>#}
-
-    {#</div>#}
-
-    {#<div class="actions">#}
-        {#<div class="ui button">Cancel</div>#}
-        {#<div onclick="addListe(true);" class="ui button">OK</div>#}
-    {#</div>#}
-{#</div>#}

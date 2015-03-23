@@ -1,0 +1,8 @@
+.bs-tab-membre td:first-child {
+    min-width: 150px;
+}
+
+.bs-tab-membre input, .bs-tab-membre textarea {
+    width: 60%;
+}
+

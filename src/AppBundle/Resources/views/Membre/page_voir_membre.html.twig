@@ -13,56 +13,57 @@
 <div class="ui page grid">
     <div class="column">
 
-    <div class="ui close right rail">
-        <div class="ui sticky fixed top">
-            <div id="page-menu" class="ui secondary vertical following fluid menu">
-                <a class="item" href="#membre">{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</a>
-                <a class="item" href="#infos-membre">Informations</a>
-                <a class="item" href="#contact">Contact</a>
-                <a class="item" href="#infos-scout">Information scouts</a>
-                <a class="item" href="#finances">Factures & créances</a>
+        <div class="ui close right rail">
+            <div class="ui sticky fixed top">
+                <div id="page-menu" class="ui secondary vertical following fluid menu">
+                    <a class="item" href="#membre">{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</a>
+                    <a class="item" href="#infos-membre">Informations</a>
+                    <a class="item" href="#contact">Contact</a>
+                    <a class="item" href="#infos-scout">Information scouts</a>
+                    <a class="item" href="#finances">Factures & créances</a>
+                </div>
             </div>
         </div>
-    </div>
 
 
-    <h1>{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}<a class="anchor" id="membre"></a></h1>
+        <h1>{{ membre.prenom|capitalize }} <a href="{{ path('interne_voir_famille',{'famille': membre.famille.id }) }}">{{ membre.nom|capitalize }}</a><a class="anchor" id="membre"></a></h1>
 
 
 
-    <h2>Information sur le membre<a class="anchor" id="infos-membre"></a></h2>
-    <div class="row ui segment">
+        <h2>Information sur le membre<a class="anchor" id="infos-membre"></a></h2>
+        <div class="ui segment">
 
-        {% include "AppBundle:Membre:voir_infos_membre.html.twig" with {'membreForm':membreForm, 'membre':membre, } %}
+            {% include "AppBundle:Membre:voir_infos_membre.html.twig" with {'membreForm':membreForm, 'membre':membre, } %}
 
-    </div>
+        </div>
 
-    <h2>Contact<a class="anchor" id="contact"></a></h2>
-    <div class="row ui segment">
+        <h2>Contact<a class="anchor" id="contact"></a></h2>
+        <div class="ui segment">
 
-        {% include "AppBundle:Contact:voir_contact.html.twig" with {'membreForm':membreForm, 'membre':membre, } %}
+            {% include "AppBundle:Contact:voir_contact_membre.html.twig" with {'membreForm':membreForm, 'membre':membre, } %}
 
-    </div>
+        </div>
 
-    <h2>Informations scouts<a class="anchor" id="infos-scout"></a></h2>
-    <div class="row ui segment">
+        <h2>Factures et créances<a class="anchor" id="finances"></a></h2>
+        <div class="ui segment">
 
-        {% include "AppBundle:Membre:voir_infos_scouts.html.twig" with {'membre':membre, } %}
+            {% include "InterneFinancesBundle:Interface:interface.html.twig" with {'ownerEntity': membre }%}
 
-    </div>
-
-    <h2>Factures et créances<a class="anchor" id="finances"></a></h2>
-    <div class="row ui segment">
-
-        {% include "InterneFinancesBundle:Interface:interface.html.twig" with {'ownerEntity': membre }%}
-
-    </div>
+        </div>
     </div>
 </div>
 
 
 
 {% endblock %}
+
+
+{% block css %}
+    {% stylesheets '@AppBundle/Resources/public/css/Membre/membre.css' filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
 
 {% block js %}
 

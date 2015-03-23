@@ -2,8 +2,7 @@ $(document).ready(function(){
 
     $('.ui.checkbox').checkbox();
 
-    AdresseHighlight();
-    EmailsCheckboxSetup();
+
 
     $('.contact_adresse').find('.checkbox').click(function(){
         modifyAdresseCible(this);
@@ -33,19 +32,28 @@ $(document).ready(function(){
     });
 
 
+    AdresseHighlight();
+    EmailsCheckboxSetup();
+
+
 
 
 });
 
 function modifyAdresseCible(checkBox)
 {
+    //si checked alors volonté de selectionner cette adresse.
+    var checked = $(checkBox).checkbox('is checked');
+
+    //on iter sur chaque bloc d'adresse
     $('.contact_adresse').each(function(){
 
+        //on prend la checkbox du bloc d'adresse
         var $checkBox = $(this).find('.ui.checkbox');
 
+        //on regarde si il s'agit de la meme checkbox que celle qui a été cliquée.
         if($(checkBox).attr('id') == $checkBox.attr('id'))
         {
-            var checked = $checkBox.checkbox('is checked');
 
             var $expediableHidden = $(this).find('.expediable').children().first();
             var expediableText = $expediableHidden.text();
@@ -94,30 +102,31 @@ function AdresseHighlight()
         else
         {
             $checkBox.checkbox('disable');
+            $checkBox.unbind( "click" ); //remove event handler attached to this element.
         }
 
 
         if(!foundExpediable)
         {
 
-            var expediableText = $expediableHidden.text();
+            var expediableText = $expediableHidden.data('value');
             var expediable = ($.trim(expediableText) === '1');
 
             if(expediable)
             {
                 //active uniquement la première adresse trouvée qui est expediable
                 foundExpediable = true;
-                $(this).addClass('active');
+                $(this).addClass('green');
                 $checkBox.checkbox('check');
             }
             else
             {
-                $(this).removeClass('active');
+                $(this).removeClass('green');
                 $checkBox.checkbox('uncheck');
             }
         }
         else{
-            $(this).removeClass('active');
+            $(this).removeClass('green');
             $checkBox.checkbox('uncheck');
         }
 

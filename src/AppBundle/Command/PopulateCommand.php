@@ -522,7 +522,7 @@ class PopulateCommand extends ContainerAwareCommand
 
         $distinction = new ObtentionDistinction();
         $distinction->setDistinction($this->listeDistinctions[mt_rand(0, (count($this->listeDistinctions)-1))]);
-        $distinction->setObtention($this->getRandomInscription());
+        $distinction->setDate($this->getRandomInscription());
 
         return $distinction;
     }

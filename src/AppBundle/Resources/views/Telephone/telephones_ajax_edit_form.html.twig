@@ -1,17 +1,42 @@
 {% form_theme telephones  ':Templates/Form:ajax_edit_telephone.html.twig' %}
 
 <div class="ui grid">
-
-    <div class="column">
         {% for telephone in telephones %}
-            <div class="row" style="min-height: 2em">
 
-                {{ form_row(telephone.telephone)  }}
+        <div class="row">
+
+            <div class="column">
+
+
+            <div class="ui accordion">
+                <div class="title">
+
+
+                    <div class="ui grid">
+
+                        <div class="row">
+                            <div class="one wide column"><i class="dropdown icon"></i></div>
+
+                            <div class="ten wide column">
+                                {{ form_row(telephone.telephone)  }}
+                            </div>
+                            <div class="one wide column">
+                                <i class="popupable trash red icon" data-content="Supprimer cette adresse"></i>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="content">
+                    <b>Remarques:</b><br>
+                    <p>{{ form_row(telephone.remarques)  }}</p>
+                </div>
+            </div>
 
             </div>
+
+
+        </div>
         {% endfor %}
-    </div>
-
-
-
 </div>

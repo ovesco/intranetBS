@@ -1,0 +1,20 @@
+{% set familleForm = membreForm.famille %}
+{% set mereForm = membreForm.famille.mere %}
+{% set pereForm = membreForm.famille.pere %}
+
+{% set famille = membre.famille %}
+
+{% set arrayOfContact = [{'type':'Membre','contact': membre, 'contactForm':membreForm }, {'type':'Famille','contact':famille,'contactForm':familleForm }] %}
+
+{% if membre.famille.mere is not null %}
+    {% set mere = membre.famille.mere %}
+    {% set arrayOfContact = arrayOfContact|merge([{'type':'Mère','contact': mere, 'contactForm':mereForm}]) %}
+{% endif %}
+
+{% if membre.famille.pere is defined %}
+    {% set pere = membre.famille.pere %}
+    {% set arrayOfContact = arrayOfContact|merge([{'type':'Père','contact': pere, 'contactForm':pereForm}]) %}
+{% endif %}
+
+
+{%  include 'AppBundle:Contact:voir_contact.html.twig' with {'arrayOfContact': arrayOfContact} %}

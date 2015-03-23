@@ -28,15 +28,29 @@ var alerte = {
     /**
      * Envoie une alerte simple.
      * @param message string le message
-     * @param type string le type parmi 'info', 'warning', 'danger', 'success'
+     * @param type string le type parmi 'info', 'warning', 'error', 'success'
      * @param delay la durée d'affichage (en ms)
      * @return integer l'id de l'alerte
      */
     send: function (message, type, delay) {
 
+        var typeLabel = 'Information';
+        switch(type)
+        {
+            case 'warning': typeLabel = 'Attention'; break;
+            case 'error': typeLabel = 'Erreur'; break;
+            case 'success': typeLabel = 'Confirmation'; break;
+            default: break;
+        }
+
         var id = guid(),
-            html = '<div id="' + id + '" class="ui ' + type + ' message"><i onclick="alerte.dismiss(' + id + ');" class="close icon"></i><div class="header">Alerte</div>' +
-                '<p>' + message + '</p></div></div>';
+            html =
+                '<div id="' + id + '" class="ui ' + type + ' message">' +
+                    '<i onclick="alerte.dismiss(' + id + ');" class="close icon"></i>' +
+                    '<div class="header">' + typeLabel + '</div>' +
+                        '<p>' + message + '</p>' +
+                    '</div>' +
+                '</div>';
 
         this.alerts.push(id);
 
@@ -44,9 +58,9 @@ var alerte = {
 
 
         //delay de disparition de l'alerte
-        if (typeof(delay) != "undefined") {
+        if (typeof delay !== "undefined") {
             setTimeout(function () {
-                $('#' + id).remove();
+                $('#' + id).dismiss();
             }, delay);
         }
 

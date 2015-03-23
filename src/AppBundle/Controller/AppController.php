@@ -27,9 +27,14 @@ class AppController extends Controller
         $lastNews = $em->getRepository('InterneOrganisationBundle:News')->findForPaging(0,1);
 
         /** @var Membre $membre */
-        $membre = $this->getUser()->getMembre();
-        $groupes = $membre->getActiveGroupes();
-
+        // FIXME : le suer devrait être validé en amont
+        if ($this->getUser() != null) {
+            $membre = $this->getUser()->getMembre();
+            $groupes = $membre->getActiveGroupes();
+        }
+        else {
+            $groupes = array();
+        }
 
 
 

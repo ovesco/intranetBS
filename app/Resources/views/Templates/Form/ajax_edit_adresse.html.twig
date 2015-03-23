@@ -28,14 +28,15 @@
 {# hidden #}
 {% block hidden_widget -%}
 
-    <div style="" data-type="text" {{ block('validation_block') }}>
+    <div style="" data-type="text" {{ block('validation_block') }}
         {% if value is not empty %}
             {% if value %}
-                1
+                data-value="1"
             {% else %}
-                0
+                data-value="0"
             {% endif %}
-        {% endif %}</div>
+        {% endif %}>
+    </div>
 
 {%- endblock hidden_widget %}
 

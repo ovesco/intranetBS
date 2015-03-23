@@ -35,15 +35,34 @@ $('.listing-table tbody').on( 'click', 'tr', function () {
     $('.listing-update-' + token).text(number);
 } );
 
+$('#add_attribution').click(function() {
+    var table = tables[$(this).parents('.listing-container').attr("data-token")];
 
-$('#add_distinction').click(function() {
-    //TODO: get all ids
-    //var idMembre = { idMembre: $(this).data('idMembre') };
-    getModal(null, Routing.generate('obtention-distinction_get_modal'));
+    var rows  = table.rows('.selected').nodes(),
+        ids   = [];
+
+    $(rows).each(function(i, obj) {
+        ids.push($(obj).attr("data-id"));
+    });
+
+    var idMembres = { idMembre: ids };
+    getModal(idMembres, Routing.generate('attribution_get_modal'));
 });
 
-$('#add_attribution').click(function() {
-    getModal(null, Routing.generate('attribution_get_modal'));
+
+$('#add_distinction').click(function() {
+    var table = $(this).parent('.listing-container').children('.listing-table')
+
+    var rows  = table.rows('.selected').nodes(),
+        ids   = [];
+
+    $(rows).each(function(i, obj) {
+
+        ids.push($(obj).attr("data-id"));
+    });
+
+    var idMembres = { idMembre: ids };
+    getModal(idMembres, Routing.generate('date-distinction_get_modal'));
 });
 
 

@@ -1,8 +1,8 @@
 <div class="ui grid">
     <div class="row">
-        <div class="five wide column">
+        <div class="six wide column">
 
-            <table class="ui definition small table">
+            <table class="ui definition small table bs-tab-membre">
 
                 <tbody>
 
@@ -14,7 +14,7 @@
             </table>
 
 
-            <table class="ui definition small table">
+            <table class="ui definition small table bs-tab-membre">
                 <tbody>
 
                 {{ form_row(membreForm.numeroBs) }}
@@ -25,7 +25,7 @@
                 </tbody>
             </table>
 
-            <table class="ui definition small table">
+            <table class="ui definition small table bs-tab-membre">
                 <tbody>
 
                 {{ form_row(membreForm.numeroAvs) }}
@@ -37,9 +37,13 @@
 
         </div>
 
-        <div class="eleven wide column">
-            <h4>Attributions actuel</h4>
-            {% include "AppBundle:Attribution:listeAttributionActuel.html.twig" with {'attributions':membre.activeAttributions} %}
+        <div class="ten wide column">
+            {% include "AppBundle:Attribution:listeAttributionActuel.html.twig" with {'attributions':membre.attributions} %}
+            <div id="ajouter-attribution" data-membre="{{ membre.id }}" class="ui button">Ajouter</div>
+
+            {% include "AppBundle:ObtentionDistinction:listeObtentionDistinction.html.twig" with {'distinctions': membre.distinctions } %}
+            <div id="ajouter-distinction" data-membre="{{ membre.id }}" class="ui button">Ajouter</div>
+
         </div>
 
     </div>

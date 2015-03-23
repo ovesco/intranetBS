@@ -16,6 +16,11 @@ $('.ui.dropdown')
     .dropdown()
 ;
 
+//Accordions
+$('.ui.accordion')
+    .accordion()
+;
+
 //Checkbox
 $('.ui.checkbox')
     .checkbox()

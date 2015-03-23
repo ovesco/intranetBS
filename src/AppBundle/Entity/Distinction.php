@@ -100,9 +100,15 @@ class Distinction
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct($name = "")
     {
         $this->obtentionDistinctions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->setNom($name);
+    }
+
+    public function __toString()
+    {
+        return $this->getNom();
     }
 
     /**
