@@ -57,13 +57,12 @@ class Pere extends Geniteur
      */
     public function getNom()
     {
-        if($this->nom == null)
-        {
-
-            return $this->getFamille()->getNom();
-        }
-        else
+        if($this->nom !== null)
             return ucwords($this->nom);
+        elseif($this->getFamille() !== null)
+            return $this->getFamille()->getNom();
+        else
+            return 'Inconnu';
     }
 
 }

@@ -47,13 +47,11 @@ class ValidationExtension extends \Twig_Extension
 
         if($this->validation->isInModification($path) == true) {
 
-            $oldValue = '';
-            $popup    = '';
-
             if($this->validation->accessor->extractEntity($path)->getValidity() == 1) {
-                $popup = '<table class="ui definition table"><tbody><tr><td>Ancienne valeur : </td><td>' .
-                    $this->parser->parseToString($this->validation->getModification($path)->getOldValue()) . "</td></tr><tr>" .
-                    '<td>En attente de validation : </td><td>' . $this->parser->parseToString($this->validation->getModification($path)->getNewValue()) . '</td></tr></tbody></table>';
+                $popup =
+                    '<table class="ui definition table"><tbody>' .
+                        '<tr><td>Ancienne valeur : </td><td>' . $this->parser->parseToString($this->validation->getModification($path)->getOldValue()) . '</td></tr>' .
+                    '</tbody></table>';
 
                 return 'class=no-editable data-content=' . base64_encode($popup);
             }
