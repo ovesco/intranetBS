@@ -57,7 +57,13 @@ class User implements UserInterface, \Serializable
      *      )
      */
     private $roles;
-    
+
+    /**
+     * @var \Datetime
+     *
+     * @ORM\Column(name="last_connexion", type="datetime")
+     */
+    private $lastConnexion;
     
 
     public function __construct()
@@ -196,5 +202,61 @@ class User implements UserInterface, \Serializable
 
         $this->membre = $membre;
         return $this;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set isActive
+     *
+     * @param boolean $isActive
+     * @return User
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean 
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * Set lastConnexion
+     *
+     * @param \DateTime $lastConnexion
+     * @return User
+     */
+    public function setLastConnexion($lastConnexion)
+    {
+        $this->lastConnexion = $lastConnexion;
+
+        return $this;
+    }
+
+    /**
+     * Get lastConnexion
+     *
+     * @return \DateTime 
+     */
+    public function getLastConnexion()
+    {
+        return $this->lastConnexion;
     }
 }
