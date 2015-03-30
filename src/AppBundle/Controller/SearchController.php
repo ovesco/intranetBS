@@ -106,16 +106,17 @@ class SearchController extends Controller
         $pattern     = $request->query->get('pattern');
         $pattern     = "*" . $pattern . "*";
 
-        var_dump($pattern);
 
         $limit       = 4;
         $jsonParser  = $this->get('jsonParser');
 
         $familles    = array_slice($this->searchFamilles($pattern), 0, $limit);
 
-        var_dump($familles);
-        $returned = $jsonParser->toSemanticCategorySearch('famille', $familles);
-        return new JsonResponse($returned);
+        $returned    = array();
+        foreach($familles as $k => $f)
+            $returned['results'][] = $jsonParser->toSelectFamille($f);
+
+        return new Response($this->get('jms_serializer')->serialize($returned,'json'));//JsonResponse($returned);
 
     }
 

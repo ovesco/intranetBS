@@ -4,198 +4,125 @@
 
 {% block content %}
 
+
+
     {{ form_start(membreForm,{'attr': {'class': 'ui form'}}) }}
 
-    {{ form_widget(membreForm.prenom) }}
-
-    {{ form_widget(membreForm.famille.nom) }}
-
-    {{ form_end(membreForm) }}
-
-    {#
     <div class="ui page grid">
-
         <div class="row">
             <div class="column">
-                <h2>Ajouter un membre</h2>
-                <div class="ui form segment">
 
-                    <h3>Informations de base</h3>
+                <h2 class="header">Ajouter un membre</h2>
 
-                    <form method="post" action="">
+                <div class="two fields">
+                    {{ form_widget(membreForm.prenom) }}
 
-                        <div class="ui vertical segment">
-
-                            <div class="two fields">
-                                {{ form_widget(membreForm.prenom) }}
-                                {{ form_widget(membreFamilleForm.famille) }}
-                            </div>
-
-                            <div class="two fields">
-                                {{ form_widget(membreForm.sexe) }}
-                                {{ form_widget(membreForm.naissance) }}
-                            </div>
-
-
-                            <div class="two fields">
-                                {{ form_widget(membreForm.numeroAvs) }}
-                                {{ form_widget(membreForm.remarques) }}
-                            </div>
-
-                        </div>
-
-                        <div id="famille-form-segment" class="ui vertical segment">
-                            <h3>Informations sur la famille</h3>
-                            
-                                {{ form_widget(familleForm.nom) }}
-
-                            <h4 class="ui horizontal header divider">
-                                <i class="female icon"></i>
-                                Mère
-                            </h4>
-
-                            <div class="two fields">
-                                {{ form_widget(familleForm.mere.prenom) }}
-                                {{ form_widget(familleForm.mere.profession) }}
-                            </div>
-                            <h4 class="ui horizontal header divider">
-                                <i class="male icon"></i>
-                                Père
-                            </h4>
-
-                            <div class="two fields">
-                                {{ form_widget(familleForm.pere.prenom) }}
-                                {{ form_widget(familleForm.pere.profession) }}
-                            </div>
-
-                        </div>
-
-                        {#
-                        <div id="adresse-segment" class="ui vertical segment">
-                            <h3>Adresse(s)</h3>
-                            <div id="adresses-context">
-                                <div class="ui top attached tabular menu">
-                                    <div class="active item" data-tab="adresse-famille">Adresse familiale</div>
-                                    <div class="item" data-tab="adresse-membre">Adresse du membre</div>
-                                    <div class="item" data-tab="adresse-pere">Adresse du père</div>
-                                    <div class="item" data-tab="adresse-mere">Adresse de la mère</div>
-                                </div>
-                                <div class="ui bottom attached active tab segment" data-tab="adresse-famille">
-                                    <div class="ui grid">
-                                        <div class="eight wide column">
-                                            <div class="three fields">
-
-                                                    {{ form_widget(familleForm.adresse.rue) }}
-                                                    {{ form_widget(familleForm.adresse.npa) }}
-                                                    {{ form_widget(familleForm.adresse.localite) }}
-                                            </div>
-
-                                            {{ form_widget(familleForm.adresse.facturable) }}
-                                            {{ form_widget(familleForm.adresse.remarques) }}
-
-                                        </div>
-                                        <div class="eight wide column">
-                                            <h4>Adresse familiale</h4>
-                                            <p>
-                                                L'adresse familiale est l'adresse principale. C'est l'adresse à laquelle
-                                                le courrier est envoyé. Elle est utilisée dans le cas où tous les enfants habitent
-                                                chez les parents.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="ui bottom attached tab segment" data-tab="adresse-membre">
-                                    <div class="ui grid">
-                                        <div class="eight wide column">
-                                            <div class="three fields">
-
-                                                    {{ form_widget(membreForm.adresse.rue) }}
-                                                    {{ form_widget(membreForm.adresse.npa) }}
-                                                    {{ form_widget(membreForm.adresse.localite) }}
-                                            </div>
-
-                                            {{ form_widget(membreForm.adresse.facturable) }}
-                                            {{ form_widget(membreForm.adresse.remarques) }}
-                                        </div>
-                                        <div class="eight wide column">
-                                            <h4>Adresse du membre</h4>
-                                            <p>
-                                                L'adresse du membre est l'adresse attribuée au membre si il n'habite plus chez
-                                                ses parents. Cocher cette adresse comme principale fera arriver le courrier chez lui
-                                                plutôt que chez ses parents (si il y a des frères et soeurs, ca reste l'adresse familiale).
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="ui bottom attached tab segment" data-tab="adresse-pere">
-                                    <div class="ui grid">
-                                        <div class="eight wide column">
-                                            <div class="three fields">
-
-                                                    {{ form_widget(familleForm.pere.adresse.rue) }}
-                                                    {{ form_widget(familleForm.pere.adresse.npa) }}
-                                                    {{ form_widget(familleForm.pere.adresse.localite) }}
-                                            </div>
-
-                                            {{ form_widget(familleForm.pere.adresse.facturable) }}
-                                            {{ form_widget(familleForm.pere.adresse.remarques) }}
-
-                                        </div>
-                                        <div class="eight wide column">
-                                            <h4>Adresse du père</h4>
-                                            <p>
-                                                On garde l'adresse du père dans le cas de parents divorcés. C'est toujours l'adresse de
-                                                la mère qui prime, sauf si elle est non principale mais celle du père l'est.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="ui bottom attached tab segment"  data-tab="adresse-mere">
-                                    <div class="ui grid">
-                                        <div class="eight wide column">
-                                            <div class="three fields">
-
-                                                    {{ form_widget(familleForm.mere.adresse.rue) }}
-                                                    {{ form_widget(familleForm.mere.adresse.npa) }}
-                                                    {{ form_widget(familleForm.mere.adresse.localite) }}
-                                            </div>
-
-                                            {{ form_widget(familleForm.mere.adresse.facturable) }}
-                                            {{ form_widget(familleForm.mere.adresse.remarques) }}
-
-                                        </div>
-                                        <div class="eight wide column">
-                                            <h4>Adresse de la mère</h4>
-                                            <p>
-                                                On garde l'adresse de la mère dans le cas de parents divorcés. C'est toujours son adresse
-                                                qui prime, sauf si elle est marquée non principale, mais celle du père l'est.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="ui vertical segment">
-                            <div id="first-form-buttons" class="ui buttons">
-                                <div class="ui teal button">Vérifier</div>
-                                <div class="or"  data-text="ou"></div>
-                                <input type="submit" value="envoyer" class="ui positive button" />
-                            </div>
-                        </div>
-
-                        {{ form_rest(membreForm) }}
-                        {{ form_rest(membreFamilleForm) }}
-                        {{ form_rest(familleForm) }}
-
-                    </form>
+                    {{ form_widget(membreForm.famille.nom) }}
                 </div>
+
+
+
             </div>
         </div>
+        <div class="row">
+            <div class="column">
+                <h3 class="ui dividing header">Information sur la famille</h3>
+                <div id="famille_form">
 
+
+                    <div class="ui grid">
+                        <div class="row">
+                            <div class="five wide column">
+                                <h4 class="ui dividing header">Famille</h4>
+                            </div>
+
+                            <div class="five wide column">
+                                <h4 class="ui dividing header">Mère</h4>
+                                {{ form_widget(membreForm.famille.mere.prenom) }}
+                                {{ form_widget(membreForm.famille.mere.profession) }}
+                            </div>
+
+                            <div class="five wide column">
+                                <h4 class="ui dividing header">Père</h4>
+                                {{ form_widget(membreForm.famille.pere.prenom) }}
+                                {{ form_widget(membreForm.famille.pere.profession) }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="five wide column">
+                                <h5 class="ui dividing header">Adresse</h5>
+                                {% set contact = membreForm.famille.contact %}
+                                {{ form_widget(contact.adresse.rue) }}
+                                <div class="two fields">
+                                    {{ form_widget(contact.adresse.npa) }}
+                                    {{ form_widget(contact.adresse.localite) }}
+                                </div>
+
+                                {{ form_widget(contact.adresse.remarques) }}
+
+                            </div>
+
+                            <div class="five wide column">
+                                <h5 class="ui dividing header">Adresse</h5>
+                                {% set contact = membreForm.famille.mere.contact %}
+                                {{ form_widget(contact.adresse.rue) }}
+                                <div class="two fields">
+                                    {{ form_widget(contact.adresse.npa) }}
+                                    {{ form_widget(contact.adresse.localite) }}
+                                </div>
+
+                                {{ form_widget(contact.adresse.remarques) }}
+                            </div>
+
+                            <div class="five wide column">
+                                <h5 class="ui dividing header">Adresse</h5>
+                                {% set contact = membreForm.famille.pere.contact %}
+                                {{ form_widget(contact.adresse.rue) }}
+                                <div class="two fields">
+                                    {{ form_widget(contact.adresse.npa) }}
+                                    {{ form_widget(contact.adresse.localite) }}
+
+                                </div>
+                                {{ form_widget(contact.adresse.remarques) }}
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+
+                </div>
+
+
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="column">
+                <h3 class="ui dividing header">Information sur le membre</h3>
+
+                <div class="two fields">
+                    {{ form_widget(membreForm.sexe) }}
+                    {{ form_widget(membreForm.naissance) }}
+                </div>
+
+
+                <div class="two fields">
+                    {{ form_widget(membreForm.numeroAvs) }}
+                    {{ form_widget(membreForm.remarques) }}
+                </div>
+
+            </div>
+
+        </div>
     </div>
 
-    #}
+
+
+
+   {{ form_end(membreForm) }}
 
 {% endblock %}
 

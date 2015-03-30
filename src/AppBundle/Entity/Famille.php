@@ -556,6 +556,19 @@ class Famille implements ExpediableInterface, ClassInterface
         return $liste;
     }
 
+    public function getListePrenomEnfants()
+    {
+        $enfants = $this->getMembres();
+
+        $listOfPrenom = array();
+        foreach($enfants as $enfant)
+        {
+            /** @var Membre $enfant */
+            $listOfPrenom[] = $enfant->getPrenom();
+        }
+        return $listOfPrenom;
+    }
+
 
 
 }

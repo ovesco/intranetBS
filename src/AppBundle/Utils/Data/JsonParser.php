@@ -3,6 +3,7 @@
 namespace AppBundle\Utils\Data;
 
 use AppBundle\Entity\Membre;
+use AppBundle\Entity\Famille;
 use Symfony\Component\Routing\Router;
 
 class JsonParser {
@@ -69,5 +70,15 @@ class JsonParser {
             'numeroBs'      => $membre->getNumeroBs(),
             'url'           => $this->router->generate('interne_voir_membre', array('membre' => $membre->getId()))
         );
+    }
+
+    public function toSelectFamille(Famille $famille)
+    {
+        return array(
+            'id'            => $famille->getId(),
+            'title'         => $famille->getNom(),
+            'description'   => $famille->getListePrenomEnfants(),
+        );
+
     }
 }
