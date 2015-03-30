@@ -11,7 +11,7 @@
     {% set arrayOfContact = arrayOfContact|merge([{'type':'Mère','contact': mere, 'contactForm':mereForm}]) %}
 {% endif %}
 
-{% if membre.famille.pere is defined %}
+{% if membre.famille.pere is not null %}
     {% set pere = membre.famille.pere %}
     {% set arrayOfContact = arrayOfContact|merge([{'type':'Père','contact': pere, 'contactForm':pereForm}]) %}
 {% endif %}
