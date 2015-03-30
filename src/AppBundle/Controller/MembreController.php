@@ -79,8 +79,8 @@ class MembreController extends Controller {
                 if ($familleForm->isValid()) {
 
                     $famille->setValidity(0);
-                    $famille->getPere()->setSexe('m');
-                    $famille->getMere()->setSexe('f');
+                    $famille->getPere()->setSexe(Personne::HOMME);
+                    $famille->getMere()->setSexe(Personne::FEMME);
 
                     /*
                      * On analyse les informations sur les geniteurs, pour savoir si on les set à null,
