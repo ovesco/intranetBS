@@ -4,6 +4,15 @@
 
 {% block content %}
 
+    {{ form_start(membreForm,{'attr': {'class': 'ui form'}}) }}
+
+    {{ form_widget(membreForm.prenom) }}
+
+    {{ form_widget(membreForm.famille.nom) }}
+
+    {{ form_end(membreForm) }}
+
+    {#
     <div class="ui page grid">
 
         <div class="row">
@@ -166,7 +175,7 @@
                                 </div>
                             </div>
                         </div>
-                        #}
+
                         <div class="ui vertical segment">
                             <div id="first-form-buttons" class="ui buttons">
                                 <div class="ui teal button">Vérifier</div>
@@ -186,20 +195,18 @@
 
     </div>
 
+    #}
+
 {% endblock %}
 
 {% block js %}
 
-    {% javascripts '@AppBundle/Resources/public/js/specials/ajouter_membre_famille_toggle.js' %}
+    {% javascripts
+    '@AppBundle/Resources/public/js/specials/ajouter_membre_famille_toggle.js'
+    '@AppBundle/Resources/public/js/Membre/page_ajouter_membre.js'%}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
-    <script type="text/javascript">
-        $('#adresses-context .menu .item')
-            .tab({
-                context: $('#adresses-context')
-            })
-        ;
-    </script>
+
 
 {% endblock %}

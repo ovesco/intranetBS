@@ -80,14 +80,14 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
     private $statut;
 
     /**
-     * @var date
+     * @var \Datetime
      *
      * @ORM\Column(name="inscription", type="date")
      */
     private $inscription;
 
     /**
-     * @var text
+     * @var string
      *
      * @ORM\Column(name="remarques", type="text", nullable=true)
      */
@@ -109,14 +109,14 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
 
 
     /**
-     * @var ArryCollection
+     * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Interne\FinancesBundle\Entity\CreanceToMembre",
      *                mappedBy="membre", cascade={"persist","remove"})
      */
     private $creances;
     /**
-     * @var ArryCollection
+     * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Interne\FinancesBundle\Entity\FactureToMembre",
      *                mappedBy="membre", cascade={"persist","remove"})
@@ -128,7 +128,7 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
      * à la famille ou au membre lui même.
      */
     /**
-     * @var envoiFacture
+     * @var string envoiFacture
      *
      * @ORM\Column(name="envoi_facture", type="string", columnDefinition="ENUM('Famille', 'Membre')")
      *

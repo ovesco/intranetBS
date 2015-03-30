@@ -37,7 +37,7 @@ twig:
     form:
         resources:
             - 'Templates/Form/Widgets/default_widgets.html.twig'
-            - 'Templates/Form/Widgets/membre_famille_value_widget.html.twig'
+            - 'Templates/Form/Widgets/famille_value_widget.html.twig'
             - 'Templates/Form/Widgets/datepicker_widget.html.twig'
             - 'Templates/Form/Widgets/semantic_widget.html.twig'
 

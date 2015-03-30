@@ -15,7 +15,25 @@
             <td><a href="{{ path('interne_voir_groupe', {groupe:attribution.groupe.id}) }}">{{ attribution.groupe.nom }}</a></td>
             <td>{{ attribution.datedebut|date('d.m.Y') }}</td>
             <td>{{ attribution.datefin|date('d.m.Y') }}</td>
-            <td><div class="circular ui mini icon red button popupable" data-content="Terminer"><i class="remove icon"></i></div></td>
+            <td>
+                {% if attribution.remarques is not null %}
+                    <i class="file text outline icon link popupable" data-title="Remarques" data-content="{{ attribution.remarques }}"></i>
+                {% endif %}
+                <i class="lock icon link popupable onclick"></i>
+                <div class="ui popup">
+                    <div class="ui one column relaxed divided grid">
+                        <div class="ui column">
+                            <h4 class="ui header">Terminer...</h4>
+                            <div class="ui link list">
+                                <a class="item">immédiatement</a>
+                                <a class="item">pour le prochain RASS</a>
+                                <a class="item">pour une date précise</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <i class="delete icon link red"></i>
+            </td>
         </tr>
     {% endfor %}
     </tbody>

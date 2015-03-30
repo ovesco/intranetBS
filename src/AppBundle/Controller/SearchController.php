@@ -95,6 +95,29 @@ class SearchController extends Controller
         //return new JsonResponse($returned);
     }
 
+    /**
+     * Recherche les familles pour le formulaire d'ajout de membre
+     * @Route("/famille-search", name="interne_famille_search", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function AddMembreSearchFamille(Request $request){
+
+        $pattern     = $request->query->get('pattern');
+        $pattern     = "*" . $pattern . "*";
+
+        var_dump($pattern);
+
+        $limit       = 4;
+        $jsonParser  = $this->get('jsonParser');
+
+        $familles    = array_slice($this->searchFamilles($pattern), 0, $limit);
+
+        var_dump($familles);
+        $returned = $jsonParser->toSemanticCategorySearch('famille', $familles);
+        return new JsonResponse($returned);
+
+    }
 
     /**
      * Effectue une recherche sur les membres pour un pattern donné

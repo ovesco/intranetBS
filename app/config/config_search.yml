@@ -1,7 +1,7 @@
 # Elasticsearch Configuration
 fos_elastica:
     clients:
-        default: { host: "%database_host%", port: "%database_port%" }
+        default: { host: "%elastic_host%", port: "%elastic_port%" }
     indexes:
         search:
             types:

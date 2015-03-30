@@ -33,6 +33,10 @@ $('.datepicker').datepicker({
 
 //popup
 $('.popupable').popup();
+$('.popupable.onclick').popup({
+    on    : 'click'
+});
+
 
 //modal
 function showModal(id) {

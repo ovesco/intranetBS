@@ -2,7 +2,7 @@
 
 namespace AppBundle\Form;
 
-use AppBundle\Field\MembreFamilleValueType;
+use AppBundle\Field\FamilleValueType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -21,7 +21,7 @@ class MembreFamilleType extends AbstractType
         $builder
             ->add(
                 'famille',
-                new MembreFamilleValueType(),
+                new FamilleValueType(),
                 array(
                     'class' => 'AppBundle:Famille',
                     'property' => 'nom'
