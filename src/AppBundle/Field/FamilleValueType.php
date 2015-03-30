@@ -13,15 +13,15 @@ use Symfony\Component\Form\AbstractType;
  *
  * @package AppBundle\Form
  */
-class MembreFamilleValueType extends AbstractType
+class FamilleValueType extends AbstractType
 {
     public function getParent()
     {
-        return 'entity';
+        return 'text';
     }
 
     public function getName()
     {
-        return 'membre_famille_value';
+        return 'famille_value';
     }
 }

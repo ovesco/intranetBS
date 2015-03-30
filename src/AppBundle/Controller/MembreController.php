@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\Famille;
 
-use AppBundle\Form\MembreType;
+use AppBundle\Form\AddMembreType;
 use AppBundle\Form\FamilleType;
 use AppBundle\Form\MembreFamilleType;
 use AppBundle\Form\VoirMembreType;
@@ -35,8 +35,17 @@ class MembreController extends Controller {
     public function ajouterMembreAction(Request $request) {
 
         $membre             = new Membre();
+        $membreForm         = $this->createForm(new AddMembreType, $membre);
+
+        return $this->render('AppBundle:Membre:page_ajouter_membre.html.twig', array(
+            'membreForm'        => $membreForm->createView(),
+        ));
+
+
+        /*
+        $membre             = new Membre();
         $famille            = new Famille();
-        $membreForm         = $this->createForm(new MembreType, $membre);
+        $membreForm         = $this->createForm(new AddMembreType, $membre);
         $membreFamilleForm  = $this->createForm(new MembreFamilleType(), $membre);
         $familleForm        = $this->createForm(new FamilleType, $famille);
         $em                 = $this->getDoctrine()->getManager();
@@ -50,7 +59,7 @@ class MembreController extends Controller {
          * - Ensuite on traite d'abord le formulaire du membre n' sh*t
          * - Ensuite, si la valeur de membreFamille était NOEXIST (aucune famille), alors on valide le formulaire de famille
          * - Sinon, on récupère la bonne famille (id transmise par membreFamille)
-         */
+         *
         $membreForm->handleRequest($request);
 
         if ($membreForm->isValid()) {
@@ -74,7 +83,7 @@ class MembreController extends Controller {
                     /*
                      * On analyse les informations sur les geniteurs, pour savoir si on les set à null,
                      * ainsi que les informations sur les adresses
-                     */
+                     *
                     if($famille->getAdresse()->getRue() == null) $famille->setAdresse(null);
                     if($famille->getPere()->getPrenom() == null) $famille->setPere(null);
                     if($famille->getMere()->getPrenom() == null) $famille->setMere(null);
@@ -102,6 +111,8 @@ class MembreController extends Controller {
             'membreFamilleForm' => $membreFamilleForm->createView(),
             'familleForm'       => $familleForm->createView(),
         ));
+
+        */
     }
 
 

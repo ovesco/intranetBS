@@ -1,0 +1,18 @@
+{% block famille_value_widget %}
+    {% spaceless %}
+
+        {% if required and empty_value is none and not empty_value_in_choices %}
+            {% set required = false %}
+        {% endif %}
+
+        <div class="field">
+            {{ block('form_label') }}
+
+            <div class="ui search">
+                <input {{ block('widget_attributes') }} class="prompt" type="text">
+                <div class="results"></div>
+            </div>
+        </div>
+
+    {% endspaceless %}
+{% endblock famille_value_widget %}
