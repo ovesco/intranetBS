@@ -2,6 +2,7 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\Attribution;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -16,34 +17,24 @@ class AttributionType extends AbstractType
             $attribution = $event->getData();
             $form = $event->getForm();
 
-            if (null === $attribution->getMembre()) {
-
-                if(isset($options['attr']['multiMembre']) && true == $options['attr']['multiMembre']) {
-//                    $form->add('membre', 'entity', array(
-//                        'class'     => 'AppBundle:Membre',
-//                        'multiple'  => true,
-//                        'data'      => array('1' => '1')
-//                    ));
+            /* We have to check that is doesn't exist because of form inheritance */
+            if(!$form->has('membre')) {
+                if (null !== $attribution->getMembre()) {
                     $form->add('membre', 'hidden', array(
-                        'data'  => $options['attr']['multiMembreIds'],
-                        'attr'  => array('data-multi' => 'true')
+                        'data' => $attribution->getMembre()->GetId()
                     ));
-                }
-                else {
+                } else {
                     $form->add('membre', 'entity', array(
                         'class' => 'AppBundle:Membre'
                     ));
                 }
             }
-            else
-                $form->add('membre', 'hidden', array(
-                    'data'  => $attribution->getMembre()->GetId()
-                ));
 
-            if (null != $attribution->getId())
+            if (null !== $attribution->getId()) {
                 $form->add('id', 'hidden', array(
-                    'data'  => $attribution->GetId()
+                    'data' => $attribution->GetId()
                 ));
+            }
         });
 
         $builder

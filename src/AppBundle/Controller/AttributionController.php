@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\Attribution;
 use AppBundle\Form\AttributionType;
+use AppBundle\Form\AttributionMultiMembreType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
@@ -39,8 +40,6 @@ class AttributionController extends Controller
         $idMembre = $request->request->get('idMembre');
         $idAttribution = $request->request->get('idAttribution');
 
-        $multiMembre = false;
-        $multiMembreIds = null;
         $attribution = null;
         $attributionForm = null;
         if ($idAttribution == null) {
@@ -49,22 +48,32 @@ class AttributionController extends Controller
              */
             $attribution = new Attribution();
 
+            /* S'il y a des données de membres renseignées */
             if($idMembre !== null) {
+
+                /* Tester s'il y en a plusieurs */
                 if( is_array($idMembre) ) {
-                    $multiMembre = true;
-                    $multiMembreIds = implode(",", $idMembre);
+
+                    /* Formulaire multimembre */
+                    $attributionForm = $this->createForm(new AttributionMultiMembreType(), $attribution, array(
+                        'action'    => $this->generateUrl('attribution_multimembre_add'),
+                        'attr'      => array(
+                            'membres'    => implode(",", $idMembre)
+                        )
+                    ));
+
                 } else {
+                    /* Formulaire simple */
                     $attribution->setMembre($em->getRepository('AppBundle:Membre')->find($idMembre));
                 }
             }
 
-            $attributionForm = $this->createForm(new AttributionType(), $attribution, array(
-                'action'    => $this->generateUrl('attribution_add'),
-                'attr'      => array(
-                    'multiMembre'       => $multiMembre,
-                    'multiMembreIds'    => $multiMembreIds
-                )
-            ));
+            /* S'il n'y a pas de données, mettre le formulaire simple */
+            if($attributionForm === null) {
+                $attributionForm = $this->createForm(new AttributionType(), $attribution, array(
+                    'action' => $this->generateUrl('attribution_add')
+                ));
+            }
 
         } else {
             /*
@@ -96,6 +105,34 @@ class AttributionController extends Controller
 
         $newAttribution = new Attribution();
         $newAttributionForm = $this->createForm(new AttributionType(), $newAttribution);
+
+        $newAttributionForm->handleRequest($request);
+
+        if($newAttributionForm->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($newAttribution);
+            $em->flush();
+
+            return new JsonResponse(true);
+        }
+
+        return $this->render('AppBundle:Attribution:attribution_form_modal.html.twig', array(
+            'form' => $newAttributionForm->createView(),
+            'postform' => $newAttributionForm));
+    }
+
+    /**
+     * @Route("/add-multimembre", name="attribution_multimembre_add", options={"expose"=true})
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function addAttributionMultiMembreAction(Request $request)
+    {
+
+        $newAttribution = new Attribution();
+        $newAttributionForm = $this->createForm(new AttributionMultiMembreType(), $newAttribution);
 
         $newAttributionForm->handleRequest($request);
 

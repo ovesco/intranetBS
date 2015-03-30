@@ -1,4 +1,4 @@
-{% if form.date.vars.value == '' %}
+{% if form.id is not defined %}
     {%  set header = 'Ajouter une distinction' %}
     {%  set buttonText = 'Ajouter' %}
 {% else %}
@@ -15,15 +15,23 @@
 
     <div class="content">
 
-        {{ form_start(form,{'attr': {'class': 'ui form'}}) }}
+        <div id="message-box" class="ui icon message">
+            <i class="exclamation icon"></i>
+            <div class="content">
+                <div class="header"></div>
+                <p id="messages"></p>
+            </div>
+        </div>
+
+        {{ form_start(form, {'attr': {'class': 'ui form ajax'}}) }}
+
+        {{ form_errors(form) }}
 
         {{ form_rest(form) }}
-
 
         <div class="ui field">
             <input type="submit" class="ui green button" value="{{ buttonText }}" />
         </div>
-
 
         {{ form_end(form) }}
 
@@ -31,4 +39,11 @@
     <div class="actions">
         <div class="ui button">Annuler</div>
     </div>
+
+    <script>
+        $(document).ready(function(){
+            bindForm();
+        });
+    </script>
+
 </div>

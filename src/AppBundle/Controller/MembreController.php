@@ -2,11 +2,13 @@
 
 namespace AppBundle\Controller;
 
+use Interne\SecurityBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
+use AppBundle\Utils\Data\Useful as clearer;
 
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\Famille;
@@ -100,7 +102,20 @@ class MembreController extends Controller {
             $famille->addMembre($membre);
             $em->persist($famille);
 
+            /*
+             * On ajoute un user de manière automatique
+             * au membre nouvellement créé
+             */
+            $user = new User();
+            $user->setUsername(clearer::cleanNames($membre->getPrenom()) . "." . $membre->getNom());
+            $user->setPassword($membre->getNom() . time());
+            $user->setMembre($membre);
+
             $em->flush();
+
+            $em->persist($user);
+
+            $em->flush(); // flush après que le membre soit persisté de manière à pas avoir d'erreurs
 
             return $this->redirect($this->generateUrl('interne_voir_membre', array('membre' => $membre->getId())));
         }

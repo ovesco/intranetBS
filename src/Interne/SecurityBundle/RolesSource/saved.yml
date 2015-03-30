@@ -1,0 +1,234 @@
+         app:
+            role: "ROLE_APP"
+            nom:  "Role global de l'application"
+            desc: "Donne tous les droits sur les accès sur la partie structure et fichier de l'application"
+            enfants:
+                basic_user:
+                    nom: "Droit de connexion"
+                    role: "ROLE_USER"
+                    desc: "Donne le droit à un utilisateur de se connecter"
+
+                donnees_acces:
+                    nom:  "Accès total aux données"
+                    role: "ROLE_GENERAL_FULL_ACCESS"
+                    desc: "Donne tous les accès aux ressources"
+                    enfants:
+                        membre:
+                            role: "ROLE_MEMBRE_FULL_ACCESS"
+                            nom: "accès total aux membres"
+                            desc: "Donne tous les droits sur les personnes enregistrées dans l'application"
+                            enfants:
+                                membre_vision_all:
+                                    nom: "vision de tous les membres"
+                                    role: "ROLE_MEMBRE_ALL_VIEW"
+                                    desc: "Donne droit de consultation à toutes les personnes enregistrées dans l'application"
+                                    enfants:
+                                        membre_vision_parent:
+                                            nom: "vision des membres unité parente"
+                                            role: "ROLE_MEMBRE_PARENT_VIEW"
+                                            desc: "Donne droit de consultation aux membres appartenant à l'unité parente et à ses sous unités de celle de l'utilisateur courant"
+                                            enfants:
+                                                membre_vision_groupe:
+                                                    nom: "vision des membres de l'unité"
+                                                    role: "ROLE_MEMBRE_GROUPE_VIEW"
+                                                    desc: "Donne droit de consultation aux membres appartenant à l'unité et aux sous unités de l'utilisateur courant"
+                                                    enfants:
+                                                        membre_vision_self:
+                                                            nom: "vision de soi-même seulement"
+                                                            role: "ROLE_MEMBRE_SELF_VIEW"
+                                                            desc: "Donne droit de consultation uniquement à l'utilisateur courant"
+
+                                membre_modification_all:
+                                    nom: "modification de tous les membres"
+                                    role: "ROLE_MEMBRE_ALL_MODIF"
+                                    desc: "Donne droit de modification sur toutes les personnes enregistrées dans l'application"
+                                    enfants:
+                                        membre_modification_parent:
+                                            nom: "modification des membres unité parente"
+                                            role: "ROLE_MEMBRE_PARENT_MODIF"
+                                            desc: "Donne droit de modification sur tous les membres appartenant à l'unité parente et à ses sous unités de celle de l'utilisateur courant"
+                                            enfants:
+                                                membre_modification_groupe:
+                                                    nom: "modification des membres de l'unité"
+                                                    role: "ROLE_MEMBRE_GROUPE_MODIF"
+                                                    desc: "Donne droit de modifications sur tous les membres appartenant à l'unité et aux sous unités de l'utilisateur courant"
+                                                    enfants:
+                                                        membre_modification_self:
+                                                            nom: "modification de soi-même seulement"
+                                                            role: "ROLE_MEMBRE_SELF_MODIF"
+                                                            desc: "Donne droit de modification uniquement sur l'utilisateur courant"
+
+                                membre_supression_all:
+                                    nom: "supression de tous les membres"
+                                    role: "ROLE_MEMBRE_ALL_REMOVE"
+                                    desc: "Donne droit de suppression sur toutes les personnes enregistrées"
+                                    enfants:
+                                        membre_supression_parent:
+                                            nom: "supression de membres unité parent"
+                                            role: "ROLE_MEMBRE_PARENT_REMOVE"
+                                            desc: "Donne droit de suppression sur les membres de l'unité parente à celle de l'utilisateur courant"
+                                            enfants:
+                                                membre_supression_groupe:
+                                                    nom: "supression des membres de l'unité"
+                                                    role: "ROLE_MEMBRE_GROUPE_REMOVE"
+                                                    desc: "Donne droit de suppression sur les membres de l'unité et sous unités de l'utilisateur courant"
+
+                                membre_ajout_all:
+                                    nom: "ajout total membres"
+                                    role: "ROLE_MEMBRE_ALL_ADD"
+                                    desc: "Donne droit d'ajout de membres sur l'ensemble du fichier"
+                                    enfants:
+                                        membre_ajout_parent:
+                                            nom: "ajout de membres dans groupe parent"
+                                            role: "ROLE_MEMBRE_PARENT_ADD"
+                                            desc: "Donne droit d'ajout de membres dans l'unité parente et sous unités à celle de l'utilisateur courant"
+                                            enfants:
+                                                membre_ajout_groupe:
+                                                    nom: "ajout de membres dans l'unité"
+                                                    role: "ROLE_MEMBRE_GROUPE_ADD"
+                                                    desc: "Donne droit d'ajout de membres dans l'unité et sous unités de celle de l'utilisateur courant"
+
+                        groupe:
+                            role: "ROLE_GROUPE_FULL_ACCESS"
+                            nom: "accès total aux groupes"
+                            desc: "Donne tous les droits sur la totalité des unités de l'application"
+                            enfants:
+                                groupe_vision_all:
+                                    nom: "vision de tous les groupes"
+                                    role: "ROLE_GROUPE_ALL_VIEW"
+                                    desc: "Donne droit de consultation sur la totalité des unités de l'application"
+                                    enfants:
+                                        groupe_vision_parent:
+                                            nom: "vision des groupes du groupe parent"
+                                            role: "ROLE_GROUPE_PARENT_VIEW"
+                                            desc: "Donne droit de consultation aux unités comprises dans les sous unités de l'unité parente à celle de l'utilisateur courant"
+                                            enfants:
+                                                groupe_vision_self:
+                                                    nom: "vision de son groupe"
+                                                    role: "ROLE_GROUPE_SELF_VIEW"
+                                                    desc: "Donne droit de consultation à l'unité de l'utilisateur courant uniquement"
+
+                                groupe_modification_all:
+                                    nom: "modification de tous les groupes"
+                                    role: "ROLE_GROUPE_ALL_MODIF"
+                                    desc: "Donne droit de modification sur la totalité des unités de l'application"
+                                    enfants:
+                                        groupe_modification_parent:
+                                            nom: "modification des groupes du groupe parent"
+                                            role: "ROLE_GROUPE_PARENT_MODIF"
+                                            desc: "Donne droit de modification sur les unités comprises dans les sous unités de l'unité parente à celle de l'utilisateur courant"
+                                            enfants:
+                                                groupe_modification_self:
+                                                    nom: "modification de son groupe"
+                                                    role: "ROLE_GROUPE_SELF_MODIF"
+                                                    desc: "Donne droit de modification sur l'unité de l'utilisateur courant uniquement"
+
+                                groupe_supression_all:
+                                    nom: "supression de tous les groupes"
+                                    role: "ROLE_GROUPE_ALL_REMOVE"
+                                    desc: "Donne droit de suppression sur la totalité des groupes de l'application"
+                                    enfants:
+                                        groupe_supression_parent:
+                                            nom: "supression des groupes du groupe parent"
+                                            role: "ROLE_GROUPE_PARENT_REMOVE"
+                                            desc: "Donne droit de suppression sur les unités comprises dans les sous unités de l'unité parente à celle de l'utilisateur courant"
+                                            enfants:
+                                                groupe_supression_self:
+                                                    nom: "supression de son groupe"
+                                                    role: "ROLE_GROUPE_SELF_REMOVE"
+                                                    desc: "Donne droit de suppression sur l'unité de l'utilisateur courant uniquement"
+
+                                groupe_ajout_all:
+                                    nom: "ajout de tous les groupes"
+                                    role: "ROLE_GROUPE_ALL_ADD"
+                                    desc: "Donne droit d'ajout d'unités dans l'ensemble de l'application"
+                                    enfants:
+                                        groupe_ajout_parent:
+                                            nom: "ajout de groupes dans groupe parent"
+                                            role: "ROLE_GROUPE_PARENT_ADD"
+                                            desc: "Donne droit d'ajouter des unités dans la hierarchie de l'unité parente à celle de l'utilisateur courant"
+                                            enfants:
+                                                groupe_ajout_self:
+                                                    nom: "ajout de groupes dans son groupe"
+                                                    role: "ROLE_GROUPE_SELF_ADD"
+                                                    desc: "Donne droit d'ajouter des unités dans l'unité de l'utilisateur courant uniquement"
+
+                        famille:
+                            role: "ROLE_FAMILLE_FULL_ACCESS"
+                            nom: "accès total aux familles"
+                            desc: "Donne tous les droits sur la totalité des familles de l'application"
+                            enfants:
+                                famille_vision_all:
+                                    nom: "vision de toutes les familles"
+                                    role: "ROLE_FAMILLE_ALL_VIEW"
+                                    desc: "Donne droit de consultation sur la totalité des familles de l'application"
+                                    enfants:
+                                        famille_vision_parent:
+                                            nom: "vision des familles du groupe parent"
+                                            role: "ROLE_FAMILLE_PARENT_VIEW"
+                                            desc: "Donne droit de consultation aux familles possédant au moins un membre qui appartienne à une unité comprise dans les sous unités de celle de l'utilisateur courant"
+                                            enfants:
+                                                famille_vision_groupe:
+                                                    nom: "vision des familles de l'unité"
+                                                    role: "ROLE_FAMILLE_GROUPE_VIEW"
+                                                    desc: "Donne droit de consultation aux familles possédant au moins un membre qui appartienne à l'unité de l'utilisateur courant"
+                                                    enfants:
+                                                        famille_vision_self:
+                                                            nom: "vision de sa propre famille"
+                                                            role: "ROLE_FAMILLE_SELF_VIEW"
+                                                            desc: "Donne droit de consultation à la famille de l'utilisateur courant uniquement"
+
+                                famille_modification_all:
+                                    nom: "modification de toutes les familles"
+                                    role: "ROLE_FAMILLE_ALL_MODIF"
+                                    desc: "Donne droit de modification sur la totalité des familles de l'application"
+                                    enfants:
+                                        famille_modification_parent:
+                                            nom: "modification des familles du groupe parent"
+                                            role: "ROLE_FAMILLE_PARENT_MODIF"
+                                            desc: "Donne droit de modification sur les familles possédant au moins un membre qui appartienne à une unité comprise dans les sous unités de celle de l'utilisateur courant"
+                                            enfants:
+                                                famille_modification_groupe:
+                                                    nom: "modification des familles de l'unité"
+                                                    role: "ROLE_FAMILLE_GROUPE_MODIF"
+                                                    desc: "Donne droit de modification sur les familles possédant au moins un membre qui appartienne à l'unité de l'utilisateur courant"
+                                                    enfants:
+                                                        famille_modification_self:
+                                                            nom: "modification de sa propre famille"
+                                                            role: "ROLE_FAMILLE_SELF_MODIF"
+                                                            desc: "Donne droit de modification sur la famille de l'utilisateur courant uniquement"
+
+                                famille_supression_all:
+                                    nom: "supression de toutes les familles"
+                                    role: "ROLE_FAMILLE_ALL_REMOVE"
+                                    desc: "Donne droit de suppression sur la totalité des familles de l'application"
+                                    enfants:
+                                        famille_supression_parent:
+                                            nom: "supression des familles du groupe parent"
+                                            role: "ROLE_FAMILLE_PARENT_REMOVE"
+                                            desc: "Donne droit de suppression sur les familles possédant au moins un membre qui appartienne à une unité comprise dans les sous unités de celle de l'utilisateur courant"
+                                            enfants:
+                                                famille_supression_groupe:
+                                                    nom: "supression des familles de l'unité"
+                                                    role: "ROLE_FAMILLE_GROUPE_REMOVE"
+                                                    desc: "Donne droit de suppression sur les familles possédant au moins un membre qui appartienne à l'unité de l'utilisateur courant"
+                                                    enfants:
+                                                        famille_supression_self:
+                                                            nom: "supression de de sa propre famille"
+                                                            role: "ROLE_FAMILLE_SELF_REMOVE"
+                                                            desc: "Donne droit de suppression sur la famille de l'utilisateur courant uniquement"
+
+                                famille_ajout_all:
+                                    nom: "ajout de toutes les familles"
+                                    role: "ROLE_FAMILLE_ALL_ADD"
+                                    desc: "Donne droit d'ajouter des familles n'importe où dans l'application"
+                                    enfants:
+                                        famille_ajout_parent:
+                                            nom: "ajout des familles dans groupe parent"
+                                            role: "ROLE_FAMILLE_PARENT_ADD"
+                                            desc: "Donne droit d'ajout de familles dans les unités appartenant aux sous unités de l'unité parente à celle de l'utilisateur courant"
+                                            enfants:
+                                                famille_ajout_groupe:
+                                                    nom: "ajout des familles de l'unité"
+                                                    role: "ROLE_FAMILLE_GROUPE_ADD"
+                                                    desc: "Donne droit d'ajout de familles dans l'unité de l'utilisateur courant"
