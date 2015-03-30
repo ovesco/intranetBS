@@ -105,7 +105,7 @@ class MembreController extends Controller {
             /*
              * On ajoute un user de manière automatique
              * au membre nouvellement créé
-             */
+             *
             $user = new User();
             $user->setUsername(clearer::cleanNames($membre->getPrenom()) . "." . $membre->getNom());
             $user->setPassword($membre->getNom() . time());
@@ -118,6 +118,8 @@ class MembreController extends Controller {
             $em->flush(); // flush après que le membre soit persisté de manière à pas avoir d'erreurs
 
             return $this->redirect($this->generateUrl('interne_voir_membre', array('membre' => $membre->getId())));
+
+
         }
 
         return $this->render('AppBundle:Membre:page_ajouter_membre.html.twig', array(
@@ -128,6 +130,8 @@ class MembreController extends Controller {
         ));
 
         */
+
+
     }
 
 
