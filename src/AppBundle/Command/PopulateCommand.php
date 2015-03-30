@@ -4,6 +4,7 @@ namespace AppBundle\Command;
 
 use AppBundle\Entity\Contact;
 use AppBundle\Entity\ObtentionDistinction;
+use AppBundle\Entity\Personne;
 use AppBundle\Entity\Telephone;
 use AppBundle\Utils\Email\Email;
 use ClassesWithParents\F;
@@ -141,8 +142,8 @@ class PopulateCommand extends ContainerAwareCommand
                         break;
                     case 2:
                         //on donne les deux parent
-                        $famille->setMere($this->getRandomMere('f'));
-                        $famille->setPere($this->getRandomPere('m'));
+                        $famille->setMere($this->getRandomMere(Personne::FEMME));
+                        $famille->setPere($this->getRandomPere(Personne::HOMME));
                         break;
                 }
 
@@ -422,7 +423,7 @@ class PopulateCommand extends ContainerAwareCommand
         $geniteur->setPrenom($this->getPrenom('m'));
         $geniteur->getProfession($this->getProfession(true));
         $geniteur->setContact($this->getRandomContact());
-        $geniteur->setSexe('m');
+        $geniteur->setSexe(Personne::HOMME);
         $geniteur->setIban($this->getIban(true));
 
         return $geniteur;
@@ -435,10 +436,10 @@ class PopulateCommand extends ContainerAwareCommand
 
         $geniteur = new Mere();
 
-        $geniteur->setPrenom($this->getPrenom('f'));
+        $geniteur->setPrenom($this->getPrenom(Personne::FEMME));
         $geniteur->getProfession($this->getProfession(true));
         $geniteur->setContact($this->getRandomContact());
-        $geniteur->setSexe('f');
+        $geniteur->setSexe(Personne::FEMME);
         $geniteur->setIban($this->getIban(true));
 
         return $geniteur;
@@ -451,7 +452,7 @@ class PopulateCommand extends ContainerAwareCommand
     private function getRandomMember() {
 
         $membre = new Membre();
-        $sexe   = (mt_rand(1,10) > 5 ) ? 'f' : 'm';
+        $sexe   = (mt_rand(1,10) > 5 ) ? Personne::FEMME : Personne::HOMME;
 
         $frFaker   = \Faker\Factory::create('fr_FR');
 
@@ -1085,7 +1086,7 @@ class PopulateCommand extends ContainerAwareCommand
      */
     private function getPrenom($sexe, $canBeNull = false) {
 
-        if($sexe == 'f')
+        if($sexe == Personne::FEMME)
             $prenom = \Faker\Provider\fr_FR\Person::firstNameFemale();
         else
             $prenom = \Faker\Provider\fr_FR\Person::firstNameMale();

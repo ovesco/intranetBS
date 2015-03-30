@@ -452,7 +452,7 @@ class FichierBsCommand extends ContainerAwareCommand
                             $pere = new Pere();
                             $pere->setNom(utf8_encode($result['nom_pere']));
                             $pere->setPrenom(utf8_encode($result['prenom_pere']));
-                            $pere->setSexe('m');
+                            $pere->setSexe(Personne::HOMME);
                             $pere->setProfession(utf8_encode($result['profession_pere']));
                         }
                         if($result['prenom_mere'] != null)
@@ -460,7 +460,7 @@ class FichierBsCommand extends ContainerAwareCommand
                             $mere = new Mere();
                             $mere->setNom(utf8_encode($result['nom_mere']));
                             $mere->setPrenom(utf8_encode($result['prenom_mere']));
-                            $mere->setSexe('f');
+                            $mere->setSexe(Personne::FEMME);
                             $mere->setProfession(utf8_encode($result['profession_mere']));
                         }
 
