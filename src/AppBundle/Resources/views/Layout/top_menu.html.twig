@@ -7,12 +7,12 @@
         </div>
         <div class="right menu">
             <div class="item">
-                <div id="layout-search" class="ui small fluid icon input">
-                    <input id="layout-search-input" class="prompt" type="text" placeholder="Rechercher...">
-                    <i class="search icon"></i>
-                </div>
-                <div class="results"></div>
+                <div id="layout-search" class="ui input category search">
 
+                        <input id="layout-search-input" class="prompt" type="text" placeholder="Search animals...">
+
+                    <div class="results"></div>
+                </div>
             </div>
             <div class="ui dropdown item">
                 {{ app.security.token.user.membre.prenom|capitalize }} {{ app.security.token.user.membre.nom|capitalize }} <i class="dropdown icon"></i>
