@@ -1,0 +1,107 @@
+
+{% macro generateBackground(debut, fin) %}
+
+    {% set d1  = debut.getTimestamp %}
+    {% set d2  = fin.getTimestamp %}
+    {% set val = 0 %}
+
+
+    background: #ffffff;
+    background: -moz-linear-gradient(left, #e8f1ff 0%, #d1e4ff 43%, #ffffff 44%, #ffffff 100%);
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,#e8f1ff), color-stop(43%,#d1e4ff), color-stop(44%,#ffffff), color-stop(100%,#ffffff));
+    background: -webkit-linear-gradient(left, #e8f1ff 0%,#d1e4ff 43%,#ffffff 44%,#ffffff 100%);
+    background: -o-linear-gradient(left, #e8f1ff 0%,#d1e4ff 43%,#ffffff 44%,#ffffff 100%);
+    background: -ms-linear-gradient(left, #e8f1ff 0%,#d1e4ff 43%,#ffffff 44%,#ffffff 100%);
+    background: linear-gradient(to right, #e8f1ff 0%,#d1e4ff 43%,#ffffff 44%,#ffffff 100%);
+
+{% endmacro %}
+
+
+{% macro switchButton() %}
+    {% import _self as macro %}
+    <div class="mini ui icon button" onclick="{{ macro.switchScript() }}">
+        <i class="exchange icon"></i>
+    </div>
+{% endmacro %}
+
+{% macro input_number_switch(form_value, form_min, form_max) %}
+
+    {% import _self as macro %}
+
+    <div class="field">
+        <label>{{ form_label(form_value) }}</label>
+        <div class="searchSwitch">
+            <div class="optionSearch" >
+                <div class="input-group">
+                    <table>
+                        <tr>
+                            <td>{{ form_widget(form_value, { 'attr': {'placeholder': "Fixe"}}) }}</td>
+                            <td>
+                                {{ macro.switchButton() }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="optionSearch" hidden>
+                <div class="input-group">
+                    <table>
+                        <tr>
+                            <td>{{ form_widget(form_min, { 'attr': {'placeholder': "De (minimum)"}}) }}</td>
+                            <td rowspan="2">
+                                {{ macro.switchButton() }}
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>{{ form_widget(form_max, { 'attr': {'placeholder': "à (maximum)"}}) }}</td>
+
+
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro input_date_switch(form_value, form_min, form_max) %}
+
+    {% import _self as macro %}
+
+    <div class="field">
+        <label>{{ form_label(form_value) }}</label>
+        <div class="searchSwitch">
+            <div class="optionSearch" >
+                <div class="input-group">
+                    <table>
+                        <tr>
+                            <td>{{ form_widget(form_value) }}</td>
+                            <td>
+                                {{ macro.switchButton() }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="optionSearch" hidden>
+                <div class="input-group">
+                    <table>
+                        <tr>
+                            <td>Du</td>
+                            <td>{{ form_widget(form_min) }}</td>
+                            <td rowspan="2">
+                                {{ macro.switchButton() }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>au</td>
+                            <td>{{ form_widget(form_max) }}</td>
+
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}

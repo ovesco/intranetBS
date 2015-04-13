@@ -1,14 +1,13 @@
- /*
- * # Semantic UI
- * https://github.com/Semantic-Org/Semantic-UI
- * http://www.semantic-ui.com/
+/*!
+ * # Semantic UI 1.11.6 - Input
+ * http://github.com/semantic-org/semantic-ui/
+ *
  *
  * Copyright 2014 Contributors
  * Released under the MIT license
  * http://opensource.org/licenses/MIT
  *
  */
-
 
 
 /*******************************
@@ -22,17 +21,23 @@
 
 .ui.input {
   position: relative;
-  display: inline-block;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
   color: rgba(0, 0, 0, 0.8);
 }
 .ui.input input {
   margin: 0em;
-  width: 100%;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
   outline: none;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
   text-align: left;
   line-height: 1.2142em;
-  font-family: "Helvetica Neue", "Helvetica", Arial;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   padding: 0.67861em 1em;
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.15);
@@ -78,7 +83,7 @@
        Loading
 ---------------------*/
 
-.ui.loading.loading.input > .icon:before {
+.ui.loading.loading.input > i.icon:before {
   position: absolute;
   content: '';
   top: 50%;
@@ -89,7 +94,7 @@
   border-radius: 500rem;
   border: 0.2em solid rgba(0, 0, 0, 0.1);
 }
-.ui.loading.loading.input > .icon:after {
+.ui.loading.loading.input > i.icon:after {
   position: absolute;
   content: '';
   top: 50%;
@@ -115,7 +120,7 @@
 .ui.input.focus input,
 .ui.input input:focus {
   border-color: rgba(39, 41, 43, 0.3);
-  background: '';
+  background: #ffffff;
   color: rgba(0, 0, 0, 0.8);
   box-shadow: none;
 }
@@ -172,7 +177,7 @@
 }
 
 /* Transparent Icon */
-.ui.transparent.icon.input > .icon {
+.ui.transparent.icon.input > i.icon {
   width: 1.25em;
 }
 .ui.transparent.icon.input > input {
@@ -199,7 +204,7 @@
          Icon
 ---------------------*/
 
-.ui.icon.input > .icon {
+.ui.icon.input > i.icon {
   cursor: default;
   position: absolute;
   text-align: center;
@@ -213,8 +218,11 @@
   -webkit-transition: opacity 0.3s ease;
           transition: opacity 0.3s ease;
 }
-.ui.icon.input > .icon:before,
-.ui.icon.input > .icon:after {
+.ui.icon.input input {
+  padding-right: 2.82142em !important;
+}
+.ui.icon.input > i.icon:before,
+.ui.icon.input > i.icon:after {
   left: 0;
   position: absolute;
   text-align: center;
@@ -222,24 +230,21 @@
   width: 100%;
   margin-top: -0.5em;
 }
-.ui.icon.input > .link.icon {
+.ui.icon.input > i.link.icon {
   cursor: pointer;
 }
-.ui.icon.input input {
-  padding-right: 2.82142em !important;
-}
-.ui.icon.input > .circular.icon {
+.ui.icon.input > i.circular.icon {
   top: 0.35em;
   right: 0.5em;
 }
 
 /* Left Icon Input */
-.ui[class*="left icon"].input > .icon {
+.ui[class*="left icon"].input > i.icon {
   right: auto;
   left: 1px;
   border-radius: 0.2857rem 0em 0em 0.2857rem;
 }
-.ui[class*="left icon"].input > .circular.icon {
+.ui[class*="left icon"].input > i.circular.icon {
   right: auto;
   left: 0.5em;
 }
@@ -249,7 +254,7 @@
 }
 
 /* Focus */
-.ui.icon.input > input:focus ~ .icon {
+.ui.icon.input > input:focus ~ i.icon {
   opacity: 1;
 }
 
@@ -260,30 +265,30 @@
 
 /* Adjacent Label */
 .ui.labeled.input {
-  display: table;
-}
-.ui.labeled.input > input {
-  display: table-cell;
-  vertical-align: top;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
 }
 .ui.labeled.input > .label {
-  display: table-cell;
-  vertical-align: middle;
-  white-space: nowrap;
+  -webkit-box-flex: 0;
+  -webkit-flex-grow: 0;
+      -ms-flex-positive: 0;
+          flex-grow: 0;
+  margin: 0;
   font-size: 1em;
 }
-.ui.labeled.input > .label > .icon {
-  display: inline;
-  vertical-align: top;
+.ui.labeled.input > .label:not(.corner) {
+  padding-top: 0.78571em;
+  padding-bottom: 0.78571em;
 }
 
 /* Fluid Labeled */
 .ui.fluid.labeled.input {
-  display: table;
-  width: 100%;
-}
-.ui.fluid.labeled.input > .label {
-  width: 0.01%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 /* Label on Left */
@@ -320,12 +325,6 @@
 }
 
 /* Spacing with corner label */
-.ui[class*="corner labeled"].input {
-  display: inline-block;
-}
-.ui[class*="corner labeled"].input > input {
-  display: block;
-}
 .ui[class*="corner labeled"].icon.input:not(.left) > input {
   padding-right: 3.25em !important;
 }
@@ -338,31 +337,31 @@
 ---------------------*/
 
 .ui.action.input {
-  display: table;
-}
-.ui.action.input > input {
-  display: table-cell;
-  vertical-align: top;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
 }
 .ui.action.input > .button,
 .ui.action.input > .buttons {
-  display: table-cell;
-  vertical-align: middle;
-  white-space: nowrap;
+  -webkit-box-flex: 0;
+  -webkit-flex-grow: 0;
+      -ms-flex-positive: 0;
+          flex-grow: 0;
+}
+.ui.action.input > .button,
+.ui.action.input > .buttons > .button {
   padding-top: 0.78571em;
   padding-bottom: 0.78571em;
+  margin: 0;
 }
-.ui.action.input > .button > .icon,
-.ui.action.input > .buttons > .button > .icon {
-  display: inline;
-  vertical-align: top;
-}
+
+/* Fluid */
 .ui.fluid.action.input {
-  display: table;
-  width: 100%;
-}
-.ui.fluid.action.input > .button {
-  width: 0.01%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 /* Button on Right */
@@ -372,14 +371,14 @@
   border-bottom-right-radius: 0px !important;
 }
 .ui.action.input:not([class*="left action"]) > .button,
-.ui.action.input:not([class*="left action"]) > .buttons {
+.ui.action.input:not([class*="left action"]) > .buttons > .button {
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
 }
 
 /* Button on Left */
 .ui[class*="left action"].input > .button,
-.ui[class*="left action"].input > .buttons {
+.ui[class*="left action"].input > .buttons > .button {
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
 }
