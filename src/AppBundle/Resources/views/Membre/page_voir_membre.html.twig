@@ -1,57 +1,118 @@
 {% extends 'AppBundle:Layout:layout.html.twig' %}
 
-
+{% import 'AppBundle:Macros:attribution_macro.html.twig' as attrsMacros %}
 
 {% block titre %}
     {{ membre.prenom }} {{ membre.nom }}
 {% endblock %}
 
-{% form_theme membreForm       ':Templates/Form:ajax_edit.html.twig' %}
+{% form_theme membreForm ':Templates/Form:ajax_edit.html.twig' %}
 
 
 {% block content %}
-<div class="ui page grid">
-    <div class="column">
 
-        <div class="ui close right rail">
-            <div class="ui sticky fixed top">
-                <div id="page-menu" class="ui secondary vertical following fluid menu">
-                    <a class="item" href="#membre">{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</a>
-                    <a class="item" href="#infos-membre">Informations</a>
-                    <a class="item" href="#contact">Contact</a>
-                    <a class="item" href="#infos-scout">Information scouts</a>
-                    <a class="item" href="#finances">Factures & créances</a>
+    <div class="ui page grid">
+        <div class="column">
+
+            <div class="ui info attached icon message">
+                <i class="user icon"></i>
+                <div class="content">
+                    <div class="header">
+                        <h2 class="ui header">{{ membre.prenom|capitalize }} <a href="{{ path('interne_voir_famille',{'famille': membre.famille.id }) }}">{{ membre.nom|capitalize }}</a></h2>
+                    </div>
+                    <p>{{ membre.activeAttribution.fonction.nom }} - {{ membre.activeAttribution.groupe.nom }}</p>
                 </div>
             </div>
-        </div>
+            <div class="ui attached segment">
 
+                <div class="ui grid">
 
-        <h1>{{ membre.prenom|capitalize }} <a href="{{ path('interne_voir_famille',{'famille': membre.famille.id }) }}">{{ membre.nom|capitalize }}</a><a class="anchor" id="membre"></a></h1>
+                    <div class="two column row"> <!-- informations de base -->
 
+                        <div class="column">
 
+                            <h4 class="ui header">Informations de base</h4>
+                            <div class="bs ajax-input">
+                                <label>Prénom</label>
+                                <input value="{{ membre.prenom }}" type="text">
+                            </div>
+                            <div class="bs ajax-input">
+                                <label>Sexe</label>
+                                <select>
+                                    <option>Homme</option>
+                                    <option>Femme</option>
+                                </select>
+                            </div>
+                        </div>
 
-        <h2>Information sur le membre<a class="anchor" id="infos-membre"></a></h2>
-        <div class="ui segment">
+                        <div class="column">
+                            <h4 class="ui header">Sa famille</h4>
+                        </div>
+                    </div> <!-- /informations de base -->
 
-            {% include "AppBundle:Membre:voir_infos_membre.html.twig" with {'membreForm':membreForm, 'membre':membre, } %}
+                    <div class="one column row">
+                        <h3 class="ui horizontal divider">
+                            Aux scouts
+                        </h3>
+                    </div>
 
-        </div>
+                    <div class="row"> <!-- attributions et distinctions -->
 
-        <h2>Contact<a class="anchor" id="contact"></a></h2>
-        <div class="ui segment">
+                        <div class="five wide column">
 
-            {% include "AppBundle:Contact:voir_contact_membre.html.twig" with {'membreForm':membreForm, 'membre':membre, } %}
+                            <h4 class="ui header">Distinctions</h4>
 
-        </div>
+                            <table class="ui small very basic table">
+                                <thead>
+                                    <tr>
+                                        <th>Distinction</th>
+                                        <th>Obtention</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for distinction in membre.distinctions %}
+                                        <tr>
+                                            <td>{{ distinction.distinction.nom }}</td>
+                                            <td>{{ distinction.date|date("d.m.Y") }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
 
-        <h2>Factures et créances<a class="anchor" id="finances"></a></h2>
-        <div class="ui segment">
+                        <div class="eleven wide column">
+                            <h4 class="ui header">Attributions</h4>
 
-            {% include "InterneFinancesBundle:Interface:interface.html.twig" with {'ownerEntity': membre }%}
+                            <table class="ui small very basic table">
+                                <thead>
+                                <tr>
+                                    <th>Fonction</th>
+                                    <th>Unité</th>
+                                    <th>Début</th>
+                                    <th>Fin</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for attribution in membre.attributions %}
+                                    <tr style="{{ attrsMacros.generateBackground(attribution.dateDebut, attribution.dateFin) }}">
+                                        <td>{{ attribution.fonction.nom }}</td>
+                                        <td>{{ attribution.groupe.nom}}</td>
+                                        <td>{{ attribution.dateDebut|date("d.m.Y") }}</td>
+                                        <td>{{ attribution.dateFin|date("d.m.Y") }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div> <!-- /attributions et distinctions -->
+
+                </div>
+
+            </div>
 
         </div>
     </div>
-</div>
 
 
 
@@ -67,8 +128,7 @@
 
 {% block js %}
 
-
-    {# javscript pour l'interface du finance Bundle #}
+    {# javscript pour l'interface du finance Bundle
     {% javascripts
     '@InterneFinancesBundle/Resources/public/js/creance.js'
     '@InterneFinancesBundle/Resources/public/js/facture.js'
@@ -93,7 +153,7 @@
     {% endjavascripts %}
 
 
-
+#}
 
 {% endblock %}
 

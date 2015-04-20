@@ -1,14 +1,13 @@
- /*
- * # Semantic UI
- * https://github.com/Semantic-Org/Semantic-UI
- * http://www.semantic-ui.com/
+/*!
+ * # Semantic UI 1.11.6 - Progress Bar
+ * http://github.com/semantic-org/semantic-ui/
  *
- * Copyright 2014 Contributors
+ *
+ * Copyright 2014 Contributorss
  * Released under the MIT license
  * http://opensource.org/licenses/MIT
  *
  */
-
 
 
 /*******************************
@@ -34,6 +33,54 @@
 }
 
 /* Indicating */
+.ui.indicating.progress .bar[style*="width: 1"],
+.ui.indicating.progress .bar[style*="width: 2"] {
+  background-color: #d95c5c;
+}
+.ui.indicating.progress .bar[style*="width: 3"] {
+  background-color: #d9a65c;
+}
+.ui.indicating.progress .bar[style*="width: 4"],
+.ui.indicating.progress .bar[style*="width: 5"] {
+  background-color: #e6bb48;
+}
+.ui.indicating.progress .bar[style*="width: 6"] {
+  background-color: #ddc928;
+}
+.ui.indicating.progress .bar[style*="width: 7"],
+.ui.indicating.progress .bar[style*="width: 8"] {
+  background-color: #b4d95c;
+}
+.ui.indicating.progress .bar[style*="width: 9"],
+.ui.indicating.progress .bar[style*="width: 100"] {
+  background-color: #66da81;
+}
+
+/* Indicating Label */
+.ui.indicating.progress[data-percent^="1"] .label,
+.ui.indicating.progress[data-percent^="2"] .label {
+  color: #d95c5c;
+}
+.ui.indicating.progress[data-percent^="3"] .label {
+  color: #d9a65c;
+}
+.ui.indicating.progress[data-percent^="4"] .label,
+.ui.indicating.progress[data-percent^="5"] .label {
+  color: #e6bb48;
+}
+.ui.indicating.progress[data-percent^="6"] .label {
+  color: #ddc928;
+}
+.ui.indicating.progress[data-percent^="7"] .label,
+.ui.indicating.progress[data-percent^="8"] .label {
+  color: #b4d95c;
+}
+.ui.indicating.progress[data-percent^="9"] .label,
+.ui.indicating.progress[data-percent^="100"] .label {
+  color: #66da81;
+}
+
+/* Single Digits */
 .ui.indicating.progress .bar[style^="width: 1%"],
 .ui.indicating.progress .bar[style^="width: 2%"],
 .ui.indicating.progress .bar[style^="width: 3%"],
@@ -42,63 +89,23 @@
 .ui.indicating.progress .bar[style^="width: 6%"],
 .ui.indicating.progress .bar[style^="width: 7%"],
 .ui.indicating.progress .bar[style^="width: 8%"],
-.ui.indicating.progress .bar[style^="width: 9%"],
-.ui.indicating.progress .bar[style^="width: 1"],
-.ui.indicating.progress .bar[style^="width: 2"] {
+.ui.indicating.progress .bar[style^="width: 9%"] {
   background-color: #d95c5c;
 }
-.ui.indicating.progress .bar[style^="width: 3"] {
-  background-color: #d9a65c;
-}
-.ui.indicating.progress .bar[style^="width: 4"],
-.ui.indicating.progress .bar[style^="width: 5"] {
-  background-color: #e6bb48;
-}
-.ui.indicating.progress .bar[style^="width: 6"] {
-  background-color: #ddc928;
-}
-.ui.indicating.progress .bar[style^="width: 7"],
-.ui.indicating.progress .bar[style^="width: 8"] {
-  background-color: #b4d95c;
-}
-.ui.indicating.progress .bar[style^="width: 9"],
-.ui.indicating.progress .bar[style^="width: 100"] {
-  background-color: #66da81;
-}
-
-/* Single Digits Last */
-.ui.indicating.progress .bar[style^="width: 1%"] + .label,
-.ui.indicating.progress .bar[style^="width: 2%"] + .label,
-.ui.indicating.progress .bar[style^="width: 3%"] + .label,
-.ui.indicating.progress .bar[style^="width: 4%"] + .label,
-.ui.indicating.progress .bar[style^="width: 5%"] + .label,
-.ui.indicating.progress .bar[style^="width: 6%"] + .label,
-.ui.indicating.progress .bar[style^="width: 7%"] + .label,
-.ui.indicating.progress .bar[style^="width: 8%"] + .label,
-.ui.indicating.progress .bar[style^="width: 9%"] + .label,
-.ui.indicating.progress .bar[style^="width: 1"] + .label,
-.ui.indicating.progress .bar[style^="width: 2"] + .label {
+.ui.indicating.progress[data-percent="1"] .label,
+.ui.indicating.progress[data-percent="2"] .label,
+.ui.indicating.progress[data-percent="3"] .label,
+.ui.indicating.progress[data-percent="4"] .label,
+.ui.indicating.progress[data-percent="5"] .label,
+.ui.indicating.progress[data-percent="6"] .label,
+.ui.indicating.progress[data-percent="7"] .label,
+.ui.indicating.progress[data-percent="8"] .label,
+.ui.indicating.progress[data-percent="9"] .label {
   color: #d95c5c;
 }
-.ui.indicating.progress .bar[style^="width: 3"] + .label {
-  color: #d9a65c;
-}
-.ui.indicating.progress .bar[style^="width: 4"] + .label,
-.ui.indicating.progress .bar[style^="width: 5"] + .label {
-  color: #e6bb48;
-}
-.ui.indicating.progress .bar[style^="width: 6"] + .label {
-  color: #ddc928;
-}
-.ui.indicating.progress .bar[style^="width: 7"] + .label,
-.ui.indicating.progress .bar[style^="width: 8"] + .label {
-  color: #b4d95c;
-}
-.ui.indicating.progress .bar[style^="width: 9"] + .label,
-.ui.indicating.progress .bar[style^="width: 100"] + .label {
-  color: #66da81;
-}
-.ui.indicating.progress.success .bar + .label {
+
+/* Indicating Success */
+.ui.indicating.progress.success .label {
   color: #356e36;
 }
 
@@ -117,8 +124,8 @@
   min-width: 2em;
   background: #888888;
   border-radius: 0.2857rem;
-  -webkit-transition: width 0.2s linear, background-color 0.2s linear;
-          transition: width 0.2s linear, background-color 0.2s linear;
+  -webkit-transition: width 0.3s ease, background-color 0.3s ease;
+          transition: width 0.3s ease, background-color 0.3s ease;
 }
 
 /* Percent Complete */
@@ -313,7 +320,7 @@
 .ui.progress.attached,
 .ui.progress.attached .bar {
   display: block;
-  height: 3px;
+  height: 0.2rem;
   padding: 0px;
   overflow: hidden;
   border-radius: 0em 0em 0.2857rem 0.2857rem;
@@ -330,6 +337,21 @@
 }
 .ui.progress.top.attached .bar {
   border-radius: 0em;
+}
+
+/* Coupling */
+.ui.segment > .ui.attached.progress,
+.ui.card > .ui.attached.progress {
+  position: absolute;
+  top: auto;
+  left: 0;
+  bottom: 100%;
+  width: 100%;
+}
+.ui.segment > .ui.bottom.attached.progress,
+.ui.card > .ui.bottom.attached.progress {
+  top: 100%;
+  bottom: auto;
 }
 
 /*--------------
@@ -425,3 +447,15 @@
 .ui.big.progress .bar {
   height: 3.5em;
 }
+
+
+/*******************************
+            Progress
+*******************************/
+
+
+
+/*******************************
+         Site Overrides
+*******************************/
+
