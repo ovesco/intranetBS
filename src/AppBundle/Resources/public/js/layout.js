@@ -31,6 +31,8 @@ $('.datepicker').datepicker({
     format: 'dd.mm.yyyy'
 });
 
+
+
 //popup
 $('.popupable').popup();
 $('.popupable.onclick').popup({
@@ -78,3 +80,10 @@ $('#layout-search')
         type: 'category'
     })
 ;
+
+// x-editable
+$.fn.editable.defaults.mode = 'inline';
+
+// x-editable templates
+$.fn.editableform.template = '<form class="form-inline editableform"> <div class="control-group"> <div><div class="editable-input ui mini input"></div><div class="editable-buttons"></div></div> <div class="editable-error-block"></div> </div> </form>';
+$.fn.editableform.buttons  = '<button type="submit" class="editable-submit ui tiny circular green icon button"><i class="checkmark icon"></i></button> <button type="button" class="editable-cancel ui tiny circular red icon button"><i class="remove icon"></i></button>';

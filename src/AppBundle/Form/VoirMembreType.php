@@ -24,7 +24,7 @@ class VoirMembreType extends AbstractType
         $builder
 
             ->add('prenom','text',array('label' => 'Prénom'))
-            ->add('naissance','datepicker')
+            ->add('naissance','datepicker', array('label' => 'Date de naissance'))
             ->add('sexe','genre')
             ->add('numeroAvs','number',
                 array(
@@ -68,8 +68,6 @@ class VoirMembreType extends AbstractType
             ->add('numeroBs', 'text',array('label' => 'Numéro BS'))
             ->add('inscription','datepicker',array('label' => 'Inscription'))
             ->add('statut','text',array('label' => 'Statut'))
-
-            ->add('famille',new FamilleType())
 
             ->add(
                 'id',

@@ -1,0 +1,107 @@
+{#
+    Feuille de theme des formulaires qui affichent les widgets x-editable
+    pour édition rapide en ajax
+#}
+
+{#
+    On définit un block dont le but est de déterminer la valeur du type à fournir à xEditable.
+    Pour se faire on regarde le type de champ (entity, text, datepicker...) et on le convertit entre un des 5 champs
+    disponible dans x-editable
+#}
+{% block xtype %}
+
+    {% set TEXTS    = ['text', 'email', 'integer', 'money', 'number', 'password', 'percent', 'search', 'url'] %}
+    {% set TEXTAREA = ['textarea'] %}
+    {% set CHOICES  = ['choice', 'entity', 'country', 'language', 'locale', 'timezone', 'currency', 'semantic', 'genre'] %}
+    {% set DATES    = ['date', 'datetime', 'time', 'birthday', 'datepicker'] %}
+
+    {% set prefixes     = form.vars['block_prefixes'] %}
+    {% set attr         = prefixes[ prefixes|length - 2 ] %}
+
+    {# definition des types xEditable #}
+    {% set types        = ['text', 'textarea', 'select', 'date', 'checklist'] %}
+
+    {#
+        On définit ensuite le type par rapport à l'un des tableau au dessus. Si le type n'y est pas, on affiche de la
+        merde et on fait un dump pour bien le montrer tu vois comment
+    #}
+    {% if attr in TEXTS %}
+        data-type="{{ types[0] }}"
+
+    {% elseif attr in TEXTAREA %}
+        data-type="{{ types[1] }}"
+
+    {% elseif attr in CHOICES %}
+        data-type="{{ types[2] }}"
+
+    {% elseif attr in DATES %}
+        data-type="{{ types[3] }}"
+
+    {% else %}
+        {{ dump(attr) }}
+    {% endif %}
+
+{% endblock %}
+
+{#
+    On génère ensuite le block x-editable qui contient toutes les informations utiles à son utilisation
+    Ce bloc génère les attributs qui iront se greffer sur le A. On a ainsi un système d'affichage des données
+    extrêmement génériques
+#}
+{% block xeditable %}
+
+    {# On a besoin du prefix pour savoir quoi faire au niveau du backend #}
+    {% set prefixes     = form.vars['block_prefixes'] %}
+    {% set attr         = prefixes[ prefixes|length - 2 ] %}
+
+    {# On récupère l'entité liée au formulaire #}
+    {% set object = form.parent.vars['value'] %}
+
+    data-pk="{{ object.id }}"
+    data-url="{{ path('interne_ajax_app_modify_property') }}"
+    data-name="{{ form.vars['id'] }}" {# le name contient le nom du champ a modifier ainsi que le type de ce champ #}
+    data-value="{{ value }}"
+
+    {# type et éventuelles données supplémentaires requises #}
+    {{ block('xtype') }}
+{% endblock %}
+
+{#
+    Pour themer un champ, il faut appeler form_row qui met en place le bon mark-up
+    du champ. le widget (ensemble label et input) est compris dans une DIV de classe spécifique
+    On déclare ensuite un B pour le nom du champ, et un A pour l'affichage de la donnée. le A
+    possède également tous les attributs x-editable
+#}
+{% block form_row %}
+    <div class="modifiable-container">{{ form_widget(form) }}</div>
+{% endblock form_row %}
+
+
+{# label #}
+{% block label -%}
+    <b>{{ label }}</b>
+{%- endblock %}
+
+{#
+    Widget simple, input text basique
+    Ce bloc sert de structure globale d'affichage des données dans le A
+ #}
+{% block form_widget %}
+
+    {{ block('label') }}
+    <a href="#" class="xeditable" {{ block('xeditable') }} >{{ value }}</a>
+{% endblock %}
+
+{#
+    On définit ici tous les widgets comme utilisant form_widget standard, je sais pas pourquoi ca marche
+    pas par défaut
+#}
+{% block datepicker_widget %}
+
+    {{ block('form_widget') }}
+{% endblock %}
+
+{% block form_widget_simple %}
+
+    {{ block('form_widget') }}
+{% endblock %}

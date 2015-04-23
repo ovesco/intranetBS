@@ -7,6 +7,7 @@ use AppBundle\Utils\Data\Validation;
 use Symfony\Component\BrowserKit\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Router;
 
 class ValidationExtension extends \Twig_Extension
 {
@@ -14,11 +15,30 @@ class ValidationExtension extends \Twig_Extension
     private $validation;
     private $parser;
     private $request;
+    private $router;
 
-    public function __construct(Validation $validation, Parser $parser) {
+    public function __construct(Validation $validation, Parser $parser, Router $router) {
 
         $this->validation   = $validation;
         $this->parser       = $parser;
+        $this->router       = $router;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFunctions() {
+        return array(
+            'modificationRoute' => new \Twig_Function_Method($this, 'modificationRoute')
+        );
+    }
+
+    /**
+     * Génère la route appelée par xEditable pour modifier une valeur
+     */
+    public function modificationRoute() {
+
+        return $this->router->generate('interne_ajax_app_modify_property');
     }
 
     public function setRequest(RequestStack $request_stack)

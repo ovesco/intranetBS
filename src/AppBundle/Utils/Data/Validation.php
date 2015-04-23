@@ -50,6 +50,8 @@ class Validation {
         $entity     = $this->accessor->extractEntity($path);
         $oldValue   = $this->accessor->getStrictProperty($entity, $this->accessor->extractSchema($path));
 
+        $this->parse($entity, null, $newValue);
+
         $container  = $this->generateContainer($entity);
         $container  = $this->generateModification($container, $path, $oldValue, $newValue);
 
@@ -58,7 +60,24 @@ class Validation {
         $this->em->flush();
         $this->em->getConnection()->setNestTransactionsWithSavepoints(true);
 
-        return $this->tryToValidate($path, $container);
+        //return $this->tryToValidate($path, $container);
+    }
+
+    /**
+     * Cette méthode va transformer la valeur passée en paramètre en quelque chose de persistable par
+     * doctrine
+     * TODO: L'améliorer parce que là c'est des bails à l'ancienne
+     * @param $entity
+     * @param $field
+     * @param $value
+     */
+    private function parse($entity, $field, $value) {
+
+        $class  = \Doctrine\Common\Util\ClassUtils::getRealClass(get_class($entity));
+        $emptyObjectName    = \Doctrine\Common\Util\ClassUtils::getRealClass(get_class($entity));
+        $metaData           = $this->em->getClassMetadata($emptyObjectName);
+
+        var_dump($metaData);
     }
 
 
@@ -84,7 +103,10 @@ class Validation {
 
         //Si il n'y a pas d'erreur ici, c'est qu'il est possible de modifier l'entité
         $this->accessor->pa->setValue($entity, $schema, $this->parser->decode($modif->getNewValue()));
+
         $this->em->persist($entity);
+
+        echo $entity->getNaissance();
         $this->em->flush();
 
     }

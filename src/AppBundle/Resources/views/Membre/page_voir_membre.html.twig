@@ -6,7 +6,7 @@
     {{ membre.prenom }} {{ membre.nom }}
 {% endblock %}
 
-{% form_theme membreForm ':Templates/Form:ajax_edit.html.twig' %}
+{% form_theme membreForm 'Templates/form_to_xEditable.html.twig' %}
 
 
 {% block content %}
@@ -18,37 +18,105 @@
                 <i class="user icon"></i>
                 <div class="content">
                     <div class="header">
-                        <h2 class="ui header">{{ membre.prenom|capitalize }} <a href="{{ path('interne_voir_famille',{'famille': membre.famille.id }) }}">{{ membre.nom|capitalize }}</a></h2>
+                        <h2 class="ui header">{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</h2>
                     </div>
                     <p>{{ membre.activeAttribution.fonction.nom }} - {{ membre.activeAttribution.groupe.nom }}</p>
                 </div>
             </div>
             <div class="ui attached segment">
 
-                <div class="ui grid">
+                <div class="ui divided grid">
 
-                    <div class="two column row"> <!-- informations de base -->
+                    <div class="row"> <!-- informations de base -->
 
-                        <div class="column">
+                        <div class="eight wide column">
 
-                            <h4 class="ui header">Informations de base</h4>
-                            <div class="bs ajax-input">
-                                <label>Prénom</label>
-                                <input value="{{ membre.prenom }}" type="text">
+                            <h4 class="ui header">Informations</h4>
+
+                            {# Informations de base sur le membre #}
+                            {{ form_row(membreForm.prenom) }}
+                            {{ form_row(membreForm.naissance) }}
+                            {{ form_row(membreForm.inscription) }}
+
+                            <div class="ui divider"></div>
+
+                            <div class="ui two column divided grid">
+                                <div class="column">
+                                    <h5 class="ui header">Téléphone(s)</h5>
+                                    <table class="ui very basic small table">
+                                        <thead>
+                                            <tr>
+                                                <th>Numéro</th>
+                                                <th>Remarques</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for tel in membre.contact.telephones %}
+                                                <tr>
+                                                    <td>{{ tel.telephone }}</td>
+                                                    <td>{{ tel.remarques }}</td>
+                                                    <td>
+                                                        <i class="remove red link icon"></i>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="column">
+                                    <h5 class="ui header">E-mail(s)</h5>
+                                </div>
                             </div>
-                            <div class="bs ajax-input">
-                                <label>Sexe</label>
-                                <select>
-                                    <option>Homme</option>
-                                    <option>Femme</option>
-                                </select>
-                            </div>
+
+
                         </div>
 
-                        <div class="column">
-                            <h4 class="ui header">Sa famille</h4>
-                        </div>
+                        <div class="eight wide column">     <!-- informations famille -->
+
+                            <h4 class="ui header">Famille</h4>
+
+                            {% set famille = membre.famille %}
+
+                            <div class="ui list">
+                                {% include 'AppBundle:Partials:partial_contact.html.twig' with {'contact' : famille.contact} %}
+                            </div>
+
+                            <h4>Frères et soeurs</h4>
+
+                            <table class="ui very basic small table">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Nom</th>
+                                        <th>Role dans la BS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for gosse in membre.famille.membres %}
+                                    {% if gosse.id != membre.id %}
+                                        {% set sexeIcone = gosse.sexe == 'Personne::HOMME' ? "man" : "woman" %}
+                                        <tr>
+                                            <td><i class="{{ sexeIcone }} icon"></i></td>
+                                            <td>
+                                                <a data-position="left center" class="popupable" href="{{ path('interne_voir_membre', {membre: gosse.id}) }}">{{ gosse.prenom|capitalize }} {{ gosse.nom|capitalize }}</a>
+                                                {% include 'AppBundle:Popup:popup_membre.html.twig' with {'membre' : gosse, 'blocks' : ['personal', 'scout']} %}
+                                            </td>
+                                            <td>{{ gosse.activeAttribution.fonction.nom }} - {{ gosse.activeAttribution.groupe.nom }}</td>
+                                        </tr>
+                                    {% endif %}
+
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+
+                        </div> <!-- /informations famille -->
                     </div> <!-- /informations de base -->
+                </div>
+                <div class="ui grid">
 
                     <div class="one column row">
                         <h3 class="ui horizontal divider">
@@ -83,7 +151,7 @@
                         <div class="eleven wide column">
                             <h4 class="ui header">Attributions</h4>
 
-                            <table class="ui small very basic table">
+                            <table class="ui small very basic four column table">
                                 <thead>
                                 <tr>
                                     <th>Fonction</th>
@@ -98,7 +166,7 @@
                                         <td>{{ attribution.fonction.nom }}</td>
                                         <td>{{ attribution.groupe.nom}}</td>
                                         <td>{{ attribution.dateDebut|date("d.m.Y") }}</td>
-                                        <td>{{ attribution.dateFin|date("d.m.Y") }}</td>
+                                        <td>{{ attribution.dateFin is null ? '-' : attribution.dateFin|date("d.m.Y") }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -127,6 +195,12 @@
 
 
 {% block js %}
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.xeditable').editable();
+        });
+    </script>
 
     {# javscript pour l'interface du finance Bundle
     {% javascripts

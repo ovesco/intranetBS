@@ -72,6 +72,7 @@ services:
         arguments:
             - @validation
             - @parser
+            - @router
         calls:
             - [setRequest, [@request_stack]]
         tags:
@@ -84,7 +85,7 @@ services:
         tags:
             - { name: twig.extension }
 
-    app.twig.vusial:
+    app.twig.visual:
         class: AppBundle\Twig\VisualExtension
         tags:
             - { name: twig.extension }

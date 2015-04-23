@@ -27,7 +27,9 @@
 <header>
 
     <a href="{{ path('public_galerie_accueil') }}">
-        <img src="{{ asset('bundles/app/images/logo.png') }}" />
+        {% image '@AppBundle/Resources/public/images/logo.png' %}
+        <img src="{{ asset_url }}" id="main-logo" alt="Logo" />
+        {% endimage %}
         <h1>Galerie BS</h1>
     </a>
 
