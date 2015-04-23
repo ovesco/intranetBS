@@ -108,7 +108,7 @@ doctrine:
                 connection:       default
                 auto_mapping: true
             fichier:
-                connection:       fichier
+                connection:       fichier #base de donnée utilisée pour le transfert depuis l'ancien fichier
 
 
 

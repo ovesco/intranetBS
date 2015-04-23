@@ -8,10 +8,16 @@
         <div class="field">
             {{ block('form_label') }}
 
+            <select id="familleSelect" class="ui search dropdown familleSearch">
+
+            </select>
+
+            {#
             <div class="ui search familleSearch">
                 <input {{ block('widget_attributes') }} class="prompt" type="text">
                 <div class="results"></div>
             </div>
+            #}
         </div>
 
     {% endspaceless %}

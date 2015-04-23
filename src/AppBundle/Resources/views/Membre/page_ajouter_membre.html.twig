@@ -100,19 +100,29 @@
             </div>
         </div>
         <div class="row">
-            <div class="column">
-                <h3 class="ui dividing header">Information sur le membre</h3>
+            <h3 class="ui dividing header">Information sur le membre</h3>
+            <div class="five wide column">
 
+
+
+
+                {{ form_widget(membreForm.sexe) }}
+                {{ form_widget(membreForm.naissance) }}
+                {{ form_widget(membreForm.numeroAvs) }}
+                {{ form_widget(membreForm.iban) }}
+                {{ form_widget(membreForm.envoiFacture) }}
+                {{ form_widget(membreForm.remarques) }}
+
+                <h5 class="ui dividing header">Adresse</h5>
+                {% set contact = membreForm.contact %}
+                {{ form_widget(contact.adresse.rue) }}
                 <div class="two fields">
-                    {{ form_widget(membreForm.sexe) }}
-                    {{ form_widget(membreForm.naissance) }}
-                </div>
+                    {{ form_widget(contact.adresse.npa) }}
+                    {{ form_widget(contact.adresse.localite) }}
 
-
-                <div class="two fields">
-                    {{ form_widget(membreForm.numeroAvs) }}
-                    {{ form_widget(membreForm.remarques) }}
                 </div>
+                {{ form_widget(contact.adresse.remarques) }}
+
 
             </div>
 
