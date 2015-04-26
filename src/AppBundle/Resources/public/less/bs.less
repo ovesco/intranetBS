@@ -1,3 +1,8 @@
+body {
+
+    background: rgb(235,237,239);
+}
+
 .modifiable-container {
 
     display:flex;
@@ -7,4 +12,28 @@
         display: block;
         width:140px;
     }
+}
+
+.ui.list {
+
+    &:hover {
+
+        cursor:default;
+    }
+
+    .bs-editable.header > b,
+    .bs-editable.description > b {
+
+        display:none;
+    }
+
+    .bs-content {
+
+        width:100%;
+    }
+}
+
+.xeditable {
+
+    border-bottom:1px dashed rgb(200,200,200);
 }

@@ -12,7 +12,7 @@
 
     {% set TEXTS    = ['text', 'email', 'integer', 'money', 'number', 'password', 'percent', 'search', 'url'] %}
     {% set TEXTAREA = ['textarea'] %}
-    {% set CHOICES  = ['choice', 'entity', 'country', 'language', 'locale', 'timezone', 'currency', 'semantic', 'genre'] %}
+    {% set CHOICES  = ['choice', 'entity', 'country', 'language', 'locale', 'timezone', 'currency', 'semantic', 'genre', 'boolean'] %}
     {% set DATES    = ['date', 'datetime', 'time', 'birthday', 'datepicker'] %}
 
     {% set prefixes     = form.vars['block_prefixes'] %}
@@ -26,16 +26,17 @@
         merde et on fait un dump pour bien le montrer tu vois comment
     #}
     {% if attr in TEXTS %}
-        data-type="{{ types[0] }}"
+        data-type="text"
 
     {% elseif attr in TEXTAREA %}
-        data-type="{{ types[1] }}"
+        data-type="textarea"
 
     {% elseif attr in CHOICES %}
-        data-type="{{ types[2] }}"
+        data-type="select"
+        data-source="{{ form.vars['choices']|choiceToXeditable }}"
 
     {% elseif attr in DATES %}
-        data-type="{{ types[3] }}"
+        data-type="date"
 
     {% else %}
         {{ dump(attr) }}
@@ -59,10 +60,10 @@
 
     data-pk="{{ object.id }}"
     data-url="{{ path('interne_ajax_app_modify_property') }}"
-    data-name="{{ form.vars['id'] }}" {# le name contient le nom du champ a modifier ainsi que le type de ce champ #}
+    data-name="{{ attr ~ "___" ~ form.vars['id'] }}" {# le name contient le nom du champ a modifier ainsi que le type de ce champ #}
     data-value="{{ value }}"
 
-    {# type et éventuelles données supplémentaires requises #}
+    {# type et éventuelles données supplémentaires requises liées à ce type, comme pour choice, on génère le data-source #}
     {{ block('xtype') }}
 {% endblock %}
 
@@ -73,7 +74,10 @@
     possède également tous les attributs x-editable
 #}
 {% block form_row %}
-    <div class="modifiable-container">{{ form_widget(form) }}</div>
+    <div class="modifiable-container">
+        {{ block('label') }}
+        {{ form_widget(form) }}
+    </div>
 {% endblock form_row %}
 
 
@@ -87,8 +91,6 @@
     Ce bloc sert de structure globale d'affichage des données dans le A
  #}
 {% block form_widget %}
-
-    {{ block('label') }}
     <a href="#" class="xeditable" {{ block('xeditable') }} >{{ value }}</a>
 {% endblock %}
 
@@ -102,6 +104,21 @@
 {% endblock %}
 
 {% block form_widget_simple %}
+
+    {{ block('form_widget') }}
+{% endblock %}
+
+{% block textarea_widget %}
+
+    {{ block('form_widget') }}
+{% endblock %}
+
+{% block choice_widget %}
+
+    {{ block('form_widget') }}
+{% endblock %}
+
+{% block checkbox_widget %}
 
     {{ block('form_widget') }}
 {% endblock %}

@@ -2,10 +2,7 @@
 
 namespace AppBundle\Form;
 
-use AppBundle\Entity\Famille;
-use AppBundle\Field\MembreFamilleType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
 
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -25,18 +22,8 @@ class VoirMembreType extends AbstractType
 
             ->add('prenom','text',array('label' => 'Prénom'))
             ->add('naissance','datepicker', array('label' => 'Date de naissance'))
-            ->add('sexe','genre')
-            ->add('numeroAvs','number',
-                array(
-                    'label' => 'Numéro AVS',
-                    'required' => false,
-                    'attr' => array(
-                        'data-formatter' => 'true',
-                        'data-pattern'   => '{{9999999999999}}'
-                    )
-                )
-            )
-
+            ->add('sexe','genre', array('label' => 'Sexe'))
+            ->add('numeroAvs','text', array('label' => 'Numéro AVS',) )
             ->add(
                 'iban',
                 'text',
@@ -68,6 +55,8 @@ class VoirMembreType extends AbstractType
             ->add('numeroBs', 'text',array('label' => 'Numéro BS'))
             ->add('inscription','datepicker',array('label' => 'Inscription'))
             ->add('statut','text',array('label' => 'Statut'))
+            ->add('attributions', 'collection', array('type' => new AttributionType()))
+            ->add('distinctions', 'collection', array('type' => new ObtentionDistinctionType()))
 
             ->add(
                 'id',

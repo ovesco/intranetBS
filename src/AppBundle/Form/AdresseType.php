@@ -12,7 +12,7 @@ class AdresseType extends AbstractType
     {
         $builder
 
-            ->add('expediable', 'hidden')
+            ->add('expediable', 'boolean',      array('label'    => 'expediable'))
             ->add('rue',        'text',         array('required' => false, 'label' => 'Rue'))
             ->add('npa',        'number',       array('required' => false, 'label' => 'NPA'))
             ->add('localite',   'text',         array('required' => false, 'label' => 'Localité'))

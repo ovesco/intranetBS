@@ -1,1 +1,1 @@
-.modifiable-container{display:flex}.modifiable-container>b{display:block;width:140px}
+body{background:#ebedef}.modifiable-container{display:flex}.modifiable-container>b{display:block;width:140px}.ui.list:hover{cursor:default}.ui.list .bs-editable.header>b,.ui.list .bs-editable.description>b{display:none}.ui.list .bs-content{width:100%}.xeditable{border-bottom:1px dashed #c8c8c8}
