@@ -70,10 +70,7 @@ services:
     app.twig.validation_extension:
         class: AppBundle\Twig\ValidationExtension
         arguments:
-            - @validation
-            - @parser
-        calls:
-            - [setRequest, [@request_stack]]
+            - @router
         tags:
             - { name: twig.extension }
 
@@ -84,7 +81,7 @@ services:
         tags:
             - { name: twig.extension }
 
-    app.twig.vusial:
+    app.twig.visual:
         class: AppBundle\Twig\VisualExtension
         tags:
             - { name: twig.extension }
@@ -108,3 +105,8 @@ services:
         class: AppBundle\Field\GenreType
         tags:
             - { name: form.type, alias: genre }
+
+    app.type.boolean:
+            class: AppBundle\Field\BooleanType
+            tags:
+                - { name: form.type, alias: boolean }

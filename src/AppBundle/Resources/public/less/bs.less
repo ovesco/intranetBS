@@ -1,38 +1,39 @@
-.bs {
+body {
 
-    &.ajax-input {
+    background: rgb(235,237,239);
+}
+
+.modifiable-container {
+
+    display:flex;
+
+    > b
+    {
+        display: block;
+        width:140px;
+    }
+}
+
+.ui.list {
+
+    &:hover {
+
+        cursor:default;
+    }
+
+    .bs-editable.header > b,
+    .bs-editable.description > b {
+
+        display:none;
+    }
+
+    .bs-content {
 
         width:100%;
-        display:flex;
-
-        > label {
-
-            width:150px;
-            line-height:30px;
-            font-weight:bold;
-        }
-
-        input,
-        select {
-
-            width:calc(~"100% - 150px");
-            height:30px;
-            line-height:30px;
-            border:1px solid transparent;
-            background:transparent;
-            border-radius:2px;
-
-            &:hover {
-
-                border:1px solid rgb(210,210,210);
-                background:rgba(255,255,255,0.4);
-            }
-
-            &:focus {
-
-                border:1px solid rgb(180,180,180);
-                background:white;
-            }
-        }
     }
+}
+
+.xeditable {
+
+    border-bottom:1px dashed rgb(200,200,200);
 }

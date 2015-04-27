@@ -31,6 +31,8 @@ $('.datepicker').datepicker({
     format: 'dd.mm.yyyy'
 });
 
+
+
 //popup
 $('.popupable').popup();
 $('.popupable.onclick').popup({
@@ -49,6 +51,8 @@ $('.datatable').dataTable();
 
 //select2
 $('.select2').select2();
+
+$('.tabular .item').tab();
 
 /**
  * scan la page à la recherche de pattern à respecter pour tous les inputs type="text"
@@ -78,3 +82,19 @@ $('#layout-search')
         type: 'category'
     })
 ;
+
+// x-editable
+$.fn.editable.defaults.mode = 'inline';
+
+// x-editable templates
+$.fn.editableform.template = '<form class="form-inline editableform"> <div class="control-group"> <div><div class="editable-input ui mini input"></div><div class="editable-buttons"></div></div> <div class="editable-error-block"></div> </div> </form>';
+$.fn.editableform.buttons  = '<button type="submit" class="editable-submit ui tiny circular green icon button"><i class="checkmark icon"></i></button> <button type="button" class="editable-cancel ui tiny circular red icon button"><i class="remove icon"></i></button>';
+
+$(document).ready(function() {
+    $('.xeditable').editable({
+
+        success: function(response, newValue) {
+            if(!response.success) return response.msg;
+        }
+    });
+});

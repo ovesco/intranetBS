@@ -3,27 +3,30 @@
 namespace AppBundle\Field;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use AppBundle\Transformer\BooleanToStringTransformer;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use AppBundle\Entity\Personne;
 
 /**
- * Class GenreType
- *
- * Type à utiliser pour un champ définissant le genre dans un formulaire
- *
  * @package AppBundle\Form
  */
-class GenreType extends AbstractType
+class BooleanType extends AbstractType
 {
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
             'choices' => array(
-               Personne::HOMME => 'Homme',
-               Personne::FEMME => 'Femme',
+                "1"   => "Oui",
+                "0"   => "Non"
             )
         ));
     }
+
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder->addViewTransformer(new BooleanToStringTransformer("Oui", "Non"));
+    }
+
 
     public function getParent()
     {
@@ -32,6 +35,6 @@ class GenreType extends AbstractType
 
     public function getName()
     {
-        return 'genre';
+        return 'boolean';
     }
 }

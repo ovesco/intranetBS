@@ -41,4 +41,24 @@ class AppController extends Controller
         return $this->render('AppBundle:Homepage:page_homepage.html.twig',
             array('lastNews'=>$lastNews, 'groupes'=>$groupes));
     }
+
+    /**
+     * @route("test")
+     */
+    public function test() {
+
+        $id    = 1;
+        $value = 2012-04-03;
+
+        $schem = explode('_', 'AppBundle_membre_naissance');
+
+
+        // On nettoie le schem afin de l'utiliser
+        $path  = $schem[1] . '.' . $id . '.' . $schem[2];
+
+        $validator      = $this->get('validation');
+        $requiredPaths  = $validator->validateField($value, $path);
+
+        return new Response();
+    }
 }

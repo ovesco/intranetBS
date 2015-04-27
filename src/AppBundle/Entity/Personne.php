@@ -11,13 +11,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 abstract class Personne
 {
 
-    const HOMME = 'HOMME';
-    const FEMME = 'FEMME';
+    const HOMME = 'Homme';
+    const FEMME = 'Femme';
 
     /**
      * @var string
-     * @Assert\NotBlank()
-     * @Assert\Length(min = "2")
      * @ORM\Column(name="prenom", type="string", length=255)
      */
     private $prenom;
@@ -25,7 +23,7 @@ abstract class Personne
     /**
      * @var string
      *
-     * @ORM\Column(name="sexe", type="string", columnDefinition="ENUM('Personne::HOMME', 'Personne::FEMME')")
+     * @ORM\Column(name="sexe", type="string", columnDefinition="ENUM('Homme', 'Femme')")
      */
     private $sexe;
 
@@ -73,7 +71,7 @@ abstract class Personne
     public function setSexe($sexe)
     {
         if($sexe != Personne::HOMME && $sexe != Personne::FEMME)
-            throw new Exception("Le sexe doit être " . Personne::HOMME . " ou " . Personne::FEMME);
+            throw new Exception("Le sexe doit être " . Personne::HOMME . " ou " . Personne::FEMME . ", obtenu : '" . $sexe . "'");
 
         $this->sexe = $sexe;
 

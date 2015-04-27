@@ -1,0 +1,18 @@
+
+<div class="ui divided list">
+    {% for element in data %}
+
+        {% set header = (type == 'telephone') ? form_widget(element.telephone) : form_widget(element.email) %}
+
+        <div class="item">
+            <i class="{{ (type == 'telephone') ? 'call' : 'mail' }} icon"></i>
+            <div class="content bs-content">
+                <i class="right floated link red remove icon"></i>
+                <div class="bs-editable header">{{ header|raw }}</div>
+                <div class="bs-editable description">
+                    {{ form_widget(element.remarques) }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

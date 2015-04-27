@@ -31,9 +31,9 @@
 
                                 {% if album.photos is not empty %}
                                     <div class="extra images">
-                                        {% if album.photos|length > 4 %}{% set maxPictos = 3 %}{% else %}{% set maxPictos = album.photos|length %}{% endif %}
+                                        {% set maxx = (album.photos|length - 1) > 3 ? 3 : album.photos|length -1 %}
 
-                                        {% for i in 0..maxPictos %}
+                                        {% for i in 0..maxx %}
                                             <a href="{{ path('public_galerie_voir_album', {album: album.id}) }}"><img src="{{ asset(album.photos[i].thumbnailPath) }}"></a>
                                         {% endfor %}
                                     </div>

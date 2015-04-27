@@ -684,75 +684,42 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
         return $this->envoiFacture;
     }
 
+    /**
+     * Retourne l'adresse d'expédition du membre, c'est-à-dire son adresse principale
+     * @return array|null
+     */
     public function getAdresseExpedition()
     {
+        $pere       = $this->getFamille()->getPere();
+        $mere       = $this->getFamille()->getMere();
+        $adresse    = null;
+        $generator  = function($type, $adresse) {
 
-        $adresse = $this->getContact()->getAdresse();
-        if(!is_null($adresse))
-        {
-            if ($adresse->isExpediable()) {
-                return array('adresse' => $adresse,
-                    'owner' => array(
-                        'prenom' => $this->getPrenom(),
-                        'nom' => $this->getNom(),
-                        'type' => 'Membre',
-                    ));
-            }
+            return array('owner' => $type, 'adresse' => $adresse);
+        };
+
+        // On liste d'abord les adresses potentielles
+        $adresses   = array(
+
+            'membre'    => $this->getContact()->getAdresse(),
+            'famille'   => $this->getFamille()->getContact()->getAdresse(),
+            'mere'      => ($pere == null) ? null : $pere->getContact()->getAdresse(),
+            'pere'      => ($mere == null) ? null : $mere->getContact()->getAdresse()
+        );
+
+        /** @var Adresse $adr */
+        foreach($adresses as $k => $adr) {
+
+            if($adr != null && $adr->getExpediable())
+                return $generator($k, $adr);
+
+            else if($adr != null) $adresse = $generator($k, $adr);
         }
 
-        $adresse = $this->getFamille()->getContact()->getAdresse();
-        if(!is_null($adresse))
-        {
-            if ($adresse->isExpediable()) {
-                return array('adresse' => $adresse,
-                    'owner' => array(
-                        'prenom' => null,
-                        'nom' => $this->getNom(),
-                        'type' => 'Famille',
-                    ));
-            }
-        }
-
-        $mere = $this->getFamille()->getMere();
-        if(!is_null($mere))
-        {
-            $adresse = $mere->getContact()->getAdresse();
-
-            if(!is_null($adresse))
-            {
-                if ($adresse->isExpediable()) {
-                    return array('adresse' => $adresse,
-                        'owner' => array(
-                            'prenom' => $mere->getPrenom(),
-                            'nom' => $this->getNom(),
-                            'type' => 'Mere',
-                        ));
-                }
-            }
-        }
-
-        $pere = $this->getFamille()->getPere();
-        if(!is_null($pere))
-        {
-            $adresse = $pere->getContact()->getAdresse();
-
-            if(!is_null($adresse))
-            {
-                if ($adresse->isExpediable()) {
-                    return array('adresse' => $adresse,
-                        'owner' => array(
-                            'prenom' => $pere->getPrenom(),
-                            'nom' => $this->getNom(),
-                            'type' => 'Pere',
-                        ));
-                }
-            }
-        }
-
-
-        //aucune adresse trouvée
-        return null;
+        if($adresse['adresse'] == null) return null;
+        else return $adresse;
     }
+
 
     public function getListeEmailsExpedition()
     {
