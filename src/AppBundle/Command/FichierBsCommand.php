@@ -15,9 +15,9 @@ use AppBundle\Entity\Groupe;
 use AppBundle\Entity\Famille;
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\Model;
+use AppBundle\Entity\Personne;
 use AppBundle\Entity\ObtentionDistinction;
 use AppBundle\Entity\Telephone;
-use ClassesWithParents\F;
 use Interne\FinancesBundle\Entity\CreanceToMembre;
 use Interne\FinancesBundle\Entity\CreanceToFamille;
 use Interne\FinancesBundle\Entity\FactureToFamille;
@@ -29,9 +29,23 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
+use Doctrine\ORM\EntityManager;
+use Doctrine\DBAL\Connection;
+use AppBundle\Utils\Data\Sanitizer;
+use Interne\SecurityBundle\Entity\User;
 
-
-
+/**
+ * Class FichierBsCommand
+ * @package AppBundle\Command
+ *
+ *
+ * Utilisation:
+ * 1) désactivé elasticsearch (commentaire dans le fichier de config)
+ * 2) reset (si les tables de liens sont déjà existante
+ * 3) prepare
+ * 4) load (ctrl+c pour s'arreter au milieu et s'affranchir du probleme de mémoire...ensuite: "load" à nouveau
+ *
+ */
 class FichierBsCommand extends ContainerAwareCommand
 {
     private $em;
@@ -45,19 +59,22 @@ class FichierBsCommand extends ContainerAwareCommand
             ->setName('app:fichier')
             ->setDescription('Remplir la base de donnée')
             ->addArgument('action', InputArgument::REQUIRED, 'Quel action souhaitez-vous faire?')
+            ->addArgument('verbose', InputArgument::OPTIONAL, 'Mode: verbose')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
-        /** @var \Doctrine\ORM\EntityManager $em */
+        /** @var EntityManager $em */
         $em                           = $this->getContainer()->get('doctrine.orm.entity_manager');
+        /** @var EntityManager $fichierEm */
         $fichierEm                    = $this->getContainer()->get('doctrine')->getManager('fichier');
         $action                       = $input->getArgument('action');
 
         $this->em = $em;
         $this->fichierBsEm = $fichierEm;
+        /** @var Connection connectionFichierBs */
         $this->connectionFichierBs = $this->fichierBsEm->getConnection();
 
         $this->linkTables = array('link_fonction',
@@ -558,7 +575,15 @@ class FichierBsCommand extends ContainerAwareCommand
 
                         $membre->setNumeroBs($result['numeroBS']);
                         $membre->setPrenom(utf8_encode($result['prenom']));
-                        $membre->setSexe($result['sexe']);
+
+                        if($result['sexe'] == 'f')
+                        {
+                            $membre->setSexe(Personne::FEMME);
+                        }
+                        else{
+                            $membre->setSexe(Personne::HOMME);
+                        }
+
 
 
 
@@ -589,7 +614,20 @@ class FichierBsCommand extends ContainerAwareCommand
                         $membre->setContact($contact);
 
 
-                        $this->em->persist($membre);
+                        /*
+                         * On ajoute un user de manière automatique
+                         * au membre nouvellement créé
+                         */
+                        $user = new User();
+                        $user->setUsername(Sanitizer::cleanNames($membre->getPrenom()) . "." . $membre->getNom());
+
+                        $password = substr(md5($user->getUsername()),0,7);
+
+                        $user->setPassword($password);
+                        $user->setMembre($membre);
+
+                        $em->persist($user);
+
                         $this->em->persist($contact);
                         $this->em->flush();
 

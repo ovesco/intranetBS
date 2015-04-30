@@ -3,12 +3,12 @@
 namespace AppBundle\Utils\Data;
 
 /**
- * Class Useful
+ * Class Sanitizer
  * Offre diverses methodes utiles pour traiter des données
  * La classe ne doit pas être enregistrées en tant que service, et toutes ses méthodes doivent être statiques
  * @package AppBundle\Utils\Data
  */
-class Useful {
+class Sanitizer {
 
     /**
      * Nettoie une chaine de charactères de tout caractère spécial
