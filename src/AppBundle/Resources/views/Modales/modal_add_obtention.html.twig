@@ -1,0 +1,22 @@
+<div class="ui small modal" id="modal-distinction-add-obtention">
+    <i class="close icon"></i>
+    <div class="header">
+        Ajouter une distinction
+    </div>
+    <div class="content">
+
+        <p><span id="add-distinction-amount-concerned"></span> membre(s) concerné(s)</p>
+        <form method="post" action="{{ path('interne_add_obtention_distinction') }}">
+
+                {{ form_row(form.distinction) }}
+                {{ form_row(form.date) }}
+                {{ form_row(form.membres) }}
+                {{ form_rest(form) }}
+
+            <button type="submit" class="ui green button">Ajouter</button>
+        </form>
+    </div>
+    <div class="actions">
+        <div class="ui button">Annuler</div>
+    </div>
+</div>

@@ -16,30 +16,9 @@ class ObtentionDistinctionType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) use ($options) {
-            $attribution = $event->getData();
-            $form = $event->getForm();
-
-            /* We have to check that is doesn't exist because of form inheritance */
-            if(!$form->has('membre')) {
-                if (null !== $attribution->getMembre()) {
-                    $form->add('membre', 'hidden', array(
-                        'data' => $attribution->getMembre()->GetId()
-                    ));
-                } else {
-                    $form->add('membre', 'entity', array(
-                        'class' => 'AppBundle:Membre'
-                    ));
-                }
-            }
-        });
-
-
         $builder
-            ->add('date', 'date', array(
-                'attr'	=> array('class' => 'datepicker')
-            ))
+            ->add('membres', 'hidden', array('mapped' => false))
+            ->add('date', 'datepicker', array('label' => "date d'obtention"))
             ->add('distinction', 'entity', array(
                 'class'		=> 'AppBundle:Distinction'
             ))
@@ -61,6 +40,6 @@ class ObtentionDistinctionType extends AbstractType
      */
     public function getName()
     {
-        return 'appbundle_obtentiondistinction';
+        return 'AppBundle_obtention_distinction';
     }
 }

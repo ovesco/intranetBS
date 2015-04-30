@@ -19,8 +19,14 @@ class ValidationExtension extends \Twig_Extension
      */
     public function getFunctions() {
         return array(
-            'modificationRoute' => new \Twig_Function_Method($this, 'modificationRoute')
+            'modificationRoute' => new \Twig_Function_Method($this, 'modificationRoute'),
+            'class' => new \Twig_SimpleFunction('class', array($this, 'getClass'))
         );
+    }
+
+    public function getClass($object)
+    {
+        return (new \ReflectionClass($object))->getShortName();
     }
 
     /**

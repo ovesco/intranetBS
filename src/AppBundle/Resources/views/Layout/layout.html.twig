@@ -24,10 +24,11 @@
         {% block css %}{% endblock %}
 
         {% block headjs %}{% endblock %}
+
     </head>
 
 
-    <body class="pushable">
+    <body class="pusher">
 
 
         {{ render(controller('AppBundle:Layout:mainMenuGenerate')) }}
@@ -36,7 +37,7 @@
         {% include 'AppBundle:Layout:top_menu.html.twig' %}
 
 
-        <div class="pusher">
+        <div class="pushable">
 
             <div id="alerts-bag"></div>
 
@@ -51,6 +52,56 @@
 
         </div>
 
+        {#
+            LISTING
+            =======
+
+            On définit le container, car il nous permettra ensuite de modifier le menu
+            de manière dynamique à chaque fois qu'on souhaite accéder au listing
+        #}
+        <div class="ui top sidebar ui secondary segment" id="listing-bar"></div>
+
+        {#
+            On définit ici le container à menu. On y stocke le menu de popup géneré dynamiquement pour pouvoir
+            l'afficher n'importe où sur la page
+        #}
+        <div id="popup-menu-container"></div>
+
+        {% include 'AppBundle:Modales:modal_add_liste.html.twig' %}
+
+        <!-- la modale d'ajout de distinctions -->
+        {{ render(controller('AppBundle:Distinction:renderModalOrPersist')) }}
+
+        <!-- la modale d'ajout d'attributions -->
+        {{ render(controller('AppBundle:Attribution:renderModalOrPersist')) }}
+
+        <!-- la modale pour terminer des attributions -->
+        <div class="ui small modal" id="modal-terminer-attribution">
+            <i class="close icon"></i>
+            <div class="header">
+                Terminer des attributions
+            </div>
+            <div class="content">
+
+                <form method="post" action="{{ path('interne_attribution_terminer') }}">
+
+                    <input type="hidden" name="ids" id="attributions-ids" />
+                    <input type="text" name="dateFin" class="datepicker" />
+                    <button type="submit" class="ui green button">Terminer <span id="amount-attributions-concerned"></span> attributions</button>
+                </form>
+            </div>
+            <div class="actions">
+                <div class="ui button">Annuler</div>
+            </div>
+        </div>
+
+
+        <!-- on ajoute aussi un container qui contiendra les modales génerées dynamiquement -->
+        <div id="dynamic-modal-container"></div>
+
+
+
+
 
         <script src="{{ asset('assetic/jquery.js') }}"></script>
         <script src="{{ asset('semantic/semantic.min.js') }}"></script>
@@ -59,11 +110,15 @@
 
 
         {% javascripts
-            '@AppBundle/Resources/public/js/alwaysIncluded/*'
+            '@AppBundle/Resources/public/js/noty.js'
+            '@AppBundle/Resources/public/js/noty_default.js'
             '//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/js/jquery-editable-poshytip.min.js'
+            '@AppBundle/Resources/public/js/alwaysIncluded/*'
             '@AppBundle/Resources/public/js/layout.js'
 
-            output="js/main.js"
+            '@AppBundle/Resources/public/js/Contact/contact.js'
+
+        output="js/main.js"
         %}
         <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
@@ -75,9 +130,9 @@
              * une alerte correspondante
              */
             {% for label, flashes in app.session.flashbag.all %}
-                {% for flash in flashes %}
-                    alerte.send("{{ flash }}", "{{ label }}");
-                {% endfor %}
+            {% for flash in flashes %}
+                alerte.send("{{ flash }}", "{{ label }}");
+            {% endfor %}
             {% endfor %}
         </script>
 

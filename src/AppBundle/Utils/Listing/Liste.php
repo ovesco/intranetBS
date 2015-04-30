@@ -82,7 +82,7 @@ class Liste {
      * Retourne la taille de la liste
      * @return int
      */
-    public function getLength() {
+    public function getSize() {
 
         return count($this->liste);
     }

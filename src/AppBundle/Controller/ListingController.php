@@ -3,10 +3,12 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Utils\Listing\Lister;
 
 /**
  * Class ListingController
@@ -15,6 +17,36 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ListingController extends Controller
 {
+
+    /**
+     * Gébère la barre qui s'affiche dans chaque page
+     * @route("/generate-bar", name="listing_generate_top_bar", options={"expose"=true})
+     * @Template("AppBundle:Listing:top_layout_listing.html.twig")
+     */
+    public function listingBarAction() {
+
+        return array('listing' => $this->get('listing'));
+    }
+
+    /**
+     * Retourne la liste des listes actuelles en json
+     * @route("/listes-as-json", name="listing_load_listes_as_json", options={"expose"=true})
+     */
+    public function loadListesAsJsonAction() {
+
+        $rtn    = array();
+
+        foreach($this->get('listing')->getListes() as $liste)
+            $rtn[] = array(
+                'token' => $liste->getToken(),
+                'name'  => $liste->name,
+                'size'  => $liste->getSize()
+            );
+
+        return new JsonResponse($rtn);
+    }
+
+
     /**
      * Permet d'avoir une vue d'ensemble des listes dynamiques disponibles
      * @return Response la vue
@@ -31,21 +63,33 @@ class ListingController extends Controller
         ));
     }
 
+    /**
+     * @param $token
+     * @return Response
+     * @route("/view/liste/{token}", name="listing_view_liste_by_token", options={"expose"=true})
+     */
+    public function viewListe($token) {
+
+        /** @var Lister $listing */
+        $listing = $this->get('listing');
+        $liste   = $listing->getByToken($token);
+
+        return $this->render('AppBundle:Listing:listing_view_liste.html.twig', array('liste' => $liste));
+    }
+
 
     /**
      * Permet de créer une liste
-     * @param Request $request
      * @return Response redirection vers la page du listing
-     * @route("/add", name="listing_add")
+     * @route("/add/{name}", name="listing_add", options={"expose"=true})
      */
-    public function addListeAction(Request $request) {
+    public function addListeAction($name) {
 
         $listing = $this->get('listing');
-        $name    = $request->request->get('new_liste_name');
         $listing->addListe($name);
         $listing->save();
 
-        return $this->redirect($this->generateUrl('listing_page'));
+        return new JsonResponse();
     }
 
 
@@ -53,7 +97,7 @@ class ListingController extends Controller
      * Permet de supprimer une liste du listing
      * @param $token string le token de la liste
      * @return Response redirection vers la page du listing
-     * @route("/remove/{token}", name="listing_remove", options={"expose"=true})
+     * @route("/remove/{token}", name="listing_remove_liste", options={"expose"=true})
      */
     public function removeListeAction($token) {
 
@@ -61,7 +105,7 @@ class ListingController extends Controller
         $listing->removeListeByToken($token);
         $listing->save();
 
-        return $this->redirect($this->generateUrl('listing_page'));
+        return new JsonResponse();
     }
 
 
@@ -93,6 +137,7 @@ class ListingController extends Controller
 
         $listing = $this->get('listing');
         $data    = explode(',', $ids);
+
         $listing->getByToken($token)->addByIds($data);
         $listing->save();
         return new JsonResponse('');

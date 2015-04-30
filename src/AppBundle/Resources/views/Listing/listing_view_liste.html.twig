@@ -1,0 +1,39 @@
+
+
+<h2 class="ui header">
+    <div class="ui mini red right floated button listing-remove-liste-button" data-token="{{ liste.token }}">supprimer</div>
+    <div class="ui mini teal right floated button">exporter</div>
+    <i class="list layout icon"></i>
+    <div class="content">
+        {{ liste.name }}
+        <div class="sub header">
+            Contient {{ liste.size }} membre{% if liste.size > 1 %}s{% endif %}
+        </div>
+    </div>
+
+</h2>
+
+<table class="ui table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Nom</th>
+            <th>Rôle</th>
+            <th>Numéro BS</th>
+            <th>Date de naissance</th>
+            <th>options</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for type in liste.all %}
+            <tr>
+                <td></td>
+                <td>{{ type.prenom|capitalize }} {{ type.nom|capitalize }}</td>
+                <td>{{ type.activeAttribution.fonction.nom }} - {{ type.activeAttribution.groupe.nom|capitalize }}</td>
+                <td>{{ type.numeroBs }}</td>
+                <td>{{ type.naissance|date('d.m.Y') }}</td>
+                <td></td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

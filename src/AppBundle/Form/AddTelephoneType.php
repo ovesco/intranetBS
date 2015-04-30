@@ -26,6 +26,6 @@ class AddTelephoneType extends AbstractType
 
     public function getName()
     {
-        return 'apprbundle_addtelephonetype';
+        return 'app_bundle_addtelephonetype';
     }
 }

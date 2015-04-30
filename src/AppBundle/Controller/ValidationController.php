@@ -28,22 +28,25 @@ class ValidationController extends Controller
         $value  = $request->get('value');                // la nouvelle valeur
         $data   = $request->get('name');                 // Les données utiles
 
-        /*-----------------------
-        $id     = 1;
-        $data   = 'checkbox___AppBundle_membre_contact_adresse_expediable';
-        $value  = false;
-        -----------------------*/
+
+
+        /*
+        $id     = 3;
+        $data   = '';
+        $value  = 'yolololol';
+        */
+
 
 
         $data   = explode('___', $data);                 // separation des données utiles
         $type   = $data[0];                              // le type (parmis les types de form comme entity, text...)
+        $class  = $data[1];
+        $field  = $data[2];
 
 
 
         $em     = $this->getDoctrine()->getManager();
-        $main   = $this->getLinkedEntity($id, $data[1]);
-        $entity = $main['entity'];                      // l'entité
-        $field  = $main['property'];                    // la proprieté à modifier
+        $entity = $em->getRepository('AppBundle:' . $class)->find($id);
 
 
         $form = $this->createFormBuilder($entity, array('csrf_protection' => false))->add($field, $type)->getForm();
@@ -104,12 +107,15 @@ class ValidationController extends Controller
             if($i == (count($realDeal) -1)) // C'est la proprieté à modifier, donc on retourne l'entité courante
                 return array('entity' => $cursor, 'property' => $current);
 
+
             /*
              * Sinon on analyse la valeur du $current. Si il s'agit d'une string claire, alors on a affaire à un GET
              * sur le curseur. Si par contre on a une valeur numérique, on doit réaliser un get sur un array.
              */
             if(is_numeric($current))
                 $cursor = $cursor[intval($current)];
+
+
 
             else {
                 $getter = 'get' . ucfirst($current);

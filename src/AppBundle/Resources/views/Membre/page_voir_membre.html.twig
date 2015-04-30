@@ -82,11 +82,11 @@
 
                                 <div class="ui tab basic segment" data-tab="contact-{{ membre.prenom }}">
 
-                                    <h5 class="ui header">Téléphone(s) - <a>ajouter</a></h5>
+                                    <h5 class="ui header">Téléphone(s) - <a href="#" class="button-add-telephone" data-contact-id="{{ membre.contact.id }}">ajouter</a></h5>
                                     {% include 'AppBundle:Partials:partial_list_phone_mail.html.twig' with {'type' : 'telephone', 'data' : membreForm.contact.telephones} %}
 
                                     <div class="ui divider"></div>
-                                    <h5 class="ui header">E-mail(s) - <a>ajouter</a></h5>
+                                    <h5 class="ui header">E-mail(s) - <a href="#" class="button-add-email" data-contact-id="{{ membre.contact.id }}">ajouter</a></h5>
                                     {% include 'AppBundle:Partials:partial_list_phone_mail.html.twig' with {'type' : 'email', 'data' : membreForm.contact.emails} %}
                                 </div>
 
@@ -122,6 +122,7 @@
                                             <th></th>
                                             <th>Nom</th>
                                             <th>Role dans la BS</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -136,6 +137,9 @@
                                                     {% include 'AppBundle:Popup:popup_membre.html.twig' with {'membre' : gosse, 'blocks' : ['personal', 'scout']} %}
                                                 </td>
                                                 <td>{{ gosse.activeAttribution.fonction.nom }} - {{ gosse.activeAttribution.groupe.nom }}</td>
+                                                <td>
+                                                    {% include 'AppBundle:Listing:listing_single_button.html.twig' with {'membre' : gosse} %}
+                                                </td>
                                             </tr>
                                         {% endif %}
 
@@ -156,7 +160,7 @@
                         <div class="eleven wide column">
 
                             <div class="ui top attached message">
-                                <div class="header"><h3><i class="tags icon"></i>Roles dans la brigade - <a href="#">ajouter</a></h3></div>
+                                <div class="header"><h3><i class="tags icon"></i>Roles dans la brigade - <a class="add-single-attribution" data-id="{{ membre.id }}" href="#">ajouter</a></h3></div>
                             </div>
 
                             <div class="ui bottom attached segment">
@@ -168,15 +172,19 @@
                                         <th>Unité</th>
                                         <th>Début</th>
                                         <th>Fin</th>
+                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {% for attribution in membre.attributions %}
                                         <tr style="{{ attrsMacros.generateBackground(attribution.dateDebut, attribution.dateFin) }}">
                                             <td>{{ attribution.fonction.nom }}</td>
-                                            <td>{{ attribution.groupe.nom}}</td>
+                                            <td><a href="{{ path('interne_voir_groupe', {groupe: attribution.groupe.id}) }}">{{ attribution.groupe.nom}}</a></td>
                                             <td>{{ attribution.dateDebut|date("d.m.Y") }}</td>
                                             <td>{{ attribution.dateFin is null ? '-' : attribution.dateFin|date("d.m.Y") }}</td>
+                                            <td>
+                                                <i class="link flag outline blue icon button-terminer-single-attribution" data-attribution-id="{{ attribution.id }}"></i>
+                                            </td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>
@@ -187,26 +195,11 @@
                         <div class="five wide column">
 
                             <div class="ui top attached message">
-                                <div class="header"><h3><i class="star icon"></i>Distinctions - <a href="#">ajouter</a></h3></div>
+                                <div class="header"><h3><i class="star icon"></i>Distinctions - <a href="#" class="button-single-add-distinction" data-id="{{ membre.id }}">ajouter</a></h3></div>
                             </div>
 
                             <div class="ui bottom attached segment">
-                                <table class="ui small very basic table">
-                                    <thead>
-                                        <tr>
-                                            <th>Distinction</th>
-                                            <th>Obtention</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for distinction in membre.distinctions %}
-                                            <tr>
-                                                <td>{{ distinction.distinction.nom }}</td>
-                                                <td>{{ distinction.date|date("d.m.Y") }}</td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
+                                {% include 'AppBundle:ObtentionDistinction:liste_obtention_distinction.html.twig' with {'distinctions' : membre.distinctions} %}
                             </div>
 
                         </div>
@@ -217,6 +210,12 @@
             <!-- -->
         </div>
     </div>
+
+    <!-- La modale pour ajouter un téléphone -->
+    {{ render(controller('AppBundle:Contact:renderModalTelephone')) }}
+
+    <!-- et celle pour ajouter un email -->
+    {{ render(controller('AppBundle:Contact:renderModalEmail')) }}
 
 
 
