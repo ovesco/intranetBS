@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,6 +23,183 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class AttributionController extends Controller
 {
+    /**
+     * @param Request $request
+     * @route("/modal-or-persist", name="interne_attribution_render_modale_or_persist")
+     * Pour ajouter des attributions, c'est un peu plus compliqué que de simplement afficher le formulaire.
+     * En effet on peut être tenté d'ajouter plusieurs attributions. Pour ce fait, on génère un formulaire dynamique
+     * suivant le nombre de personnes qui ont besoin d'une attribution
+     * @return Response
+     */
+    public function renderModalOrPersistAction(Request $request) {
+
+        /*
+         * Formulaire soumis, on ajoute une attribution pour chaque champ
+         */
+        if($request->get('is-submitted') == "oui") {
+
+            $em         = $this->getDoctrine()->getManager();
+            $membreRepo = $em->getRepository('AppBundle:Membre');
+            $fnRepo     = $em->getRepository('AppBundle:Fonction');
+            $grpRepo    = $em->getRepository('AppBundle:Groupe');
+            $transfo    = new DateTimeToStringTransformer(null, null, 'd.m.Y');
+
+            $parameters = $request->request->getIterator();
+            $data       = array();
+
+            /*
+             * On met en place un iterateur
+             * On va ensuite iterer sur chaque valeur jusqu'à toutes les avoir parcourues. On les range ainsi dans un
+             * array
+             */
+            foreach($parameters as $k => $r) {
+
+                $infos = explode('__', $k);
+
+                if($infos[0] == "fonction")
+                    $data[ $infos[1] ]['fonction'] = $r;
+
+                else if($infos[0] == "groupe")
+                    $data[ $infos[1] ]['groupe'] = $r;
+
+                else if($infos[0] == "date-debut")
+                    $data[ $infos[1] ]['debut'] = $r;
+
+                else if($infos[0] == "date-fin")
+                    $data[ $infos[1] ]['fin'] = $r;
+            }
+
+            /*
+             * Ensuite on commence à génerer des attributions à la pelle pour tous les membres concernés
+             * On utilise les data-transformers pour les dates, et les $em directement pour le reste
+             */
+            foreach($data as $id => $yolo) {
+
+
+                // On fait les tests de validité des données
+                if(!isset($yolo['debut']) || $yolo['debut'] == "")
+                    continue;
+                if(!isset($yolo['fonction']) || !is_numeric($yolo['fonction']))
+                    continue;
+                if(!isset($yolo['groupe']) || !is_numeric($yolo['groupe']))
+                    continue;
+
+                $attribution = new Attribution();
+                $attribution->setDateDebut( $transfo->reverseTransform($yolo['debut']) );
+                $attribution->setDateFin( $transfo->reverseTransform($yolo['fin']) );
+                $attribution->setFonction($fnRepo->find($yolo['fonction']));
+                $attribution->setGroupe($grpRepo->find($yolo['groupe']));
+                $attribution->setMembre($membreRepo->find($id));
+
+                $em->persist($attribution);
+            }
+
+            $em->flush();
+
+            return $this->redirect( $request->headers->get('referer') );
+
+        }
+
+        return $this->render('AppBundle:Modales:modal_add_attribution.html.twig');
+    }
+
+
+    /**
+     * @route("render-form", name="interne_attribution_render_formulaire_modal", options={"expose"=true});
+     * @param Request $request
+     * @return Response
+     */
+    public function renderFormAction(Request $request) {
+
+        $ids = $request->get('membres');
+        $em  = $this->getDoctrine()->getManager();
+        $rep = $em->getRepository('AppBundle:Membre');
+        $mem = array();
+
+        foreach($ids as $id)
+            $mem[] = $rep->find($id);
+
+        return $this->render('AppBundle:Partials:partial_add_attribution_form.html.twig', array(
+
+            'membres'   => $mem,
+            'form'      => $this->createForm(new AttributionType(), new Attribution())->createView()
+        ));
+    }
+
+
+    /**
+     * Appelée pour terminer une chiée d'attributions en même temps
+     * @route("terminer-attributions", name="interne_attribution_terminer")
+     */
+    public function terminateAttributionsAction(Request $request) {
+
+        $ids = explode(",", $request->get('ids'));
+        $fin = $request->get('dateFin');
+        $em  = $this->getDoctrine()->getManager();
+        $rep = $em->getRepository('AppBundle:Attribution');
+        $tr  = new DateTimeToStringTransformer(null, null, 'd.m.Y');
+
+        foreach($ids as $id) {
+            $attr = $rep->find($id)->setDateFin( $tr->reverseTransform($fin) );
+            $em->persist($attr);
+        }
+
+        $em->flush();
+
+        return $this->redirect( $request->headers->get('referer') );
+    }
+
+    /**
+     * Supprimme une attribution
+     * @route("remove/{attribution}", name="interne_remove_attribution", options={"expose"=true})
+     * @paramConverter("attribution", class="AppBundle:Attribution")
+     * @param $attribution
+     * @return JsonResponse
+     */
+    public function removeAttributionAction($attribution) {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $em->remove($attribution);
+        $em->flush();
+
+        return new JsonResponse();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * @Route("/get-modal", name="attribution_get_modal", options={"expose"=true})

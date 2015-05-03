@@ -50,7 +50,7 @@ class Role implements RoleInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="Role", inversedBy="enfants", cascade={"persist"})
-     * @ORM\JoinColumn(name="role_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="parent_role_id", referencedColumnName="id", nullable=true)
      */
     private $parent;
 

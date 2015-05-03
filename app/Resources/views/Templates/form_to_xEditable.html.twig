@@ -60,7 +60,7 @@
 
     data-pk="{{ object.id }}"
     data-url="{{ path('interne_ajax_app_modify_property') }}"
-    data-name="{{ attr ~ "___" ~ form.vars['id'] }}" {# le name contient le nom du champ a modifier ainsi que le type de ce champ #}
+    data-name="{{ attr ~ "___" ~ class(object) ~ "___" ~ form.vars['name'] }}" {# le name contient le nom du champ a modifier ainsi que le type de ce champ #}
     data-value="{{ value }}"
 
     {# type et éventuelles données supplémentaires requises liées à ce type, comme pour choice, on génère le data-source #}
@@ -74,6 +74,7 @@
     possède également tous les attributs x-editable
 #}
 {% block form_row %}
+
     <div class="modifiable-container">
         {{ block('label') }}
         {{ form_widget(form) }}

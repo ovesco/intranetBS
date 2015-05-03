@@ -1,0 +1,20 @@
+<div class="ui small modal" id="modal-contact-add-email">
+    <i class="close icon"></i>
+    <div class="header">
+        Ajouter une adresse Email
+    </div>
+    <div class="content">
+        <form method="post" action="{{ path('add_email_to_contact') }}">
+            {{ form_row(emailForm.email) }}
+            {{ form_row(emailForm.remarques) }}
+            {{ form_row(emailForm.contact_id) }}
+
+            {{ form_rest(emailForm) }}
+
+            <button type="submit" class="ui green button">Ajouter</button>
+        </form>
+    </div>
+    <div class="actions">
+        <div class="ui button">Annuler</div>
+    </div>
+</div>

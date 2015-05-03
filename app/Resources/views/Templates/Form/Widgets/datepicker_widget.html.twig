@@ -2,6 +2,6 @@
 {% block datepicker_widget -%}
     <div class="field">
         {{ block('form_label') }}
-        <input type="text" {{ block('widget_attributes') }} class="datepicker" {% if value is not empty %}value="{{ value|date('Y-m-d') }}"{% endif %} />
+        <input type="text" class="datepicker" {{ block('widget_attributes') }} value="{{ value }}" />
     </div>
 {%- endblock datepicker_widget %}

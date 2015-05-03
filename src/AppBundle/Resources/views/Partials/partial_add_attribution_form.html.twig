@@ -1,0 +1,69 @@
+{#
+    Génère pour chaque membre passé un morceau de formulaire pour celui-ci
+    pour lui ajouter une attribution
+    En gros on fait du gros bricolage pour modifier le formulaire. On ne peut pas utiliser de formulaire avec
+    un allow_add multiple parce que on génère en fait PLEIN d'attributions pour PLEIN de membres DIFFERENTS.
+#}
+
+<input type="hidden" name="is-submitted" value="oui" />
+
+{% for membre in membres %}
+
+    <div>
+        <h4 class="ui header">Attribution pour {{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</h4>
+
+        <div class="ui four column grid">
+            <div class="column">
+                <div class="field">
+                    <label>fonction</label>
+
+                    <div class="ui fluid search selection dropdown">
+                        <input name="fonction__{{ membre.id }}" type="hidden">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">fonction</div>
+                        <div class="menu">
+
+                            {% for choice in form.fonction.vars['choices'] %}
+                                <div class="item" data-value="{{ choice.value }}">{{ choice.label }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="column">
+
+                <div class="field">
+                    <label>Unité</label>
+
+                    <div class="ui fluid search selection dropdown">
+                        <input name="groupe__{{ membre.id }}" type="hidden">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">unité</div>
+                        <div class="menu">
+
+                            {% for choice in form.groupe.vars['choices'] %}
+                                <div class="item" data-value="{{ choice.value }}">{{ choice.label }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="column">
+                <div class="field">
+                    <label>Date de début</label>
+                    <input type="text" class="ui input datepicker" name="date-debut__{{ membre.id }}" />
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <label>Date de fin</label>
+                    <input type="text" class="ui input datepicker" name="date-fin__{{ membre.id }}" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endfor %}

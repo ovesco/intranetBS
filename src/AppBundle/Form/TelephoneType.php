@@ -12,7 +12,6 @@ class TelephoneType extends AbstractType
     {
         $builder
             ->add('telephone','text',array('required' => false, 'label' => 'Numéro'))
-
             ->add('remarques','textarea',array('required' => false, 'label' => 'Remarque'))
         ;
     }

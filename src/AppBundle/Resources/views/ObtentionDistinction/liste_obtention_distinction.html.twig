@@ -1,4 +1,4 @@
-<table class="ui table">
+<table class="ui small very basic table">
     <thead>
     <tr>
         <th>Distinction</th>
@@ -15,7 +15,7 @@
                 {% if obtention.distinction.remarques is not null %}
                     <i class="file text outline icon link popupable" data-title="Remarques" data-content="{{ obtention.distinction.remarques }}"></i>
                 {% endif %}
-                <i class="delete icon link red"></i>
+                <i class="delete icon link red button-remove-distinction" data-id="{{ obtention.id }}"></i>
             </td>
         </tr>
     {% endfor %}

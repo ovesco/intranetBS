@@ -26,6 +26,6 @@ class AddEmailType extends AbstractType
 
     public function getName()
     {
-        return 'apprbundle_addemailtype';
+        return 'app_bundle_addemailtype';
     }
 }

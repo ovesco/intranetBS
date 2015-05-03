@@ -1,0 +1,20 @@
+<div class="ui small modal" id="modal-contact-add-telephone">
+    <i class="close icon"></i>
+    <div class="header">
+        Ajouter un numéro de téléphone
+    </div>
+    <div class="content">
+        <form method="post" action="{{ path('add_telephone_to_contact') }}">
+            {{ form_row(telephoneForm.telephone) }}
+            {{ form_row(telephoneForm.remarques) }}
+            {{ form_row(telephoneForm.contact_id) }}
+
+            {{ form_rest(telephoneForm) }}
+
+            <button type="submit" class="ui green button">Ajouter</button>
+        </form>
+    </div>
+    <div class="actions">
+        <div class="ui button">Annuler</div>
+    </div>
+</div>

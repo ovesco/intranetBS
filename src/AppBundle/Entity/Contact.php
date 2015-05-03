@@ -159,7 +159,4 @@ class Contact
     {
         return $this->telephones;
     }
-
-
-
 }
