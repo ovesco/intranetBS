@@ -48,7 +48,7 @@ class Telephone
 
     public function __construct($telephone = null)
     {
-        $this->telephone = $telephone;
+        $this->setTelephone($telephone);
     }
 
     /**
@@ -92,7 +92,10 @@ class Telephone
      */
     public function setTelephone($telephone)
     {
-        $this->telephone = $telephone;
+
+        preg_match_all("/[0-9]+/",$telephone, $matches);
+
+        $this->telephone = implode($matches[0]);
 
         return $this;
     }
