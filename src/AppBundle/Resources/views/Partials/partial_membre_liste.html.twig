@@ -1,0 +1,32 @@
+{#
+    Cette partiale affiche une liste pour afficher des membres. Il faudrait
+    l'utiliser au maximum pour standardiser l'affichage des tables. Elle supporte toutes les actions
+    vitales au travers d'une api chillos
+#}
+
+{% if fields is not defined %}
+    {% define fields = ['nom', 'prenom', 'naissance', 'fonction', 'groupe', 'numeroBs'] %}
+
+<div class="membre-table">
+
+    <div class="ui menu">
+
+        <div class="item">
+            <div class="ui transparent icon input">
+                <input placeholder="Search..." type="text">
+                <i class="search link icon"></i>
+            </div>
+        </div>
+
+        <a class="active item">
+            <i class="home icon"></i> Home
+        </a>
+        <a class="item">
+            <i class="mail icon"></i> Messages
+        </a>
+        <div class="right menu">
+
+        </div>
+    </div>
+
+</div>

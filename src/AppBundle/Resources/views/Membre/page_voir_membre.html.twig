@@ -165,7 +165,7 @@
 
                             <div class="ui bottom attached segment">
 
-                                <table class="ui small very basic four column table">
+                                <table class="ui small very basic table">
                                     <thead>
                                     <tr>
                                         <th>Fonction</th>
@@ -183,7 +183,8 @@
                                             <td>{{ attribution.dateDebut|date("d.m.Y") }}</td>
                                             <td>{{ attribution.dateFin is null ? '-' : attribution.dateFin|date("d.m.Y") }}</td>
                                             <td>
-                                                <i class="link flag outline blue icon button-terminer-single-attribution" data-attribution-id="{{ attribution.id }}"></i>
+                                                <i class="link remove red icon button-remove-attribution" title="supprimer" data-attribution-id="{{ attribution.id }}"></i>
+                                                <i class="link flag outline blue icon button-terminer-single-attribution" title="changer/mettre une date de fin" data-attribution-id="{{ attribution.id }}"></i>
                                             </td>
                                         </tr>
                                     {% endfor %}

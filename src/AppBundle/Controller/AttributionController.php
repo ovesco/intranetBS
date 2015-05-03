@@ -75,10 +75,13 @@ class AttributionController extends Controller
              */
             foreach($data as $id => $yolo) {
 
-                if(
-                    !( isset($yolo['debut']) && isset($yolo['fin']) && isset($yolo['fonction']) && isset($yolo['groupe']))
-                    || !(is_null($yolo['debut']) && is_null($yolo['fin']) && is_null($yolo['fonction']) && is_null($yolo['groupe']))
-                    || !($yolo['debut'] == "" && $yolo['fin'] == "" && $yolo['fonction'] == "" && $yolo['groupe'] == ""))
+
+                // On fait les tests de validité des données
+                if(!isset($yolo['debut']) || $yolo['debut'] == "")
+                    continue;
+                if(!isset($yolo['fonction']) || !is_numeric($yolo['fonction']))
+                    continue;
+                if(!isset($yolo['groupe']) || !is_numeric($yolo['groupe']))
                     continue;
 
                 $attribution = new Attribution();
@@ -130,10 +133,37 @@ class AttributionController extends Controller
      */
     public function terminateAttributionsAction(Request $request) {
 
-        $ids = $request->get('ids');
+        $ids = explode(",", $request->get('ids'));
         $fin = $request->get('dateFin');
+        $em  = $this->getDoctrine()->getManager();
+        $rep = $em->getRepository('AppBundle:Attribution');
+        $tr  = new DateTimeToStringTransformer(null, null, 'd.m.Y');
 
+        foreach($ids as $id) {
+            $attr = $rep->find($id)->setDateFin( $tr->reverseTransform($fin) );
+            $em->persist($attr);
+        }
 
+        $em->flush();
+
+        return $this->redirect( $request->headers->get('referer') );
+    }
+
+    /**
+     * Supprimme une attribution
+     * @route("remove/{attribution}", name="interne_remove_attribution", options={"expose"=true})
+     * @paramConverter("attribution", class="AppBundle:Attribution")
+     * @param $attribution
+     * @return JsonResponse
+     */
+    public function removeAttributionAction($attribution) {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $em->remove($attribution);
+        $em->flush();
+
+        return new JsonResponse();
     }
 
 

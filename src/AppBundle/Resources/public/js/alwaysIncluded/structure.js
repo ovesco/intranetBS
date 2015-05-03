@@ -1,5 +1,5 @@
 /**
- * Supprimer une attribution
+ * Supprimer une distinction
  */
 $('.button-remove-distinction').click(function() {
 
@@ -33,9 +33,45 @@ $('.button-remove-distinction').click(function() {
     });
 });
 
+/**
+ * Supprimme une attribution
+ */
+$('.button-remove-attribution').click(function() {
+
+    $btn = $(this);
+    var id = $btn.attr("data-attribution-id");
+
+    noty({
+        text: 'Etes-vous sur de vouloir retirer cette attribution ?',
+        type: 'confirm',
+        buttons: [
+            {
+                addClass: 'ui green button', text: 'Oui', onClick: function ($noty) {
+                $noty.close();
+
+                $.ajax({
+                    url: Routing.generate('interne_remove_attribution', {attribution: id}),
+                    type: 'GET',
+                    success: function() {
+                        noty({text: 'Attribution supprimée', type: 'information'});
+
+                        $btn.parent().parent().remove();
+                    }
+                });
+            }
+            },
+            {
+                addClass: 'ui button', text: 'Annuler', onClick: function ($noty) {
+                $noty.close();
+            }
+            }
+        ]
+    });
+});
+
 
 /**
- * cliqué lorsque l'on veut ajouter une attribution à 1 membre donné
+ * cliqué lorsque l'on veut ajouter une distinction à 1 membre donné
  */
 $('.button-single-add-distinction').click(function() {
 

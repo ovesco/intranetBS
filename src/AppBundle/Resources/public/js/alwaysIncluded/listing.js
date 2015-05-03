@@ -4,6 +4,7 @@
  */
 $('.single-listing-button').click(function() {
 
+
     var $btn  = $(this);
     var $menu = $btn.children('.menu');
 
@@ -78,7 +79,6 @@ $(document).on('click', '.listing-addToMenu-button', function() {
     addElements($btn.attr("data-token"), $btn.attr("data-ids"));
 });
 
-//Appelé pour supprimer automatiquement la popup du menu des listes pour la réactualiser à chaque fois
 
 /**
  * Ouvre la barre de listing
@@ -185,42 +185,3 @@ function addElements(token, ids) {
         }
     });
 }
-
-
-/**
- * listing.js
- * regroupe toutes les fonctions liées au listing, suppression, récupération, ajout...
- */
-$(document).ready(function() {
-
-    var listing = {
-
-        /**
-         * Supprimme une liste existante du listing
-         * @param token le token de la liste à supprimer
-         */
-        remove: function (token) {
-
-
-        },
-
-        /**
-         * Supprimme des éléments d'une liste
-         * @param token string le token de la liste
-         * @param ids array les ids de membres à enlever
-         */
-        removeElements: function (token, ids) {
-
-            $.ajax({
-                url: Routing.generate('listing_remove_members_by_id', {token: token, ids: ids}),
-                type: 'GET',
-                success: function () {
-                    alerte.send('Element(s) supprimé(s) avec succès', 'info');
-                },
-                error: function (data) {
-                    alert("Erreur lors de la suppression des membres");
-                }
-            });
-        }
-    }
-});

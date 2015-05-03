@@ -43,11 +43,11 @@ $('#main-menu-button').click(function() {
 
 //Listing, affichage de la barre en dessous
 
-
 //Dropdowns
 $(document).on('click', '.ui.dropdown', function() {
 
     $(this).dropdown('show');
+
 });
 
 

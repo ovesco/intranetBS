@@ -3,19 +3,6 @@
 parameters:
 
 services:
-    accessor:
-        class: AppBundle\Utils\Accessor\Accessor
-        arguments:
-            - @Property_accessor
-            - @doctrine.orm.entity_manager
-
-    validation:
-        class: AppBundle\Utils\Data\Validation
-        arguments:
-            - @doctrine.orm.entity_manager
-            - @accessor
-            - @parser
-
     listing:
         class: AppBundle\Utils\Listing\Lister
         arguments:

@@ -55,16 +55,19 @@ class ValidationExtension extends \Twig_Extension
     public function choiceToXeditable(array $choices) {
 
         $return = "[";
+        $i      = 0;
+        $total  = count($choices);
 
-        for($i = 0; $i < count($choices); $i++) {
+        foreach($choices as $id => $choice) {
 
-            $value = $choices[$i]->value;
-            $text  = $choices[$i]->label;
-
+            $value   = $choice->value;
+            $text    = $choice->label;
             $return .= '{"value":"' . $value . '", "text":"' . $text . '"}';
 
-            if($i != (count($choices) -1))
+            if($i != ($total - 1))
                 $return .= ",";
+
+            $i++;
         }
 
         return $return . "]";
