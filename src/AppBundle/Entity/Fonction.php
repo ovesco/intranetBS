@@ -45,6 +45,13 @@ class Fonction
      */
     private $roles;
 
+
+    public function __tostring()
+    {
+        return $this->getNom();
+    }
+
+
     /**
      * Get id
      *
@@ -143,15 +150,6 @@ class Fonction
         return $this->attributions;
     }
 
-
-    /**
-     *
-     * @return String
-     */
-    public function __toString()
-    {
-        return $this->getNom();
-    }
 
     /**
      * Add roles

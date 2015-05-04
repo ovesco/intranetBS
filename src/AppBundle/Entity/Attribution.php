@@ -69,6 +69,10 @@ class Attribution
     private $remarques;
 
 
+    public function __tostring()
+    {
+        return $this->getFonction() . ' à ' . $this->getGroupe();
+    }
 
 
     /**

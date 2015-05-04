@@ -8,24 +8,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Geniteur
  *
- * @ORM\Table(name="app_geniteurs")
  * @ORM\Entity
+ * @ORM\Table(name="app_geniteurs")
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discriminator", type="string")
  * @ORM\DiscriminatorMap({"pere" = "Pere", "mere" = "Mere"})
  */
 abstract class Geniteur extends Personne
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-
 
     /**
      * @var string
@@ -42,16 +32,6 @@ abstract class Geniteur extends Personne
      * @ORM\Column(name="profession", type="string", nullable=true)
      */
     private $profession;
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set profession

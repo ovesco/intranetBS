@@ -16,14 +16,16 @@ services:
     data_logger:
         class: AppBundle\Utils\Log\DataLogger
         arguments:
-         - @logger
-         - @security.context
+            - @logger
         tags:
             - { name: monolog.logger, channel: data_logger }
 
     # This binds the onFLush doctrine event on our data logging listener
     data.change.listener:
         class: AppBundle\EventListener\LogOnChangeListener
+        arguments:
+            - @security.token_storage
+            - @data_logger
         tags:
             - { name: doctrine.event_listener, event: onFlush }
 

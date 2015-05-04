@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\DiscriminatorMap({"to_membre" = "CreanceToMembre", "to_famille" = "CreanceToFamille"})
  *
  */
-class Creance implements OwnerInterface
+abstract class Creance implements OwnerInterface
 {
     /**
      * @var integer

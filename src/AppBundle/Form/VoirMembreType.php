@@ -54,7 +54,7 @@ class VoirMembreType extends AbstractType
 
             ->add('numeroBs', 'text',array('label' => 'Numéro BS'))
             ->add('inscription','datepicker',array('label' => 'Inscription'))
-            ->add('statut','text',array('label' => 'Statut'))
+            ->add('statut','text', array('label' => 'Statut'))
             ->add('attributions', 'collection', array('type' => new AttributionType()))
             ->add('distinctions', 'collection', array('type' => new ObtentionDistinctionType()))
 

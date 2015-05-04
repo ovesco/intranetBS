@@ -11,25 +11,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="app_email")
  * @ORM\Entity
  */
-class Email
+class Email extends ContactInformation
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
-     * @var Contact
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Contact", inversedBy="emails")
-     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
-     */
-    private $contact;
-
 
     /**
      * @var boolean
@@ -58,37 +41,9 @@ class Email
         $this->expediable = $expediable;
     }
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function __tostring()
     {
-        return $this->id;
-    }
-
-    /**
-     * Set contact
-     *
-     * @param Contact $contact
-     * @return Email
-     */
-    public function setContact(Contact $contact)
-    {
-        $this->contact = $contact;
-
-        return $this;
-    }
-
-    /**
-     * Get contact
-     *
-     * @return Contact
-     */
-    public function getContact()
-    {
-        return $this->contact;
+        return  $this->getEmail();
     }
 
     /**
