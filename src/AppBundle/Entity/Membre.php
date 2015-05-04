@@ -686,8 +686,8 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
 
             'membre'    => $this->getContact()->getAdresse(),
             'famille'   => $this->getFamille()->getContact()->getAdresse(),
-            'mere'      => ($pere == null) ? null : $pere->getContact()->getAdresse(),
-            'pere'      => ($mere == null) ? null : $mere->getContact()->getAdresse()
+            'pere'      => ($pere == null) ? null : $pere->getContact()->getAdresse(),
+            'mere'      => ($mere == null) ? null : $mere->getContact()->getAdresse()
         );
 
         /** @var Adresse $adr */

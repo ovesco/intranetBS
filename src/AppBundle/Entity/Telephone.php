@@ -31,7 +31,7 @@ class Telephone extends ContactInformation
 
     public function __construct($telephone = null)
     {
-        $this->telephone = $telephone;
+        $this->setTelephone($telephone);
     }
 
     public function __tostring()
@@ -47,7 +47,10 @@ class Telephone extends ContactInformation
      */
     public function setTelephone($telephone)
     {
-        $this->telephone = $telephone;
+
+        preg_match_all("/[0-9]+/",$telephone, $matches);
+
+        $this->telephone = implode($matches[0]);
 
         return $this;
     }

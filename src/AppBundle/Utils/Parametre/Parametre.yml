@@ -19,3 +19,4 @@ intranet:
     label: 'Paramètres généraux du site'
     parametres:
         nom: { type: string, label: 'Nom de l intranet', default: Intranet }
+        email_debug: { type: string, label: 'Adresse email pour les "bug report"', default: dev.sauvabelin@gmail.com }
