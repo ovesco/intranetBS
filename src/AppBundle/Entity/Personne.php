@@ -5,39 +5,48 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/** 
- * @ORM\MappedSuperclass 
+
+/**
+ * @ORM\MappedSuperclass
  */
 abstract class Personne
 {
-
     const HOMME = 'Homme';
     const FEMME = 'Femme';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
 
     /**
      * @var string
      * @ORM\Column(name="prenom", type="string", length=255)
      */
-    private $prenom;
+    protected $prenom;
 
     /**
      * @var string
      *
      * @ORM\Column(name="sexe", type="string", columnDefinition="ENUM('Homme', 'Femme')")
      */
-    private $sexe;
+    protected $sexe;
 
     /**
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Contact", cascade={"persist", "remove"}, fetch="EAGER")
      */
-    private $contact;
+    protected $contact;
 
     /**
      * @var string
      *
      * @ORM\Column(name="iban", type="string", length=255, nullable=true)
      */
-    private $iban;
+    protected $iban;
 
     /**
      * Set prenom
@@ -138,4 +147,14 @@ abstract class Personne
 
 
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 }

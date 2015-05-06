@@ -353,4 +353,14 @@ class Groupe
     {
         return $this->getNom();
     }
+
+    /**
+     * Get active
+     *
+     * @return boolean
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
 }

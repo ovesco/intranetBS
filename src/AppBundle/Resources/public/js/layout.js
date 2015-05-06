@@ -121,6 +121,8 @@ $('#layout-search')
 
 // x-editable
 $.fn.editable.defaults.mode = 'inline';
+$.fn.editable.defaults.onblur = 'submit';
+$.fn.editable.defaults.emptytext = '—';
 
 // x-editable templates
 $.fn.editableform.template = '<form class="form-inline editableform"> <div class="control-group"> <div><div class="editable-input ui mini input"></div><div class="editable-buttons"></div></div> <div class="editable-error-block"></div> </div> </form>';

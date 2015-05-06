@@ -11,25 +11,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="app_telephone")
  * @ORM\Entity
  */
-class Telephone
+class Telephone extends ContactInformation
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
-     * @var Contact
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Contact", inversedBy="telephones")
-     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
-     */
-    private $contact;
-
 
     /**
      * @var string
@@ -51,37 +34,9 @@ class Telephone
         $this->setTelephone($telephone);
     }
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function __tostring()
     {
-        return $this->id;
-    }
-
-    /**
-     * Set contact
-     *
-     * @param Contact $contact
-     * @return Telephone
-     */
-    public function setContact(Contact $contact)
-    {
-        $this->contact = $contact;
-
-        return $this;
-    }
-
-    /**
-     * Get contact
-     *
-     * @return Contact
-     */
-    public function getContact()
-    {
-        return $this->contact;
+        return  $this->getTelephone();
     }
 
     /**
@@ -109,9 +64,6 @@ class Telephone
     {
         return $this->telephone;
     }
-
-
-
 
     /**
      * Set remarques

@@ -35,7 +35,6 @@ class RoleHierarchyVoter extends RoleVoter {
          */
         $session = $this->session;
 
-
         if(!$session->has(self::$sessionAttribute)
             || ($session->get(self::$sessionAttribute) == null)
             || !($session->get(self::$expirationAttribute) > new \Datetime('now'))) {

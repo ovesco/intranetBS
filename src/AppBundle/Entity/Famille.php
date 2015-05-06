@@ -16,10 +16,10 @@ use Interne\FinancesBundle\Entity\FactureToFamille;
 
 /**
  * Famille
+ *
  * @ORM\Entity
  * @ORM\Table(name="app_familles")
  */
- 
 class Famille implements ExpediableInterface, ClassInterface
 {
     /**
@@ -94,8 +94,10 @@ class Famille implements ExpediableInterface, ClassInterface
 
     /**
      * Constructor
+     *
+     * @param string $nom
      */
-    public function __construct()
+    public function __construct($nom = '')
     {
         $this->membres = new ArrayCollection();
 
@@ -106,6 +108,8 @@ class Famille implements ExpediableInterface, ClassInterface
         $this->factures = new ArrayCollection();
 
         $this->validity = true;
+
+        $this->nom = $nom;
     }
 
     /**

@@ -301,4 +301,28 @@ class Model
 
 
 
+
+    /**
+     * Add category
+     *
+     * @param \AppBundle\Entity\Categorie $category
+     *
+     * @return Model
+     */
+    public function addCategory(\AppBundle\Entity\Categorie $category)
+    {
+        $this->categories[] = $category;
+
+        return $this;
+    }
+
+    /**
+     * Remove category
+     *
+     * @param \AppBundle\Entity\Categorie $category
+     */
+    public function removeCategory(\AppBundle\Entity\Categorie $category)
+    {
+        $this->categories->removeElement($category);
+    }
 }
