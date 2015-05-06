@@ -207,6 +207,26 @@
 
                     </div> <!-- /attributions et distinctions -->
 
+                    <div class="row">
+
+                        <div class="column">
+
+                            <div class="ui top attached message">
+                                <div class="header"><h3><i class="money icon"></i>Créances et factures</h3></div>
+                            </div>
+
+                            <div class="ui bottom attached segment">
+                                {% include "InterneFinancesBundle:Interface:interface.html.twig" with {'ownerEntity': membre }%}
+                            </div>
+
+
+                        </div>
+
+
+
+
+                    </div>
+
                 </div>
             <!-- -->
         </div>
@@ -232,7 +252,7 @@
 
 {% block js %}
 
-    {# javscript pour l'interface du finance Bundle
+    {# javscript pour l'interface du finance  #}
     {% javascripts
     '@InterneFinancesBundle/Resources/public/js/creance.js'
     '@InterneFinancesBundle/Resources/public/js/facture.js'
@@ -245,7 +265,7 @@
     {% endjavascripts %}
 
 
-
+{#
 
     {% javascripts
     '@AppBundle/Resources/public/js/editable.js'

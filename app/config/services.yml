@@ -73,6 +73,10 @@ services:
         tags:
             - { name: twig.extension }
 
+    app.twig.get_class_filter:
+        class: AppBundle\Twig\GetClassFilter
+        tags:
+            - { name: twig.extension }
 
 
     # Types

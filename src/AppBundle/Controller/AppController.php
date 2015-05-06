@@ -9,6 +9,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+
 use AppBundle\Entity\Membre;
 
 /**
@@ -77,14 +80,19 @@ class AppController extends Controller
             /*
              * Construction du formulaire
              */
-            $data = array();
-            $form = $this->createFormBuilder($data)
-                ->add('action', 'textarea',array('label'=>'Action souhaitée'))
+            $form = $this->createFormBuilder()
+                ->add('action', 'textarea',
+                    array('label'=>'Comment le bug est-il apparu?',
+                        'attr' => array(
+                            'placeholder' => 'Une breve description de(s) action(s) qui ont mené à ce bug nous aidra!!!')))
                 ->add('remarque', 'textarea',array('label'=>'Remarque'))
-                ->add('url','url',
+                ->add('url','hidden',
                     array('label'=>'Url de la page actuelle','read_only'=> true))
-                ->add('user','text',
+                ->add('user','hidden',
                     array('label'=>'Auteur du rapport','read_only'=> true))
+                ->add('html','hidden',
+                    array('label'=>'Contenu html de la page','read_only'=> true))
+
                 ->getForm();
 
             if ($request->isMethod('POST')) {
@@ -125,8 +133,11 @@ class AppController extends Controller
              * Remplisage du formulaire avec des infos utiles...
              */
             $url = $request->request->get('url');
+            $html = $request->request->get('html');
 
             $form->get('url')->setData($url);
+
+            $form->get('html')->setData($html);
 
             $form->get('user')->setData($this->getUser()->getUsername());
 

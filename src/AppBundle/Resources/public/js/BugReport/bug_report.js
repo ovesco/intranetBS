@@ -1,9 +1,9 @@
-$('#bug_report').click(function(){
+$(document).on('click','#bug_report',function(){
 
     $.ajax({
         type: "POST",
         url: Routing.generate('debug_report'),
-        data: {url: window.location.href },
+        data: {url: window.location.href, html:document.documentElement.innerHTML},
         error: function(jqXHR, textStatus, errorThrown) { alerte.send('Erreur at loading: Bug report','danger'); },
         success: function(response) {
             $(response).modal('show');
