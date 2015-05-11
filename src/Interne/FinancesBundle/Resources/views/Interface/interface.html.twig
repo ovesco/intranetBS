@@ -13,46 +13,53 @@
 {% endif %}
 
 
-<div class="ui grid">
-    <div class="row">
-        <div class="column">
 
             <div id="infoFinanceContent">
 
-                <div class="ui info message">
-                    {% if ownerEntity.isClass('Membre') %}
-                        {% if ownerEntity.envoiFacture == 'Membre' %}
-                            <i class="icon user"></i>
-                            Les créances de ce membre lui sont directement facturées
-                        {% elseif ownerEntity.envoiFacture == 'Famille' %}
-                            <i class="icon users"></i>
-                            Les créances de ce membre sont facturée à la famille {{ ownerEntity.famille.nom }}
-                        {% endif %}
 
-                    {% endif %}
 
+
+
+
+
+                <div class="ui grid">
+                    <div class="row">
+                        <div class="eight wide column">
+
+                            <div class="ui info message">
+                                {% if ownerEntity.isClass('Membre') %}
+                                    {% if ownerEntity.envoiFacture == 'Membre' %}
+                                        <i class="icon user"></i>
+                                        Les créances de ce membre lui sont directement facturées
+                                    {% elseif ownerEntity.envoiFacture == 'Famille' %}
+                                        <i class="icon users"></i>
+                                        Les créances de ce membre sont facturée à la famille {{ ownerEntity.famille.nom }}
+                                    {% endif %}
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+                        <div class="eight wide column">
+
+                            <div id="interface-add-creance" class="ui button" data-id="{{ ownerEntity.id  }}" data-class="{{ ownerEntity.class }}">Ajouter une créance</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="eight wide column">
+                            <h4 class="header">Créances</h4>
+                            {% include "InterneFinancesBundle:Interface:listeCreance.html.twig" with {'ownerEntity':ownerEntity}%}
+                        </div>
+                        <div class="eight wide column">
+                            <h4 class="header">Facture</h4>
+                            {% include "InterneFinancesBundle:Interface:listeFacture.html.twig" with {'ownerEntity':ownerEntity}%}
+                        </div>
+                    </div>
                 </div>
-
-                <h4>Factures</h4>
-
-
-                {% include "InterneFinancesBundle:Interface:listeFacture.html.twig" with {'ownerEntity':ownerEntity}%}
-
-                <h4>Créances</h4>
-
-                <div class="ui right floated basic segment">
-
-                    <div id="interface-add-creance" class="ui button" data-id="{{ ownerEntity.id  }}" data-class="{{ ownerEntity.class }}">Ajouter une créance</div>
-
-                </div>
-
-
-                {% include "InterneFinancesBundle:Interface:listeCreance.html.twig" with {'ownerEntity':ownerEntity}%}
 
             </div>
-        </div>
-    </div>
-</div>
+
 
 
 

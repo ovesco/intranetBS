@@ -79,9 +79,9 @@
             <tr>
                 <td>Propriétaire</td>
                 <td>
-                    {% if creance.getOwner.isClass('Membre') %}
+                    {% if 'Membre' == creance.getOwner|get_class) %}
                         {{ creance.membre.prenom }} {{ creance.membre.nom }}
-                    {% elseif creance.getOwner.isClass('Famille') %}
+                    {% elseif 'Famille' == creance.getOwner|get_class) %}
                         {{ creance.famille }}
                     {% endif %}
                 </td>

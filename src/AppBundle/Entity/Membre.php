@@ -21,15 +21,6 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
 {
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
      * @var Famille
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Famille", inversedBy="membres", cascade={"persist"}, fetch="EAGER")
@@ -135,8 +126,13 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
      */
     private $envoiFacture = 'Membre';
 
-
-    public function __construct()
+    /**
+     *
+     *
+     * @param string $prenom
+     * @param string $nom Nom de la famille nouvellement créée
+     */
+    public function __construct($prenom = '', $nom = '')
     {
         $this->inscription = new \Datetime();
         $this->naissance   = new \Datetime();
@@ -148,6 +144,9 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
         $this->factures = new ArrayCollection();
 
         $this->validity = true;
+
+        $this->prenom = $prenom;
+        $this->famille = new Famille($nom);
     }
 
     /**
@@ -157,29 +156,7 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
      * @return string
      */
     public function __toString() {
-        return ucfirst($this->getPrenom()) . ' ' . ucfirst($this->getNom());
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set id
-     *
-     * @param integer $id
-     * @return Membre
-     */
-    public function setId($id) {
-
-        $this->id = $id;
-        return $this;
+        return $this->getPrenom() . ' ' . $this->getNom() . ' (' . $this->getUsername() . ')';
     }
 
     /**
@@ -475,6 +452,12 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
     }
 
 
+    public function getUsername()
+    {
+        // TODO: récupérer le username depuis le User
+        return strtolower($this->getPrenom()) . '.' . strtolower($this->getNom());
+    }
+
     /**
      * Add distinction
      *
@@ -703,8 +686,8 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
 
             'membre'    => $this->getContact()->getAdresse(),
             'famille'   => $this->getFamille()->getContact()->getAdresse(),
-            'mere'      => ($pere == null) ? null : $pere->getContact()->getAdresse(),
-            'pere'      => ($mere == null) ? null : $mere->getContact()->getAdresse()
+            'pere'      => ($pere == null) ? null : $pere->getContact()->getAdresse(),
+            'mere'      => ($mere == null) ? null : $mere->getContact()->getAdresse()
         );
 
         /** @var Adresse $adr */

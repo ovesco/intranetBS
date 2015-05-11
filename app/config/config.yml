@@ -2,7 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
-    #- { resource: config_search.yml }
+    - { resource: config_search.yml }
     - { resource: config_log.yml }
 
 

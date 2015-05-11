@@ -40,6 +40,7 @@ class Contact
      */
     private $telephones;
 
+
     public function __construct()
     {
         $this->telephones = new ArrayCollection();
@@ -158,5 +159,49 @@ class Contact
     public function getTelephones()
     {
         return $this->telephones;
+    }
+
+    /**
+     * Remove email
+     *
+     * @param \AppBundle\Entity\Email $email
+     */
+    public function removeEmail(\AppBundle\Entity\Email $email)
+    {
+        $this->emails->removeElement($email);
+    }
+
+    /**
+     * Remove telephone
+     *
+     * @param \AppBundle\Entity\Telephone $telephone
+     */
+    public function removeTelephone(\AppBundle\Entity\Telephone $telephone)
+    {
+        $this->telephones->removeElement($telephone);
+    }
+
+    /**
+     * Set personne
+     *
+     * @param \AppBundle\Entity\Personne $personne
+     *
+     * @return Contact
+     */
+    public function setPersonne(\AppBundle\Entity\Personne $personne = null)
+    {
+        $this->personne = $personne;
+
+        return $this;
+    }
+
+    /**
+     * Get personne
+     *
+     * @return \AppBundle\Entity\Personne
+     */
+    public function getPersonne()
+    {
+        return $this->personne;
     }
 }
