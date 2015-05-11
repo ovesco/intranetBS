@@ -1,16 +1,20 @@
 {% if adresseExpedition is not null %}
 
-    {% if  adresseExpedition['owner']['type'] == 'Membre' %}
+    {# désactivé...
+
+    {% if  adresseExpedition['owner'] == 'membre' %}
         {% set cible =  adresseExpedition['owner']['prenom']|capitalize ~' '~ adresseExpedition['owner']['nom']|capitalize  %}
-    {% elseif  adresseExpedition['owner']['type'] == 'Famille'%}
+    {% elseif  adresseExpedition['owner'] == 'famille'%}
         {% set cible =  'Famille ' ~ adresseExpedition['owner']['nom']|capitalize  %}
-    {% elseif  adresseExpedition['owner']['type'] == 'Mere'%}
+    {% elseif  adresseExpedition['owner'] == 'mere'%}
         {% set cible =  adresseExpedition['owner']['prenom']|capitalize ~' ' ~ adresseExpedition['owner']['nom']|capitalize  %}
-    {% elseif  adresseExpedition['owner']['type'] == 'Pere'%}
+    {% elseif  adresseExpedition['owner'] == 'pere'%}
         {% set cible =  adresseExpedition['owner']['prenom']|capitalize ~' ' ~ adresseExpedition['owner']['nom']|capitalize  %}
     {% endif %}
 
     {{ cible }}<br>
+
+    #}
     {{ adresseExpedition['adresse'].rue }}<br>
     {{ adresseExpedition['adresse'].npa }}
     {{ adresseExpedition['adresse'].localite }}

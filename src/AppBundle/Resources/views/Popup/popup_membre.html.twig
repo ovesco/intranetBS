@@ -8,7 +8,7 @@
 #}
 
 {% if blocks is not defined %}
-    {% set blocks = ['contact', 'personal', 'family', 'scout'] %}
+    {% set blocks = ['contact', 'personal', 'famille', 'scout'] %}
 {% endif %}
 
 {% if blocks|length == 1 %}
@@ -46,7 +46,7 @@
         </div>
         {% endif %}
 
-        {% if 'family' in blocks %}
+        {% if 'famille' in blocks %}
             <div class="column">
                 <h4 class="ui header">Famille {{ membre.famille.nom|capitalize }}</h4>
                 <p>

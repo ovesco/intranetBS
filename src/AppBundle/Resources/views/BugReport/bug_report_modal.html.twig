@@ -1,4 +1,4 @@
-<div id="bug_report_modal" class="ui modal">
+<div id="bug_report_modal" class="ui small modal">
     <i class="close icon"></i>
     <div class="header">
         <i class="bug icon"></i> Bug Report
@@ -8,20 +8,20 @@
         {{ form_start(form,{'attr': {'class': 'ui form','id':'bug_report_form'}}) }}
         {{ form_errors(form) }}
 
-        <div class="two fields">
 
-            <h4 class="ui dividing header">A remplir</h4>
-            {{ form_widget(form.action) }}
-            {{ form_widget(form.remarque) }}
-        </div>
 
-        <div class="two fields">
 
-            <h4 class="ui dividing header">Informations système (non modifiable)</h4>
-            {{ form_widget(form.url) }}
-            {{ form_widget(form.user) }}
+        {{ form_widget(form.action) }}
+        {{ form_widget(form.remarque) }}
 
-        </div>
+
+        {{ form_widget(form.url) }}
+        {{ form_widget(form.user) }}
+
+
+
+        {{ form_widget(form.html) }}
+
 
 
         {{ form_end(form) }}
@@ -29,7 +29,7 @@
 
     </div>
     <div class="actions">
-        <div id="send_bug_report" class="ui blue button">send</div>
+        Merci pour votre aide! <div id="send_bug_report" class="ui blue button">send</div>
     </div>
 
 </div>

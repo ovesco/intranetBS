@@ -48,8 +48,8 @@ $(document).on('click', '.listing-remove-liste-button', function() {
         type: 'GET',
         success: function () {
 
-            var n = noty({text: "Liste supprimée", type: "information"});
             closeBar();
+            var n = noty({text: "Liste supprimée", type: "information"});
         },
         error: function (data) {
             alert("Erreur lors de la suppression de la liste");

@@ -213,12 +213,14 @@ class PopulateCommand extends ContainerAwareCommand
             $user = new User();
 
             $membre->setPrenom('Security user');
-            $membre->setSexe('m');
+            $membre->setSexe(Personne::HOMME);
             $membre->setValidity(0);
+
 
             $user->setMembre($membre);
             $user->setPassword('admin');
             $user->setUsername('admin');
+            $user->setLastConnexion(new \Datetime);
 
 
             $role = $em->getRepository('InterneSecurityBundle:Role')->findOneByRole('ROLE_ADMIN');

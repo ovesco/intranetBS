@@ -25,6 +25,26 @@
 
                 <div class="ui grid">
 
+                    <div class="row">
+
+                        <div class="twelve wide column">
+                            <h2 class="ui header">
+                                <i class="user icon"></i>
+                                <div class="content">
+                                    {{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}
+                                    <div class="sub header">{{ membre.activeAttribution.fonction.nom }} - {{ membre.activeAttribution.groupe.nom|capitalize }}</div>
+                                </div>
+                            </h2>
+                        </div>
+
+                        <div class="four wide right aligned column">
+                            <div class="icon ui buttons">
+                                {% include 'AppBundle:Listing:listing_single_button.html.twig' with {'membre' : membre} %}
+                            </div>
+                        </div>
+
+                    </div>
+
                     <div class="row"> <!-- informations de base -->
 
                         <div class="eight wide column">
@@ -207,6 +227,21 @@
 
                     </div> <!-- /attributions et distinctions -->
 
+                    <div class="row">
+
+                        <div class="column">
+
+                            <div class="ui top attached message">
+                                <div class="header"><h3><i class="money icon"></i>Créances et factures</h3></div>
+                            </div>
+
+                            <div class="ui bottom attached segment">
+                                {% include "InterneFinancesBundle:Interface:interface.html.twig" with {'ownerEntity': membre }%}
+                            </div>
+                            
+                        </div>
+                    </div>
+
 
                     <div class="row"> <!-- history -->
                         <div class="sixteen wide column">
@@ -245,7 +280,7 @@
 
 {% block js %}
 
-    {# javscript pour l'interface du finance Bundle
+    {# javscript pour l'interface du finance  #}
     {% javascripts
     '@InterneFinancesBundle/Resources/public/js/creance.js'
     '@InterneFinancesBundle/Resources/public/js/facture.js'
@@ -258,7 +293,7 @@
     {% endjavascripts %}
 
 
-
+{#
 
     {% javascripts
     '@AppBundle/Resources/public/js/editable.js'

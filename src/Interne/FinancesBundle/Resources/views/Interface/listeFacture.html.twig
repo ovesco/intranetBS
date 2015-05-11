@@ -18,8 +18,8 @@
 ] %}
 
 {% set patterns = [
-{'statut':'<div class="ui label green">Payée</div>','equal':'payee'},
-{'statut':'<div class="ui label blue">Ouverte</div>','equal':'ouverte'},
+{'statut':'<i class="bordered inverted green checkmark icon popupable" data-content="Payée"></i>','equal':'payee'},
+{'statut':'<i class="bordered inverted blue ellipsis horizontal icon popupable" data-content="En attente de payement"></i>','equal':'ouverte'},
 {'id':'N°[data]'},
 {'montantRecu':'','equal':'0'},{'montantEmisRappels':'','equal':'0'}
 ] %}

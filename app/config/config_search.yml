@@ -42,3 +42,21 @@ fos_elastica:
                         provider: ~
                         listener: ~
                         finder: ~
+        finances:
+            types:
+                creance:
+                    mappings:
+                        titre: ~
+                        remarque:
+                        facture:
+                            type: "nested"
+                            properties:
+                                id: ~
+                                statut: ~
+                    persistence:
+                        driver: orm
+                        model: InterneFinancesBundle\Entity\Creance
+                        provider: ~
+                        listener: ~
+                        finder: ~
+

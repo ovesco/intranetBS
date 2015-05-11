@@ -1,9 +1,9 @@
-$('#bug_report').click(function(){
+$(document).on('click','#bug_report',function(){
 
     $.ajax({
         type: "POST",
         url: Routing.generate('debug_report'),
-        data: {url: window.location.href },
+        data: {url: window.location.href, html:document.documentElement.innerHTML},
         error: function(jqXHR, textStatus, errorThrown) { alerte.send('Erreur at loading: Bug report','danger'); },
         success: function(response) {
             $(response).modal('show');
@@ -24,3 +24,17 @@ $(document).on('click','#send_bug_report',function(){
             }
         });
 });
+
+/**
+ * Todo à finir mais pas une priorité....
+ */
+function getCSSRule() {
+    var css = document.styleSheets;
+
+    for (var i=0; i<document.styleSheets.length; i++) {
+
+        var styleSheet=document.styleSheets[i];
+
+    }
+
+}

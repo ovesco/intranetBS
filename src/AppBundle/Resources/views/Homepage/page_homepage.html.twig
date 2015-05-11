@@ -5,91 +5,93 @@
 {% block content %}
 
     <div class="ui page grid">
-
         <div class="row">
-            <div class="five wide column">
-                <div class="ui segment">
-                    <h3>Mes groupes</h3>
+            <div class="column">
 
-                    <div class="ui list">
-                        {%  for groupe in groupes %}
-                            <a class="item" href="{{ path('interne_voir_groupe', {'groupe' : groupe.id }) }}">{{ groupe.nom }}</a>
+                <h2 class="ui header">
+                    <i class="home icon"></i>
+                    <div class="content">
+                        Accueil
+                        <div class="sub header">
+                            Bonjour très cher.
+                        </div>
+                    </div>
+                </h2>
+
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="eleven wide column">
+
+                <div class="ui top attached message">
+
+                    <div class="header"><h3><i class="feed icon"></i>Dernières news</h3></div>
+
+                </div>
+
+                <div class="ui bottom attached segment">
+
+                    <div class="ui large feed">
+
+                        {% for news in lastNews %}
+                            <div class="event">
+                                <div class="label">
+                                    <i class="pencil icon"></i>
+                                </div>
+                                <div class="content">
+                                    <div class="summary">
+                                        {{ news.subject }}
+                                        <div class="date">
+                                            - le {{ news.date|date("d.m.Y") }} par {{ news.author }}
+                                        </div>
+                                    </div>
+                                    <div class="extra text">
+                                        {{ news.content }}
+                                    </div>
+                                </div>
+                            </div>
                         {% endfor %}
                     </div>
 
+
                 </div>
+
             </div>
 
             <div class="five wide column">
-                <div class="ui segment">
-                    <h3><i class="user icon"></i>
-                        {{ app.security.token.user.membre.prenom|capitalize }}
-                        {{ app.security.token.user.membre.nom|capitalize }}
-                    </h3>
 
-                    <a href="{{ path('interne_voir_membre', {'membre' : app.security.token.user.membre.id }) }}">Voir ma fiche personnel</a>
+                <div class="ui top attached message">
 
-
+                    <div class="header"><h3><i class="user icon"></i>Moi</h3></div>
 
                 </div>
-            </div>
 
-            <div class="five wide column">
-                <div class="ui segment">
-                    {% set groupes = app.security.token.user.membre.getActiveGroupes %}
-                    {% if groupes is not empty%}
-                        {% if groupes|length > 1 %}
-                            <h3><i class="users icon"></i>Mes groupes</h3>
-                        {% else %}
-                            <h3><i class="users icon"></i>Mon groupe</h3>
-                        {% endif %}
+                <div class="ui bottom attached segment">
 
+                    <a href="{{ path('interne_voir_membre', {membre: user.membre.id}) }}" class="ui fluid teal button">Aller matter ma page</a>
 
-                        {%  for groupe in groupes %}
-                            <a class="item" href="{{ path('interne_voir_groupe', {'groupe' : groupe.id }) }}">{{ groupe.nom }}</a>
+                    <h4 class="ui horizontal header divider">
+                        <i class="sitemap icon"></i>
+                        {% if user.membre.activeAttributions|length > 1 %}Mes unités{% else %}Mon unité{% endif %}
+                    </h4>
+
+                    <div class="ui list">
+
+                        {% for attr in user.membre.activeAttributions %}
+                            <a href="{{ path('interne_voir_groupe', {groupe: attr.groupe.id}) }}" class="item">
+                                <i class="top aligned right triangle icon"></i>
+                                <div class="content">
+                                    <div class="header" style="color:#0088cc">{{ attr.groupe }}</div>
+                                    <div class="description">{{ attr.fonction }} - {{ attr.groupe.membersRecursive|length }} membres</div>
+                                </div>
+                            </a>
                         {% endfor %}
-                    {% else %}
-                        Vous n'êtes dans aucun groupe actuellement.
 
-                    {% endif %}
+                    </div>
 
                 </div>
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="five wide column">
-                <div class="ui piled segment">
-                    <h4 class="ui header">Dernières News</h4>
-                    {% if lastNews is not empty %}
-
-                    {% set news = lastNews[0] %}
-                    <b>{{ news.subject|capitalize }}</b><br>
-
-                    {{ news.content|length > 100 ? news.content|slice(0, 100) ~ '...' : news.content  }} <br>
-
-
-                        <br>
-
-
-
-                    <a class="item" href="{{ path('interne_organisation_news_show') }}">Voir les toutes News</a>
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="five wide column">
-                <div class="ui segment">
-                    Ma fiche personnel
-
-                </div>
-            </div>
-
-            <div class="five wide column">
-                <div class="ui segment">
-                    Mon unité
-
-                </div>
             </div>
         </div>
 

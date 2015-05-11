@@ -15,8 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Session\Session;
-use AppBundle\Utils\Data\Useful;
-
+use AppBundle\Utils\Data\Sanitizer as Useful;
 /**
  * Gère toutes les routes et actions internes, c'est-à-dire accessible uniquement aux personnes authentifiées
  * @package Interne\GalerieBundle\Controller

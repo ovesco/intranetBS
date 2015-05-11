@@ -23,6 +23,18 @@
 
         {% block css %}{% endblock %}
 
+        {# doit rester la pour que le bug report marche #}
+        <script src="{{ asset('assetic/jquery.js') }}"></script>
+
+        {# Bug report doit rester la car il faut pouvoir loader la modal de rapport meme si le reste de la page subit un bug...#}
+        {% javascripts
+        '@AppBundle/Resources/public/js/BugReport/bug_report.js'
+        output="js/head.js"
+        %}
+        <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+
+
         {% block headjs %}{% endblock %}
 
     </head>
@@ -103,7 +115,7 @@
 
 
 
-        <script src="{{ asset('assetic/jquery.js') }}"></script>
+
         <script src="{{ asset('semantic/semantic.min.js') }}"></script>
         <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
         <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>

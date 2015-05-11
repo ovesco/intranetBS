@@ -34,37 +34,11 @@ var alerte = {
      */
     send: function (message, type, delay) {
 
-        var typeLabel = 'Information';
-        switch(type)
-        {
-            case 'warning': typeLabel = 'Attention'; break;
-            case 'error': typeLabel = 'Erreur'; break;
-            case 'success': typeLabel = 'Confirmation'; break;
-            default: break;
-        }
-
-        var id = guid(),
-            html =
-                '<div id="' + id + '" class="ui ' + type + ' message">' +
-                    '<i onclick="alerte.dismiss(' + id + ');" class="close icon"></i>' +
-                    '<div class="header">' + typeLabel + '</div>' +
-                        '<p>' + message + '</p>' +
-                    '</div>' +
-                '</div>';
-
-        this.alerts.push(id);
-
-        $('#alerts-bag').append(html);
-
-
-        //delay de disparition de l'alerte
-        if (typeof delay !== "undefined") {
-            setTimeout(function () {
-                $('#' + id).dismiss();
-            }, delay);
-        }
-
-        return id;
+        noty({
+            text : message,
+            type : type,
+            timeout: delay
+        });
     },
 
     /**

@@ -164,7 +164,7 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
      * @return string
      */
     public function __toString() {
-        return $this->getPrenom() . ' ' . $this->getNom() . ' (' . $this->getUsername() . ')';
+        return ucfirst($this->getPrenom() . ' ' . $this->getNom());
     }
 
     /**
