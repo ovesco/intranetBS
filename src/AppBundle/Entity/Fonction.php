@@ -46,9 +46,9 @@ class Fonction
     private $roles;
 
 
-    public function __tostring()
+    public function __toString()
     {
-        return $this->getNom();
+        return ucfirst($this->getNom());
     }
 
 
