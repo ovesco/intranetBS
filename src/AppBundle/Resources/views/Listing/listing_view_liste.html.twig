@@ -1,5 +1,3 @@
-
-
 <h2 class="ui header">
     <div class="ui mini red right floated button listing-remove-liste-button" data-token="{{ liste.token }}">supprimer</div>
     <div class="ui mini teal right floated button">exporter</div>
@@ -13,7 +11,7 @@
 
 </h2>
 
-<table class="ui table">
+<table class="ui table" id="listing-table-viewer">
     <thead>
         <tr>
             <th></th>
@@ -27,7 +25,7 @@
     <tbody>
         {% for type in liste.all %}
             <tr>
-                <td></td>
+                <td><input type="checkbox" /></td>
                 <td>{{ type.prenom|capitalize }} {{ type.nom|capitalize }}</td>
                 <td>{{ type.activeAttribution.fonction.nom }} - {{ type.activeAttribution.groupe.nom|capitalize }}</td>
                 <td>{{ type.numeroBs }}</td>

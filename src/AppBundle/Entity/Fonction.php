@@ -150,7 +150,7 @@ class Fonction
      */
     public function __toString()
     {
-        return $this->getNom();
+        return ucfirst($this->getNom());
     }
 
     /**

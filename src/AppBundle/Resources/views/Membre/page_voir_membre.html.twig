@@ -14,16 +14,27 @@
     <div class="ui page grid">
         <div class="column">
 
-            <h2 class="ui header">
-                <i class="user icon"></i>
-                <div class="content">
-                    {{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}
-                    <div class="sub header">{{ membre.activeAttribution.fonction.nom }} - {{ membre.activeAttribution.groupe.nom|capitalize }}</div>
-                </div>
-            </h2>
-            <!-- -->
-
                 <div class="ui grid">
+
+                    <div class="row">
+
+                        <div class="twelve wide column">
+                            <h2 class="ui header">
+                                <i class="user icon"></i>
+                                <div class="content">
+                                    {{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}
+                                    <div class="sub header">{{ membre.activeAttribution.fonction.nom }} - {{ membre.activeAttribution.groupe.nom|capitalize }}</div>
+                                </div>
+                            </h2>
+                        </div>
+
+                        <div class="four wide right aligned column">
+                            <div class="icon ui buttons">
+                                {% include 'AppBundle:Listing:listing_single_button.html.twig' with {'membre' : membre} %}
+                            </div>
+                        </div>
+
+                    </div>
 
                     <div class="row"> <!-- informations de base -->
 

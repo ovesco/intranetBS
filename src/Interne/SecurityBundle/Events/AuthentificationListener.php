@@ -9,11 +9,13 @@ class AuthentificationListener {
 
     private $user;
     private $em;
+    private $listing;
 
-    public function __construct($token, $em) {
+    public function __construct($token, $em, $listing) {
 
-        $this->user = ($token->getToken()->getUser() == null) ? null : $token->getToken()->getUser();
-        $this->em    = $em;
+        $this->user     = ($token->getToken()->getUser() == null) ? null : $token->getToken()->getUser();
+        $this->em       = $em;
+        $this->listing  = $listing;
     }
 
     /**
@@ -23,6 +25,19 @@ class AuthentificationListener {
     public function onAuthenticationSuccess( InteractiveLoginEvent $event )
     {
         $user = $this->user;
+
+        // On crée une liste vide dans le listing parce que Muller
+        /** @var \AppBundle\Utils\Listing\Lister $listing */
+        $listing = $this->listing;
+
+
+        if($listing->get('Ma super liste') == null) {
+
+            $listing->addListe('Ma super liste');
+            $listing->save();
+        }
+
+
 
         $user->setLastConnexion(new \Datetime());
         $this->em->persist($user);

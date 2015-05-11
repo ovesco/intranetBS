@@ -213,5 +213,9 @@ class Attribution
         $this->remarques = $remarques;
     }
 
+    public function __toString() {
+
+        return $this->fonction . ' - ' . $this->groupe;
+    }
 
 }

@@ -54,7 +54,6 @@ class RoleHierarchyVoter extends RoleVoter {
         }
 
         return $session->get(self::$sessionAttribute);
-
     }
 
 
