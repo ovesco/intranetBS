@@ -106,6 +106,7 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
      *                mappedBy="membre", cascade={"persist","remove"})
      */
     private $creances;
+
     /**
      * @var ArrayCollection
      *
@@ -114,11 +115,10 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
      */
     private $factures;
 
-    /*
+    /**
      * Cette propriété détermine si les cérances détenues par ce membre sont facturées
      * à la famille ou au membre lui même.
-     */
-    /**
+     *
      * @var string envoiFacture
      *
      * @ORM\Column(name="envoi_facture", type="string", columnDefinition="ENUM('Famille', 'Membre')")
@@ -126,8 +126,16 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
      */
     private $envoiFacture = 'Membre';
 
+
     /**
+     * @var ArrayCollection
      *
+     * @ORM\OneToMany(targetEntity="Interne\HistoryBundle\Entity\MemberHistory", mappedBy="modifiedMember", cascade={"persist","remove"})
+     */
+    private $historique;
+
+    /**
+     * Constructor
      *
      * @param string $prenom
      * @param string $nom Nom de la famille nouvellement créée
@@ -768,14 +776,41 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
             }
         }
 
-
-
-
-
         return $liste;
     }
 
 
+    /**
+     * Add historique
+     *
+     * @param \Interne\HistoryBundle\Entity\MemberHistory $historique
+     *
+     * @return Membre
+     */
+    public function addHistorique(\Interne\HistoryBundle\Entity\MemberHistory $historique)
+    {
+        $this->historique[] = $historique;
 
+        return $this;
+    }
 
+    /**
+     * Remove historique
+     *
+     * @param \Interne\HistoryBundle\Entity\MemberHistory $historique
+     */
+    public function removeHistorique(\Interne\HistoryBundle\Entity\MemberHistory $historique)
+    {
+        $this->historique->removeElement($historique);
+    }
+
+    /**
+     * Get historique
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getHistorique()
+    {
+        return $this->historique;
+    }
 }
