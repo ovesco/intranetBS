@@ -77,6 +77,11 @@ services:
         class: AppBundle\Twig\GetClassFilter
         tags:
             - { name: twig.extension }
+    app.twig.groupby:
+        class: AppBundle\Twig\GroupByExtension
+        tags:
+            - { name: twig.extension }
+
 
 
     # Types

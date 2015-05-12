@@ -35,11 +35,12 @@ class AppKernel extends Kernel
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new FOS\ElasticaBundle\FOSElasticaBundle(),
 
+            new AppBundle\AppBundle(),
             new Interne\FinancesBundle\InterneFinancesBundle(),
             new Interne\GalerieBundle\InterneGalerieBundle(),
             new Interne\SecurityBundle\InterneSecurityBundle(),
-            new AppBundle\AppBundle(),
             new Interne\OrganisationBundle\InterneOrganisationBundle(),
+            new Interne\HistoryBundle\InterneHistoryBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

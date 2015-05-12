@@ -14,221 +14,239 @@
     <div class="ui page grid">
         <div class="column">
 
-            <h2 class="ui header">
-                <i class="user icon"></i>
-                <div class="content">
-                    {{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}
-                    <div class="sub header">{{ membre.activeAttribution.fonction.nom }} - {{ membre.activeAttribution.groupe.nom|capitalize }}</div>
-                </div>
-            </h2>
-            <!-- -->
+            <div class="ui grid">
 
-                <div class="ui grid">
+                <div class="row">
 
-                    <div class="row"> <!-- informations de base -->
-
-                        <div class="eight wide column">
-
-                            <div class="ui attached message">
-                                <div class="header"><h3><i class="info icon"></i>Informations</h3></div>
+                    <div class="twelve wide column">
+                        <h2 class="ui header">
+                            <i class="user icon"></i>
+                            <div class="content">
+                                {{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}
+                                <div class="sub header">{{ membre.activeAttribution.fonction.nom }} - {{ membre.activeAttribution.groupe.nom|capitalize }}</div>
                             </div>
+                        </h2>
+                    </div>
 
-                            <div class="ui bottom attached segment">
-
-                                {# Informations de base sur le membre #}
-                                {{ form_row(membreForm.prenom) }}
-                                {{ form_row(membreForm.naissance) }}
-                                {{ form_row(membreForm.sexe) }}
-                                {{ form_row(membreForm.numeroAvs) }}
-
-                                <div class="ui divider"></div>
-
-                                {{ form_row(membreForm.numeroBs) }}
-                                {{ form_row(membreForm.statut) }}
-
-                            </div>
-
-                            <div class="ui top attached message">
-                                <div class="header"><h3><i class="fax icon"></i>Contact</h3></div>
-                            </div>
-
-                            <div class="ui bottom attached segment">
-
-                                <div class="ui pointing secondary tabular menu">
-                                    <a class="active item" data-tab="adresse-{{ membre.prenom }}">Adresse</a>
-                                    <a class="item" data-tab="contact-{{ membre.prenom }}">Téléphone et mail</a>
-                                </div>
-
-                                <div class="ui active tab basic segment" data-tab="adresse-{{ membre.prenom }}">
-                                    <div class="ui small info message">
-
-                                        {% set    ae = membre.adresseExpedition %}
-                                        {% set    lf = '<a href="' ~path('interne_voir_famille', {famille: membre.famille.id}) ~ '">' %}
-                                        {% if     ae['owner'] == 'membre'%}{% set aeowner = 'la sienne' %}
-                                        {% elseif ae['owner'] == 'famille'%}{% set aeowner = lf ~ 'celle de sa famille</a>' %}
-                                        {% elseif ae['owner'] == 'mere'%}{% set aeowner = lf ~ 'celle de sa mère</a>' %}
-                                        {% elseif ae['owner'] == 'pere'%}{% set aeowner = lf ~ 'celle de son père</a>' %}
-                                        {% else %}{% set aeowner = ', aucune idée en vrai.' %}{% endif %}
-                                        <div class="content">Actuellement, l'adresse de facturation de ce membre est <b>{{ aeowner|raw }}</b></div>
-                                    </div>
-
-                                    {{ form_row(membreForm.contact.adresse.rue) }}
-                                    {{ form_row(membreForm.contact.adresse.npa) }}
-                                    {{ form_row(membreForm.contact.adresse.localite) }}
-                                    {{ form_row(membreForm.contact.adresse.expediable) }}
-                                    {{ form_row(membreForm.contact.adresse.remarques) }}
-                                </div>
-
-
-                                <div class="ui tab basic segment" data-tab="contact-{{ membre.prenom }}">
-
-                                    <h5 class="ui header">Téléphone(s) - <a href="#" class="button-add-telephone" data-contact-id="{{ membre.contact.id }}">ajouter</a></h5>
-                                    {% include 'AppBundle:Partials:partial_list_phone_mail.html.twig' with {'type' : 'telephone', 'data' : membreForm.contact.telephones} %}
-
-                                    <div class="ui divider"></div>
-                                    <h5 class="ui header">E-mail(s) - <a href="#" class="button-add-email" data-contact-id="{{ membre.contact.id }}">ajouter</a></h5>
-                                    {% include 'AppBundle:Partials:partial_list_phone_mail.html.twig' with {'type' : 'email', 'data' : membreForm.contact.emails} %}
-                                </div>
-
-                            </div>
-
+                    <div class="four wide right aligned column">
+                        <div class="icon ui buttons">
+                            {% include 'AppBundle:Listing:listing_single_button.html.twig' with {'membre' : membre} %}
                         </div>
-
-                        <div class="eight wide column">     <!-- informations famille -->
-
-                            <div class="ui top attached message">
-                                <div class="header"><h3><i class="users icon"></i>Famille</h3></div>
-                            </div>
-
-                            <div onclick="location.href='{{ path('interne_voir_famille', {famille: membre.famille.id}) }}'" class="ui bottom attached segment">
-
-                                {% set famille = membre.famille %}
-
-                                <div class="ui list">
-                                    {% include 'AppBundle:Partials:partial_contact.html.twig' with {'contact' : famille.contact} %}
-                                </div>
-
-                            </div>
-
-                            <div class="ui top attached message">
-                                <div class="header"><h3><i class="child icon"></i>Frères et soeurs</h3></div>
-                            </div>
-
-                            <div class="ui bottom attached segment">
-
-                                <table class="ui very basic small table">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Nom</th>
-                                            <th>Role dans la BS</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    {% for gosse in membre.famille.membres %}
-                                        {% if gosse.id != membre.id %}
-                                            {% set sexeIcone = gosse.sexe == 'Homme' ? "man" : "woman" %}
-                                            <tr>
-                                                <td><i class="{{ sexeIcone }} icon"></i></td>
-                                                <td>
-                                                    <a data-position="left center" class="popupable" href="{{ path('interne_voir_membre', {membre: gosse.id}) }}">{{ gosse.prenom|capitalize }} {{ gosse.nom|capitalize }}</a>
-                                                    {% include 'AppBundle:Popup:popup_membre.html.twig' with {'membre' : gosse, 'blocks' : ['personal', 'scout']} %}
-                                                </td>
-                                                <td>{{ gosse.activeAttribution.fonction.nom }} - {{ gosse.activeAttribution.groupe.nom }}</td>
-                                                <td>
-                                                    {% include 'AppBundle:Listing:listing_single_button.html.twig' with {'membre' : gosse} %}
-                                                </td>
-                                            </tr>
-                                        {% endif %}
-
-                                    {% endfor %}
-
-                                    </tbody>
-                                </table>
-
-                            </div>
-
-                        </div> <!-- /informations famille -->
-                    </div> <!-- /informations de base -->
-                </div>
-                <div class="ui grid">
-
-                    <div class="row"> <!-- attributions et distinctions -->
-
-                        <div class="eleven wide column">
-
-                            <div class="ui top attached message">
-                                <div class="header"><h3><i class="tags icon"></i>Roles dans la brigade - <a class="add-single-attribution" data-id="{{ membre.id }}" href="#">ajouter</a></h3></div>
-                            </div>
-
-                            <div class="ui bottom attached segment">
-
-                                <table class="ui small very basic table">
-                                    <thead>
-                                    <tr>
-                                        <th>Fonction</th>
-                                        <th>Unité</th>
-                                        <th>Début</th>
-                                        <th>Fin</th>
-                                        <th></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for attribution in membre.attributions %}
-                                        <tr style="{{ attrsMacros.generateBackground(attribution.dateDebut, attribution.dateFin) }}">
-                                            <td>{{ attribution.fonction.nom }}</td>
-                                            <td><a href="{{ path('interne_voir_groupe', {groupe: attribution.groupe.id}) }}">{{ attribution.groupe.nom}}</a></td>
-                                            <td>{{ attribution.dateDebut|date("d.m.Y") }}</td>
-                                            <td>{{ attribution.dateFin is null ? '-' : attribution.dateFin|date("d.m.Y") }}</td>
-                                            <td>
-                                                <i class="link remove red icon button-remove-attribution" title="supprimer" data-attribution-id="{{ attribution.id }}"></i>
-                                                <i class="link flag outline blue icon button-terminer-single-attribution" title="changer/mettre une date de fin" data-attribution-id="{{ attribution.id }}"></i>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        
-                        <div class="five wide column">
-
-                            <div class="ui top attached message">
-                                <div class="header"><h3><i class="star icon"></i>Distinctions - <a href="#" class="button-single-add-distinction" data-id="{{ membre.id }}">ajouter</a></h3></div>
-                            </div>
-
-                            <div class="ui bottom attached segment">
-                                {% include 'AppBundle:ObtentionDistinction:liste_obtention_distinction.html.twig' with {'distinctions' : membre.distinctions} %}
-                            </div>
-
-                        </div>
-
-                    </div> <!-- /attributions et distinctions -->
-
-                    <div class="row">
-
-                        <div class="column">
-
-                            <div class="ui top attached message">
-                                <div class="header"><h3><i class="money icon"></i>Créances et factures</h3></div>
-                            </div>
-
-                            <div class="ui bottom attached segment">
-                                {% include "InterneFinancesBundle:Interface:interface.html.twig" with {'ownerEntity': membre }%}
-                            </div>
-
-
-                        </div>
-
-
-
-
                     </div>
 
                 </div>
-            <!-- -->
+
+                <div class="row"> <!-- informations de base -->
+
+                    <div class="eight wide column">
+
+                        <div class="ui attached message">
+                            <div class="header"><h3><i class="info icon"></i>Informations</h3></div>
+                        </div>
+
+                        <div class="ui bottom attached segment">
+
+                            {# Informations de base sur le membre #}
+                            {{ form_row(membreForm.prenom) }}
+                            {{ form_row(membreForm.naissance) }}
+                            {{ form_row(membreForm.sexe) }}
+                            {{ form_row(membreForm.numeroAvs) }}
+
+                            <div class="ui divider"></div>
+
+                            {{ form_row(membreForm.numeroBs) }}
+                            {{ form_row(membreForm.statut) }}
+
+                        </div>
+
+                        <div class="ui top attached message">
+                            <div class="header"><h3><i class="fax icon"></i>Contact</h3></div>
+                        </div>
+
+                        <div class="ui bottom attached segment">
+
+                            <div class="ui pointing secondary tabular menu">
+                                <a class="active item" data-tab="adresse-{{ membre.prenom }}">Adresse</a>
+                                <a class="item" data-tab="contact-{{ membre.prenom }}">Téléphone et mail</a>
+                            </div>
+
+                            <div class="ui active tab basic segment" data-tab="adresse-{{ membre.prenom }}">
+                                <div class="ui small info message">
+
+                                    {% set    ae = membre.adresseExpedition %}
+                                    {% set    lf = '<a href="' ~path('interne_voir_famille', {famille: membre.famille.id}) ~ '">' %}
+                                    {% if     ae['owner'] == 'membre'%}{% set aeowner = 'la sienne' %}
+                                    {% elseif ae['owner'] == 'famille'%}{% set aeowner = lf ~ 'celle de sa famille</a>' %}
+                                    {% elseif ae['owner'] == 'mere'%}{% set aeowner = lf ~ 'celle de sa mère</a>' %}
+                                    {% elseif ae['owner'] == 'pere'%}{% set aeowner = lf ~ 'celle de son père</a>' %}
+                                    {% else %}{% set aeowner = ', aucune idée en vrai.' %}{% endif %}
+                                    <div class="content">Actuellement, l'adresse de facturation de ce membre est <b>{{ aeowner|raw }}</b></div>
+                                </div>
+
+                                {{ form_row(membreForm.contact.adresse.rue) }}
+                                {{ form_row(membreForm.contact.adresse.npa) }}
+                                {{ form_row(membreForm.contact.adresse.localite) }}
+                                {{ form_row(membreForm.contact.adresse.expediable) }}
+                                {{ form_row(membreForm.contact.adresse.remarques) }}
+                            </div>
+
+
+                            <div class="ui tab basic segment" data-tab="contact-{{ membre.prenom }}">
+
+                                <h5 class="ui header">Téléphone(s) - <a href="#" class="button-add-telephone" data-contact-id="{{ membre.contact.id }}">ajouter</a></h5>
+                                {% include 'AppBundle:Partials:partial_list_phone_mail.html.twig' with {'type' : 'telephone', 'data' : membreForm.contact.telephones} %}
+
+                                <div class="ui divider"></div>
+                                <h5 class="ui header">E-mail(s) - <a href="#" class="button-add-email" data-contact-id="{{ membre.contact.id }}">ajouter</a></h5>
+                                {% include 'AppBundle:Partials:partial_list_phone_mail.html.twig' with {'type' : 'email', 'data' : membreForm.contact.emails} %}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="eight wide column">     <!-- informations famille -->
+
+                        <div class="ui top attached message">
+                            <div class="header"><h3><i class="users icon"></i>Famille</h3></div>
+                        </div>
+
+                        <div onclick="location.href='{{ path('interne_voir_famille', {famille: membre.famille.id}) }}'" class="ui bottom attached segment">
+
+                            {% set famille = membre.famille %}
+
+                            <div class="ui list">
+                                {% include 'AppBundle:Partials:partial_contact.html.twig' with {'contact' : famille.contact} %}
+                            </div>
+
+                        </div>
+
+                        <div class="ui top attached message">
+                            <div class="header"><h3><i class="child icon"></i>Frères et soeurs</h3></div>
+                        </div>
+
+                        <div class="ui bottom attached segment">
+
+                            <table class="ui very basic small table">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Nom</th>
+                                        <th>Role dans la BS</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for gosse in membre.famille.membres %}
+                                    {% if gosse.id != membre.id %}
+                                        {% set sexeIcone = gosse.sexe == 'Homme' ? "man" : "woman" %}
+                                        <tr>
+                                            <td><i class="{{ sexeIcone }} icon"></i></td>
+                                            <td>
+                                                <a data-position="left center" class="popupable" href="{{ path('interne_voir_membre', {membre: gosse.id}) }}">{{ gosse.prenom|capitalize }} {{ gosse.nom|capitalize }}</a>
+                                                {% include 'AppBundle:Popup:popup_membre.html.twig' with {'membre' : gosse, 'blocks' : ['personal', 'scout']} %}
+                                            </td>
+                                            <td>{{ gosse.activeAttribution.fonction.nom }} - {{ gosse.activeAttribution.groupe.nom }}</td>
+                                            <td>
+                                                {% include 'AppBundle:Listing:listing_single_button.html.twig' with {'membre' : gosse} %}
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div> <!-- /informations famille -->
+                </div> <!-- /informations de base -->
+            </div>
+            <div class="ui grid">
+
+                <div class="row"> <!-- attributions et distinctions -->
+
+                    <div class="eleven wide column">
+
+                        <div class="ui top attached message">
+                            <div class="header"><h3><i class="tags icon"></i>Roles dans la brigade - <a class="add-single-attribution" data-id="{{ membre.id }}" href="#">ajouter</a></h3></div>
+                        </div>
+
+                        <div class="ui bottom attached segment">
+
+                            <table class="ui small very basic table">
+                                <thead>
+                                <tr>
+                                    <th>Fonction</th>
+                                    <th>Unité</th>
+                                    <th>Début</th>
+                                    <th>Fin</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for attribution in membre.attributions %}
+                                    <tr style="{{ attrsMacros.generateBackground(attribution.dateDebut, attribution.dateFin) }}">
+                                        <td>{{ attribution.fonction.nom }}</td>
+                                        <td><a href="{{ path('interne_voir_groupe', {groupe: attribution.groupe.id}) }}">{{ attribution.groupe.nom}}</a></td>
+                                        <td>{{ attribution.dateDebut|date("d.m.Y") }}</td>
+                                        <td>{{ attribution.dateFin is null ? '-' : attribution.dateFin|date("d.m.Y") }}</td>
+                                        <td>
+                                            <i class="link remove red icon button-remove-attribution" title="supprimer" data-attribution-id="{{ attribution.id }}"></i>
+                                            <i class="link flag outline blue icon button-terminer-single-attribution" title="changer/mettre une date de fin" data-attribution-id="{{ attribution.id }}"></i>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="five wide column">
+
+                        <div class="ui top attached message">
+                            <div class="header"><h3><i class="star icon"></i>Distinctions - <a href="#" class="button-single-add-distinction" data-id="{{ membre.id }}">ajouter</a></h3></div>
+                        </div>
+
+                        <div class="ui bottom attached segment">
+                            {% include 'AppBundle:ObtentionDistinction:liste_obtention_distinction.html.twig' with {'distinctions' : membre.distinctions} %}
+                        </div>
+
+                    </div>
+
+                </div> <!-- /attributions et distinctions -->
+
+                <div class="row">
+
+                    <div class="column">
+
+                        <div class="ui top attached message">
+                            <div class="header"><h3><i class="money icon"></i>Créances et factures</h3></div>
+                        </div>
+
+                        <div class="ui bottom attached segment">
+                            {% include "InterneFinancesBundle:Interface:interface.html.twig" with {'ownerEntity': membre }%}
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="row"> <!-- history -->
+                    <div class="sixteen wide column">
+                        <div class="ui top attached message">
+                            <div class="header"><h3><i class="wait icon"></i>Historique</h3></div>
+                        </div>
+
+                        <div class="ui bottom attached segment">
+                            {% include 'AppBundle:Membre:history.html.twig' %}
+                        </div>
+                    </div>
+                </div> <!-- history -->
+
+            </div>
         </div>
     </div>
 

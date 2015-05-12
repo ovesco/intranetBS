@@ -6,31 +6,36 @@ use AppBundle\Entity\Attribution;
 use AppBundle\Entity\ContactInformation;
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\ObtentionDistinction;
-use AppBundle\Utils\Log\DataLogger;
-use Faker\Provider\cs_CZ\DateTime;
+use Doctrine\ORM\Event\PostFlushEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Interne\HistoryBundle\Entity\MemberHistory;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Doctrine\ORM\Event\OnFlushEventArgs;
 
 class LogOnChangeListener {
 
-    private $data_logger;
     private $token_storage;
 
-    public function __construct(TokenStorageInterface $token_storage, DataLogger $data_logger)
+    /** @var MemberHistory $historyEntry */
+    private $historyEntry;
+
+    /** @var Session $session */
+    private $session;
+
+    public function __construct(TokenStorageInterface $token_storage, Session $session)
     {
         $this->token_storage = $token_storage;
-        $this->data_logger = $data_logger;
+        $this->session = $session;
     }
 
-    public function onFlush(OnFlushEventArgs $eventArgs)
+    public function preUpdate(PreUpdateEventArgs $eventArgs)
     {
         $uow = $eventArgs->getEntityManager()->getUnitOfWork();
-        $uow->computeChangeSets();
 
         if($this->token_storage->getToken() != NULL)
             $editorMember = $this->token_storage->getToken()->getUser()->getMembre();
         else
-            $editorMember = new Membre('John', 'Doe');
+            $editorMember = new Membre('John', 'Doe'); // TODO : we may find someone else than this guy for default
 
         /* Get all updated entities */
         foreach ($uow->getScheduledEntityUpdates() as $entity) {
@@ -42,7 +47,8 @@ class LogOnChangeListener {
                 $modifiedMember = $entity;
 
                 foreach ($changeSet as $property => $values) {
-                    $this->data_logger->member($editorMember, $modifiedMember, $property, $values[0], $values[1]);
+                    //$this->data_logger->member($editorMember, $modifiedMember, $property, $values[0], $values[1]);
+                    $this->historyEntry = new MemberHistory($editorMember, $modifiedMember, $property, $values[0], $values[1]);
                 }
             }
 
@@ -55,7 +61,8 @@ class LogOnChangeListener {
                 if($modifiedMember != NULL) {
                     foreach ($changeSet as $property => $values) {
                         $detailedProperty = $property . ' (' . $contactInformation . ')';
-                        $this->data_logger->member($editorMember, $modifiedMember, $detailedProperty, $values[0], $values[1]);
+                        //$this->data_logger->member($editorMember, $modifiedMember, $detailedProperty, $values[0], $values[1]);
+                        $this->historyEntry = new MemberHistory($editorMember, $modifiedMember, $detailedProperty, $values[0], $values[1]);
                     }
                 }
             }
@@ -74,7 +81,8 @@ class LogOnChangeListener {
                     if($values[1] != NULL && $values[1] instanceof \DateTime)
                         $values[1] = $values[1]->format('d.m.Y'); // TODO: take date format from globals
 
-                    $this->data_logger->member($editorMember, $modifiedMember, $detailedProperty, $values[0], $values[1]);
+                    //$this->data_logger->member($editorMember, $modifiedMember, $detailedProperty, $values[0], $values[1]);
+                    $this->historyEntry = new MemberHistory($editorMember, $modifiedMember, $detailedProperty, $values[0], $values[1]);
                 }
             }
 
@@ -91,12 +99,32 @@ class LogOnChangeListener {
                     if($values[1] != NULL && $values[1] instanceof \DateTime)
                         $values[1] = $values[1]->format('d.m.Y'); // TODO: take date format from globals
 
-                    $this->data_logger->member($editorMember, $modifiedMember, $detailedProperty, $values[0], $values[1]);
+                    //$this->data_logger->member($editorMember, $modifiedMember, $detailedProperty, $values[0], $values[1]);
+                    $this->historyEntry = new MemberHistory($editorMember, $modifiedMember, $detailedProperty, $values[0], $values[1]);
                 }
-
             }
 
         }
+    }
+
+    /**
+     * Add the history entry to the DB
+     */
+    public function postFlush(PostFlushEventArgs $args)
+    {
+        if (!empty($this->historyEntry)) {
+
+            $this->historyEntry->setSession($this->session->getId());
+
+            $em = $args->getEntityManager();
+            $em->persist($this->historyEntry);
+
+            /* We must clean entry before flush, else we get infinite recursion */
+            $this->historyEntry = NULL;
+
+            $em->flush();
+        }
+
     }
 
     public function setEntityHelper($entityHelper)

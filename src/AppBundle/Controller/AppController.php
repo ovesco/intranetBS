@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Interne\SecurityBundle\Entity\Role;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -24,27 +25,13 @@ class AppController extends Controller
     /**
      * Page d'accueil de l'application
      * @Route("", name="interne_homepage")
-     *
      */
     public function homePageAction()
     {
         $em = $this->getDoctrine()->getManager();
         $lastNews = $em->getRepository('InterneOrganisationBundle:News')->findForPaging(0,1);
 
-        /** @var Membre $membre */
-        // FIXME : le suer devrait être validé en amont
-        if ($this->getUser() != null) {
-            $membre = $this->getUser()->getMembre();
-            $groupes = $membre->getActiveGroupes();
-        }
-        else {
-            $groupes = array();
-        }
-
-
-
-        return $this->render('AppBundle:Homepage:page_homepage.html.twig',
-            array('lastNews'=>$lastNews, 'groupes'=>$groupes));
+        return $this->render("AppBundle:Homepage:page_homepage.html.twig", array('lastNews' => $lastNews, 'user' => $this->getUser()));
     }
 
     /**

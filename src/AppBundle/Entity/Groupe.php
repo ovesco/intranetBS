@@ -351,7 +351,7 @@ class Groupe
      */
     public function __toString()
     {
-        return $this->getNom();
+        return ucfirst($this->getNom());
     }
 
     /**

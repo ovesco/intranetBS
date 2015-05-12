@@ -4,29 +4,33 @@
     vitales au travers d'une api chillos
 #}
 
-{% if fields is not defined %}
-    {% define fields = ['nom', 'prenom', 'naissance', 'fonction', 'groupe', 'numeroBs'] %}
-
-<div class="membre-table">
-
-    <div class="ui menu">
-
-        <div class="item">
-            <div class="ui transparent icon input">
-                <input placeholder="Search..." type="text">
-                <i class="search link icon"></i>
-            </div>
-        </div>
-
-        <a class="active item">
-            <i class="home icon"></i> Home
-        </a>
-        <a class="item">
-            <i class="mail icon"></i> Messages
-        </a>
-        <div class="right menu">
-
-        </div>
-    </div>
-
-</div>
+<table class="ui table membre-datatable" data-swag="it">
+    <thead>
+    <tr>
+        <th>
+            <input type="checkbox" class="table-checkbox" />
+        </td>
+        </th>
+        <th>Nom</th>
+        <th>Dans la BS</th>
+        <th>Naissance</th>
+        <th>Numéro BS</th>
+        <th>Options</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for membre in membres %}
+        <tr data-membre-id="{{ membre.id }}">
+            <td></td>
+            <td>
+                <a data-position="left center" class="popupable" href="{{ path('interne_voir_membre', {membre: membre.id}) }}">{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</a>
+                {% include 'AppBundle:Popup:popup_membre.html.twig' with {'membre' : membre, 'blocks' : ['personal', 'famille']} %}
+            </td>
+            <td>{{ membre.activeAttribution.fonction.nom|capitalize }} - {{ membre.activeAttribution.groupe.nom|capitalize }}</td>
+            <td>{{ membre.naissance|date("d.m.Y") }}</td>
+            <td>{{ membre.numeroBs }}</td>
+            <td></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

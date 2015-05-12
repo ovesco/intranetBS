@@ -217,5 +217,4 @@ class Attribution
         $this->remarques = $remarques;
     }
 
-
 }
