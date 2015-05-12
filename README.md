@@ -112,3 +112,11 @@ elastic_port: 9200
 php app/console fos:elastica:reset --force
 php app/console fos:elastica:populate
 ```
+
+
+# Tests
+
+## Lancer les tests
+```
+phpunit -c app/
+```
