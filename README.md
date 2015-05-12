@@ -26,32 +26,35 @@ Le but du NetBS est d'offir une interface gratuite de gestion de groupe scoute. 
 * Les attributions des membres leurs donnent accès à certanes parties (en lecture ou modification)
 * Supervision centralisée avec surveillance des modifications
 
+
 # Installation
 ## Acquérir les sources
-### Cloner le dépôt Git
-
-### Installer composer
-
-### Installer les dépendances à l'aide de composer
+* Cloner le dépôt Git
+* Installer composer sur le serveur
+* Installer les dépendances à l'aide de composer
 ```
 composer update
 ```
+
+
 ## Mise en route
-### Initialiser la base de données
+* Initialiser la base de données
 ```
 php app/console doctrine:schema:create
 ```
-### Peupler la base de donnée
+* Peupler la base de donnée
 ```
 php app/console doctrine:schema:update --force
 ```
+
 ## Données
 ### Générer des données de test
 ```
 php app/console app:populate create
-php app/console app:populate fill 500
+php app/console app:populate fill 200
 ```
 ### Générer les droits
+Les droits sont sotckés dans la base de données. Ils euvent être extraits d'un fichier yml respectant la structure avec la commande suivante :
 ```
 php app/console security:roles:build roles.yml
 ```
@@ -62,7 +65,7 @@ Ajouter manuellement avec phpmyadmin dans security_users et roles_users
 
 #### Installation de elasticsearch
 
-Pour faire fonctionner le bundle FOSElasticaBundle, il est nécessaire d'avoir installer le programme "elasticsearch" comme service sur son server.
+Pour faire fonctionner le bundle FOSElasticaBundle, il est nécessaire d'installer "elasticsearch" comme service sur son serveur.
 
 ##### Elasticsearch sur MacOSX
 ```
