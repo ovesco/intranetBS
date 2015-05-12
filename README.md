@@ -1,7 +1,5 @@
-NetBS
-
 Bienvenue sur le repository de l'intranet de la Brigade de Sauvabelin.
-Si vous êtes intéressé par le projet, n'hésitez pas à me contacter
+Si vous êtes intéressé par le projet, n'hésitez pas à [me contacter](mailto:it@sauvabelin.ch).
 
 # Résumé
 Le but du NetBS est d'offir une interface gratuite de gestion de groupe scoute. Cette plate-forme est actuellement adaptée à de grandes structures (>100 membres) avec une importante structure hiérarchique. L'objectif est de réduire la charge administrative en automatisant les tâches et en proposant un outils collaboratif pour que les modifications s'effectuent depuis tous les niveaux du groupe.
