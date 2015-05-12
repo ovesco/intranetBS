@@ -4,6 +4,7 @@ namespace Interne\FinancesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\Famille;
+use FOS\ElasticaBundle\Configuration\Search;
 
 
 
@@ -11,7 +12,8 @@ use AppBundle\Entity\Famille;
 /**
  * Class CreanceToFamille
  * @package Interne\FinancesBundle\Entity
- * @ORM\Entity(repositoryClass="Interne\FinancesBundle\Entity\CreanceToFamilleRepository")
+ * @ORM\Entity
+ * @Search(repositoryClass="Interne\FinancesBundle\SearchRepository\CreanceToFamilleRepository")
  */
 class CreanceToFamille extends Creance
 {

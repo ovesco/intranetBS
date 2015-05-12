@@ -4,11 +4,14 @@ namespace Interne\FinancesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\Membre;
+use FOS\ElasticaBundle\Configuration\Search;
 
 /**
  * Class CreanceToMembre
  * @package Interne\FinancesBundle\Entity
- * @ORM\Entity(repositoryClass="Interne\FinancesBundle\Entity\CreanceToMembreRepository")
+ * @ORM\Entity
+ * @Search(repositoryClass="Interne\FinancesBundle\SearchRepository\CreanceToMembreRepository")
+ *
  *
  */
 class CreanceToMembre extends Creance

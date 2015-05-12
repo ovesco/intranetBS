@@ -4,14 +4,16 @@ namespace Interne\FinancesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+
+
 /**
  * Class Creance
  *
  * @ORM\Table(name="finances_bundle_creances")
- * @ORM\Entity(repositoryClass="Interne\FinancesBundle\Entity\CreanceRepository")
  * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="discriminator", type="string")
- * @ORM\DiscriminatorMap({"to_membre" = "CreanceToMembre", "to_famille" = "CreanceToFamille"})
+ * @ORM\DiscriminatorColumn(name="proprietaire", type="string")
+ * @ORM\DiscriminatorMap({"membre" = "CreanceToMembre", "famille" = "CreanceToFamille"})
+ * @ORM\Entity
  *
  */
 abstract class Creance implements OwnerInterface

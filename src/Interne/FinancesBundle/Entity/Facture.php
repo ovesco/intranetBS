@@ -26,7 +26,7 @@ abstract class Facture implements OwnerInterface
     private $id;
 
     /**
-     * @var ArryCollection
+     * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Interne\FinancesBundle\Entity\Rappel",
      *                mappedBy="facture", cascade={"persist", "remove"})
@@ -34,7 +34,7 @@ abstract class Facture implements OwnerInterface
     private $rappels;
 
     /**
-     * @var ArryCollection
+     * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Interne\FinancesBundle\Entity\Creance",
      *                mappedBy="facture", cascade={"persist", "remove"})

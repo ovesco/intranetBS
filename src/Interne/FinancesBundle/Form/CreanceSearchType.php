@@ -16,28 +16,11 @@ class CreanceSearchType extends AbstractType
         $builder
             ->add('titre','text',array('label' => 'Titre', 'required' => false))
             ->add('remarque','textarea',array('label' => 'Remarque', 'required' => false))
-            ->add('montantEmis','number',array('label' => 'Montant émis', 'required' => false))
-            ->add('montantRecu','number',array('label' => 'Montant reçu', 'required' => false))
-            ->add('dateCreation','date',array('label' => 'Date de création','data'=> null,'required' => false))
+            ->add('fromDateCreation','date',array('label' => 'from', 'required' => false))
+            ->add('toDateCreation','date',array('label' => 'To', 'required' => false))
+        ;
 
 
-            /*
-             * l'option "mapped (false)" permet d'ajouter des champs qui n'appartiennent
-             * pas à l'entité.
-             */
-            ->add('montantEmisMinimum','number',array('required' => false,'mapped' => false))
-            ->add('montantEmisMaximum','number', array('required' => false,'mapped' => false))
-
-            ->add('montantRecuMinimum','number',array('required' => false,'mapped' => false))
-            ->add('montantRecuMaximum','number', array('required' => false,'mapped' => false))
-
-            ->add('dateCreationMaximum','date',array('data'=> null,'required' => false,'mapped' => false))
-            ->add('dateCreationMinimum','date',array('data'=> null,'required' => false,'mapped' => false))
-
-
-            ->add('isLinkedToFacture','choice',array('label' => 'Lien avec facture ','required' => true, 'mapped' => false,'choices' => array('no' =>'En attente de facturation', 'yes' =>'Faturée'),'data'=>'yes'))
-
-            ;//fin de la fonction
 
 
 
@@ -47,14 +30,14 @@ class CreanceSearchType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Interne\FinancesBundle\Entity\Creance'
+            'data_class' => 'Interne\FinancesBundle\SearchClass\CreanceSearch'
         ));
     }
 
 
     public function getName()
     {
-        return 'InterneFinancesBundleCreanceSearchType';
+        return 'InterneFinancesBundle_CreanceSearch_Type';
     }
 
 }

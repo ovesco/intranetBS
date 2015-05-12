@@ -38,7 +38,6 @@ class SearchController extends Controller
          * on crée le formulaire de recherche.
          *
          */
-        $searchForm = $this->getSearchForm();
 
         /*
          * On récupère la session qui contient la liste des factures/creances des
@@ -47,6 +46,9 @@ class SearchController extends Controller
         $session = $this->get('session');
 
         if($request->isXmlHttpRequest()) {
+
+
+            $searchForm = $this->getSearchForm();
 
             /*
              * On récupère le formulaire
@@ -116,7 +118,6 @@ class SearchController extends Controller
         $this->checkSession();
 
         return $this->render('InterneFinancesBundle:Search:page_search.html.twig', array(
-            'searchForm' => $searchForm->createView(),
             'factures' => $session->get('factures'),
             'creances' => $session->get('creances'),
         ));

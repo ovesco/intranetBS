@@ -12,6 +12,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 use Interne\FinancesBundle\Form\CreanceAddType;
 use Interne\FinancesBundle\Entity\Creance;
+use Interne\FinancesBundle\SearchClass\CreanceSearch;
+use Interne\FinancesBundle\Form\CreanceSearchType;
+use Interne\FinancesBundle\SearchRepository\CreanceToMembreRepository;
+use Interne\FinancesBundle\SearchRepository\CreanceToFamilleRepository;
 use AppBundle\Entity\Membre;
 use Interne\FinancesBundle\Entity\Facture;
 use AppBundle\Utils\Listing\Liste;
@@ -21,6 +25,11 @@ use AppBundle\Entity\Groupe;
 
 
 
+/**
+ * Class CreanceController
+ * @package Interne\FinancesBundle\Controller
+ * @Route("/creance")
+ */
 class CreanceController extends Controller
 {
     /**
@@ -30,7 +39,7 @@ class CreanceController extends Controller
      * liée a une facture.
      *
      *
-     * @Route("/creance/delete_ajax", name="interne_fiances_creance_delete_ajax", options={"expose"=true})
+     * @Route("/delete_ajax", name="interne_fiances_creance_delete_ajax", options={"expose"=true})
      * @param Request $request
      * @return Response
      */
@@ -62,7 +71,7 @@ class CreanceController extends Controller
 
 
     /**
-     * @Route("/creance/show_ajax", name="interne_fiances_creance_show_ajax", options={"expose"=true})
+     * @Route("/show_ajax", name="interne_fiances_creance_show_ajax", options={"expose"=true})
      * @param Request $request
      * @return Response
      */
@@ -82,7 +91,7 @@ class CreanceController extends Controller
 
     /*
      * Ajoute des cérances en masse à la liste de membre (listing)
-     *
+     * todo fixe me
      */
     /**
      * @param Request $request
@@ -140,7 +149,7 @@ class CreanceController extends Controller
      * Ajoute une cérance à un membre ou une famille
      */
     /**
-     * @Route("/creance/add_ajax", name="interne_fiances_creance_add_ajax", options={"expose"=true})
+     * @Route("/add_ajax", name="interne_fiances_creance_add_ajax", options={"expose"=true})
      * @param Request $request
      * @return Response
      */
@@ -196,7 +205,7 @@ class CreanceController extends Controller
      * Ajoute une cérance à un membre ou une famille
      */
     /**
-     * @Route("/creance/get_form_ajax", name="interne_fiances_creance_get_form_ajax", options={"expose"=true})
+     * @Route("/get_form_ajax", name="interne_fiances_creance_get_form_ajax", options={"expose"=true})
      * @param Request $request
      * @return Response
      */
@@ -226,7 +235,7 @@ class CreanceController extends Controller
 
 
     /**
-     * @Route("/creance/ajout_en_masse", name="interne_fiances_creance_ajout_en_masse", options={"expose"=true})
+     * @Route("/ajout_en_masse", name="interne_fiances_creance_ajout_en_masse", options={"expose"=true})
      * @param Request $request
      * @return Response
      */
@@ -309,6 +318,46 @@ class CreanceController extends Controller
 
         return $this->render('InterneFinancesBundle:Creance:page_ajout_creance_en_masse.html.twig',
             array('ajoutForm'=>$ajoutForm->createView()));
+    }
+
+    /**
+     * @Route("/search", name="interne_fiances_creance_search", options={"expose"=true})
+     * @param Request $request
+     * @return Response
+     */
+    public function searchAction(Request $request){
+
+        $creanceSearch = new CreanceSearch();
+
+        $searchForm = $this->createForm(new CreanceSearchType,$creanceSearch);
+
+        $results = array();
+
+        $searchForm->handleRequest($request);
+
+        if ($searchForm->isValid()) {
+
+            $creanceSearch = $searchForm->getData();
+
+            $elasticaManager = $this->container->get('fos_elastica.manager');
+
+            /** @var CreanceToMembreRepository $repository */
+            $repository = $elasticaManager->getRepository('InterneFinancesBundle:CreanceToMembre');
+
+            $resultsCreanceToMembre = $repository->search($creanceSearch);
+
+            /** @var CreanceToFamilleRepository $repository */
+            $repository = $elasticaManager->getRepository('InterneFinancesBundle:CreanceToFamille');
+
+            $resultsCreanceToFamille = $repository->search($creanceSearch);
+
+            $results = array_merge($resultsCreanceToMembre,$resultsCreanceToFamille);
+
+        }
+
+
+        return $this->render('InterneFinancesBundle:Creance:page_recherche.html.twig',
+            array('searchForm'=>$searchForm->createView(),'creances'=>$results));
     }
 
 

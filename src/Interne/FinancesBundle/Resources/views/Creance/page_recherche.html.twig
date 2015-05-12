@@ -1,25 +1,34 @@
 {% extends "AppBundle:Layout:layout.html.twig" %}
 
 
-{% block titre %}Recherche de créances et de factures{% endblock %}
+{% block titre %}Recherche de créances{% endblock %}
 
 {% block content %}
 
-<div class="ui page grid">
-    <div class="row">
-        <div class="column">
-            <div class="ui segment">
+    <div class="ui page grid">
+        <div class="row">
+            <div class="four wide column">
+
+                {% include "InterneFinancesBundle:Creance:searchForm.html.twig" with {'searchForm':searchForm} %}
+            </div>
+
+
+            <div class="ui vertical divider"></div>
+            <div class="twelve wide column">
 
                 {% if creances is not empty %}
 
-                    {% include "InterneFinancesBundle:Search:liste_search_results.html.twig" with {'creances':creances}%}
+
+                    {% include "InterneFinancesBundle:Creance:liste_search_results.html.twig" with {'creances':creances} %}
+
 
                 {% endif %}
+
+
 
             </div>
         </div>
     </div>
-</div>
 
 
 {% endblock %}
@@ -34,7 +43,7 @@
     '@InterneFinancesBundle/Resources/public/js/event_catcher.js'
     '@InterneFinancesBundle/Resources/public/js/liste.js'
     %}
-        <script src="{{ asset_url }}"></script>
+    <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
 
