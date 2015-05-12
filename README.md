@@ -61,13 +61,17 @@ php app/console security:roles:build roles.yml
 ### Générer un user de login
 Ajouter manuellement avec phpmyadmin dans security_users et roles_users
 
-### Indexer le contenu à rechercher
 
-#### Installation de elasticsearch
+
+## Indexation
+
+Les membres et les factures sont indexés pour la recherche avec [Elastic](https://www.elastic.co/) (anciennement Elasticsearch)
+
+### Installation d'Elastic
 
 Pour faire fonctionner le bundle FOSElasticaBundle, il est nécessaire d'installer "elasticsearch" comme service sur son serveur.
 
-##### Elasticsearch sur MacOSX
+#### Elastic sur MacOSX
 ```
 brew update
 brew install elasticsearch
@@ -77,7 +81,7 @@ Commencer par la commande qui crée le lien suivant:
 ```
 sudo ln -sfv /usr/local/opt/elasticsearch/*.plist ~/Library/LaunchAgents
 ```
-Ceci met elasticsearch dans les services à lancer au démarrage pour cette session
+Ceci met Elastic dans les services à lancer au démarrage pour cette session
 
 Il faut s'assurer des droits corrects pour le fichier *.plist
 
@@ -102,7 +106,7 @@ en lieu et place de:
 elastic_host: lcoalhost
 elastic_port: 9200
 ```
-#### Initialisation de FOSelasticaBundle
+### Initialisation de FOSElasticaBundle
 
 ```
 php app/console fos:elastica:reset --force
