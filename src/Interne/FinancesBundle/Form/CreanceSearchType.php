@@ -23,6 +23,9 @@ class CreanceSearchType extends AbstractType
             ->add('fromMontantRecu','number',array('label' => 'De', 'required' => false))
             ->add('toMontantRecu','number',array('label' => 'à', 'required' => false))
             ->add('idFacture','number',array('label' => 'Facture (n°)', 'required' => false))
+            ->add('nomMembre','text',array('label' => 'Nom', 'required' => false))
+            ->add('prenomMembre','text',array('label' => 'Prénom', 'required' => false))
+            ->add('nomFamille','text',array('label' => 'Nom de famille', 'required' => false))
 
         ;
 

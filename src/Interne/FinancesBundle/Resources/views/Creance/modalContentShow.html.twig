@@ -89,11 +89,20 @@
             <tr>
                 <td>Cible de facturation</td>
                 <td>
-                    {% if creance.membre.envoiFacture == 'Membre' %}
-                        {{ creance.membre.prenom }} {{ creance.membre.nom }}
-                    {% elseif creance.membre.envoiFacture == 'Famille' %}
-                        {{ creance.membre.famille }}
+                    {% if 'Membre' == creance.getOwner|get_class %}
+
+                        {% if creance.membre.envoiFacture == 'Membre' %}
+                            {{ creance.membre.prenom }} {{ creance.membre.nom }}
+                        {% elseif creance.membre.envoiFacture == 'Famille' %}
+                            Famille {{ creance.membre.famille.nom }}
+                        {% endif %}
+
+
+                    {% elseif 'Famille' == creance.getOwner|get_class %}
+                        {{ creance.famille }}
                     {% endif %}
+
+
                 </td>
             </tr>
 

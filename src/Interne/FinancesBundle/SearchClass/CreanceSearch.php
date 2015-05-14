@@ -62,6 +62,24 @@ class CreanceSearch
      */
     private $fromMontantRecu;
 
+    /**
+     * @var string
+     *
+     */
+    private $prenomMembre;
+
+    /**
+     * @var string
+     *
+     */
+    private $nomMembre;
+
+    /**
+     * @var string
+     *
+     */
+    private $nomFamille;
+
 
     /**
      * @var integer
@@ -274,7 +292,7 @@ class CreanceSearch
     /**
      * Set idFacture
      *
-     * @param float $idFacture
+     * @param integer $idFacture
      *
      * @return CreanceSearch
      */
@@ -288,12 +306,83 @@ class CreanceSearch
     /**
      * Get idFacture
      *
-     * @return float
+     * @return integer
      */
     public function getIdFacture()
     {
         return $this->idFacture;
     }
 
+    /**
+     * Set prenomMembre
+     *
+     * @param string $prenomMembre
+     *
+     * @return CreanceSearch
+     */
+    public function setPrenomMembre($prenomMembre)
+    {
+        $this->prenomMembre = $prenomMembre;
+
+        return $this;
+    }
+
+    /**
+     * Get prenomMembre
+     *
+     * @return string
+     */
+    public function getPrenomMembre()
+    {
+        return $this->prenomMembre;
+    }
+
+    /**
+     * Set nomMembre
+     *
+     * @param string $nomMembre
+     *
+     * @return CreanceSearch
+     */
+    public function setNomMembre($nomMembre)
+    {
+        $this->nomMembre = $nomMembre;
+
+        return $this;
+    }
+
+    /**
+     * Get nomMembre
+     *
+     * @return string
+     */
+    public function getNomMembre()
+    {
+        return $this->nomMembre;
+    }
+
+    /**
+     * Set nomFamille
+     *
+     * @param string $nomFamille
+     *
+     * @return CreanceSearch
+     */
+    public function setNomFamille($nomFamille)
+    {
+        $this->nomFamille = $nomFamille;
+
+        return $this;
+    }
+
+    /**
+     * Get nomFamille
+     *
+     * @return string
+     */
+    public function getNomFamille()
+    {
+        return $this->nomFamille;
+    }
 }
 

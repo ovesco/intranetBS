@@ -1,43 +1,114 @@
+
 {% form_theme searchForm 'AppBundle:Templates:form_template.html.twig' %}
 
+<h4 class="ui header">Formulaire de recherche</h4>
 
 {{ form_start(searchForm, {'attr': {'class': 'ui form'}}) }}
 
+<div class="ui accordion">
 
-{{ form_row(searchForm.titre) }}
+    <div class=" title">
+        <i class="dropdown icon"></i>
+        {{ form_label(searchForm.titre) }}
+    </div>
+    <div class="content">
 
-<h4 class="ui dividing header">Montant Emis</h4>
+        {{ form_row(searchForm.titre) }}
+    </div>
 
-<div class="two fields">
-{{ form_row(searchForm.fromMontantEmis) }}
+    <div class=" title">
+        <i class="dropdown icon"></i>
+        Montant Emis
+    </div>
+    <div class="content">
 
-{{ form_row(searchForm.toMontantEmis) }}
+        <div class="two fields">
+            {{ form_row(searchForm.fromMontantEmis) }}
+
+            {{ form_row(searchForm.toMontantEmis) }}
+
+        </div>
+    </div>
+
+    <div class=" title">
+        <i class="dropdown icon"></i>
+        Montant Reçu
+    </div>
+    <div class="content">
+
+        <div class="two fields">
+            {{ form_row(searchForm.fromMontantRecu) }}
+
+            {{ form_row(searchForm.toMontantRecu) }}
+
+        </div>
+    </div>
+
+
+    <div class=" title">
+        <i class="dropdown icon"></i>
+        Date de créations
+    </div>
+    <div class="content">
+
+        {{ form_row(searchForm.fromDateCreation) }}
+
+        {{ form_row(searchForm.toDateCreation) }}
+    </div>
+
+    <div class=" title">
+        <i class="dropdown icon"></i>
+        Remarque
+    </div>
+    <div class="content">
+
+
+        {{ form_row(searchForm.remarque) }}
+    </div>
+
+    <div class=" title">
+        <i class="dropdown icon"></i>
+        Lien avec les factures
+    </div>
+    <div class="content">
+
+
+        {{ form_row(searchForm.idFacture) }}
+    </div>
+
+
+    <div class=" title">
+        <i class="dropdown icon"></i>
+        Propriétaire
+    </div>
+    <div class="content">
+
+        <h4 class="ui dividing header">Membre</h4>
+
+        <div class="two fields">
+
+            {{ form_row(searchForm.prenomMembre) }}
+            {{ form_row(searchForm.nomMembre) }}
+
+        </div>
+
+
+        <h4 class="ui dividing header">Famille</h4>
+
+        {{ form_row(searchForm.nomFamille) }}
+    </div>
+
 
 </div>
 
-<h4 class="ui dividing header">Montant Recu</h4>
-
-<div class="two fields">
-    {{ form_row(searchForm.fromMontantRecu) }}
-
-    {{ form_row(searchForm.toMontantRecu) }}
-
-</div>
-
-<h4 class="ui dividing header">Date de créations</h4>
 
 
-    {{ form_row(searchForm.fromDateCreation) }}
-
-    {{ form_row(searchForm.toDateCreation) }}
-
-
-
-{{ form_row(searchForm.remarque) }}
 
 {{ form_rest(searchForm) }}
 
 
-<input type="submit" value="Rechercher" class="ui button">
+<input type="submit" value="Rechercher" class="ui blue submit button">
 
 {{ form_end(searchForm) }}
+
+

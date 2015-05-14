@@ -55,7 +55,12 @@ fos_elastica:
                         facture:
                             type: "nested"
                             properties:
-                                id: ~
+                                id: { type: integer }
+                        membre:
+                            type: "nested"
+                            properties:
+                                prenom: { type: string }
+                                nom: { type: string }
                     persistence:
                         driver: orm
                         model: Interne\FinancesBundle\Entity\CreanceToMembre
@@ -73,7 +78,12 @@ fos_elastica:
                         facture:
                             type: "nested"
                             properties:
-                                id: ~
+                                id: { type: integer }
+
+                        famille:
+                            type: "nested"
+                            properties:
+                                nom: { type: string }
                     persistence:
                         driver: orm
                         model: Interne\FinancesBundle\Entity\CreanceToFamille

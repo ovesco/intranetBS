@@ -12,15 +12,15 @@ class CreanceRepository extends Repository
 
     public function search(CreanceSearch $creanceSearch){
 
-
-
         $query = new \Elastica\Query();
-
 
         /*
          * fixme ceci n'est pas propre mais par defaut la taille est 10...je prend un peu de marge ;-)
          */
         $query->setSize(50000);
+
+        $emptyQuery = true;
+
 
         $boolQuery = new \Elastica\Query\Bool();
 
@@ -28,9 +28,22 @@ class CreanceRepository extends Repository
         $titre = $creanceSearch->getTitre();
         if($titre != null && $titre != '')
         {
+            $emptyQuery = false;
+
             $fieldQuery = new \Elastica\Query\Match();
             $fieldQuery->setFieldQuery('titre',$titre);
             $fieldQuery->setFieldMinimumShouldMatch('titre','100%');
+            $boolQuery->addMust($fieldQuery);
+        }
+
+        $remarque = $creanceSearch->getRemarque();
+        if($remarque != null && $remarque != '')
+        {
+            $emptyQuery = false;
+
+            $fieldQuery = new \Elastica\Query\Match();
+            $fieldQuery->setFieldQuery('remarque',$remarque);
+            $fieldQuery->setFieldMinimumShouldMatch('remarque','100%');
             $boolQuery->addMust($fieldQuery);
         }
 
@@ -38,6 +51,8 @@ class CreanceRepository extends Repository
         $fromMontantEmis = $creanceSearch->getFromMontantEmis();
         if($fromMontantEmis != null)
         {
+            $emptyQuery = false;
+
             $fromMontantEmisQuery = new \Elastica\Query\Range('montantEmis',array('gte'=>$fromMontantEmis));
             $boolQuery->addMust($fromMontantEmisQuery);
         }
@@ -45,6 +60,8 @@ class CreanceRepository extends Repository
         $toMontantEmis = $creanceSearch->getToMontantEmis();
         if($toMontantEmis != null)
         {
+            $emptyQuery = false;
+
             $toMontantEmisQuery = new \Elastica\Query\Range('montantEmis',array('lte'=>$toMontantEmis));
             $boolQuery->addMust($toMontantEmisQuery);
         }
@@ -53,6 +70,8 @@ class CreanceRepository extends Repository
         $fromMontantRecu = $creanceSearch->getFromMontantRecu();
         if($fromMontantRecu != null)
         {
+            $emptyQuery = false;
+
             $fromMontantRecuQuery = new \Elastica\Query\Range('montantRecu',array('gte'=>$fromMontantRecu));
             $boolQuery->addMust($fromMontantRecuQuery);
         }
@@ -60,6 +79,8 @@ class CreanceRepository extends Repository
         $toMontantRecu = $creanceSearch->getToMontantRecu();
         if($toMontantRecu != null)
         {
+            $emptyQuery = false;
+
             $toMontantRecuQuery = new \Elastica\Query\Range('montantRecu',array('lte'=>$toMontantRecu));
             $boolQuery->addMust($toMontantRecuQuery);
         }
@@ -73,6 +94,7 @@ class CreanceRepository extends Repository
         $fromDateCreation = $creanceSearch->getFromDateCreation();
         if($fromDateCreation != null)
         {
+            $emptyQuery = false;
 
             $fromDateCreationQuery = new \Elastica\Query\Range('dateCreation',array('gte'=>\Elastica\Util::convertDate($fromDateCreation->getTimestamp())));
             //$fromDateCreationQuery = new \Elastica\Query\Range('dateCreation',array('gte'=>\Elastica\Util::convertDate($fromDateCreation->getTimestamp())));
@@ -83,6 +105,8 @@ class CreanceRepository extends Repository
         $toDateCreation = $creanceSearch->getToDateCreation();
         if($toDateCreation != null)
         {
+            $emptyQuery = false;
+
             $toDateCreationQuery = new \Elastica\Query\Range('dateCreation',array('lte'=>\Elastica\Util::convertDate($toDateCreation->getTimestamp())));
             $boolQuery->addMust($toDateCreationQuery);
         }
@@ -93,163 +117,32 @@ class CreanceRepository extends Repository
         $idFacture = $creanceSearch->getIdFacture();
         if($idFacture != null && $idFacture != '')
         {
+            $emptyQuery = false;
 
-            $factureQuery = new \Elastica\Query\Bool();
+            $baseQuery = new \Elastica\Query\MatchAll();
 
-            $bool = new \Elastica\Filter\Bool();
-            $bool->addMust(new \Elastica\Filter\Term(['facture.id' => $idFacture]));
+
+            $term = new \Elastica\Filter\Term(array('facture.id' => $idFacture));
+
+            $boolFilter = new \Elastica\Filter\Bool();
+            $boolFilter->addMust($term);
 
             $nested = new \Elastica\Filter\Nested();
             $nested->setPath("facture");
-            $nested->setFilter($bool);
-
-            $nested->setQuery($factureQuery);
-
-            $factureQuery = new \Elastica\Query\Filtered($factureQuery, $nested);
+            $nested->setFilter($boolFilter);
 
 
+            $factureQuery = new \Elastica\Query\Filtered($baseQuery, $nested);
 
-
-            ///$fieldQuery = new \Elastica\Query\Match();
-            //$fieldQuery->setFieldQuery('facture.id',$idFacture);
-            //$fieldQuery->setFieldMinimumShouldMatch('facture.id','100%');
             $boolQuery->addMust($factureQuery);
         }
 
 
 
-
-
-
-
-        $query->setQuery($boolQuery);
-
-        return $query;
+        return array('mainQuery'=>$query,'boolQuery'=>$boolQuery,'emptyQuery'=>$emptyQuery);
 
 
 
     }
 
 }
-
-/*
-           Dates filter
-           We add this filter only the getIspublished filter is not at "false"
-       *
-       if( null !== $creanceSearch->getFromDateCreation() && null !== $creanceSearch->getToDateCreation())
-       {
-           $boolFilter->addMust(new \Elastica\Filter\Range('CreatedAt',
-               array(
-                   'gte' => \Elastica\Util::convertDate($creanceSearch->getFromDateCreation()->getTimestamp()),
-                   'lte' => \Elastica\Util::convertDate($creanceSearch->getToDateCreation()->getTimestamp())
-               )
-           ));
-       }
-       */
-
-
-/*
-
-$filtered = new \Elastica\Query\Filtered($baseQuery, $boolFilter);
-
-$finalQuery = \Elastica\Query::create($filtered);
-
-
-
-*/
-
-//$baseQuery = new \Elastica\Query\MatchAll();
-
-/*
-if ($creanceSearch->getTitre() != null && $creanceSearch != '') {
-    $query = new \Elastica\Query\Match();
-    $query->setFieldQuery('creance.titre', $creanceSearch->getTitre());
-    //
-} else {
-    $query = new \Elastica\Query\MatchAll();
-}
-$baseQuery = $query;
-
-
-*/
-
-
-/*
-            new \Elastica\Query\Term();
-
-            $queryString = new \Elastica\Query\QueryString();
-            $queryString->setQuery($creanceSearch->getTitre());
-            $queryString->setAnalyzer('classic_analyser');
-            $queryString->setFields(array('creance_to_membre.titre'));
-            $boolFilter->addMust($queryString);
-           // $query->setQuery($boolQuery);
-
-            */
-
-
-
-/*
-$tagsQuery = new \Elastica\Query\Terms();
-$tagsQuery->setTerms('tags', array('tag1', 'tag2'));
-$boolQuery->addShould($tagsQuery);
-
-$categoryQuery = new \Elastica\Query\Terms();
-$categoryQuery->setTerms('categoryIds', array('1', '2', '3'));
-$boolQuery->addMust($categoryQuery);
-
-*/
-
-
-
-/*
-        $boolFilter= new \Elastica\Filter\Bool();
-
-
-        $termFilter = new \Elastica\Filter\Term();
-
-        $termFilter->setParam('titre','Cotisation 2008');
-
-
-        $boolFilter->addMust($termFilter);
-
-
-        $boolQuery = new \Elastica\Filter\Bool();
-
-        $stringQuery = new Query\QueryString();
-
-        $stringQuery->setFields(array('titre'));
-        $stringQuery->setQuery($creanceSearch->getTitre());
-
-        $boolQuery->addMust($stringQuery);
-
-
-        $remarqueQuery = new Query\QueryString();
-
-        $remarqueQuery->setFields(array('remarque'));
-        $remarqueQuery->setQuery($creanceSearch->getRemarque());
-
-        $boolQuery->addMust($remarqueQuery);
-
-
-        $filtered = new \Elastica\Query\Filtered($finalQuery, $boolQuery);
-
-        $finalQuery = \Elastica\Query::create($filtered);
-
-        //$finalQuery->setQuery($boolQuery);
-
-
-
-        //$boolQuery->addMust($stringQuery);
-
-        //$finalQuery->setQuery($boolQuery);
-
-        */
-
-/*
-$filteredQuery = new \Elastica\Query\Filtered($query, $boolFilter);
-
-$query->setQuery($filteredQuery);
-
-*/
-
-//$query->setPostFilter($boolFilter);

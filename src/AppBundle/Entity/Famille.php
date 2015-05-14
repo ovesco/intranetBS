@@ -254,10 +254,14 @@ class Famille implements ExpediableInterface, ClassInterface
 
         $string = "Les " . $this->getNom();
 
-        if ($this->getContact()->getAdresse() != NULL)
-            $string .= " de " . $this->getContact()->getAdresse()->getLocalite();
+        if($this->getContact() != null)
+        {
+            if ($this->getContact()->getAdresse() != NULL)
+            {
+                $string .= " de " . $this->getContact()->getAdresse()->getLocalite();
+            }
+        }
 
-        // . " (" . sizeof($this->getMembres()) . ")";
 
         return $string;
 
