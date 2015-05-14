@@ -5,6 +5,7 @@ namespace Interne\FinancesBundle\SearchRepository;
 
 use Interne\FinancesBundle\SearchClass\CreanceSearch;
 use FOS\ElasticaBundle\Repository;
+use Elastica\Query;
 
 
 class CreanceToMembreRepository extends CreanceRepository

@@ -4,10 +4,40 @@
 {{ form_start(searchForm, {'attr': {'class': 'ui form'}}) }}
 
 
+{{ form_row(searchForm.titre) }}
+
+<h4 class="ui dividing header">Montant Emis</h4>
+
+<div class="two fields">
+{{ form_row(searchForm.fromMontantEmis) }}
+
+{{ form_row(searchForm.toMontantEmis) }}
+
+</div>
+
+<h4 class="ui dividing header">Montant Recu</h4>
+
+<div class="two fields">
+    {{ form_row(searchForm.fromMontantRecu) }}
+
+    {{ form_row(searchForm.toMontantRecu) }}
+
+</div>
+
+<h4 class="ui dividing header">Date de créations</h4>
+
+
+    {{ form_row(searchForm.fromDateCreation) }}
+
+    {{ form_row(searchForm.toDateCreation) }}
+
+
+
+{{ form_row(searchForm.remarque) }}
 
 {{ form_rest(searchForm) }}
 
 
-<input type="submit" value="Submit" class="ui button">
+<input type="submit" value="Rechercher" class="ui button">
 
 {{ form_end(searchForm) }}

@@ -349,11 +349,13 @@ class CreanceController extends Controller
             /** @var CreanceToFamilleRepository $repository */
             $repository = $elasticaManager->getRepository('InterneFinancesBundle:CreanceToFamille');
 
-            $resultsCreanceToFamille = $repository->search($creanceSearch);
-
-            $results = array_merge($resultsCreanceToMembre,$resultsCreanceToFamille);
+            //$resultsCreanceToFamille = $repository->search($creanceSearch);
+            $results = $resultsCreanceToMembre;
+            //$results = array_merge($resultsCreanceToMembre,$resultsCreanceToFamille);
 
         }
+
+
 
 
         return $this->render('InterneFinancesBundle:Creance:page_recherche.html.twig',

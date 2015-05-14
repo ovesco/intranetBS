@@ -48,6 +48,14 @@ fos_elastica:
                     mappings:
                         id: ~
                         titre: ~
+                        remarque: ~
+                        montantEmis: ~
+                        montantRecu: ~
+                        dateCreation: { type: date }
+                        facture:
+                            type: "nested"
+                            properties:
+                                id: ~
                     persistence:
                         driver: orm
                         model: Interne\FinancesBundle\Entity\CreanceToMembre
@@ -58,6 +66,14 @@ fos_elastica:
                     mappings:
                         id: ~
                         titre: ~
+                        remarque: ~
+                        montantEmis: ~
+                        montantRecu: ~
+                        dateCreation: { type: date}
+                        facture:
+                            type: "nested"
+                            properties:
+                                id: ~
                     persistence:
                         driver: orm
                         model: Interne\FinancesBundle\Entity\CreanceToFamille
