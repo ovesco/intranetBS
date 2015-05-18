@@ -1,0 +1,31 @@
+<table class="ui very basic small table">
+    <thead>
+    <tr>
+        <th></th>
+        <th>Nom</th>
+        <th>Role dans la BS</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+
+    {% for fraternel in fratrie %}
+        {% if fraternel.id != membre.id %}
+            {% set sexeIcone = fraternel.sexe == 'Homme' ? "man" : "woman" %}
+            <tr>
+                <td><i class="{{ sexeIcone }} icon"></i></td>
+                <td>
+                    <a data-position="left center" class="popupable"
+                       href="{{ path('interne_voir_membre', {membre: fraternel.id}) }}">{{ fraternel.prenom|capitalize }} {{ fraternel.nom|capitalize }}</a>
+                    {% include 'AppBundle:Popup:popup_membre.html.twig' with {'membre' : fraternel, 'blocks' : ['personal', 'scout']} %}
+                </td>
+                <td>{{ fraternel.activeAttribution.fonction.nom }} - {{ fraternel.activeAttribution.groupe.nom }}</td>
+                <td>
+                    {% include 'AppBundle:Listing:listing_single_button.html.twig' with {'membre' : fraternel} %}
+                </td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+
+    </tbody>
+</table>

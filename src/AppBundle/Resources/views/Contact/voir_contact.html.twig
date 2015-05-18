@@ -30,16 +30,11 @@
                 <div class="ui contact_adresse segment">
                     <div class="ui right corner label"><i class="mail outline icon"></i></div>
 
-
-
                     {% if (type == 'Membre') or (type == 'Mère') or (type == 'Père') %}
                         {{ owner.nom }} {{ owner.prenom }}
                     {% elseif type == 'Famille'%}
                         Famille {{ owner.nom }}
                     {% endif %}
-
-
-                    {% include 'AppBundle:Adresse:adresse_ajax_edit_form.html.twig' with {'adresse':form.contact.adresse } %}
 
                     <div class="ui toggle checkbox" id="{{ owner.contact.adresse.id }}">
                         <input type="checkbox">
@@ -57,10 +52,6 @@
 
                     {{ self.add_email_button(owner) }}
 
-                    {% include 'AppBundle:Email:emails_ajax_edit_form.html.twig' with {'emails':form.contact.emails } %}
-
-
-
                 </div>
             </div>
             <div class="four wide column">
@@ -69,9 +60,6 @@
                     <div class="ui right corner label"><i class="call icon"></i></div>
 
                     {{ self.add_telephone_button(owner) }}
-
-                    {% include 'AppBundle:Telephone:telephones_ajax_edit_form.html.twig' with {'telephones':form.contact.telephones } %}
-
                 </div>
 
 

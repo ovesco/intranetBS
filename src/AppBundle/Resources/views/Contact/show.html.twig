@@ -1,31 +1,65 @@
-<h4>Contact</h4>
+{#
+    Inclus dans la plupart des cartes, permet d'afficher les informations de contact
+    d'une entité sous la forme d'une liste à icones
+#}
 
-{% if contact.adresse is not null %}
+{% if contact is defined and contact is not null %}
 
-    {% include "AppBundle:Adresse:show.html.twig" with {'adresse':contact.adresse} %}
+    {% if contact.adresse is not null %}
+        <a class="item">
+            <i class="top aligned right home icon"></i>
 
-{% else %}
-    <div class="ui message">Auncune adresse</div>
+            <div class="content">
+                <div class="header">Adresse</div>
+                <div class="description">
+                    <p>{{ contact.adresse.rue }}</p>
+
+                    <p>{{ contact.adresse.npa }} - {{ contact.adresse.localite }}</p>
+
+                    <p>{{ contact.adresse.remarques }}</p>
+                </div>
+            </div>
+        </a>
+    {% endif %}
+
+    {% if contact.telephones is not empty %}
+        <a class="item">
+            <i class="top aligned right call icon"></i>
+
+            <div class="content">
+                <div class="header">Téléphone(s)</div>
+                <div class="description">
+                    {% for phone in contact.telephones %}
+                        <p>{{ phone.telephone }}</p>
+                        <p>{{ phone.remarques }}</p>
+
+                        {% if not loop.last %}
+                            <br/>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </a>
+    {% endif %}
+
+    {% if contact.emails is not empty %}
+        <a class="item">
+            <i class="top aligned right inbox icon"></i>
+
+            <div class="content">
+                <div class="header">E-mail(s)</div>
+                <div class="description">
+                    {% for mail in contact.emails %}
+                        <p>{{ mail.email }}</p>
+                        <p>{{ mail.remarques }}</p>
+
+                        {% if not loop.last %}
+                            <br/>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </a>
+    {% endif %}
+
 {% endif %}
-
-
-
-{% if contact.emails is not null %}
-
-    <h5>Emails</h5>
-
-    <table class="ui table">
-        <tbody>
-        {% for email in contact.emails%}
-
-            {% include "AppBundle:Email:show.html.twig" with {'email':email} %}
-
-        {% endfor %}
-
-        </tbody>
-    </table>
-
-{% else %}
-    <div class="ui message yellow">Auncune adresse Email</div>
-{% endif %}
-

@@ -79,7 +79,7 @@
         #}
         <div id="popup-menu-container"></div>
 
-        {% include 'AppBundle:Modales:modal_add_liste.html.twig' %}
+        {% include 'AppBundle:Listing:modal_add_listing.html.twig' %}
 
         <!-- la modale d'ajout de distinctions -->
         {{ render(controller('AppBundle:Distinction:renderModalOrPersist')) }}
@@ -124,7 +124,6 @@
         {% javascripts
             '@AppBundle/Resources/public/js/noty.js'
             '@AppBundle/Resources/public/js/noty_default.js'
-            '//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/js/jquery-editable-poshytip.min.js'
             '@AppBundle/Resources/public/js/alwaysIncluded/*'
             '@AppBundle/Resources/public/js/layout.js'
 

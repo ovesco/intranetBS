@@ -3,19 +3,17 @@
 namespace AppBundle\Controller;
 
 
+use AppBundle\Entity\Contact;
 use AppBundle\Entity\Email;
 use AppBundle\Entity\Telephone;
 use AppBundle\Form\AddEmailType;
 use AppBundle\Form\AddTelephoneType;
-use AppBundle\Entity\Contact;
-use AppBundle\Form\TelephoneType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class ContactController
@@ -129,7 +127,7 @@ class ContactController extends Controller{
      */
     public function renderModalTelephoneAction(Request $request) {
 
-        $telephone     = new Telephone();
+        $telephone = new Telephone();
         $telephoneForm = $this->createForm(new AddTelephoneType(),$telephone);
 
         $telephoneForm->handleRequest($request);
@@ -139,6 +137,7 @@ class ContactController extends Controller{
             $em = $this->getDoctrine()->getManager();
             $idContact = $telephoneForm->get('contact_id')->getData();
 
+            /** @var Contact $contact */
             $contact = $em->getRepository('AppBundle:Contact')->find($idContact);
 
             $contact->addTelephone($telephone);
@@ -153,7 +152,7 @@ class ContactController extends Controller{
             return $this->redirect($currentUrl);
         }
 
-        return $this->render('AppBundle:Modales:modal_add_telephone.html.twig', array('telephoneForm'    => $telephoneForm->createView()));
+        return $this->render('AppBundle:Telephone:modal_add_telephone.html.twig', array('telephoneForm' => $telephoneForm->createView()));
     }
 
     /**
@@ -174,6 +173,7 @@ class ContactController extends Controller{
             $em = $this->getDoctrine()->getManager();
             $idContact = $emailForm->get('contact_id')->getData();
 
+            /** @var Contact $contact */
             $contact = $em->getRepository('AppBundle:Contact')->find($idContact);
 
             $contact->addEmail($email);
@@ -188,34 +188,43 @@ class ContactController extends Controller{
             return $this->redirect($currentUrl);
         }
 
-        return $this->render('AppBundle:Modales:modal_add_email.html.twig', array('emailForm'    => $emailForm->createView()));
+        return $this->render('AppBundle:Email:modal_add_email.html.twig', array('emailForm' => $emailForm->createView()));
     }
 
+
     /**
-     * Supprimme un e-mail
-     * @route("/email/remove/{object}", name="interne_contact_remove_email", options={"expose"=true})
-     * @paramConverter("object", class="AppBundle:Email")
+     * Supprime un e-mail
+     *
+     * @Route("/email/remove/{object}", name="interne_contact_remove_email", options={"expose"=true})
+     * @ParamConverter("email", class="AppBundle:Email")
+     * @param $email
+     * @return JsonResponse
      */
-    public function removeEmailAction($object) {
+    public function removeEmailAction($email)
+    {
 
         $em = $this->getDoctrine()->getManager();
 
-        $em->remove($object);
+        $em->remove($email);
         $em->flush();
 
         return new JsonResponse();
     }
 
     /**
-     * Supprimme un telephone
-     * @route("/telephone/remove/{object}", name="interne_contact_remove_telephone", options={"expose"=true})
-     * @paramConverter("object", class="AppBundle:Telephone")
+     * Supprime un telephone
+     * @Route("/telephone/remove/{object}", name="interne_contact_remove_telephone", options={"expose"=true})
+     * @ParamConverter("telephone", class="AppBundle:Telephone")
+     *
+     * @param $telephone
+     * @return JsonResponse
      */
-    public function removeTelephoneAction($object) {
+    public function removeTelephoneAction($telephone)
+    {
 
         $em = $this->getDoctrine()->getManager();
 
-        $em->remove($object);
+        $em->remove($telephone);
         $em->flush();
 
         return new JsonResponse();

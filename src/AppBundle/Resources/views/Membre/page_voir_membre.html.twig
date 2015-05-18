@@ -1,7 +1,5 @@
 {% extends 'AppBundle:Layout:layout.html.twig' %}
 
-{% import 'AppBundle:Macros:attribution_macro.html.twig' as attrsMacros %}
-
 {% block titre %}
     {{ membre.prenom }} {{ membre.nom }}
 {% endblock %}
@@ -19,13 +17,13 @@
                 <div class="row">
 
                     <div class="twelve wide column">
-                        <h2 class="ui header">
+                        <div class="ui header">
                             <i class="user icon"></i>
                             <div class="content">
-                                {{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}
+                                <h2>{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</h2>
                                 <div class="sub header">{{ membre.activeAttribution.fonction.nom }} - {{ membre.activeAttribution.groupe.nom|capitalize }}</div>
                             </div>
-                        </h2>
+                        </div>
                     </div>
 
                     <div class="four wide right aligned column">
@@ -94,11 +92,11 @@
                             <div class="ui tab basic segment" data-tab="contact-{{ membre.prenom }}">
 
                                 <h5 class="ui header">Téléphone(s) - <a href="#" class="button-add-telephone" data-contact-id="{{ membre.contact.id }}">ajouter</a></h5>
-                                {% include 'AppBundle:Partials:partial_list_phone_mail.html.twig' with {'type' : 'telephone', 'data' : membreForm.contact.telephones} %}
+                                {% include 'AppBundle:Contact:list_phone_mail.html.twig' with {'type' : 'telephone', 'data' : membreForm.contact.telephones} %}
 
                                 <div class="ui divider"></div>
                                 <h5 class="ui header">E-mail(s) - <a href="#" class="button-add-email" data-contact-id="{{ membre.contact.id }}">ajouter</a></h5>
-                                {% include 'AppBundle:Partials:partial_list_phone_mail.html.twig' with {'type' : 'email', 'data' : membreForm.contact.emails} %}
+                                {% include 'AppBundle:Contact:list_phone_mail.html.twig' with {'type' : 'email', 'data' : membreForm.contact.emails} %}
                             </div>
 
                         </div>
@@ -112,13 +110,9 @@
                         </div>
 
                         <div onclick="location.href='{{ path('interne_voir_famille', {famille: membre.famille.id}) }}'" class="ui bottom attached segment">
-
-                            {% set famille = membre.famille %}
-
                             <div class="ui list">
-                                {% include 'AppBundle:Partials:partial_contact.html.twig' with {'contact' : famille.contact} %}
+                                {% include 'AppBundle:Contact:show.html.twig' with {'contact' : membre.famille.contact} %}
                             </div>
-
                         </div>
 
                         <div class="ui top attached message">
@@ -126,39 +120,7 @@
                         </div>
 
                         <div class="ui bottom attached segment">
-
-                            <table class="ui very basic small table">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>Nom</th>
-                                        <th>Role dans la BS</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                {% for gosse in membre.famille.membres %}
-                                    {% if gosse.id != membre.id %}
-                                        {% set sexeIcone = gosse.sexe == 'Homme' ? "man" : "woman" %}
-                                        <tr>
-                                            <td><i class="{{ sexeIcone }} icon"></i></td>
-                                            <td>
-                                                <a data-position="left center" class="popupable" href="{{ path('interne_voir_membre', {membre: gosse.id}) }}">{{ gosse.prenom|capitalize }} {{ gosse.nom|capitalize }}</a>
-                                                {% include 'AppBundle:Popup:popup_membre.html.twig' with {'membre' : gosse, 'blocks' : ['personal', 'scout']} %}
-                                            </td>
-                                            <td>{{ gosse.activeAttribution.fonction.nom }} - {{ gosse.activeAttribution.groupe.nom }}</td>
-                                            <td>
-                                                {% include 'AppBundle:Listing:listing_single_button.html.twig' with {'membre' : gosse} %}
-                                            </td>
-                                        </tr>
-                                    {% endif %}
-
-                                {% endfor %}
-
-                                </tbody>
-                            </table>
-
+                            {% include 'AppBundle:Famille:liste_fratrie.html.twig' with {'fratrie' : membre.famille.membres, 'membre' : membre} %}
                         </div>
 
                     </div> <!-- /informations famille -->
@@ -175,32 +137,7 @@
                         </div>
 
                         <div class="ui bottom attached segment">
-
-                            <table class="ui small very basic table">
-                                <thead>
-                                <tr>
-                                    <th>Fonction</th>
-                                    <th>Unité</th>
-                                    <th>Début</th>
-                                    <th>Fin</th>
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for attribution in membre.attributions %}
-                                    <tr style="{{ attrsMacros.generateBackground(attribution.dateDebut, attribution.dateFin) }}">
-                                        <td>{{ attribution.fonction.nom }}</td>
-                                        <td><a href="{{ path('interne_voir_groupe', {groupe: attribution.groupe.id}) }}">{{ attribution.groupe.nom}}</a></td>
-                                        <td>{{ attribution.dateDebut|date("d.m.Y") }}</td>
-                                        <td>{{ attribution.dateFin is null ? '-' : attribution.dateFin|date("d.m.Y") }}</td>
-                                        <td>
-                                            <i class="link remove red icon button-remove-attribution" title="supprimer" data-attribution-id="{{ attribution.id }}"></i>
-                                            <i class="link flag outline blue icon button-terminer-single-attribution" title="changer/mettre une date de fin" data-attribution-id="{{ attribution.id }}"></i>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
+                            {% include 'AppBundle:Attribution:liste_attributions.html.twig' with {'attributions' : membre.attributions} %}
                         </div>
                     </div>
 
@@ -233,7 +170,6 @@
                     </div>
                 </div>
 
-
                 <div class="row"> <!-- history -->
                     <div class="sixteen wide column">
                         <div class="ui top attached message">
@@ -255,8 +191,6 @@
 
     <!-- et celle pour ajouter un email -->
     {{ render(controller('AppBundle:Contact:renderModalEmail')) }}
-
-
 
 {% endblock %}
 

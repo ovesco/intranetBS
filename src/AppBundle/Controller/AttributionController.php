@@ -2,13 +2,11 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Membre;
 use AppBundle\Entity\Attribution;
 use AppBundle\Form\AttributionType;
-use AppBundle\Form\AttributionMultiMembreType;
+use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -38,6 +36,7 @@ class AttributionController extends Controller
          */
         if($request->get('is-submitted') == "oui") {
 
+            /** @var EntityManager $em */
             $em         = $this->getDoctrine()->getManager();
             $membreRepo = $em->getRepository('AppBundle:Membre');
             $fnRepo     = $em->getRepository('AppBundle:Fonction');
@@ -49,7 +48,7 @@ class AttributionController extends Controller
 
             /*
              * On met en place un iterateur
-             * On va ensuite iterer sur chaque valeur jusqu'à toutes les avoir parcourues. On les range ainsi dans un
+             * On va ensuite iterer sur chaque attributionData jusqu'à toutes les avoir parcourues. On les range ainsi dans un
              * array
              */
             foreach($parameters as $k => $r) {
@@ -73,22 +72,22 @@ class AttributionController extends Controller
              * Ensuite on commence à génerer des attributions à la pelle pour tous les membres concernés
              * On utilise les data-transformers pour les dates, et les $em directement pour le reste
              */
-            foreach($data as $id => $yolo) {
+            foreach ($data as $id => $attributionData) {
 
 
                 // On fait les tests de validité des données
-                if(!isset($yolo['debut']) || $yolo['debut'] == "")
+                if (!isset($attributionData['debut']) || $attributionData['debut'] == "")
                     continue;
-                if(!isset($yolo['fonction']) || !is_numeric($yolo['fonction']))
+                if (!isset($attributionData['fonction']) || !is_numeric($attributionData['fonction']))
                     continue;
-                if(!isset($yolo['groupe']) || !is_numeric($yolo['groupe']))
+                if (!isset($attributionData['groupe']) || !is_numeric($attributionData['groupe']))
                     continue;
 
                 $attribution = new Attribution();
-                $attribution->setDateDebut( $transfo->reverseTransform($yolo['debut']) );
-                $attribution->setDateFin( $transfo->reverseTransform($yolo['fin']) );
-                $attribution->setFonction($fnRepo->find($yolo['fonction']));
-                $attribution->setGroupe($grpRepo->find($yolo['groupe']));
+                $attribution->setDateDebut($transfo->reverseTransform($attributionData['debut']));
+                $attribution->setDateFin($transfo->reverseTransform($attributionData['fin']));
+                $attribution->setFonction($fnRepo->find($attributionData['fonction']));
+                $attribution->setGroupe($grpRepo->find($attributionData['groupe']));
                 $attribution->setMembre($membreRepo->find($id));
 
                 $em->persist($attribution);
@@ -100,7 +99,7 @@ class AttributionController extends Controller
 
         }
 
-        return $this->render('AppBundle:Modales:modal_add_attribution.html.twig');
+        return $this->render('AppBundle:Attribution:modal_add_attribution.html.twig');
     }
 
 
@@ -119,7 +118,7 @@ class AttributionController extends Controller
         foreach($ids as $id)
             $mem[] = $rep->find($id);
 
-        return $this->render('AppBundle:Partials:partial_add_attribution_form.html.twig', array(
+        return $this->render('AppBundle:Attribution:partial_add_attribution_form.html.twig', array(
 
             'membres'   => $mem,
             'form'      => $this->createForm(new AttributionType(), new Attribution())->createView()
@@ -129,12 +128,17 @@ class AttributionController extends Controller
 
     /**
      * Appelée pour terminer une chiée d'attributions en même temps
+     *
      * @route("terminer-attributions", name="interne_attribution_terminer")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function terminateAttributionsAction(Request $request) {
 
         $ids = explode(",", $request->get('ids'));
         $fin = $request->get('dateFin');
+
+        /** @var EntityManager $em */
         $em  = $this->getDoctrine()->getManager();
         $rep = $em->getRepository('AppBundle:Attribution');
         $tr  = new DateTimeToStringTransformer(null, null, 'd.m.Y');

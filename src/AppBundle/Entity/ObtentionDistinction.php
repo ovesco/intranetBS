@@ -45,13 +45,54 @@ class ObtentionDistinction
 
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getDistinction()->getNom(); // TODO : peut mieux faire
+    }
+
+    /**
+     * Get distinction
+     *
+     * @return \AppBundle\Entity\Distinction
+     */
+    public function getDistinction()
+    {
+        return $this->distinction;
+    }
+
+    /**
+     * Set distinction
+     *
+     * @param \AppBundle\Entity\Distinction $distinction
+     * @return ObtentionDistinction
+     */
+    public function setDistinction(Distinction $distinction = null)
+    {
+        $this->distinction = $distinction;
+
+        return $this;
+    }
+
+    /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
     }
 
     /**
@@ -63,18 +104,18 @@ class ObtentionDistinction
     public function setDate($date)
     {
         $this->date = $date;
-    
+
         return $this;
     }
 
     /**
-     * Get date
+     * Get membre
      *
-     * @return \DateTime 
+     * @return \AppBundle\Entity\Membre
      */
-    public function getDate()
+    public function getMembre()
     {
-        return $this->date;
+        return $this->membre;
     }
 
     /**
@@ -83,43 +124,10 @@ class ObtentionDistinction
      * @param \AppBundle\Entity\Membre $membre
      * @return ObtentionDistinction
      */
-    public function setMembre(\AppBundle\Entity\Membre $membre = null)
+    public function setMembre(Membre $membre = null)
     {
         $this->membre = $membre;
 
         return $this;
-    }
-
-    /**
-     * Get membre
-     *
-     * @return \AppBundle\Entity\Membre 
-     */
-    public function getMembre()
-    {
-        return $this->membre;
-    }
-
-    /**
-     * Set distinction
-     *
-     * @param \AppBundle\Entity\Distinction $distinction
-     * @return ObtentionDistinction
-     */
-    public function setDistinction(\AppBundle\Entity\Distinction $distinction = null)
-    {
-        $this->distinction = $distinction;
-
-        return $this;
-    }
-
-    /**
-     * Get distinction
-     *
-     * @return \AppBundle\Entity\Distinction 
-     */
-    public function getDistinction()
-    {
-        return $this->distinction;
     }
 }

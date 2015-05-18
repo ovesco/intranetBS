@@ -1,22 +1,14 @@
-{% form_theme emails  ':Templates/Form:ajax_edit_email.html.twig' %}
 
 <div class="ui grid">
 
-
-
     {% for email in emails %}
-
-
-
 
         <div class="row contact_emails_item">
 
             <div class="column">
 
-
                 <div class="ui accordion">
                     <div class="title">
-
 
                         <div class="ui grid">
 
@@ -51,30 +43,14 @@
                     </div>
                 </div>
 
-
-
-
-
                 <div class="expediable">
                     {{ form_row(email.expediable)  }}
                 </div>
 
-
-
-
-
-
             </div>
-
-
-
 
         </div>
 
-
     {% endfor %}
-
-
-
 
 </div>
