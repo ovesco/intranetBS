@@ -47,7 +47,6 @@ class LogOnChangeListener {
                 $modifiedMember = $entity;
 
                 foreach ($changeSet as $property => $values) {
-                    //$this->data_logger->member($editorMember, $modifiedMember, $property, $values[0], $values[1]);
                     $this->historyEntry = new MemberHistory($editorMember, $modifiedMember, $property, $values[0], $values[1]);
                 }
             }
@@ -61,7 +60,6 @@ class LogOnChangeListener {
                 if($modifiedMember != NULL) {
                     foreach ($changeSet as $property => $values) {
                         $detailedProperty = $property . ' (' . $contactInformation . ')';
-                        //$this->data_logger->member($editorMember, $modifiedMember, $detailedProperty, $values[0], $values[1]);
                         $this->historyEntry = new MemberHistory($editorMember, $modifiedMember, $detailedProperty, $values[0], $values[1]);
                     }
                 }
@@ -81,7 +79,6 @@ class LogOnChangeListener {
                     if($values[1] != NULL && $values[1] instanceof \DateTime)
                         $values[1] = $values[1]->format('d.m.Y'); // TODO: take date format from globals
 
-                    //$this->data_logger->member($editorMember, $modifiedMember, $detailedProperty, $values[0], $values[1]);
                     $this->historyEntry = new MemberHistory($editorMember, $modifiedMember, $detailedProperty, $values[0], $values[1]);
                 }
             }
@@ -89,6 +86,8 @@ class LogOnChangeListener {
 
             if($entity instanceof ObtentionDistinction) {
                 $obtentionDistinction = $entity;
+
+                $modifiedMember = $obtentionDistinction->getMembre();
 
                 foreach ($changeSet as $property => $values) {
                     $detailedProperty = $property . ' (' . $obtentionDistinction . ')';
@@ -99,7 +98,6 @@ class LogOnChangeListener {
                     if($values[1] != NULL && $values[1] instanceof \DateTime)
                         $values[1] = $values[1]->format('d.m.Y'); // TODO: take date format from globals
 
-                    //$this->data_logger->member($editorMember, $modifiedMember, $detailedProperty, $values[0], $values[1]);
                     $this->historyEntry = new MemberHistory($editorMember, $modifiedMember, $detailedProperty, $values[0], $values[1]);
                 }
             }
@@ -109,6 +107,8 @@ class LogOnChangeListener {
 
     /**
      * Add the history entry to the DB
+     *
+     * @param PostFlushEventArgs $args
      */
     public function postFlush(PostFlushEventArgs $args)
     {
@@ -127,12 +127,6 @@ class LogOnChangeListener {
 
     }
 
-    public function setEntityHelper($entityHelper)
-    {
-        $this->entityHelper = $entityHelper;
-
-        return $this;
-    }
 }
 
 ?>

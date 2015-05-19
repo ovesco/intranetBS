@@ -3,21 +3,16 @@
 namespace AppBundle\Controller;
 
 
-use AppBundle\Entity\Email;
+use AppBundle\Entity\Membre;
 use AppBundle\Entity\ObtentionDistinction;
-use AppBundle\Entity\Telephone;
-use AppBundle\Form\AddEmailType;
-use AppBundle\Form\AddTelephoneType;
-use AppBundle\Entity\Contact;
 use AppBundle\Form\ObtentionDistinctionType;
-use AppBundle\Form\TelephoneType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class ContactController
@@ -28,8 +23,8 @@ use Symfony\Component\HttpFoundation\Request;
 class DistinctionController extends Controller{
 
     /**
-     * @route("remove/{distinction}", name="interne_structure_remove_distinction", options={"expose"=true})
-     * @paramConverter("distinction", class="AppBundle:ObtentionDistinction")
+     * @Route("remove/{distinction}", name="interne_structure_remove_distinction", options={"expose"=true})
+     * @ParamConverter("distinction", class="AppBundle:ObtentionDistinction")
      * @param $distinction
      * @return JsonResponse
      */
@@ -45,7 +40,7 @@ class DistinctionController extends Controller{
 
     /**
      * Génère la modale pour ajouter une distinction à un ou plusieurs membres
-     * @route("add-obtention", name="interne_add_obtention_distinction")
+     * @Route("add-obtention", name="interne_add_obtention_distinction")
      * @param Request $request
      * @return Response
      */
@@ -58,12 +53,14 @@ class DistinctionController extends Controller{
 
         if($form->isValid()) {
 
+            /** @var EntityManager $em */
             $em      = $this->getDoctrine()->getManager();
             $repo    = $em->getRepository('AppBundle:Membre');
             $membres = explode(",", $form->get('membres')->getData());
 
             foreach($membres as $id) {
 
+                /** @var Membre $membre */
                 $membre = $repo->find($id);
 
                 $membre->addDistinction($obtention);
@@ -75,6 +72,6 @@ class DistinctionController extends Controller{
             return $this->redirect(  $request->headers->get('referer')  );
         }
 
-        return $this->render('AppBundle:Modales:modal_add_obtention.html.twig', array('form' => $form->createView()));
+        return $this->render('AppBundle:ObtentionDistinction:modal_add_obtention.html.twig', array('form' => $form->createView()));
     }
 }

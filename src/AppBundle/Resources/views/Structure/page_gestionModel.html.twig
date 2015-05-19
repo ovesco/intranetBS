@@ -1,6 +1,5 @@
 {% extends 'AppBundle:Layout:layout.html.twig' %}
 
-
 {% block titre %}Modèles{% endblock %}
 
 {% block content %}
@@ -17,17 +16,12 @@
                         Ajouter un model
                     </div>
 
-                    {% include "AppBundle:Model:listeModel.html.twig" with {'models': models}  %}
-
+                    {% include "AppBundle:Model:liste_model.html.twig" with { 'models' : models } %}
 
                 </div>
             </div>
         </div>
     </div>
-
-
-
-
 
 {% endblock %}
 
@@ -38,7 +32,6 @@
     <script src="{{ asset_url }}"></script>
 
     {% endjavascripts %}
-
 
 {% endblock %}
 

@@ -2,19 +2,12 @@
 
 namespace AppBundle\Controller;
 
-use Interne\SecurityBundle\Entity\Role;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Component\HttpFoundation\Request;
-
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use AppBundle\Utils\Email\Email;
-
-use AppBundle\Entity\Membre;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class AppController
@@ -39,17 +32,6 @@ class AppController extends Controller
      */
     public function test() {
 
-        $id    = 1;
-        $value = 2012-04-03;
-
-        $schem = explode('_', 'AppBundle_membre_naissance');
-
-
-        // On nettoie le schem afin de l'utiliser
-        $path  = $schem[1] . '.' . $id . '.' . $schem[2];
-
-        $validator      = $this->get('validation');
-        $requiredPaths  = $validator->validateField($value, $path);
 
         return new Response();
     }

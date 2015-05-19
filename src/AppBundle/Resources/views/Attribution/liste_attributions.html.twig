@@ -1,0 +1,29 @@
+<table class="ui small very basic table">
+    <thead>
+    <tr>
+        <th>Fonction</th>
+        <th>Unité</th>
+        <th>Depuis</th>
+        <th>Jusqu'à</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for attribution in attributions %}
+        <tr>
+            <td>{{ attribution.fonction.nom }}</td>
+            <td>
+                <a href="{{ path('interne_voir_groupe', {groupe: attribution.groupe.id}) }}">{{ attribution.groupe.nom }}</a>
+            </td>
+            <td>{{ attribution.dateDebut|date("d.m.Y") }}</td>
+            <td>{{ attribution.dateFin is null ? '-' : attribution.dateFin|date("d.m.Y") }}</td>
+            <td>
+                <i class="link remove red icon button-remove-attribution" title="supprimer"
+                   data-attribution-id="{{ attribution.id }}"></i>
+                <i class="link flag outline blue icon button-terminer-single-attribution"
+                   title="changer/mettre une date de fin" data-attribution-id="{{ attribution.id }}"></i>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

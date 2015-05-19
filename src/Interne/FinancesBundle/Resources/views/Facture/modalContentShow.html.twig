@@ -51,7 +51,7 @@
             <td>Envoie par courrier</td>
             <td>
 
-                {% include 'AppBundle:Adresse:showFormatPostal.html.twig' with {'adresseExpedition':facture.getOwner.adresseExpedition} %}
+                {% include 'AppBundle:Adresse:show_format_postal.html.twig' with {'adresseExpedition':facture.getOwner.adresseExpedition} %}
 
 
             </td>
@@ -61,7 +61,7 @@
 
             <td>Envoie par e-mail</td>
             <td>
-                {% include 'AppBundle:Email:showListeExpedition.html.twig' with {'listeEmailsExpedition':facture.getOwner.listeEmailsExpedition} %}
+                {% include 'AppBundle:Email:show_liste_expedition.html.twig' with {'listeEmailsExpedition':facture.getOwner.listeEmailsExpedition} %}
 
             </td>
         </tr>

@@ -4,8 +4,6 @@
     Famille {{ famille.nom|capitalize }}
 {% endblock %}
 
-{% form_theme familleForm ':Templates/Form:ajax_edit.html.twig' %}
-
 {% block content %}
 
     <div class="ui page grid">
@@ -66,13 +64,13 @@
 
                         <div class="eight wide column">
                             <h3>Mère</h3>
-                            {% include "AppBundle:Geniteur:showWithForm.html.twig" with {'geniteur':familleForm.mere} %}
+                            {% include "AppBundle:Geniteur:show_with_form.html.twig" with {'geniteur':familleForm.mere} %}
                         </div>
 
                         <div class="eight wide column">
                             <h3>Père</h3>
 
-                            {% include "AppBundle:Geniteur:showWithForm.html.twig" with {'geniteur':familleForm.pere} %}
+                            {% include "AppBundle:Geniteur:show_with_form.html.twig" with {'geniteur':familleForm.pere} %}
                         </div>
 
 
@@ -173,12 +171,12 @@
 
                                         <div class="eight wide column">
                                             <h3>Mère</h3>
-                                            {% include "AppBundle:Geniteur:showWithForm.html.twig" with {'geniteur':familleForm.mere} %}
+                                            {% include "AppBundle:Geniteur:show_with_form.html.twig" with {'geniteur':familleForm.mere} %}
                                         </div>
 
                                         <div class="eight wide column">
                                             <h3>Père</h3>
-                                            {% include "AppBundle:Geniteur:showWithForm.html.twig" with {'geniteur':familleForm.pere} %}
+                                            {% include "AppBundle:Geniteur:show_with_form.html.twig" with {'geniteur':familleForm.pere} %}
                                             </div>
                                         </div>
 
