@@ -1,0 +1,130 @@
+
+{% form_theme searchForm 'AppBundle:Templates:form_template.html.twig' %}
+
+<h4 class="ui header">Formulaire de recherche</h4>
+
+{{ form_start(searchForm, {'attr': {'class': 'ui form'}}) }}
+
+<div class="ui accordion">
+
+    <div class="title">
+        <i class="dropdown icon"></i>
+        {{ form_label(searchForm.id) }}
+    </div>
+    <div class="content">
+        {{ form_row(searchForm.id) }}
+    </div>
+
+    <div class=" title">
+        <i class="dropdown icon"></i>
+        Montants émis
+    </div>
+    <div class="content">
+
+        <h5 class="header">Montant total</h5>
+        <div class="two fields">
+        {{ form_row(searchForm.fromMontantEmis) }}
+        {{ form_row(searchForm.toMontantEmis) }}
+        </div>
+
+        <h5 class="header">Montant des créances</h5>
+        <div class="two fields">
+            {{ form_row(searchForm.fromMontantEmisCreances) }}
+            {{ form_row(searchForm.toMontantEmisCreances) }}
+        </div>
+
+        <h5 class="header">Montant des rappels</h5>
+        <div class="two fields">
+            {{ form_row(searchForm.fromMontantEmisRappels) }}
+            {{ form_row(searchForm.toMontantEmisRappels) }}
+        </div>
+
+    </div>
+
+    <div class=" title">
+        <i class="dropdown icon"></i>
+        Date de création
+    </div>
+    <div class="content">
+        {{ form_row(searchForm.fromDateCreation) }}
+        {{ form_row(searchForm.toDateCreation) }}
+    </div>
+
+    <div class=" title">
+        <i class="dropdown icon"></i>
+        Recherche par créances
+    </div>
+    <div class="content">
+        {{ form_row(searchForm.titreCreance) }}
+
+        <h5 class="header">Montant de la créance</h5>
+
+        <div class="two fields">
+            {{ form_row(searchForm.fromMontantEmisCreance) }}
+            {{ form_row(searchForm.toMontantEmisCreance) }}
+        </div>
+
+        <h5 class="header">Date de création</h5>
+
+        {{ form_row(searchForm.fromDateCreationCreance) }}
+        {{ form_row(searchForm.toDateCreationCreance) }}
+
+    </div>
+
+    <div class=" title">
+        <i class="dropdown icon"></i>
+        Recherche par rappels
+    </div>
+    <div class="content">
+        {{ form_row(searchForm.nombreRappels) }}
+
+        <h5 class="header">Montant du rappel</h5>
+
+        <div class="two fields">
+            {{ form_row(searchForm.fromMontantEmisRappel) }}
+            {{ form_row(searchForm.toMontantEmisRappel) }}
+        </div>
+
+
+        <h5 class="header">Date de création</h5>
+
+        {{ form_row(searchForm.fromDateCreationRappel) }}
+        {{ form_row(searchForm.toDateCreationRappel) }}
+
+    </div>
+
+    <div class=" title">
+        <i class="dropdown icon"></i>
+        Payements
+    </div>
+    <div class="content">
+        {{ form_row(searchForm.statut) }}
+
+        <h5 class="header">Montant reçu</h5>
+
+        <div class="two fields">
+            {{ form_row(searchForm.fromMontantRecu) }}
+            {{ form_row(searchForm.toMontantRecu) }}
+        </div>
+
+
+        <h5 class="header">Date de payement</h5>
+
+        {{ form_row(searchForm.fromDatePayement) }}
+        {{ form_row(searchForm.toDatePayement) }}
+
+    </div>
+
+</div>
+
+
+
+
+{{ form_rest(searchForm) }}
+
+
+<input type="submit" value="Rechercher" class="ui blue submit button">
+
+{{ form_end(searchForm) }}
+
+

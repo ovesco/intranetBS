@@ -6,11 +6,15 @@ use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\Adresse;
 
+use FOS\ElasticaBundle\Configuration\Search;
+
 
 /**
  * Class FactureToMembre
  * @package Interne\FinancesBundle\Entity
- * @ORM\Entity(repositoryClass="Interne\FinancesBundle\Entity\FactureToMembreRepository")
+ * @ORM\Entity
+ * @Search(repositoryClass="Interne\FinancesBundle\SearchRepository\FactureToMembreRepository")
+ *
  */
 class FactureToMembre extends Facture
 {

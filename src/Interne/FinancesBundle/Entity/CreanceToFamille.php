@@ -57,7 +57,7 @@ class CreanceToFamille extends Creance
     }
 
     /**
-     * Conversion de Creance à CranceToFamille
+     * Conversion de Creance à CreanceToFamille
      *
      * @param Creance $creance
      */

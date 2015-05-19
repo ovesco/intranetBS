@@ -26,6 +26,8 @@ class CreanceSearchType extends AbstractType
             ->add('nomMembre','text',array('label' => 'Nom', 'required' => false))
             ->add('prenomMembre','text',array('label' => 'Prénom', 'required' => false))
             ->add('nomFamille','text',array('label' => 'Nom de famille', 'required' => false))
+            ->add('factured','choice',array('label'=>'Facturée?','choices'=>array('yes'=>'oui','no'=>'non'),'required'  => false))
+            ->add('payed','choice',array('label'=>'Payée?','choices'=>array('yes'=>'oui','no'=>'non'),'required'  => false))
 
         ;
 

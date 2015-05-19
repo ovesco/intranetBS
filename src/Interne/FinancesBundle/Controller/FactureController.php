@@ -2,6 +2,7 @@
 
 namespace Interne\FinancesBundle\Controller;
 
+use Interne\FinancesBundle\SearchClass\FactureSearch;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,6 +14,9 @@ use Interne\FinancesBundle\Entity\FactureToMembre;
 use Interne\FinancesBundle\Entity\FactureToFamille;
 use Interne\FinancesBundle\Entity\Facture;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Interne\FinancesBundle\Form\FactureSearchType;
+use Interne\FinancesBundle\SearchRepository\FactureToFamilleRepository;
+use Interne\FinancesBundle\SearchRepository\FactureToMembreRepository;
 
 
 /**
@@ -309,6 +313,51 @@ class FactureController extends Controller
                 $em->flush();
             }
         }
+    }
+
+    /**
+     * @Route("/search", name="interne_fiances_facture_search", options={"expose"=true})
+     * @param Request $request
+     * @return Response
+     */
+    public function searchAction(Request $request){
+
+
+        $factureSearch = new FactureSearch();
+
+        $searchForm = $this->createForm(new FactureSearchType,$factureSearch);
+
+        $results = array();
+
+        $searchForm->handleRequest($request);
+
+        if ($searchForm->isValid()) {
+
+            $factureSearch = $searchForm->getData();
+
+
+            $elasticaManager = $this->container->get('fos_elastica.manager');
+
+            /** @var FactureToMembreRepository $repository */
+            $repository = $elasticaManager->getRepository('InterneFinancesBundle:FactureToMembre');
+
+            $resultsFactureToMembre = $repository->search($factureSearch);
+
+            /** @var FactureToFamilleRepository $repository */
+            $repository = $elasticaManager->getRepository('InterneFinancesBundle:FactureToFamille');
+
+            $resultsFactureToFamille = $repository->search($factureSearch);
+
+            $results = array_merge($resultsFactureToMembre,$resultsFactureToFamille);
+
+
+
+        }
+
+
+        return $this->render('InterneFinancesBundle:Facture:page_recherche.html.twig',
+            array('searchForm'=>$searchForm->createView(),'factures'=>$results));
+
     }
 
 

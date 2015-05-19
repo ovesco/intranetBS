@@ -88,6 +88,18 @@ class CreanceSearch
     private $idFacture;
 
     /**
+     * @var string
+     *
+     */
+    private $factured;
+
+    /**
+     * @var string
+     *
+     */
+    private $payed;
+
+    /**
      * Get id
      *
      * @return integer
@@ -384,5 +396,55 @@ class CreanceSearch
     {
         return $this->nomFamille;
     }
+
+
+    /**
+     * Set factured
+     *
+     * @param string $factured
+     *
+     * @return CreanceSearch
+     */
+    public function setFactured($factured)
+    {
+        $this->factured = $factured;
+
+        return $this;
+    }
+
+    /**
+     * Get factured
+     *
+     * @return string
+     */
+    public function getFactured()
+    {
+        return $this->factured;
+    }
+
+    /**
+     * Set payed
+     *
+     * @param string $payed
+     *
+     * @return CreanceSearch
+     */
+    public function setPayed($payed)
+    {
+        $this->payed = $payed;
+
+        return $this;
+    }
+
+    /**
+     * Get payed
+     *
+     * @return string
+     */
+    public function getPayed()
+    {
+        return $this->payed;
+    }
+
 }
 

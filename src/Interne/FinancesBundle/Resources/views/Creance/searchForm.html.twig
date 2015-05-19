@@ -36,6 +36,8 @@
     </div>
     <div class="content">
 
+        {{ form_row(searchForm.payed) }}
+
         <div class="two fields">
             {{ form_row(searchForm.fromMontantRecu) }}
 
@@ -71,7 +73,7 @@
         Lien avec les factures
     </div>
     <div class="content">
-
+        {{ form_row(searchForm.factured) }}
 
         {{ form_row(searchForm.idFacture) }}
     </div>

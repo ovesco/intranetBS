@@ -350,13 +350,10 @@ class CreanceController extends Controller
             $repository = $elasticaManager->getRepository('InterneFinancesBundle:CreanceToFamille');
 
             $resultsCreanceToFamille = $repository->search($creanceSearch);
-            //$results = $resultsCreanceToMembre;
+
             $results = array_merge($resultsCreanceToMembre,$resultsCreanceToFamille);
 
         }
-
-
-
 
         return $this->render('InterneFinancesBundle:Creance:page_recherche.html.twig',
             array('searchForm'=>$searchForm->createView(),'creances'=>$results));

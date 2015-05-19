@@ -5,11 +5,13 @@ namespace Interne\FinancesBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\Famille;
 use AppBundle\Entity\Adresse;
+use FOS\ElasticaBundle\Configuration\Search;
 
 /**
  * Class FactureToFamille
  * @package Interne\FinancesBundle\Entity
- * @ORM\Entity(repositoryClass="Interne\FinancesBundle\Entity\FactureToFamilleRepository")
+ * @ORM\Entity
+ * @Search(repositoryClass="Interne\FinancesBundle\SearchRepository\FactureToFamilleRepository")
  */
 class FactureToFamille extends Facture
 {

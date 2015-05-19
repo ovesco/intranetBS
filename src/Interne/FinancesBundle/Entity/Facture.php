@@ -9,10 +9,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Class Facture
  *
  * @ORM\Table(name="finances_bundle_factures")
- * @ORM\Entity(repositoryClass="Interne\FinancesBundle\Entity\FactureRepository")
+ * @ORM\Entity
  * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="discriminator", type="string")
- * @ORM\DiscriminatorMap({"to_membre" = "FactureToMembre", "to_famille" = "FactureToFamille"})
+ * @ORM\DiscriminatorColumn(name="proprietaire", type="string")
+ * @ORM\DiscriminatorMap({"membre" = "FactureToMembre", "famille" = "FactureToFamille"})
  */
 abstract class Facture implements OwnerInterface
 {

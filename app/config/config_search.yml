@@ -51,6 +51,10 @@ fos_elastica:
                         remarque: ~
                         montantEmis: ~
                         montantRecu: ~
+                        isFactured:
+                            type: boolean
+                        isPayed:
+                            type: boolean
                         dateCreation: { type: date }
                         facture:
                             type: "nested"
@@ -74,6 +78,10 @@ fos_elastica:
                         remarque: ~
                         montantEmis: ~
                         montantRecu: ~
+                        isFactured:
+                            type: boolean
+                        isPayed:
+                            type: boolean
                         dateCreation: { type: date}
                         facture:
                             type: "nested"
@@ -87,6 +95,69 @@ fos_elastica:
                     persistence:
                         driver: orm
                         model: Interne\FinancesBundle\Entity\CreanceToFamille
+                        provider: ~
+                        listener: ~
+                        finder: ~
+                factures_to_membre:
+                    mappings:
+                        id: ~
+                        montantEmis: ~
+                        montantEmisCreances: ~
+                        montantEmisRappels: ~
+                        nombreRappels: ~
+                        dateCreation: { type: date}
+                        datePayement: { type: date}
+                        montantRecu: ~
+                        creances:
+                            type: "nested"
+                            properties:
+                                titre: ~
+                                montantEmis: ~
+                                dateCreation: { type: date}
+                        rappels:
+                            type: "nested"
+                            properties:
+                                montantEmis: ~
+                                dateCreation: { type: date}
+                        membre:
+                            type: "nested"
+                            properties:
+                                prenom: { type: string }
+                                nom: { type: string }
+                    persistence:
+                        driver: orm
+                        model: Interne\FinancesBundle\Entity\FactureToMembre
+                        provider: ~
+                        listener: ~
+                        finder: ~
+                factures_to_famille:
+                    mappings:
+                        id: ~
+                        montantEmis: ~
+                        montantEmisCreances: ~
+                        montantEmisRappels: ~
+                        nombreRappels: ~
+                        dateCreation: { type: date}
+                        datePayement: { type: date}
+                        montantRecu: ~
+                        creances:
+                            type: "nested"
+                            properties:
+                                titre: ~
+                                montantEmis: ~
+                                dateCreation: { type: date}
+                        rappels:
+                            type: "nested"
+                            properties:
+                                montantEmis: ~
+                                dateCreation: { type: date}
+                        famille:
+                            type: "nested"
+                            properties:
+                                nom: { type: string }
+                    persistence:
+                        driver: orm
+                        model: Interne\FinancesBundle\Entity\FactureToFamille
                         provider: ~
                         listener: ~
                         finder: ~

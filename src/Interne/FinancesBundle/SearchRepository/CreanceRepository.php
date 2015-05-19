@@ -112,30 +112,70 @@ class CreanceRepository extends Repository
         }
 
 
+        $factured = $creanceSearch->getFactured();
+        if($factured == 'yes'){
+
+            $emptyQuery = false;
+            /*
+             * si facturée, on exclu tout les facture en attente et on regarde si le num de réf est spécifié.
+             */
+
+            $termQuery = new \Elastica\Query\Term(array('isFactured'=>true));
+            $boolQuery->addMust($termQuery);
 
 
-        $idFacture = $creanceSearch->getIdFacture();
-        if($idFacture != null && $idFacture != '')
-        {
+
+            $idFacture = $creanceSearch->getIdFacture();
+            if($idFacture != null && $idFacture != '')
+            {
+                $emptyQuery = false;
+
+                $baseQuery = new \Elastica\Query\MatchAll();
+
+
+                $term = new \Elastica\Filter\Term(array('facture.id' => $idFacture));
+
+                $boolFilter = new \Elastica\Filter\Bool();
+                $boolFilter->addMust($term);
+
+                $nested = new \Elastica\Filter\Nested();
+                $nested->setPath("facture");
+                $nested->setFilter($boolFilter);
+
+
+                $idFactureQuery = new \Elastica\Query\Filtered($baseQuery, $nested);
+
+                $boolQuery->addMust($idFactureQuery);
+            }
+
+
+
+        }
+        elseif($factured == 'no'){
+
             $emptyQuery = false;
 
-            $baseQuery = new \Elastica\Query\MatchAll();
+            $termQuery = new \Elastica\Query\Term(array('isFactured'=>false));
+            $boolQuery->addMust($termQuery);
 
-
-            $term = new \Elastica\Filter\Term(array('facture.id' => $idFacture));
-
-            $boolFilter = new \Elastica\Filter\Bool();
-            $boolFilter->addMust($term);
-
-            $nested = new \Elastica\Filter\Nested();
-            $nested->setPath("facture");
-            $nested->setFilter($boolFilter);
-
-
-            $factureQuery = new \Elastica\Query\Filtered($baseQuery, $nested);
-
-            $boolQuery->addMust($factureQuery);
         }
+
+        $payed = $creanceSearch->getPayed();
+        if($payed == 'yes'){
+
+            $emptyQuery = false;
+            $termQuery = new \Elastica\Query\Term(array('isPayed'=>true));
+            $boolQuery->addMust($termQuery);
+
+
+        }
+        elseif($payed == 'no'){
+            $emptyQuery = false;
+            $termQuery = new \Elastica\Query\Term(array('isPayed'=>false));
+            $boolQuery->addMust($termQuery);
+        }
+
+
 
 
 

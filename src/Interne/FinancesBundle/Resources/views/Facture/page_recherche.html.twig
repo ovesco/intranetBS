@@ -1,0 +1,52 @@
+{% extends "AppBundle:Layout:layout.html.twig" %}
+
+
+{% block titre %}Recherche de facture{% endblock %}
+
+{% block content %}
+
+    <div class="ui page grid">
+        <div class="row">
+            <div class="four wide column">
+
+                {% include "InterneFinancesBundle:Facture:searchForm.html.twig" with {'searchForm':searchForm} %}
+
+
+            </div>
+
+
+            <div class="twelve wide column">
+
+
+                {% if factures is not empty %}
+
+
+                    {% include "InterneFinancesBundle:Facture:liste_search_results.html.twig" with {'factures':factures} %}
+
+
+                {% endif %}
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block js %}
+
+
+    {% javascripts
+    '@InterneFinancesBundle/Resources/public/js/creance.js'
+    '@InterneFinancesBundle/Resources/public/js/facture.js'
+    '@InterneFinancesBundle/Resources/public/js/rappel.js'
+    '@InterneFinancesBundle/Resources/public/js/event_catcher.js'
+    '@InterneFinancesBundle/Resources/public/js/liste.js'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+
+{% endblock %}

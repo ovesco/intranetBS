@@ -2,15 +2,15 @@
 
 namespace Interne\FinancesBundle\SearchRepository;
 
-use Interne\FinancesBundle\SearchClass\CreanceSearch;
+
+use Interne\FinancesBundle\SearchClass\FactureSearch;
 
 
-class CreanceToFamilleRepository extends CreanceRepository
+class FactureToMembreRepository extends FactureRepository
 {
+    public function search(FactureSearch $factureSearch){
 
-    public function search(CreanceSearch $creanceSearch){
-
-        $arrayOfQuery = parent::search($creanceSearch);
+        $arrayOfQuery = parent::search($factureSearch);
 
         /** @var \Elastica\Query $query */
         $query = $arrayOfQuery['mainQuery'];
@@ -21,6 +21,7 @@ class CreanceToFamilleRepository extends CreanceRepository
         $emptyQuery = $arrayOfQuery['emptyQuery'];
 
 
+        /*
         $nom = $creanceSearch->getNomFamille();
         if($nom != null && $nom != '')
         {
@@ -28,7 +29,7 @@ class CreanceToFamilleRepository extends CreanceRepository
             $emptyQuery = false;
             /*
              * C'est nécéssaire car elastica parse en minuscule
-             */
+             *
 
             $nom = strtolower($nom);
 
@@ -52,6 +53,7 @@ class CreanceToFamilleRepository extends CreanceRepository
             $boolQuery->addMust($nomQuery);
         }
 
+        */
 
 
         $query->setQuery($boolQuery);
@@ -65,4 +67,5 @@ class CreanceToFamilleRepository extends CreanceRepository
         }
 
     }
+
 }
