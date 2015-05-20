@@ -110,7 +110,32 @@ elastic_port: 9200
 php app/console fos:elastica:reset --force
 php app/console fos:elastica:populate
 ```
+### Elasticsearch sous Debian :
+Installer java-jdk version 8 (possible d'installer le 7 normalement)
+```
+echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | tee /etc/apt/sources.list.d/webupd8team-java.list
+echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | tee -a /etc/apt/sources.list.d/webupd8team-java.list
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886
+apt-get update
+apt-get install oracle-java8-installer
+```
+Installer elasticsearch :
+```
+wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+echo "deb http://packages.elastic.co/elasticsearch/1.5/debian stable main" | sudo tee -a /etc/apt/sources.list
+sudo apt-get update && sudo apt-get install elasticsearch
+sudo mkdir /usr/share/elasticsearch/data
+sudo chown elasticsearch:elasticsearch usr/share/elasticsearch/data -R
 
+```
+(optional) start @boot
+```
+sudo update-rc.d elasticsearch defaults 95 10
+```
+Sinon
+```
+sudo service elasticsearch start
+```
 
 # Tests
 
