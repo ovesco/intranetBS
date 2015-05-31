@@ -127,12 +127,24 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
     private $envoiFacture = 'Membre';
 
 
+    /*
+     * ===== History Bundle ====
+     */
     /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Interne\HistoryBundle\Entity\MemberHistory", mappedBy="modifiedMember", cascade={"persist","remove"})
      */
     private $historique;
+
+
+    /*
+     * ===== MatBundle
+     */
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Membre", mappedBy="membre", cascade={"persist", "remove"})
+     */
+    private $bookings;
 
     /**
      * Constructor

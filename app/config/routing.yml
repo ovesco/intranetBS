@@ -1,3 +1,8 @@
+mat:
+    resource: "@MatBundle/Controller/"
+    type:     annotation
+    prefix:   /interne/materiel
+
 interne_organisation:
     resource: "@InterneOrganisationBundle/Controller/"
     type:     annotation
