@@ -41,6 +41,7 @@ class AppKernel extends Kernel
             new Interne\SecurityBundle\InterneSecurityBundle(),
             new Interne\OrganisationBundle\InterneOrganisationBundle(),
             new Interne\HistoryBundle\InterneHistoryBundle(),
+            new Interne\MatBundle\MatBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

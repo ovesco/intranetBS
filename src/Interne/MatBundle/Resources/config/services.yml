@@ -1,0 +1,4 @@
+services:
+#    mat.example:
+#        class: Interne\MatBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
