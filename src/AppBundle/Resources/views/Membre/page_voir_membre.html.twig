@@ -133,7 +133,10 @@
                     <div class="eleven wide column">
 
                         <div class="ui top attached message">
-                            <div class="header"><h3><i class="tags icon"></i>Roles dans la brigade - <a class="add-single-attribution" data-id="{{ membre.id }}" href="#">ajouter</a></h3></div>
+                            <div class="header"><h3><i class="tags icon"></i>Roles dans la brigade - <a href="#"
+                                                                                                        id="ajouter-attribution"
+                                                                                                        data-id="{{ membre.id }}">ajouter</a>
+                                </h3></div>
                         </div>
 
                         <div class="ui bottom attached segment">
@@ -144,7 +147,10 @@
                     <div class="five wide column">
 
                         <div class="ui top attached message">
-                            <div class="header"><h3><i class="star icon"></i>Distinctions - <a href="#" class="button-single-add-distinction" data-id="{{ membre.id }}">ajouter</a></h3></div>
+                            <div class="header"><h3><i class="star icon"></i>Distinctions - <a href="#"
+                                                                                               id="ajouter-distinction"
+                                                                                               data-id="{{ membre.id }}">ajouter</a>
+                                </h3></div>
                         </div>
 
                         <div class="ui bottom attached segment">
@@ -185,12 +191,13 @@
             </div>
         </div>
     </div>
+    {#
+        <!-- La modale pour ajouter un téléphone -->
+        {{ render(controller('AppBundle:Contact:renderModalTelephone')) }}
 
-    <!-- La modale pour ajouter un téléphone -->
-    {{ render(controller('AppBundle:Contact:renderModalTelephone')) }}
-
-    <!-- et celle pour ajouter un email -->
-    {{ render(controller('AppBundle:Contact:renderModalEmail')) }}
+        <!-- et celle pour ajouter un email -->
+        {{ render(controller('AppBundle:Contact:renderModalEmail')) }}
+    #}
 
 {% endblock %}
 
@@ -206,6 +213,7 @@
 
     {# javscript pour l'interface du finance  #}
     {% javascripts
+    '@AppBundle/Resources/public/js/Membre/page_voir_membre.js'
     '@InterneFinancesBundle/Resources/public/js/creance.js'
     '@InterneFinancesBundle/Resources/public/js/facture.js'
     '@InterneFinancesBundle/Resources/public/js/rappel.js'
@@ -222,7 +230,6 @@
     {% javascripts
     '@AppBundle/Resources/public/js/editable.js'
     '@AppBundle/Resources/public/js/specials/validation_popup_generation.js'
-    '@AppBundle/Resources/public/js/Membre/page_voir_membre.js'
     '@AppBundle/Resources/public/js/Contact/contact_form.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
