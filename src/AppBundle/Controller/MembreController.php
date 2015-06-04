@@ -2,25 +2,18 @@
 
 namespace AppBundle\Controller;
 
-use Interne\SecurityBundle\Entity\User;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-
-use AppBundle\Utils\Data\Useful as clearer;
-
-use AppBundle\Entity\Membre;
 use AppBundle\Entity\Famille;
-
+use AppBundle\Entity\Membre;
 use AppBundle\Form\AddMembreType;
-use AppBundle\Form\FamilleType;
-use AppBundle\Form\MembreFamilleType;
 use AppBundle\Form\VoirMembreType;
-
-
-use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Utils\Data\Useful as clearer;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
 
 /**
  * Class MembreController
@@ -33,6 +26,8 @@ class MembreController extends Controller {
      * Affiche la page d'ajout de membre -> Membre/page_ajouter_membre.html.twig
      * et valide le formulaire si celui-ci est soumis
      * @Route("/ajouter", name="interne_ajouter_membre")
+     * @param Request $request
+     * @return Response
      */
     public function ajouterMembreAction(Request $request) {
 

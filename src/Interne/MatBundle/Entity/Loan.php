@@ -64,6 +64,16 @@ class Loan
     }
 
     /**
+     * Get status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
      * Set status
      *
      * @param string $status
@@ -78,13 +88,13 @@ class Loan
     }
 
     /**
-     * Get status
+     * Get damage
      *
      * @return string
      */
-    public function getStatus()
+    public function getDamage()
     {
-        return $this->status;
+        return $this->damage;
     }
 
     /**
@@ -102,13 +112,13 @@ class Loan
     }
 
     /**
-     * Get damage
+     * Get comment
      *
      * @return string
      */
-    public function getDamage()
+    public function getComment()
     {
-        return $this->damage;
+        return $this->comment;
     }
 
     /**
@@ -126,16 +136,14 @@ class Loan
     }
 
     /**
-     * Get comment
+     * Get booking
      *
-     * @return string
+     * @return \Interne\MatBundle\Entity\Booking
      */
-    public function getComment()
+    public function getBooking()
     {
-        return $this->comment;
+        return $this->booking;
     }
-
-
 
     /**
      * Set booking
@@ -152,38 +160,26 @@ class Loan
     }
 
     /**
-     * Get booking
-     *
-     * @return \Interne\MatBundle\Entity\Booking
-     */
-    public function getBooking()
-    {
-        return $this->booking;
-    }
-
-
-
-    /**
-     * Set equipement
-     *
-     * @param \Interne\MatBundle\Entity\Equipement $equipement
-     *
-     * @return Loan
-     */
-    public function setEquipement(\Interne\MatBundle\Entity\Equipement $equipement = null)
-    {
-        $this->equipement = $equipement;
-
-        return $this;
-    }
-
-    /**
      * Get equipement
      *
-     * @return \Interne\MatBundle\Entity\Equipement
+     * @return \Interne\MatBundle\Entity\Equipment
      */
     public function getEquipement()
     {
         return $this->equipement;
+    }
+
+    /**
+     * Set equipement
+     *
+     * @param \Interne\MatBundle\Entity\Equipment $equipement
+     *
+     * @return Loan
+     */
+    public function setEquipement(\Interne\MatBundle\Entity\Equipment $equipement = null)
+    {
+        $this->equipement = $equipement;
+
+        return $this;
     }
 }
