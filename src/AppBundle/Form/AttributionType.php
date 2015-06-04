@@ -17,7 +17,7 @@ class AttributionType extends AbstractType
             $attribution = $event->getData();
             $form = $event->getForm();
 
-            /* We have to check that is doesn't exist because of form iheritance */
+            /* We have to check that is doesn't exist because of form inheritance */
             if (!$form->has('membre')) {
                 if (null !== $attribution->getMembre()) {
                     $form->add('membre', 'hidden', array(

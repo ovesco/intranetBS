@@ -3,13 +3,26 @@ $('#membre-infos-context .menu .item').tab({
 });
 
 $('#ajouter-attribution').click(function() {
-    var idMembre = { idMembre: $(this).data('membre') };
-    getModal(idMembre, Routing.generate('attribution_get_modal'));
+    var idMembre = {idMembre: $(this).data('membre-id')};
+    getModal(idMembre, Routing.generate('attribution_add_modal'));
+})
+
+$('#modifier-attribution').click(function () {
+    getModal(null, Routing.generate('attribution_edit_modal', {attribution: $(this).data('attribution-id')}));
+})
+
+$('#terminer-attribution').click(function () {
+    var url = Routing.generate('attribution_terminate', {attribution: $(this).data('attribution-id')});
+})
+
+$('#supprimer-attribution').click(function () {
+    if (removeAttribution($(this).data('attribution-id')))
+        $(btn).parent().parent().remove();
 })
 
 $('#ajouter-distinction').click(function() {
-    var idMembre = { idMembre: $(this).data('membre') };
-    getModal(idMembre, Routing.generate('obtention-distinction_get_modal'));
+    var idMembre = {idMembre: $(this).data('membre-id')};
+    getModal(idMembre, Routing.generate('obtention-distinction_add_modal'));
 })
 
 $('#modifier-famille').click(function() {
@@ -21,7 +34,6 @@ $('#modifier-numero-bs').click(function() {
 });
 
 $('.editable').click(function() {
-
     editable.init($(this));
 });
 
@@ -35,34 +47,6 @@ function createAdresse(btn) {
 
 }
 
-/**
- * Suppression d'attributions ou de distinctions pour le membre donné
- * @param btn le bouton qui a triggeré l'action
- * @param membre l'id du membre
- * @param type 'distinction' ou 'attribution'
- * @param id l'id de l'attribution ou distinction
- */
-function removeAttributionOrDistinction(btn, membre, type, id) {
-
-    if(confirm('Etes-vous sur de vouloir supprimer ça ?')) {
-        $.ajax({
-            url: Routing.generate('interne_ajax_membre_remove_attr_dist', {
-                membre: membre,
-                type: type,
-                obj: id
-            }),
-            type: 'GET',
-            success: function () {
-
-                $(btn).parent().parent().remove();
-            },
-            error: function (data) {
-                //alert('Impossible de supprimer l\'objet');
-                alert(JSON.stringify(data));
-            }
-        });
-    }
-}
 
 /**
  * Cette méthode permet de vérifier si un numéro BS est occupé ou non
