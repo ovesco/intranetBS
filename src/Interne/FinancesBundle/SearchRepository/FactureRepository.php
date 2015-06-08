@@ -133,9 +133,33 @@ class FactureRepository extends Repository
         {
             $emptyQuery = false;
 
+            //$titre = strtolower($titre);
+
+            /*
+
+            $fieldQuery = new \Elastica\Query\Match();
+            $fieldQuery->setFieldQuery('creances.titre',$titre);
+            $fieldQuery->setFieldMinimumShouldMatch('creances.titre','100%');
+            $boolQuery->addMust($fieldQuery);
+
+            */
 
 
+            $boolFilter = new \Elastica\Filter\Bool();
+            $term = new \Elastica\Filter\Term(array('creances.titre' => $titre));
+            $boolFilter->addMust($term);
 
+            $nested = new \Elastica\Filter\Nested();
+            $nested->setPath("creances");
+            $nested->setFilter($boolFilter);
+
+            //$nested->setQuery(new \Elastica\Query\MatchAll());
+
+            /*
+             * meme code que creance mais probalblement le onetomany qui fait foiré
+             * */
+
+            /*
 
             $baseQuery = new \Elastica\Query\MatchAll();
 
@@ -145,19 +169,28 @@ class FactureRepository extends Repository
             $boolFilter->addMust($term);
 
             $nested = new \Elastica\Filter\Nested();
-            $nested->setPath('creances');
+            $nested->setPath("creances");
             $nested->setFilter($boolFilter);
 
+            */
 
-            $titreCreanceQuery = new \Elastica\Query\Filtered($baseQuery, $nested);
+
+            $titreCreanceQuery = new \Elastica\Query\Filtered(new \Elastica\Query\MatchAll(), $nested);
+
+
 
             var_dump($titreCreanceQuery->toArray());
 
             $boolQuery->addMust($titreCreanceQuery);
 
 
+
+
         }
 
+        /*
+         *
+         * todo les nested ne marche pas encore
 
         $fromMontantEmisCreance = $factureSearch->getFromMontantEmisCreance();
         $toMontantEmisCreance = $factureSearch->getToMontantEmisCreance();
@@ -210,6 +243,7 @@ class FactureRepository extends Repository
         }
 
 
+        */
 
         $nombreRappels = $factureSearch->getNombreRappels();
         if(($nombreRappels != null) && ($nombreRappels != '')){

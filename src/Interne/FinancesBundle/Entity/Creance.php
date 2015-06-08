@@ -78,10 +78,7 @@ abstract class Creance implements OwnerInterface
     /**
      * @return mixed
      */
-    public function getOwner()
-    {
-        return null;
-    }
+    abstract public function getOwner();
 
 
     /**

@@ -1,0 +1,36 @@
+<div class="ui small modal" aria-hidden="true">
+    <div class="header">Détail du payement</div>
+    <div class="content">
+
+
+        <table class="ui definition table">
+            <tbody>
+            <tr>
+                <td>N° de réf.</td>
+                <td>
+                    {{ payement.idFacture }}
+                </td>
+            </tr>
+            <tr>
+                <td>Facture</td>
+                <td>
+                    {% if payement.facture is not null %}
+                    N°{{ payement.facture.id }}
+                    <a onclick="openFactureShow({{ payement.facture.id }});" >
+                        <i class="zoom icon"></i>
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
+
+
+
+            </tbody>
+        </table>
+
+
+
+
+    </div>
+    <div class="actions"></div>
+</div>

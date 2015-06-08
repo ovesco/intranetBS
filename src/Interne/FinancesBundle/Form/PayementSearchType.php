@@ -16,8 +16,10 @@ class PayementSearchType extends AbstractType
         $builder
 
             ->add('idFacture','number',array('label' => 'N°Facture', 'required' => false))
-            ->add('montantRecu','number',array('label' => 'Montant reçu', 'required' => false))
-            ->add('datePayement','date',array('label' => 'Date de payement','data'=> null,'required' => false))
+            ->add('fromMontantRecu','number',array('label' => 'De', 'required' => false))
+            ->add('toMontantRecu','number',array('label' => 'a', 'required' => false))
+            ->add('fromDate','date',array('label' => 'De', 'required' => false))
+            ->add('toDate','date',array('label' => 'à', 'required' => false))
             ->add('state','choice',array('label' => 'Lien avec facture ','required' => false,
                     'choices' => array( 'waiting' =>'En attente de validation',
                                         'not_found' =>'Facture inexistante',
@@ -28,14 +30,7 @@ class PayementSearchType extends AbstractType
                     )))
 
 
-            /*
-             * Données suplémentaires
-             */
 
-            ->add('montantRecuMinimum','number',array('required' => false,'mapped' => false))
-            ->add('montantRecuMaximum','number', array('required' => false,'mapped' => false))
-            ->add('datePayementMaximum','date',array('data'=> null,'required' => false,'mapped' => false))
-            ->add('datePayementMinimum','date',array('data'=> null,'required' => false,'mapped' => false))
 
 
 
@@ -50,7 +45,7 @@ class PayementSearchType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Interne\FinancesBundle\Entity\Payement'
+            'data_class' => 'Interne\FinancesBundle\SearchClass\PayementSearch'
         ));
     }
 

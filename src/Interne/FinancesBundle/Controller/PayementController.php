@@ -2,18 +2,31 @@
 
 namespace Interne\FinancesBundle\Controller;
 
-use Interne\FinancesBundle\Entity\CreanceToFamille;
-use Interne\FinancesBundle\Entity\CreanceToMembre;
-use Interne\FinancesBundle\Form\FactureRepartitionType;
+/* Routing */
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Interne\FinancesBundle\Entity\Payement;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
-use Interne\FinancesBundle\Form\PayementSearchType;
+
+
+/* Entity */
+use Interne\FinancesBundle\Entity\CreanceToFamille;
+use Interne\FinancesBundle\Entity\CreanceToMembre;
 use Interne\FinancesBundle\Entity\FactureRepository;
 use Interne\FinancesBundle\Entity\Facture;
+use Interne\FinancesBundle\Entity\Payement;
+
+/* Form */
+use Interne\FinancesBundle\Form\FactureRepartitionType;
+use Interne\FinancesBundle\Form\PayementSearchType;
+
+/* Other */
+use Interne\FinancesBundle\SearchClass\PayementSearch;
+use Interne\FinancesBundle\SearchRepository\PayementRepository;
+
 
 /**
  * Class PayementController
@@ -22,6 +35,62 @@ use Interne\FinancesBundle\Entity\Facture;
  */
 class PayementController extends Controller
 {
+
+    /**
+     * @Route("/search", name="interne_fiances_payement_search", options={"expose"=true})
+     * @param Request $request
+     * @return Response
+     * @Template("InterneFinancesBundle:Payement:page_recherche.html.twig")
+     */
+    public function searchAction(Request $request){
+
+        $payementSearch = new PayementSearch();
+
+        $searchForm = $this->createForm(new PayementSearchType,$payementSearch);
+
+        $results = array();
+
+        $searchForm->handleRequest($request);
+
+        if ($searchForm->isValid()) {
+
+            $payementSearch = $searchForm->getData();
+
+            $elasticaManager = $this->container->get('fos_elastica.manager');
+
+            /** @var PayementRepository $repository */
+            $repository = $elasticaManager->getRepository('InterneFinancesBundle:Payement');
+
+            $results = $repository->search($payementSearch);
+
+        }
+
+        return array('searchForm'=>$searchForm->createView(),'payements'=>$results);
+    }
+
+    /**
+     * @Route("/show/{payement}", name="interne_fiances_payement_show", options={"expose"=true})
+     * @param Payement $payement
+     * @ParamConverter("payement", class="InterneFinancesBundle:Payement")
+     * @Template("InterneFinancesBundle:Payement:showModal.html.twig")
+     * @return Response
+     */
+    public function showAction(Payement $payement){
+        return array('payement'=>$payement);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * @Route("/", name="interne_fiances_payement")
@@ -112,66 +181,10 @@ class PayementController extends Controller
     }
 
 
-    /**
-     * @route("/search/get-form", name="interne_fiances_payement_get_search_form_ajax", options={"expose"=true})
-     * @param Request $request
-     * @return Response
-     */
-    public function getSearchFormAjaxAction(Request $request)
-    {
-        if($request->isXmlHttpRequest())
-        {
-            $payementSearchForm  = $this->createForm(new PayementSearchType);
-
-            return $this->render('InterneFinancesBundle:Payement:modalPayementSearchForm.html.twig',
-                array('searchForm'=> $payementSearchForm->createView()));
-        }
-
-    }
-
-    /**
-     * @route("/search", name="interne_fiances_payement_search_ajax", options={"expose"=true})
-     * @param Request $request
-     * @return Response
-     */
-    public function searchAjaxAction(Request $request)
-    {
-
-        if($request->isXmlHttpRequest()) {
-
-            $payement = new Payement(null,null,null,null);
-
-            $payementSearchForm = $this->createForm(new PayementSearchType,$payement);
-
-            if ($request->request->has('InterneFinancesBundlePayementSearchType')) {
-
-                $payementSearchForm->submit($request);
-                $payement = $payementSearchForm->getData();
-
-
-                $searchParameters = array(
-                    'montantRecuMaximum' => $payementSearchForm->get('montantRecuMaximum')->getData(),
-                    'montantRecuMinimum' => $payementSearchForm->get('montantRecuMinimum')->getData(),
-                    'datePayementMaximum' => $payementSearchForm->get('datePayementMaximum')->getData(),
-                    'datePayementMinimum' => $payementSearchForm->get('datePayementMinimum')->getData());
 
 
 
-                $em = $this->getDoctrine()->getManager();
-                $payements = $em->getRepository('InterneFinancesBundle:Payement')->findBySearch($payement,$searchParameters);
 
-                $results = array();
-                foreach($payements as $payement)
-                {
-                    $facture = $em->getRepository('InterneFinancesBundle:Facture')->find($payement->getIdFacture());
-                    $results[] = array('id'=>$payement->getId(),'payement'=> $payement, 'facture' => $facture);
-                }
-
-                return $this->render('InterneFinancesBundle:Payement:PayementsListe.html.twig',array('results'=>$results));
-            }
-        }
-        return new Response();
-    }
 
 
     /**
