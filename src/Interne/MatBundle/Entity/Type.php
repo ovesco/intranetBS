@@ -29,7 +29,7 @@ class Type
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="Interne\MatBundle\Entity\Equipement", mappedBy="type", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Interne\MatBundle\Entity\Equipment", mappedBy="type", cascade={"persist"})
      */
     private $equipements;
 

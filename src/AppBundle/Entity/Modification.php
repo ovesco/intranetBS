@@ -38,13 +38,6 @@ class Modification
     /**
      * @var string
      *
-     * @ORM\Column(name="string", type="text", nullable=true)
-     */
-    private $dataType;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="path", type="string", length=255)
      */
     private $path;
@@ -185,28 +178,5 @@ class Modification
     public function getNewValue()
     {
         return $this->newValue;
-    }
-
-    /**
-     * Set dataType
-     *
-     * @param string $dataType
-     * @return Modification
-     */
-    public function setDataType($dataType)
-    {
-        $this->dataType = $dataType;
-
-        return $this;
-    }
-
-    /**
-     * Get dataType
-     *
-     * @return string 
-     */
-    public function getDataType()
-    {
-        return $this->dataType;
     }
 }

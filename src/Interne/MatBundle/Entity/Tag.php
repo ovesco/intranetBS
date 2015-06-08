@@ -29,10 +29,10 @@ class Tag
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Interne\MatBundle\Entity\Equipement", inversedBy="tags", cascade={"persist"})
-     * @ORM\JoinTable(name="mat_bundle_tag_equipement",
+     * @ORM\ManyToMany(targetEntity="Interne\MatBundle\Entity\Equipment", inversedBy="tags", cascade={"persist"})
+     * @ORM\JoinTable(name="mat_bundle_tag_equipment",
      *      joinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="equipement_id", referencedColumnName="id")}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="equipment_id", referencedColumnName="id")}
      *      )
      */
     private $equipements;

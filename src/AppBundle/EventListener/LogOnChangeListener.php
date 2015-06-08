@@ -200,8 +200,10 @@ class LogOnChangeListener {
                         $modification->setDate(new \DateTime());
                         $modification->setPath($path);
 
-                        var_dump($modification);
+                        $em->persist($modification);
                     }
+
+                    $em->flush();
                 }
 
             }

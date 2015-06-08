@@ -27,7 +27,7 @@ class Loan
     private $booking;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Interne\MatBundle\Entity\Equipement", inversedBy="loans")
+     * @ORM\ManyToOne(targetEntity="Interne\MatBundle\Entity\Equipment", inversedBy="loans")
      */
     private $equipement;
 

@@ -29,9 +29,11 @@ class ModificationController extends Controller
         $data   = $request->get('name');                 // Les données utile
 
 
+        /*
         $id     = 1;
         $data   = 'text___Adresse___rue';
         $value  = 'Rue des poireaux ' . time();
+        */
 
 
         $data   = explode('___', $data);                 // separation des données utiles
