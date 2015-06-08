@@ -1,7 +1,4 @@
-
-
-
-{% macro liste(name,data,headers,columns,actions,patterns,filters,toolbar) %}
+{% macro liste(name, data, headers, columns, actions, patterns, filters, toolbar) %}
 
     {% import _self as liste_macro %}
 
@@ -241,7 +238,7 @@
                     {% elseif  applayedFilter == 'number_2'%}
                         {{ dataValue|number_format(2, '.', ',') }}
                     {% elseif  applayedFilter == 'date'%}
-                        {{ dataValue|date("d/m/Y") }}
+                        {{ dataValue|date(global_date_format) }}
                     {% endif %}
 
 

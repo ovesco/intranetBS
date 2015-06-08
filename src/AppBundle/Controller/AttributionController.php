@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Attribution;
+use AppBundle\Entity\Membre;
 use AppBundle\Form\AttributionType;
 use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -160,7 +161,8 @@ class AttributionController extends Controller
      * @param $attribution
      * @return JsonResponse
      */
-    public function removeAttributionAction($attribution) {
+    public function removeAttributionAction(Attribution $attribution)
+    {
 
         $em = $this->getDoctrine()->getManager();
 
@@ -173,45 +175,52 @@ class AttributionController extends Controller
 
     /**
      * @Route("/modal/add", name="attribution_add_modal", options={"expose"=true})
-     *
      * @param Request $request
      * @return Response
      */
     public function addAttributionFormAjaxAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $idMembre = $request->request->get('idMembre');
-
         $attributionForm = null;
         $attribution = new Attribution();
 
-        /* S'il y a des données de membres renseignées */
-        if ($idMembre !== null) {
-
-            /* Tester s'il y en a plusieurs */
-            if (is_array($idMembre)) {
-
-                /* Formulaire multimembre */
-                $attributionForm = $this->createForm(new AttributionMultiMembreType(), $attribution, array(
-                    'action' => $this->generateUrl('attribution_add_multimembre'),
-                    'attr' => array(
-                        'membres' => implode(",", $idMembre)
-                    )
-                ));
-
-            } else {
-                /* Formulaire simple */
-                $attribution->setMembre($em->getRepository('AppBundle:Membre')->find($idMembre));
-            }
-        }
-
-        /* S'il n'y a pas de données, mettre le formulaire simple */
         if ($attributionForm === null) {
             $attributionForm = $this->createForm(new AttributionType(), $attribution, array(
                 'action' => $this->generateUrl('attribution_add')
             ));
         }
+
+        return $this->render('AppBundle:Attribution:attribution_form_modal.html.twig', array(
+                'form' => $attributionForm->createView(),
+                'postform' => $attributionForm)
+        );
+    }
+
+
+    /**
+     * @Route("/modal/add/{membre}", name="attribution_add_modal", options={"expose"=true})
+     *
+     * @param Request $request
+     * @param Membre $membre
+     * @ParamConverter("membre", class="AppBundle:Membre")
+     * @return Response
+     */
+    public function addAttributionWithMembreFormAjaxAction(Request $request, Membre $membre)
+    {
+
+        $attributionForm = null;
+        $attribution = new Attribution();
+
+        /* Formulaire multimembre
+        $attributionForm = $this->createForm(new AttributionMultiMembreType(), $attribution, array(
+            'action' => $this->generateUrl('attribution_add_multimembre'),
+            'attr' => array(
+                'membres' => implode(",", $idMembre)
+            )
+        ));
+        */
+
+        /* Formulaire simple */
+        $attribution->setMembre($membre);
 
         return $this->render('AppBundle:Attribution:attribution_form_modal.html.twig', array(
                 'form' => $attributionForm->createView(),

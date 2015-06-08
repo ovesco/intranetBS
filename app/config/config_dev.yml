@@ -46,3 +46,15 @@ assetic:
 
 #swiftmailer:
 #    delivery_address: me@example.com
+
+
+# HTML to PDF
+knp_snappy:
+    pdf:
+        enabled:    true
+        binary:     /usr/local/bin/wkhtmltopdf
+        options:    []
+    image:
+        enabled:    true
+        binary:     /usr/local/bin/wkhtmltoimage
+        options:    []

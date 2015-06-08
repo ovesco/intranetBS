@@ -1,10 +1,6 @@
-{% extends 'AppBundle:Layout:layout.html.twig' %}
-
 {% block titre %}
     {{ membre.prenom }} {{ membre.nom }}
 {% endblock %}
-
-{% form_theme membreForm 'Templates/form_to_xEditable.html.twig' %}
 
 
 {% block content %}
@@ -19,25 +15,17 @@
                     <div class="twelve wide column">
                         <div class="ui header">
                             <i class="user icon"></i>
+
                             <div class="content">
                                 <h2>{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</h2>
-                                <div class="sub header">{{ membre.activeAttribution.fonction.nom }} - {{ membre.activeAttribution.groupe.nom|capitalize }}</div>
+
+                                <div class="sub header">{{ membre.activeAttribution.fonction.nom }}
+                                    - {{ membre.activeAttribution.groupe.nom|capitalize }}</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="four wide right aligned column">
-                        <div class="icon ui buttons">
-                            <div class="ui mini blue basic top left pointing icon dropdown button">
-                                <i class="download layout icon"></i>
-
-                                <div class="menu">
-                                    <div class="item">
-                                        <a href="{{ path('membre_voir_pdf', {membre: membre.id}) }}">PDF</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="icon ui buttons">
                             {% include 'AppBundle:Listing:listing_single_button.html.twig' with {'membre' : membre} %}
                         </div>
@@ -84,12 +72,13 @@
 
                                     {% set    ae = membre.adresseExpedition %}
                                     {% set    lf = '<a href="' ~path('interne_voir_famille', {famille: membre.famille.id}) ~ '">' %}
-                                    {% if     ae['owner'] == 'membre'%}{% set aeowner = 'la sienne' %}
-                                    {% elseif ae['owner'] == 'famille'%}{% set aeowner = lf ~ 'celle de sa famille</a>' %}
-                                    {% elseif ae['owner'] == 'mere'%}{% set aeowner = lf ~ 'celle de sa mère</a>' %}
-                                    {% elseif ae['owner'] == 'pere'%}{% set aeowner = lf ~ 'celle de son père</a>' %}
+                                    {% if     ae['owner'] == 'membre' %}{% set aeowner = 'la sienne' %}
+                                    {% elseif ae['owner'] == 'famille' %}{% set aeowner = lf ~ 'celle de sa famille</a>' %}
+                                    {% elseif ae['owner'] == 'mere' %}{% set aeowner = lf ~ 'celle de sa mère</a>' %}
+                                    {% elseif ae['owner'] == 'pere' %}{% set aeowner = lf ~ 'celle de son père</a>' %}
                                     {% else %}{% set aeowner = ', aucune idée en vrai.' %}{% endif %}
-                                    <div class="content">Actuellement, l'adresse de facturation de ce membre est <b>{{ aeowner|raw }}</b></div>
+                                    <div class="content">Actuellement, l'adresse de facturation de ce membre est
+                                        <b>{{ aeowner|raw }}</b></div>
                                 </div>
 
                                 {{ form_row(membreForm.contact.adresse.rue) }}
@@ -102,11 +91,15 @@
 
                             <div class="ui tab basic segment" data-tab="contact-{{ membre.prenom }}">
 
-                                <h5 class="ui header">Téléphone(s) - <a href="#" class="button-add-telephone" data-contact-id="{{ membre.contact.id }}">ajouter</a></h5>
+                                <h5 class="ui header">Téléphone(s) - <a href="#" class="button-add-telephone"
+                                                                        data-contact-id="{{ membre.contact.id }}">ajouter</a>
+                                </h5>
                                 {% include 'AppBundle:Contact:list_phone_mail.html.twig' with {'type' : 'telephone', 'data' : membreForm.contact.telephones} %}
 
                                 <div class="ui divider"></div>
-                                <h5 class="ui header">E-mail(s) - <a href="#" class="button-add-email" data-contact-id="{{ membre.contact.id }}">ajouter</a></h5>
+                                <h5 class="ui header">E-mail(s) - <a href="#" class="button-add-email"
+                                                                     data-contact-id="{{ membre.contact.id }}">ajouter</a>
+                                </h5>
                                 {% include 'AppBundle:Contact:list_phone_mail.html.twig' with {'type' : 'email', 'data' : membreForm.contact.emails} %}
                             </div>
 
@@ -120,7 +113,8 @@
                             <div class="header"><h3><i class="users icon"></i>Famille</h3></div>
                         </div>
 
-                        <div onclick="location.href='{{ path('interne_voir_famille', {famille: membre.famille.id}) }}'" class="ui bottom attached segment">
+                        <div onclick="location.href='{{ path('interne_voir_famille', {famille: membre.famille.id}) }}'"
+                             class="ui bottom attached segment">
                             <div class="ui list">
                                 {% include 'AppBundle:Contact:show.html.twig' with {'contact' : membre.famille.contact} %}
                             </div>
@@ -134,8 +128,10 @@
                             {% include 'AppBundle:Famille:liste_fratrie.html.twig' with {'fratrie' : membre.famille.membres, 'membre' : membre} %}
                         </div>
 
-                    </div> <!-- /informations famille -->
-                </div> <!-- /informations de base -->
+                    </div>
+                    <!-- /informations famille -->
+                </div>
+                <!-- /informations de base -->
             </div>
             <div class="ui grid">
 
@@ -173,7 +169,8 @@
 
                     </div>
 
-                </div> <!-- /attributions et distinctions -->
+                </div>
+                <!-- /attributions et distinctions -->
 
                 <div class="row">
                     <div class="column">
@@ -182,7 +179,7 @@
                         </div>
 
                         <div class="ui bottom attached segment">
-                            {% include "InterneFinancesBundle:Interface:interface.html.twig" with {'ownerEntity': membre }%}
+                            {% include "InterneFinancesBundle:Interface:interface.html.twig" with {'ownerEntity': membre } %}
                         </div>
 
                     </div>
@@ -198,7 +195,8 @@
                             {% include 'AppBundle:Membre:history.html.twig' %}
                         </div>
                     </div>
-                </div> <!-- history -->
+                </div>
+                <!-- history -->
 
             </div>
         </div>
@@ -215,42 +213,20 @@
 
 
 {% block css %}
-    {% stylesheets '@AppBundle/Resources/public/css/Membre/membre.css' filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
+
+    {% javascripts
+    '@AppBundle/Resources/public/css/Layout/layout.css'
+    '@AppBundle/Resources/public/css/Membre/membre.css'
+
+    output="js/main.js" %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
 {% endblock %}
 
 
 {% block js %}
 
-    {# javscript pour l'interface du finance  #}
-    {% javascripts
-    '@AppBundle/Resources/public/js/Attribution/attribution.js'
-    '@AppBundle/Resources/public/js/Distinction/distinction.js'
-    '@AppBundle/Resources/public/js/Membre/page_voir_membre.js'
-    '@InterneFinancesBundle/Resources/public/js/creance.js'
-    '@InterneFinancesBundle/Resources/public/js/facture.js'
-    '@InterneFinancesBundle/Resources/public/js/rappel.js'
-    '@InterneFinancesBundle/Resources/public/js/page_interface.js'
-    '@InterneFinancesBundle/Resources/public/js/event_catcher.js'
-    '@InterneFinancesBundle/Resources/public/js/liste.js'%}
-    <script src="{{ asset_url }}"></script>
-
-    {% endjavascripts %}
-
-
-{#
-
-    {% javascripts
-    '@AppBundle/Resources/public/js/editable.js'
-    '@AppBundle/Resources/public/js/specials/validation_popup_generation.js'
-    '@AppBundle/Resources/public/js/Contact/contact_form.js'
-    %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-
-
-#}
 
 {% endblock %}
 

@@ -1,8 +1,10 @@
 {% import "@App/Templates/liste.html.twig" as macro %}
 
 {% set toolbar =
-{'masse_actions':[['money','Facturer les cérance','event_masse_facturation_creance'],
-['trash','Supprimer','event_masse_delete_creance']],
+{'masse_actions':[
+['money','Facturer les cérance','event_masse_facturation_creance'],
+['trash','Supprimer','event_masse_delete_creance']
+],
 'search_bar':true,
 'selection_buttons':true,
 'paging':[10,20,50],
@@ -19,7 +21,6 @@
 
 {% set patterns = [ {'facture.id':'N°[data]','diff':''},
 {'facture.id':'<div class="ui label orange">En attente</div>','equal':''},] %}
-
 
 {% set filters = [
 {'montantEmis':'number_2'},

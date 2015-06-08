@@ -35,6 +35,7 @@ class AppKernel extends Kernel
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new FOS\ElasticaBundle\FOSElasticaBundle(),
             new FOS\RestBundle\FOSRestBundle(),
+            new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
 
             new AppBundle\AppBundle(),
             new Interne\FinancesBundle\InterneFinancesBundle(),
