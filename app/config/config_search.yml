@@ -161,3 +161,16 @@ fos_elastica:
                         provider: ~
                         listener: ~
                         finder: ~
+                payement:
+                    mappings:
+                        id: ~
+                        montantRecu: ~
+                        date: { type: date}
+                        state: ~
+                        idFacture: ~
+                    persistence:
+                        driver: orm
+                        model: Interne\FinancesBundle\Entity\Payement
+                        provider: ~
+                        listener: ~
+                        finder: ~

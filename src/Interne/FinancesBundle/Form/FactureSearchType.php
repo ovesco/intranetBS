@@ -52,34 +52,7 @@ class FactureSearchType extends AbstractType
             ->add('statut','choice',array('label' => 'Statut','required' => false,'choices' => array('ouverte'=>'Ouverte', 'payee'=>'Payée'), 'required' => false))
 
 
-            /*
 
-            ->add('statut','choice',array('label' => 'Statut','required' => false,'choices' => array('ouverte'=>'Ouverte', 'payee'=>'Payée'),'data' => null))
-            ->add('dateCreation','date',array('label' => 'Date de création','data'=> null,'required' => false))
-            ->add('datePayement','date',array('label' => 'Date de Payement','data'=> null,'required' => false))
-            /*
-             * l'option "mapped (false)" permet d'ajouter des champs qui n'appartiennent
-             * pas à l'entité.
-             *
-            ->add('nombreRappel','number',array('label' => 'Nombre de Rappel','required' => false,'mapped' => false))
-
-            ->add('montantRecu','number',array('required' => false,'mapped' => false))
-            ->add('montantRecuMinimum','number',array('required' => false,'mapped' => false))
-            ->add('montantRecuMaximum','number',array('required' => false,'mapped' => false))
-
-            ->add('montantEmis','number',array('required' => false,'mapped' => false))
-            ->add('montantEmisMinimum','number',array('required' => false,'mapped' => false))
-            ->add('montantEmisMaximum','number',array('required' => false,'mapped' => false))
-
-
-
-
-            ->add('dateCreationMaximum','date',array('data'=> null,'required' => false,'mapped' => false))
-            ->add('dateCreationMinimum','date',array('data'=> null,'required' => false,'mapped' => false))
-            ->add('datePayementMaximum','date',array('data'=> null,'required' => false,'mapped' => false))
-            ->add('datePayementMinimum','date',array('data'=> null,'required' => false,'mapped' => false))
-
-            */
 
         ;//fin de la fonction builder
 

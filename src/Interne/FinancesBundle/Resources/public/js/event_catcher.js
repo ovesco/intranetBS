@@ -46,6 +46,12 @@ jQuery(document).ready(function() {
             case 'event_masse_delete_creance':
                 deleteListeCreance(e.detail.data);
                 break;
+            /*
+             * Payements
+             */
+            case 'event_show_payement':
+                showPayement(e.detail.data);
+                break;
 
 
 

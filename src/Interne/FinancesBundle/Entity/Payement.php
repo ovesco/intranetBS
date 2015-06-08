@@ -3,12 +3,14 @@
 namespace Interne\FinancesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use FOS\ElasticaBundle\Configuration\Search;
 
 /**
  * Payement
  *
- * @ORM\Table(name="finances_bundle_payements")
- * @ORM\Entity(repositoryClass="Interne\FinancesBundle\Entity\PayementRepository")
+ * @ORM\Table(name="finances_bundle_payement")
+ * @ORM\Entity
+ * @Search(repositoryClass="Interne\FinancesBundle\SearchRepository\PayementRepository")
  */
 class Payement
 {
@@ -29,6 +31,13 @@ class Payement
     private $idFacture; //n'est pas forcement représentatif d'un ID existant. (state: not_found)
 
     /**
+     * @var Facture
+     *
+     * @ORM\OneToOne(targetEntity="Facture", inversedBy="payement", cascade={"persist"})
+     */
+    private $facture;
+
+    /**
      * @var float
      *
      * @ORM\Column(name="montantRecu", type="float")
@@ -38,9 +47,9 @@ class Payement
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="datePayement", type="datetime")
+     * @ORM\Column(name="date", type="datetime")
      */
-    private $datePayement;
+    private $date;
 
     /**
      * @var string
@@ -50,16 +59,16 @@ class Payement
     private $state;
 
     /**
-     * @param $idFacture
+     * @param  $idFacture
      * @param  $montantRecu
-     * @param  $datePayement
+     * @param  $date
      * @param  $state
      */
-    public function __construct($idFacture, $montantRecu, $datePayement, $state)
+    public function __construct($idFacture, $montantRecu, $date, $state)
     {
         $this->idFacture = $idFacture;
         $this->montantRecu = $montantRecu;
-        $this->datePayement = $datePayement;
+        $this->date = $date;
         $this->state = $state;
     }
 
@@ -121,26 +130,26 @@ class Payement
     }
 
     /**
-     * Set datePayement
+     * Set date
      *
-     * @param \DateTime $datePayement
+     * @param \DateTime $date
      * @return Payement
      */
-    public function setDatePayement($datePayement)
+    public function setDate($date)
     {
-        $this->datePayement = $datePayement;
+        $this->date = $date;
 
         return $this;
     }
 
     /**
-     * Get datePayement
+     * Get date
      *
      * @return \DateTime 
      */
-    public function getDatePayement()
+    public function getDate()
     {
-        return $this->datePayement;
+        return $this->date;
     }
 
     /**
@@ -164,5 +173,29 @@ class Payement
     public function getState()
     {
         return $this->state;
+    }
+
+    /**
+     * Set facture
+     *
+     * @param \Interne\FinancesBundle\Entity\Facture $facture
+     *
+     * @return Payement
+     */
+    public function setFacture(\Interne\FinancesBundle\Entity\Facture $facture = null)
+    {
+        $this->facture = $facture;
+
+        return $this;
+    }
+
+    /**
+     * Get facture
+     *
+     * @return \Interne\FinancesBundle\Entity\Facture
+     */
+    public function getFacture()
+    {
+        return $this->facture;
     }
 }

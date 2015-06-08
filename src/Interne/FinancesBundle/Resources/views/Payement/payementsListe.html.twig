@@ -1,32 +1,34 @@
-{% import "InterneFinancesBundle:Templates:liste.html.twig" as macro %}
+{% import "AppBundle:Templates:liste.html.twig" as macro %}
 
 {% set toolbar =
 {'search_bar':true,'selection_buttons':false,'paging':[10,20,50]}
 %}
 
-{% set headers = [['N°Réf.','Date','Montant recu','etat','']]%}
+{% set headers = [['N°Réf.','Date','Montant recu','etat']]%}
 
-{% set columns = ['payement.idFacture','payement.datePayement','payement.montantRecu','payement.state','facture.id'] %}
+{% set columns = ['idFacture','date','montantRecu','state'] %}
+
+{% set actions = [  {'icon':'zoom','label':'Afficher','event':'event_show_payement'} ] %}
 
 {% set patterns = [
-{'payement.state':'<i class="large wait icon popupable" data-content="En attente de validation"></i>','equal':'waiting'},
-{'payement.state':'<i class="large red circle warning icon popupable" data-content="Facture inexistante pour ce payement"></i>','equal':'not_found'},
-{'payement.state':'<i class="large green circle check icon popupable" data-content="Payement valide"></i>','equal':'found_valid'},
-{'payement.state':'<i class="large yellow circle arrow up icon popupable" data-content="Montant supérieur"></i>','equal':'found_upper'},
-{'payement.state':'<i class="large yellow circle arrow down icon popupable" data-content="Montant inférieur"></i>','equal':'found_lower'},
-{'payement.state':'<i class="large yellow circle check icon popupable" data-content="Facture déjà payée"></i>','equal':'found_payed'},
+{'state':'<i class="large wait icon popupable" data-content="En attente de validation"></i>','equal':'waiting'},
+{'state':'<i class="large red circle warning icon popupable" data-content="Facture inexistante pour ce payement"></i>','equal':'not_found'},
+{'state':'<i class="large green circle check icon popupable" data-content="Payement valide"></i>','equal':'found_valid'},
+{'state':'<i class="large yellow circle arrow up icon popupable" data-content="Montant supérieur"></i>','equal':'found_upper'},
+{'state':'<i class="large yellow circle arrow down icon popupable" data-content="Montant inférieur"></i>','equal':'found_lower'},
+{'state':'<i class="large yellow circle check icon popupable" data-content="Facture déjà payée"></i>','equal':'found_payed'},
 {'facture.id':'<i class="zoom icon showFacture popupable" data-id="[data]" data-content="Voir la facture"></i>','diff':''},
-{'payement.idFacture':'N°[data]'},
-{'payement.montantRecu':'','equal':0},
+{'idFacture':'N°[data]'},
+{'montantRecu':'','equal':0},
 ] %}
 
 {% set filters = [
-{'payement.montantRecu':'number_2'},
-{'payement.datePayement':'date'},
+{'montantRecu':'number_2'},
+{'date':'date'},
 ] %}
 
 
 
 {% if results is not empty %}
-    {{ macro.liste('payements',results,headers,columns,null,patterns,filters,toolbar) }}
+    {{ macro.liste('payements',results,headers,columns,actions,patterns,filters,toolbar) }}
 {% endif %}

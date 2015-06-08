@@ -28,7 +28,7 @@ abstract class Facture implements OwnerInterface
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Interne\FinancesBundle\Entity\Rappel",
+     * @ORM\OneToMany(targetEntity="Rappel",
      *                mappedBy="facture", cascade={"persist", "remove"})
      */
     private $rappels;
@@ -36,7 +36,7 @@ abstract class Facture implements OwnerInterface
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Interne\FinancesBundle\Entity\Creance",
+     * @ORM\OneToMany(targetEntity="Creance",
      *                mappedBy="facture", cascade={"persist", "remove"})
      */
     private $creances;
@@ -56,11 +56,13 @@ abstract class Facture implements OwnerInterface
     private $dateCreation;
 
     /**
-     * @var \DateTime
+     * @var Payement
      *
-     * @ORM\Column(name="datePayement", type="date", nullable=true)
+     * @ORM\OneToOne(targetEntity="Payement", mappedBy="facture", cascade={"persist"})
      */
-    private $datePayement;
+    private $payement;
+
+
 
 
     /*
@@ -287,20 +289,6 @@ abstract class Facture implements OwnerInterface
         return $montantRappel;
     }
 
-
-    /**
-     * Set datePayement
-     *
-     * @param \DateTime $datePayement
-     * @return Facture
-     */
-    public function setDatePayement($datePayement)
-    {
-        $this->datePayement = $datePayement;
-
-        return $this;
-    }
-
     /**
      * Get datePayement
      *
@@ -308,7 +296,10 @@ abstract class Facture implements OwnerInterface
      */
     public function getDatePayement()
     {
-        return $this->datePayement;
+        if($this->payement == null)
+            return null;
+        else
+            return $this->payement->getDate();
     }
 
     /**
@@ -377,4 +368,28 @@ abstract class Facture implements OwnerInterface
         return $this->creances;
     }
 
+
+    /**
+     * Set payement
+     *
+     * @param \Interne\FinancesBundle\Entity\Payement $payement
+     *
+     * @return Facture
+     */
+    public function setPayement(\Interne\FinancesBundle\Entity\Payement $payement = null)
+    {
+        $this->payement = $payement;
+
+        return $this;
+    }
+
+    /**
+     * Get payement
+     *
+     * @return \Interne\FinancesBundle\Entity\Payement
+     */
+    public function getPayement()
+    {
+        return $this->payement;
+    }
 }
