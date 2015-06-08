@@ -198,12 +198,12 @@ class LogOnChangeListener {
                         $modification->setNewValue($values[1]);
                         $modification->setAuteur($token->getUser()->getMembre());
                         $modification->setDate(new \DateTime());
-                        $modification->setPath($path);
+                        $modification->setPath($path . '.' . $property);
 
                         $em->persist($modification);
                     }
 
-                    $em->flush();
+                    $uow->computeChangeSets();
                 }
 
             }

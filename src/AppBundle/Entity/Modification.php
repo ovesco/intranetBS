@@ -50,7 +50,7 @@ class Modification
     private $date;
 
     /**
-     * @ORM\OneToOne(targetEntity="Membre")
+     * @ORM\ManyToOne(targetEntity="Membre")
      */
     private $auteur;
 
