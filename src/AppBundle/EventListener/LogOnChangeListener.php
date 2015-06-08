@@ -2,10 +2,19 @@
 
 namespace AppBundle\EventListener;
 
+use AppBundle\Entity\Adresse;
 use AppBundle\Entity\Attribution;
+use AppBundle\Entity\Contact;
 use AppBundle\Entity\ContactInformation;
+use AppBundle\Entity\Distinction;
+use AppBundle\Entity\Email;
+use AppBundle\Entity\Famille;
 use AppBundle\Entity\Membre;
+use AppBundle\Entity\Mere;
+use AppBundle\Entity\Modification;
 use AppBundle\Entity\ObtentionDistinction;
+use AppBundle\Entity\Pere;
+use AppBundle\Entity\Telephone;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Interne\HistoryBundle\Entity\MemberHistory;
@@ -47,6 +56,8 @@ class LogOnChangeListener {
                 $modifiedMember = $entity;
 
                 foreach ($changeSet as $property => $values) {
+
+                    //$this->data_logger->member($editorMember, $modifiedMember, $property, $values[0], $values[1]);
                     $this->historyEntry = new MemberHistory($editorMember, $modifiedMember, $property, $values[0], $values[1]);
                 }
             }
@@ -60,6 +71,7 @@ class LogOnChangeListener {
                 if($modifiedMember != NULL) {
                     foreach ($changeSet as $property => $values) {
                         $detailedProperty = $property . ' (' . $contactInformation . ')';
+                        //$this->data_logger->member($editorMember, $modifiedMember, $detailedProperty, $values[0], $values[1]);
                         $this->historyEntry = new MemberHistory($editorMember, $modifiedMember, $detailedProperty, $values[0], $values[1]);
                     }
                 }
@@ -98,8 +110,100 @@ class LogOnChangeListener {
                     if($values[1] != NULL && $values[1] instanceof \DateTime)
                         $values[1] = $values[1]->format('d.m.Y'); // TODO: take date format from globals
 
+                    //$this->data_logger->member($editorMember, $modifiedMember, $detailedProperty, $values[0], $values[1]);
                     $this->historyEntry = new MemberHistory($editorMember, $modifiedMember, $detailedProperty, $values[0], $values[1]);
                 }
+            }
+
+
+            /*
+             * Gestion des modifications et de la validation des changements effectués sur la base de donnée
+             * Tous les changements sur la BDD engendrent la création d'un objet modification, qui servira de contrôle et permettra
+             * de retourner à l'état précédent si nécessaire.
+             *
+             * Cet outil ne s'applique pas aux membres ayant les roles suffisants
+             */
+            $token = $this->token_storage->getToken();
+
+            if(!$token->getUser()->hasRole('ROLE_SWAG')) { //TODO : mettre un role plus cool et virer le !
+
+                $linkedEntity       = null;
+                $path               = "";
+                $em                 = $eventArgs->getEntityManager();
+                $entityFromContact  = function($source, $contact) use ($em) {
+
+                    $potentialMembre   = $em->getRepository('AppBundle:Membre')->find($contact->getId());
+                    $potentialFamille  = $em->getRepository('AppBundle:Famille')->find($contact->getId());
+                    $potentialGeniteur = $em->getRepository('AppBundle:Geniteur')->find($contact->getId());
+
+                    if($potentialMembre != null)
+                        return "membre." . $potentialMembre->getId() . "." . $source;
+                    elseif($potentialFamille != null)
+                        return "famille." . $potentialFamille->getId() . "." . $source;
+
+                    elseif($potentialGeniteur != null) {
+
+                        if($potentialGeniteur instanceof Mere)
+                            return "famille." . $potentialGeniteur->getFamille()->getId() . ".mere." . $source;
+                        else if($potentialGeniteur instanceof Pere)
+                            return "famille." . $potentialGeniteur->getFamille()->getId() . ".pere." . $source;
+                        else
+                            return null;
+
+                    }
+                    else
+                        throw new \Exception("Goddamit Jack, j'ai pas trouvé l'entité yo");
+                };
+
+                /*
+                 * ICI :
+                 * On récupère l'entité "racine" de celle qui subit la modification, un membre ou une famille
+                 * TODO : Faire un truc mieux si possible
+                 */
+                if($entity instanceof Membre)
+                    //$linkedEntity = $entity;
+                    $path           = "membre." . $entity->getId();
+                elseif($entity instanceof Famille)
+                    //$linkedEntity = $entity;
+                    $path           = "famille." . $entity->getId();
+                elseif($entity instanceof Pere)
+                    //$linkedEntity = $entity->getFamille();
+                    $path           = "famille." . $entity->getFamille()->getId() . ".pere";
+                elseif($entity instanceof Mere)
+                    //$linkedEntity = $entity->getFamille();
+                    $path           = "famille." . $entity->getFamille()->getId() . ".mere";
+                elseif($entity instanceof Attribution)
+                    //$linkedEntity = $entity->getMembre();
+                    $path           = "membre." . $entity->getMembre()->getId() . ".attributions[" . $entity->getMembre()->getAttributions()->indexOf($entity) . "]";
+                elseif($entity instanceof ObtentionDistinction)
+                    //$linkedEntity = $entity->getMembre();
+                    $path           = "membre." . $entity->getMembre()->getId() . ".obtentionDistinctions[" . $entity->getMembre()->getDistinctions()->indexOf($entity) . "]";
+                elseif($entity instanceof Contact)
+                    $path           = $entityFromContact('contact', $entity);
+                elseif($entity instanceof Telephone)
+                    $path           = $entityFromContact('contact.telephone', $entity->getContact());
+                elseif($entity instanceof Email)
+                    $path           = $entityFromContact('contact.email', $entity->getContact());
+                elseif($entity instanceof Adresse)
+                    $path           = $entityFromContact('contact.adresse', $entity->getContact());
+
+                // Génération d'un objet Modification dans le cas où c'est nécessaire
+                if($path != null) {
+
+                    foreach($changeSet as $property => $values) {
+
+                        $modification = new Modification();
+
+                        $modification->setOldValue($values[0]);
+                        $modification->setNewValue($values[1]);
+                        $modification->setAuteur($token->getUser()->getMembre());
+                        $modification->setDate(new \DateTime());
+                        $modification->setPath($path);
+
+                        var_dump($modification);
+                    }
+                }
+
             }
 
         }
@@ -127,6 +231,22 @@ class LogOnChangeListener {
 
     }
 
-}
+    public function setEntityHelper($entityHelper)
+    {
+        $this->entityHelper = $entityHelper;
 
-?>
+        return $this;
+    }
+
+    /**
+     * Génère un path lisible pour retracer l'origine de la modification
+     * par exemple Membre[1]->famille->pere->adresse->rue
+     * @param $linkedEntity
+     * @param $entity
+     * @param $field
+     */
+    private function generatePath($linkedEntity, $entity, $field) {
+
+
+    }
+}

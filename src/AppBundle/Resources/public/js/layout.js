@@ -60,8 +60,6 @@ function showModal(id) {
 //datatable
 $('.datatable').dataTable();
 
-//select2
-$('.select2').select2();
 
 $('.tabular .item').tab();
 

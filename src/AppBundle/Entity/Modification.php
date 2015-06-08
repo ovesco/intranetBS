@@ -24,23 +24,30 @@ class Modification
     /**
      * @var string
      *
-     * @ORM\Column(name="path", type="string", length=255)
-     */
-    private $path;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="oldValue", type="string", length=255, nullable=true)
+     * @ORM\Column(name="oldValue", type="text", nullable=true)
      */
     private $oldValue;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="newValue", type="string", length=255, nullable=true)
+     * @ORM\Column(name="newValue", type="text", nullable=true)
      */
     private $newValue;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="string", type="text", nullable=true)
+     */
+    private $dataType;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="path", type="string", length=255)
+     */
+    private $path;
 
     /**
      * @var \DateTime
@@ -50,11 +57,9 @@ class Modification
     private $date;
 
     /**
-     * @var ModificationsContainer
-     *
-     * @ORM\ManyToOne(targetEntity="ModificationsContainer", inversedBy="modifications")
+     * @ORM\OneToOne(targetEntity="Membre")
      */
-    private $modificationsContainer;
+    private $auteur;
 
 
     /**
@@ -65,6 +70,52 @@ class Modification
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set oldValue
+     *
+     * @param string $oldValue
+     * @return Verification
+     */
+    public function setOldValue($oldValue)
+    {
+        $this->oldValue = $oldValue;
+
+        return $this;
+    }
+
+    /**
+     * Get oldValue
+     *
+     * @return string 
+     */
+    public function getOldValue()
+    {
+        return $this->oldValue;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     * @return Verification
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime 
+     */
+    public function getDate()
+    {
+        return $this->date;
     }
 
     /**
@@ -91,72 +142,26 @@ class Modification
     }
 
     /**
-     * Set date
+     * Set auteur
      *
-     * @param \DateTime $date
+     * @param \AppBundle\Entity\Membre $auteur
      * @return Modification
      */
-    public function setDate($date)
+    public function setAuteur(\AppBundle\Entity\Membre $auteur = null)
     {
-        $this->date = $date;
+        $this->auteur = $auteur;
 
         return $this;
     }
 
     /**
-     * Get date
+     * Get auteur
      *
-     * @return \DateTime 
+     * @return \AppBundle\Entity\Membre 
      */
-    public function getDate()
+    public function getAuteur()
     {
-        return $this->date;
-    }
-
-    /**
-     * Set modificationsContainer
-     *
-     * @param \AppBundle\Entity\ModificationsContainer $modificationsContainer
-     * @return Modification
-     */
-    public function setModificationsContainer(\AppBundle\Entity\ModificationsContainer $modificationsContainer = null)
-    {
-        $this->modificationsContainer = $modificationsContainer;
-        $this->modificationsContainer->addModification($this);
-        return $this;
-    }
-
-    /**
-     * Get modificationsContainer
-     *
-     * @return \AppBundle\Entity\ModificationsContainer
-     */
-    public function getModificationsContainer()
-    {
-        return $this->modificationsContainer;
-    }
-
-    /**
-     * Set oldValue
-     *
-     * @param string $oldValue
-     * @return Modification
-     */
-    public function setOldValue($oldValue)
-    {
-        $this->oldValue = $oldValue;
-
-        return $this;
-    }
-
-    /**
-     * Get oldValue
-     *
-     * @return string 
-     */
-    public function getOldValue()
-    {
-        return $this->oldValue;
+        return $this->auteur;
     }
 
     /**
@@ -180,5 +185,28 @@ class Modification
     public function getNewValue()
     {
         return $this->newValue;
+    }
+
+    /**
+     * Set dataType
+     *
+     * @param string $dataType
+     * @return Modification
+     */
+    public function setDataType($dataType)
+    {
+        $this->dataType = $dataType;
+
+        return $this;
+    }
+
+    /**
+     * Get dataType
+     *
+     * @return string 
+     */
+    public function getDataType()
+    {
+        return $this->dataType;
     }
 }
