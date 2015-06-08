@@ -2,12 +2,10 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Membre;
 use AppBundle\Entity\ObtentionDistinction;
 use AppBundle\Form\ObtentionDistinctionType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,19 +39,45 @@ class ObtentionDistinctionController extends Controller
 
         $obtention = null;
         $obtentionForm = null;
-        if ($idObtentionDistinction == null) {
-            /*
-             * Ajout
-             */
-            $obtention = new ObtentionDistinction();
-            $obtention->setMembre($em->getRepository('AppBundle:Membre')->find($idMembre));
-            $obtentionForm = $this->createForm(new ObtentionDistinctionType(), $obtention,
-                array('action' => $this->generateUrl('obtention-distinction_add', array('member'=>$idMembre))));
 
-        } else {
+        /*
+         * Ajout
+         */
+        if ($idObtentionDistinction == null) {
+            $obtention = new ObtentionDistinction();
+
+            /* S'il y a des données de membres renseignées */
+            if ($idMembre !== null) {
+
+                /* Tester s'il y en a plusieurs */
+                if (is_array($idMembre)) {
+
+                    /* Formulaire multimembre */
+                    $obtentionForm = $this->createForm(new ObtentionDistinctionMultiMembreType(), $obtention, array(
+                        'action' => $this->generateUrl('obtention-distinction_add_multimembre'),
+                        'attr' => array(
+                            'membres' => implode(",", $idMembre)
+                        )
+                    ));
+
+                } else {
+                    /* Formulaire simple */
+                    $obtention->setMembre($em->getRepository('AppBundle:Membre')->find($idMembre));
+                }
+
+            }
+
+            /* S'il n'y a pas de données, mettre le formulaire simple */
+            if ($obtentionForm === null) {
+                $obtentionForm = $this->createForm(new ObtentionDistinctionType(), $obtention, array(
+                    'action' => $this->generateUrl('obtention-distinction_add')
+                ));
+            }
+
             /*
              * Modification
              */
+        } else {
             //TODO: pas testé
             $obtention = $em->getRepository('AppBundle:ObtentionDistinction')->find($idObtentionDistinction);
             $obtentionForm = $this->createForm(new ObtentionDistinctionType(), $obtention,

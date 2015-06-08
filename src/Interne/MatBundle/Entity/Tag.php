@@ -29,14 +29,21 @@ class Tag
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Interne\MatBundle\Entity\Equipement", inversedBy="tags", cascade={"persist"})
-     * @ORM\JoinTable(name="mat_bundle_tag_equipement",
+     * @ORM\ManyToMany(targetEntity="Interne\MatBundle\Entity\Equipment", inversedBy="tags", cascade={"persist"})
+     * @ORM\JoinTable(name="mat_bundle_tag_equipment",
      *      joinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="equipement_id", referencedColumnName="id")}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="equipment_id", referencedColumnName="id")}
      *      )
      */
     private $equipements;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->equipements = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -46,6 +53,16 @@ class Tag
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**
@@ -63,32 +80,13 @@ class Tag
     }
 
     /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->equipements = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
      * Add equipement
      *
-     * @param \Interne\MatBundle\Entity\Equipement $equipement
+     * @param \Interne\MatBundle\Entity\Equipment $equipement
      *
      * @return Tag
      */
-    public function addEquipement(\Interne\MatBundle\Entity\Equipement $equipement)
+    public function addEquipement(\Interne\MatBundle\Entity\Equipment $equipement)
     {
         $this->equipements[] = $equipement;
 
@@ -98,9 +96,9 @@ class Tag
     /**
      * Remove equipement
      *
-     * @param \Interne\MatBundle\Entity\Equipement $equipement
+     * @param \Interne\MatBundle\Entity\Equipment $equipement
      */
-    public function removeEquipement(\Interne\MatBundle\Entity\Equipement $equipement)
+    public function removeEquipement(\Interne\MatBundle\Entity\Equipment $equipement)
     {
         $this->equipements->removeElement($equipement);
     }

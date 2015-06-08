@@ -1,7 +1,7 @@
 <?php
 
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 class AppKernel extends Kernel
 {
@@ -34,6 +34,7 @@ class AppKernel extends Kernel
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new FOS\ElasticaBundle\FOSElasticaBundle(),
+            new FOS\RestBundle\FOSRestBundle(),
 
             new AppBundle\AppBundle(),
             new Interne\FinancesBundle\InterneFinancesBundle(),

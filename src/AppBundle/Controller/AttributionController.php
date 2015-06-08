@@ -155,7 +155,7 @@ class AttributionController extends Controller
 
     /**
      * Supprimme une attribution
-     * @route("remove/{attribution}", name="interne_remove_attribution", options={"expose"=true})
+     * @route("remove/{attribution}", name="attribution_remove", options={"expose"=true})
      * @paramConverter("attribution", class="AppBundle:Attribution")
      * @param $attribution
      * @return JsonResponse
@@ -167,112 +167,98 @@ class AttributionController extends Controller
         $em->remove($attribution);
         $em->flush();
 
-        return new JsonResponse();
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
-     * @Route("/get-modal", name="attribution_get_modal", options={"expose"=true})
+     * @Route("/modal/add", name="attribution_add_modal", options={"expose"=true})
      *
      * @param Request $request
      * @return Response
      */
-    public function getAttributionFormAjaxAction(Request $request)
+    public function addAttributionFormAjaxAction(Request $request)
     {
-
         $em = $this->getDoctrine()->getManager();
-        /*
-         * On envoie le formulaire en modal
-         */
 
         $idMembre = $request->request->get('idMembre');
-        $idAttribution = $request->request->get('idAttribution');
 
-        $attribution = null;
         $attributionForm = null;
-        if ($idAttribution == null) {
-            /*
-             * Ajout
-             */
-            $attribution = new Attribution();
+        $attribution = new Attribution();
 
-            /* S'il y a des données de membres renseignées */
-            if($idMembre !== null) {
+        /* S'il y a des données de membres renseignées */
+        if ($idMembre !== null) {
 
-                /* Tester s'il y en a plusieurs */
-                if( is_array($idMembre) ) {
+            /* Tester s'il y en a plusieurs */
+            if (is_array($idMembre)) {
 
-                    /* Formulaire multimembre */
-                    $attributionForm = $this->createForm(new AttributionMultiMembreType(), $attribution, array(
-                        'action'    => $this->generateUrl('attribution_multimembre_add'),
-                        'attr'      => array(
-                            'membres'    => implode(",", $idMembre)
-                        )
-                    ));
-
-                } else {
-                    /* Formulaire simple */
-                    $attribution->setMembre($em->getRepository('AppBundle:Membre')->find($idMembre));
-                }
-            }
-
-            /* S'il n'y a pas de données, mettre le formulaire simple */
-            if($attributionForm === null) {
-                $attributionForm = $this->createForm(new AttributionType(), $attribution, array(
-                    'action' => $this->generateUrl('attribution_add')
+                /* Formulaire multimembre */
+                $attributionForm = $this->createForm(new AttributionMultiMembreType(), $attribution, array(
+                    'action' => $this->generateUrl('attribution_add_multimembre'),
+                    'attr' => array(
+                        'membres' => implode(",", $idMembre)
+                    )
                 ));
+
+            } else {
+                /* Formulaire simple */
+                $attribution->setMembre($em->getRepository('AppBundle:Membre')->find($idMembre));
             }
+        }
 
-        } else {
-            /*
-             * Modification
-             */
-            //TODO: pas testé
-            $attribution = $em->getRepository('AppBundle:Attribution')->find($idAttribution);
-            $attributionForm = $this->createForm(new AttributionType(), $attribution,
-                array('action' => $this->generateUrl('attribution_edit')));
-
+        /* S'il n'y a pas de données, mettre le formulaire simple */
+        if ($attributionForm === null) {
+            $attributionForm = $this->createForm(new AttributionType(), $attribution, array(
+                'action' => $this->generateUrl('attribution_add')
+            ));
         }
 
         return $this->render('AppBundle:Attribution:attribution_form_modal.html.twig', array(
-            'form' => $attributionForm->createView(),
-            'postform' => $attributionForm)
+                'form' => $attributionForm->createView(),
+                'postform' => $attributionForm)
         );
+    }
 
+
+    /**
+     * @Route("/modal/edit/{attribution}", name="attribution_edit_modal", options={"expose"=true})
+     *
+     * @param Attribution $attribution
+     * @ParamConverter("attribution", class="AppBundle:Attribution")
+     * @return Response
+     */
+    public function editAttributionFormAjaxAction($attribution)
+    {
+        $attributionForm = $this->createForm(new AttributionType(), $attribution,
+            array('action' => $this->generateUrl('attribution_edit', array('attribution' => $attribution))));
+
+        return $this->render('AppBundle:Attribution:attribution_form_modal.html.twig', array(
+                'form' => $attributionForm->createView(),
+                'postform' => $attributionForm)
+        );
+    }
+
+    /**
+     * @Route("/modal/terminate/{attribution}/{dateFin}", name="attribution_terminate", options={"expose"=true})
+     *
+     * @param Attribution $attribution
+     * @param \DateTime $dateFin
+     * @ParamConverter("attribution", class="AppBundle:Attribution")
+     * @ParamConverter("dateFin", class="\DateTime")
+     * @return JsonResponse
+     */
+    public function terminateAttribution($attribution, $dateFin)
+    {
+        if ($dateFin < $attribution->getDateDebut())
+            return new JsonResponse("L'attribution doit se terminer APRES avoir débuté (c'est logique, tu t'es gourré)", Response::HTTP_BAD_REQUEST);
+
+        $attribution->setDateFin($dateFin);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($attribution);
+
+        return new JsonResponse($attribution, Response::HTTP_OK);
     }
 
 
@@ -296,7 +282,7 @@ class AttributionController extends Controller
             $em->persist($newAttribution);
             $em->flush();
 
-            return new JsonResponse(true);
+            return new JsonResponse($newAttribution, Response::HTTP_CREATED);
         }
 
         return $this->render('AppBundle:Attribution:attribution_form_modal.html.twig', array(
@@ -305,7 +291,7 @@ class AttributionController extends Controller
     }
 
     /**
-     * @Route("/add-multimembre", name="attribution_multimembre_add", options={"expose"=true})
+     * @Route("/add-multimembre", name="attribution_add_multimembre", options={"expose"=true})
      *
      * @param Request $request
      * @return Response
@@ -324,12 +310,13 @@ class AttributionController extends Controller
             $em->persist($newAttribution);
             $em->flush();
 
-            return new JsonResponse(true);
+            return new JsonResponse($newAttribution, Response::HTTP_CREATED);
         }
 
         return $this->render('AppBundle:Attribution:attribution_form_modal.html.twig', array(
             'form' => $newAttributionForm->createView(),
-            'postform' => $newAttributionForm));
+                'postform' => $newAttributionForm)
+        );
     }
 
     /**
@@ -344,8 +331,5 @@ class AttributionController extends Controller
     {
         //TODO: modifier une attribution (ou peut-être ne veut-on que les supprimer ?)
     }
-
-    //TODO : remove
 }
-
 ?>

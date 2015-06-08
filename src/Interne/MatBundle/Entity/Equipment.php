@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="mat_bundle_equipement")
  * @ORM\Entity
  */
-class Equipement
+class Equipment
 {
     /**
      * @var integer
@@ -58,6 +58,14 @@ class Equipement
      */
     private $name;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->loans = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -67,20 +75,6 @@ class Equipement
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set expendable
-     *
-     * @param boolean $expendable
-     *
-     * @return Equipement
-     */
-    public function setExpendable($expendable)
-    {
-        $this->expendable = $expendable;
-
-        return $this;
     }
 
     /**
@@ -94,15 +88,15 @@ class Equipement
     }
 
     /**
-     * Set comment
+     * Set expendable
      *
-     * @param string $comment
+     * @param boolean $expendable
      *
-     * @return Equipement
+     * @return Equipment
      */
-    public function setComment($comment)
+    public function setExpendable($expendable)
     {
-        $this->comment = $comment;
+        $this->expendable = $expendable;
 
         return $this;
     }
@@ -118,15 +112,15 @@ class Equipement
     }
 
     /**
-     * Set name
+     * Set comment
      *
-     * @param string $name
+     * @param string $comment
      *
-     * @return Equipement
+     * @return Equipment
      */
-    public function setName($name)
+    public function setComment($comment)
     {
-        $this->name = $name;
+        $this->comment = $comment;
 
         return $this;
     }
@@ -141,14 +135,18 @@ class Equipement
         return $this->name;
     }
 
-
     /**
-     * Constructor
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Equipment
      */
-    public function __construct()
+    public function setName($name)
     {
-        $this->loans = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->name = $name;
+
+        return $this;
     }
 
     /**
@@ -156,7 +154,7 @@ class Equipement
      *
      * @param \Interne\MatBundle\Entity\Loan $loan
      *
-     * @return Equipement
+     * @return Equipment
      */
     public function addLoan(\Interne\MatBundle\Entity\Loan $loan)
     {
@@ -190,7 +188,7 @@ class Equipement
      *
      * @param \Interne\MatBundle\Entity\Tag $tag
      *
-     * @return Equipement
+     * @return Equipment
      */
     public function addTag(\Interne\MatBundle\Entity\Tag $tag)
     {
@@ -220,20 +218,6 @@ class Equipement
     }
 
     /**
-     * Set type
-     *
-     * @param \Interne\MatBundle\Entity\Type $type
-     *
-     * @return Equipement
-     */
-    public function setType(\Interne\MatBundle\Entity\Type $type = null)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
      * Get type
      *
      * @return \Interne\MatBundle\Entity\Type
@@ -241,5 +225,19 @@ class Equipement
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Set type
+     *
+     * @param \Interne\MatBundle\Entity\Type $type
+     *
+     * @return Equipment
+     */
+    public function setType(\Interne\MatBundle\Entity\Type $type = null)
+    {
+        $this->type = $type;
+
+        return $this;
     }
 }

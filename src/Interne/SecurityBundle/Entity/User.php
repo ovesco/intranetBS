@@ -160,6 +160,20 @@ class User implements UserInterface, \Serializable
 
         return $roles;
     }
+
+    /**
+     * Vérifie que l'utilisateur possède un role donné
+     * @param string $role
+     * @return boolean
+     */
+    public function hasRole($role) {
+
+        foreach($this->getRoles() as $r)
+            if($r->getRole() == $role)
+                return true;
+
+        return false;
+    }
     
     /**
      * Add roles

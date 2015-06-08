@@ -38,6 +38,10 @@ services:
         arguments:
             - @kernel
 
+    verification:
+        class: AppBundle\Utils\Verification\Verification
+        arguments:
+            - @doctrine.orm.entity_manager
 
 
 

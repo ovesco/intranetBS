@@ -27,7 +27,10 @@
 
         {{ form_errors(form) }}
 
-        {{ form_rest(form) }}
+        {% for form_line in form %}
+            {{ form_row(form_line) }}
+        {% endfor %}
+
 
         <div class="ui field">
             <input type="submit" class="ui green button" value="{{ buttonText }}" />

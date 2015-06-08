@@ -29,10 +29,17 @@ class Type
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="Interne\MatBundle\Entity\Equipement", mappedBy="type", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Interne\MatBundle\Entity\Equipment", mappedBy="type", cascade={"persist"})
      */
     private $equipements;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->equipements = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -42,6 +49,16 @@ class Type
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**
@@ -59,30 +76,13 @@ class Type
     }
 
     /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->equipements = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
      * Add equipement
      *
-     * @param \Interne\MatBundle\Entity\Equipement $equipement
+     * @param \Interne\MatBundle\Entity\Equipment $equipement
      *
      * @return Type
      */
-    public function addEquipement(\Interne\MatBundle\Entity\Equipement $equipement)
+    public function addEquipement(\Interne\MatBundle\Entity\Equipment $equipement)
     {
         $this->equipements[] = $equipement;
 
@@ -92,9 +92,9 @@ class Type
     /**
      * Remove equipement
      *
-     * @param \Interne\MatBundle\Entity\Equipement $equipement
+     * @param \Interne\MatBundle\Entity\Equipment $equipement
      */
-    public function removeEquipement(\Interne\MatBundle\Entity\Equipement $equipement)
+    public function removeEquipement(\Interne\MatBundle\Entity\Equipment $equipement)
     {
         $this->equipements->removeElement($equipement);
     }

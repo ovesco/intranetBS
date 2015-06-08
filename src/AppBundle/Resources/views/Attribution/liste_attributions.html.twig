@@ -18,10 +18,12 @@
             <td>{{ attribution.dateDebut|date("d.m.Y") }}</td>
             <td>{{ attribution.dateFin is null ? '-' : attribution.dateFin|date("d.m.Y") }}</td>
             <td>
-                <i class="link remove red icon button-remove-attribution" title="supprimer"
+                <i class="link flag blue icon" title="Terminer" id="terminer-attribution"
                    data-attribution-id="{{ attribution.id }}"></i>
-                <i class="link flag outline blue icon button-terminer-single-attribution"
-                   title="changer/mettre une date de fin" data-attribution-id="{{ attribution.id }}"></i>
+                <i class="link edit blue icon" title="Modifier" id="modifier-attribution"
+                   data-attribution-id="{{ attribution.id }}"></i>
+                <i class="link delete red icon" title="Supprimer" id="supprimer-attribution"
+                   data-attribution-id="{{ attribution.id }}"></i>
             </td>
         </tr>
     {% endfor %}
