@@ -39,11 +39,9 @@
 
 
     {% javascripts
-    '@InterneFinancesBundle/Resources/public/js/creance.js'
-    '@InterneFinancesBundle/Resources/public/js/facture.js'
-    '@InterneFinancesBundle/Resources/public/js/rappel.js'
+    '@InterneFinancesBundle/Resources/public/js/model/*'
     '@InterneFinancesBundle/Resources/public/js/event_catcher.js'
-    '@InterneFinancesBundle/Resources/public/js/liste.js'
+    output='js/finances_recherche_creances.js'
     %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}

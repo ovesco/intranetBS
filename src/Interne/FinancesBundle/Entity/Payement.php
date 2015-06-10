@@ -4,6 +4,7 @@ namespace Interne\FinancesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use FOS\ElasticaBundle\Configuration\Search;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 /**
  * Payement
@@ -14,6 +15,15 @@ use FOS\ElasticaBundle\Configuration\Search;
  */
 class Payement
 {
+
+    const NOT_FOUND = 'not_found';
+    const FOUND_PAYED = 'found_payed';
+    const FOUND_VALID = 'found_valid';
+    const FOUND_LOWER = 'found_lower';
+    const FOUND_LOWER_NEW_FACTURE = 'found_lower_new_facture';
+    const FOUND_UPPER = 'found_upper';
+    const WAITING_VALIDATION = 'waiting';
+
     /**
      * @var integer
      *
@@ -28,7 +38,7 @@ class Payement
      *
      * @ORM\Column(name="idFacture", type="integer")
      */
-    private $idFacture; //n'est pas forcement représentatif d'un ID existant. (state: not_found)
+    private $idFacture; //n'est pas forcement représentatif d'un ID existant. (state: NOT_FOUND)
 
     /**
      * @var Facture
@@ -160,6 +170,15 @@ class Payement
      */
     public function setState($state)
     {
+        if( $state != Payement::NOT_FOUND &&
+            $state != Payement::FOUND_PAYED &&
+            $state != Payement::FOUND_VALID &&
+            $state != Payement::FOUND_LOWER &&
+            $state != Payement::FOUND_LOWER_NEW_FACTURE &&
+            $state != Payement::FOUND_UPPER &&
+            $state != Payement::WAITING_VALIDATION)
+            throw new Exception("Le statut incorect , obtenu : '" . $state . "'");
+
         $this->state = $state;
 
         return $this;

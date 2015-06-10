@@ -62,7 +62,14 @@
 
 
 
+{# javscript pour l'interface du finance  #}
+{% javascripts
+'@InterneFinancesBundle/Resources/public/js/model/*.js'
+'@InterneFinancesBundle/Resources/public/js/page_interface.js'
+'@InterneFinancesBundle/Resources/public/js/event_catcher.js'%}
+<script src="{{ asset_url }}"></script>
 
+{% endjavascripts %}
 
 
 

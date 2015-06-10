@@ -3,6 +3,7 @@
 namespace Interne\FinancesBundle\Controller;
 
 /* Routing */
+use Interne\FinancesBundle\Form\PayementAddType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -37,6 +38,8 @@ class PayementController extends Controller
 {
 
     /**
+     * Page for searching payement
+     *
      * @Route("/search", name="interne_fiances_payement_search", options={"expose"=true})
      * @param Request $request
      * @return Response
@@ -69,6 +72,8 @@ class PayementController extends Controller
     }
 
     /**
+     * Return modal of the payement
+     *
      * @Route("/show/{payement}", name="interne_fiances_payement_show", options={"expose"=true})
      * @param Payement $payement
      * @ParamConverter("payement", class="InterneFinancesBundle:Payement")
@@ -78,6 +83,31 @@ class PayementController extends Controller
     public function showAction(Payement $payement){
         return array('payement'=>$payement);
     }
+
+
+
+    /**
+     * Page for adding new payement (manualy of by uploading file)
+     *
+     * @Route("/add", name="interne_fiances_payement_add", options={"expose"=true})
+     * @param Request $request
+     * @Template("InterneFinancesBundle:Payement:showModal.html.twig")
+     * @return Response
+     */
+    public function addAction(Request $request){
+
+        /*
+         * todo continuer ici pour les payemnts
+         */
+
+
+        return array('payement'=>$payement);
+    }
+
+    protected function getAddForm(Payement $payement){
+        $form  = $this->createForm(new PayementAddType(),$payement);
+    }
+
 
 
 
