@@ -2,28 +2,7 @@ $('#membre-infos-context .menu .item').tab({
     context: $('#membre-infos-context')
 });
 
-$('#ajouter-attribution').click(function() {
-    var idMembre = {idMembre: $(this).data('membre-id')};
-    getModal(idMembre, Routing.generate('attribution_add_modal'));
-})
 
-$('#modifier-attribution').click(function () {
-    getModal(null, Routing.generate('attribution_edit_modal', {attribution: $(this).data('attribution-id')}));
-})
-
-$('#terminer-attribution').click(function () {
-    var url = Routing.generate('attribution_terminate', {attribution: $(this).data('attribution-id')});
-})
-
-$('#supprimer-attribution').click(function () {
-    if (removeAttribution($(this).data('attribution-id')))
-        $(btn).parent().parent().remove();
-})
-
-$('#ajouter-distinction').click(function() {
-    var idMembre = {idMembre: $(this).data('membre-id')};
-    getModal(idMembre, Routing.generate('obtention-distinction_add_modal'));
-})
 
 $('#modifier-famille').click(function() {
     modifyFamilleTriggered();
@@ -42,9 +21,7 @@ $('.editable').click(function() {
  * @param btn le bouton qui a triggeré l'action
  */
 function createAdresse(btn) {
-
     $(btn).parent().parent().parent().removeClass('active');
-
 }
 
 

@@ -22,64 +22,10 @@
                             {{ liste.name }}
                         </h3>
 
-                        <table class="ui table listing-table">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>Unité</th>
-                                    <th>Numéro BS</th>
-                                    <th>Naissance</th>
-                                    <th>Options</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for membre in liste.all %}
-                                    <tr data-id="{{ membre.id }}">
-                                        <td>{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</td>
-                                        <td>{% if membre.activeAttribution is not null %}{{ membre.activeAttribution.fonction.nom }} à {{ membre.activeAttribution.groupe.nom }}{% endif %}</td>
-                                        <td>{{ membre.numeroBs }}</td>
-                                        <td>{{ membre.naissance|date('d.m.Y') }}</td>
-                                        <td>
-                                            <a href="{{ path('interne_voir_membre', {membre: membre.id}) }}" class="circular ui mini icon blue button popupable" data-content="Voir la fiche de {{ membre.prenom|capitalize }}"><i class="share icon"></i></a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
 
-                        <div class="ui left floated basic segment">
-                            <a href="{{ path('listing_remove', {token: liste.token }) }}" class="ui tiny labeled icon red button">
-                                <i class="remove icon"></i>
-                                Supprimer la liste
-                            </a>
-                        </div>
+                        {% include 'AppBundle:Listing:listing_view_liste.html.twig' with {'liste' : liste} %}
 
-                        <div class="ui right floated basic segment">
 
-                            <a onclick="removeElementsBySelector(this);" class="ui tiny labeled icon red button">
-                                <i class="remove icon"></i>
-                                Supprimer (<span class="listing-update-{{ liste.token }}">0</span>)
-                            </a>
-
-                            <div class="ui tiny labeled icon dropdown button">
-                                <i class="wizard icon"></i>
-                                Actions
-                                <div class="menu">
-                                    <div class="header">
-                                        Action sur (<span class="listing-update-{{ liste.token }}">0</span>) membres
-                                    </div>
-                                    <div id="add_distinction" class="item">
-                                        Masse de distinctions
-                                    </div>
-                                    <div id="add_attribution" class="item">
-                                        Masse d'attributions
-                                    </div>
-                                    <div id="add_creances" class="item" onclick="">
-                                        Ajout de créance en masse (todo)
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                 {% endfor %}
@@ -95,7 +41,7 @@
             Ajouter une liste
         </div>
         <div class="content">
-            <form method="post" action="{{ path('listing_add') }}">
+            <form method="post">
                 <p>Choisissez un nom pour la liste. Si le nom est déjà pris, il sera légèrement modifié</p>
                 <div class="ui left icon input">
                     <input id="new-liste-name" type="text" name="new_liste_name" placeholder="Entrez un nom">

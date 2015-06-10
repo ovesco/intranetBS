@@ -168,9 +168,36 @@ class MembreController extends Controller {
                 'membreForm'        => $membreForm->createView(),
             )
         );
-
     }
 
+
+    /**
+     * @route("/voir/{membre}/pdf", name="membre_voir_pdf", requirements={"membre" = "\d+"})
+     * @ParamConverter("membre", class="AppBundle:Membre")
+     */
+    public function voirMembrePdfAction($membre)
+    {
+
+        $membreForm = $this->createForm(new VoirMembreType(), $membre);
+
+        $html = $this->render('AppBundle:Membre:pdf_voir_membre.html.twig', array(
+
+                'membre' => $membre,
+                'listing' => $this->get('listing'),
+                'membreForm' => $membreForm->createView(),
+            )
+        );
+
+        return new Response(
+            $this->get('knp_snappy.pdf')->getOutputFromHtml($html),
+            200,
+            array(
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="file.pdf"'
+            )
+        );
+
+    }
 
 
     /**
