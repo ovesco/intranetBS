@@ -140,11 +140,12 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
 
     /*
      * ===== MatBundle
-     */
-    /**
+     *
+    /*
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Membre", mappedBy="membre", cascade={"persist", "remove"})
-     */
+     *
     private $bookings;
+    //*/
 
     /**
      * Constructor

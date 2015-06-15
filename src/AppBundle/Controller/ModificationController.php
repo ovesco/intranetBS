@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Modification;
 use AppBundle\Form\VoirMembreType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -86,10 +87,9 @@ class ModificationController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        return $this->render('AppBundle:Validation:global_view.html.twig', array(
-            'modifications' => $em->getRepository('AppBundle:Modification')->findAll()
+        return $this->render('AppBundle:Modifications:page_gestion_modifications.html.twig', array(
+
+            'modifications' => $em->getRepository('AppBundle:Modification')->findByStatut(Modification::EN_ATTENTE)
         ));
     }
-
-
 }

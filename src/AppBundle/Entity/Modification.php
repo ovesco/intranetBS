@@ -12,6 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Modification
 {
+
+    const EN_ATTENTE = "WAITING";
+    const ACCEPTEE   = "ACCEPTED";
+    const REFUSEE    = "REFUSED";
+
+
     /**
      * @var integer
      *
@@ -53,6 +59,11 @@ class Modification
      * @ORM\ManyToOne(targetEntity="Membre")
      */
     private $auteur;
+
+    /**
+     * @ORM\Column(name="statut", type="string", length=255)
+     */
+    private $statut;
 
 
     /**
@@ -178,5 +189,29 @@ class Modification
     public function getNewValue()
     {
         return $this->newValue;
+    }
+
+    /**
+     * Set statut
+     *
+     * @param string $statut
+     *
+     * @return Modification
+     */
+    public function setStatut($statut)
+    {
+        $this->statut = $statut;
+
+        return $this;
+    }
+
+    /**
+     * Get statut
+     *
+     * @return string
+     */
+    public function getStatut()
+    {
+        return $this->statut;
     }
 }

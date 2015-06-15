@@ -1,0 +1,40 @@
+{% extends 'AppBundle:Layout:layout.html.twig' %}
+
+{% block titre %}Gestion des modifications{% endblock %}
+
+{% block content %}
+
+    <div class="ui page grid">
+        <div class="column">
+
+            <div class="ui grid">
+
+                <div class="row">
+
+                    <div class="twelve wide column">
+                        <h2 class="ui header">
+                            <i class="cubes icon"></i>
+                            <div class="content">
+                                Modifications
+                                <div class="sub header">Gestion des valeurs modifiées en attente</div>
+                            </div>
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="one column row">
+                    <div class="column">
+
+                        <div class="ui attached message">
+                            <div class="header"><h3><i class="info icon"></i>Sur des membres</h3></div>
+                        </div>
+
+                        <div class="ui bottom attached segment">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
