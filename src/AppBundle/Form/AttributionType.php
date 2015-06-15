@@ -11,6 +11,10 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class AttributionType extends AbstractType
 {
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($options) {

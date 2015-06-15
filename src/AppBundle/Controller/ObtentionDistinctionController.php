@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Membre;
 use AppBundle\Entity\ObtentionDistinction;
 use AppBundle\Form\ObtentionDistinctionType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -21,69 +22,67 @@ class ObtentionDistinctionController extends Controller
 {
 
     /**
-     * @Route("/get-modal", name="obtention-distinction_get_modal", options={"expose"=true})
+     * @Route("/modal/add", name="obtention-distinction_add_modal", options={"expose"=true})
      *
      * @param Request $request
      * @return Response
      */
-    public function getObtentionDistinctionFormAjaxAction(Request $request)
+    public function getAddModalAction(Request $request)
+    {
+        $obtention = new ObtentionDistinction();
+
+        $obtentionForm = $this->createForm(new ObtentionDistinctionType(), $obtention, array(
+            'action' => $this->generateUrl('obtention-distinction_add')
+        ));
+
+        return $this->render('AppBundle:ObtentionDistinction:obtention-distinctions_form_modal.html.twig', array(
+                'form' => $obtentionForm->createView())
+        );
+    }
+
+
+    /**
+     * @Route("/modal/add/{membre}", name="obtention-distinction_add_membre_modal", options={"expose"=true})
+     *
+     * @param Request $request
+     * @param Membre $membre
+     * @ParamConverter("membre", class="AppBundle:Membre")
+     * @return Response
+     */
+    public function getAddWithMemberModalAction(Request $request, Membre $membre)
+    {
+        $obtention = new ObtentionDistinction();
+
+        /* Formulaire simple */
+        $obtention->setMembre($membre);
+
+        $obtentionForm = $this->createForm(new ObtentionDistinctionType(), $obtention, array(
+            'action' => $this->generateUrl('obtention-distinction_add')
+        ));
+
+        return $this->render('AppBundle:ObtentionDistinction:obtention-distinctions_form_modal.html.twig', array(
+                'form' => $obtentionForm->createView(),
+                'postform' => $obtentionForm)
+        );
+    }
+
+    /**
+     * @Route("/modal/add/{obtention}", name="obtention-distinction_edit_modal", options={"expose"=true})
+     *
+     * @param Request $request
+     * @param ObtentionDistinction $obtention
+     * @ParamConverter("obtention", class="AppBundle:ObtentionDistinction")
+     * @return Response
+     */
+    public function getEditModalAction(Request $request, ObtentionDistinction $obtention)
     {
 
-        $em = $this->getDoctrine()->getManager();
-        /*
-         * On envoie le formulaire en modal
-         */
+        $obtentionForm = $this->createForm(
+            new ObtentionDistinctionType(),
+            $obtention,
+            array('action' => $this->generateUrl('obtention-distinction_edit', array('obtention' => $obtention)))
+        );
 
-        $idMembre = $request->request->get('idMembre');
-        $idObtentionDistinction = $request->request->get('idObtentionDistinction');
-
-        $obtention = null;
-        $obtentionForm = null;
-
-        /*
-         * Ajout
-         */
-        if ($idObtentionDistinction == null) {
-            $obtention = new ObtentionDistinction();
-
-            /* S'il y a des données de membres renseignées */
-            if ($idMembre !== null) {
-
-                /* Tester s'il y en a plusieurs */
-                if (is_array($idMembre)) {
-
-                    /* Formulaire multimembre */
-                    $obtentionForm = $this->createForm(new ObtentionDistinctionMultiMembreType(), $obtention, array(
-                        'action' => $this->generateUrl('obtention-distinction_add_multimembre'),
-                        'attr' => array(
-                            'membres' => implode(",", $idMembre)
-                        )
-                    ));
-
-                } else {
-                    /* Formulaire simple */
-                    $obtention->setMembre($em->getRepository('AppBundle:Membre')->find($idMembre));
-                }
-
-            }
-
-            /* S'il n'y a pas de données, mettre le formulaire simple */
-            if ($obtentionForm === null) {
-                $obtentionForm = $this->createForm(new ObtentionDistinctionType(), $obtention, array(
-                    'action' => $this->generateUrl('obtention-distinction_add')
-                ));
-            }
-
-            /*
-             * Modification
-             */
-        } else {
-            //TODO: pas testé
-            $obtention = $em->getRepository('AppBundle:ObtentionDistinction')->find($idObtentionDistinction);
-            $obtentionForm = $this->createForm(new ObtentionDistinctionType(), $obtention,
-                array('action' => $this->generateUrl('obtention-distinction_edit', array('obtention'=>$idObtentionDistinction))));
-
-        }
 
         return $this->render('AppBundle:ObtentionDistinction:obtention-distinctions_form_modal.html.twig', array(
                 'form' => $obtentionForm->createView())
