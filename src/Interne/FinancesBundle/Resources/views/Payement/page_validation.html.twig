@@ -1,0 +1,43 @@
+{% extends "AppBundle:Layout:layout.html.twig" %}
+
+
+
+
+
+{% block titre %}Payements{% endblock %}
+
+
+{% block content %}
+
+    <div class="ui page grid">
+        <div class="row">
+            <div class="column">
+
+
+                <h1 class="header">Validation des payements</h1>
+
+                {% include 'InterneFinancesBundle:Payement:waitingListe.html.twig' with {'waitingListe':waitingListe}%}
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    {% endblock %}
+
+    {% block js %}
+
+    {% javascripts
+    '@InterneFinancesBundle/Resources/public/js/model/*.js'
+    '@InterneFinancesBundle/Resources/public/js/event_catcher.js'
+    %}
+
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+{% endblock %}
