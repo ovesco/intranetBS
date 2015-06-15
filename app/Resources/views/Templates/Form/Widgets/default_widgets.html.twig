@@ -1,9 +1,14 @@
 
+{% block form_row %}
+    {{ block('form_label') }}
+    {{ block('form_widget_simple') }}
+    {{ block('form_errors') }}
+{% endblock %}
+
 {# simple widget #}
 {% block form_widget_simple -%}
     <div class="field">
         {%- set type = type|default('text') -%}
-        {{ block('form_label') }}
         <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
     </div>
 {%- endblock form_widget_simple %}

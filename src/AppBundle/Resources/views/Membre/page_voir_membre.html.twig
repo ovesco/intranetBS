@@ -17,13 +17,13 @@
                 <div class="row">
 
                     <div class="twelve wide column">
-                        <div class="ui header">
+                        <h2 class="ui header">
                             <i class="user icon"></i>
                             <div class="content">
-                                <h2>{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</h2>
+                                {{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}
                                 <div class="sub header">{{ membre.activeAttribution.fonction.nom }} - {{ membre.activeAttribution.groupe.nom|capitalize }}</div>
                             </div>
-                        </div>
+                        </h2>
                     </div>
 
                     <div class="four wide right aligned column">
@@ -223,11 +223,21 @@
 
 {% block js %}
 
+    {#
+    '@InterneFinancesBundle/Resources/public/js/creance.js'
+    '@InterneFinancesBundle/Resources/public/js/facture.js'
+    '@InterneFinancesBundle/Resources/public/js/rappel.js'
+    '@InterneFinancesBundle/Resources/public/js/page_interface.js'
+    '@InterneFinancesBundle/Resources/public/js/event_catcher.js'
+    '@InterneFinancesBundle/Resources/public/js/liste.js'
+    #}
+
     {# javscript pour l'interface du finance  #}
     {% javascripts
     '@AppBundle/Resources/public/js/Attribution/attribution.js'
     '@AppBundle/Resources/public/js/Distinction/distinction.js'
-    '@AppBundle/Resources/public/js/Membre/page_voir_membre.js' %}
+    '@AppBundle/Resources/public/js/Membre/page_voir_membre.js'
+    %}
     <script src="{{ asset_url }}"></script>
 
     {% endjavascripts %}
