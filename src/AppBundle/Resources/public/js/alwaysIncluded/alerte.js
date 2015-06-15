@@ -34,10 +34,10 @@ var alerte = {
      */
     send: function (message, type, delay) {
 
+        delay = (delay === undefined || delay === null) ? 10000000 : delay;
         noty({
             text : message,
-            type : type,
-            timeout: delay
+            type : type
         });
     },
 
