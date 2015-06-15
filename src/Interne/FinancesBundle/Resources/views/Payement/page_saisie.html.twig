@@ -1,0 +1,59 @@
+{% extends "AppBundle:Layout:layout.html.twig" %}
+
+
+{% block titre %}Saisie de payement{% endblock %}
+
+{% block content %}
+
+    <div class="ui page grid">
+        <div class="row">
+            <div class="five wide column">
+
+                <div class="ui segment">
+                    <h3 class="header">
+                        Saisie manuelle
+                    </h3>
+
+
+                    {% include  "InterneFinancesBundle:Payement:addForm.html.twig" with {'formMultiple': formMultiple} %}
+
+                </div>
+
+
+            </div>
+
+            <div class="ten wide column">
+
+
+                {{ form_start(formUpload, {'attr': {'class': 'ui form'}}) }}
+
+
+                {{ form_rest(formUpload) }}
+
+
+                {{ form_end(formUpload) }}
+
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+{% block js %}
+
+
+    {% javascripts
+    '@InterneFinancesBundle/Resources/public/js/model/*'
+    '@InterneFinancesBundle/Resources/public/js/event_catcher.js'
+    '@InterneFinancesBundle/Resources/public/js/page_saisie.js'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+
+{% endblock %}

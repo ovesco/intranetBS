@@ -199,6 +199,7 @@ class LogOnChangeListener {
                         $modification->setAuteur($token->getUser()->getMembre());
                         $modification->setDate(new \DateTime());
                         $modification->setPath($path . '.' . $property);
+                        $modification->setStatut(Modification::EN_ATTENTE);
 
                         $em->persist($modification);
                     }

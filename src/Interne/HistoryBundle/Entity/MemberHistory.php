@@ -16,7 +16,7 @@ class MemberHistory extends HistoryLogger
     /**
      * @var \AppBundle\Entity\Membre
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Membre")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Membre", inversedBy="historique")
      * @ORM\JoinColumn(name="modified_member_id", referencedColumnName="id")
      */
     private $modifiedMember;

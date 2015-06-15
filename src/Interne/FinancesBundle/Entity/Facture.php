@@ -5,6 +5,8 @@ namespace Interne\FinancesBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Symfony\Component\Config\Definition\Exception\Exception;
+
 /**
  * Class Facture
  *
@@ -16,6 +18,9 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 abstract class Facture implements OwnerInterface
 {
+    const PAYEE = 'payee';
+    const OUVERTE = 'ouverte';
+
     /**
      * @var integer
      *
@@ -46,7 +51,7 @@ abstract class Facture implements OwnerInterface
      *
      * @ORM\Column(name="statut", type="string", columnDefinition="ENUM('ouverte','payee')")
      */
-    private $statut = 'ouverte';
+    private $statut = Facture::OUVERTE;
 
     /**
      * @var \DateTime
@@ -111,6 +116,9 @@ abstract class Facture implements OwnerInterface
     */
     public function setStatut($statut)
     {
+
+        if($statut != Facture::OUVERTE && $statut != Facture::PAYEE)
+            throw new Exception("Le statut doit être " . Facture::OUVERTE . " ou " . Facture::PAYEE . ", obtenu : '" . $statut . "'");
 
         $this->statut = $statut;
 

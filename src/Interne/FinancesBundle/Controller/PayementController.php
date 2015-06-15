@@ -3,6 +3,8 @@
 namespace Interne\FinancesBundle\Controller;
 
 /* Routing */
+use Doctrine\ORM\EntityManager;
+use Interne\FinancesBundle\Form\PayementAddType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -10,18 +12,20 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 
 /* Entity */
 use Interne\FinancesBundle\Entity\CreanceToFamille;
 use Interne\FinancesBundle\Entity\CreanceToMembre;
-use Interne\FinancesBundle\Entity\FactureRepository;
 use Interne\FinancesBundle\Entity\Facture;
 use Interne\FinancesBundle\Entity\Payement;
 
 /* Form */
 use Interne\FinancesBundle\Form\FactureRepartitionType;
 use Interne\FinancesBundle\Form\PayementSearchType;
+use Interne\FinancesBundle\Form\PayementAddMultipleType;
+use Interne\FinancesBundle\Form\PayementUploadFileType;
 
 /* Other */
 use Interne\FinancesBundle\SearchClass\PayementSearch;
@@ -37,6 +41,8 @@ class PayementController extends Controller
 {
 
     /**
+     * Page for searching payement
+     *
      * @Route("/search", name="interne_fiances_payement_search", options={"expose"=true})
      * @param Request $request
      * @return Response
@@ -69,6 +75,8 @@ class PayementController extends Controller
     }
 
     /**
+     * Return modal of the payement
+     *
      * @Route("/show/{payement}", name="interne_fiances_payement_show", options={"expose"=true})
      * @param Payement $payement
      * @ParamConverter("payement", class="InterneFinancesBundle:Payement")
@@ -78,6 +86,190 @@ class PayementController extends Controller
     public function showAction(Payement $payement){
         return array('payement'=>$payement);
     }
+
+
+    /**
+     * Page for adding new payement (manualy of by uploading file)
+     *
+     * @Route("/add", name="interne_fiances_payement_add", options={"expose"=true})
+     * @param Request $request
+     * @Template("InterneFinancesBundle:Payement:page_saisie.html.twig")
+     * @return Response
+     */
+    public function addAction(Request $request){
+
+        $form = $this->processAddForm($request);
+
+        $upload = $this->processUploadForm($request);
+
+
+        return array('formMultiple'=>$form->createView(),'formUpload'=>$upload->createView());
+    }
+
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\Form\Form
+     *
+     * Cette fonction fournit le forumlaire d'ajout multiple de payement pour la page "add"
+     *
+     */
+    private function processAddForm(Request $request){
+
+        $form  = $this->createForm(new PayementAddMultipleType());
+        $form->get('multiple_payement')->setData(array(new Payement()));
+        $form->add('Ajouter','submit');
+
+        $form->handleRequest($request);
+
+        if($form->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+
+
+            $payements = $form->get('multiple_payement')->getData();
+
+
+            /** @var Payement $payement */
+            foreach($payements as $payement)
+            {
+
+                /*
+                 * On controle que le payement soit bien valide
+                 */
+                if(($payement->getIdFacture() != null) && ($payement->getMontantRecu() != null))
+                {
+                    $payement->setDate(new \DateTime());
+                    $payement->setState(Payement::WAITING_VALIDATION);
+
+                    $em->persist($payement);
+
+                    //todo correct flashbag
+                    $this->get('session')->getFlashBag()->add(
+                        'info',
+                        'Payement '.$payement->getIdFacture().' enregisté!'
+                    );
+                }
+
+            }
+            $em->flush();
+
+
+        }
+        return $form;
+    }
+
+    private function processUploadForm(Request $request){
+
+        $upload = $this->createForm(new PayementUploadFileType());
+        $upload->add('Ajouter','submit');
+
+        /** @var UploadedFile $file */
+        $file = $upload['file']->getData();
+
+        var_dump($file->getType());
+
+        return $upload;
+
+    }
+
+    /**
+     * Page for validation of payements
+     *
+     * @Route("/validation", name="interne_fiances_payement_validation", options={"expose"=true})
+     * @param Request $request
+     * @Template("InterneFinancesBundle:Payement:page_validation.html.twig")
+     * @return Response
+     */
+    public function validationAction(Request $request){
+
+        $em = $this->getDoctrine()->getManager();
+
+        /*
+         * todo faire ceci avec elasitca (pas nécaissaire dans l'imédia)
+         */
+        $payements = $em->getRepository('InterneFinancesBundle:Payement')->findByState(Payement::WAITING_VALIDATION);
+
+        $results =  $this->compareWithFactureInBDD($payements);
+
+        return array('waitingListe'=>$results);
+
+
+    }
+
+    private function compareWithFactureInBDD($payements)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $factureRepository = $em->getRepository('InterneFinancesBundle:Facture');
+
+        $results = array();
+
+        /** @var Payement $payement */
+        foreach($payements as $payement)
+        {
+
+
+            $facture = $factureRepository->find($payement->getIdFacture());
+
+            $validationStatut = null;
+
+            if($facture != Null)
+            {
+                if($facture->getStatut() == Facture::OUVERTE)
+                {
+                    $montantTotalEmis = $facture->getMontantEmis();
+                    $montantRecu = $payement->getMontantRecu();
+
+                    if($montantTotalEmis == $montantRecu)
+                    {
+                        $validationStatut = Payement::FOUND_VALID;
+                    }
+                    elseif($montantTotalEmis > $montantRecu)
+                    {
+                        $validationStatut = Payement::FOUND_LOWER;
+                    }
+                    elseif($montantTotalEmis < $montantRecu)
+                    {
+                        $validationStatut = Payement::FOUND_UPPER;
+                    }
+                }
+                else
+                {
+                    /*
+                     * la facture a déjà été payée
+                     */
+                    $validationStatut = Payement::FOUND_PAYED;
+                }
+
+
+            }
+            else
+            {
+                $validationStatut = Payement::NOT_FOUND;
+            }
+
+            $results[] = array(
+                'id'=>$payement->getId(),
+                'payement' => $payement,
+                'facture' => $facture,
+                'statut' => $validationStatut
+            );
+        }
+
+        return $results;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -99,8 +291,9 @@ class PayementController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('InterneFinancesBundle:Payement:page_payement.html.twig');
+        return $this->render('InterneFinancesBundle:Payement:page_validation.html.twig');
     }
+
 
     /**
      * @Route("/waiting_liste", name="interne_fiances_payement_waiting_liste", options={"expose"=true})
@@ -118,34 +311,7 @@ class PayementController extends Controller
     }
 
 
-    /**
-     * @Route("/add_manualy", name="interne_fiances_payement_add_manualy", options={"expose"=true})
-     * @param Request $request
-     * @return Response
-     */
-    public function addManualyAjaxAction(Request $request)
-    {
 
-        $request = $this->getRequest();
-
-        if($request->isXmlHttpRequest())
-        {
-            $idFacture = $request->request->get('idFacture');
-            $montantRecu = $request->request->get('montantRecu');
-
-            $idFacture = (int)$idFacture; //cast sur int
-
-            $payement = new Payement($idFacture,$montantRecu,new \Datetime,'waiting');
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($payement);
-            $em->flush();
-
-            return new Response('success');
-
-        }
-        return new Response('error');
-    }
 
     /*
      * Charge le fichier V11 qui contient une liste de payement payée sur le compte
@@ -293,68 +459,7 @@ class PayementController extends Controller
         return array('payements' => $payementsInFile, 'infos' => $infos);
     }
 
-    private function compareWithFactureInBDD($em,$payements)
-    {
-        $factureRepository = $em->getRepository('InterneFinancesBundle:Facture');
 
-
-        $results = array();
-
-        foreach($payements as $payement)
-        {
-
-
-            $factureFound = $factureRepository->find($payement->getIdFacture());
-
-            $validationStatut = null;
-
-            if($factureFound != Null)
-            {
-                if($factureFound->getStatut() == 'ouverte')
-                {
-                    $montantTotalEmis = $factureFound->getMontantEmis();
-                    $montantRecu = $payement->getMontantRecu();
-
-                    if($montantTotalEmis == $montantRecu)
-                    {
-                        $validationStatut = 'found_valid';
-                    }
-                    elseif($montantTotalEmis > $montantRecu)
-                    {
-                        $validationStatut = 'found_lower';
-                    }
-                    elseif($montantTotalEmis < $montantRecu)
-                    {
-                        $validationStatut = 'found_upper';
-                    }
-                }
-                else
-                {
-                    /*
-                     * la facture a déjà été payée
-                     */
-                    $validationStatut = 'found_payed';
-                }
-
-
-            }
-            else
-            {
-                $validationStatut = 'not_found';
-            }
-
-            $results[] = array(
-                'id'=>$payement->getId(),
-                'payement' => $payement,
-                'facture' => $factureFound,
-                'statut' => $validationStatut
-            );
-        }
-
-
-
-        return $results;
-    }
 
     private function repartitionMontantInFacture($request,$facture)
     {
