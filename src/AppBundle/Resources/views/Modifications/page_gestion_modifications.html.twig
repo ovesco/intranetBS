@@ -30,6 +30,28 @@
                         </div>
 
                         <div class="ui bottom attached segment">
+
+                            <div class="ui basic buttons">
+                                <div class="ui button">Auteur</div>
+                                <div class="ui button">Date</div>
+                                <div class="ui button">Personne/Famille</div>
+                            </div>
+
+                            <table class="ui small table">
+                                <thead>
+                                    <tr>
+                                        <th>Auteur de la modification</th>
+                                        <th>Concerne</th>
+                                        <th>Ancienne valeur</th>
+                                        <th>Nouvelle valeur</th>
+                                        <th>Date</th>
+                                        <th>Statut</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-modifs">
+
+                                </tbody>
+                            </table>
                         </div>
 
                     </div>
@@ -37,4 +59,18 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        var modifications   = {{ jsonModifications|raw }};
+        var $tbody          = $('#tbody-modifs');
+
+        function orderModifications(order) {
+            $(modifications).each(function(k, v) {
+
+                $tbody.append('<tr data-modif-id="' + v.id + '"><td>')
+            });
+        }
+    </script>
 {% endblock %}

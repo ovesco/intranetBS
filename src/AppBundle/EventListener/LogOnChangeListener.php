@@ -127,7 +127,6 @@ class LogOnChangeListener {
 
             if(!$token->getUser()->hasRole('ROLE_SWAG')) { //TODO : mettre un role plus cool et virer le !
 
-                $linkedEntity       = null;
                 $path               = "";
                 $em                 = $eventArgs->getEntityManager();
                 $entityFromContact  = function($source, $contact) use ($em) {
@@ -161,29 +160,23 @@ class LogOnChangeListener {
                  * TODO : Faire un truc mieux si possible
                  */
                 if($entity instanceof Membre)
-                    //$linkedEntity = $entity;
                     $path           = "membre." . $entity->getId();
                 elseif($entity instanceof Famille)
-                    //$linkedEntity = $entity;
                     $path           = "famille." . $entity->getId();
                 elseif($entity instanceof Pere)
-                    //$linkedEntity = $entity->getFamille();
                     $path           = "famille." . $entity->getFamille()->getId() . ".pere";
                 elseif($entity instanceof Mere)
-                    //$linkedEntity = $entity->getFamille();
                     $path           = "famille." . $entity->getFamille()->getId() . ".mere";
                 elseif($entity instanceof Attribution)
-                    //$linkedEntity = $entity->getMembre();
                     $path           = "membre." . $entity->getMembre()->getId() . ".attributions[" . $entity->getMembre()->getAttributions()->indexOf($entity) . "]";
                 elseif($entity instanceof ObtentionDistinction)
-                    //$linkedEntity = $entity->getMembre();
                     $path           = "membre." . $entity->getMembre()->getId() . ".obtentionDistinctions[" . $entity->getMembre()->getDistinctions()->indexOf($entity) . "]";
                 elseif($entity instanceof Contact)
                     $path           = $entityFromContact('contact', $entity);
                 elseif($entity instanceof Telephone)
-                    $path           = $entityFromContact('contact.telephone', $entity->getContact());
+                    $path           = $entityFromContact('contact.telephones[' . $entity->getContact()->getTelephones()->indexOf($entity) . "]", $entity->getContact());
                 elseif($entity instanceof Email)
-                    $path           = $entityFromContact('contact.email', $entity->getContact());
+                    $path           = $entityFromContact('contact.emails[' . $entity->getContact()->getEmails()->indexOf($entity) . "]", $entity->getContact());
                 elseif($entity instanceof Adresse)
                     $path           = $entityFromContact('contact.adresse', $entity->getContact());
 

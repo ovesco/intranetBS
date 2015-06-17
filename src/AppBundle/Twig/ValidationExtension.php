@@ -2,16 +2,20 @@
 
 namespace AppBundle\Twig;
 
+use Doctrine\ORM\EntityManager;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Routing\Router;
 
 class ValidationExtension extends \Twig_Extension
 {
 
     private $router;
+    private $em;
 
-    public function __construct(Router $router) {
+    public function __construct(Router $router, EntityManager $em) {
 
         $this->router       = $router;
+        $this->em           = $em;
     }
 
     /**
@@ -36,7 +40,45 @@ class ValidationExtension extends \Twig_Extension
     {
         return array(
             new \Twig_SimpleFilter('choiceToXeditable', array($this, 'choiceToXeditable')),
+            new \Twig_SimpleFilter('pathToString', array($this, 'pathToString')),
         );
+    }
+
+    /**
+     * This filter is mainly used on the modification page. It gets the the path stored in the
+     * modification, and returns a string representation of the targeted data. For example, in the case
+     * family.2.pere.adresse.rue, it will output (family.2)toString -> pere -> adresse -> rue
+     * @param string $path
+     * @return string
+     */
+    public function pathToString($path) {
+
+        $data   = explode('.', $path);
+        $ap     = PropertyAccess::createPropertyAccessor();
+        $curr   = "";
+        $entity = $this->em->getRepository('AppBundle:' . ucfirst($data[0]))->find($data[1]);
+        $return = $entity->__toString();
+
+        for($i = 2; $i < count($data); $i++) {
+
+
+            if($i < count($data))
+                $return .= " -> ";
+
+            if($i < count($data) && $i != 2)
+                $curr .= "." . $data[$i];
+            else
+                $curr .= $data[$i];
+
+            if(preg_match("/^[a-z]+[[]{1}[0-9][]]{1}$/", $data[$i]))
+                $return .= $ap->getValue($entity, $curr)->__toString();
+
+
+            else
+                $return .= $data[$i];
+        }
+
+        return $return;
     }
 
     /**

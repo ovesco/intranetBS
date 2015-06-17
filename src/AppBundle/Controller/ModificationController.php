@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Membre;
 use AppBundle\Entity\Modification;
 use AppBundle\Form\VoirMembreType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -85,11 +86,32 @@ class ModificationController extends Controller
      */
     public function modificationViewAction() {
 
-        $em = $this->getDoctrine()->getManager();
+        $em             = $this->getDoctrine()->getManager();
+        $modifications  = $em->getRepository('AppBundle:Modification')->findByStatut(Modification::EN_ATTENTE);
+        $twigModif      = $this->get('app.twig.validation_extension');
+        $jsoned         = array();
+        $concerned      = function($path) use ($em) {
+            $data = explode('.', $path);
+            return $this->getDoctrine()->getRepository('AppBundle:' . ucfirst($data[0]))->find($data[1]);
+        };
+
+        foreach($modifications as $modif) {
+
+            $ccc = $concerned($modif->getPath());
+
+            $jsoned[] = array(
+                'id'        => $modif->getId(),
+                'auteur'    => array('nom' => $modif->getAuteur()->__toString(), 'id' => $modif->getAuteur()->getId()),
+                'concerned' => array('type' => ($ccc instanceof Membre)? 'membre' : 'famille', 'id' => $ccc->getId(), 'path' => $twigModif->pathToString($modif->getPath())),
+                'values'    => array('old' => $modif->getOldValue(), 'new' => $modif->getNewValue()),
+                'date'      => $modif->getDate()->format('d.m.Y')
+            );
+        }
+
 
         return $this->render('AppBundle:Modifications:page_gestion_modifications.html.twig', array(
 
-            'modifications' => $em->getRepository('AppBundle:Modification')->findByStatut(Modification::EN_ATTENTE)
+            'jsonModifications' => json_encode($jsoned)
         ));
     }
 }

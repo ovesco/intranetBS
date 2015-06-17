@@ -181,27 +181,5 @@ class Contact
         $this->telephones->removeElement($telephone);
     }
 
-    /**
-     * Set personne
-     *
-     * @param \AppBundle\Entity\Personne $personne
-     *
-     * @return Contact
-     */
-    public function setPersonne(\AppBundle\Entity\Personne $personne = null)
-    {
-        $this->personne = $personne;
 
-        return $this;
-    }
-
-    /**
-     * Get personne
-     *
-     * @return \AppBundle\Entity\Personne
-     */
-    public function getPersonne()
-    {
-        return $this->personne;
-    }
 }

@@ -11,8 +11,16 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="app_adresses")
  * @ORM\Entity
  */
-class Adresse extends ContactInformation
+class Adresse
 {
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
 
     /**
      * @var boolean
@@ -47,7 +55,6 @@ class Adresse extends ContactInformation
      */
     private $localite;
 
-
     
     /**
      * @var text
@@ -56,6 +63,14 @@ class Adresse extends ContactInformation
      */
      private $remarques;
 
+    /**
+     * @var Contact
+     *
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Contact", inversedBy="adresse")
+     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
+     */
+    private $contact;
+
 
     public function __construct($rue = '', $npa = null, $localite = '', $expediable = true)
     {
@@ -63,6 +78,16 @@ class Adresse extends ContactInformation
         $this->npa = $npa;
         $this->localite = $localite;
         $this->expediable = $expediable;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
 
@@ -197,4 +222,28 @@ class Adresse extends ContactInformation
         return $this->remarques;
     }
 
+
+    /**
+     * Set contact
+     *
+     * @param \AppBundle\Entity\Contact $contact
+     *
+     * @return ContactInformation
+     */
+    public function setContact(\AppBundle\Entity\Contact $contact = null)
+    {
+        $this->contact = $contact;
+
+        return $this;
+    }
+
+    /**
+     * Get contact
+     *
+     * @return \AppBundle\Entity\Contact
+     */
+    public function getContact()
+    {
+        return $this->contact;
+    }
 }
