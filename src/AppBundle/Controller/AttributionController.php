@@ -180,14 +180,11 @@ class AttributionController extends Controller
      */
     public function addAttributionFormAjaxAction(Request $request)
     {
-        $attributionForm = null;
         $attribution = new Attribution();
 
-        if ($attributionForm === null) {
-            $attributionForm = $this->createForm(new AttributionType(), $attribution, array(
-                'action' => $this->generateUrl('attribution_add')
-            ));
-        }
+        $attributionForm = $this->createForm(new AttributionType(), $attribution, array(
+            'action' => $this->generateUrl('attribution_add')
+        ));
 
         return $this->render('AppBundle:Attribution:attribution_form_modal.html.twig', array(
                 'form' => $attributionForm->createView(),
@@ -206,8 +203,6 @@ class AttributionController extends Controller
      */
     public function addAttributionWithMembreFormAjaxAction(Request $request, Membre $membre)
     {
-
-        $attributionForm = null;
         $attribution = new Attribution();
 
         /* Formulaire multimembre
@@ -219,7 +214,12 @@ class AttributionController extends Controller
         ));
         */
 
-        /* Formulaire simple */
+        $attribution->setMembre($membre);
+
+        $attributionForm = $this->createForm(new AttributionType(), $attribution, array(
+            'action' => $this->generateUrl('attribution_add')
+        ));
+
         $attribution->setMembre($membre);
 
         return $this->render('AppBundle:Attribution:attribution_form_modal.html.twig', array(
@@ -239,7 +239,7 @@ class AttributionController extends Controller
     public function editAttributionFormAjaxAction($attribution)
     {
         $attributionForm = $this->createForm(new AttributionType(), $attribution,
-            array('action' => $this->generateUrl('attribution_edit', array('attribution' => $attribution))));
+            array('action' => $this->generateUrl('attribution_edit', array('attribution' => $attribution->getId()))));
 
         return $this->render('AppBundle:Attribution:attribution_form_modal.html.twig', array(
                 'form' => $attributionForm->createView(),
@@ -336,9 +336,20 @@ class AttributionController extends Controller
      * @return Response
      * @ParamConverter("attribution", class="AppBundle:Attribution")
      */
-    public function editAttribution(Attribution $attribution, Request $request)
+    public function editAttribution(Request $request, Attribution $attribution)
     {
-        //TODO: modifier une attribution (ou peut-être ne veut-on que les supprimer ?)
+        $attributionForm = $this->createForm(new AttributionType(), $attribution);
+        $attributionForm->handleRequest($request);
+
+        if ($attributionForm->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($attribution);
+            $em->flush();
+
+            return new JsonResponse($attribution, Response::HTTP_OK);
+        }
+
+        return new JsonResponse("Le formulaire contient une erreur", Response::HTTP_BAD_REQUEST);
     }
 }
 ?>

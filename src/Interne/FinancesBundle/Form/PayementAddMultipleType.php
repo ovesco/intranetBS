@@ -8,19 +8,19 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 
-class PayementAddType extends AbstractType
+class PayementAddMultipleType extends AbstractType
 {
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
 
-            ->add('idFacture','integer',array('label' => 'N°Facture', 'required' => false))
-            ->add('montantRecu','number',array('label' => 'Montant reçu', 'required' => false))
-
+            ->add('multiple_payement','collection',array(
+                'allow_add'=>true,
+                'prototype'=>true,
+                'by_reference' => false,
+                'type'   => new PayementAddType()))
         ;//fin de la fonction
-
-
 
 
     }
@@ -28,14 +28,14 @@ class PayementAddType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Interne\FinancesBundle\Entity\Payement'
+            //'data_class' => 'Interne\FinancesBundle\Entity\Payement'
         ));
     }
 
 
     public function getName()
     {
-        return 'InterneFinancesBundlePayementAddType';
+        return 'InterneFinancesBundlePayementAddMultipleType';
     }
 
 }

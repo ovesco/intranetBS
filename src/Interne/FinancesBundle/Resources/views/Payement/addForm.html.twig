@@ -1,0 +1,41 @@
+{{ form_start(formMultiple, {'attr': {'class': 'ui form'}}) }}
+
+
+
+<div id="payements_add_form" data-prototype="
+{{ '<div class="two fields payement_add_form">'|e }}
+
+
+{{ form_widget(formMultiple.multiple_payement.vars.prototype.idFacture,{'attr': {'class': 'idFacture'}})|e }}
+{{ form_widget(formMultiple.multiple_payement.vars.prototype.montantRecu,{'attr': {'class': 'montantRecu'}})|e }}
+
+{{ '</div>'|e }}
+
+
+
+">
+
+
+    {% for field in formMultiple.multiple_payement %}
+
+        <div class="two fields payement_add_form">
+            {{ form_widget(field.idFacture,{'attr': {'class': 'idFacture'}}) }}
+            {{ form_widget(field.montantRecu, {'attr': {'class': 'montantRecu'}}) }}
+
+        </div>
+
+
+    {% endfor %}
+
+
+</div>
+
+
+
+{{ form_widget(formMultiple.Ajouter,{'attr': {'class': 'ui blue button'}}) }}
+
+
+{{ form_rest(formMultiple) }}
+
+
+{{ form_end(formMultiple) }}

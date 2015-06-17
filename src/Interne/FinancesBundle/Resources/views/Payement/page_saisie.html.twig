@@ -9,37 +9,30 @@
         <div class="row">
             <div class="five wide column">
 
-                <div class="ui form segment">
-                    <h4 class="ui dividing header">Saisie manuellee</h4>
+                <div class="ui segment">
+                    <h3 class="header">
+                        Saisie manuelle
+                    </h3>
 
-                    <div class="field">
-                        <input id="form_num_ref" type="number" placeholder="Num. de référance">
-                    </div>
-                    <div class="field">
-                        <input id="form_montant_recu" type="number" placeholder="Montant reçu">
-                    </div>
 
-                    <div class="tiny ui button saisieAddManualy">
-                        Valider
-                    </div>
+                    {% include  "InterneFinancesBundle:Payement:addForm.html.twig" with {'formMultiple': formMultiple} %}
+
                 </div>
+
 
             </div>
 
             <div class="ten wide column">
 
-                <div class="ui form segment">
-                    <h4 class="ui dividing header">Chargement de fichier</h4>
-                    <div class="field">
-                        <input id="form_file" type="file" placeholder="Ficher de type *.V11">
-                    </div>
+
+                {{ form_start(formUpload, {'attr': {'class': 'ui form'}}) }}
 
 
+                {{ form_rest(formUpload) }}
 
-                    <div class="ui button saisieUploadFile">
-                        Charger
-                    </div>
-                </div>
+
+                {{ form_end(formUpload) }}
+
 
 
             </div>
@@ -57,6 +50,7 @@
     {% javascripts
     '@InterneFinancesBundle/Resources/public/js/model/*'
     '@InterneFinancesBundle/Resources/public/js/event_catcher.js'
+    '@InterneFinancesBundle/Resources/public/js/page_saisie.js'
     %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}

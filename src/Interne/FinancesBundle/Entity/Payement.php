@@ -74,7 +74,7 @@ class Payement
      * @param  $date
      * @param  $state
      */
-    public function __construct($idFacture, $montantRecu, $date, $state)
+    public function __construct($idFacture = null, $montantRecu= null, $date = null, $state = Payement::NOT_FOUND)
     {
         $this->idFacture = $idFacture;
         $this->montantRecu = $montantRecu;
