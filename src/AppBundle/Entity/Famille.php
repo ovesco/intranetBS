@@ -32,19 +32,19 @@ class Famille implements ExpediableInterface, ClassInterface
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Membre", mappedBy="famille", cascade={"persist", "remove"}, fetch="EAGER")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Membre", mappedBy="famille", cascade={"persist", "remove"})
      */
     private $membres;
 
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Pere", mappedBy="famille", cascade={"persist", "remove"}, fetch="EAGER")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Pere", mappedBy="famille", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="pere_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $pere;
 
     /**
      *
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Mere", mappedBy="famille", cascade={"persist", "remove"}, fetch="EAGER")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Mere", mappedBy="famille", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="mere_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $mere;

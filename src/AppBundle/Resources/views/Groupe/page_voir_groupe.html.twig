@@ -1,6 +1,7 @@
 {% extends 'AppBundle:Layout:layout.html.twig' %}
 
 {% form_theme groupeForm 'Templates/form_to_xEditable.html.twig' %}
+{% import "@App/Templates/liste_membres.html.twig" as macro %}
 
 {% block titre %}{{ groupe.nom }}{% endblock %}
 
@@ -98,7 +99,7 @@
                             <i class="file excel outline icon"></i>Excel
                         </a>
                         <a class="item">
-                            <i class="grid layout icon"></i>Etiquettes
+                            <i class="grid layout icon"></i>Étiquettes
                         </a>
                         <a class="item">
                             <i class="list layout icon"></i>Liste REGA
@@ -117,6 +118,7 @@
                 </div>
 
                 <div class="ui bottom attached segment">
+                    {{ macro.listeMembres('liste_membres', groupe.members) }}
                 </div>
 
                 {% if groupe.model.affichageEffectifs %}
@@ -127,12 +129,14 @@
                     </h4>
 
 
-                    {% for enfant in groupe.enfants %}
+                    {% for groupeEnfant in groupe.enfants %}
                         <div class="ui attached message">
-                            <div class="header"><h3><i class="users icon"></i>{{ enfant.nom|capitalize }}</h3></div>
+                            <div class="header"><h3><i class="users icon"></i>{{ groupeEnfant.nom|capitalize }}</h3>
+                            </div>
                         </div>
 
                         <div class="ui bottom attached segment">
+                            {{ macro.listeMembres('liste_membres', groupeEnfant.members) }}
                         </div>
                     {% endfor %}
                 {% endif %}

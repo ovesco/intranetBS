@@ -2,9 +2,8 @@
 
 namespace Interne\FinancesBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
 /**
@@ -109,23 +108,6 @@ abstract class Facture implements OwnerInterface
     }
 
     /**
-    * Set statut
-    *
-    * @param string $statut
-    * @return Facture
-    */
-    public function setStatut($statut)
-    {
-
-        if($statut != Facture::OUVERTE && $statut != Facture::PAYEE)
-            throw new Exception("Le statut doit être " . Facture::OUVERTE . " ou " . Facture::PAYEE . ", obtenu : '" . $statut . "'");
-
-        $this->statut = $statut;
-
-        return $this;
-    }
-
-    /**
      * Get statut
      *
      * @return string
@@ -133,6 +115,23 @@ abstract class Facture implements OwnerInterface
     public function getStatut()
     {
         return $this->statut;
+    }
+
+    /**
+     * Set statut
+     *
+     * @param string $statut
+     * @return Facture
+     */
+    public function setStatut($statut)
+    {
+
+        if ($statut != Facture::OUVERTE && $statut != Facture::PAYEE)
+            throw new Exception("Le statut doit être " . Facture::OUVERTE . " ou " . Facture::PAYEE . ", obtenu : '" . $statut . "'");
+
+        $this->statut = $statut;
+
+        return $this;
     }
 
     /**
@@ -164,24 +163,6 @@ abstract class Facture implements OwnerInterface
     }
 
     /**
-     * Set rappels
-     *
-     * @param ArrayCollection $rappels
-     * @return Facture
-     */
-    public function setRappels(ArrayCollection $rappels)
-    {
-        $this->rappels = $rappels;
-
-        foreach($rappels as $rappel)
-        {
-            $rappel->setFacture($this);
-        }
-
-        return $this;
-    }
-
-    /**
      * Get rappels
      *
      * @return ArrayCollection
@@ -191,16 +172,19 @@ abstract class Facture implements OwnerInterface
         return $this->rappels;
     }
 
-
     /**
-     * Set dateCreation
+     * Set rappels
      *
-     * @param \DateTime $dateCreation
+     * @param ArrayCollection $rappels
      * @return Facture
      */
-    public function setDateCreation($dateCreation)
+    public function setRappels(ArrayCollection $rappels)
     {
-        $this->dateCreation = $dateCreation;
+        $this->rappels = $rappels;
+
+        foreach ($rappels as $rappel) {
+            $rappel->setFacture($this);
+        }
 
         return $this;
     }
@@ -213,6 +197,19 @@ abstract class Facture implements OwnerInterface
     public function getDateCreation()
     {
         return $this->dateCreation;
+    }
+
+    /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     * @return Facture
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
     }
 
     /**
@@ -311,6 +308,21 @@ abstract class Facture implements OwnerInterface
     }
 
     /**
+     * Set datePayement
+     *
+     * @param \DateTime $dateTime
+     * @return Facture
+     */
+    public function setDatePayement(\DateTime $dateTime)
+    {
+
+        if ($this->payement != null)
+            $this->payement->setDate($dateTime);
+
+        return $this->payement;
+    }
+
+    /**
      * Get nombreRappels
      *
      * @return integer
@@ -349,24 +361,6 @@ abstract class Facture implements OwnerInterface
     }
 
     /**
-     * Set creances
-     *
-     * @param ArrayCollection $creances
-     * @return Facture
-     */
-    public function setCreances(ArrayCollection $creances)
-    {
-        $this->creances = $creances;
-
-        foreach($creances as $creance)
-        {
-            $creance->setFacture($this);
-        }
-
-        return $this;
-    }
-
-    /**
      * Get creances
      *
      * @return ArrayCollection
@@ -376,6 +370,32 @@ abstract class Facture implements OwnerInterface
         return $this->creances;
     }
 
+    /**
+     * Set creances
+     *
+     * @param ArrayCollection $creances
+     * @return Facture
+     */
+    public function setCreances(ArrayCollection $creances)
+    {
+        $this->creances = $creances;
+
+        foreach ($creances as $creance) {
+            $creance->setFacture($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get payement
+     *
+     * @return \Interne\FinancesBundle\Entity\Payement
+     */
+    public function getPayement()
+    {
+        return $this->payement;
+    }
 
     /**
      * Set payement
@@ -389,15 +409,5 @@ abstract class Facture implements OwnerInterface
         $this->payement = $payement;
 
         return $this;
-    }
-
-    /**
-     * Get payement
-     *
-     * @return \Interne\FinancesBundle\Entity\Payement
-     */
-    public function getPayement()
-    {
-        return $this->payement;
     }
 }

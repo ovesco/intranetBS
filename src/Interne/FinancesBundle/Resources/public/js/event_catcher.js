@@ -1,4 +1,4 @@
-jQuery(document).ready(function() {
+$(function () {
 
     /**
      * Gestion des évenement envoyé par les liste de créance et de facture.
@@ -52,8 +52,6 @@ jQuery(document).ready(function() {
             case 'event_show_payement':
                 showPayement(e.detail.data);
                 break;
-
-
 
         }
     }, false);

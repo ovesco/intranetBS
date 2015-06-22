@@ -39,29 +39,18 @@
 
     </head>
 
-
     <body class="pusher">
-
 
         {{ render(controller('AppBundle:Layout:mainMenuGenerate')) }}
 
-
         {% include 'AppBundle:Layout:top_menu.html.twig' %}
 
-
         <div class="pushable">
-
             <div id="alerts-bag"></div>
-
             <div id="main-container">
-
                 {% block content %}{% endblock %}
-
-
             </div>
-
             <div id="server-data" data-client="{% if clientData is defined %}{{ clientData }}{% endif %}"></div>
-
         </div>
 
         {#
@@ -90,18 +79,19 @@
         <!-- la modale pour terminer des attributions -->
         <div class="ui small modal" id="modal-terminer-attribution">
             <i class="close icon"></i>
+
             <div class="header">
                 Terminer des attributions
             </div>
+
             <div class="content">
-
                 <form method="post" action="{{ path('interne_attribution_terminer') }}">
-
                     <input type="hidden" name="ids" id="attributions-ids" />
                     <input type="text" name="dateFin" class="datepicker" />
                     <button type="submit" class="ui green button">Terminer <span id="amount-attributions-concerned"></span> attributions</button>
                 </form>
             </div>
+
             <div class="actions">
                 <div class="ui button">Annuler</div>
             </div>
@@ -112,10 +102,6 @@
         <div id="dynamic-modal-container"></div>
 
 
-
-
-
-
         <script src="{{ asset('semantic/semantic.min.js') }}"></script>
         <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
         <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
@@ -124,12 +110,10 @@
         {% javascripts
             '@AppBundle/Resources/public/js/noty.js'
             '@AppBundle/Resources/public/js/noty_default.js'
-            'http://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/js/jquery-editable-poshytip.min.js'
             '@AppBundle/Resources/public/js/alwaysIncluded/*'
             '@AppBundle/Resources/public/js/layout.js'
-
             '@AppBundle/Resources/public/js/Contact/contact.js'
-
+        '@AppBundle/Resources/public/js/Membre/events.js'
         output="js/main.js"
         %}
         <script src="{{ asset_url }}"></script>

@@ -9,10 +9,11 @@ services:
             - @session
             - @doctrine.orm.entity_manager
 
-    parser:
-        class: AppBundle\Utils\Accessor\Parser
-        arguments:
-            - @doctrine.orm.entity_manager
+    #parser:
+    #    class: AppBundle\Utils\Accessor\Parser
+    #    arguments:
+    #        - @doctrine.orm.entity_manager
+
 
     jsonParser:
         class: AppBundle\Utils\Data\JsonParser
@@ -38,11 +39,6 @@ services:
         arguments:
             - @kernel
 
-    verification:
-        class: AppBundle\Utils\Verification\Verification
-        arguments:
-            - @doctrine.orm.entity_manager
-
 
 
     # Twig
@@ -62,25 +58,23 @@ services:
         class: AppBundle\Twig\ValidationExtension
         arguments:
             - @router
+            - @doctrine.orm.entity_manager
         tags:
             - { name: twig.extension }
 
-    app.twig.parser_extension:
-        class: AppBundle\Twig\ParserExtension
-        arguments:
-            - @parser
-        tags:
-            - { name: twig.extension }
+    #app.twig.parser_extension:
+    #    class: AppBundle\Twig\ParserExtension
+    #    arguments:
+    #        - @parser
+    #    tags:
+    #        - { name: twig.extension }
 
-    app.twig.visual:
-        class: AppBundle\Twig\VisualExtension
-        tags:
-            - { name: twig.extension }
 
     app.twig.get_class_filter:
         class: AppBundle\Twig\GetClassFilter
         tags:
             - { name: twig.extension }
+
     app.twig.groupby:
         class: AppBundle\Twig\GroupByExtension
         tags:

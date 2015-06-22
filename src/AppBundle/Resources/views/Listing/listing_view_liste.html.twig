@@ -1,4 +1,4 @@
-{% import "@App/Templates/liste.html.twig" as macro %}
+{% import "@App/Templates/liste_membres.html.twig" as macro %}
 
 <h2 class="ui header">
     <i class="list layout icon"></i>
@@ -10,110 +10,12 @@
     </div>
 </h2>
 
-
-<table class="ui table" id="listing-table-viewer">
-    <thead>
-        <tr>
-            <th></th>
-            <th>Nom</th>
-            <th>Rôle</th>
-            <th>Numéro BS</th>
-            <th>Date de naissance</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for membre in liste.all %}
-            <tr>
-                <td><input type="checkbox" /></td>
-                <td>{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</td>
-                <td>{{ membre.activeAttribution.fonction.nom }}
-                    - {{ membre.activeAttribution.groupe.nom|capitalize }}</td>
-                <td>{{ membre.numeroBs }}</td>
-                <td>{{ membre.naissance|date('d.m.Y') }}</td>
-                <td>
-                    <i class="link linux blue icon" title="Page du membre" id="membre-page"
-                       data-membre-id="{{ membre.id }}"></i>
-                    <i class="link edit blue icon" title="Modifier" id="membre-modifier"
-                       data-membre-id="{{ membre.id }}"></i>
-                    <i class="link delete red icon" title="Supprimer" id="liste-membre-supprimer"
-                       data-membre-id="{{ membre.id }}"></i>
-                </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-{% set membres = liste.all %}
-
-{% set toolbar =
-{'masse_actions':[
-['money','Facturer les cérance','event_masse_facturation_creance'],
-['trash','Supprimer','event_masse_delete_creance']
-],
-'search_bar':true,
-'selection_buttons':true,
-'paging':[10,20,50],
-'sizing_label':'Créances'} %}
-
-{% set headers = [['Nom', 'Role', 'Num. BS', 'Naissance', 'Actions']] %}
-
-{% set columns = ['prenom', 'activeAttribution.fonction.nom', 'numeroBs', 'naissance'] %}
-
-{% set actions = [
-{'icon':'zoom','label':'Afficher','event':'event_membre_page'},
-{'icon':'delete','label':'Enlever','event':'event_liste_delete_element'}
-] %}
-
-{% set filters = [
-{'naissance':'date'}
-] %}
+<div class="ui tiny red icon button listing-remove-liste-button" data-token="{{ liste.token }}">Supprimer la liste</div>
 
 {% if liste.all is not empty %}
-    {{ macro.liste('liste_membres', membres, headers, columns, actions, null, filters) }}
+    {{ macro.listeMembres('liste_membres', liste.all) }}
 {% endif %}
 
-
-<div class="ui right aligned column">
-    <div class="ui tiny labeled dropdown button">
-        <i class="wizard icon"></i>
-        Actions
-        <div class="menu">
-            <div class="header">
-                Action sur <span class="listing-update-{{ liste.token }}">0</span> membres
-            </div>
-            <div id="add_distinction" class="item">
-                Ajouter une distinction
-            </div>
-            <div id="add_attribution" class="item">
-                Ajouter une attribution
-            </div>
-            <div id="add_creances" class="item">
-                Ajouter une créance
-            </div>
-        </div>
-    </div>
-
-    <div class="ui tiny teal labeled dropdown button">
-        Exporter
-        <div class="menu">
-            <div class="header">
-                Export de <span class="listing-update-{{ liste.token }}">0</span> membres
-            </div>
-            <div id="add_distinction" class="item">
-                PDF
-            </div>
-            <div id="add_attribution" class="item">
-                Excel (csv)
-            </div>
-            <div id="add_creances" class="item">
-                Publipostage
-            </div>
-        </div>
-    </div>
-
-    <div class="ui tiny red icon button listing-remove-liste-button" data-token="{{ liste.token }}"><i
-                class="remove icon"></i></div>
 
 </div>
 
