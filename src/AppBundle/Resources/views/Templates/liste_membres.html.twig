@@ -3,18 +3,25 @@
     {% import "@App/Templates/liste.html.twig" as listMacro %}
 
     {% set toolbar =
-    {'masse_actions':[
-    ['money','Facturer les créance','event_masse_facturation_creance'],
-    ['trash','Supprimer','event_masse_delete_creance']
+    {
+    'masse_actions':[
+    ['flag','Ajouter une attribution','event_masse_membre_attribution_ajout'],
+    ['star','Ajouter une distinction','event_masse_membre_distinction_ajout'],
+    ['money','Ajouter une créance','event_masse_membre_creance_ajout']
+    ],
+    'masse_export':[
+    ['file pdf outline','PDF','event_masse_export_pdf'],
+    ['file excel outline','Excel (CSV)','event_masse_export_csv'],
+    ['mail','Publipostage','event_masse_export_publipostage']
     ],
     'search_bar':true,
     'selection_buttons':true,
     'paging':[10,20,50],
-    'sizing_label':'Créances'} %}
+    'sizing_label':'membres'} %}
 
-    {% set headers = [['Nom', 'Fonction', 'Num. BS', 'Naissance', 'Actions']] %}
+    {% set headers = [['Prenom', 'Nom', 'Fonction', 'Num. BS', 'Naissance', 'Actions']] %}
 
-    {% set columns = ['prenom', 'activeAttribution.fonction.nom', 'numeroBs', 'naissance'] %}
+    {% set columns = ['prenom', 'nom', 'activeAttribution.fonction.nom', 'numeroBs', 'naissance'] %}
 
     {% set actions = [
     {'icon':'zoom','label':'Afficher','event':'event_membre_page'},
@@ -25,45 +32,6 @@
     {'naissance':'date'}
     ] %}
 
-    {{ listMacro.liste(name, membres, headers, columns, actions, null, filters) }}
-
-    <div class="ui right aligned column">
-        <div class="ui tiny labeled dropdown button">
-            <i class="wizard icon"></i>
-            Actions
-            <div class="menu">
-                <div class="header">
-                    Action sur {{ membres|length }} membres
-                </div>
-                <div id="add_distinction" class="item">
-                    Ajouter une distinction
-                </div>
-                <div id="add_attribution" class="item">
-                    Ajouter une attribution
-                </div>
-                <div id="add_creances" class="item">
-                    Ajouter une créance
-                </div>
-            </div>
-        </div>
-
-        <div class="ui tiny teal labeled dropdown button">
-            Exporter
-            <div class="menu">
-                <div class="header">
-                    Export de {{ membres|length }} membres
-                </div>
-                <div id="add_distinction" class="item">
-                    PDF
-                </div>
-                <div id="add_attribution" class="item">
-                    Excel (csv)
-                </div>
-                <div id="add_creances" class="item">
-                    Publipostage
-                </div>
-            </div>
-        </div>
-    </div>
+    {{ listMacro.liste(name, membres, headers, columns, actions, null, filters, toolbar) }}
 
 {% endmacro %}

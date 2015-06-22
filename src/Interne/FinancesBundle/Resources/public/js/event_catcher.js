@@ -53,8 +53,6 @@ jQuery(document).ready(function() {
                 showPayement(e.detail.data);
                 break;
 
-
-
         }
     }, false);
 

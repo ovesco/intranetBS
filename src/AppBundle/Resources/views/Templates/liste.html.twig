@@ -2,78 +2,52 @@
 
     {% import _self as liste_macro %}
 
-{#  #}
-<div class="data-liste" data-name="{{ name }}">
-    {# Partie toolbar de la liste #}
-    {% if toolbar is not null %}
-        <div class="data-liste-toolbar">
+    {#  #}
+    <div class="data-liste" data-name="{{ name }}">
+        {# Partie toolbar de la liste #}
+        {% if toolbar is not null %}
+            <div class="data-liste-toolbar">
 
-            {% if toolbar['sizing_label'] is defined %}
+                {% if toolbar['sizing_label'] is defined %}
 
-            <div class="ui blue circular label">{{ data|length }} {{ toolbar['sizing_label'] }}</div>
-
-            {% endif %}
-
-
-            {% if toolbar['search_bar'] is defined %}
-                {% if toolbar['search_bar'] %}
-                    <div class="ui mini icon input">
-                        <input class="data-liste-search" type="text" placeholder="Rechercher...">
-                        <i class="search icon"></i>
-                    </div>
-                {% endif %}
-            {% endif %}
-
-
-            {% if toolbar['selection_buttons'] is defined %}
-                {% if toolbar['selection_buttons'] %}
-
-                    <div class="ui mini basic buttons">
-                        <div class="ui button data-liste-button-selection" data-action="select"><i class="plus icon"></i></div>
-                        <div class="ui button data-liste-button-selection" data-action="unselect"><i class="minus icon"></i></div>
-                    </div>
+                    <div class="ui blue circular label">{{ data|length }} {{ toolbar['sizing_label'] }}</div>
 
                 {% endif %}
-            {% endif %}
 
 
-            {% if toolbar['paging'] is defined %}
-
-
-
-
-                <div class="data-liste-paging ui mini basic buttons">
-                    <div class="ui button data-liste-paging-navig" data-action="previous"><i class="caret left icon"></i></div>
-                    <div class="ui button data-liste-paging-active">1</div>
-
-
-                    <div class="ui mini basic button dropdown">
-                        <span class="text">{{ toolbar['paging'][0] }}/page</span>
-                        <div class="menu">
-                            {% for numberByPage in toolbar['paging'] %}
-                                <div class="item data-liste-paging-value" data-value="{{ numberByPage }}">{{ numberByPage }}/page</div>
-                            {% endfor %}
-                            <div class="item data-liste-paging-value" data-value="{{ data|length }}">Tout afficher</div>
+                {% if toolbar['search_bar'] is defined %}
+                    {% if toolbar['search_bar'] %}
+                        <div class="ui mini icon input">
+                            <input class="data-liste-search" type="text" placeholder="Rechercher...">
+                            <i class="search icon"></i>
                         </div>
-                    </div>
+                    {% endif %}
+                {% endif %}
 
 
-                    <div class="ui button data-liste-paging-navig" data-action="next"><i class="caret right icon"></i></div>
-                </div>
+                {% if toolbar['selection_buttons'] is defined %}
+                    {% if toolbar['selection_buttons'] %}
+
+                        <div class="ui mini basic buttons">
+                            <div class="ui button data-liste-button-selection" data-action="select"><i
+                                        class="plus icon"></i></div>
+                            <div class="ui button data-liste-button-selection" data-action="unselect"><i
+                                        class="minus icon"></i></div>
+                        </div>
+
+                    {% endif %}
+                {% endif %}
 
 
 
-            {% endif %}
 
 
-
-            {% if toolbar['masse_actions'] is defined %}
-
+                {% if toolbar['masse_actions'] is defined %}
 
                     <div class="ui tiny basic button dropdown">
-
-                        Action sur la liste
+                        Actions
                         <i class="dropdown icon"></i>
+
                         <div class="menu">
                             {% for action in toolbar['masse_actions'] %}
 
@@ -81,18 +55,39 @@
                                 {% set label_action = action[1] %}
                                 {% set event_action = action[2] %}
 
-                                <div class="data-liste-button item" data-event="{{ event_action }}"><i class="icon {{ icon_action }}"></i>{{ label_action }}</div>
+                                <div class="data-liste-button item" data-event="{{ event_action }}"><i
+                                            class="icon {{ icon_action }}"></i>{{ label_action }}</div>
                             {% endfor %}
                         </div>
                     </div>
-            {% endif %}
-        </div>
-    {% endif %}
+                {% endif %}
+
+                {% if toolbar['masse_export'] is defined %}
+
+                    <div class="ui tiny basic button dropdown">
+                        Export
+                        <i class="dropdown icon"></i>
+                        <div class="menu">
+                            {% for export in toolbar['masse_export'] %}
+
+                                {% set icon_export = export[0] %}
+                                {% set label_export = export[1] %}
+                                {% set event_export = export[2] %}
+
+                                <div class="data-liste-button item" data-event="{{ event_export }}"><i
+                                            class="icon {{ icon_export }}"></i>{{ label_export }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+        {% endif %}
 
 
-    <table class="ui table data-liste-table">
+        <table class="ui table data-liste-table">
 
-        <thead>
+            <thead>
             {% for header in headers %}
                 <tr>
                     {% for header_item in header %}
@@ -101,25 +96,51 @@
 
                     {# Si aucune actions n'est définie, on n'ajoute pas cette colonne. #}
                     {% if actions|default(null) is not null %}
-                        <th> </th>
+                        <th></th>
                     {% endif %}
                 </tr>
             {% endfor %}
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             {% for row in data %}
-
-
                 {{ liste_macro.row(row,columns,actions,patterns,filters) }}
-
-
             {% endfor %}
-        </tbody>
+            </tbody>
 
-    </table>
+        </table>
 
 
-</div>
+        {% if toolbar is not null %}
+            <div class="data-liste-toolbar">
+
+                {% if toolbar['paging'] is defined %}
+                    <div class="data-liste-paging ui mini basic buttons">
+                        <div class="ui button data-liste-paging-navig" data-action="previous"><i
+                                    class="caret left icon"></i></div>
+                        <div class="ui button data-liste-paging-active">1</div>
+
+                        <div class="ui mini basic button dropdown">
+                            <span class="text">{{ toolbar['paging'][0] }}/page</span>
+
+                            <div class="menu">
+                                {% for numberByPage in toolbar['paging'] %}
+                                    <div class="item data-liste-paging-value"
+                                         data-value="{{ numberByPage }}">{{ numberByPage }}/page
+                                    </div>
+                                {% endfor %}
+                                <div class="item data-liste-paging-value" data-value="{{ data|length }}">Tout afficher
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ui button data-liste-paging-navig" data-action="next"><i
+                                    class="caret right icon"></i></div>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+    </div>
 {% endmacro %}
 
 
@@ -275,6 +296,5 @@
 
         {% endif %}
     </tr>
-
 
 {% endmacro %}

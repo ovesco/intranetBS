@@ -10,13 +10,12 @@
     </div>
 </h2>
 
+<div class="ui tiny red icon button listing-remove-liste-button" data-token="{{ liste.token }}">Supprimer la liste</div>
+
 {% if liste.all is not empty %}
     {{ macro.listeMembres('liste_membres', liste.all) }}
 {% endif %}
 
-
-    <div class="ui tiny red icon button listing-remove-liste-button" data-token="{{ liste.token }}"><i
-                class="remove icon"></i></div>
 
 </div>
 
