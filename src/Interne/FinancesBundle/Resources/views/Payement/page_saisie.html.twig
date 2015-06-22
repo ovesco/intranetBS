@@ -7,11 +7,12 @@
 
     <div class="ui page grid">
         <div class="row">
-            <div class="five wide column">
+            <div class="eight wide column">
 
                 <div class="ui segment">
                     <h3 class="header">
                         Saisie manuelle
+
                     </h3>
 
 
@@ -22,17 +23,41 @@
 
             </div>
 
-            <div class="ten wide column">
+            <div class="eight wide column">
+
+                <div class="ui segment">
+                    <h3 class="header">
+                        Chargement de ficher
+                    </h3>
 
 
-                {{ form_start(formUpload, {'attr': {'class': 'ui form'}}) }}
+                    {{ form_start(formUpload, {'attr': {'class': 'ui form'}}) }}
 
 
-                {{ form_rest(formUpload) }}
+                    {{ form_widget(formUpload.file) }}
 
 
-                {{ form_end(formUpload) }}
+                    {{ form_widget(formUpload.Charger, {'attr': {'class': 'ui blue button'}}) }}
 
+                    {{ form_rest(formUpload) }}
+
+
+                    {{ form_end(formUpload) }}
+
+                    {% set extensions = formUpload.file.vars.attr.accept|split(',') %}
+
+                    Les extentions de fichiers autorisées sont:
+
+                    {% for extension in extensions %}
+                        <div class="ui label">
+                            *{{ extension }}
+                        </div>
+                    {% endfor %}
+
+
+
+
+                </div>
 
 
             </div>

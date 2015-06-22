@@ -31,6 +31,9 @@ use Interne\FinancesBundle\Form\PayementUploadFileType;
 use Interne\FinancesBundle\SearchClass\PayementSearch;
 use Interne\FinancesBundle\SearchRepository\PayementRepository;
 
+/* Services */
+use Interne\FinancesBundle\Utils\PayementFileParser;
+
 
 /**
  * Class PayementController
@@ -118,6 +121,7 @@ class PayementController extends Controller
         $form  = $this->createForm(new PayementAddMultipleType());
         $form->get('multiple_payement')->setData(array(new Payement()));
         $form->add('Ajouter','submit');
+        $form->add('Anuller','reset');
 
         $form->handleRequest($request);
 
@@ -125,9 +129,10 @@ class PayementController extends Controller
         {
             $em = $this->getDoctrine()->getManager();
 
-
             $payements = $form->get('multiple_payement')->getData();
 
+            $notValidPayements = array();
+            $sucessString = '';
 
             /** @var Payement $payement */
             foreach($payements as $payement)
@@ -143,16 +148,24 @@ class PayementController extends Controller
 
                     $em->persist($payement);
 
-                    //todo correct flashbag
-                    $this->get('session')->getFlashBag()->add(
-                        'info',
-                        'Payement '.$payement->getIdFacture().' enregisté!'
-                    );
+                    $sucessString = 'Payement '.$payement->getIdFacture().' avec '.$payement->getMontantRecu().'CHF enregisté!';
+
+                    $this->get('session')->getFlashBag()->add('success',$sucessString);
+
+                }
+                elseif(($payement->getIdFacture() != null) || ($payement->getMontantRecu() != null))
+                {
+                    /*
+                     * Envoi d'information sur l'erreur via flashbag
+                     */
+                    $errorString = 'Payement '.$payement->getIdFacture().' avec '.$payement->getMontantRecu().'CHF non valide!';
+                    $this->get('session')->getFlashBag()->add('error',$errorString);
+                    $notValidPayements[] = $payement;
+
                 }
 
             }
             $em->flush();
-
 
         }
         return $form;
@@ -161,12 +174,40 @@ class PayementController extends Controller
     private function processUploadForm(Request $request){
 
         $upload = $this->createForm(new PayementUploadFileType());
-        $upload->add('Ajouter','submit');
+        $upload->add('Charger','submit');
 
-        /** @var UploadedFile $file */
-        $file = $upload['file']->getData();
+        if ($request->isMethod('POST')) {
 
-        var_dump($file->getType());
+            $upload->handleRequest($request);
+
+            if($upload->isValid()){
+                /** @var UploadedFile $file */
+                $file = $upload['file']->getData();
+
+                /** @var PayementFileParser $payementParser */
+                $payementParser = $this->get('payement_file_parser');
+                $payementParser->setFile($file);
+                $payementParser->extract();
+                /** @var ArrayCollection $payements */
+                $payements = $payementParser->getPayements();
+
+                $em = $this->getDoctrine()->getManager();
+                foreach($payements as $payement)
+                {
+                    $em->persist($payement);
+                }
+                $em->flush();
+
+                $this->get('session')->getFlashBag()->add('success','Fichier valide avec '.$payements->count().' payements ajoutés.');
+            }
+            else
+            {
+                $this->get('session')->getFlashBag()->add('error','Fichier non valide');
+            }
+
+        }
+
+
 
         return $upload;
 

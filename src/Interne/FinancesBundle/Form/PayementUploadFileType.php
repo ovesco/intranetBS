@@ -6,6 +6,7 @@ namespace Interne\FinancesBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\File;
 
 
 class PayementUploadFileType extends AbstractType
@@ -14,8 +15,10 @@ class PayementUploadFileType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('file','file',array(
+                'attr'=>array('accept'=>'.v11'),
+                'constraints' => new File(array('maxSize' => '200K'))))
 
-            ->add('file','file',array('attr'=>array('accept'=>'.v11')))
 
         ;//fin de la fonction
 

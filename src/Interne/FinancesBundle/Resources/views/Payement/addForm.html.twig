@@ -1,6 +1,18 @@
 {{ form_start(formMultiple, {'attr': {'class': 'ui form'}}) }}
 
 
+<div class="three fields">
+    <div class="field">
+        <label>Num. de réf.</label>
+    </div>
+    <div class="field">
+        <label>Montant reçu</label>
+    </div>
+    <div class="field">
+        <div class="ui icon green submit button" id="AddPayement"><i class="add icon"></i></div>
+    </div>
+
+</div>
 
 <div id="payements_add_form" data-prototype="
 {{ '<div class="two fields payement_add_form">'|e }}
@@ -11,17 +23,15 @@
 
 {{ '</div>'|e }}
 
-
-
 ">
-
 
     {% for field in formMultiple.multiple_payement %}
 
-        <div class="two fields payement_add_form">
+        <div class="three fields payement_add_form">
             {{ form_widget(field.idFacture,{'attr': {'class': 'idFacture'}}) }}
             {{ form_widget(field.montantRecu, {'attr': {'class': 'montantRecu'}}) }}
 
+            <div class="ui icon red button" id=""><i class="minus icon"></i></div>
         </div>
 
 
@@ -33,7 +43,7 @@
 
 
 {{ form_widget(formMultiple.Ajouter,{'attr': {'class': 'ui blue button'}}) }}
-
+{{ form_widget(formMultiple.Anuller,{'attr': {'class': 'ui button'}}) }}
 
 {{ form_rest(formMultiple) }}
 
