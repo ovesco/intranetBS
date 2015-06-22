@@ -30,7 +30,7 @@ class MembreFamilleType extends AbstractType
         ;
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions( \Symfony\Component\OptionsResolver\OptionsResolver $resolver)
     {
 
         $resolver->setDefaults(array(
