@@ -1,4 +1,4 @@
-jQuery(document).ready(function() {
+$(function () {
 
     /**
      * Gestion des évenement envoyé par les liste de créance et de facture.

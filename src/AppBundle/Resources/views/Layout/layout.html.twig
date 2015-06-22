@@ -39,29 +39,18 @@
 
     </head>
 
-
     <body class="pusher">
-
 
         {{ render(controller('AppBundle:Layout:mainMenuGenerate')) }}
 
-
         {% include 'AppBundle:Layout:top_menu.html.twig' %}
 
-
         <div class="pushable">
-
             <div id="alerts-bag"></div>
-
             <div id="main-container">
-
                 {% block content %}{% endblock %}
-
-
             </div>
-
             <div id="server-data" data-client="{% if clientData is defined %}{{ clientData }}{% endif %}"></div>
-
         </div>
 
         {#
@@ -90,18 +79,19 @@
         <!-- la modale pour terminer des attributions -->
         <div class="ui small modal" id="modal-terminer-attribution">
             <i class="close icon"></i>
+
             <div class="header">
                 Terminer des attributions
             </div>
+
             <div class="content">
-
                 <form method="post" action="{{ path('interne_attribution_terminer') }}">
-
                     <input type="hidden" name="ids" id="attributions-ids" />
                     <input type="text" name="dateFin" class="datepicker" />
                     <button type="submit" class="ui green button">Terminer <span id="amount-attributions-concerned"></span> attributions</button>
                 </form>
             </div>
+
             <div class="actions">
                 <div class="ui button">Annuler</div>
             </div>
@@ -110,10 +100,6 @@
 
         <!-- on ajoute aussi un container qui contiendra les modales génerées dynamiquement -->
         <div id="dynamic-modal-container"></div>
-
-
-
-
 
 
         <script src="{{ asset('semantic/semantic.min.js') }}"></script>
@@ -127,6 +113,7 @@
             '@AppBundle/Resources/public/js/alwaysIncluded/*'
             '@AppBundle/Resources/public/js/layout.js'
             '@AppBundle/Resources/public/js/Contact/contact.js'
+        '@AppBundle/Resources/public/js/Membre/events.js'
         output="js/main.js"
         %}
         <script src="{{ asset_url }}"></script>

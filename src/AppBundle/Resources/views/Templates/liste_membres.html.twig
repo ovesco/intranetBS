@@ -10,9 +10,9 @@
     ['money','Ajouter une créance','event_masse_membre_creance_ajout']
     ],
     'masse_export':[
-    ['file pdf outline','PDF','event_masse_export_pdf'],
-    ['file excel outline','Excel (CSV)','event_masse_export_csv'],
-    ['mail','Publipostage','event_masse_export_publipostage']
+    ['file pdf outline','PDF','event_masse_membre_export_pdf'],
+    ['file excel outline','Excel (CSV)','event_masse_membre_export_csv'],
+    ['mail','Publipostage','event_masse_membre_export_publipostage']
     ],
     'search_bar':true,
     'selection_buttons':true,
@@ -33,5 +33,6 @@
     ] %}
 
     {{ listMacro.liste(name, membres, headers, columns, actions, null, filters, toolbar) }}
+
 
 {% endmacro %}
