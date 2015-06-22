@@ -1,0 +1,69 @@
+{% macro listeMembres(name, membres) %}
+
+    {% import "@App/Templates/liste.html.twig" as listMacro %}
+
+    {% set toolbar =
+    {'masse_actions':[
+    ['money','Facturer les créance','event_masse_facturation_creance'],
+    ['trash','Supprimer','event_masse_delete_creance']
+    ],
+    'search_bar':true,
+    'selection_buttons':true,
+    'paging':[10,20,50],
+    'sizing_label':'Créances'} %}
+
+    {% set headers = [['Nom', 'Fonction', 'Num. BS', 'Naissance', 'Actions']] %}
+
+    {% set columns = ['prenom', 'activeAttribution.fonction.nom', 'numeroBs', 'naissance'] %}
+
+    {% set actions = [
+    {'icon':'zoom','label':'Afficher','event':'event_membre_page'},
+    {'icon':'delete','label':'Enlever','event':'event_liste_delete_element'}
+    ] %}
+
+    {% set filters = [
+    {'naissance':'date'}
+    ] %}
+
+    {{ listMacro.liste(name, membres, headers, columns, actions, null, filters) }}
+
+    <div class="ui right aligned column">
+        <div class="ui tiny labeled dropdown button">
+            <i class="wizard icon"></i>
+            Actions
+            <div class="menu">
+                <div class="header">
+                    Action sur {{ membres|length }} membres
+                </div>
+                <div id="add_distinction" class="item">
+                    Ajouter une distinction
+                </div>
+                <div id="add_attribution" class="item">
+                    Ajouter une attribution
+                </div>
+                <div id="add_creances" class="item">
+                    Ajouter une créance
+                </div>
+            </div>
+        </div>
+
+        <div class="ui tiny teal labeled dropdown button">
+            Exporter
+            <div class="menu">
+                <div class="header">
+                    Export de {{ membres|length }} membres
+                </div>
+                <div id="add_distinction" class="item">
+                    PDF
+                </div>
+                <div id="add_attribution" class="item">
+                    Excel (csv)
+                </div>
+                <div id="add_creances" class="item">
+                    Publipostage
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endmacro %}

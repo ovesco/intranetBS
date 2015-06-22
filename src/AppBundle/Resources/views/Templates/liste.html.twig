@@ -85,18 +85,9 @@
                             {% endfor %}
                         </div>
                     </div>
-
-
-
             {% endif %}
-
-
-
-
         </div>
-
     {% endif %}
-
 
 
     <table class="ui table data-liste-table">
@@ -145,10 +136,7 @@
 
         {# On crée un tableau pour sauver les valeurs des colomnes#}
 
-
         {% set valuesArray = { 'id': rowId } %}
-
-
 
         {# on affiche chaque colonne #}
         {% for value in columns %}
@@ -240,7 +228,6 @@
                     {% elseif  applayedFilter == 'date'%}
                         {{ dataValue|date(global_date_format) }}
                     {% endif %}
-
 
 
                 {% endif %}
