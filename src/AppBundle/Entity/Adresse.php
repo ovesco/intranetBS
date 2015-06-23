@@ -32,8 +32,6 @@ class Adresse
      * @var string
      *
      * @ORM\Column(name="rue", type="string", length=255)
-     * @Assert\NotBlank()
-     * @Assert\Length(min = "3")
      */
     private $rue;
 
@@ -41,8 +39,6 @@ class Adresse
      * @var integer
      *
      * @ORM\Column(name="npa", type="integer")
-     * @Assert\NotBlank()
-     * @Assert\Length(min = "3")
      */
     private $npa;
 
@@ -50,8 +46,6 @@ class Adresse
      * @var string
      *
      * @ORM\Column(name="localite", type="string", length=255)
-     * @Assert\NotBlank()
-     * @Assert\Length(min = "3")
      */
     private $localite;
 

@@ -17,14 +17,14 @@
                         <table class="ui definition table">
                             <tr>
                                 <td>Nom d'utilisateur</td>
-                                <td>{{ app.security.token.user.username }}</td>
+                                <td>{{ app.user.username }}</td>
                             </tr>
                             <tr>
                                 <td>Ma page</td>
                                 <td>
-                                    <a href="{{ path('interne_voir_membre', {membre: app.security.token.user.membre.id}) }}">
-                                        {{ app.security.token.user.membre.prenom|capitalize }}
-                                        {{ app.security.token.user.membre.nom|capitalize }}
+                                    <a href="{{ path('interne_voir_membre', {membre: app.user.membre.id}) }}">
+                                        {{ app.user.membre.prenom|capitalize }}
+                                        {{ app.user.membre.nom|capitalize }}
                                     </a>
                                 </td>
                             </tr>

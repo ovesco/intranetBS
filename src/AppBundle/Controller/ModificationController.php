@@ -33,9 +33,10 @@ class ModificationController extends Controller
 
         /*
         $id     = 1;
-        $data   = 'text___Adresse___rue';
-        $value  = 'Rue des poireaux ' . time();
+        $data   = 'text___Mere___prenom';
+        $value  = 'Edith';
         */
+
 
 
         $data   = explode('___', $data);                 // separation des données utiles
@@ -46,12 +47,10 @@ class ModificationController extends Controller
         $em     = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('AppBundle:' . $class)->find($id);
 
-        $getter = 'get' . ucfirst($field);               // On génère un getter pour obtenir l'ancienne valeur avant modif
-        $oldVal = $entity->$getter();                    // On récupère l'ancienne valeur
-
 
         $form   = $this->createFormBuilder($entity, array('csrf_protection' => false))->add($field, $type)->getForm();
         $form->submit( array($field => $value) );
+
 
         /*
          * Formulaire valide, on valide la modification, et on crée une entrée de modification qui permettra
@@ -59,14 +58,13 @@ class ModificationController extends Controller
          */
         if($form->isValid()) {
 
-            $verification = $this->get('verification');
-            //$verification->addModification($field, $oldVal, $entity);
-
-
 
             echo 'valid';
+
+
             $em->persist($entity);
             $em->flush();
+
         }
 
         else {
