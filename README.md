@@ -147,6 +147,8 @@ phpunit -c app/
 ```
 
 
+
+[a relative link](/src/AppBundle/Resources/doc/to_mode_prod.md)
 # Passer en mode "Prod"
 
 ##Erreur courrante avec les CSS et Assetic.
