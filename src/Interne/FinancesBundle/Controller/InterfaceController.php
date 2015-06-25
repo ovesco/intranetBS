@@ -24,7 +24,7 @@ class InterfaceController extends Controller
 {
 
     /**
-     * @Route("/reload_ajax", name="interne_fiances_interface_reload_ajax", options={"expose"=true})
+     * @Route("/reload_ajax", name="interne_finances_interface_reload_ajax", options={"expose"=true})
      * @param Request $request
      * @return Response
      */

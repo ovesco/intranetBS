@@ -30,7 +30,7 @@ class FactureController extends Controller
 
 
     /**
-     * @Route("/delete_ajax", name="interne_fiances_facture_delete_ajax", options={"expose"=true})
+     * @Route("/delete_ajax", name="interne_finances_facture_delete_ajax", options={"expose"=true})
      *
      * @return Response
      */
@@ -57,7 +57,7 @@ class FactureController extends Controller
 
 
     /**
-     * @Route("/show_ajax", name="interne_fiances_facture_show_ajax", options={"expose"=true})
+     * @Route("/show_ajax", name="interne_finances_facture_show_ajax", options={"expose"=true})
      * @param Request $request
      * @return Response
      */
@@ -84,7 +84,7 @@ class FactureController extends Controller
      * depuis plusieur page différente.
      */
     /**
-     * @Route("/create_ajax", name="interne_fiances_facture_create_ajax", options={"expose"=true})
+     * @Route("/create_ajax", name="interne_finances_facture_create_ajax", options={"expose"=true})
      * @param Request $request
      * @return Response
      */
@@ -109,7 +109,7 @@ class FactureController extends Controller
     }
 
     /**
-     * @Route("/envoi", name="interne_fiances_facture_envoi_ajax", options={"expose"=true})
+     * @Route("/envoi", name="interne_finances_facture_envoi_ajax", options={"expose"=true})
      * @param Request $request
      * @return Response
      */
@@ -151,7 +151,7 @@ class FactureController extends Controller
 
     /**
      * @param Facture $facture
-     * @Route("/print/{facture}", name="interne_fiances_facture_print", options={"expose"=true})
+     * @Route("/print/{facture}", name="interne_finances_facture_print", options={"expose"=true})
      * @return Response
      * @ParamConverter("facture", class="InterneFinancesBundle:Facture")
      */
@@ -316,7 +316,7 @@ class FactureController extends Controller
     }
 
     /**
-     * @Route("/search", name="interne_fiances_facture_search", options={"expose"=true})
+     * @Route("/search", name="interne_finances_facture_search", options={"expose"=true})
      * @param Request $request
      * @return Response
      */

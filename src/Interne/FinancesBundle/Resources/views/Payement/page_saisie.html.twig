@@ -10,11 +10,6 @@
             <div class="eight wide column">
 
                 <div class="ui segment">
-                    <h3 class="header">
-                        Saisie manuelle
-
-                    </h3>
-
 
                     {% include  "InterneFinancesBundle:Payement:addForm.html.twig" with {'formMultiple': formMultiple} %}
 
@@ -26,36 +21,8 @@
             <div class="eight wide column">
 
                 <div class="ui segment">
-                    <h3 class="header">
-                        Chargement de ficher
-                    </h3>
 
-
-                    {{ form_start(formUpload, {'attr': {'class': 'ui form'}}) }}
-
-
-                    {{ form_widget(formUpload.file) }}
-
-
-                    {{ form_widget(formUpload.Charger, {'attr': {'class': 'ui blue button'}}) }}
-
-                    {{ form_rest(formUpload) }}
-
-
-                    {{ form_end(formUpload) }}
-
-                    {% set extensions = formUpload.file.vars.attr.accept|split(',') %}
-
-                    Les extentions de fichiers autorisées sont:
-
-                    {% for extension in extensions %}
-                        <div class="ui label">
-                            *{{ extension }}
-                        </div>
-                    {% endfor %}
-
-
-
+                    {% include  "InterneFinancesBundle:Payement:uploadFileForm.html.twig" with {'formUpload': formUpload} %}
 
                 </div>
 
