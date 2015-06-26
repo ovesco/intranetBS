@@ -32,6 +32,21 @@ php app/console security:roles:build roles.yml
 ### Générer un user de login
 Ajouter manuellement avec phpmyadmin dans security_users et roles_users
 
+###Exemple de script pour générer des données de test
+
+Ce script requière que la base de donnée soit vide avant son execution.
+
+```bash
+php app/console cache:clear
+php app/console doctrine:schema:update --force
+php app/console security:roles:build roles.yml
+php app/console app:populate create
+php app/console app:populate fill 200
+php app/console app:populate security
+php app/console fos:elastica:populate
+```
+
+Après ceci, une connexion avec le user "admin" (psw: "admin") et le tour et joué...
 
 ##Indexation
 
