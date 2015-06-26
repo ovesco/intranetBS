@@ -1,5 +1,4 @@
-
-# Passer en mode "Prod"
+#Passer en mode "Prod"
 
 ##Erreur courrante avec les CSS et Assetic.
 
