@@ -13,9 +13,9 @@ class FactureRepartitionType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('creances', 'collection', array('label'=>false,'type' => new CreanceRepartitionType()));
-
-        $builder->add('rappels', 'collection', array('label'=>false,'type' => new RappelRepartitionType()));
+        $builder
+            ->add('creances', 'collection', array('label'=>'Créances','type' => new CreanceRepartitionType()))
+            ->add('rappels', 'collection', array('label'=>'Rappels','type' => new RappelRepartitionType()));
 
 
         ;//fin de la fonction builder

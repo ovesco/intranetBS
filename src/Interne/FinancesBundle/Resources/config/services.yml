@@ -13,3 +13,11 @@ services:
             - @doctrine.orm.entity_manager
             - @parametres
             - @pdf
+
+    # Twig
+    # Extensions twig qui permettent de mettre en place des filtres
+    # personnalisés
+    app.twig.money_filter:
+        class: Interne\FinancesBundle\Twig\MoneyFilter
+        tags:
+            - { name: twig.extension }

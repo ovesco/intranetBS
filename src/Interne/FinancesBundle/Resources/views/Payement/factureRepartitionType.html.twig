@@ -1,0 +1,68 @@
+
+
+{% block InterneFinancesBundleFactureRepartitionType_widget %}
+    {% spaceless %}
+        {% if (form.creances is not empty) or (form.rappels is not empty )%}
+            <div class="field" {{ block('widget_container_attributes') }}>
+                <table class="ui definition table">
+                    <thead>
+                    <tr>
+                        <th>
+
+                        </th>
+                        <th>
+                            Demandé
+                        </th>
+                        <th>
+                            Montant réparti
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for child in form.creances %}
+                        <tr>
+                            <td>
+                                {{ child.vars.value.titre  }}
+                            </td>
+                            <td>
+                                {{  child.vars.value.montantEmis|money }}
+                            </td>
+                            <td>
+                                {{ form_widget(child.montantRecu, {'attr':{'class':'repartitionMontant'}} ) }}
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+
+                    {% for child in form.rappels %}
+                        <tr>
+                            <td>
+                                {{  child.vars.value.dateCreation|date(global_date_format) }}
+                            </td>
+                            <td>
+                                {{  child.vars.value.montantEmis|money  }}
+                            </td>
+                            <td>
+                                {{ form_widget(child.montantRecu, {'attr':{'class':'repartitionMontant'}} ) }}
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+
+                    <tr>
+                        <td>
+                            Montant à répartir
+                        </td>
+
+                        <td class="montantRestant right aligned" colspan="2">
+
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    {% endspaceless %}
+{% endblock %}

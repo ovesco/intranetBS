@@ -9,12 +9,7 @@ $(function () {
         switch(e.detail.name){
 
 
-            case 'event_voir_creance':
-                openCreanceShow(e.detail.data,'interface');
-                break;
-            case 'event_delete_creance':
-                deleteCreance(e.detail.data);
-                break;
+
 
             case 'event_add_rappel':
                 openRappelForm(e.detail.data);
@@ -29,9 +24,7 @@ $(function () {
                 openRappelForm(null);
                 break;
 
-            case 'event_masse_delete_creance':
-                deleteListeCreance(e.detail.data);
-                break;
+
 
 
         }

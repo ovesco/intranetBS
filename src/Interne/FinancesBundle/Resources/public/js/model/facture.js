@@ -46,7 +46,7 @@ function deleteFacture(id,reload){
     var data = { idFacture: id};
     return $.ajax({
         type: "POST",
-        url: Routing.generate('interne_fiances_facture_delete_ajax'),
+        url: Routing.generate('interne_finances_facture_delete_ajax'),
         data: data,
         error: function(jqXHR, textStatus, errorThrown) {
             alerte.send('Erreur lors de la suppresion','error');
@@ -85,7 +85,7 @@ function createFactureWithListeCreances(listeCreance){
 
     $.ajax({
         type: "POST",
-        url: Routing.generate('interne_fiances_facture_create_ajax'),
+        url: Routing.generate('interne_finances_facture_create_ajax'),
         data: data,
         error: function(jqXHR, textStatus, errorThrown) {
             alerte.send('Erreur lors de la création de la facture','error');
@@ -109,7 +109,7 @@ function sendFacture(idFacture){
 
     return $.ajax({
         type: "POST",
-        url: Routing.generate('interne_fiances_facture_envoi_ajax'),
+        url: Routing.generate('interne_finances_facture_envoi_ajax'),
         data: data,
         //async: false, //option utiliée pour retourner la valeur de success en dehors de la requete ajax
         error: function(jqXHR, textStatus, errorThrown) { return false; },
@@ -123,7 +123,7 @@ function sendFacture(idFacture){
  */
 function printFacture(id){
 
-    var url = Routing.generate('interne_fiances_facture_print') + '/' + id;
+    var url = Routing.generate('interne_finances_facture_print') + '/' + id;
 
     /*
      * Ouvre le pdf dans une nouvelle fenetre
@@ -138,7 +138,7 @@ function printFacture(id){
 function showFacture(idFacture)
 {
     var data = { idFacture: idFacture};
-    var url = Routing.generate('interne_fiances_facture_show_ajax');
+    var url = Routing.generate('interne_finances_facture_show_ajax');
 
     getModal(data,url);
 }

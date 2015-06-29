@@ -75,6 +75,8 @@ abstract class Creance implements OwnerInterface
      * ========== Fonctions =================
      */
 
+
+
     /**
      * @return mixed
      */
