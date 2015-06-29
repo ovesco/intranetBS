@@ -161,7 +161,7 @@
 
         {# on affiche chaque colonne #}
         {% for value in columns %}
-            <td>
+
                 {% set object = row %}
                 {# on splite value au '.' afin de cherche la donnée de manière récursive. (ex. membre.famille.id) #}
                 {%  set keys = value|split('.') %}
@@ -236,22 +236,26 @@
                     {% endif %}
                 {% endfor %}
 
-
-                {# le filtre raw permet d'insérer des balises html #}
-                {{ openBalise|raw }}
                 {% if printData %}
                     {# impression de la donnée et éventuellement de son filtre #}
                     {% if applayedFilter is null %}
                         {# sans filtre #}
-                        {{ dataValue }}
+                        {% set print = dataValue %}
                     {% elseif  applayedFilter == 'number_2'%}
-                        {{ dataValue|number_format(2, '.', ',') }}
+                        {% set print = dataValue|number_format(2, '.', ',') %}
                     {% elseif  applayedFilter == 'date'%}
-                        {{ dataValue|date(global_date_format) }}
+                        {% set print = dataValue|date(global_date_format) %}
                     {% endif %}
-
-
+                {% else %}
+                    {% set print = '' %}
                 {% endif %}
+
+
+            {# on stoke toute ces informations en balise, le but et de pouvoir réutiliser ceci lors d'un modification. todo#}
+            <td data-key="{{ value }}" data-openbalise="{{ openBalise }}" data-closebalise="{{ closeBalise }}" data-print="{{ print }}">
+                {# le filtre raw permet d'insérer des balises html #}
+                {{ openBalise|raw }}
+                {{ print }}
                 {# le filtre raw permet d'insérer des balises html #}
                 {{ closeBalise|raw }}
             </td>

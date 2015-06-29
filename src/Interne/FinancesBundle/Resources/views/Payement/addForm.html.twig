@@ -1,44 +1,72 @@
+<h3 class="header">
+    Saisie manuelle
+</h3>
+
 {{ form_start(formMultiple, {'attr': {'class': 'ui form'}}) }}
 
 
-<div class="three fields">
-    <div class="field">
-        <label>Num. de réf.</label>
-    </div>
-    <div class="field">
-        <label>Montant reçu</label>
-    </div>
-    <div class="field">
-        <div class="ui icon green submit button" id="AddPayement"><i class="add icon"></i></div>
-    </div>
-
-</div>
-
-<div id="payements_add_form" data-prototype="
-{{ '<div class="two fields payement_add_form">'|e }}
+<table>
+    <thead>
+     <tr>
+         <th>
+             <div class="two fields">
+                 <div class="field">
+                     <label>Num. de réf.</label>
+                 </div>
+                 <div class="field">
+                     <label>Montant reçu</label>
+                 </div>
 
 
-{{ form_widget(formMultiple.multiple_payement.vars.prototype.idFacture,{'attr': {'class': 'idFacture'}})|e }}
-{{ form_widget(formMultiple.multiple_payement.vars.prototype.montantRecu,{'attr': {'class': 'montantRecu'}})|e }}
-
-{{ '</div>'|e }}
-
-">
-
-    {% for field in formMultiple.multiple_payement %}
-
-        <div class="three fields payement_add_form">
-            {{ form_widget(field.idFacture,{'attr': {'class': 'idFacture'}}) }}
-            {{ form_widget(field.montantRecu, {'attr': {'class': 'montantRecu'}}) }}
-
-            <div class="ui icon red button" id=""><i class="minus icon"></i></div>
-        </div>
+             </div>
+         </th>
+         <th>
+             <div class="ui mini icon green submit button" id="AddPayement"><i class="add icon"></i></div>
+             <div class="ui mini icon red button" id="deletePayement"><i class="minus icon"></i></div>
+         </th>
+     </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
 
 
-    {% endfor %}
+                <div id="payements_add_form" data-prototype="
+                    {{ '<div class="two fields payement_add_form">'|e }}
 
 
-</div>
+                    {{ form_widget(formMultiple.multiple_payement.vars.prototype.idFacture,{'attr': {'class': 'idFacture'}})|e }}
+                    {{ form_widget(formMultiple.multiple_payement.vars.prototype.montantRecu,{'attr': {'class': 'montantRecu'}})|e }}
+
+                    {{ '</div>'|e }}
+
+                    ">
+
+                    {% for field in formMultiple.multiple_payement %}
+
+                        <div class="two fields payement_add_form">
+                            {{ form_widget(field.idFacture,{'attr': {'class': 'idFacture'}}) }}
+                            {{ form_widget(field.montantRecu, {'attr': {'class': 'montantRecu'}}) }}
+
+                        </div>
+
+                    {% endfor %}
+
+
+                </div>
+
+
+
+            </td>
+            <td>
+
+            </td>
+        </tr>
+
+    </tbody>
+</table>
+
+
 
 
 
@@ -49,3 +77,4 @@
 
 
 {{ form_end(formMultiple) }}
+

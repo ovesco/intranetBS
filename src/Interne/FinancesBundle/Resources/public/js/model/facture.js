@@ -1,3 +1,43 @@
+$(document).ready(function () {
+
+    /**
+     * Gestion des évenement envoyé par les listes pour les factures.
+     */
+    document.addEventListener('data-liste-event', function (e) {
+
+
+        switch(e.detail.name){
+            case 'event_voir_facture':
+                showFacture(e.detail.data);
+                break;
+            case 'event_delete_facture':
+                deleteFacture(e.detail.data);
+                break;
+
+            case 'event_send_facture':
+                sendFacture(e.detail.data);
+                break;
+
+            case 'event_print_facture':
+                printFacture(e.detail.data);
+                break;
+
+            case 'event_masse_delete_facture':
+                deleteListFacture(e.detail.data);
+                break;
+
+        }
+    }, false);
+
+});
+
+
+
+
+
+
+
+
 function deleteFacture(id,reload){
 
     //default value
@@ -27,7 +67,7 @@ function deleteFacture(id,reload){
     });
 }
 
-function deleteListeFacture(idArray)
+function deleteListFacture(idArray)
 {
 
 
@@ -62,7 +102,7 @@ function createFactureWithListeCreances(listeCreance){
 /*
  * Ajoute la facture au service d'envoi
  */
-function factureEnvoi(idFacture){
+function sendFacture(idFacture){
 
     var success;
     var data = {idFacture:idFacture};
@@ -95,7 +135,7 @@ function printFacture(id){
  *
  * @param idFacture
  */
-function openFactureShow(idFacture)
+function showFacture(idFacture)
 {
     var data = { idFacture: idFacture};
     var url = Routing.generate('interne_fiances_facture_show_ajax');

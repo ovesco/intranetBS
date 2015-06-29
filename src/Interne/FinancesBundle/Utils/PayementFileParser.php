@@ -101,7 +101,15 @@ class PayementFileParser {
                 /*
                  * création du payement extraite de la ligne
                  */
-                $this->payements[] = new Payement($numRef,$montantRecu,$datePayement,Payement::WAITING_VALIDATION);
+
+                $payement = new Payement();
+                $payement->setIdFacture($numRef);
+                $payement->setMontantRecu($montantRecu);
+                $payement->setDate($datePayement);
+                $payement->setState(Payement::NOT_DEFINED);
+                $payement->setValidated(false);
+
+                $this->payements[] = $payement;
 
             }
             else
