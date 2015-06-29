@@ -11,6 +11,9 @@ before_script:
 
 script: phpunit -c app/
 
+services:
+  - elasticsearch
+
 notifications:
   email:
     - netbs@sauvabelin.ch
