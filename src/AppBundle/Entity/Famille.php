@@ -2,17 +2,13 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
-
-use AppBundle\Entity\Pere;
-use AppBundle\Entity\Mere;
-use AppBundle\Entity\Geniteur;
-
-//FinancesBundle
+use Doctrine\ORM\Mapping as ORM;
 use Interne\FinancesBundle\Entity\CreanceToFamille;
 use Interne\FinancesBundle\Entity\FactureToFamille;
+use Symfony\Component\Validator\Constraints as Assert;
+
+//FinancesBundle
 
 /**
  * Famille
@@ -32,19 +28,19 @@ class Famille implements ExpediableInterface, ClassInterface
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Membre", mappedBy="famille", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Membre", mappedBy="famille", cascade={"persist"})
      */
     private $membres;
 
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Pere", mappedBy="famille", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Pere", mappedBy="famille", cascade={"persist"})
      * @ORM\JoinColumn(name="pere_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $pere;
 
     /**
      *
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Mere", mappedBy="famille", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Mere", mappedBy="famille", cascade={"persist"})
      * @ORM\JoinColumn(name="mere_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $mere;
@@ -131,67 +127,61 @@ class Famille implements ExpediableInterface, ClassInterface
         return $this;
     }
 
-
     /**
-     * Get membres
+     * Add membres
      *
-     * @return array
-     */
-    public function getMembres()
-    {
-        return $this->membres;
-    }
-
-    /**
-     * Set pere
-     *
-     * @param Pere $pere
+     * @param \AppBundle\Entity\Membre $membres
      * @return Famille
      */
-    public function setPere($pere = null)
+    public function addMembre(\AppBundle\Entity\Membre $membres)
     {
-        $this->pere = $pere;
-        if($pere != null)
-        {
-            $pere->setFamille($this);
-        }
+        $this->membres[] = $membres;
+        $membres->setFamille($this);
         return $this;
     }
 
     /**
-     * Get pere
+     * Remove membres
      *
-     * @return \AppBundle\Entity\Geniteur
+     * @param \AppBundle\Entity\Membre $membres
      */
-    public function getPere()
+    public function removeMembre(\AppBundle\Entity\Membre $membres)
     {
-        return $this->pere;
+        $this->membres->removeElement($membres);
     }
 
     /**
-     * Set mere
+     * Doit renvoyer quelque chose qui permet d'identifier (humainement) une famille
+     * Le nom n'est pas suffisant p.ex puisqu'il peut y avoir plusieurs famille avec le même nom
+     * du coup on renvoie la localité derrière
      *
-     * @param  Mere $mere
-     * @return Famille
+     * @return string
      */
-    public function setMere($mere = null)
+    public function __toString()
     {
-        $this->mere = $mere;
-        if($mere != null)
+
+        $string = "Les " . $this->getNom();
+
+        if ($this->getContact() != null)
         {
-            $mere->setFamille($this);
+            if ($this->getContact()->getAdresse() != NULL) {
+                $string .= " de " . $this->getContact()->getAdresse()->getLocalite();
+            }
         }
-        return $this;
+
+
+        return $string;
+
     }
 
     /**
-     * Get mere
+     * Get nom
      *
-     * @return \AppBundle\Entity\Geniteur
+     * @return string
      */
-    public function getMere()
+    public function getNom()
     {
-        return $this->mere;
+        return ucwords($this->nom);
     }
 
     /**
@@ -208,63 +198,36 @@ class Famille implements ExpediableInterface, ClassInterface
     }
 
     /**
-     * Get nom
+     * Get contact
      *
-     * @return string
+     * @return Contact
      */
-    public function getNom()
+    public function getContact()
     {
-        return ucwords($this->nom);
+        return $this->contact;
     }
 
-
     /**
-     * Add membres
+     * Set contact
      *
-     * @param \AppBundle\Entity\Membre $membres
+     * @param Contact $contact
      * @return Famille
      */
-    public function addMembre(\AppBundle\Entity\Membre $membres)
+    public function setContact(Contact $contact = null)
     {
-        $this->membres[] = $membres;
-    	$membres->setFamille($this);
+        $this->contact = $contact;
+
         return $this;
     }
 
     /**
-     * Remove membres
+     * Get validity
      *
-     * @param \AppBundle\Entity\Membre $membres
+     * @return integer
      */
-    public function removeMembre(\AppBundle\Entity\Membre $membres)
+    public function getValidity()
     {
-        $this->membres->removeElement($membres);
-    }
-
-
-
-    /**
-     * Doit renvoyer quelque chose qui permet d'identifier (humainement) une famille
-     * Le nom n'est pas suffisant p.ex puisqu'il peut y avoir plusieurs famille avec le même nom
-     * du coup on renvoie la localité derrière
-     *
-     * @return string
-     */
-    public function __toString() {
-
-        $string = "Les " . $this->getNom();
-
-        if($this->getContact() != null)
-        {
-            if ($this->getContact()->getAdresse() != NULL)
-            {
-                $string .= " de " . $this->getContact()->getAdresse()->getLocalite();
-            }
-        }
-
-
-        return $string;
-
+        return $this->validity;
     }
 
     /**
@@ -281,20 +244,6 @@ class Famille implements ExpediableInterface, ClassInterface
     }
 
     /**
-     * Get validity
-     *
-     * @return integer 
-     */
-    public function getValidity()
-    {
-        return $this->validity;
-    }
-
-    /*
-     * ====== FinancesBundle =======
-     */
-
-    /**
      * Is classe
      *
      * @param string $className
@@ -302,7 +251,7 @@ class Famille implements ExpediableInterface, ClassInterface
      */
     public function isClass($className)
     {
-        if($className == 'Famille')
+        if ($className == 'Famille')
             return true;
         else
             return false;
@@ -326,13 +275,16 @@ class Famille implements ExpediableInterface, ClassInterface
     {
         $this->factures = $factures;
 
-        foreach($factures as $facture)
-        {
+        foreach ($factures as $facture) {
             $facture->setFamille($this);
         }
 
         return $this;
     }
+
+    /*
+     * ====== FinancesBundle =======
+     */
 
     /**
      * Get facture
@@ -401,24 +353,6 @@ class Famille implements ExpediableInterface, ClassInterface
     }
 
     /**
-     * Set creances
-     *
-     * @param ArrayCollection $creances
-     * @return Famille
-     */
-    public function setCreances(ArrayCollection $creances)
-    {
-        $this->creances = $creances;
-
-        foreach($creances as $creance)
-        {
-            $creance->setFamille($this);
-        }
-
-        return $this;
-    }
-
-    /**
      * Get creances
      *
      * @return ArrayCollection
@@ -429,33 +363,26 @@ class Famille implements ExpediableInterface, ClassInterface
     }
 
     /**
-     * Set contact
+     * Set creances
      *
-     * @param Contact $contact
+     * @param ArrayCollection $creances
      * @return Famille
      */
-    public function setContact(Contact $contact = null)
+    public function setCreances(ArrayCollection $creances)
     {
-        $this->contact = $contact;
+        $this->creances = $creances;
+
+        foreach ($creances as $creance) {
+            $creance->setFamille($this);
+        }
 
         return $this;
-    }
-
-    /**
-     * Get contact
-     *
-     * @return Contact
-     */
-    public function getContact()
-    {
-        return $this->contact;
     }
 
     public function getAdresseExpedition()
     {
         $adresse = $this->getContact()->getAdresse();
-        if(!is_null($adresse))
-        {
+        if (!is_null($adresse)) {
             if ($adresse->isExpediable()) {
                 return array('adresse' => $adresse,
                     'owner' => array(
@@ -467,12 +394,10 @@ class Famille implements ExpediableInterface, ClassInterface
         }
 
         $mere = $this->getMere();
-        if(!is_null($mere))
-        {
+        if (!is_null($mere)) {
             $adresse = $mere->getContact()->getAdresse();
 
-            if(!is_null($adresse))
-            {
+            if (!is_null($adresse)) {
                 if ($adresse->isExpediable()) {
                     return array('adresse' => $adresse,
                         'owner' => array(
@@ -485,12 +410,10 @@ class Famille implements ExpediableInterface, ClassInterface
         }
 
         $pere = $this->getPere();
-        if(!is_null($pere))
-        {
+        if (!is_null($pere)) {
             $adresse = $pere->getContact()->getAdresse();
 
-            if(!is_null($adresse))
-            {
+            if (!is_null($adresse)) {
                 if ($adresse->isExpediable()) {
                     return array('adresse' => $adresse,
                         'owner' => array(
@@ -505,17 +428,66 @@ class Famille implements ExpediableInterface, ClassInterface
         return null;
     }
 
+    /**
+     * Get mere
+     *
+     * @return \AppBundle\Entity\Geniteur
+     */
+    public function getMere()
+    {
+        return $this->mere;
+    }
+
+    /**
+     * Set mere
+     *
+     * @param  Mere $mere
+     * @return Famille
+     */
+    public function setMere($mere = null)
+    {
+        $this->mere = $mere;
+        if ($mere != null) {
+            $mere->setFamille($this);
+        }
+        return $this;
+    }
+
+    /**
+     * Get pere
+     *
+     * @return \AppBundle\Entity\Geniteur
+     */
+    public function getPere()
+    {
+        return $this->pere;
+    }
+
+    /**
+     * Set pere
+     *
+     * @param Pere $pere
+     * @return Famille
+     */
+    public function setPere($pere = null)
+    {
+        $this->pere = $pere;
+        if ($pere != null) {
+            $pere->setFamille($this);
+        }
+        return $this;
+    }
+
     public function getListeEmailsExpedition()
     {
         $liste = array();
 
 
         $emails = $this->getContact()->getEmails();
-        if(!is_null($emails))
+        if (!is_null($emails))
         {
-            foreach($emails as $email){
-                if($email->isExpediable())
-                {
+            foreach ($emails as $email) {
+                if ($email->isExpediable()) {
                     $liste['Famille'] = $email->getEmail();
                 }
 
@@ -523,16 +495,14 @@ class Famille implements ExpediableInterface, ClassInterface
         }
 
 
-
         $mere = $this->getMere();
         if(!is_null($mere))
         {
             $emails = $mere->getContact()->getEmails();
-            if(!is_null($emails))
+            if (!is_null($emails))
             {
-                foreach($emails as $email){
-                    if($email->isExpediable())
-                    {
+                foreach ($emails as $email) {
+                    if ($email->isExpediable()) {
                         $liste['Mère'] = $email->getEmail();
                     }
 
@@ -545,20 +515,16 @@ class Famille implements ExpediableInterface, ClassInterface
         if(!is_null($pere))
         {
             $emails = $pere->getContact()->getEmails();
-            if(!is_null($emails))
+            if (!is_null($emails))
             {
-                foreach($emails as $email){
-                    if($email->isExpediable())
-                    {
+                foreach ($emails as $email) {
+                    if ($email->isExpediable()) {
                         $liste['Père'] = $email->getEmail();
                     }
 
                 }
             }
         }
-
-
-
 
 
         return $liste;
@@ -569,12 +535,22 @@ class Famille implements ExpediableInterface, ClassInterface
         $enfants = $this->getMembres();
 
         $listOfPrenom = array();
-        foreach($enfants as $enfant)
+        foreach ($enfants as $enfant)
         {
             /** @var Membre $enfant */
             $listOfPrenom[] = $enfant->getPrenom();
         }
         return $listOfPrenom;
+    }
+
+    /**
+     * Get membres
+     *
+     * @return array
+     */
+    public function getMembres()
+    {
+        return $this->membres;
     }
 
 
