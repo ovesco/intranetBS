@@ -21,8 +21,6 @@ abstract class Geniteur extends Personne
      * @var string
      *
      * @ORM\Column(name="nom", type="string", length=255, nullable=true)
-     * @Assert\NotBlank()
-     * @Assert\Length(min = "2")
      */
     protected $nom;
     

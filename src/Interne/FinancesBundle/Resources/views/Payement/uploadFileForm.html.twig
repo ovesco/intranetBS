@@ -1,0 +1,26 @@
+<h3 class="header">
+    Chargement de ficher
+</h3>
+
+{{ form_start(formUpload, {'attr': {'class': 'ui form'}}) }}
+
+
+{{ form_widget(formUpload.file) }}
+
+
+{{ form_widget(formUpload.Charger, {'attr': {'class': 'ui blue button'}}) }}
+
+{{ form_rest(formUpload) }}
+
+
+{{ form_end(formUpload) }}
+
+{% set extensions = formUpload.file.vars.attr.accept|split(',') %}
+
+Les extentions de fichiers autorisées sont:
+
+{% for extension in extensions %}
+    <div class="ui label">
+        *{{ extension }}
+    </div>
+{% endfor %}

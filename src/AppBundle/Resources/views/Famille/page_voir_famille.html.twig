@@ -4,13 +4,235 @@
     Famille {{ famille.nom|capitalize }}
 {% endblock %}
 
+{% macro contact(entity, form, id) %}
+
+    {% set id = (id is null) ? entity.id : id %}
+    <div class="ui pointing secondary tabular menu">
+        <a class="active item" data-tab="adresse-{{ id }}">Adresse</a>
+        <a class="item" data-tab="contact-{{ id }}">Téléphone et mail</a>
+    </div>
+
+    <div class="ui active tab basic segment" data-tab="adresse-{{ id }}">
+
+        {% if entity.contact.adresse %}
+        {{ form_row(form.contact.adresse.rue) }}
+        {{ form_row(form.contact.adresse.npa) }}
+        {{ form_row(form.contact.adresse.localite) }}
+        {{ form_row(form.contact.adresse.expediable) }}
+        {{ form_row(form.contact.adresse.remarques) }}
+        {% endif %}
+    </div>
+
+
+    <div class="ui tab basic segment" data-tab="contact-{{ id }}">
+
+        <h5 class="ui header">Téléphone(s) - <a href="#" class="button-add-telephone" data-contact-id="{{ entity.contact.id }}">ajouter</a></h5>
+        {% include 'AppBundle:Contact:list_phone_mail.html.twig' with {'type' : 'telephone', 'data' : form.contact.telephones} %}
+
+        <div class="ui divider"></div>
+        <h5 class="ui header">E-mail(s) - <a href="#" class="button-add-email" data-contact-id="{{ entity.contact.id }}">ajouter</a></h5>
+        {% include 'AppBundle:Contact:list_phone_mail.html.twig' with {'type' : 'email', 'data' : form.contact.emails} %}
+    </div>
+
+{% endmacro %}
+
+{% import _self as macral %}
+{% import "@App/Templates/liste_membres.html.twig" as macro %}
+
+
+{% form_theme familleForm 'Templates/form_to_xEditable.html.twig' %}
+
 {% block content %}
 
+    <div class="ui page grid">
+        <div class="column">
+
+            <div class="ui grid">
+
+                <div class="row">
+
+                    <div class="twelve wide column">
+                        <h2 class="ui header">
+                            <i class="users icon"></i>
+                            <div class="content">
+                                Famille {{ famille.nom|capitalize }}
+                                <div class="sub header">{% if famille.contact.adresse %}{{ famille.contact.adresse.localite }}{% else %}-{% endif %}</div>
+                            </div>
+                        </h2>
+                    </div>
+
+                </div>
+
+                <div class="row"> <!-- informations de base sur la famille -->
+
+                    <div class="eight wide column">
+                        <div class="ui attached message">
+                            <div class="header"><h3><i class="info icon"></i>Informations</h3></div>
+                        </div>
+
+                        <div class="ui bottom attached segment">
+
+                            {# Informations de base sur la famille #}
+                            {{ form_row(familleForm.nom) }}
+
+                            <h4 class="ui horizontal header divider">
+                                <i class="exchange icon"></i>
+                                Informations de contact
+                            </h4>
+
+                            {{ macral.contact(famille, familleForm, 'famille') }}
+
+                        </div>
+                    </div>
+
+
+                    <div class="eight wide column">
+                        <div class="ui attached message">
+                            <div class="header"><h3><i class="user icon"></i>Parents</h3></div>
+                        </div>
+
+                        <div class="ui bottom attached segment">
+
+                            {% set activeMere = (famille.pere is null) ? 'active' : '' %}
+                            <div class="ui top attached tabular menu">
+                                {% if famille.pere %}<a class="item active" data-tab="pere">Père</a>{% endif %}
+                                {% if famille.mere %}<a class="item {{ activeMere }}" data-tab="mere">Mère</a>{% endif %}
+                            </div>
+
+                            {% if famille.pere %}
+
+                                <div class="ui bottom attached active tab segment" data-tab="pere">
+
+
+                                    {{ form_row(familleForm.pere.prenom) }}
+                                    {{ form_row(familleForm.pere.profession) }}
+
+                                    <h4 class="ui horizontal header divider">
+                                        <i class="exchange icon"></i>
+                                        Informations de contact
+                                    </h4>
+
+                                    {{ macral.contact(famille.pere, familleForm.pere, 'pere') }}
+
+
+                                </div>
+                            {% endif %}
+
+                            {% if famille.mere %}
+                                <div class="ui bottom attached {{ activeMere }} tab segment" data-tab="mere">
+
+                                    {{ form_row(familleForm.mere.prenom) }}
+                                    {{ form_row(familleForm.mere.profession) }}
+
+                                    <h4 class="ui horizontal header divider">
+                                        <i class="exchange icon"></i>
+                                        Informations de contact
+                                    </h4>
+
+                                    {{ macral.contact(famille.mere, familleForm.mere, 'mere') }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div> <!-- /informations de base -->
+
+                <div class="row"> <!-- Membres dans la famille -->
+
+                    {# TODO ajouter la liste a uffer :D #}
+
+                    <div class="sixteen wide column">
+
+                        <div class="ui attached message">
+                            <div class="header"><h3><i class="info icon"></i>Membres dans la famille</h3></div>
+                        </div>
+
+                        <div class="ui bottom attached segment">
+                            {{ macro.listeMembres('liste_membres', famille.membres) }}
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    {#
     <div class="ui page grid">
 
         <div class="column">
 
-            <h1>Les {{ famille.nom|capitalize }}</h1>
+            <h1>{{ famille }}</h1>
 
 
 
@@ -90,8 +312,9 @@
             <h2>Factures et créances<a class="anchor" id="finances"></a></h2>
             <div class="ui segment">
 
-                {# Insertion de la partie facture et créance pour le membre #}
+                {# Insertion de la partie facture et créance pour le membre
                 {% include "InterneFinancesBundle:Interface:interface.html.twig" with {'ownerEntity': famille } %}
+
 
             </div>
 
@@ -216,7 +439,6 @@
 
     {% javascripts
 
-        '@AppBundle/Resources/public/js/editable.js'
         '@AppBundle/Resources/public/js/specials/validation_popup_generation.js'
 
         output="js/voir_famille.js"

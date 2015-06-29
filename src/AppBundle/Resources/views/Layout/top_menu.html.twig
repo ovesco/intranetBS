@@ -22,7 +22,7 @@
             <a class="item" href="#" id="main-listing-button">Listes</a>
 
             <div class="ui dropdown item">
-                {{ app.security.token.user.membre.prenom|capitalize }} {{ app.security.token.user.membre.nom|capitalize }} <i class="dropdown icon"></i>
+                {{ app.user.membre.prenom|capitalize }} {{ app.user.membre.nom|capitalize }} <i class="dropdown icon"></i>
                 <div class="menu">
                     <a class="item" href="{{ path('security_my_account') }}" ><i class="user icon"></i>Mon compte</a>
                     <a class="item" href="{{ path('logout') }}" ><i class="delete icon"></i>Déconnexion</a>

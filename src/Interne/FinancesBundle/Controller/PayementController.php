@@ -5,6 +5,7 @@ namespace Interne\FinancesBundle\Controller;
 /* Routing */
 use Doctrine\ORM\EntityManager;
 use Interne\FinancesBundle\Form\PayementAddType;
+use Interne\FinancesBundle\SearchRepository\FactureRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -31,6 +32,9 @@ use Interne\FinancesBundle\Form\PayementUploadFileType;
 use Interne\FinancesBundle\SearchClass\PayementSearch;
 use Interne\FinancesBundle\SearchRepository\PayementRepository;
 
+/* Services */
+use Interne\FinancesBundle\Utils\PayementFileParser;
+
 
 /**
  * Class PayementController
@@ -43,7 +47,7 @@ class PayementController extends Controller
     /**
      * Page for searching payement
      *
-     * @Route("/search", name="interne_fiances_payement_search", options={"expose"=true})
+     * @Route("/search", name="interne_finances_payement_search", options={"expose"=true})
      * @param Request $request
      * @return Response
      * @Template("InterneFinancesBundle:Payement:page_recherche.html.twig")
@@ -77,7 +81,7 @@ class PayementController extends Controller
     /**
      * Return modal of the payement
      *
-     * @Route("/show/{payement}", name="interne_fiances_payement_show", options={"expose"=true})
+     * @Route("/show/{payement}", name="interne_finances_payement_show", options={"expose"=true})
      * @param Payement $payement
      * @ParamConverter("payement", class="InterneFinancesBundle:Payement")
      * @Template("InterneFinancesBundle:Payement:showModal.html.twig")
@@ -89,9 +93,9 @@ class PayementController extends Controller
 
 
     /**
-     * Page for adding new payement (manualy of by uploading file)
+     * Page for adding new payement (manualy or by uploading file)
      *
-     * @Route("/add", name="interne_fiances_payement_add", options={"expose"=true})
+     * @Route("/add", name="interne_finances_payement_add", options={"expose"=true})
      * @param Request $request
      * @Template("InterneFinancesBundle:Payement:page_saisie.html.twig")
      * @return Response
@@ -101,7 +105,6 @@ class PayementController extends Controller
         $form = $this->processAddForm($request);
 
         $upload = $this->processUploadForm($request);
-
 
         return array('formMultiple'=>$form->createView(),'formUpload'=>$upload->createView());
     }
@@ -118,6 +121,7 @@ class PayementController extends Controller
         $form  = $this->createForm(new PayementAddMultipleType());
         $form->get('multiple_payement')->setData(array(new Payement()));
         $form->add('Ajouter','submit');
+        $form->add('Anuller','reset');
 
         $form->handleRequest($request);
 
@@ -125,10 +129,10 @@ class PayementController extends Controller
         {
             $em = $this->getDoctrine()->getManager();
 
-
             $payements = $form->get('multiple_payement')->getData();
 
-
+            $sucessString = '';
+            $errorString = '';
             /** @var Payement $payement */
             foreach($payements as $payement)
             {
@@ -139,20 +143,28 @@ class PayementController extends Controller
                 if(($payement->getIdFacture() != null) && ($payement->getMontantRecu() != null))
                 {
                     $payement->setDate(new \DateTime());
-                    $payement->setState(Payement::WAITING_VALIDATION);
+                    $payement->setValidated(false);
+                    $payement = $this->checkPayementState($payement,$em);
 
                     $em->persist($payement);
 
-                    //todo correct flashbag
-                    $this->get('session')->getFlashBag()->add(
-                        'info',
-                        'Payement '.$payement->getIdFacture().' enregisté!'
-                    );
+                    $sucessString = $sucessString.'Payement '.$payement->getIdFacture().' avec '.$payement->getMontantRecu().'CHF enregisté!'."\r\n";
+                }
+                elseif(($payement->getIdFacture() != null) || ($payement->getMontantRecu() != null))
+                {
+                    /*
+                     * Envoi d'information sur l'erreur via flashbag
+                     */
+                    $errorString = $errorString.'Payement '.$payement->getIdFacture().' avec '.$payement->getMontantRecu().'CHF non valide!'."\r\n";
                 }
 
             }
             $em->flush();
-
+            /*
+             * Send info via flashbag
+             */
+            $this->get('session')->getFlashBag()->add('success',$sucessString);
+            $this->get('session')->getFlashBag()->add('error',$errorString);
 
         }
         return $form;
@@ -161,12 +173,41 @@ class PayementController extends Controller
     private function processUploadForm(Request $request){
 
         $upload = $this->createForm(new PayementUploadFileType());
-        $upload->add('Ajouter','submit');
+        $upload->add('Charger','submit');
 
-        /** @var UploadedFile $file */
-        $file = $upload['file']->getData();
+        if ($request->isMethod('POST')) {
 
-        var_dump($file->getType());
+            $upload->handleRequest($request);
+
+            if($upload->isValid()){
+                /** @var UploadedFile $file */
+                $file = $upload['file']->getData();
+
+                /** @var PayementFileParser $payementParser */
+                $payementParser = $this->get('payement_file_parser');
+                $payementParser->setFile($file);
+                $payementParser->extract();
+                /** @var ArrayCollection $payements */
+                $payements = $payementParser->getPayements();
+
+                $em = $this->getDoctrine()->getManager();
+                foreach($payements as $payement)
+                {
+                    $payement = $this->checkPayementState($payement,$em);
+                    $em->persist($payement);
+                }
+                $em->flush();
+
+                $this->get('session')->getFlashBag()->add('success','Fichier valide avec '.$payements->count().' payements ajoutés.');
+            }
+            else
+            {
+                $this->get('session')->getFlashBag()->add('error','Fichier non valide');
+            }
+
+        }
+
+
 
         return $upload;
 
@@ -175,175 +216,82 @@ class PayementController extends Controller
     /**
      * Page for validation of payements
      *
-     * @Route("/validation", name="interne_fiances_payement_validation", options={"expose"=true})
+     * @Route("/validation", name="interne_finances_payement_validation_list", options={"expose"=true})
      * @param Request $request
      * @Template("InterneFinancesBundle:Payement:page_validation.html.twig")
      * @return Response
      */
     public function validationAction(Request $request){
 
+
         $em = $this->getDoctrine()->getManager();
 
         /*
          * todo faire ceci avec elasitca (pas nécaissaire dans l'imédia)
          */
-        $payements = $em->getRepository('InterneFinancesBundle:Payement')->findByState(Payement::WAITING_VALIDATION);
+        $payements = $em->getRepository('InterneFinancesBundle:Payement')->findByValidated(false);
 
-        $results =  $this->compareWithFactureInBDD($payements);
 
-        return array('waitingListe'=>$results);
+        return array('results'=>$payements);
 
 
     }
 
-    private function compareWithFactureInBDD($payements)
-    {
-        $em = $this->getDoctrine()->getManager();
+    /**
+     * @param Payement $payement
+     * @return Payement
+     */
+    private function checkPayementState(Payement $payement,EntityManager $em){
 
-        $factureRepository = $em->getRepository('InterneFinancesBundle:Facture');
+        /** @var Facture $facture */
+        $facture = $em->getRepository('InterneFinancesBundle:Facture')->find($payement->getIdFacture());
 
-        $results = array();
-
-        /** @var Payement $payement */
-        foreach($payements as $payement)
+        if($facture != Null)
         {
-
-
-            $facture = $factureRepository->find($payement->getIdFacture());
-
-            $validationStatut = null;
-
-            if($facture != Null)
+            if($facture->getStatut() == Facture::OUVERTE)
             {
-                if($facture->getStatut() == Facture::OUVERTE)
+                $montantTotalEmis = $facture->getMontantEmis();
+                $montantRecu = $payement->getMontantRecu();
+
+                if($montantTotalEmis == $montantRecu)
                 {
-                    $montantTotalEmis = $facture->getMontantEmis();
-                    $montantRecu = $payement->getMontantRecu();
-
-                    if($montantTotalEmis == $montantRecu)
-                    {
-                        $validationStatut = Payement::FOUND_VALID;
-                    }
-                    elseif($montantTotalEmis > $montantRecu)
-                    {
-                        $validationStatut = Payement::FOUND_LOWER;
-                    }
-                    elseif($montantTotalEmis < $montantRecu)
-                    {
-                        $validationStatut = Payement::FOUND_UPPER;
-                    }
+                    $payement->setState(Payement::FOUND_VALID);
                 }
-                else
+                elseif($montantTotalEmis > $montantRecu)
                 {
-                    /*
-                     * la facture a déjà été payée
-                     */
-                    $validationStatut = Payement::FOUND_PAYED;
+                    $payement->setState(Payement::FOUND_LOWER);
                 }
-
-
+                elseif($montantTotalEmis < $montantRecu)
+                {
+                    $payement->setState(Payement::FOUND_UPPER);
+                }
+                /*
+                 * On lie le payement à la facture
+                 */
+                $payement->setFacture($facture);
+                $facture->setPayement($payement);
+                /*
+                 * On definit la facture comme payée dans tout les cas...
+                 */
+                $facture->setStatut(Facture::PAYEE);
+                $em->persist($facture);
             }
             else
             {
-                $validationStatut = Payement::NOT_FOUND;
+                /*
+                 * la facture a déjà été payée
+                 */
+                $payement->setState(Payement::FOUND_ALREADY_PAID);
             }
 
-            $results[] = array(
-                'id'=>$payement->getId(),
-                'payement' => $payement,
-                'facture' => $facture,
-                'statut' => $validationStatut
-            );
+
         }
-
-        return $results;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * @Route("/", name="interne_fiances_payement")
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function indexAction()
-    {
-        return $this->render('InterneFinancesBundle:Payement:page_validation.html.twig');
-    }
-
-
-    /**
-     * @Route("/waiting_liste", name="interne_fiances_payement_waiting_liste", options={"expose"=true})
-     * @return Response
-     */
-    public function getWaitingListeAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $payements = $em->getRepository('InterneFinancesBundle:Payement')->findByState('waiting');
-
-        $results =  $this->compareWithFactureInBDD($em,$payements);
-
-        return $this->render('InterneFinancesBundle:Payement:waitingListe.html.twig',array('waitingListe'=>$results));
-    }
-
-
-
-
-    /*
-     * Charge le fichier V11 qui contient une liste de payement payée sur le compte
-     * BVR. On extrait les infos du fichier
-     */
-    /**
-     * @route("/upload_file", name="interne_fiances_payement_upload_file", options={"expose"=true})
-     *
-     * @return Response
-     */
-    public function uploadFileAjaxAction()
-    {
-        $request = $this->getRequest();
-
-        if($request->isXmlHttpRequest())
+        else
         {
-            $file = $request->files->get('file');
-
-            $array = $this->extractFacturesInFile($file);
-
-            $payementsInFile = $array['payements'];
-            $infos = $array['infos'];
-
-            $em = $this->getDoctrine()->getManager();
-            foreach($payementsInFile as $payement)
-            {
-                $em->persist($payement);
-            }
-            $em->flush();
-
-            return new Response();
+            $payement->setState(Payement::NOT_FOUND);
         }
+
+        return $payement;
     }
 
 
@@ -353,8 +301,63 @@ class PayementController extends Controller
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
-     * @route("/repartition_payement", name="interne_fiances_payement_repartition_ajax", options={"expose"=true})
+     * @route("/repartition_payement", name="interne_finances_payement_repartition_ajax", options={"expose"=true})
      * @param Request $request
      * @return Response
      */
@@ -384,80 +387,6 @@ class PayementController extends Controller
         }
     }
 
-    private function extractFacturesInFile($file)
-    {
-        /*
-         * extraction du contenu du fichier.
-         */
-        $fileString = file($file);
-        $nbLine = count($fileString);
-
-        /*
-         * création des conteneurs de résultats de la fonction.
-         */
-        $facturesInFile = new ArrayCollection();
-        $infos = array();
-
-        /*
-         * analyse ligne par ligne du fichier-
-         */
-        for ($i = 0; $i < $nbLine; $i++) {
-
-            $line = $fileString[$i];
-            $infos = array();
-            $infos['rejetsBvr'] = 0;
-
-            if (substr($line, 0, 1) != 9) {
-                //extraction des infos de la ligne
-                $numRef = substr($line, 12, 26);
-                $montantRecu = substr($line, 39, 10);
-                $datePayement = substr($line, 71, 6);
-                $rejetBVR = substr($line, 86, 1);
-
-                /*
-                 * enregistre le nombre de facture qui ont
-                 * été rejetée et rentrée à la main par
-                 * la poste.
-                 */
-                if($rejetBVR)
-                {
-                    $infos['rejetsBvr'] =$infos['rejetsBvr']+1;
-                }
-
-                //reformatage des chaines de caractère
-                $numRef = (integer)ltrim($numRef,0);
-                $montantRecu = (float)(ltrim($montantRecu,0)/100);
-                $date_payement_annee = '20'. substr($datePayement,0,2);
-                $date_payement_mois = substr($datePayement,2,2);
-                $date_payement_jour = substr($datePayement,4,2);
-                $datePayement = new \DateTime();
-                $datePayement->setDate((int)$date_payement_annee,(int)$date_payement_mois,(int)$date_payement_jour);
-
-                /*
-                 * création du payement extraite de la ligne
-                 */
-                $payement = new Payement($numRef,$montantRecu,$datePayement,'waiting');
-
-                $payementsInFile[] = $payement;
-            }
-            else
-            {
-                /*
-                 * Infos sur les factures présente dans ce fichier.
-                 * Elle sont stoquées sur la ligne qui commence
-                 * par un 9.
-                 */
-                $infos['genreTransaction'] = substr($line, 0, 3);
-                $infos['montantTotal'] = ltrim(substr($line, 39, 12),0);
-                $infos['nbTransactions'] = ltrim(substr($line, 51, 12),0);
-                $infos['dateDisquette'] = substr($line, 63, 6);
-                $infos['taxes'] = substr($line, 69, 9);
-
-            }
-        }
-
-        return array('payements' => $payementsInFile, 'infos' => $infos);
-    }
 
 
 

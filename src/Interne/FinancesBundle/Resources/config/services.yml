@@ -1,4 +1,7 @@
 services:
+    payement_file_parser:
+        class: Interne\FinancesBundle\Utils\PayementFileParser
+
     finances_statistics:
         class: Interne\FinancesBundle\Controller\StatisticsController
         arguments:

@@ -39,7 +39,7 @@ class CreanceController extends Controller
      * liée a une facture.
      *
      *
-     * @Route("/delete_ajax", name="interne_fiances_creance_delete_ajax", options={"expose"=true})
+     * @Route("/delete_ajax", name="interne_finances_creance_delete_ajax", options={"expose"=true})
      * @param Request $request
      * @return Response
      */
@@ -71,7 +71,7 @@ class CreanceController extends Controller
 
 
     /**
-     * @Route("/show_ajax", name="interne_fiances_creance_show_ajax", options={"expose"=true})
+     * @Route("/show_ajax", name="interne_finances_creance_show_ajax", options={"expose"=true})
      * @param Request $request
      * @return Response
      */
@@ -149,7 +149,7 @@ class CreanceController extends Controller
      * Ajoute une cérance à un membre ou une famille
      */
     /**
-     * @Route("/add_ajax", name="interne_fiances_creance_add_ajax", options={"expose"=true})
+     * @Route("/add_ajax", name="interne_finances_creance_add_ajax", options={"expose"=true})
      * @param Request $request
      * @return Response
      */
@@ -205,7 +205,7 @@ class CreanceController extends Controller
      * Ajoute une cérance à un membre ou une famille
      */
     /**
-     * @Route("/get_form_ajax", name="interne_fiances_creance_get_form_ajax", options={"expose"=true})
+     * @Route("/get_form_ajax", name="interne_finances_creance_get_form_ajax", options={"expose"=true})
      * @param Request $request
      * @return Response
      */
@@ -235,7 +235,7 @@ class CreanceController extends Controller
 
 
     /**
-     * @Route("/ajout_en_masse", name="interne_fiances_creance_ajout_en_masse", options={"expose"=true})
+     * @Route("/ajout_en_masse", name="interne_finances_creance_ajout_en_masse", options={"expose"=true})
      * @param Request $request
      * @return Response
      */
@@ -321,7 +321,7 @@ class CreanceController extends Controller
     }
 
     /**
-     * @Route("/search", name="interne_fiances_creance_search", options={"expose"=true})
+     * @Route("/search", name="interne_finances_creance_search", options={"expose"=true})
      * @param Request $request
      * @return Response
      */

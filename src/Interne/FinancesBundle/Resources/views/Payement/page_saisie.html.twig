@@ -7,13 +7,9 @@
 
     <div class="ui page grid">
         <div class="row">
-            <div class="five wide column">
+            <div class="eight wide column">
 
                 <div class="ui segment">
-                    <h3 class="header">
-                        Saisie manuelle
-                    </h3>
-
 
                     {% include  "InterneFinancesBundle:Payement:addForm.html.twig" with {'formMultiple': formMultiple} %}
 
@@ -22,17 +18,13 @@
 
             </div>
 
-            <div class="ten wide column">
+            <div class="eight wide column">
 
+                <div class="ui segment">
 
-                {{ form_start(formUpload, {'attr': {'class': 'ui form'}}) }}
+                    {% include  "InterneFinancesBundle:Payement:uploadFileForm.html.twig" with {'formUpload': formUpload} %}
 
-
-                {{ form_rest(formUpload) }}
-
-
-                {{ form_end(formUpload) }}
-
+                </div>
 
 
             </div>

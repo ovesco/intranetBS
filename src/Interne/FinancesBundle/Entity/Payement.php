@@ -16,13 +16,12 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 class Payement
 {
 
-    const NOT_FOUND = 'not_found';
-    const FOUND_PAYED = 'found_payed';
-    const FOUND_VALID = 'found_valid';
+    const NOT_DEFINED = 'not_defined'; //if the payement is still not compared with Facture
+    const NOT_FOUND = 'not_found'; //no facture with this payment->idFacture
+    const FOUND_ALREADY_PAID = 'found_already_payed';//if facture is found but already paid
+    const FOUND_VALID = 'found_valid';//payement correspond to the facture
     const FOUND_LOWER = 'found_lower';
-    const FOUND_LOWER_NEW_FACTURE = 'found_lower_new_facture';
     const FOUND_UPPER = 'found_upper';
-    const WAITING_VALIDATION = 'waiting';
 
     /**
      * @var integer
@@ -64,23 +63,16 @@ class Payement
     /**
      * @var string
      *
-     * @ORM\Column(name="state", type="string", columnDefinition="ENUM('not_found','found_payed','found_valid','found_lower','found_lower_new_facture','found_upper','waiting')")
+     * @ORM\Column(name="state", type="string", columnDefinition="ENUM('not_found','found_already_payed','found_valid','found_lower','found_upper','not_defined')")
      */
     private $state;
 
     /**
-     * @param  $idFacture
-     * @param  $montantRecu
-     * @param  $date
-     * @param  $state
+     * @var boolean
+     *
+     * @ORM\Column(name="validated", type="boolean")
      */
-    public function __construct($idFacture = null, $montantRecu= null, $date = null, $state = Payement::NOT_FOUND)
-    {
-        $this->idFacture = $idFacture;
-        $this->montantRecu = $montantRecu;
-        $this->date = $date;
-        $this->state = $state;
-    }
+    private $validated;
 
 
     /**
@@ -170,13 +162,12 @@ class Payement
      */
     public function setState($state)
     {
-        if( $state != Payement::NOT_FOUND &&
-            $state != Payement::FOUND_PAYED &&
+        if( $state != Payement::NOT_DEFINED &&
+            $state != Payement::NOT_FOUND &&
+            $state != Payement::FOUND_ALREADY_PAID &&
             $state != Payement::FOUND_VALID &&
             $state != Payement::FOUND_LOWER &&
-            $state != Payement::FOUND_LOWER_NEW_FACTURE &&
-            $state != Payement::FOUND_UPPER &&
-            $state != Payement::WAITING_VALIDATION)
+            $state != Payement::FOUND_UPPER)
             throw new Exception("Le statut incorect , obtenu : '" . $state . "'");
 
         $this->state = $state;
@@ -216,5 +207,41 @@ class Payement
     public function getFacture()
     {
         return $this->facture;
+    }
+
+    /**
+     * Set validated
+     *
+     * @param boolean $validated
+     *
+     * @return Payement
+     */
+    public function setValidated($validated)
+    {
+        $this->validated = $validated;
+
+        return $this;
+    }
+
+    /**
+     * Is validated
+     *
+     *
+     * @return Payement
+     */
+    public function isValidated()
+    {
+        return $this->validated;
+    }
+
+
+    /**
+     * Get validated
+     *
+     * @return boolean
+     */
+    public function getValidated()
+    {
+        return $this->validated;
     }
 }
