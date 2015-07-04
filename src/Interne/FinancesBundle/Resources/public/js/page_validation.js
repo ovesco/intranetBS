@@ -9,7 +9,7 @@ $(document).ready(function(){
      * Elle verifie que la somme entrée est correct avant de pouvoir
      * soumettre le formulaire.
      */
-    $('.repartitionForm').change(function(){
+    $('.validationForm').change(function(){
 
         var montantRecu = parseFloat($(this).find('.montantRecu').val());
         var montantRepartit = 0.0;
@@ -32,7 +32,7 @@ $(document).ready(function(){
 
         if(montantRestant == 0)
         {
-            $(this).find('.submitRepartionForm').show();
+            $(this).find('.submitValidationForm').show();
         }
         else
         {
@@ -50,8 +50,25 @@ $(document).ready(function(){
 
     });
 
-    $('.submitRepartionForm').click(function(){
+    $('.submitValidationForm').click(function(){
+        var validationForm = $(this).closest('.validationForm');
+        var validationContainer = $(this).closest('.validationContainer');
+        var loader = $(validationContainer).find('.dimmer');
+        var payementId = $(validationContainer).data('id');
 
+        $(loader).addClass('active');
+
+        $.ajax({
+            type: "POST",
+            url: Routing.generate('interne_finances_payement_validation_form',{'payement':payementId}),
+            data: $(validationForm).serialize(),
+            error: function(jqXHR, textStatus, errorThrown) {
+                alerte('Validation impossible: le formulaire contient une erreur','error');
+            },
+            success: function(response) {
+                $(validationContainer).fadeOut(400, function() { $(this).remove(); });
+            }
+        });
     });
 
 });

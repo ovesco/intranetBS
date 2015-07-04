@@ -229,8 +229,9 @@ class PayementController extends Controller
 
         /*
          * todo faire ceci avec elasitca (pas nécaissaire dans l'imédia)
-         */
-        $payements = $em->getRepository('InterneFinancesBundle:Payement')->findByValidated(false);
+        */
+
+        $payements = $em->getRepository('InterneFinancesBundle:Payement')->findBy(array('validated'=>false),null,10);
 
         return array('payements'=>$payements);
 
@@ -250,6 +251,45 @@ class PayementController extends Controller
     public function validationFormAction(Request $request,Payement $payement)
     {
         $validationForm  = $this->createForm(new PayementValidationType(),$payement);
+
+        if($request->isXmlHttpRequest()){
+
+            $validationForm->handleRequest($request);
+
+            if($validationForm->isValid()) {
+
+                $em = $this->getDoctrine()->getManager();
+
+                switch($payement->getState()){
+                    case Payement::FOUND_LOWER:
+                    case Payement::FOUND_VALID:
+                    case Payement::FOUND_UPPER:
+                        $payement->getFacture()->setStatut(Facture::PAYEE);
+                        break;
+                }
+
+                /*
+                 * todo verifier le montant avant la validation.
+                 */
+
+                $payement->setValidated(true);
+                $em->persist($payement);
+                $em->flush();
+
+                $success = new Response();
+                $success->setStatusCode(200);//ok
+                return $success;
+
+            }
+            else{
+                $error = new Response();
+                $error->setStatusCode(400);//bad request
+                return $error;
+            }
+
+        }
+
+
 
         return array('payement'=>$payement,'form'=>$validationForm->createView());
     }
