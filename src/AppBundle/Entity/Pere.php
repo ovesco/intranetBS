@@ -13,6 +13,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Pere extends Geniteur
 {
+
+    /**
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Famille", inversedBy="pere")
+     * @ORM\JoinColumn(name="famille_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected $famille;
+
     /**
      * Constructor
      *

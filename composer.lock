@@ -947,12 +947,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSJsRoutingBundle.git",
-                "reference": "fbc7c38816aae80416a2f891873d648e14ceb20c"
+                "reference": "0b102317cfb4d4f2a8250b9a5dc3480a9cebfb01"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSJsRoutingBundle/zipball/fbc7c38816aae80416a2f891873d648e14ceb20c",
-                "reference": "fbc7c38816aae80416a2f891873d648e14ceb20c",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSJsRoutingBundle/zipball/0b102317cfb4d4f2a8250b9a5dc3480a9cebfb01",
+                "reference": "0b102317cfb4d4f2a8250b9a5dc3480a9cebfb01",
                 "shasum": ""
             },
             "require": {
@@ -997,7 +997,7 @@
                 "javascript",
                 "routing"
             ],
-            "time": "2015-05-19 15:57:18"
+            "time": "2015-06-29 21:36:23"
         },
         {
             "name": "friendsofsymfony/rest-bundle",
@@ -2344,12 +2344,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Filesystem.git",
-                "reference": "24fc9ecf8ed33772e0744397ba976cae95240a3b"
+                "reference": "eda46c137125a18f951fcf73248ce3edb9d37330"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/24fc9ecf8ed33772e0744397ba976cae95240a3b",
-                "reference": "24fc9ecf8ed33772e0744397ba976cae95240a3b",
+                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/eda46c137125a18f951fcf73248ce3edb9d37330",
+                "reference": "eda46c137125a18f951fcf73248ce3edb9d37330",
                 "shasum": ""
             },
             "require": {
@@ -2385,7 +2385,7 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2015-06-18 16:25:07"
+            "time": "2015-07-01 20:40:29"
         },
         {
             "name": "symfony/monolog-bundle",

@@ -49,7 +49,7 @@ class Attribution
      * @var Membre $membre
      * 
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Membre", inversedBy="attributions")
-     * @ORM\JoinColumn(name="membre_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="membre_id", referencedColumnName="id", onDelete="CASCADE")
      */
      private $membre;
      
@@ -74,107 +74,14 @@ class Attribution
         return $this->getFonction() . ' à ' . $this->getGroupe();
     }
 
-
     /**
-     * Get id
+     * Get fonction
      *
-     * @return integer 
+     * @return \AppBundle\Entity\Fonction
      */
-    public function getId()
+    public function getFonction()
     {
-        return $this->id;
-    }
-
-    /**
-     * Set dateDebut
-     *
-     * @param \DateTime $dateDebut
-     * @return Attribution
-     */
-    public function setDateDebut($dateDebut)
-    {
-        $this->dateDebut = $dateDebut;
-    
-        return $this;
-    }
-
-    /**
-     * Get dateDebut
-     *
-     * @return \DateTime 
-     */
-    public function getDateDebut()
-    {
-        return $this->dateDebut;
-    }
-
-    /**
-     * Set dateFin
-     *
-     * @param string $dateFin
-     * @return Attribution
-     */
-    public function setDateFin($dateFin)
-    {
-        $this->dateFin = $dateFin;
-    
-        return $this;
-    }
-    
-
-    /**
-     * Get dateFin
-     *
-     * @return \DateTime 
-     */
-    public function getDateFin()
-    {
-        return $this->dateFin;
-    }
-
-    /**
-     * Set groupe
-     *
-     * @param \AppBundle\Entity\Groupe $groupe
-     * @return Attribution
-     */
-    public function setGroupe(\AppBundle\Entity\Groupe $groupe = null)
-    {
-        $this->groupe = $groupe;
-
-        return $this;
-    }
-
-    /**
-     * Get groupe
-     *
-     * @return \AppBundle\Entity\Groupe 
-     */
-    public function getGroupe()
-    {
-        return $this->groupe;
-    }
-
-    /**
-     * Set membre
-     *
-     * @param \AppBundle\Entity\Membre $membre
-     * @return Attribution
-     */
-    public function setMembre(\AppBundle\Entity\Membre $membre = null)
-    {
-        $this->membre = $membre;
-        return $this;
-    }
-
-    /**
-     * Get membre
-     *
-     * @return \AppBundle\Entity\Membre 
-     */
-    public function getMembre()
-    {
-        return $this->membre;
+        return $this->fonction;
     }
 
     /**
@@ -191,15 +98,105 @@ class Attribution
     }
 
     /**
-     * Get fonction
+     * Get groupe
      *
-     * @return \AppBundle\Entity\Fonction 
+     * @return \AppBundle\Entity\Groupe
      */
-    public function getFonction()
+    public function getGroupe()
     {
-        return $this->fonction;
+        return $this->groupe;
     }
 
+    /**
+     * Set groupe
+     *
+     * @param \AppBundle\Entity\Groupe $groupe
+     * @return Attribution
+     */
+    public function setGroupe(\AppBundle\Entity\Groupe $groupe = null)
+    {
+        $this->groupe = $groupe;
+
+        return $this;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Get dateDebut
+     *
+     * @return \DateTime
+     */
+    public function getDateDebut()
+    {
+        return $this->dateDebut;
+    }
+
+    /**
+     * Set dateDebut
+     *
+     * @param \DateTime $dateDebut
+     * @return Attribution
+     */
+    public function setDateDebut($dateDebut)
+    {
+        $this->dateDebut = $dateDebut;
+
+        return $this;
+    }
+
+    /**
+     * Get dateFin
+     *
+     * @return \DateTime
+     */
+    public function getDateFin()
+    {
+        return $this->dateFin;
+    }
+
+    /**
+     * Set dateFin
+     *
+     * @param string $dateFin
+     * @return Attribution
+     */
+    public function setDateFin($dateFin)
+    {
+        $this->dateFin = $dateFin;
+
+        return $this;
+    }
+
+    /**
+     * Get membre
+     *
+     * @return \AppBundle\Entity\Membre
+     */
+    public function getMembre()
+    {
+        return $this->membre;
+    }
+
+    /**
+     * Set membre
+     *
+     * @param \AppBundle\Entity\Membre $membre
+     * @return Attribution
+     */
+    public function setMembre(\AppBundle\Entity\Membre $membre = null)
+    {
+        $this->membre = $membre;
+        return $this;
+    }
 
     /**
      * @return String

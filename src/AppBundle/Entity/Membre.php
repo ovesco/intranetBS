@@ -2,14 +2,14 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Interne\FinancesBundle\Entity\CreanceToMembre;
+use Interne\FinancesBundle\Entity\FactureToMembre;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 //FinancesBundle
-Use Interne\FinancesBundle\Entity\CreanceToMembre;
-Use Interne\FinancesBundle\Entity\FactureToMembre;
 
 /**
  * Membre
@@ -17,7 +17,7 @@ Use Interne\FinancesBundle\Entity\FactureToMembre;
  * @ORM\Entity
  * @ORM\Table(name="app_membres")
  */
-class Membre extends Personne implements ExpediableInterface, ClassInterface
+class Membre extends Personne implements ExpediableInterface
 {
 
     /**
@@ -181,6 +181,29 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
     }
 
     /**
+     * Get nom
+     *
+     * @return string
+     */
+    public function getNom()
+    {
+        if ($this->getFamille() != null)
+            return $this->getFamille()->getNom();
+        else
+            return "Pas dans une famille...";
+    }
+
+    /**
+     * Get famille
+     *
+     * @return Famille
+     */
+    public function getFamille()
+    {
+        return $this->famille;
+    }
+
+    /**
      * Set famille
      *
      * @param Famille $famille
@@ -194,29 +217,14 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
     }
 
     /**
-     * Get famille
+     * Get distinctions
      *
-     * @return Famille
+     * @return array
      */
-    public function getFamille()
+    public function getDistinctions()
     {
-        return $this->famille;
+        return $this->distinctions;
     }
-
-
-    /**
-     * Get nom
-     *
-     * @return string
-     */
-    public function getNom()
-    {
-        if ($this->getFamille() != null)
-            return $this->getFamille()->getNom();
-        else
-            return "Pas dans une famille...";
-    }
-
 
     /**
      * Set distinctions
@@ -232,13 +240,13 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
     }
 
     /**
-     * Get distinctions
+     * Get numeroBs
      *
-     * @return array
+     * @return integer
      */
-    public function getDistinctions()
+    public function getNumeroBs()
     {
-        return $this->distinctions;
+        return $this->numeroBs;
     }
 
     /**
@@ -255,13 +263,13 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
     }
 
     /**
-     * Get numeroBs
+     * Get numeroAvs
      *
-     * @return integer
+     * @return string
      */
-    public function getNumeroBs()
+    public function getNumeroAvs()
     {
-        return $this->numeroBs;
+        return $this->numeroAvs;
     }
 
     /**
@@ -278,13 +286,13 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
     }
 
     /**
-     * Get numeroAvs
+     * Get statut
      *
      * @return string
      */
-    public function getNumeroAvs()
+    public function getStatut()
     {
-        return $this->numeroAvs;
+        return $this->statut;
     }
 
     /**
@@ -301,15 +309,14 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
     }
 
     /**
-     * Get statut
+     * Get naissance
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getStatut()
+    public function getNaissance()
     {
-        return $this->statut;
+        return $this->naissance;
     }
-
 
     /**
      * Set naissance
@@ -325,13 +332,13 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
     }
 
     /**
-     * Get naissance
+     * Get inscription
      *
      * @return \DateTime
      */
-    public function getNaissance()
+    public function getInscription()
     {
-        return $this->naissance;
+        return $this->inscription;
     }
 
     /**
@@ -346,17 +353,6 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
 
         return $this;
     }
-
-    /**
-     * Get inscription
-     *
-     * @return \DateTime
-     */
-    public function getInscription()
-    {
-        return $this->inscription;
-    }
-
 
     /**
      * Add attributions
@@ -389,26 +385,6 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
     public function getAttributions()
     {
         return $this->attributions;
-    }
-
-
-    /**
-     * Get active attributions
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getActiveAttributions()
-    {
-        $attrs = array();
-        $today = new \Datetime("now");
-
-        foreach($this->attributions as $attr) {
-
-            if($attr->getDateFin() >= $today || $attr->getDateFin() == null)
-                $attrs[] = $attr;
-        }
-
-        return $attrs;
     }
 
     /**
@@ -450,16 +426,22 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
     }
 
     /**
-     * Set remarques
+     * Get active attributions
      *
-     * @param $remarques
-     * @return Membre
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setRemarques($remarques)
+    public function getActiveAttributions()
     {
-        $this->remarques = $remarques;
+        $attrs = array();
+        $today = new \Datetime("now");
 
-        return $this;
+        foreach ($this->attributions as $attr) {
+
+            if ($attr->getDateFin() >= $today || $attr->getDateFin() == null)
+                $attrs[] = $attr;
+        }
+
+        return $attrs;
     }
 
     /**
@@ -472,6 +454,18 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
         return $this->remarques;
     }
 
+    /**
+     * Set remarques
+     *
+     * @param $remarques
+     * @return Membre
+     */
+    public function setRemarques($remarques)
+    {
+        $this->remarques = $remarques;
+
+        return $this;
+    }
 
     public function getUsername()
     {
@@ -502,6 +496,15 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
         $this->distinctions->removeElement($distinction);
     }
 
+    /**
+     * Get validity
+     *
+     * @return integer
+     */
+    public function getValidity()
+    {
+        return $this->validity;
+    }
 
     /**
      * Set validity
@@ -516,21 +519,10 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
         return $this;
     }
 
-    /**
-     * Get validity
-     *
-     * @return integer 
-     */
-    public function getValidity()
-    {
-        return $this->validity;
-    }
-
 
     /*
      * ====== FinancesBundle =======
      */
-
 
     /**
      * @param String $className
@@ -581,6 +573,16 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
     }
 
     /**
+     * Get creances
+     *
+     * @return ArrayCollection
+     */
+    public function getCreances()
+    {
+        return $this->creances;
+    }
+
+    /**
      * Set creances
      *
      * @param ArrayCollection $creances
@@ -597,17 +599,6 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
 
         return $this;
     }
-
-    /**
-     * Get creances
-     *
-     * @return ArrayCollection
-     */
-    public function getCreances()
-    {
-        return $this->creances;
-    }
-
 
     /**
      * Set facture
@@ -666,6 +657,16 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
     }
 
     /**
+     * Get envoiFacture
+     *
+     * @return string
+     */
+    public function getEnvoiFacture()
+    {
+        return $this->envoiFacture;
+    }
+
+    /**
      * Set envoiFacture
      *
      * @param string $envoiFacture
@@ -676,16 +677,6 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
         $this->envoiFacture = $envoiFacture;
 
         return $this;
-    }
-
-    /**
-     * Get envoiFacture
-     *
-     * @return string
-     */
-    public function getEnvoiFacture()
-    {
-        return $this->envoiFacture;
     }
 
     /**
@@ -704,7 +695,6 @@ class Membre extends Personne implements ExpediableInterface, ClassInterface
 
         // On liste d'abord les adresses potentielles
         $adresses   = array(
-
             'membre'    => $this->getContact()->getAdresse(),
             'famille'   => $this->getFamille()->getContact()->getAdresse(),
             'pere'      => ($pere == null) ? null : $pere->getContact()->getAdresse(),

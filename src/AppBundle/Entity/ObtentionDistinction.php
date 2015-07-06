@@ -40,6 +40,7 @@ class ObtentionDistinction
      * @var membre
      * 
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Membre", inversedBy="distinctions")
+     * @ORM\JoinColumn(name="membre_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $membre;
 

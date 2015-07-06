@@ -12,6 +12,13 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Mere extends Geniteur
 {
+
+    /**
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Famille", inversedBy="mere")
+     * @ORM\JoinColumn(name="famille_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected $famille;
+
     /**
      * Constructor
      *

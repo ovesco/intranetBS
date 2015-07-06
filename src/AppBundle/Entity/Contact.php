@@ -32,12 +32,12 @@ class Contact
     private $adresse;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Email", mappedBy="contact", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Email", mappedBy="contact", cascade={"persist"})
      */
     private $emails;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Telephone", mappedBy="contact", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Telephone", mappedBy="contact", cascade={"persist"})
      */
     private $telephones;
 
