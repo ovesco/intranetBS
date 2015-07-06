@@ -36,7 +36,6 @@ twig:
     strict_variables: "%kernel.debug%"
     globals:
         parametreService: "@parametres"
-        global_date_format: d.m.Y
     form:
         resources:
             - 'Templates/Form/Widgets/default_widgets.html.twig'

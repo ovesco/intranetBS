@@ -12,11 +12,30 @@
                 </td>
             </tr>
             <tr>
+                <td>Date de récéption</td>
+                <td>
+                    {{ payement.date|date(global_date_format) }}
+                </td>
+            </tr>
+            <tr>
+                <td>Montant reçu</td>
+                <td>
+                    {{ payement.montantRecu|money }}
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    {{ payement.state|payement_state_icon}}
+
+                </td>
+            </tr>
+            <tr>
                 <td>Facture</td>
                 <td>
                     {% if payement.facture is not null %}
                     N°{{ payement.facture.id }}
-                    <a onclick="openFactureShow({{ payement.facture.id }});" >
+                    <a onclick="showFacture({{ payement.facture.id }});" >
                         <i class="zoom icon"></i>
                     </a>
                     {% endif %}
@@ -27,6 +46,12 @@
 
             </tbody>
         </table>
+
+        {#
+
+                {{ apply_filter(payement.state,'upper') }}
+
+        {{ apply_filter(payement.montantRecu,'money') }}#}
 
 
 
