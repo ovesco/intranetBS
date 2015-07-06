@@ -44,15 +44,6 @@ services:
     # Twig
     # Extensions twig qui permettent de mettre en place des filtres
     # personnalisés
-    app.twig.boolean_filter:
-        class: AppBundle\Twig\BooleanFilter
-        tags:
-            - { name: twig.extension }
-
-    app.twig.genre_filter:
-        class: AppBundle\Twig\GenreFilter
-        tags:
-            - { name: twig.extension }
 
     app.twig.validation_extension:
         class: AppBundle\Twig\ValidationExtension
@@ -70,15 +61,17 @@ services:
     #        - { name: twig.extension }
 
 
-    app.twig.get_class_filter:
-        class: AppBundle\Twig\GetClassFilter
-        tags:
-            - { name: twig.extension }
+
 
     app.twig.groupby:
         class: AppBundle\Twig\GroupByExtension
         tags:
             - { name: twig.extension }
+
+    app.twig.app_extension:
+            class: AppBundle\Twig\AppExtension
+            tags:
+                - { name: twig.extension }
 
 
 

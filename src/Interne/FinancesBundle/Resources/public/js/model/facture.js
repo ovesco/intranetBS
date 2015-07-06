@@ -32,12 +32,6 @@ $(document).ready(function () {
 });
 
 
-
-
-
-
-
-
 function deleteFacture(id,reload){
 
     //default value

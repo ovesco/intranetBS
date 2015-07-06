@@ -17,7 +17,7 @@ services:
     # Twig
     # Extensions twig qui permettent de mettre en place des filtres
     # personnalisés
-    app.twig.money_filter:
-        class: Interne\FinancesBundle\Twig\MoneyFilter
+    app.twig.finances_extension:
+        class: Interne\FinancesBundle\Twig\FinancesExtension
         tags:
             - { name: twig.extension }

@@ -25,7 +25,7 @@ $(document).ready(function () {
  */
 function showPayement(id)
 {
-    var url = Routing.generate('interne_fiances_payement_show',{'payement':id});
+    var url = Routing.generate('interne_finances_payement_show',{'payement':id});
     getModal(null,url);
 }
 

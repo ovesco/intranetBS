@@ -1,4 +1,9 @@
 
+{#
+Note: c'est important d'affichier les widget des champ "hidden" quand bien même on
+utilise la valeur dans vars.value...sinon on écrase des donnée avec des Null ou des zero.
+
+#}
 
 {% block InterneFinancesBundleFactureRepartitionType_widget %}
     {% spaceless %}
@@ -23,9 +28,11 @@
                         <tr>
                             <td>
                                 {{ child.vars.value.titre  }}
+                                {{ form_widget(child.titre) }}
                             </td>
                             <td>
                                 {{  child.vars.value.montantEmis|money }}
+                                {{ form_widget(child.montantEmis) }}
                             </td>
                             <td>
                                 {{ form_widget(child.montantRecu, {'attr':{'class':'repartitionMontant'}} ) }}
@@ -37,10 +44,11 @@
                     {% for child in form.rappels %}
                         <tr>
                             <td>
-                                {{  child.vars.value.dateCreation|date(global_date_format) }}
+                                Rappel N°{{ loop.index }}
                             </td>
                             <td>
                                 {{  child.vars.value.montantEmis|money  }}
+                                {{ form_widget(child.montantEmis) }}
                             </td>
                             <td>
                                 {{ form_widget(child.montantRecu, {'attr':{'class':'repartitionMontant'}} ) }}
@@ -66,3 +74,5 @@
         {% endif %}
     {% endspaceless %}
 {% endblock %}
+
+
