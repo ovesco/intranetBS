@@ -26,7 +26,8 @@ class Contact
 
 
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Adresse", mappedBy="contact", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Adresse", mappedBy="contact", cascade={"persist"})
+     * @ORM\JoinColumn(name="adresse_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $adresse;
 
@@ -57,21 +58,6 @@ class Contact
         return $this->id;
     }
 
-
-    /**
-     * Set adresse
-     *
-     * @param \AppBundle\Entity\Adresse $adresse
-     * @return Contact
-     */
-    public function setAdresse(Adresse $adresse = null)
-    {
-        $this->adresse = $adresse;
-        $adresse->setContact($this);
-
-        return $this;
-    }
-
     /**
      * Get adresse
      *
@@ -83,18 +69,15 @@ class Contact
     }
 
     /**
-     * Set emails
+     * Set adresse
      *
-     * @param ArrayCollection $emails
+     * @param \AppBundle\Entity\Adresse $adresse
      * @return Contact
      */
-    public function setEmails(ArrayCollection $emails = null)
+    public function setAdresse(Adresse $adresse = null)
     {
-
-        $this->emails = $emails;
-        foreach($emails as $email){
-            $email->setContact($this);
-        }
+        $this->adresse = $adresse;
+        $adresse->setContact($this);
 
         return $this;
     }
@@ -123,16 +106,17 @@ class Contact
     }
 
     /**
-     * Set telephones
+     * Set emails
      *
-     * @param ArrayCollection $telephones
+     * @param ArrayCollection $emails
      * @return Contact
      */
-    public function setTelephones(ArrayCollection $telephones = null)
+    public function setEmails(ArrayCollection $emails = null)
     {
-        $this->telephones = $telephones;
-        foreach($telephones as $telephone){
-            $telephone->setContact($this);
+
+        $this->emails = $emails;
+        foreach ($emails as $email) {
+            $email->setContact($this);
         }
 
         return $this;
@@ -159,6 +143,22 @@ class Contact
     public function getTelephones()
     {
         return $this->telephones;
+    }
+
+    /**
+     * Set telephones
+     *
+     * @param ArrayCollection $telephones
+     * @return Contact
+     */
+    public function setTelephones(ArrayCollection $telephones = null)
+    {
+        $this->telephones = $telephones;
+        foreach ($telephones as $telephone) {
+            $telephone->setContact($this);
+        }
+
+        return $this;
     }
 
     /**

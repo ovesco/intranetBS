@@ -41,7 +41,7 @@ class Telephone
      * @var Contact
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Contact", inversedBy="telephones")
-     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $contact;
 
@@ -66,6 +66,16 @@ class Telephone
     }
 
     /**
+     * Get telephone
+     *
+     * @return string
+     */
+    public function getTelephone()
+    {
+        return $this->telephone;
+    }
+
+    /**
      * Set telephone
      *
      * @param string $telephone
@@ -74,7 +84,7 @@ class Telephone
     public function setTelephone($telephone)
     {
 
-        preg_match_all("/[0-9]+/",$telephone, $matches);
+        preg_match_all("/[0-9]+/", $telephone, $matches);
 
         $this->telephone = implode($matches[0]);
 
@@ -82,13 +92,13 @@ class Telephone
     }
 
     /**
-     * Get telephone
+     * Get remarques
      *
      * @return string
      */
-    public function getTelephone()
+    public function getRemarques()
     {
-        return $this->telephone;
+        return $this->remarques;
     }
 
     /**
@@ -105,13 +115,13 @@ class Telephone
     }
 
     /**
-     * Get remarques
+     * Get contact
      *
-     * @return string
+     * @return \AppBundle\Entity\Contact
      */
-    public function getRemarques()
+    public function getContact()
     {
-        return $this->remarques;
+        return $this->contact;
     }
 
     /**
@@ -126,16 +136,6 @@ class Telephone
         $this->contact = $contact;
 
         return $this;
-    }
-
-    /**
-     * Get contact
-     *
-     * @return \AppBundle\Entity\Contact
-     */
-    public function getContact()
-    {
-        return $this->contact;
     }
 
 }

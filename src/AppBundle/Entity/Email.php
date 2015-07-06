@@ -48,7 +48,7 @@ class Email
      * @var Contact
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Contact", inversedBy="emails")
-     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $contact;
 
@@ -74,6 +74,16 @@ class Email
     }
 
     /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
      * Set email
      *
      * @param string $email
@@ -88,22 +98,21 @@ class Email
     }
 
     /**
-     * Get email
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-
-    /**
      * is expediable
      *
      * @return bool
      */
     public function isExpediable()
+    {
+        return $this->expediable;
+    }
+
+    /**
+     * Get expediable
+     *
+     * @return boolean
+     */
+    public function getExpediable()
     {
         return $this->expediable;
     }
@@ -122,13 +131,13 @@ class Email
     }
 
     /**
-     * Get expediable
+     * Get remarques
      *
-     * @return boolean
+     * @return string
      */
-    public function getExpediable()
+    public function getRemarques()
     {
-        return $this->expediable;
+        return $this->remarques;
     }
 
     /**
@@ -145,15 +154,14 @@ class Email
     }
 
     /**
-     * Get remarques
+     * Get contact
      *
-     * @return string
+     * @return \AppBundle\Entity\Contact
      */
-    public function getRemarques()
+    public function getContact()
     {
-        return $this->remarques;
+        return $this->contact;
     }
-
 
     /**
      * Set contact
@@ -167,15 +175,5 @@ class Email
         $this->contact = $contact;
 
         return $this;
-    }
-
-    /**
-     * Get contact
-     *
-     * @return \AppBundle\Entity\Contact
-     */
-    public function getContact()
-    {
-        return $this->contact;
     }
 }

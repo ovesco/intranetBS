@@ -37,7 +37,8 @@ abstract class Personne
     protected $sexe;
 
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Contact", cascade={"persist", "remove"}, fetch="EAGER")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Contact", cascade={"persist"}, fetch="EAGER")
+     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $contact;
 
@@ -47,6 +48,16 @@ abstract class Personne
      * @ORM\Column(name="iban", type="string", length=255, nullable=true)
      */
     protected $iban;
+
+    /**
+     * Get prenom
+     *
+     * @return string
+     */
+    public function getPrenom()
+    {
+        return $this->prenom;
+    }
 
     /**
      * Set prenom
@@ -62,13 +73,13 @@ abstract class Personne
     }
 
     /**
-     * Get prenom
+     * Get sexe
      *
-     * @return string 
+     * @return string
      */
-    public function getPrenom()
+    public function getSexe()
     {
-        return $this->prenom;
+        return $this->sexe;
     }
 
     /**
@@ -79,35 +90,10 @@ abstract class Personne
      */
     public function setSexe($sexe)
     {
-        if($sexe != Personne::HOMME && $sexe != Personne::FEMME)
+        if ($sexe != Personne::HOMME && $sexe != Personne::FEMME)
             throw new Exception("Le sexe doit être " . Personne::HOMME . " ou " . Personne::FEMME . ", obtenu : '" . $sexe . "'");
 
         $this->sexe = $sexe;
-
-        return $this;
-    }
-
-    /**
-     * Get sexe
-     *
-     * @return string 
-     */
-    public function getSexe()
-    {
-        return $this->sexe;
-    }
-
-
-
-    /**
-     * Set iban
-     *
-     * @param string $iban
-     * @return Membre
-     */
-    public function setIban($iban)
-    {
-        $this->iban = $iban;
 
         return $this;
     }
@@ -123,14 +109,14 @@ abstract class Personne
     }
 
     /**
-     * Set contact
+     * Set iban
      *
-     * @param Contact $contact
-     * @return Personne
+     * @param string $iban
+     * @return Membre
      */
-    public function setContact(Contact $contact = null)
+    public function setIban($iban)
     {
-        $this->contact = $contact;
+        $this->iban = $iban;
 
         return $this;
     }
@@ -145,8 +131,18 @@ abstract class Personne
         return $this->contact;
     }
 
+    /**
+     * Set contact
+     *
+     * @param Contact $contact
+     * @return Personne
+     */
+    public function setContact(Contact $contact = null)
+    {
+        $this->contact = $contact;
 
-
+        return $this;
+    }
 
     /**
      * Get id

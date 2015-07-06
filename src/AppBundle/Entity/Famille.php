@@ -29,19 +29,20 @@ class Famille implements ExpediableInterface, ClassInterface
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Membre", mappedBy="famille", cascade={"persist"})
+     * @ORM\JoinColumn(name="membres_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $membres;
 
     /**
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Pere", mappedBy="famille", cascade={"persist"})
-     * @ORM\JoinColumn(name="pere_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="pere_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $pere;
 
     /**
      *
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Mere", mappedBy="famille", cascade={"persist"})
-     * @ORM\JoinColumn(name="mere_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="mere_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $mere;
 
@@ -62,7 +63,8 @@ class Famille implements ExpediableInterface, ClassInterface
     private $validity;
 
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Contact", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Contact", cascade={"persist"})
+     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $contact;
 
