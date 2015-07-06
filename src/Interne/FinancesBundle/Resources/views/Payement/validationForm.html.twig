@@ -1,0 +1,126 @@
+{% form_theme form 'InterneFinancesBundle:Payement:factureRepartitionType.html.twig' %}
+
+{% block content %}
+
+<div class="ui segment validationContainer" data-id="{{ payement.id }}">
+    <div class="ui inverted dimmer">
+        <div class="ui text loader">Validation en cours...</div>
+    </div>
+
+
+    {% if payement.state == 'not_found' %}
+        {% set color = 'red' %}
+        {% set text = 'Facture introuvable pour ce payement' %}
+        {% set icon = 'warning' %}
+        {% set validation = '' %}
+        {% set validation_text = 'Ingorer' %}
+    {% elseif payement.state == 'found_already_payed' %}
+        {% set color = 'orange' %}
+        {% set text = 'Facture déjà payée précédement' %}
+        {% set icon = 'warning' %}
+        {% set validation = '' %}
+        {% set validation_text = 'Ignorer' %}
+    {% elseif payement.state == 'found_valid' %}
+        {% set color = 'green' %}
+        {% set text = 'Payement valide' %}
+        {% set icon = 'checkmark' %}
+        {% set validation = 'hidden' %}
+        {% set validation_text = 'Valider' %}
+    {% elseif payement.state == 'found_lower' %}
+        {% set color = 'red' %}
+        {% set text = 'Payement reçu avec montant insuffisant' %}
+        {% set icon = 'caret down' %}
+        {% set validation = 'hidden' %}
+        {% set validation_text = 'Valider' %}
+    {% elseif payement.state == 'found_upper' %}
+        {% set color = 'green' %}
+        {% set text = 'Payement reçu avec montant supérieure' %}
+        {% set icon = 'caret up' %}
+        {% set validation = 'hidden' %}
+        {% set validation_text = 'Valider' %}
+    {% endif %}
+
+
+
+
+    {{ form_start(form, {'attr': {'class': 'ui form validationForm'}}) }}
+
+    <div class="ui grid">
+        <div class="row">
+            <div class="eight wide column">
+
+                <div class="ui {{ color }} icon message">
+                    <i class="{{ icon }} icon"></i>
+                    <div class="content">
+                        <div class="header">
+                            {{ text }}
+                        </div>
+
+                    </div>
+                </div>
+
+                <table class="ui definition table">
+                    <tbody>
+                    <tr>
+                        <td>
+                            Facture
+                        </td>
+                        <td>
+                            N°{{ payement.idFacture }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Date de payement
+                        </td>
+                        <td>
+                            N°{{ payement.date|date(global_date_format) }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            Montant reçu
+                        </td>
+                        <td>
+                            {{ payement.montantRecu|money }}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="eight wide column">
+
+                {{ form_widget(form.comment) }}
+
+            </div>
+        </div>
+        {% if (form.montantRecu is defined) and  (form.facture is defined) %}
+        <div class="row">
+            <div class="sixteen wide column">
+            {{ form_widget(form.montantRecu,{'attr': {'class': 'montantRecu'}}) }}
+
+            {{ form_widget(form.facture) }}
+
+            </div>
+        </div>
+        {% endif %}
+        <div class="row">
+
+            <div class="column">
+                <div class="field">
+                    <div {{ validation }} class="submitValidationForm ui blue button">{{ validation_text }}</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+</div>
+
+{% endblock %}

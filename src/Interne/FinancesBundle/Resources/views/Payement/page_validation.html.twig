@@ -3,7 +3,6 @@
 
 
 
-
 {% block titre %}Payements{% endblock %}
 
 
@@ -18,8 +17,16 @@
 
 
 
-                {% include 'InterneFinancesBundle:Payement:validationListe.html.twig' with {'results':results}%}
+                {% for payement in payements %}
 
+
+                    {{ render(controller('InterneFinancesBundle:Payement:validationForm', { 'payement': payement.id })) }}
+
+                {% endfor %}
+
+                {#
+                {% include 'InterneFinancesBundle:Payement:validationListe.html.twig' with {'results':results}%}
+                #}
 
             </div>
         </div>
@@ -34,9 +41,11 @@
     {% javascripts
     '@InterneFinancesBundle/Resources/public/js/model/*.js'
     '@InterneFinancesBundle/Resources/public/js/event_catcher.js'
+    '@InterneFinancesBundle/Resources/public/js/page_validation.js'
     %}
 
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
 {% endblock %}
+

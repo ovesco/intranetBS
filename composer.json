@@ -29,7 +29,8 @@
         "monolog/monolog": "@stable",
         "symfony/filesystem": "3.0.*@dev",
         "friendsofsymfony/rest-bundle": "^1.6",
-        "knplabs/knp-snappy-bundle": "dev-master"
+        "knplabs/knp-snappy-bundle": "dev-master",
+        "coresphere/console-bundle": "dev-master"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

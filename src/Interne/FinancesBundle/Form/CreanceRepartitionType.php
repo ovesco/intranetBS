@@ -36,7 +36,7 @@ class CreanceRepartitionType extends AbstractType
 
     public function getName()
     {
-        return 'InterneFinancesBundle_creanceRepartitionType';
+        return 'InterneFinancesBundleCreanceRepartitionType';
     }
 
 }

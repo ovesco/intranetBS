@@ -1,3 +1,30 @@
+$(document).ready(function () {
+
+    /**
+     * Gestion des évenement envoyé par les listes pour les factures.
+     */
+    document.addEventListener('data-liste-event', function (e) {
+
+
+        switch(e.detail.name){
+            case 'event_voir_creance':
+                openCreanceShow(e.detail.data,'interface');
+                break;
+            case 'event_delete_creance':
+                deleteCreance(e.detail.data);
+                break;
+            case 'event_masse_delete_creance':
+                deleteListeCreance(e.detail.data);
+                break;
+
+        }
+    }, false);
+
+});
+
+
+
+
 function deleteCreance(id,reload){
 
     //default value
@@ -6,7 +33,7 @@ function deleteCreance(id,reload){
     var data = { idCreance: id};
     $.ajax({
         type: "POST",
-        url: Routing.generate('interne_fiances_creance_delete_ajax'),
+        url: Routing.generate('interne_finances_creance_delete_ajax'),
         data: data,
         error: function(jqXHR, textStatus, errorThrown) {
             alerte.send('Erreur lors de la suppresion','error');
@@ -43,7 +70,7 @@ function addCreance(idForm){
     var form = $('#'+idForm).serialize();
     $.ajax({
         type: "POST",
-        url: Routing.generate('interne_fiances_creance_add_ajax'),
+        url: Routing.generate('interne_finances_creance_add_ajax'),
         data: form,
         error: function(jqXHR, textStatus, errorThrown) {
             reloadPage();
@@ -62,7 +89,7 @@ function addCreance(idForm){
 function openCreanceShow(id)
 {
     var data = { idCreance: id};
-    var url = Routing.generate('interne_fiances_creance_show_ajax');
+    var url = Routing.generate('interne_finances_creance_show_ajax');
 
     getModal(data,url);
 }
@@ -75,7 +102,7 @@ function openCreanceShow(id)
 function openCreanceForm(ownerId,ownerType)
 {
     var data = { ownerId: ownerId, ownerType:ownerType};
-    var url = Routing.generate('interne_fiances_creance_get_form_ajax');
+    var url = Routing.generate('interne_finances_creance_get_form_ajax');
 
     getModal(data,url);
 

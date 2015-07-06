@@ -5,6 +5,7 @@ namespace Interne\FinancesBundle\Controller;
 /* Routing */
 use Doctrine\ORM\EntityManager;
 use Interne\FinancesBundle\Form\PayementAddType;
+use Interne\FinancesBundle\Form\PayementValidationType;
 use Interne\FinancesBundle\SearchRepository\FactureRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -144,7 +145,7 @@ class PayementController extends Controller
                 {
                     $payement->setDate(new \DateTime());
                     $payement->setValidated(false);
-                    $payement = $this->checkPayementState($payement,$em);
+                    $payement->checkState($em);
 
                     $em->persist($payement);
 
@@ -193,7 +194,7 @@ class PayementController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 foreach($payements as $payement)
                 {
-                    $payement = $this->checkPayementState($payement,$em);
+                    $payement->checkState($em);
                     $em->persist($payement);
                 }
                 $em->flush();
@@ -228,71 +229,71 @@ class PayementController extends Controller
 
         /*
          * todo faire ceci avec elasitca (pas nécaissaire dans l'imédia)
-         */
-        $payements = $em->getRepository('InterneFinancesBundle:Payement')->findByValidated(false);
+        */
 
+        $payements = $em->getRepository('InterneFinancesBundle:Payement')->findBy(array('validated'=>false),null,10);
 
-        return array('results'=>$payements);
+        return array('payements'=>$payements);
 
 
     }
 
     /**
+     * Validation form
+     *
+     * @Route("/validation_form/{payement}", name="interne_finances_payement_validation_form", options={"expose"=true})
+     * @param Request $request
      * @param Payement $payement
-     * @return Payement
+     * @ParamConverter("payement", class="InterneFinancesBundle:Payement")
+     * @Template("InterneFinancesBundle:Payement:validationForm.html.twig")
+     * @return Response
      */
-    private function checkPayementState(Payement $payement,EntityManager $em){
+    public function validationFormAction(Request $request,Payement $payement)
+    {
+        $validationForm  = $this->createForm(new PayementValidationType(),$payement);
 
-        /** @var Facture $facture */
-        $facture = $em->getRepository('InterneFinancesBundle:Facture')->find($payement->getIdFacture());
+        if($request->isXmlHttpRequest()){
 
-        if($facture != Null)
-        {
-            if($facture->getStatut() == Facture::OUVERTE)
-            {
-                $montantTotalEmis = $facture->getMontantEmis();
-                $montantRecu = $payement->getMontantRecu();
+            $validationForm->handleRequest($request);
 
-                if($montantTotalEmis == $montantRecu)
-                {
-                    $payement->setState(Payement::FOUND_VALID);
+            if($validationForm->isValid()) {
+
+                $em = $this->getDoctrine()->getManager();
+
+                switch($payement->getState()){
+                    case Payement::FOUND_LOWER:
+                    case Payement::FOUND_VALID:
+                    case Payement::FOUND_UPPER:
+                        $payement->getFacture()->setStatut(Facture::PAYEE);
+                        break;
                 }
-                elseif($montantTotalEmis > $montantRecu)
-                {
-                    $payement->setState(Payement::FOUND_LOWER);
-                }
-                elseif($montantTotalEmis < $montantRecu)
-                {
-                    $payement->setState(Payement::FOUND_UPPER);
-                }
+
                 /*
-                 * On lie le payement à la facture
+                 * todo verifier le montant avant la validation.
                  */
-                $payement->setFacture($facture);
-                $facture->setPayement($payement);
-                /*
-                 * On definit la facture comme payée dans tout les cas...
-                 */
-                $facture->setStatut(Facture::PAYEE);
-                $em->persist($facture);
+
+                $payement->setValidated(true);
+                $em->persist($payement);
+                $em->flush();
+
+                $success = new Response();
+                $success->setStatusCode(200);//ok
+                return $success;
+
             }
-            else
-            {
-                /*
-                 * la facture a déjà été payée
-                 */
-                $payement->setState(Payement::FOUND_ALREADY_PAID);
+            else{
+                $error = new Response();
+                $error->setStatusCode(400);//bad request
+                return $error;
             }
 
-
-        }
-        else
-        {
-            $payement->setState(Payement::NOT_FOUND);
         }
 
-        return $payement;
+
+
+        return array('payement'=>$payement,'form'=>$validationForm->createView());
     }
+
 
 
 

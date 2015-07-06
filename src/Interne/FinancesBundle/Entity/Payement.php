@@ -5,6 +5,7 @@ namespace Interne\FinancesBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\ElasticaBundle\Configuration\Search;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Payement
@@ -73,6 +74,13 @@ class Payement
      * @ORM\Column(name="validated", type="boolean")
      */
     private $validated;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="comment", type="text", nullable=true)
+     */
+    private $comment;
 
 
     /**
@@ -243,5 +251,89 @@ class Payement
     public function getValidated()
     {
         return $this->validated;
+    }
+
+
+    /**
+     * Cette fonction va checker le statut de lu payement en fonction des factures existantes.
+     *
+     * @param EntityManager $em
+     */
+    public function checkState(EntityManager $em){
+
+        /** @var Facture $facture */
+        $facture = $em->getRepository('InterneFinancesBundle:Facture')->find($this->getIdFacture());
+
+        if($facture != Null)
+        {
+            if($facture->getStatut() == Facture::OUVERTE)
+            {
+                $montantTotalEmis = $facture->getMontantEmis();
+                $montantRecu = $this->getMontantRecu();
+
+                if($montantTotalEmis == $montantRecu)
+                {
+                    $this->setState(Payement::FOUND_VALID);
+                }
+                elseif($montantTotalEmis > $montantRecu)
+                {
+                    $this->setState(Payement::FOUND_LOWER);
+                }
+                elseif($montantTotalEmis < $montantRecu)
+                {
+                    $this->setState(Payement::FOUND_UPPER);
+                }
+                /*
+                 * On lie le payement à la facture
+                 */
+                $this->setFacture($facture);
+                $facture->setPayement($this);
+                /*
+                 * On definit la facture comme payée dans tout les cas...ce qui correspond à la réalité.
+                 * par contre le payement reste à valider pour répartir la somme dans les créances
+                 */
+                $facture->setStatut(Facture::PAYEE);
+                $em->persist($facture);
+            }
+            else
+            {
+                /*
+                 * la facture a déjà été payée
+                 */
+                $this->setState(Payement::FOUND_ALREADY_PAID);
+            }
+
+
+        }
+        else
+        {
+            $this->setState(Payement::NOT_FOUND);
+        }
+
+
+    }
+
+    /**
+     * Set comment
+     *
+     * @param string $comment
+     *
+     * @return Payement
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Get comment
+     *
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
     }
 }

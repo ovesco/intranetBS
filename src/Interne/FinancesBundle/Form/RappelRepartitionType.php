@@ -13,6 +13,7 @@ class RappelRepartitionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('dateCreation','date',array('label' => false))
             ->add('montantEmis','hidden',array('label' => false))
             ->add('montantRecu','number',array('label' => false))
             ;
