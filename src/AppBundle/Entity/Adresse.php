@@ -61,7 +61,7 @@ class Adresse
      * @var Contact
      *
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Contact", inversedBy="adresse")
-     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $contact;
 
@@ -90,6 +90,15 @@ class Adresse
         return  $this->getRue() . ', ' . $this->getNpa() . ' ' . $this->getLocalite();
     }
 
+    /**
+     * Get rue
+     *
+     * @return string
+     */
+    public function getRue()
+    {
+        return $this->rue;
+    }
 
     /**
      * Set rue
@@ -100,18 +109,18 @@ class Adresse
     public function setRue($rue)
     {
         $this->rue = $rue;
-    
+
         return $this;
     }
 
     /**
-     * Get rue
+     * Get npa
      *
-     * @return string 
+     * @return integer
      */
-    public function getRue()
+    public function getNpa()
     {
-        return $this->rue;
+        return $this->npa;
     }
 
     /**
@@ -123,18 +132,18 @@ class Adresse
     public function setNpa($npa)
     {
         $this->npa = $npa;
-    
+
         return $this;
     }
 
     /**
-     * Get npa
+     * Get localite
      *
-     * @return integer 
+     * @return string
      */
-    public function getNpa()
+    public function getLocalite()
     {
-        return $this->npa;
+        return $this->localite;
     }
 
     /**
@@ -146,18 +155,8 @@ class Adresse
     public function setLocalite($localite)
     {
         $this->localite = $localite;
-    
-        return $this;
-    }
 
-    /**
-     * Get localite
-     *
-     * @return string 
-     */
-    public function getLocalite()
-    {
-        return $this->localite;
+        return $this;
     }
 
     /**
@@ -171,6 +170,16 @@ class Adresse
     }
 
     /**
+     * Get expediable
+     *
+     * @return boolean
+     */
+    public function getExpediable()
+    {
+        return $this->expediable;
+    }
+
+    /**
      * Set expediable
      *
      * @param boolean $expediable
@@ -179,18 +188,18 @@ class Adresse
     public function setExpediable($expediable)
     {
         $this->expediable = $expediable;
-    
+
         return $this;
     }
 
     /**
-     * Get expediable
+     * Get remarques
      *
-     * @return boolean 
+     * @return string
      */
-    public function getExpediable()
+    public function getRemarques()
     {
-        return $this->expediable;
+        return $this->remarques;
     }
 
     /**
@@ -202,20 +211,19 @@ class Adresse
     public function setRemarques($remarques)
     {
         $this->remarques = $remarques;
-    
+
         return $this;
     }
 
     /**
-     * Get remarques
+     * Get contact
      *
-     * @return string 
+     * @return \AppBundle\Entity\Contact
      */
-    public function getRemarques()
+    public function getContact()
     {
-        return $this->remarques;
+        return $this->contact;
     }
-
 
     /**
      * Set contact
@@ -229,15 +237,5 @@ class Adresse
         $this->contact = $contact;
 
         return $this;
-    }
-
-    /**
-     * Get contact
-     *
-     * @return \AppBundle\Entity\Contact
-     */
-    public function getContact()
-    {
-        return $this->contact;
     }
 }

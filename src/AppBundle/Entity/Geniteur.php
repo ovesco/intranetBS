@@ -32,6 +32,22 @@ abstract class Geniteur extends Personne
     private $profession;
 
     /**
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Famille", inversedBy="geniteur")
+     * @ORM\JoinColumn(name="famille_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $famille;
+
+    /**
+     * Get profession
+     *
+     * @return integer
+     */
+    public function getProfession()
+    {
+        return $this->profession;
+    }
+
+    /**
      * Set profession
      *
      * @param integer $profession
@@ -40,18 +56,23 @@ abstract class Geniteur extends Personne
     public function setProfession($profession)
     {
         $this->profession = $profession;
-    
+
         return $this;
     }
 
     /**
-     * Get profession
+     * Get nom
      *
-     * @return integer 
+     * @return string
      */
-    public function getProfession()
+    public function getNom()
     {
-        return $this->profession;
+        if ($this->nom !== null)
+            return ucwords($this->nom);
+        elseif ($this->getFamille() !== null)
+            return $this->getFamille()->getNom();
+        else
+            return 'Inconnu';
     }
 
     /**
@@ -68,14 +89,26 @@ abstract class Geniteur extends Personne
     }
 
     /**
-     * Get nom
+     * Get famille
      *
-     * On a besoin du lien avec la famille pour connaitre le nom du Geniteur.
-     * Donc se fait dans les class filles.
-     *
-     * @return string
+     * @return Famille
      */
-    abstract public function getNom();
+    public function getFamille()
+    {
+        return $this->famille;
+    }
 
+    /**
+     * Set famille
+     *
+     * @param Famille $famille
+     * @return Pere
+     */
+    public function setFamille($famille)
+    {
+        $this->famille = $famille;
+
+        return $this;
+    }
 
 }
