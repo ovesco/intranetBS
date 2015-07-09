@@ -39,6 +39,10 @@ services:
         arguments:
             - @kernel
 
+    list_container:
+        class: AppBundle\Utils\ListRender\ListContainer
+        arguments:
+            - @twig
 
 
     # Twig
@@ -59,9 +63,6 @@ services:
     #        - @parser
     #    tags:
     #        - { name: twig.extension }
-
-
-
 
     app.twig.groupby:
         class: AppBundle\Twig\GroupByExtension

@@ -56,13 +56,13 @@ class FinancesExtension extends \Twig_Extension
     public function payement_state_text($state)
     {
         $data = $this->processStateRepresentation($state);
-        return $data['icon'];
+        return $data['text'];
     }
 
     public function payement_state_color($state)
     {
         $data = $this->processStateRepresentation($state);
-        return $data['icon'];
+        return $data['color'];
     }
 
     private function processStateRepresentation($state){

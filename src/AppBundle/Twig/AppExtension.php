@@ -4,6 +4,8 @@ namespace AppBundle\Twig;
 
 use AppBundle\Entity\Personne;
 use ReflectionClass;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 
 /**
  * Cette class est un container qui contient tout les filtres et autre ajout
@@ -57,6 +59,7 @@ class AppExtension extends \Twig_Extension
             new \Twig_SimpleFilter('boolean', array($this, 'boolean_filter')),
             new \Twig_SimpleFilter('genre', array($this, 'genre_filter')),
             new \Twig_SimpleFilter('get_class', array($this, 'get_class_filter')),
+            new \Twig_SimpleFilter('apply_filter',array($this, 'applyFilter'), array('needs_environment' => true,'needs_context' => true,))
         );
     }
 
@@ -80,28 +83,52 @@ class AppExtension extends \Twig_Extension
     }
 
     /**
-     * Tentative de fonciton pour appeler de facon générique des filtres.
+     * Apply twig filter of the environment by using theirs names (as string).
      *
-     * @param $context
-     * @param $filterName
-     * @return null
+     * Exemple: {{ value|apply_filter("upper") }}
+     *
+     * @param \Twig_Environment $env
+     * @param array $context
+     * @param $value
+     * @param $filters
+     *
+     * @return string
      */
-    public function applyFilter($context, $filterName)
+    public function applyFilter(\Twig_Environment $env, $context = array(), $value, $filters)
     {
 
-        $filter = $this->environment->getFilter($filterName);
+        $fs = new Filesystem();
 
-        $callable = $filter->getCallable();
+        //set the needed path
+        $template_dir_path = $env->getCache().'/apply_filter';
+        $template_file_name = $filters.'.html.twig';
+        $template_path = $template_dir_path.'/'.$template_file_name;
+
+        //create dir for templates in twig cache
+        if(!$fs->exists($template_dir_path))
+            $fs-mkdir($template_dir_path);
+
+        if(!$fs->exists($template_path))
+        {
+            //write the new template if first call
+            $template = sprintf('{{ value|%s }}', $filters);
+            file_put_contents($template_path,$template);
+        }
+
+        //store the old loader (not sure that is necessary)
+        $old_loader = $env->getLoader();
+
+        //use file loader
+        $loader = new \Twig_Loader_Filesystem($template_dir_path);
+        $env->setLoader($loader);
 
 
-        $string = __NAMESPACE__ ."\\".get_class($filter).'::'.$callable;
-        //var_dump(call_user_func($callable));
+        $rendered = $env->render($template_file_name,array("value" => $value));
 
-        //var_dump(call_user_func_array($callable,array($this->environment,$context)));
-        return null;
+        //reload the previous loader
+        $env->setLoader($old_loader);
 
-        // handle parameters here, by calling the
-        // appropriate filter and pass $context there
+        return $rendered;
     }
 
 }

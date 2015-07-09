@@ -8,6 +8,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Doctrine\ORM\EntityManager;
+
+use AppBundle\Utils\ListRender\ListContainer;
+use AppBundle\Utils\ListRender\Column;
 
 /**
  * Class AppController
@@ -32,8 +36,25 @@ class AppController extends Controller
      */
     public function test() {
 
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $objs = $em->getRepository('AppBundle:Membre')->findBy(array(),array(),5);
 
-        return new Response();
+        /** @var ListContainer $container */
+        $container = $this->get('list_container');
+
+        $list = $container->getNewListRender();
+        $list->setObjects($objs);
+        $list->setName('un_nom');
+        $list->setSearchBar(true);
+
+
+        $col = new Column(function($obj){return $obj->getId();});
+        $list->addColumn($col);
+        $col = new Column(function($obj){return $obj->getPrenom();});
+        $list->addColumn($col);
+
+        return new Response($list->render());
     }
 
 

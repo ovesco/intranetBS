@@ -32,9 +32,9 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
 
             new JMS\SerializerBundle\JMSSerializerBundle(),
-            new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
-            new FOS\ElasticaBundle\FOSElasticaBundle(),
-            new FOS\RestBundle\FOSRestBundle(),
+            new FOS\JsRoutingBundle\FOSJsRoutingBundle(),//Pour le routing javascript
+            new FOS\ElasticaBundle\FOSElasticaBundle(),//Elasitca
+            new FOS\RestBundle\FOSRestBundle(),//Pour les applications REST
             new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
 
             new AppBundle\AppBundle(),
@@ -44,6 +44,7 @@ class AppKernel extends Kernel
             new Interne\OrganisationBundle\InterneOrganisationBundle(),
             new Interne\HistoryBundle\InterneHistoryBundle(),
             new Interne\MatBundle\MatBundle(),
+
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
@@ -51,7 +52,7 @@ class AppKernel extends Kernel
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
-            $bundles[] = new CoreSphere\ConsoleBundle\CoreSphereConsoleBundle();
+            $bundles[] = new CoreSphere\ConsoleBundle\CoreSphereConsoleBundle();//Pour avoir la console dans la toobar symfony
         }
 
         return $bundles;

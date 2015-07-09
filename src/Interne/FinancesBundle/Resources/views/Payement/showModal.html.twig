@@ -24,9 +24,10 @@
                 </td>
             </tr>
             <tr>
-                <td></td>
+                <td>Etat</td>
                 <td>
-                    {{ payement.state|payement_state_icon}}
+                        <i class="{{ payement.state|payement_state_color}}  {{ payement.state|payement_state_icon}} icon"></i>
+                        {{ payement.state|payement_state_text}}
 
                 </td>
             </tr>
