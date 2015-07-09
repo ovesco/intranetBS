@@ -38,7 +38,7 @@ abstract class Personne
 
     /**
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Contact", cascade={"persist"}, fetch="EAGER")
-     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
      */
     protected $contact;
 

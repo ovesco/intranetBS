@@ -2,8 +2,9 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use AppBundle\Form\GroupeType;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Categorie
@@ -36,16 +37,12 @@ class Categorie
      */
     private $description;
 
-
-
     /**
      * @ORM\ManyToMany(targetEntity="Model", mappedBy="categories")
      * @ORM\JoinTable(name="app_categorie_model",
      *      joinColumns={@ORM\JoinColumn(name="categorie_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="model_id", referencedColumnName="id")}
      *      )
-     *
-     *
      */
     private $models;
 
@@ -72,6 +69,16 @@ class Categorie
     }
 
     /**
+     * Get nom
+     *
+     * @return string
+     */
+    public function getNom()
+    {
+        return $this->nom;
+    }
+
+    /**
      * Set nom
      *
      * @param string $nom
@@ -85,13 +92,13 @@ class Categorie
     }
 
     /**
-     * Get nom
+     * Get description
      *
-     * @return string 
+     * @return string
      */
-    public function getNom()
+    public function getDescription()
     {
-        return $this->nom;
+        return $this->description;
     }
 
     /**
@@ -105,16 +112,6 @@ class Categorie
         $this->description = $description;
 
         return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string 
-     */
-    public function getDescription()
-    {
-        return $this->description;
     }
 
     /**

@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\Table(name="app_familles")
  */
-class Famille implements ExpediableInterface, ClassInterface
+class Famille implements ExpediableInterface
 {
     /**
      * @var integer

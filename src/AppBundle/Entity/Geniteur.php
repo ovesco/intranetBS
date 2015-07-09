@@ -29,13 +29,10 @@ abstract class Geniteur extends Personne
      * 
      * @ORM\Column(name="profession", type="string", nullable=true)
      */
-    private $profession;
+    protected $profession;
 
-    /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Famille", inversedBy="geniteur")
-     * @ORM\JoinColumn(name="famille_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $famille;
+
+    protected $famille;
 
     /**
      * Get profession

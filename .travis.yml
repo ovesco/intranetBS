@@ -15,5 +15,5 @@ services:
   - elasticsearch
 
 notifications:
-  email:
-    - netbs@sauvabelin.ch
+  email: netbs@sauvabelin.ch
+  slack: netbs:kV6ZYhENYoPAI1AAcyr7XwIq
