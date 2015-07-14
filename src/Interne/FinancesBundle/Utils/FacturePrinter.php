@@ -1,25 +1,15 @@
 <?php
 
-namespace Interne\FinancesBundle\Controller;
+namespace Interne\FinancesBundle\Utils;
 
 use AppBundle\Utils\Parametre\Parametres;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Interne\FinancesBundle\Entity\Facture;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Utils\Export\Pdf;
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 
-/**
- * Class PrintController
- * @package Interne\FinancesBundle\Controller
- */
-class PrintController extends Controller
+
+class FacturePrinter
 {
 
     private $em;
@@ -367,3 +357,4 @@ class PrintController extends Controller
     }
 
 }
+

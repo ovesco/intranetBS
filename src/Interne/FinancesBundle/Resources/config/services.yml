@@ -7,8 +7,8 @@ services:
         arguments:
             - @doctrine.orm.entity_manager
 
-    finances_printer:
-        class: Interne\FinancesBundle\Controller\PrintController
+    facture_printer:
+        class: Interne\FinancesBundle\Utils\FacturePrinter
         arguments:
             - @doctrine.orm.entity_manager
             - @parametres

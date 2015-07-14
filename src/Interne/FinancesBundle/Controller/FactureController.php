@@ -2,21 +2,32 @@
 
 namespace Interne\FinancesBundle\Controller;
 
-use Interne\FinancesBundle\SearchClass\FactureSearch;
+/* Symfony */
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-
+/* Entity */
 use Interne\FinancesBundle\Entity\FactureToMembre;
 use Interne\FinancesBundle\Entity\FactureToFamille;
 use Interne\FinancesBundle\Entity\Facture;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
+/* Form */
 use Interne\FinancesBundle\Form\FactureSearchType;
+
+/* Elastica repository */
 use Interne\FinancesBundle\SearchRepository\FactureToFamilleRepository;
 use Interne\FinancesBundle\SearchRepository\FactureToMembreRepository;
+use Interne\FinancesBundle\SearchClass\FactureSearch;
+
+/* routing */
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 
 /**
@@ -28,53 +39,144 @@ use Interne\FinancesBundle\SearchRepository\FactureToMembreRepository;
 class FactureController extends Controller
 {
 
-
     /**
-     * @Route("/delete_ajax", name="interne_finances_facture_delete_ajax", options={"expose"=true})
-     *
-     * @return Response
-     */
-    public function deleteAjaxAction()
-    {
-        $request = $this->getRequest();
-
-        if($request->isXmlHttpRequest()) {
-
-            $id = $request->request->get('idFacture');
-            $em = $this->getDoctrine()->getManager();
-            $facture = $em->getRepository('InterneFinancesBundle:Facture')->find($id);
-
-            //on verifie que la facture existe bien, si c'est pas le cas, on affiche l'index
-            if ($facture != Null) {
-                $em->remove($facture);
-                $em->flush();
-            }
-            return new Response();
-        }
-        return new Response();
-    }
-
-
-
-    /**
-     * @Route("/show_ajax", name="interne_finances_facture_show_ajax", options={"expose"=true})
+     * @Route("/search", name="interne_finances_facture_search", options={"expose"=true})
      * @param Request $request
      * @return Response
      */
-    public function showAjaxAction(Request $request){
+    public function searchAction(Request $request){
 
-        if($request->isXmlHttpRequest()) {
 
-            $id = $request->request->get('idFacture');
+        $factureSearch = new FactureSearch();
 
-            $em = $this->getDoctrine()->getManager();
-            $facture = $em->getRepository('InterneFinancesBundle:Facture')->find($id);
-            return $this->render('InterneFinancesBundle:Facture:modalContentShow.html.twig',
-                array('facture' => $facture));
+        $searchForm = $this->createForm(new FactureSearchType,$factureSearch);
+
+        $results = array();
+
+        $searchForm->handleRequest($request);
+
+        if ($searchForm->isValid()) {
+
+            $factureSearch = $searchForm->getData();
+
+
+            $elasticaManager = $this->container->get('fos_elastica.manager');
+
+            /** @var FactureToMembreRepository $repository */
+            $repository = $elasticaManager->getRepository('InterneFinancesBundle:FactureToMembre');
+
+            $resultsFactureToMembre = $repository->search($factureSearch);
+
+            /** @var FactureToFamilleRepository $repository */
+            $repository = $elasticaManager->getRepository('InterneFinancesBundle:FactureToFamille');
+
+            $resultsFactureToFamille = $repository->search($factureSearch);
+
+            $results = array_merge($resultsFactureToMembre,$resultsFactureToFamille);
+
         }
 
-        return new Response();
+
+        return $this->render('InterneFinancesBundle:Facture:page_recherche.html.twig',
+            array('searchForm'=>$searchForm->createView(),'factures'=>$results));
+
     }
+
+
+    /**
+     * @Route("/show/{facture}", name="interne_finances_facture_show", options={"expose"=true})
+     * @param Facture $facture
+     * @ParamConverter("facture", class="InterneFinancesBundle:Facture")
+     * @param Request $request
+     * @return Response
+     * @Template("InterneFinancesBundle:Facture:modalContentShow.html.twig")
+     */
+    public function showAction(Request $request,Facture $facture){
+
+        return  array('facture' => $facture);
+    }
+
+
+    /**
+     * @Route("/delete/{facture}", name="interne_finances_facture_delete", options={"expose"=true})
+     * @param Facture $facture
+     * @ParamConverter("facture", class="InterneFinancesBundle:Facture")
+     * @param Request $request
+     * @return Response
+     */
+    public function deleteAction(Request $request,Facture $facture)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($facture);
+        $em->flush();
+        $response = new Response();
+        return $response->setStatusCode(200);//OK
+    }
+
+    /**
+     * Create a PDF and send it to the client browser
+     *
+     * @param Facture $facture
+     * @Route("/print/{facture}", name="interne_finances_facture_print", options={"expose"=true})
+     * @return Response
+     * @ParamConverter("facture", class="InterneFinancesBundle:Facture")
+     */
+    public function printAction(Facture $facture)
+    {
+
+        $printer = $this->get('facture_printer');
+        $pdf = $printer->factureToPdf($facture);
+
+        /*
+         * Ajout de l'adresse
+         */
+        $adresse = $facture->getOwner()->getAdresseExpedition();
+        $pdf->addAdresseEnvoi($adresse);
+
+        //return $pdf->Output('Facture N°'.$facture->getId().'.this->pdf','I');
+
+
+        $filePath = $this->get('kernel')->getCacheDir().'/temp_pdf/';
+        $fileName = 'facture_'.$facture->getId().'.pdf';
+
+        $fs = new Filesystem();
+
+        if(!$fs->exists($filePath))
+        {
+            $fs->mkdir($filePath);
+        }
+
+        /*
+         * Save the PDF in cache dir
+         */
+        $pdf->Output($filePath.$fileName,'F');
+
+        return new BinaryFileResponse($filePath.$fileName);
+    }
+
+
+
+
+
+
+    /*
+     * TODO CODE CI DESSOUS A REVOIR
+     */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -149,27 +251,7 @@ class FactureController extends Controller
 
     }
 
-    /**
-     * @param Facture $facture
-     * @Route("/print/{facture}", name="interne_finances_facture_print", options={"expose"=true})
-     * @return Response
-     * @ParamConverter("facture", class="InterneFinancesBundle:Facture")
-     */
-    public function printAction(Facture $facture)
-    {
 
-        $printer = $this->get('finances_printer');
-        $pdf = $printer->factureToPdf($facture);
-
-        /*
-         * Ajout de l'adresse
-         */
-        $adresse = $facture->getOwner()->getAdresseExpedition();
-        $pdf->addAdresseEnvoi($adresse);
-
-        return $pdf->Output('Facture N°'.$facture->getId().'.this->pdf','I');
-
-    }
 
 
 
@@ -315,50 +397,7 @@ class FactureController extends Controller
         }
     }
 
-    /**
-     * @Route("/search", name="interne_finances_facture_search", options={"expose"=true})
-     * @param Request $request
-     * @return Response
-     */
-    public function searchAction(Request $request){
 
-
-        $factureSearch = new FactureSearch();
-
-        $searchForm = $this->createForm(new FactureSearchType,$factureSearch);
-
-        $results = array();
-
-        $searchForm->handleRequest($request);
-
-        if ($searchForm->isValid()) {
-
-            $factureSearch = $searchForm->getData();
-
-
-            $elasticaManager = $this->container->get('fos_elastica.manager');
-
-            /** @var FactureToMembreRepository $repository */
-            $repository = $elasticaManager->getRepository('InterneFinancesBundle:FactureToMembre');
-
-            $resultsFactureToMembre = $repository->search($factureSearch);
-
-            /** @var FactureToFamilleRepository $repository */
-            $repository = $elasticaManager->getRepository('InterneFinancesBundle:FactureToFamille');
-
-            $resultsFactureToFamille = $repository->search($factureSearch);
-
-            $results = array_merge($resultsFactureToMembre,$resultsFactureToFamille);
-
-
-
-        }
-
-
-        return $this->render('InterneFinancesBundle:Facture:page_recherche.html.twig',
-            array('searchForm'=>$searchForm->createView(),'factures'=>$results));
-
-    }
 
 
 

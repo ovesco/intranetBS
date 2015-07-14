@@ -2,24 +2,36 @@
 
 namespace Interne\FinancesBundle\Controller;
 
-use Interne\FinancesBundle\Entity\CreanceToMembre;
-use Interne\FinancesBundle\Entity\CreanceToFamille;
+
+/* Symfony */
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+
+
+
+use Interne\FinancesBundle\Entity\CreanceToMembre;
+use Interne\FinancesBundle\Entity\CreanceToFamille;
+
 use Symfony\Component\Validator\Constraints\DateTime;
 
 use Interne\FinancesBundle\Form\CreanceAddType;
-use Interne\FinancesBundle\Entity\Creance;
-use Interne\FinancesBundle\SearchClass\CreanceSearch;
+
 use Interne\FinancesBundle\Form\CreanceSearchType;
-use Interne\FinancesBundle\SearchRepository\CreanceToMembreRepository;
-use Interne\FinancesBundle\SearchRepository\CreanceToFamilleRepository;
+
 use AppBundle\Entity\Membre;
 use Interne\FinancesBundle\Entity\Facture;
 use AppBundle\Utils\Listing\Liste;
 use AppBundle\Utils\Listing\Lister;
 use AppBundle\Entity\Groupe;
+
+/* Entity */
+use Interne\FinancesBundle\Entity\Creance;
+
+/* Elastica repository */
+use Interne\FinancesBundle\SearchRepository\CreanceToMembreRepository;
+use Interne\FinancesBundle\SearchRepository\CreanceToFamilleRepository;
+use Interne\FinancesBundle\SearchClass\CreanceSearch;
 
 /* routing */
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -47,7 +59,7 @@ class CreanceController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function deleteAjaxAction(Request $request,Creance $creance)
+    public function deleteAction(Request $request,Creance $creance)
     {
         /*
          * On vérifie que la cérance n'est pas liée à une facture avant de la supprimer
@@ -73,11 +85,76 @@ class CreanceController extends Controller
      * @Template("InterneFinancesBundle:Creance:modalContentShow.html.twig")
      * @return Response
      */
-    public function showAjaxAction(Request $request,Creance $creance){
+    public function showAction(Request $request,Creance $creance){
 
         return array('creance' => $creance);
 
     }
+
+    /**
+     * @Route("/search", name="interne_finances_creance_search", options={"expose"=true})
+     * @param Request $request
+     * @return Response
+     */
+    public function searchAction(Request $request){
+
+        $creanceSearch = new CreanceSearch();
+
+        $searchForm = $this->createForm(new CreanceSearchType,$creanceSearch);
+
+        $results = array();
+
+        $searchForm->handleRequest($request);
+
+        if ($searchForm->isValid()) {
+
+            $creanceSearch = $searchForm->getData();
+
+            $elasticaManager = $this->container->get('fos_elastica.manager');
+
+            /** @var CreanceToMembreRepository $repository */
+            $repository = $elasticaManager->getRepository('InterneFinancesBundle:CreanceToMembre');
+
+            $resultsCreanceToMembre = $repository->search($creanceSearch);
+
+            /** @var CreanceToFamilleRepository $repository */
+            $repository = $elasticaManager->getRepository('InterneFinancesBundle:CreanceToFamille');
+
+            $resultsCreanceToFamille = $repository->search($creanceSearch);
+
+            $results = array_merge($resultsCreanceToMembre,$resultsCreanceToFamille);
+
+        }
+
+        return $this->render('InterneFinancesBundle:Creance:page_recherche.html.twig',
+            array('searchForm'=>$searchForm->createView(),'creances'=>$results));
+    }
+
+
+
+
+
+
+
+
+
+    /*
+     * TODO ci dessous repaser sur ce code
+     */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /*
      * Ajoute des cérances en masse à la liste de membre (listing)
@@ -310,44 +387,7 @@ class CreanceController extends Controller
             array('ajoutForm'=>$ajoutForm->createView()));
     }
 
-    /**
-     * @Route("/search", name="interne_finances_creance_search", options={"expose"=true})
-     * @param Request $request
-     * @return Response
-     */
-    public function searchAction(Request $request){
 
-        $creanceSearch = new CreanceSearch();
-
-        $searchForm = $this->createForm(new CreanceSearchType,$creanceSearch);
-
-        $results = array();
-
-        $searchForm->handleRequest($request);
-
-        if ($searchForm->isValid()) {
-
-            $creanceSearch = $searchForm->getData();
-
-            $elasticaManager = $this->container->get('fos_elastica.manager');
-
-            /** @var CreanceToMembreRepository $repository */
-            $repository = $elasticaManager->getRepository('InterneFinancesBundle:CreanceToMembre');
-
-            $resultsCreanceToMembre = $repository->search($creanceSearch);
-
-            /** @var CreanceToFamilleRepository $repository */
-            $repository = $elasticaManager->getRepository('InterneFinancesBundle:CreanceToFamille');
-
-            $resultsCreanceToFamille = $repository->search($creanceSearch);
-
-            $results = array_merge($resultsCreanceToMembre,$resultsCreanceToFamille);
-
-        }
-
-        return $this->render('InterneFinancesBundle:Creance:page_recherche.html.twig',
-            array('searchForm'=>$searchForm->createView(),'creances'=>$results));
-    }
 
 
 

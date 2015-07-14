@@ -43,8 +43,31 @@ class TestCommand extends ContainerAwareCommand
 
         $this->output($message,'comment');
 
+
+
+        $pattern = '/OK/';
+        $ok = preg_match($pattern,$message);
+        $pattern = '/FAILURES/';
+        $failures = preg_match($pattern,$message);
+        if($ok && !$failures)
+        {
+            $this->output->writeln('<info>Test passed!!!</info>');
+        }
+        else
+        {
+            $this->output->writeln('<error>Error in tests...</error>');
+        }
+
+
+
+
         $this->output('Finish tests','info');
 
+
+    }
+
+
+    private function doTest($path){
 
     }
 

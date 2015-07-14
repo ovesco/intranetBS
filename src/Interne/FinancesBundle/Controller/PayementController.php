@@ -289,8 +289,6 @@ class PayementController extends Controller
 
         }
 
-
-
         return array('payement'=>$payement,'form'=>$validationForm->createView());
     }
 
