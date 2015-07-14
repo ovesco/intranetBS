@@ -8,7 +8,7 @@ $(document).ready(function () {
 
         switch(e.detail.name){
             case 'event_voir_creance':
-                openCreanceShow(e.detail.data,'interface');
+                showCreance(e.detail.data,'interface');
                 break;
             case 'event_delete_creance':
                 deleteCreance(e.detail.data);
@@ -30,11 +30,10 @@ function deleteCreance(id,reload){
     //default value
     reload = typeof reload !== 'undefined' ? reload : true;
 
-    var data = { idCreance: id};
+
     $.ajax({
         type: "POST",
-        url: Routing.generate('interne_finances_creance_delete_ajax'),
-        data: data,
+        url: Routing.generate('interne_finances_creance_delete',{creance: id}),
         error: function(jqXHR, textStatus, errorThrown) {
             alerte.send('Erreur lors de la suppresion','error');
         },
@@ -86,12 +85,10 @@ function addCreance(idForm){
  *
  * @param id
  */
-function openCreanceShow(id)
+function showCreance(id)
 {
-    var data = { idCreance: id};
-    var url = Routing.generate('interne_finances_creance_show_ajax');
-
-    getModal(data,url);
+    var url = Routing.generate('interne_finances_creance_show',{creance: id});
+    getModal(null,url);
 }
 
 /**

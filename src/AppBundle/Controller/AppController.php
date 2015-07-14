@@ -49,17 +49,23 @@ class AppController extends Controller
         $list->setSearchBar(true);
 
 
-        $col = new Column(function($obj){return $obj->getId();});
+        $col = new Column('Id',function($obj){return $obj->getId();});
         $list->addColumn($col);
-        $col = new Column(function($obj){return $obj->getPrenom();});
+        $col = new Column('Prenom',function($obj){return $obj->getPrenom();},'capitalize|lower');
         $list->addColumn($col);
+
+
 
         return new Response($list->render());
     }
 
 
     /**
-     * Formulaire de rapport de bug
+     * Formulaire de rapport de bug.
+     *
+     * Ce formulaire apparait en modal. Il permet l'envoie d'un e-mail de l'utiliateur
+     * au modérateur avec un détail du bug et le contenu html de la page courante.
+     *
      * @Route("debug_report", name="debug_report", options={"expose"=true})
      * @param Request $request
      * @return mixed

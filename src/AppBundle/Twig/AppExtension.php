@@ -59,7 +59,7 @@ class AppExtension extends \Twig_Extension
             new \Twig_SimpleFilter('boolean', array($this, 'boolean_filter')),
             new \Twig_SimpleFilter('genre', array($this, 'genre_filter')),
             new \Twig_SimpleFilter('get_class', array($this, 'get_class_filter')),
-            new \Twig_SimpleFilter('apply_filter',array($this, 'applyFilter'), array('needs_environment' => true,'needs_context' => true,))
+            new \Twig_SimpleFilter('apply_filters',array($this, 'apply_filters'), array('needs_environment' => true,'needs_context' => true,))
         );
     }
 
@@ -94,7 +94,7 @@ class AppExtension extends \Twig_Extension
      *
      * @return string
      */
-    public function applyFilter(\Twig_Environment $env, $context = array(), $value, $filters)
+    public function apply_filters(\Twig_Environment $env, $context = array(), $value, $filters)
     {
 
         $fs = new Filesystem();

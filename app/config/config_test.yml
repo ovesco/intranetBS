@@ -14,3 +14,10 @@ web_profiler:
 
 swiftmailer:
     disable_delivery: true
+
+# Ceci règle les problèmes d'authentification pour les tests
+# effectués sur des pages.
+security:
+    firewalls:
+        interne:
+            http_basic:

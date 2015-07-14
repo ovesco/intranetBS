@@ -5,15 +5,21 @@ namespace AppBundle\Test\Controller;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Bundle\FrameworkBundle\Client;
 
 class ApplicationAvailabilityFunctionalTest extends WebTestCase
 {
 
-    private $client = null;
+    /** @var Client client */
+    private $client;
 
     public function setUp()
     {
-        $this->client = static::createClient();
+        /** @var Client client */
+        $this->client = static::createClient(array(), array(
+            'PHP_AUTH_USER' => 'admin',
+            'PHP_AUTH_PW'   => 'admin',
+        ));
     }
 
     /**
@@ -21,35 +27,25 @@ class ApplicationAvailabilityFunctionalTest extends WebTestCase
      */
     public function testPageIsSuccessful($url)
     {
-        return;
-
-        $this->logIn();
-
+        echo 'Testing route: '.$url.PHP_EOL;
         $this->client->request('GET', $url);
-
-        var_dump($this->client->getResponse());
-
         $this->assertTrue($this->client->getResponse()->isSuccessful());
     }
 
     public function urlProvider()
     {
+        $this->setUp();
+
         return array(
-            array('/'),
-            array('/interne'),
+            /* Membres */
+            array('interne/membre/ajouter'),
+            /* Structure */
+            array('/interne/structure/gestion_fonction'),
+            array('/interne/structure/gestion_categorie'),
+            array('/interne/structure/gestion_model'),
+            //array('/interne/structure/gestion_groupe')
+
+
         );
-    }
-
-    private function logIn()
-    {
-        $session = $this->client->getContainer()->get('session');
-
-        $firewall = 'secured_area';
-        $token = new UsernamePasswordToken('admin', 'admin', $firewall, array('ROLE_ADMIN'));
-        $session->set('_security_' . $firewall, serialize($token));
-        $session->save();
-
-        $cookie = new Cookie($session->getName(), $session->getId());
-        $this->client->getCookieJar()->set($cookie);
     }
 }

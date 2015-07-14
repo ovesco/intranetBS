@@ -1,9 +1,6 @@
 {{ dump(list) }}
-
-{% set test = 2.00%}
-
-{{ test|apply_filter("money") }}
-
+{% set value = 'test' %}
+{{ value|apply_filters('upper') }}
 
 <div class="data-liste" data-name="{{ list.name }}">
 
@@ -25,13 +22,25 @@
     <table class="ui table data-liste-table">
 
         <thead>
+        <tr>
+            {% for column in list.columns %}
+                <th>
+                    {{ column.name }}
+                </th>
+            {% endfor %}
+        </tr>
         </thead>
         <tbody>
         {% for object in list.objects %}
-            <tr>
+            <tr data-id="{{ list.getRawId(object) }}">
             {% for column in list.columns %}
                 <td>
-                    {{ column.render(object) }}
+                    {% if column.twigFilters is null %}
+                        {{ column.render(object) }}
+                    {% else %}
+                        {% set value = column.render(object) %}
+                        {{ value|apply_filters(column.twigFilters) }}
+                    {% endif %}
                 </td>
             {% endfor %}
             </tr>

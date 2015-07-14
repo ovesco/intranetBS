@@ -8,7 +8,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints\DateTime;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 use Interne\FinancesBundle\Form\CreanceAddType;
 use Interne\FinancesBundle\Entity\Creance;
@@ -22,7 +21,10 @@ use AppBundle\Utils\Listing\Liste;
 use AppBundle\Utils\Listing\Lister;
 use AppBundle\Entity\Groupe;
 
-
+/* routing */
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 
 /**
@@ -34,58 +36,46 @@ class CreanceController extends Controller
 {
     /**
      *
-     * Supprime une cérance en ajax.
-     * Ne supprime que les cérances qui sont pas encore
+     * Supprime une cérance.
+     * Ne supprime que les cérances qui sont pas
      * liée a une facture.
      *
      *
-     * @Route("/delete_ajax", name="interne_finances_creance_delete_ajax", options={"expose"=true})
+     * @Route("/delete/{creance}", name="interne_finances_creance_delete", options={"expose"=true})
+     * @param Creance $creance
+     * @ParamConverter("creance", class="InterneFinancesBundle:Creance")
      * @param Request $request
      * @return Response
      */
-    public function deleteAjaxAction(Request $request)
+    public function deleteAjaxAction(Request $request,Creance $creance)
     {
-
-        if ($request->isXmlHttpRequest()) {
-
-            $id = $request->request->get('idCreance');
+        /*
+         * On vérifie que la cérance n'est pas liée à une facture avant de la supprimer
+         */
+        if(!$creance->isFactured()) {
             $em = $this->getDoctrine()->getManager();
-            $creance = $em->getRepository('InterneFinancesBundle:Creance')->find($id);
+            $em->remove($creance);
+            $em->flush();
 
-            /*
-             * On vérifie que la cérance n'est pas liée à une facture avant de la supprimer
-             */
-            if(!$creance->isFactured())
-            {
-                $em->remove($creance);
-                $em->flush();
-            }
-
-            return new Response('success');
+            $response = new Response();
+            return $response->setStatusCode(200);//OK
         }
-        return new Response('error');
+        $response = new Response();
+        return $response->setStatusCode(409);//Conflict
     }
 
 
-
-
-
     /**
-     * @Route("/show_ajax", name="interne_finances_creance_show_ajax", options={"expose"=true})
+     * @Route("/show/{creance}", name="interne_finances_creance_show", options={"expose"=true})
+     * @param Creance $creance
+     * @ParamConverter("creance", class="InterneFinancesBundle:Creance")
      * @param Request $request
+     * @Template("InterneFinancesBundle:Creance:modalContentShow.html.twig")
      * @return Response
      */
-    public function showAjaxAction(Request $request){
+    public function showAjaxAction(Request $request,Creance $creance){
 
-        if($request->isXmlHttpRequest()) {
-
-            $id = $request->request->get('idCreance');
-            $em = $this->getDoctrine()->getManager();
-            $creance = $em->getRepository('InterneFinancesBundle:Creance')->find($id);
-            return $this->render('InterneFinancesBundle:Creance:modalContentShow.html.twig',
-                array('creance' => $creance));
-        }
-        return new Response();
+        return array('creance' => $creance);
 
     }
 
