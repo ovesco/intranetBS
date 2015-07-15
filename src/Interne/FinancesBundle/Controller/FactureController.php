@@ -146,10 +146,12 @@ class FactureController extends Controller
             $fs->mkdir($filePath);
         }
 
+
         /*
          * Save the PDF in cache dir
          */
         $pdf->Output($filePath.$fileName,'F');
+        //todo le cache va grandir à chache facture imprimée...resoudre ceci
 
         return new BinaryFileResponse($filePath.$fileName);
     }

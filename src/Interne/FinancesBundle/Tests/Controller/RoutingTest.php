@@ -116,6 +116,7 @@ class RoutingTest extends WebTestCase
             array('/interne/finances/payement/add'),
             array('/interne/finances/payement/validation'),
             array('/interne/finances/payement/validation_form/'.$idPayement),
+            array('/interne/finances/payement/delete/'.$idPayement),
         );
 
         /*

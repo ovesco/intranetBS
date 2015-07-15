@@ -292,6 +292,29 @@ class PayementController extends Controller
         return array('payement'=>$payement,'form'=>$validationForm->createView());
     }
 
+    /**
+     * delete a payement
+     *
+     * @Route("/delete/{payement}", name="interne_finances_payement_delete", options={"expose"=true})
+     * @param Payement $payement
+     * @ParamConverter("payement", class="InterneFinancesBundle:Payement")
+     * @return Response
+     */
+    public function deleteAction(Payement $payement){
+
+        if((!$payement->isValidated()) || ($payement->getFacture() == null))
+        {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($payement);
+            $em->flush();
+
+            $response = new Response();
+            return $response->setStatusCode(200);//OK
+        }
+        $response = new Response();
+        return $response->setStatusCode(409);//Conflict
+    }
+
 
 
 
