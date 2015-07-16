@@ -2,32 +2,33 @@
 
 namespace Interne\FinancesBundle\Controller;
 
-/* Routing */
+/* Symfony */
 use Doctrine\ORM\EntityManager;
-use Interne\FinancesBundle\Form\PayementAddType;
-use Interne\FinancesBundle\Form\PayementValidationType;
-use Interne\FinancesBundle\SearchRepository\FactureRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
+/* Routing */
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 /* Entity */
-use Interne\FinancesBundle\Entity\CreanceToFamille;
-use Interne\FinancesBundle\Entity\CreanceToMembre;
 use Interne\FinancesBundle\Entity\Facture;
 use Interne\FinancesBundle\Entity\Payement;
+
+/* Elastica */
+use Interne\FinancesBundle\SearchRepository\FactureRepository;
 
 /* Form */
 use Interne\FinancesBundle\Form\FactureRepartitionType;
 use Interne\FinancesBundle\Form\PayementSearchType;
 use Interne\FinancesBundle\Form\PayementAddMultipleType;
 use Interne\FinancesBundle\Form\PayementUploadFileType;
+use Interne\FinancesBundle\Form\PayementAddType;
+use Interne\FinancesBundle\Form\PayementValidationType;
 
 /* Other */
 use Interne\FinancesBundle\SearchClass\PayementSearch;

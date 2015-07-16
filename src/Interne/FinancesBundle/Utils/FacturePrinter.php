@@ -120,13 +120,16 @@ class FacturePrinter
         foreach($facture->getCreances() as $creance)
         {
             $proprietaire = null;
-            if($creance->getOwner()->isClass('Membre'))
+
+            $owner = $creance->getDebiteur()->getOwner();
+
+            if($owner->isClass('Membre'))
             {
-                $proprietaire = $creance->getOwner()->getPrenom().' '.$creance->getOwner()->getNom();
+                $proprietaire = $owner->getPrenom().' '.$owner->getNom();
             }
             else
             {
-                $proprietaire = 'Famille '.$creance->getOwner()->getNom();
+                $proprietaire = 'Famille '.$owner->getNom();
             }
 
             $titre = $proprietaire.' - '.$creance->getTitre();

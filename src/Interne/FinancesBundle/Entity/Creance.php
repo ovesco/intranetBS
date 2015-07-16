@@ -10,14 +10,13 @@ use Doctrine\ORM\Mapping as ORM;
  * Class Creance
  *
  * @ORM\Table(name="finances_bundle_creances")
- * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="proprietaire", type="string")
- * @ORM\DiscriminatorMap({"membre" = "CreanceToMembre", "famille" = "CreanceToFamille"})
  * @ORM\Entity
  *
  */
-abstract class Creance implements OwnerInterface
+class Creance
 {
+    const EN_ATTENTE = 'en_attente';
+
     /**
      * @var integer
      *
@@ -71,16 +70,16 @@ abstract class Creance implements OwnerInterface
      */
     protected $montantRecu;
 
-    /*
-     * ========== Fonctions =================
-     */
-
-
-
     /**
-     * @return mixed
+     * @var Debiteur
+     *
+     * @ORM\ManyToOne(targetEntity="Interne\FinancesBundle\Entity\Debiteur", inversedBy="creances")
+     * @ORM\JoinColumn(name="debiteur_id", referencedColumnName="id")
      */
-    abstract public function getOwner();
+    private $debiteur;
+
+
+
 
 
     /**
@@ -259,7 +258,7 @@ abstract class Creance implements OwnerInterface
     {
         if($this->isFactured())
         {
-            if($this->facture->getStatut() == 'payee')
+            if($this->facture->getStatut() == Facture::PAYEE)
             {
                 return true;
             }
@@ -284,6 +283,41 @@ abstract class Creance implements OwnerInterface
     }
 
 
+    public function getStatut()
+    {
+        if($this->isFactured())
+        {
+            return $this->facture->getStatut();
+        }
+        else
+        {
+            return self::EN_ATTENTE;
+        }
+    }
 
 
+
+    /**
+     * Set debiteur
+     *
+     * @param \Interne\FinancesBundle\Entity\Debiteur $debiteur
+     *
+     * @return Creance
+     */
+    public function setDebiteur(\Interne\FinancesBundle\Entity\Debiteur $debiteur = null)
+    {
+        $this->debiteur = $debiteur;
+
+        return $this;
+    }
+
+    /**
+     * Get debiteur
+     *
+     * @return \Interne\FinancesBundle\Entity\Debiteur
+     */
+    public function getDebiteur()
+    {
+        return $this->debiteur;
+    }
 }

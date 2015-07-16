@@ -4,9 +4,8 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Interne\FinancesBundle\Entity\CreanceToMembre;
-use Interne\FinancesBundle\Entity\FactureToMembre;
 use Symfony\Component\Validator\Constraints as Assert;
+use Interne\FinancesBundle\Entity\DebiteurInterface;
 
 
 //FinancesBundle
@@ -17,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\Table(name="app_membres")
  */
-class Membre extends Personne implements ExpediableInterface
+class Membre extends Personne implements ExpediableInterface,DebiteurInterface
 {
 
     /**
@@ -102,18 +101,12 @@ class Membre extends Personne implements ExpediableInterface
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Interne\FinancesBundle\Entity\CreanceToMembre",
-     *                mappedBy="membre", cascade={"persist","remove"})
+     * @ORM\OneToOne(targetEntity="Interne\FinancesBundle\Entity\DebiteurMembre",
+     *                inversedBy="membre", cascade={"persist","remove"})
      */
-    private $creances;
+    private $debiteur;
 
-    /**
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Interne\FinancesBundle\Entity\FactureToMembre",
-     *                mappedBy="membre", cascade={"persist","remove"})
-     */
-    private $factures;
+
 
     /**
      * Cette propriété détermine si les cérances détenues par ce membre sont facturées
@@ -520,9 +513,7 @@ class Membre extends Personne implements ExpediableInterface
     }
 
 
-    /*
-     * ====== FinancesBundle =======
-     */
+
 
     /**
      * @param String $className
@@ -544,117 +535,6 @@ class Membre extends Personne implements ExpediableInterface
         return 'Membre';
     }
 
-    /**
-     * Add creance
-     *
-     * @param CreanceToMembre $creance
-     * @return Membre
-     */
-    public function addCreance(CreanceToMembre $creance)
-    {
-        $this->creances[] = $creance;
-        $creance->setMembre($this);
-
-        return $this;
-    }
-
-    /**
-     * Remove creance
-     *
-     * @param CreanceToMembre $creance
-     * @return Membre
-     */
-    public function removeCreance(CreanceToMembre $creance)
-    {
-        $this->creances->remove($creance);
-        $creance->setMembre(null);
-
-        return $this;
-    }
-
-    /**
-     * Get creances
-     *
-     * @return ArrayCollection
-     */
-    public function getCreances()
-    {
-        return $this->creances;
-    }
-
-    /**
-     * Set creances
-     *
-     * @param ArrayCollection $creances
-     * @return Membre
-     */
-    public function setCreances(ArrayCollection $creances)
-    {
-        $this->creances = $creances;
-
-        foreach($creances as $creance)
-        {
-            $creance->setMembre($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set facture
-     *
-     * @param ArrayCollection $factures
-     * @return Membre
-     */
-    public function setFacture(ArrayCollection $factures)
-    {
-        $this->factures = $factures;
-
-        foreach($factures as $facture)
-        {
-            $facture->setMembre($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Get facture
-     *
-     * @return ArrayCollection
-     */
-    public function getFactures()
-    {
-        return $this->factures;
-    }
-
-    /**
-     * Add facture
-     *
-     * @param FactureToMembre $facture
-     * @return Membre
-     */
-    public function addFacture(FactureToMembre $facture)
-    {
-        $this->factures[] = $facture;
-        $facture->setMembre($this);
-
-        return $this;
-    }
-
-    /**
-     * Remove facture
-     *
-     * @param FactureToMembre $facture
-     * @return Membre
-     */
-    public function removeFacture(FactureToMembre $facture)
-    {
-        $this->factures->remove($facture);
-        $facture->setMembre(null);
-
-        return $this;
-    }
 
     /**
      * Get envoiFacture
@@ -816,4 +696,49 @@ class Membre extends Personne implements ExpediableInterface
     {
         return $this->historique;
     }
+
+    /**
+     * Set debiteur
+     *
+     * @param \Interne\FinancesBundle\Entity\DebiteurMembre $debiteur
+     *
+     * @return Membre
+     */
+    public function setDebiteur($debiteur = null)
+    {
+        $this->debiteur = $debiteur;
+        $debiteur->setMembre($this);
+        return $this;
+    }
+
+    /**
+     * Get debiteur
+     *
+     * @return \Interne\FinancesBundle\Entity\DebiteurMembre
+     */
+    public function getDebiteur()
+    {
+        return $this->debiteur;
+    }
+
+    /**
+     * @param \Interne\FinancesBundle\Entity\Creance $creance
+     * @return Membre
+     */
+    public function addCreance($creance)
+    {
+        $this->getDebiteur()->addCreance($creance);
+        return $this;
+    }
+
+    /**
+     * @param \Interne\FinancesBundle\Entity\Facture $facture
+     * @return Membre
+     */
+    public function addFacture($facture)
+    {
+        $this->getDebiteur()->addFacture($facture);
+        return $this;
+    }
+
 }

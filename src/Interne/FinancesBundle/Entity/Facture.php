@@ -11,11 +11,8 @@ use Symfony\Component\Config\Definition\Exception\Exception;
  *
  * @ORM\Table(name="finances_bundle_factures")
  * @ORM\Entity
- * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="proprietaire", type="string")
- * @ORM\DiscriminatorMap({"membre" = "FactureToMembre", "famille" = "FactureToFamille"})
  */
-abstract class Facture implements OwnerInterface
+class Facture
 {
     const PAYEE = 'payee';
     const OUVERTE = 'ouverte';
@@ -67,6 +64,15 @@ abstract class Facture implements OwnerInterface
     private $payement;
 
 
+    /**
+     * @var Debiteur
+     *
+     * @ORM\ManyToOne(targetEntity="Interne\FinancesBundle\Entity\Debiteur", inversedBy="factures")
+     * @ORM\JoinColumn(name="debiteur_id", referencedColumnName="id")
+     */
+    private $debiteur;
+
+
 
 
     /*
@@ -79,12 +85,6 @@ abstract class Facture implements OwnerInterface
         $this->creances = new ArrayCollection();
     }
 
-
-
-    /**
-     * @return mixed
-     */
-    abstract public function getOwner();
 
     /**
      * Get id
@@ -411,5 +411,31 @@ abstract class Facture implements OwnerInterface
         $this->payement = $payement;
 
         return $this;
+    }
+
+
+
+    /**
+     * Set debiteur
+     *
+     * @param \Interne\FinancesBundle\Entity\Debiteur $debiteur
+     *
+     * @return Facture
+     */
+    public function setDebiteur(\Interne\FinancesBundle\Entity\Debiteur $debiteur = null)
+    {
+        $this->debiteur = $debiteur;
+
+        return $this;
+    }
+
+    /**
+     * Get debiteur
+     *
+     * @return \Interne\FinancesBundle\Entity\Debiteur
+     */
+    public function getDebiteur()
+    {
+        return $this->debiteur;
     }
 }

@@ -2,6 +2,7 @@ services:
     payement_file_parser:
         class: Interne\FinancesBundle\Utils\PayementFileParser
 
+    #todo changer ca!!
     finances_statistics:
         class: Interne\FinancesBundle\Controller\StatisticsController
         arguments:

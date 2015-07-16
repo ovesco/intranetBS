@@ -6,17 +6,7 @@
         <tr>
             <td>Statut</td>
             <td>
-                {% if facture.statut == 'ouverte' %}
-                    <div class="ui label blue">
-                        Ouverte
-                    </div>
-                {% elseif facture.statut == 'payee' %}
-                    <div class="ui label green">
-                        Payée
-                    </div>
-                {% else %}
-                {% endif %}
-
+                {{ facture.statut|statut_label|raw }}
             </td>
         </tr>
         <tr>
@@ -38,11 +28,7 @@
         <tr>
             <td>Propriétaire</td>
             <td>
-                {% if 'Membre' == facture.getOwner|get_class %}
-                    {{ facture.membre.prenom }} {{ facture.membre.nom }}
-                {% elseif 'Famille' == facture.getOwner|get_class%}
-                    Famille {{ facture.famille }}
-                {% endif %}
+                {{ facture.debiteur.owner.__toString }}
             </td>
         </tr>
 
@@ -51,7 +37,7 @@
             <td>Envoie par courrier</td>
             <td>
 
-                {% include 'AppBundle:Adresse:show_format_postal.html.twig' with {'adresseExpedition':facture.getOwner.adresseExpedition} %}
+                {% include 'AppBundle:Adresse:show_format_postal.html.twig' with {'adresseExpedition':facture.debiteur.owner.adresseExpedition} %}
 
 
             </td>
@@ -61,7 +47,7 @@
 
             <td>Envoie par e-mail</td>
             <td>
-                {% include 'AppBundle:Email:show_liste_expedition.html.twig' with {'listeEmailsExpedition':facture.getOwner.listeEmailsExpedition} %}
+                {% include 'AppBundle:Email:show_liste_expedition.html.twig' with {'listeEmailsExpedition':facture.debiteur.owner.listeEmailsExpedition} %}
 
             </td>
         </tr>

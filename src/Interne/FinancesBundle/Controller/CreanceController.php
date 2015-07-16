@@ -7,26 +7,20 @@ namespace Interne\FinancesBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-
-
-
-use Interne\FinancesBundle\Entity\CreanceToMembre;
-use Interne\FinancesBundle\Entity\CreanceToFamille;
-
 use Symfony\Component\Validator\Constraints\DateTime;
 
-use Interne\FinancesBundle\Form\CreanceAddType;
 
-use Interne\FinancesBundle\Form\CreanceSearchType;
-
-use AppBundle\Entity\Membre;
-use Interne\FinancesBundle\Entity\Facture;
+/* Service */
 use AppBundle\Utils\Listing\Liste;
 use AppBundle\Utils\Listing\Lister;
-use AppBundle\Entity\Groupe;
+
+/* Form */
+use Interne\FinancesBundle\Form\CreanceAddType;
+use Interne\FinancesBundle\Form\CreanceSearchType;
 
 /* Entity */
 use Interne\FinancesBundle\Entity\Creance;
+use AppBundle\Entity\Groupe;
 
 /* Elastica repository */
 use Interne\FinancesBundle\SearchRepository\CreanceToMembreRepository;
@@ -82,7 +76,7 @@ class CreanceController extends Controller
      * @param Creance $creance
      * @ParamConverter("creance", class="InterneFinancesBundle:Creance")
      * @param Request $request
-     * @Template("InterneFinancesBundle:Creance:modalContentShow.html.twig")
+     * @Template("InterneFinancesBundle:Creance:show_modal.html.twig")
      * @return Response
      */
     public function showAction(Request $request,Creance $creance){
@@ -141,6 +135,21 @@ class CreanceController extends Controller
     /*
      * TODO ci dessous repaser sur ce code
      */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

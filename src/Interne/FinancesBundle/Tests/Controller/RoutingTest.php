@@ -2,9 +2,8 @@
 
 namespace Interne\FinancesBundle\Test\Controller;
 
-use Interne\FinancesBundle\Entity\CreanceToMembre;
-use Interne\FinancesBundle\Entity\FactureToFamille;
-use Interne\FinancesBundle\Entity\FactureToMembre;
+use Interne\FinancesBundle\Entity\Creance;
+use Interne\FinancesBundle\Entity\Facture;
 use Interne\FinancesBundle\Entity\Payement;
 use Interne\FinancesBundle\Entity\Rappel;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -49,11 +48,11 @@ class RoutingTest extends WebTestCase
         $membre = $em->getRepository('AppBundle:Membre')->findOneBy(array());
 
 
-        $creance = new CreanceToMembre();
+        $creance = new Creance();
         $creance->setTitre('WebTestCase');
         $creance->setDateCreation(new \DateTime());
-        $creance->setMontantEmis('999.99');
-        $creance->setMembre($membre);
+        $creance->setMontantEmis(999.99);
+        $membre->getDebiteur()->addCreance($creance);
 
         $em->persist($creance);
         $em->flush();
@@ -68,16 +67,18 @@ class RoutingTest extends WebTestCase
         );
 
 
-        $facture = new FactureToMembre();
+        $facture = new Facture();
         $facture->setDateCreation(new \DateTime());
-        $facture->setMembre($membre);
+
+        $membre->getDebiteur()->addFacture($facture);
 
 
-        $creanceForFacture = new CreanceToMembre();
+        $creanceForFacture = new Creance();
         $creanceForFacture->setTitre('WebTestCase');
         $creanceForFacture->setDateCreation(new \DateTime());
-        $creanceForFacture->setMontantEmis('999.99');
-        $creanceForFacture->setMembre($membre);
+        $creanceForFacture->setMontantEmis(999.99);
+
+        $membre->getDebiteur()->addCreance($creanceForFacture);
 
         $rappel = new Rappel();
         $rappel->setDateCreation(new \DateTime());

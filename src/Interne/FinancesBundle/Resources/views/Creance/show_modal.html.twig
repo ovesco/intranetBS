@@ -1,0 +1,83 @@
+<div class="ui small modal" id="modal-display" aria-hidden="true">
+    <div class="header">Détail de la créance</div>
+    <div class="content" style="overflow-y:auto">
+    <table class="ui definition table">
+        <tbody>
+            <tr>
+                <td>Titre</td>
+                <td>{{ creance.titre }}</td>
+            </tr>
+            <tr>
+                <td>Remarque</td>
+                <td>{{ creance.remarque }}</td>
+            </tr>
+            {% if creance.facture is not empty %}
+            <tr>
+                <td>Facture</td>
+                <td>
+                    N°{{ creance.facture.id }}
+
+                    <a onclick="showFacture({{ creance.facture.id }});" >
+                        <i class="zoom icon"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endif %}
+            <tr>
+                <td>Statut</td>
+                <td>
+                    {{ creance.statut|statut_label|raw }}
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td>Date de création</td>
+                <td>{{ creance.dateCreation|date("d/m/Y") }}</td>
+            </tr>
+
+
+
+            {% if creance.facture is not empty %}
+            <tr>
+                <td>Date de payement</td>
+                <td>
+                    {% if creance.facture.payement is not null %}
+                        {{ creance.datePayement|date(global_date_format) }}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endif %}
+
+            <tr>
+                <td>Montant émis</td>
+                <td>{{ creance.montantEmis|money }}</td>
+            </tr>
+            <tr>
+                <td>Montant reçu</td>
+                <td>{{ creance.montantRecu|money }}</td>
+            </tr>
+            <tr>
+                <td>Propriétaire</td>
+                <td>
+                    {{ creance.debiteur.owner.__toString }}
+                </td>
+            </tr>
+            <tr>
+                <td>Cible de facturation</td>
+                <td>
+                   TODO
+                </td>
+            </tr>
+
+
+        </tbody>
+    </table>
+
+
+
+</div>
+    <div class="actions"></div>
+</div>

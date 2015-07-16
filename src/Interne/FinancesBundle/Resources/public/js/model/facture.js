@@ -40,7 +40,7 @@ function deleteFacture(id,reload){
     var data = { idFacture: id};
     return $.ajax({
         type: "POST",
-        url: Routing.generate('interne_finances_facture_delete_ajax'),
+        url: Routing.generate('interne_finances_facture_delete'),
         data: data,
         error: function(jqXHR, textStatus, errorThrown) {
             alerte.send('Erreur lors de la suppresion','error');
@@ -127,12 +127,11 @@ function printFacture(id){
 
 /**
  *
- * @param idFacture
+ * @param id
  */
-function showFacture(idFacture)
+function showFacture(id)
 {
-    var data = { idFacture: idFacture};
-    var url = Routing.generate('interne_finances_facture_show_ajax');
+    var url = Routing.generate('interne_finances_facture_show',{facture: id});
 
-    getModal(data,url);
+    getModal(null,url);
 }

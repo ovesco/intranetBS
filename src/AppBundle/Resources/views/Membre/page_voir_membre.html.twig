@@ -182,7 +182,9 @@
                         </div>
 
                         <div class="ui bottom attached segment">
-                            {% include "InterneFinancesBundle:Interface:interface.html.twig" with {'ownerEntity': membre }%}
+
+                            {{ render(controller('InterneFinancesBundle:Debiteur:show', { 'debiteur': membre.debiteur.id })) }}
+
                         </div>
 
                     </div>

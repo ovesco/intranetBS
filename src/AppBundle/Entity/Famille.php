@@ -70,24 +70,13 @@ class Famille implements ExpediableInterface
 
 
 
-    /*
-     * ====== FinancesBundle =======
-     */
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Interne\FinancesBundle\Entity\FactureToFamille",
-     *                mappedBy="famille", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Interne\FinancesBundle\Entity\DebiteurFamille",
+     *                inversedBy="famille", cascade={"persist","remove"})
      */
-    private $factures;
-
-    /**
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Interne\FinancesBundle\Entity\CreanceToFamille",
-     *                mappedBy="famille", cascade={"persist"})
-     */
-    private $creances;
+    private $debiteur;
 
 
     /**
@@ -267,119 +256,7 @@ class Famille implements ExpediableInterface
         return 'Famille';
     }
 
-    /**
-     * Set facture
-     *
-     * @param ArrayCollection $factures
-     * @return Famille
-     */
-    public function setFacture(ArrayCollection $factures)
-    {
-        $this->factures = $factures;
 
-        foreach ($factures as $facture) {
-            $facture->setFamille($this);
-        }
-
-        return $this;
-    }
-
-    /*
-     * ====== FinancesBundle =======
-     */
-
-    /**
-     * Get facture
-     *
-     * @return ArrayCollection
-     */
-    public function getFactures()
-    {
-        return $this->factures;
-    }
-
-    /**
-     * Add facture
-     *
-     * @param FactureToFamille $facture
-     * @return Famille
-     */
-    public function addFacture(FactureToFamille $facture)
-    {
-        $this->factures[] = $facture;
-        $facture->setFamille($this);
-
-        return $this;
-    }
-
-    /**
-     * Remove facture
-     *
-     * @param FactureToFamille $facture
-     * @return Famille
-     */
-    public function removeFacture(FactureToFamille $facture)
-    {
-        $this->factures->remove($facture);
-        $facture->setFamille(null);
-
-        return $this;
-    }
-
-    /**
-     * Add creance
-     *
-     * @param CreanceToFamille $creance
-     * @return Famille
-     */
-    public function addCreance(CreanceToFamille $creance)
-    {
-        $this->creances[] = $creance;
-        $creance->setFamille($this);
-
-        return $this;
-    }
-
-    /**
-     * Remove creance
-     *
-     * @param CreanceToFamille $creance
-     * @return Famille
-     */
-    public function removeCreance(CreanceToFamille $creance)
-    {
-        $this->creances->remove($creance);
-        $creance->setFamille(null);
-
-        return $this;
-    }
-
-    /**
-     * Get creances
-     *
-     * @return ArrayCollection
-     */
-    public function getCreances()
-    {
-        return $this->creances;
-    }
-
-    /**
-     * Set creances
-     *
-     * @param ArrayCollection $creances
-     * @return Famille
-     */
-    public function setCreances(ArrayCollection $creances)
-    {
-        $this->creances = $creances;
-
-        foreach ($creances as $creance) {
-            $creance->setFamille($this);
-        }
-
-        return $this;
-    }
 
     public function getAdresseExpedition()
     {
@@ -557,4 +434,48 @@ class Famille implements ExpediableInterface
 
 
 
+
+    /**
+     * Set debiteur
+     *
+     * @param \Interne\FinancesBundle\Entity\DebiteurFamille $debiteur
+     *
+     * @return Famille
+     */
+    public function setDebiteur(\Interne\FinancesBundle\Entity\DebiteurFamille $debiteur = null)
+    {
+        $this->debiteur = $debiteur;
+        $debiteur->setFamille($this);
+        return $this;
+    }
+
+    /**
+     * Get debiteur
+     *
+     * @return \Interne\FinancesBundle\Entity\DebiteurFamille
+     */
+    public function getDebiteur()
+    {
+        return $this->debiteur;
+    }
+
+    /**
+     * @param \Interne\FinancesBundle\Entity\Creance $creance
+     * @return Famille
+     */
+    public function addCreance($creance)
+    {
+        $this->getDebiteur()->addCreance($creance);
+        return $this;
+    }
+
+    /**
+     * @param \Interne\FinancesBundle\Entity\Facture $facture
+     * @return Famille
+     */
+    public function addFacture($facture)
+    {
+        $this->getDebiteur()->addFacture($facture);
+        return $this;
+    }
 }

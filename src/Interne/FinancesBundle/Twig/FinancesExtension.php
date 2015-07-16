@@ -2,6 +2,8 @@
 
 namespace Interne\FinancesBundle\Twig;
 
+use Interne\FinancesBundle\Entity\Creance;
+use Interne\FinancesBundle\Entity\Facture;
 use Interne\FinancesBundle\Entity\Payement;
 
 class FinancesExtension extends \Twig_Extension
@@ -24,6 +26,7 @@ class FinancesExtension extends \Twig_Extension
             new \Twig_SimpleFilter('payement_state_icon', array($this, 'payement_state_icon')),
             new \Twig_SimpleFilter('payement_state_color', array($this, 'payement_state_color')),
             new \Twig_SimpleFilter('payement_state_text', array($this, 'payement_state_text')),
+            new \Twig_SimpleFilter('statut_label', array($this, 'statut_label')),
         );
     }
 
@@ -46,6 +49,22 @@ class FinancesExtension extends \Twig_Extension
         }
 
     }
+
+    public function statut_label($statut)
+    {
+        if($statut == Facture::PAYEE){
+            return '<div class="ui label blue">Ouverte</div>';
+        }
+        elseif($statut == Facture::OUVERTE){
+            return '<div class="ui label green">Payée</div>';
+        }
+        elseif($statut == Creance::EN_ATTENTE){
+            return '<div class="ui label orange">En attente</div>';
+        }
+        return null;
+    }
+
+
 
     public function payement_state_icon($state)
     {

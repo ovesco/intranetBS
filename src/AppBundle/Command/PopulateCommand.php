@@ -8,6 +8,7 @@ use AppBundle\Entity\Personne;
 use AppBundle\Entity\Telephone;
 use AppBundle\Utils\Email\Email;
 use ClassesWithParents\F;
+
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,20 +20,24 @@ use AppBundle\Entity\Famille;
 use AppBundle\Entity\Adresse;
 use AppBundle\Entity\Attribution;
 use AppBundle\Entity\Geniteur;
-use Interne\FinancesBundle\Entity\FactureToMembre;
-use Interne\FinancesBundle\Entity\FactureToFamille;
-use Interne\FinancesBundle\Entity\CreanceToMembre;
-use Interne\FinancesBundle\Entity\CreanceToFamille;
+
 use AppBundle\Entity\Fonction;
 use AppBundle\Entity\Distinction;
 use AppBundle\Entity\Model;
 use AppBundle\Entity\Groupe;
-use Interne\FinancesBundle\Entity\Rappel;
 use AppBundle\Entity\Pere;
 use AppBundle\Entity\Mere;
 
 use Interne\SecurityBundle\Entity\Role;
 use Interne\SecurityBundle\Entity\User;
+
+/* FinanceBundle */
+use Interne\FinancesBundle\Entity\Rappel;
+use Interne\FinancesBundle\Entity\Facture;
+use Interne\FinancesBundle\Entity\Creance;
+use Interne\FinancesBundle\Entity\DebiteurFamille;
+use Interne\FinancesBundle\Entity\DebiteurMembre;
+
 
 class PopulateCommand extends ContainerAwareCommand
 {
@@ -173,29 +178,32 @@ class PopulateCommand extends ContainerAwareCommand
 
 
                     //ajout créance et facture
+                    $debiteurM = new DebiteurMembre();
+                    $membre->setDebiteur($debiteurM);
                     $nbCreanceEnAttente = mt_rand(1,3);
                     for($n = 0; $n < $nbCreanceEnAttente; $n++) {
-                        $membre->addCreance($this->getCreance($membre));
+                        $membre->addCreance($this->getCreance($membre->getDebiteur()));
                     }
                     $nbFacture = mt_rand(1,3);
                     for($n = 0; $n < $nbFacture; $n++) {
-                        $membre->addFacture($this->getFacture($membre));
+                        $membre->addFacture($this->getFacture($membre->getDebiteur()));
                     }
 
                     $famille->addMembre($membre);
                 }
 
                 //ajout créance et facture
+
+                $debiteur = new DebiteurFamille();
+                $famille->setDebiteur($debiteur);
                 $nbCreanceEnAttente = mt_rand(1,3);
                 for($n = 0; $n < $nbCreanceEnAttente; $n++) {
-                    $famille->addCreance($this->getCreance($famille));
+                    $famille->addCreance($this->getCreance($famille->getDebiteur()));
                 }
                 $nbFacture = mt_rand(1,3);
                 for($n = 0; $n < $nbFacture; $n++) {
-                    $famille->addFacture($this->getFacture($famille));
+                    $famille->addFacture($this->getFacture($famille->getDebiteur()));
                 }
-
-
 
 
                 $em->persist($famille);
@@ -1180,24 +1188,15 @@ class PopulateCommand extends ContainerAwareCommand
     }
 
     /**
-     * @param $owner
+     * @param $debiteur
      * @param bool $payee
      * @return Creance
      */
-    private function getCreance($owner, $payee = false){
+    private function getCreance($debiteur, $payee = false){
 
-        $creance = null;
+        $creance = new Creance();
+        $creance->setDebiteur($debiteur);
 
-        if($owner->isClass('Membre'))
-        {
-            $creance = new CreanceToMembre();
-            $creance->setMembre($owner);
-        }
-        if($owner->isClass('Famille'))
-        {
-            $creance = new CreanceToFamille();
-            $creance->setFamille($owner);
-        }
 
         $annee = mt_rand(2000,2015);
         $periode = array('hiver','printemps','été','automne');
@@ -1220,21 +1219,11 @@ class PopulateCommand extends ContainerAwareCommand
      * @param $owner
      * @return Facture
      */
-    private function getFacture($owner){
+    private function getFacture($debiteur){
 
 
-        $facture = null;
-
-        if($owner->isClass('Membre'))
-        {
-            $facture = new FactureToMembre();
-            $facture->setMembre($owner);
-        }
-        if($owner->isClass('Famille'))
-        {
-            $facture = new FactureToFamille();
-            $facture->setFamille($owner);
-        }
+        $facture = new Facture();
+        $facture->setDebiteur($debiteur);
 
         $dateCreation = $this->getRandomDate();
         $facture->setDateCreation($dateCreation);
@@ -1250,7 +1239,7 @@ class PopulateCommand extends ContainerAwareCommand
         {
             //payee
             for($n = 0; $n < $nbCreance; $n++) {
-                $facture->addCreance($this->getCreance($owner,true));
+                $facture->addCreance($this->getCreance($debiteur,true));
             }
             $facture->setStatut('payee');
             $facture->setDatePayement($datePayement);
@@ -1266,7 +1255,7 @@ class PopulateCommand extends ContainerAwareCommand
         {
             //ouverte
             for($n = 0; $n < $nbCreance; $n++) {
-                $facture->addCreance($this->getCreance($owner));
+                $facture->addCreance($this->getCreance($debiteur));
             }
             for($n = 0; $n < mt_rand(0,6); $n++) {
                 $rappel = new Rappel();

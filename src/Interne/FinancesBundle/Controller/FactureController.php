@@ -12,8 +12,6 @@ use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /* Entity */
-use Interne\FinancesBundle\Entity\FactureToMembre;
-use Interne\FinancesBundle\Entity\FactureToFamille;
 use Interne\FinancesBundle\Entity\Facture;
 
 /* Form */
@@ -89,7 +87,7 @@ class FactureController extends Controller
      * @ParamConverter("facture", class="InterneFinancesBundle:Facture")
      * @param Request $request
      * @return Response
-     * @Template("InterneFinancesBundle:Facture:modalContentShow.html.twig")
+     * @Template("InterneFinancesBundle:Facture:show_modal.html.twig")
      */
     public function showAction(Request $request,Facture $facture){
 
@@ -130,7 +128,7 @@ class FactureController extends Controller
         /*
          * Ajout de l'adresse
          */
-        $adresse = $facture->getOwner()->getAdresseExpedition();
+        $adresse = $facture->getDebiteur()->getOwner()->getAdresseExpedition();
         $pdf->addAdresseEnvoi($adresse);
 
         //return $pdf->Output('Facture N°'.$facture->getId().'.this->pdf','I');
