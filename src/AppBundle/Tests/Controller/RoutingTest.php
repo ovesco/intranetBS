@@ -27,9 +27,9 @@ class ApplicationAvailabilityFunctionalTest extends WebTestCase
      */
     public function testPageIsSuccessful($url)
     {
-        echo 'Testing route: '.$url.PHP_EOL;
         $this->client->request('GET', $url);
         $this->assertTrue($this->client->getResponse()->isSuccessful());
+        echo PHP_EOL,'Testing route: '.$url,PHP_EOL;
     }
 
     public function urlProvider()

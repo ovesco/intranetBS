@@ -3,6 +3,10 @@
 namespace AppBundle\Utils\Export;
 
 use AppBundle\Entity\Adresse;
+use AppBundle\Entity\Membre;
+use AppBundle\Entity\Famille;
+use AppBundle\Entity\Mere;
+use AppBundle\Entity\Pere;
 use fpdf\FPDF;
 use fpdi\FPDI;
 use Symfony\Component\BrowserKit\Response;
@@ -259,29 +263,20 @@ class Pdf extends FPDI {
 
         if($adresseExpedition != null){
             $adresse = $adresseExpedition['adresse'];
-            $owner = $adresseExpedition['owner'];
+            $owner = $adresseExpedition['ownerEntity'];
 
+            switch($owner->className())
+            {
+                case Membre::className():
+                case Pere::className():
+                case Mere::className():
+                    $this->Cell(50,$h,ucfirst($owner->getNom()).' '.ucfirst($owner->getPrenom()));
+                    break;
+                case Famille::className():
+                    $this->Cell(50,$h,'Famille '.ucfirst($owner->getNom()));
+                    break;
+            }
 
-            if($owner['type'] == 'Membre')
-            {
-                $this->Cell(50,$h,ucfirst($owner['nom']).' '.ucfirst($owner['prenom']));
-            }
-            elseif($owner['type'] == 'Famille')
-            {
-                $this->Cell(50,$h,'Famille '.ucfirst($owner['nom']));
-            }
-            elseif($owner['type'] == 'Mere')
-            {
-                $this->Cell(50,$h,ucfirst($owner['nom']).' '.ucfirst($owner['prenom']));
-            }
-            elseif($owner['type'] == 'Pere')
-            {
-                $this->Cell(50,$h,ucfirst($owner['nom']).' '.ucfirst($owner['prenom']));
-            }
-            else
-            {
-                //erreur
-            }
 
             $y = $y+$h;
             $this->SetXY($x,$y);

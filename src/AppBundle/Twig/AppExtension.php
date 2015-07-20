@@ -2,6 +2,10 @@
 
 namespace AppBundle\Twig;
 
+use AppBundle\Entity\Membre;
+use AppBundle\Entity\Famille;
+use AppBundle\Entity\Pere;
+use AppBundle\Entity\Mere;
 use AppBundle\Entity\Personne;
 use ReflectionClass;
 use Symfony\Component\Filesystem\Filesystem;
@@ -50,6 +54,10 @@ class AppExtension extends \Twig_Extension
     function getGlobals(){
         return array(
             'global_date_format'=> 'd.m.Y',
+            'class_name_membre'=>Membre::className(),
+            'class_name_famille'=>Famille::className(),
+            'class_name_pere'=>Pere::className(),
+            'class_name_mere'=>Mere::className(),
         );
     }
 

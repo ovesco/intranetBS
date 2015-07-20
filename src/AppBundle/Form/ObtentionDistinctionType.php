@@ -24,7 +24,7 @@ class ObtentionDistinctionType extends AbstractType
             if (!$form->has('membre')) {
                 if (null !== $obtention->getMembre()) {
                     $form->add('membre', 'hidden', array(
-                        'data' => $obtention->getMembre()->GetId()
+                        'data' => $obtention->getMembre()->getId()
                     ));
                 } else {
                     $form->add('membre', 'entity', array(
@@ -35,7 +35,7 @@ class ObtentionDistinctionType extends AbstractType
 
             if (null !== $obtention->getId()) {
                 $form->add('id', 'hidden', array(
-                    'data' => $obtention->GetId()
+                    'data' => $obtention->getId()
                 ));
             }
         });
@@ -48,11 +48,8 @@ class ObtentionDistinctionType extends AbstractType
             ))
         ;
     }
-    
-    /**
-     * @param OptionsResolverInterface $resolver
-     */
-    public function configureOptions( \Symfony\Component\OptionsResolver\OptionsResolver $resolver)
+
+    public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\ObtentionDistinction'

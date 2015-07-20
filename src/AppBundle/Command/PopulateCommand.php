@@ -51,7 +51,7 @@ class PopulateCommand extends ContainerAwareCommand
         $this
             ->setName('app:populate')
             ->setDescription('Remplir la base de donnée')
-            ->addArgument('action', InputArgument::REQUIRED, 'Quel action souhaitez-vous faire? create: crée l\'arboresance / fill: remplir la base de donnée ')
+            ->addArgument('action', InputArgument::REQUIRED, 'Quel action souhaitez-vous faire? create: crée l\'arboresance / fill: remplir la base de donnée / create_admin: create user admin')
             ->addArgument('members', InputArgument::OPTIONAL, 'Combien de membres souhaitez-vous génerer ?')            //nombre de membres souhaité
             ->addArgument('fonction', InputArgument::OPTIONAL, 'Abreviation de la fonction des attributions génerées')  //Abbreviation de la fonction des attributions souhaitées
             ->addArgument('type', InputArgument::OPTIONAL, 'ID du type des groupes des attributions génerées')          //ID du type de groupe souhaité
@@ -215,12 +215,12 @@ class PopulateCommand extends ContainerAwareCommand
 
             $progress->finish();
         }
-        elseif($action == 'security')
+        elseif($action == 'create_admin')
         {
             $membre = new Membre();
             $user = new User();
 
-            $membre->setPrenom('Security user');
+            $membre->setPrenom('Admin');
             $membre->setSexe(Personne::HOMME);
             $membre->setValidity(0);
 
@@ -248,8 +248,6 @@ class PopulateCommand extends ContainerAwareCommand
             $em->flush();
 
             echo 'access for:'.$user->getUsername().' created!',PHP_EOL;
-
-
 
         }
 

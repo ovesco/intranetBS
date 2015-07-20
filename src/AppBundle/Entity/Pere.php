@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Entity
  */
-class Pere extends Geniteur
+class Pere extends Geniteur implements ClassNameInterface
 {
 
     /**
@@ -29,4 +29,11 @@ class Pere extends Geniteur
         $this->setSexe(Personne::HOMME);
     }
 
+    /**
+     * Return the class name
+     * @return string
+     */
+    static public function className(){
+        return __CLASS__;
+    }
 }

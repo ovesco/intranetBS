@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Finder\Finder;
 
 
 
@@ -31,6 +32,55 @@ class TestCommand extends ContainerAwareCommand
     {
         $this->output = $output;
         $this->input = $input;
+
+        /*
+         * TODO finir ce bout de code (uffer)
+         *
+        $appDir = $this->getContainer()->get('kernel')->getRootDir();
+
+        $srcDir = $appDir.'/../src';
+
+
+        $testFiles = array();
+
+        //foreach ($paths as $path) {
+            $finder = new Finder();
+            $finder->files()->name('*Test.php')->in($srcDir);
+            foreach ($finder as $file) {
+                $testFiles[] = $file->getRelativePathname();//$file->getRealpath();
+                //$testFiles[] = $file->getRealpath();
+            }
+        //}
+
+        foreach($testFiles as $file)
+        {
+            $this->output('src/'.$file,'info');
+
+            $message = shell_exec("php /usr/local/bin/phpunit src/AppBundle/Tests");
+
+            $this->output($message,'comment');
+
+
+            $pattern = '/OK/';
+            $ok = preg_match($pattern,$message);
+            $pattern = '/FAILURES/';
+            $failures = preg_match($pattern,$message);
+            if($ok && !$failures)
+            {
+                $this->output->writeln('<info>Test passed!!!</info>');
+            }
+            else
+            {
+                $this->output->writeln('<error>Error in tests...</error>');
+            }
+
+
+        }
+
+
+
+
+        */
 
         $this->output('Starting tests','info');
 
@@ -58,18 +108,12 @@ class TestCommand extends ContainerAwareCommand
             $this->output->writeln('<error>Error in tests...</error>');
         }
 
-
-
-
         $this->output('Finish tests','info');
 
 
-    }
-
-
-    private function doTest($path){
 
     }
+
 
     private function output($string,$mode = null){
 

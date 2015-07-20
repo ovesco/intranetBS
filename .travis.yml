@@ -8,9 +8,7 @@ before_script:
   - mysql -e 'create database symfony;'
   - composer install
   - php app/console doctrine:schema:create --env=test
-  - php app/console app:populate create
-  - php app/console app:populate fill 20
-  - php app/console app:populate security
+  - sh sh_script/fill_dev_database.sh
 
 script: phpunit -c app/
 

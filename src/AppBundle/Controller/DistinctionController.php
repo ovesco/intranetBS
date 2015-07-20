@@ -46,6 +46,7 @@ class DistinctionController extends Controller{
      */
     public function renderModalOrPersistAction(Request $request) {
 
+
         $obtention = new ObtentionDistinction();
         $form      = $this->createForm(new ObtentionDistinctionType(), $obtention);
 
@@ -71,6 +72,7 @@ class DistinctionController extends Controller{
 
             return $this->redirect(  $request->headers->get('referer')  );
         }
+
 
         return $this->render('AppBundle:ObtentionDistinction:modal_add_obtention.html.twig', array('form' => $form->createView()));
     }

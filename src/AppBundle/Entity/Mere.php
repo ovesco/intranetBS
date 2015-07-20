@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  */
-class Mere extends Geniteur
+class Mere extends Geniteur implements ClassNameInterface
 {
 
     /**
@@ -26,5 +26,13 @@ class Mere extends Geniteur
     public function __construct()
     {
         $this->setSexe(Personne::FEMME);
+    }
+
+    /**
+     * Return the class name
+     * @return string
+     */
+    static public function className(){
+        return __CLASS__;
     }
 }

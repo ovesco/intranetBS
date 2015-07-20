@@ -3,6 +3,7 @@
 namespace Interne\FinancesBundle\Entity;
 
 
+
 class EntityTest extends \PHPUnit_Framework_TestCase
 {
     public $creance;
@@ -13,34 +14,66 @@ class EntityTest extends \PHPUnit_Framework_TestCase
     public $creanceDate;
     public $creanceMontant = 1456.876;
 
+    public $factureDate;
+    public $factureStatut = Facture::OUVERTE;
+
 
     public function __construct()
     {
         date_default_timezone_set('Europe/Zurich');
 
         $this->creanceDate = new \DateTime();
-        $this->creance = new Creance();
-        $this->facture = new Facture();
+        $this->factureDate = new \DateTime();
+
+
+
+        $this->creance = $this->createCreance();
+        $this->facture = $this->createFacture();
 
     }
+
+    private function createCreance()
+    {
+        $c = new Creance();
+        $c->setTitre($this->creanceTitre);
+        $c->setDateCreation($this->creanceDate);
+        $c->setMontantEmis($this->creanceMontant);
+        $c->setMontantRecu($this->creanceMontant);
+
+        return $c;
+    }
+
+    private function createFacture()
+    {
+        $f = new Facture();
+        $f->setStatut($this->factureStatut);
+        $f->setDateCreation($this->factureDate);
+
+        return $f;
+    }
+
     public function testGetterSetterCreance()
     {
-
-        $this->creance->setTitre($this->titre);
-        $this->creance->setDateCreation($this->date);
-        $this->creance->setMontantEmis($this->montant);
-        $this->creance->setMontantRecu($this->montant);
-
-        $this->assertEquals($this->creance->getTitre(), $this->titre);
-        $this->assertEquals($this->creance->getDateCreation(), $this->date);
-        $this->assertEquals($this->creance->getMontantEmis(), $this->montant);
-        $this->assertEquals($this->creance->getMontantRecu(), $this->montant);
+        $this->assertEquals($this->creance->getTitre(), $this->creanceTitre);
+        $this->assertEquals($this->creance->getDateCreation(), $this->creanceDate);
+        $this->assertEquals($this->creance->getMontantEmis(), $this->creanceMontant);
+        $this->assertEquals($this->creance->getMontantRecu(), $this->creanceMontant);
     }
 
     public function testGetterSetterFacture(){
-        //$this->facture->setDateCreation();
-        //$this->facture->setStatut();
+        $this->assertEquals($this->facture->getStatut(), $this->factureStatut);
+        $this->assertEquals($this->facture->getDateCreation(), $this->factureDate);
     }
 
+    public function testEntityLink()
+    {
+        $f = clone $this->facture;
+        $c = clone $this->creance;
+
+        $f->addCreance($c);
+        $this->assertEquals($f->getCreances()->first(), $c);
+
+
+    }
 
 }

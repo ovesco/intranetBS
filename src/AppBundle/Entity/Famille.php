@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\Table(name="app_familles")
  */
-class Famille implements ExpediableInterface
+class Famille implements ExpediableInterface,ClassNameInterface
 {
     /**
      * @var integer
@@ -97,6 +97,14 @@ class Famille implements ExpediableInterface
         $this->validity = true;
 
         $this->nom = $nom;
+    }
+
+    /**
+     * Return the class name
+     * @return string
+     */
+    static public function className(){
+        return __CLASS__;
     }
 
     /**
@@ -260,51 +268,8 @@ class Famille implements ExpediableInterface
 
     public function getAdresseExpedition()
     {
-        $adresse = $this->getContact()->getAdresse();
-        if (!is_null($adresse)) {
-            if ($adresse->isExpediable()) {
-                return array('adresse' => $adresse,
-                    'owner' => array(
-                        'prenom' => null,
-                        'nom' => $this->getNom(),
-                        'class' => 'Famille',
-                    ));
-            }
-        }
-
-        $mere = $this->getMere();
-        if (!is_null($mere)) {
-            $adresse = $mere->getContact()->getAdresse();
-
-            if (!is_null($adresse)) {
-                if ($adresse->isExpediable()) {
-                    return array('adresse' => $adresse,
-                        'owner' => array(
-                            'prenom' => $mere->getPrenom(),
-                            'nom' => $this->getNom(),
-                            'class' => 'Famille',
-                        ));
-                }
-            }
-        }
-
-        $pere = $this->getPere();
-        if (!is_null($pere)) {
-            $adresse = $pere->getContact()->getAdresse();
-
-            if (!is_null($adresse)) {
-                if ($adresse->isExpediable()) {
-                    return array('adresse' => $adresse,
-                        'owner' => array(
-                            'prenom' => $pere->getPrenom(),
-                            'nom' => $this->getNom(),
-                            'class' => 'Famille',
-                        ));
-                }
-            }
-        }
-
-        return null;
+        $expediable = new Expediable($this);
+        return $expediable->getAdresse();
     }
 
     /**
@@ -359,54 +324,8 @@ class Famille implements ExpediableInterface
 
     public function getListeEmailsExpedition()
     {
-        $liste = array();
-
-
-        $emails = $this->getContact()->getEmails();
-        if (!is_null($emails))
-        {
-            foreach ($emails as $email) {
-                if ($email->isExpediable()) {
-                    $liste['Famille'] = $email->getEmail();
-                }
-
-            }
-        }
-
-
-        $mere = $this->getMere();
-        if(!is_null($mere))
-        {
-            $emails = $mere->getContact()->getEmails();
-            if (!is_null($emails))
-            {
-                foreach ($emails as $email) {
-                    if ($email->isExpediable()) {
-                        $liste['Mère'] = $email->getEmail();
-                    }
-
-                }
-            }
-        }
-
-
-        $pere = $this->getPere();
-        if(!is_null($pere))
-        {
-            $emails = $pere->getContact()->getEmails();
-            if (!is_null($emails))
-            {
-                foreach ($emails as $email) {
-                    if ($email->isExpediable()) {
-                        $liste['Père'] = $email->getEmail();
-                    }
-
-                }
-            }
-        }
-
-
-        return $liste;
+        $expediable = new Expediable($this);
+        return $expediable->getListeEmails();
     }
 
     public function getListePrenomEnfants()
@@ -442,7 +361,7 @@ class Famille implements ExpediableInterface
      *
      * @return Famille
      */
-    public function setDebiteur(\Interne\FinancesBundle\Entity\DebiteurFamille $debiteur = null)
+    public function setDebiteur($debiteur = null)
     {
         $this->debiteur = $debiteur;
         $debiteur->setFamille($this);

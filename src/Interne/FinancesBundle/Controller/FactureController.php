@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /* Entity */
 use Interne\FinancesBundle\Entity\Facture;
@@ -27,6 +28,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
+/* Service */
+use AppBundle\Utils\Export\Pdf;
 
 /**
  * Class FactureController
@@ -123,19 +126,19 @@ class FactureController extends Controller
     {
 
         $printer = $this->get('facture_printer');
+        /** @var Pdf $pdf */
         $pdf = $printer->factureToPdf($facture);
 
         /*
          * Ajout de l'adresse
          */
         $adresse = $facture->getDebiteur()->getOwner()->getAdresseExpedition();
-        $pdf->addAdresseEnvoi($adresse);
 
-        //return $pdf->Output('Facture N°'.$facture->getId().'.this->pdf','I');
+        $pdf->addAdresseEnvoi($adresse);
 
 
         $filePath = $this->get('kernel')->getCacheDir().'/temp_pdf/';
-        $fileName = 'facture_'.$facture->getId().'.pdf';
+        $fileName = 'facture.pdf';
 
         $fs = new Filesystem();
 
@@ -149,9 +152,14 @@ class FactureController extends Controller
          * Save the PDF in cache dir
          */
         $pdf->Output($filePath.$fileName,'F');
-        //todo le cache va grandir à chache facture imprimée...resoudre ceci
 
-        return new BinaryFileResponse($filePath.$fileName);
+        $response = new BinaryFileResponse($filePath.$fileName);
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            'Facture_'.$facture->getId().'.pdf' //change file name
+        );
+
+        return $response;
     }
 
 

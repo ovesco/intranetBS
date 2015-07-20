@@ -42,7 +42,7 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     private $distinctions;
 
     /**
-     * @var date
+     * @var \Datetime
      *
      * @ORM\Column(name="naissance", type="date")
      */
@@ -91,8 +91,13 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     private $validity;
 
 
-
-
+    /**
+     * Return the class name
+     * @return string
+     */
+    static public function className(){
+        return __CLASS__;
+    }
     /*
      * ====== FinancesBundle =======
      */
@@ -565,101 +570,15 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
      */
     public function getAdresseExpedition()
     {
-        $pere       = $this->getFamille()->getPere();
-        $mere       = $this->getFamille()->getMere();
-        $adresse    = null;
-        $generator  = function($type, $adresse) {
-
-            return array('owner' => $type, 'adresse' => $adresse);
-        };
-
-        // On liste d'abord les adresses potentielles
-        $adresses   = array(
-            'membre'    => $this->getContact()->getAdresse(),
-            'famille'   => $this->getFamille()->getContact()->getAdresse(),
-            'pere'      => ($pere == null) ? null : $pere->getContact()->getAdresse(),
-            'mere'      => ($mere == null) ? null : $mere->getContact()->getAdresse()
-        );
-
-        /** @var Adresse $adr */
-        foreach($adresses as $k => $adr) {
-
-            if($adr != null && $adr->getExpediable())
-                return $generator($k, $adr);
-
-            else if($adr != null) $adresse = $generator($k, $adr);
-        }
-
-        if($adresse['adresse'] == null) return null;
-        else return $adresse;
+        $expediable = new Expediable($this);
+        return $expediable->getAdresse();
     }
 
 
     public function getListeEmailsExpedition()
     {
-        $liste = array();
-
-        $emails = $this->getContact()->getEmails();
-        if(!is_null($emails))
-        {
-            foreach($emails as $email){
-                if($email->isExpediable())
-                {
-                    $liste['Membre'] = $email->getEmail();
-                }
-
-            }
-        }
-
-
-        $emails = $this->getFamille()->getContact()->getEmails();
-        if(!is_null($emails))
-        {
-            foreach($emails as $email){
-                if($email->isExpediable())
-                {
-                    $liste['Famille'] = $email->getEmail();
-                }
-
-            }
-        }
-
-
-
-        $mere = $this->getFamille()->getMere();
-        if(!is_null($mere))
-        {
-            $emails = $mere->getContact()->getEmails();
-            if(!is_null($emails))
-            {
-                foreach($emails as $email){
-                    if($email->isExpediable())
-                    {
-                        $liste['Mère'] = $email->getEmail();
-                    }
-
-                }
-            }
-        }
-
-
-        $pere = $this->getFamille()->getPere();
-        if(!is_null($pere))
-        {
-            $emails = $pere->getContact()->getEmails();
-            if(!is_null($emails))
-            {
-                foreach($emails as $email){
-                    if($email->isExpediable())
-                    {
-                        $liste['Père'] = $email->getEmail();
-                    }
-
-                }
-            }
-        }
-
-        return $liste;
+        $expediable = new Expediable($this);
+        return $expediable->getListeEmails();
     }
 
 
