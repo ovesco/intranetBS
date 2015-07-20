@@ -34,18 +34,40 @@ class ApplicationAvailabilityFunctionalTest extends WebTestCase
 
     public function urlProvider()
     {
+
         $this->setUp();
 
+        $urls = array();
+
+        $urls = array_merge($urls,$this->urlBugReportController());
+        $urls = array_merge($urls,$this->urlMembreController());
+        $urls = array_merge($urls,$this->urlStructureController());
+
+        return $urls;
+    }
+
+    private function urlBugReportController()
+    {
         return array(
-            /* Membres */
-            array('interne/membre/ajouter'),
-            /* Structure */
+            array('interne/bug_report/form'),
+        );
+    }
+
+    private function urlMembreController()
+    {
+        return array(
+            array('/interne/membre/ajouter'),
+        );
+    }
+
+    private function urlStructureController()
+    {
+        return array(
             array('/interne/structure/gestion_fonction'),
             array('/interne/structure/gestion_categorie'),
             array('/interne/structure/gestion_model'),
-            //array('/interne/structure/gestion_groupe')
-
-
+            //array('/interne/structure/gestion_groupe'),
         );
     }
+
 }

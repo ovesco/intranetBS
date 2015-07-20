@@ -89,7 +89,13 @@ class TestCommand extends ContainerAwareCommand
 
         $this->output($version,'info');
 
-        $message = shell_exec("php /usr/local/bin/phpunit -c app");
+
+        /*
+         * l'option "-d memory_limit=-1" permet de modifier la
+         * limite mémoire du script phpunit.
+         *
+         */
+        $message = shell_exec("php /usr/local/bin/phpunit -d memory_limit=-1 -c app");
 
         $this->output($message,'comment');
 
