@@ -94,27 +94,6 @@ class StructureController extends Controller
 
     }
 
-    /**
-     * Page qui affiche les categorie de groupes
-     *
-     * @Route("/gestion_categorie", name="structure_gestion_categorie", options={"expose"=true})
-     * @param Request $request
-     * @return Response
-     *
-     */
-    public function gestionCategorieAction(Request $request) {
-
-        $em = $this->getDoctrine()->getManager();
-
-
-        //retourne toutes les fonctions
-        $categories = $em->getRepository('AppBundle:Categorie')->findAll();
-
-        return $this->render('AppBundle:Structure:page_gestionCategorie.html.twig',array(
-            'categories' =>$categories));
-
-
-    }
 
 
 }

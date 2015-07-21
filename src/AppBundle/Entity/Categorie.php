@@ -156,4 +156,13 @@ class Categorie
     {
         $this->models = $models;
     }
+
+    /**
+     * Possible de supprimer uniquement si aucun model liés.
+     * @return bool
+     */
+    public function isRemovable()
+    {
+        return $this->models->isEmpty();
+    }
 }

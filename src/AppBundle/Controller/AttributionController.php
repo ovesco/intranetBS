@@ -105,7 +105,7 @@ class AttributionController extends Controller
 
 
     /**
-     * @route("render-form", name="interne_attribution_render_formulaire_modal", options={"expose"=true});
+     * @route("/render-form", name="interne_attribution_render_formulaire_modal", options={"expose"=true});
      * @param Request $request
      * @return Response
      */
@@ -130,7 +130,7 @@ class AttributionController extends Controller
     /**
      * Appelée pour terminer une chiée d'attributions en même temps
      *
-     * @route("terminer-attributions", name="interne_attribution_terminer")
+     * @route("/terminer-attributions", name="interne_attribution_terminer")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
@@ -156,7 +156,7 @@ class AttributionController extends Controller
 
     /**
      * Supprimme une attribution
-     * @route("remove/{attribution}", name="attribution_remove", options={"expose"=true})
+     * @route("/remove/{attribution}", name="attribution_remove", options={"expose"=true})
      * @paramConverter("attribution", class="AppBundle:Attribution")
      * @param $attribution
      * @return JsonResponse

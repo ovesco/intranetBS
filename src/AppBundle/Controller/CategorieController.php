@@ -2,18 +2,21 @@
 
 namespace AppBundle\Controller;
 
-
-use AppBundle\Entity\Categorie;
+/* Symfony */
 use Doctrine\Common\Collections\ArrayCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Doctrine\ORM\EntityManager;
 
+/* Entity */
+use AppBundle\Entity\Categorie;
+
+/* Form */
 use AppBundle\Form\CategorieType;
 
 /**
@@ -26,60 +29,37 @@ class CategorieController extends Controller
 {
 
     /**
-     * @Route("/get_form_modale", name="categrorie_get_form_modale", options={"expose"=true})
+     * Page qui affiche les categorie de groupes
      *
+     * @Route("/liste", name="categorie_liste", options={"expose"=true})
      * @param Request $request
      * @return Response
+     *
      */
-    public function getCategorieFormAjaxAction(Request $request)
-    {
+    public function listeAction(Request $request) {
 
-        if ($request->isXmlHttpRequest()) {
+        $em = $this->getDoctrine()->getManager();
 
-            $em = $this->getDoctrine()->getManager();
+        //retourne toutes les fonctions
+        $categories = $em->getRepository('AppBundle:Categorie')->findAll();
 
-            /*
-             * On envoie le formulaire en modal
-             */
-            $id = $request->request->get('idCategorie');
+        return $this->render('AppBundle:Categorie:page_liste.html.twig',array(
+            'categories' =>$categories));
 
-            $categorie = null;
-            $categorieForm = null;
-            if($id == null)
-            {
-                /*
-                 * Ajout
-                 */
-                $categorie = new Categorie();
-                $categorieForm = $this->createForm(new CategorieType(),$categorie,
-                    array('action' => $this->generateUrl('categorie_add')));
 
-            }
-            else
-            {
-
-                $categorie = $em->getRepository('AppBundle:Categorie')->find($id);
-                $categorieForm = $this->createForm(new CategorieType(),$categorie,
-                    array('action' => $this->generateUrl('categorie_edit',array('categorie'=>$id))));
-
-            }
-
-            return $this->render('AppBundle:Categorie:categorie_modale_form.html.twig',array('form'=>$categorieForm->createView()));
-
-        }
-        return new Response();
     }
 
     /**
-     * @Route("/add", name="categorie_add", options={"expose"=true})
-     *
+     * @Route("/new", name="categorie_new", options={"expose"=true})
+     * @Template("AppBundle:Categorie:modal_form.html.twig")
      * @param Request $request
      * @return Response
      */
-    public function addCategorieAction(Request $request)
+    public function newAction(Request $request)
     {
         $new = new Categorie();
-        $newForm = $this->createForm(new CategorieType(),$new);
+        $newForm = $this->createForm(new CategorieType(),$new,
+            array('action' => $this->generateUrl('categorie_new')));
 
         $newForm->handleRequest($request);
 
@@ -88,35 +68,68 @@ class CategorieController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($new);
             $em->flush();
+            return $this->redirect($this->generateUrl('categorie_liste'));
         }
 
-        return $this->redirect($this->generateUrl('structure_gestion_categorie'));
+        return array('form'=>$newForm->createView());
     }
+
 
     /**
      * @Route("/edit/{categorie}", name="categorie_edit", options={"expose"=true})
-     *
+     * @param Request $request
+     * @param Categorie $categorie
+     * @return Response
+     * @ParamConverter("categorie", class="AppBundle:Categorie")
+     * @Template("AppBundle:Categorie:modal_form.html.twig")
+     */
+    public function editAction(Categorie $categorie,Request $request)
+    {
+        $editedForm = $this->createForm(new CategorieType(),$categorie,
+            array('action' => $this->generateUrl('categorie_edit',array('categorie'=>$categorie->getId()))));
+
+        $editedForm->handleRequest($request);
+        if($editedForm->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+            return $this->redirect($this->generateUrl('categorie_liste'));
+        }
+        return array('form'=>$editedForm->createView());
+    }
+
+    /**
+     * @Route("/remove/{categorie}", name="categorie_remove", options={"expose"=true})
      * @param Request $request
      * @param Categorie $categorie
      * @return Response
      * @ParamConverter("categorie", class="AppBundle:Categorie")
      */
-    public function editFonctionction(Categorie $categorie,Request $request)
+    public function removeAction(Categorie $categorie,Request $request)
     {
-
-        $editedForm = $this->createForm(new CategorieType(),$categorie);
-
-        $editedForm->handleRequest($request);
-
-        if($editedForm->isValid())
+        if($categorie->isRemovable())
         {
+            /** @var EntityManager $em */
             $em = $this->getDoctrine()->getManager();
+            $em->remove($categorie);
             $em->flush();
-
+            $this->get('session')->getFlashBag()->add(
+                'info',
+                'Categorie supprimée'
+            );
         }
-
-        return $this->redirect($this->generateUrl('structure_gestion_categorie'));
+        else
+        {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                'Impossible de supprimer cette categorie'
+            );
+        }
+        return $this->redirect($this->generateUrl('categorie_liste'));
     }
+
+
+
 
 
 }
