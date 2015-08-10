@@ -4,8 +4,8 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Interne\FinancesBundle\Entity\DebiteurInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 //FinancesBundle
@@ -89,20 +89,6 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
      * @ORM\Column(name="validity", type="integer")
      */
     private $validity;
-
-
-    /**
-     * Return the class name
-     * @return string
-     */
-    static public function className(){
-        return __CLASS__;
-    }
-    /*
-     * ====== FinancesBundle =======
-     */
-
-
     /**
      * @var ArrayCollection
      *
@@ -110,9 +96,9 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
      *                inversedBy="membre", cascade={"persist","remove"})
      */
     private $debiteur;
-
-
-
+    /*
+     * ====== FinancesBundle =======
+     */
     /**
      * Cette propriété détermine si les cérances détenues par ce membre sont facturées
      * à la famille ou au membre lui même.
@@ -123,11 +109,6 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
      *
      */
     private $envoiFacture = 'Membre';
-
-
-    /*
-     * ===== History Bundle ====
-     */
     /**
      * @var ArrayCollection
      *
@@ -137,13 +118,8 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
 
 
     /*
-     * ===== MatBundle
-     *
-    /*
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Membre", mappedBy="membre", cascade={"persist", "remove"})
-     *
-    private $bookings;
-    //*/
+     * ===== History Bundle ====
+     */
 
     /**
      * Constructor
@@ -154,7 +130,7 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     public function __construct($prenom = '', $nom = '')
     {
         $this->inscription = new \Datetime();
-        $this->naissance   = new \Datetime();
+        $this->naissance = new \Datetime();
 
         /*
          * FinancesBundle
@@ -168,6 +144,25 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
         $this->famille = new Famille($nom);
     }
 
+
+    /*
+     * ===== MatBundle
+     *
+    /*
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Membre", mappedBy="membre", cascade={"persist", "remove"})
+     *
+    private $bookings;
+    //*/
+
+    /**
+     * Return the class name
+     * @return string
+     */
+    static public function className()
+    {
+        return __CLASS__;
+    }
+
     /**
      * Représentation string du membre
      * On ajoute le numéro BS pour le log de données sur lequel on effectuera des recherches
@@ -175,7 +170,7 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
      * @return string
      */
     public function __toString() {
-        return ucfirst($this->getPrenom() . ' ' . $this->getNom());
+        return $this->getPrenom() . ' ' . $this->getNom();
     }
 
     /**
@@ -186,7 +181,7 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     public function getNom()
     {
         if ($this->getFamille() != null)
-            return $this->getFamille()->getNom();
+            return ucwords($this->getFamille()->getNom());
         else
             return "Pas dans une famille...";
     }
@@ -617,16 +612,12 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     }
 
     /**
-     * Set debiteur
-     *
-     * @param \Interne\FinancesBundle\Entity\DebiteurMembre $debiteur
-     *
+     * @param \Interne\FinancesBundle\Entity\Creance $creance
      * @return Membre
      */
-    public function setDebiteur($debiteur = null)
+    public function addCreance($creance)
     {
-        $this->debiteur = $debiteur;
-        $debiteur->setMembre($this);
+        $this->getDebiteur()->addCreance($creance);
         return $this;
     }
 
@@ -641,12 +632,16 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     }
 
     /**
-     * @param \Interne\FinancesBundle\Entity\Creance $creance
+     * Set debiteur
+     *
+     * @param \Interne\FinancesBundle\Entity\DebiteurMembre $debiteur
+     *
      * @return Membre
      */
-    public function addCreance($creance)
+    public function setDebiteur($debiteur = null)
     {
-        $this->getDebiteur()->addCreance($creance);
+        $this->debiteur = $debiteur;
+        $debiteur->setMembre($this);
         return $this;
     }
 

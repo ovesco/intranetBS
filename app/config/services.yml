@@ -40,7 +40,7 @@ services:
             - @kernel
 
     list_container:
-        class: AppBundle\Utils\ListRender\ListContainer
+        class: AppBundle\Utils\ListRenderer\ListContainer
         arguments:
             - @twig
 
