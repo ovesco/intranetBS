@@ -12,6 +12,13 @@ use AppBundle\Entity\Telephone;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+/**
+ * Class FamilleTest
+ * @package AppBundle\Test\Entity
+ *
+ * @group entity
+ * @groupe app_bundle
+ */
 class FamilleTest extends WebTestCase
 {
     /**

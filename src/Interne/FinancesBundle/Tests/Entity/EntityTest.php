@@ -3,7 +3,14 @@
 namespace Interne\FinancesBundle\Entity;
 
 
-
+/**
+ * Class EntityTest
+ * @package Interne\FinancesBundle\Entity
+ *
+ * @group finances_bundle
+ * @group entity_finances_bundle
+ * @group entity
+ */
 class EntityTest extends \PHPUnit_Framework_TestCase
 {
     public $creance;

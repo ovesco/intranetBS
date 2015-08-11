@@ -12,6 +12,14 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Doctrine\ORM\EntityManager;
 
+/**
+ * Class RoutingTest
+ * @package Interne\FinancesBundle\Test\Controller
+ *
+ * @group finances_bundle
+ * @group routing_finances_bundle
+ * @group routing
+ */
 class RoutingTest extends WebTestCase
 {
 

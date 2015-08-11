@@ -12,6 +12,13 @@ use AppBundle\Entity\ObtentionDistinction;
 use AppBundle\Entity\Personne;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+/**
+ * Class MembreTest
+ * @package AppBundle\Test\Entity
+ *
+ * @group entity
+ * @group app_bundle
+ */
 class MembreTest extends WebTestCase
 {
 
