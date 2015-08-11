@@ -158,7 +158,6 @@ class Famille implements ExpediableInterface,ClassNameInterface
      */
     public function __toString()
     {
-
         $string = "Les " . $this->getNom();
 
         if ($this->getContact() != null)
@@ -168,9 +167,7 @@ class Famille implements ExpediableInterface,ClassNameInterface
             }
         }
 
-
         return $string;
-
     }
 
     /**
@@ -351,20 +348,13 @@ class Famille implements ExpediableInterface,ClassNameInterface
         return $this->membres;
     }
 
-
-
-
     /**
-     * Set debiteur
-     *
-     * @param \Interne\FinancesBundle\Entity\DebiteurFamille $debiteur
-     *
+     * @param \Interne\FinancesBundle\Entity\Creance $creance
      * @return Famille
      */
-    public function setDebiteur($debiteur = null)
+    public function addCreance($creance)
     {
-        $this->debiteur = $debiteur;
-        $debiteur->setFamille($this);
+        $this->getDebiteur()->addCreance($creance);
         return $this;
     }
 
@@ -379,12 +369,16 @@ class Famille implements ExpediableInterface,ClassNameInterface
     }
 
     /**
-     * @param \Interne\FinancesBundle\Entity\Creance $creance
+     * Set debiteur
+     *
+     * @param \Interne\FinancesBundle\Entity\DebiteurFamille $debiteur
+     *
      * @return Famille
      */
-    public function addCreance($creance)
+    public function setDebiteur($debiteur = null)
     {
-        $this->getDebiteur()->addCreance($creance);
+        $this->debiteur = $debiteur;
+        $debiteur->setFamille($this);
         return $this;
     }
 

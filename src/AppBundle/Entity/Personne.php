@@ -56,7 +56,7 @@ abstract class Personne
      */
     public function getPrenom()
     {
-        return $this->prenom;
+        return ucwords($this->prenom);
     }
 
     /**
@@ -67,7 +67,7 @@ abstract class Personne
      */
     public function setPrenom($prenom)
     {
-        $this->prenom = $prenom;
+        $this->prenom = ucwords($prenom);
 
         return $this;
     }
