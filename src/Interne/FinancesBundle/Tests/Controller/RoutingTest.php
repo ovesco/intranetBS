@@ -39,11 +39,11 @@ class RoutingTest extends WebTestCase
     /**
      * @dataProvider urlProvider
      */
-    public function testPageIsSuccessful($url)
+    public function testPageIsSuccessful($route)
     {
-        $this->client->request('GET', $url);
-        $this->assertTrue($this->client->getResponse()->isSuccessful());
-        echo PHP_EOL,'Testing route: '.$url,PHP_EOL;
+        $this->client->request('GET', $route);
+        $this->assertTrue($this->client->getResponse()->isSuccessful(),'Test route: '.$route);
+        //echo PHP_EOL,'Testing route: '.$route,PHP_EOL;
     }
 
     public function urlProvider()
@@ -57,20 +57,20 @@ class RoutingTest extends WebTestCase
         $membre = $em->getRepository('AppBundle:Membre')->findOneBy(array());
         $famille = $em->getRepository('AppBundle:Famille')->findOneBy(array());
 
-        $urls = array();
+        $routes = array();
 
-        $urls = array_merge($urls,$this->creanceUrl($em,$membre));
-        $urls = array_merge($urls,$this->creanceUrl($em,$famille));
-        $urls = array_merge($urls,$this->factureUrl($em,$membre));
-        $urls = array_merge($urls,$this->factureUrl($em,$famille));
-        $urls = array_merge($urls,$this->payementUrl($em));
-        $urls = array_merge($urls,$this->debiteurUrl($membre));
-        $urls = array_merge($urls,$this->debiteurUrl($famille));
+        $routes = array_merge($routes,$this->creanceRoute($em,$membre));
+        $routes = array_merge($routes,$this->creanceRoute($em,$famille));
+        $routes = array_merge($routes,$this->factureRoute($em,$membre));
+        $routes = array_merge($routes,$this->factureRoute($em,$famille));
+        $routes = array_merge($routes,$this->payementRoute($em));
+        $routes = array_merge($routes,$this->debiteurRoute($membre));
+        $routes = array_merge($routes,$this->debiteurRoute($famille));
 
-        return $urls;
+        return $routes;
     }
 
-    private function creanceUrl(EntityManager $em, $ownerEntity){
+    private function creanceRoute(EntityManager $em, $ownerEntity){
 
         $creance = new Creance();
         $creance->setTitre('WebTestCase');
@@ -91,7 +91,7 @@ class RoutingTest extends WebTestCase
         );
     }
 
-    private function factureUrl(EntityManager $em, $ownerEntity){
+    private function factureRoute(EntityManager $em, $ownerEntity){
         $facture = new Facture();
         $facture->setDateCreation(new \DateTime());
 
@@ -124,7 +124,7 @@ class RoutingTest extends WebTestCase
         );
     }
 
-    private function payementUrl(EntityManager $em){
+    private function payementRoute(EntityManager $em){
 
         $payement = new Payement();
         $payement->setDate(new \DateTime());
@@ -148,7 +148,7 @@ class RoutingTest extends WebTestCase
         );
     }
 
-    private function debiteurUrl($ownerEntity)
+    private function debiteurRoute($ownerEntity)
     {
         $id = $ownerEntity->getDebiteur()->getId();
         return array(

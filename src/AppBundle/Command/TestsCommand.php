@@ -13,7 +13,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Filesystem;
 
 
-class TestCommand extends ContainerAwareCommand
+class TestsCommand extends ContainerAwareCommand
 {
 
     private $output;
@@ -25,7 +25,7 @@ class TestCommand extends ContainerAwareCommand
             ->setName('tests')
             ->setDescription('Tests sur l\'application')
             ->addArgument('group', InputArgument::OPTIONAL, 'group:groupeName')
-            ->addOption('log',null,InputOption::VALUE_NONE,'log messages in file')
+            ->addOption('log',null,InputOption::VALUE_NONE,'log messages in file: app/logs/TestsCommand.log')
         ;
 
     }
@@ -41,61 +41,6 @@ class TestCommand extends ContainerAwareCommand
         {
             $group = explode('group:',$groupArg)[1];
         }
-
-
-
-        /*
-         * TODO finir ce bout de code (uffer)
-         *
-        $appDir = $this->getContainer()->get('kernel')->getRootDir();
-
-        $srcDir = $appDir.'/../src';
-
-
-        $testFiles = array();
-
-
-        $finder = new Finder();
-        $finder->files()->name('*Test.php')->in($srcDir);
-        foreach ($finder as $file) {
-            $testFiles[] = $file->getRelativePathname();//$file->getRealpath();
-            //$testFiles[] = $file->getRealpath();
-        }
-
-
-        foreach($testFiles as $file)
-        {
-            $this->output('src/'.$file,'info');
-
-            $message = shell_exec("php /usr/local/bin/phpunit --group bidon -d memory_limit=-1 -c app");
-
-            //$message = shell_exec("php /usr/local/bin/phpunit ./src/AppBundle/Tests/Controller/MembreControllerTest.php");
-
-            echo $message;
-
-            break;
-
-
-
-            /*$this->output($message,'comment');
-
-
-            $pattern = '/OK/';
-            $ok = preg_match($pattern,$message);
-            $pattern = '/FAILURES/';
-            $failures = preg_match($pattern,$message);
-            if($ok && !$failures)
-            {
-                $this->output->writeln('<info>Test passed!!!</info>');
-            }
-            else
-            {
-                $this->output->writeln('<error>Error in tests...</error>');
-            }
-
-
-        }*/
-
 
         //clear cache of env test
         $cache = shell_exec("php app/console cache:clear --env=test --no-debug");
@@ -124,7 +69,7 @@ class TestCommand extends ContainerAwareCommand
 
         if ($input->getOption('log')) {
             $rootDir = $this->getContainer()->getParameter('kernel.root_dir');
-            $logFile = $rootDir.'/logs/TestCommand.log';
+            $logFile = $rootDir.'/logs/TestsCommand.log';
             $fs = new Filesystem();
             $fs->dumpFile($logFile,$message);
         }
@@ -137,11 +82,11 @@ class TestCommand extends ContainerAwareCommand
         $failures = preg_match($pattern,$message);
         if($ok && !$failures)
         {
-            $this->output->writeln('<info>Test passed!!!</info>');
+            $this->output('Test passed!!!','info');
         }
         else
         {
-            $this->output->writeln('<error>Error in tests...</error>');
+            $this->output('Error in tests...','error');
         }
 
         $this->output('Finish tests','info');

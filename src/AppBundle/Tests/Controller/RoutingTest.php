@@ -32,13 +32,13 @@ class RoutingTest extends WebTestCase
     /**
      * @dataProvider urlProvider
      */
-    public function testPageIsSuccessful($url)
+    public function testPageIsSuccessful($route)
     {
 
-        echo PHP_EOL,'start testing route: '.$url,PHP_EOL;
-        $this->client->request('GET', $url);
-        $this->assertTrue($this->client->getResponse()->isSuccessful());
-        echo PHP_EOL,'end testing route: '.$url,PHP_EOL;
+        //echo PHP_EOL,'start testing route: '.$route,PHP_EOL;
+        $this->client->request('GET', $route);
+        $this->assertTrue($this->client->getResponse()->isSuccessful(),'Test route: '.$route);
+        //echo PHP_EOL,'end testing route: '.$route,PHP_EOL;
     }
 
     public function urlProvider()
@@ -49,30 +49,30 @@ class RoutingTest extends WebTestCase
         /** @var EntityManager $em */
         $em = $this->client->getContainer()->get('doctrine.orm.entity_manager');
 
-        $urls = array();
-        //$urls = array_merge($urls,$this->urlAppController());
+        $routes = array();
+        //$routes = array_merge($routes,$this->routeAppController());
 
-        //$urls = array_merge($urls,$this->urlAttributionController($em));//error
+        //$routes = array_merge($routes,$this->routeAttributionController($em));//error
 
-        $urls = array_merge($urls,$this->urlBugReportController());//ok
+        $routes = array_merge($routes,$this->routeBugReportController());//ok
 
-        $urls = array_merge($urls,$this->urlMembreController()); //ok
-        $urls = array_merge($urls,$this->urlStructureController()); //ok
-        //$urls = array_merge($urls,$this->urlCategorieController($em)); //error
+        $routes = array_merge($routes,$this->routeMembreController()); //ok
+        $routes = array_merge($routes,$this->routeStructureController()); //ok
+        //$routes = array_merge($routes,$this->routeCategorieController($em)); //error
 
 
 
-        return $urls;
+        return $routes;
     }
 
-    private function urlAppController()
+    private function routeAppController()
     {
         return array(
             array('/interne'),
         );
     }
 
-    private function urlAttributionController(EntityManager $em)
+    private function routeAttributionController(EntityManager $em)
     {
 
         $attribution = $em->getRepository('AppBundle:Attribution')->findOneBy(array());
@@ -101,21 +101,21 @@ class RoutingTest extends WebTestCase
         );
     }
 
-    private function urlBugReportController()
+    private function routeBugReportController()
     {
         return array(
             array('/interne/bug_report/form'),
         );
     }
 
-    private function urlMembreController()
+    private function routeMembreController()
     {
         return array(
             array('/interne/membre/ajouter'),
         );
     }
 
-    private function urlStructureController()
+    private function routeStructureController()
     {
         return array(
             array('/interne/structure/gestion_fonction'),
@@ -124,7 +124,7 @@ class RoutingTest extends WebTestCase
         );
     }
 
-    private function urlCategorieController(EntityManager $em)
+    private function routeCategorieController(EntityManager $em)
     {
         $categorie = new Categorie('Webtestcase');
         $em->persist($categorie);
