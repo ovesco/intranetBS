@@ -14,10 +14,6 @@ use Gedmo\Tool\Wrapper\AbstractWrapper;
 class DoctrineLoggableListener extends LoggableListener {
 
 
-    public function __construct() {
-
-    }
-
     /**
      * Set username for identification
      *
