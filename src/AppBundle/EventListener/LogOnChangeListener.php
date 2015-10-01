@@ -158,7 +158,7 @@ class LogOnChangeListener {
                  * ICI :
                  * On récupère l'entité "racine" de celle qui subit la modification, un membre ou une famille
                  * TODO : Faire un truc mieux si possible
-                 */
+
                 if($entity instanceof Membre)
                     $path           = "membre." . $entity->getId();
                 elseif($entity instanceof Famille)
@@ -199,6 +199,7 @@ class LogOnChangeListener {
 
                     $uow->computeChangeSets();
                 }
+                */
 
             }
 

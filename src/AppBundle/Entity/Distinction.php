@@ -3,12 +3,14 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Distinction
  *
  * @ORM\Table(name="app_distinctions")
  * @ORM\Entity
+ * @Gedmo\Loggable
  */
 class Distinction
 {
@@ -24,19 +26,20 @@ class Distinction
     /**
      * @var string
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="nom", type="string", length=255)
      */
     private $nom;
 
     /**
-     * @var ArrayCollection 
+     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\ObtentionDistinction", mappedBy="distinction")
      */
     private $obtentionDistinctions;
     
     /**
      * @var text
-     * 
+     * @Gedmo\Versioned
      * @ORM\Column(name="remarques", type="text", nullable=true)
      */
     private $remarques;

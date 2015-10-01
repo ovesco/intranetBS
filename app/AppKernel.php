@@ -31,7 +31,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
 
-            new JMS\SerializerBundle\JMSSerializerBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle(), //Le système de serialization
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),//Pour le routing javascript
             new FOS\ElasticaBundle\FOSElasticaBundle(),//Elasitca
             new FOS\RestBundle\FOSRestBundle(),//Pour les applications REST

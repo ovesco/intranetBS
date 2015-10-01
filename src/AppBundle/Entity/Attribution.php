@@ -2,12 +2,14 @@
 
 namespace AppBundle\Entity;
 
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Attribution
  *
  * @ORM\Table(name="app_attributions")
+ * @Gedmo\Loggable
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks()
  */
@@ -26,6 +28,7 @@ class Attribution
     /**
      * @var \DateTime
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="dateDebut", type="date")
      */
     private $dateDebut;
@@ -33,13 +36,15 @@ class Attribution
     /**
      * @var \DateTime
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="dateFin", type="date", nullable=true)
      */
     private $dateFin;
     
     /**
      * @var Groupe $groupe
-     * 
+     *
+     * @Gedmo\Versioned
      * @ORM\ManyToOne(targetEntity="Groupe", inversedBy="attributions")
      * @ORM\JoinColumn(name="groupe_id", referencedColumnName="id")
      */
@@ -47,7 +52,7 @@ class Attribution
      
     /**
      * @var Membre $membre
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Membre", inversedBy="attributions")
      * @ORM\JoinColumn(name="membre_id", referencedColumnName="id", onDelete="CASCADE")
      */
@@ -55,7 +60,8 @@ class Attribution
      
     /**
      * @var Fonction $fonction
-     * 
+     *
+     * @Gedmo\Versioned
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Fonction")
      * @ORM\JoinColumn(name="fonction_id", referencedColumnName="id")
      */
@@ -64,6 +70,7 @@ class Attribution
     /**
      * @var String
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="remarques", type="text", nullable=true)
      */
     private $remarques;

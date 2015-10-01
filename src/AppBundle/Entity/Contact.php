@@ -5,11 +5,13 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Contact
  *
  * @ORM\Table(name="app_contact")
+ * @Gedmo\Loggable
  * @ORM\Entity
  */
 class Contact
@@ -26,6 +28,7 @@ class Contact
 
 
     /**
+     * @Gedmo\Versioned
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Adresse", mappedBy="contact", cascade={"persist"})
      * @ORM\JoinColumn(name="adresse_id", referencedColumnName="id", onDelete="SET NULL")
      */

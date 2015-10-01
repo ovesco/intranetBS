@@ -3,11 +3,13 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Adresse
  *
+ * @Gedmo\Loggable
  * @ORM\Table(name="app_adresses")
  * @ORM\Entity
  */
@@ -24,6 +26,7 @@ class Adresse
 
     /**
      * @var boolean
+     * @Gedmo\Versioned
      * @ORM\Column(name="expediable", type="boolean")
      */
     private $expediable;
@@ -31,6 +34,7 @@ class Adresse
     /**
      * @var string
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="rue", type="string", length=255)
      */
     private $rue;
@@ -38,6 +42,7 @@ class Adresse
     /**
      * @var integer
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="npa", type="integer")
      */
     private $npa;
@@ -45,6 +50,7 @@ class Adresse
     /**
      * @var string
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="localite", type="string", length=255)
      */
     private $localite;
@@ -52,7 +58,8 @@ class Adresse
     
     /**
      * @var text
-     * 
+     *
+     * @Gedmo\Versioned
      * @ORM\Column(name="remarques", type="text", nullable=true)
      */
      private $remarques;
