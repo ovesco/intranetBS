@@ -40,7 +40,7 @@ class ListContainer
 
         $list->addColumn(
             new Column(
-                'Prenom',
+                'Prénom',
                 function ($item) {
                     return $item->getPrenom();
                 }
