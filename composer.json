@@ -31,7 +31,9 @@
         "friendsofsymfony/rest-bundle": "^1.6",
         "knplabs/knp-snappy-bundle": "dev-master",
         "coresphere/console-bundle": "dev-master",
-        "phpunit/phpunit": "4.7.6"
+        "phpunit/phpunit": "4.7.6",
+        "gedmo/doctrine-extensions":"dev-master"
+
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

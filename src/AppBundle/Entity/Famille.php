@@ -4,15 +4,15 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Interne\FinancesBundle\Entity\CreanceToFamille;
-use Interne\FinancesBundle\Entity\FactureToFamille;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 //FinancesBundle
 
 /**
  * Famille
  *
+ * @Gedmo\Loggable
  * @ORM\Entity
  * @ORM\Table(name="app_familles")
  */
@@ -34,6 +34,7 @@ class Famille implements ExpediableInterface,ClassNameInterface
     private $membres;
 
     /**
+     * @Gedmo\Versioned
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Pere", mappedBy="famille", cascade={"persist"})
      * @ORM\JoinColumn(name="pere_id", referencedColumnName="id", onDelete="SET NULL")
      */
@@ -41,6 +42,7 @@ class Famille implements ExpediableInterface,ClassNameInterface
 
     /**
      *
+     * @Gedmo\Versioned
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Mere", mappedBy="famille", cascade={"persist"})
      * @ORM\JoinColumn(name="mere_id", referencedColumnName="id", onDelete="SET NULL")
      */
@@ -49,6 +51,7 @@ class Famille implements ExpediableInterface,ClassNameInterface
     /**
      * @var string
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="nom", type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Length(min = "2")
@@ -58,11 +61,13 @@ class Famille implements ExpediableInterface,ClassNameInterface
     /**
      * @var integer
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="validity", type="integer")
      */
     private $validity;
 
     /**
+     * @Gedmo\Versioned
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Contact", cascade={"persist"})
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
      */

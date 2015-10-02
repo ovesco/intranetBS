@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Membre;
 use AppBundle\Utils\ListRenderer\ListContainer;
 use AppBundle\Utils\ListRenderer\ListRenderer;
 use Doctrine\ORM\EntityManager;
@@ -43,6 +44,22 @@ class AppController extends Controller
         $list->setName('un_nom');
 
         return new Response($list->render());
+    }
+
+    /**
+     * @route("test2")
+     */
+    public function test2() {
+
+        $em = $this->getDoctrine()->getManager();
+        $article = $em->find('AppBundle:Membre', 1 /*article id*/);
+        $article->setPrenom('Guillaumeus');
+        $em->persist($article);
+        $em->flush();
+
+        echo $article->getPrenom(); // prints "my title"
+
+        return new Response();
     }
 
 }

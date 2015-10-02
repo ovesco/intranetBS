@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Interne\FinancesBundle\Entity\DebiteurInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 
 //FinancesBundle
@@ -14,6 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Membre
  *
  * @ORM\Entity
+ * @Gedmo\Loggable
  * @ORM\Table(name="app_membres")
  */
 class Membre extends Personne implements ExpediableInterface,DebiteurInterface
@@ -24,6 +26,7 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Famille", inversedBy="membres", cascade={"persist"}, fetch="EAGER")
      * @ORM\JoinColumn(name="famille_id", referencedColumnName="id")
+     * @Gedmo\Versioned
      */
     private $famille;
 
@@ -44,6 +47,7 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     /**
      * @var \Datetime
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="naissance", type="date")
      */
     private $naissance;
@@ -51,6 +55,7 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     /**
      * @var integer
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="numero_bs", type="integer", nullable=true)
      */
     private $numeroBs;
@@ -58,6 +63,7 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     /**
      * @var string
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="numero_avs", type="string", length=255, nullable=true)
      */
     private $numeroAvs;
@@ -65,6 +71,7 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     /**
      * @var string
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="statut", type="string", length=255, nullable=true)
      */
     private $statut;
@@ -72,6 +79,7 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     /**
      * @var \Datetime
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="inscription", type="date")
      */
     private $inscription;
@@ -79,6 +87,7 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     /**
      * @var string
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="remarques", type="text", nullable=true)
      */
     private $remarques;
@@ -86,16 +95,12 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     /**
      * @var integer
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="validity", type="integer")
      */
     private $validity;
-    /**
-     * @var ArrayCollection
-     *
-     * @ORM\OneToOne(targetEntity="Interne\FinancesBundle\Entity\DebiteurMembre",
-     *                inversedBy="membre", cascade={"persist","remove"})
-     */
-    private $debiteur;
+
+
     /*
      * ====== FinancesBundle =======
      */
@@ -109,6 +114,15 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
      *
      */
     private $envoiFacture = 'Membre';
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToOne(targetEntity="Interne\FinancesBundle\Entity\DebiteurMembre",
+     *                inversedBy="membre", cascade={"persist","remove"})
+     */
+    private $debiteur;
+
     /**
      * @var ArrayCollection
      *

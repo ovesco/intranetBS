@@ -5,11 +5,13 @@ namespace AppBundle\Entity;
 use AppBundle\Form\GroupeType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Categorie
  *
  * @ORM\Table(name="app_categorie")
+ * @Gedmo\Loggable
  * @ORM\Entity
  */
 class Categorie
@@ -26,6 +28,7 @@ class Categorie
     /**
      * @var string
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="nom", type="string", length=255)
      */
     private $nom;
@@ -33,6 +36,7 @@ class Categorie
     /**
      * @var string
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;

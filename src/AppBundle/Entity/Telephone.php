@@ -4,11 +4,14 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
+
 
 /**
  * Telephone
  *
  * @ORM\Table(name="app_telephone")
+ * @Gedmo\Loggable
  * @ORM\Entity
  */
 class Telephone
@@ -26,6 +29,7 @@ class Telephone
      * @var string
      *
      * @ORM\Column(name="telephone", type="string", length=255)
+     * @Gedmo\Versioned
      * @Assert\NotBlank()
      */
     private $telephone;
@@ -33,6 +37,7 @@ class Telephone
     /**
      * @var string
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="remarques", type="text", nullable=true)
      */
     private $remarques;
@@ -40,6 +45,7 @@ class Telephone
     /**
      * @var Contact
      *
+     * @Gedmo\Versioned
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Contact", inversedBy="telephones")
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="CASCADE")
      */

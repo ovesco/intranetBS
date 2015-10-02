@@ -4,11 +4,13 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Model
  *
  * @ORM\Table(name="app_model")
+ * @Gedmo\Loggable
  * @ORM\Entity
  */
 class Model
@@ -25,12 +27,14 @@ class Model
     /**
      * @var string
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="nom", type="string", length=255)
      */
     private $nom;
 
     /**
      * @ORM\OneToOne(targetEntity="Fonction")
+     * @Gedmo\Versioned
      * @ORM\JoinColumn(name="fonctionChef_id", referencedColumnName="id", nullable=true)
      */
     private $fonctionChef;
@@ -53,6 +57,22 @@ class Model
     private $categories;
 
     /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Groupe", mappedBy="model", cascade={"persist"})
+     */
+    private $groupes;
+
+    /**
+     * @var boolean
+     * @Gedmo\Versioned
+     * @ORM\Column(name="affichage_effectifs", type="boolean")
+     */
+    private $affichageEffectifs;
+
+
+
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -61,21 +81,6 @@ class Model
         $this->fonctions = new ArrayCollection();
         $this->categories = new ArrayCollection();
     }
-
-
-
-    /**
-     * @var ArrayCollection 
-     * 
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Groupe", mappedBy="model", cascade={"persist"})
-     */
-    private $groupes;
-
-    /**
-     * @var boolean
-     * @ORM\Column(name="affichage_effectifs", type="boolean")
-     */
-    private $affichageEffectifs;
 
 
     /**
