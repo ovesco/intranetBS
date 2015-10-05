@@ -13,7 +13,7 @@
         </div>
     {% endif %}
 
-    <table class="ui table membre-datatable">
+    <table class="ui table{% if list.datatable %} membre-datatable{% endif %} {{ list.style }}">
 
         <thead>
         <tr>
@@ -37,10 +37,10 @@
                 {% for column in list.columns %}
                     <td>
                         {% if column.twigFilters is null %}
-                            {{ column.render(item) }}
+                            {{ column.render(item)|raw }}
                         {% else %}
                             {% set value = column.render(item) %}
-                            {{ value|apply_filters(column.twigFilters) }}
+                            {{ value|apply_filters(column.twigFilters)|raw }}
                         {% endif %}
                     </td>
                 {% endfor %}

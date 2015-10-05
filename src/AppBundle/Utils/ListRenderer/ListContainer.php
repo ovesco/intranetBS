@@ -2,7 +2,52 @@
 
 namespace AppBundle\Utils\ListRenderer;
 
+use AppBundle\Utils\ListRenderer\ListModels\ListModelsAttributions;
+use AppBundle\Utils\ListRenderer\ListModels\ListModelsDistinctions;
+use AppBundle\Utils\ListRenderer\ListModels\ListModelsMembre;
+use Interne\FinancesBundle\Utils\ListModels\ListModelsCreances;
+use Interne\FinancesBundle\Utils\ListModels\ListModelsFactures;
 use Twig_Environment;
+
+
+class Model
+{
+    const Membre = 'Membre';
+    const MembreFraterie = 'MembreFraterie';
+    const Attribution = 'Attribution';
+    const Distinction = 'Distinction';
+    const Creance = 'Creance';
+    const Facture = 'Facture';
+
+    /**
+     * @var Model
+     * @access private
+     * @static
+     */
+    private static $_instance = null;
+
+    private function __construct()
+    {
+    }
+
+    /**
+     * Méthode qui créé l'unique instance de la classe
+     * si elle n'existe pas encore puis la retourne.
+     *
+     * @param void
+     * @return Model
+     */
+    public static function getInstance()
+    {
+
+        if (is_null(self::$_instance)) {
+            self::$_instance = new Model();
+        }
+
+        return self::$_instance;
+    }
+}
+
 
 /**
  * Cette class est un service disponible dans chaque controller.
@@ -17,9 +62,13 @@ class ListContainer
     /** @var Twig_Environment */
     private $twig;
 
+    private $definedModels;
+
     public function __construct(Twig_Environment $twig)
     {
         $this->twig = $twig;
+
+        $this->definedModels = Model::getInstance();
     }
 
     /**
@@ -32,64 +81,33 @@ class ListContainer
         return new ListRenderer($this->twig);
     }
 
-    public function getMemberListRenderer($items)
+    public function getModel($type, $items)
     {
-        $list = new ListRenderer($this->twig, $items);
+        switch ($type) {
+            case Model::Membre:
+                return ListModelsMembre::getDefault($this->twig, $items);
+                break;
 
-        $list->setSearchBar(true);
+            case Model::MembreFraterie:
+                return ListModelsMembre::getFraterie($this->twig, $items);
+                break;
 
-        $list->addColumn(
-            new Column(
-                'Prénom',
-                function ($item) {
-                    return $item->getPrenom();
-                }
-            )
-        );
+            case Model::Attribution:
+                return ListModelsAttributions::getDefault($this->twig, $items);
+                break;
 
-        $list->addColumn(
-            new Column(
-                'Nom',
-                function ($item) {
-                    return $item->getNom();
-                }
-            )
-        );
+            case Model::Distinction:
+                return ListModelsDistinctions::getDefault($this->twig, $items);
+                break;
 
+            case Model::Creance:
+                return ListModelsCreances::getDefault($this->twig, $items);
+                break;
 
-        $list->addColumn(
-            new Column(
-                'Fonction',
-                function ($item) {
-                    return $item->getActiveAttribution()->getFonction();
-                }
-            )
-        );
+            case Model::Facture:
+                return ListModelsFactures::getDefault($this->twig, $items);
+                break;
 
-        $list->addColumn(
-            new Column(
-                'Num. BS',
-                function ($item) {
-                    return $item->getNumeroBs();
-                }
-            )
-        );
-
-
-        $list->addColumn(
-            new Column(
-                'Naissance',
-                function ($item) {
-                    return $item->GetNaissance();
-                },
-                'date(global_date_format)'
-            )
-        );
-
-        $list->addAction(new ActionLigne('Afficher', 'zoom icon popupable', 'event_membre_show_page'));
-        $list->addAction(new ActionLigne('Supprimer', 'delete icon popupable', 'event_liste_delete_element'));
-
-        return $list->render();
+        }
     }
-
 }

@@ -140,7 +140,7 @@
                         </div>
 
                         <div class="ui bottom attached segment">
-                            {% include 'AppBundle:Famille:liste_fratrie.html.twig' with {'fratrie' : membre.famille.membres, 'membre' : membre} %}
+                            {{ list_container.getModel(constant('AppBundle\\Utils\\ListRenderer\\Model::MembreFraterie'), membre.famille.membres).render|raw }}
                         </div>
 
                     </div> <!-- /informations famille -->
@@ -162,7 +162,7 @@
                         </div>
 
                         <div class="ui bottom attached segment">
-                            {% include 'AppBundle:Attribution:liste_attributions.html.twig' with {'attributions' : membre.attributions} %}
+                            {{ list_container.getModel(constant('AppBundle\\Utils\\ListRenderer\\Model::Attribution'), membre.attributions).render|raw }}
                         </div>
                     </div>
 
@@ -177,7 +177,7 @@
                         </div>
 
                         <div class="ui bottom attached segment">
-                            {% include 'AppBundle:ObtentionDistinction:liste_obtention_distinction.html.twig' with {'distinctions' : membre.distinctions} %}
+                            {{ list_container.getModel(constant('AppBundle\\Utils\\ListRenderer\\Model::Distinction'), membre.distinctions).render|raw }}
                         </div>
 
                     </div>
