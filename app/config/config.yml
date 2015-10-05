@@ -37,7 +37,7 @@ twig:
     strict_variables: "%kernel.debug%"
     globals:
         parametreService: "@parametres"
-        #ListRenderer: "@listRenderer"
+        list_container: "@list_container"
     form:
         resources:
             - 'Templates/Form/Widgets/default_widgets.html.twig'

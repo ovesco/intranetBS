@@ -118,7 +118,7 @@
                 </div>
 
                 <div class="ui bottom attached segment">
-                    {{ macro.listeMembres('liste_membres', groupe.members) }}
+                    {{ list_container.getMemberListRenderer(groupe.members)|raw }}
                 </div>
 
                 {% if groupe.model.affichageEffectifs %}
@@ -136,7 +136,7 @@
                         </div>
 
                         <div class="ui bottom attached segment">
-                            {{ macro.listeMembres('liste_membres', groupeEnfant.members) }}
+                            {{ list_container.getMemberListRenderer(groupeEnfant.members)|raw }}
                         </div>
                     {% endfor %}
                 {% endif %}

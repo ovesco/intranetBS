@@ -8,8 +8,8 @@ use Gedmo\Tool\Wrapper\AbstractWrapper;
 
 
 /**
- * Override du loggableListener par défaut afin de permettre la validation de modifications,
- * et de garder une trace de la personne qui a modifié.
+ * Override du loggableListener par dï¿½faut afin de permettre la validation de modifications,
+ * et de garder une trace de la personne qui a modifiï¿½.
  */
 class DoctrineLoggableListener extends LoggableListener {
 
@@ -40,8 +40,8 @@ class DoctrineLoggableListener extends LoggableListener {
 
 
     /**
-     * On surcharge également la méthode qui génère la custom logEntry afin de
-     * générer la notre OKLM
+     * On surcharge ï¿½galement la mï¿½thode qui gï¿½nï¿½re la custom logEntry afin de
+     * gï¿½nï¿½rer la notre OKLM
      * @param string $action
      * @param object $object
      * @param LoggableAdapter $ea
@@ -66,7 +66,7 @@ class DoctrineLoggableListener extends LoggableListener {
             $logEntry->setAction($action);
             $logEntry->setUsername($this->username);
             $logEntry->setObjectClass($meta->name);
-            $logEntry->setUser(null);
+            //$logEntry->setUser(null);
             $logEntry->setStatus(CustomLogEntry::$WAITING);
             $logEntry->setLoggedAt();
 

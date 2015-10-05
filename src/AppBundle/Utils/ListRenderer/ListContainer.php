@@ -32,9 +32,9 @@ class ListContainer
         return new ListRenderer($this->twig);
     }
 
-    public function getMemberListRenderer()
+    public function getMemberListRenderer($items)
     {
-        $list = new ListRenderer($this->twig);
+        $list = new ListRenderer($this->twig, $items);
 
         $list->setSearchBar(true);
 
@@ -75,20 +75,21 @@ class ListContainer
             )
         );
 
+
         $list->addColumn(
             new Column(
                 'Naissance',
                 function ($item) {
                     return $item->GetNaissance();
                 },
-                'date("d.m.Y")'
+                'date(global_date_format)'
             )
         );
 
-        $list->addAction(new ActionLigne('Afficher', 'zoom icon popupable', 'event_membre_page'));
+        $list->addAction(new ActionLigne('Afficher', 'zoom icon popupable', 'event_membre_show_page'));
         $list->addAction(new ActionLigne('Supprimer', 'delete icon popupable', 'event_liste_delete_element'));
 
-        return $list;
+        return $list->render();
     }
 
 }

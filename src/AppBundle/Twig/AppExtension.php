@@ -2,14 +2,14 @@
 
 namespace AppBundle\Twig;
 
-use AppBundle\Entity\Membre;
 use AppBundle\Entity\Famille;
-use AppBundle\Entity\Pere;
+use AppBundle\Entity\Membre;
 use AppBundle\Entity\Mere;
+use AppBundle\Entity\Pere;
 use AppBundle\Entity\Personne;
 use ReflectionClass;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Cette class est un container qui contient tout les filtres et autre ajout
@@ -21,6 +21,9 @@ use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
  */
 class AppExtension extends \Twig_Extension
 {
+    /** @var \Twig_Environment null */
+    private $environment = null;
+
     /**
      * Returns the name of the extension.
      *
@@ -30,9 +33,6 @@ class AppExtension extends \Twig_Extension
     {
         return 'app_extension';
     }
-
-    /** @var \Twig_Environment null  */
-    private $environment = null;
 
     public function initRuntime(\Twig_Environment $environment)
     {
@@ -93,7 +93,7 @@ class AppExtension extends \Twig_Extension
     /**
      * Apply twig filter of the environment by using theirs names (as string).
      *
-     * Exemple: {{ value|apply_filter("upper") }}
+     * Exemple: {{ value|apply_filter("upper|lower") }}
      *
      * @param \Twig_Environment $env
      * @param array $context
