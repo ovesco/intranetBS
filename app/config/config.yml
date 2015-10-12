@@ -86,6 +86,7 @@ doctrine:
                 user:     "%database_user%"
                 password: "%database_password%"
                 charset:  UTF8
+                server_version: "%database_server_version%"
                 mapping_types:
                     enum: string
             fichier: # connexion aux table de l'ancien fichier...

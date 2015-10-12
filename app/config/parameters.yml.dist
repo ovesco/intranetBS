@@ -6,6 +6,7 @@ parameters:
     database_name:     symfony
     database_user:     root
     database_password: ~
+    database_server_version: 5.5.38 # your database server version here
     # You should uncomment this if you want use pdo_sqlite
     # database_path: "%kernel.root_dir%/data.db3"
 
@@ -21,3 +22,64 @@ parameters:
 
     elastic_host: localhost
     elastic_port: 9200
+
+    #Email for bug notification
+    bug_report_email: dev.sauvabelin@gmail.com
+
+
+
+    #list of parameters of the app
+    intranet_parameters:
+            app_name:
+                type: text
+                options:
+                    label: 'Nom de la platforme'
+                    default: Intranet
+                    description: 'Il s agit du nom que vous souhaitez donner à cet intranet'
+            group_name:
+                type: text
+                options:
+                    label: 'Nom du groupe scout'
+                    default: 'Nom du groupe'
+            group_address:
+                type: textaera
+                options:
+                    label: 'Adresse postale du groupe scout'
+                    default: 'Adresse postale du groupe scout'
+            no_reply_email:
+                type: email
+                options:
+                    default: noreply@dbscout.ch
+                    label: "Adresse email d'expedition automatique"
+            group_logo:
+                type: png
+                options:
+                    label: "Logo du groupe scout"
+                    max: 50k
+            finances_impression_cpp_bvr:
+                type: text
+                options:
+                    label: "Numéro de compte CCP (BVR)"
+                    default: 10-1915-8
+            finances_impression_cpp_bvr:
+                type: text
+                options:
+                    label: "Numéro de compte CCP (BV)"
+                    default: 10-1915-8
+            finances_impression_texte_facture:
+                type: text
+                options:
+                    label: "Texte présent sur les factures"
+                    default: "Text à écrire"
+            finances_impression_affichage_montant:
+                type: choice
+                options:
+                    label: "Affichage du montant sur les factures"
+                    default: false
+                    choices: [true: oui , false: non]
+            finances_impression_mode_payement:
+                type: choice
+                options:
+                    label: "Choix du mode de payement"
+                    default: BV
+                    choices: [BV: BV , BVR: BVR]

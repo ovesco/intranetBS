@@ -28,7 +28,7 @@ class ParameterCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('parameters')
+            ->setName('parameter')
             ->setDescription('Gestion des parametres de l\'application')
             ->addArgument('mode', InputArgument::REQUIRED, 'mode: reset')
         ;
@@ -61,9 +61,6 @@ class ParameterCommand extends ContainerAwareCommand
 
 
                 $parameters = $this->getContainer()->getParameter('intranet_parameters');
-
-                var_dump($parameters);
-
 
                 foreach($parameters as $parameter_name => $parameter_def)
                 {

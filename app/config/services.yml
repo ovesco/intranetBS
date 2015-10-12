@@ -37,7 +37,8 @@ services:
     parametres:
         class: AppBundle\Utils\Parametre\Parametres
         arguments:
-            - @kernel
+            - @doctrine.orm.entity_manager
+
 
     list_container:
         class: AppBundle\Utils\ListRenderer\ListContainer
