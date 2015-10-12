@@ -32,11 +32,11 @@
                     <div class="row">
                         <div class="eight wide column">
                             <h4 class="header">Créances</h4>
-                            {% include "InterneFinancesBundle:Debiteur:listeCreance.html.twig" with {'debiteur':debiteur}%}
+                            {{ list_container.getModel(constant('AppBundle\\Utils\\ListRenderer\\Model::Creance'), debiteur.creances).render|raw }}
                         </div>
                         <div class="eight wide column">
                             <h4 class="header">Facture</h4>
-                            {% include "InterneFinancesBundle:Debiteur:listeFacture.html.twig" with {'debiteur':debiteur}%}
+                            {{ list_container.getModel(constant('AppBundle\\Utils\\ListRenderer\\Model::Facture'), debiteur.factures).render|raw }}
                         </div>
                     </div>
                 </div>

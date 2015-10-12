@@ -5,6 +5,7 @@ namespace AppBundle\Utils\ListRenderer;
 use Doctrine\Common\Collections\ArrayCollection;
 use Twig_Environment;
 
+
 class ListRenderer
 {
     /** @var Array
@@ -32,6 +33,14 @@ class ListRenderer
     /** @var ArrayCollection */
     private $actions;
 
+    /** @var bool */
+    private $datatable;
+
+    /** @var String */
+    private $style;
+
+
+
     /**
      * @param Twig_Environment $twig
      * @param array $items
@@ -45,6 +54,8 @@ class ListRenderer
         $this->toolbar = false;
         $this->columns = new ArrayCollection();
         $this->actions = new ArrayCollection();
+        $this->datatable = true;
+        $this->style = '';
 
         //most of the time objects have getId funciton.
         if ($itemIdAccessor == null) {
@@ -56,6 +67,7 @@ class ListRenderer
         }
 
     }
+
 
     /**
      * Cette fonction crée le rendu html de la liste
@@ -123,6 +135,39 @@ class ListRenderer
     public function hasToolbar()
     {
         return $this->toolbar;
+    }
+
+
+    /**
+     * @return boolean
+     */
+    public function isDatatable()
+    {
+        return $this->datatable;
+    }
+
+    /**
+     * @param boolean $datatable
+     */
+    public function setDatatable($datatable)
+    {
+        $this->datatable = $datatable;
+    }
+
+    /**
+     * @return String
+     */
+    public function getStyle()
+    {
+        return $this->style;
+    }
+
+    /**
+     * @param String $style
+     */
+    public function setStyle($style)
+    {
+        $this->style = $style;
     }
 
 

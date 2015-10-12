@@ -4,12 +4,14 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Email
  *
  * @ORM\Table(name="app_email")
  * @ORM\Entity
+ * @Gedmo\Loggable
  */
 class Email
 {
@@ -25,6 +27,7 @@ class Email
 
     /**
      * @var boolean
+     * @Gedmo\Versioned
      * @ORM\Column(name="expediable", type="boolean")
      */
     private $expediable;
@@ -33,6 +36,7 @@ class Email
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255)
+     * @Gedmo\Versioned
      * @Assert\NotBlank()
      */
     private $email;
@@ -40,6 +44,7 @@ class Email
     /**
      * @var string
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="remarques", type="text", nullable=true)
      */
     private $remarques;

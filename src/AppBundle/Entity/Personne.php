@@ -4,10 +4,13 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
+
 
 
 /**
  * @ORM\MappedSuperclass
+ * @Gedmo\Loggable
  */
 abstract class Personne
 {
@@ -24,7 +27,9 @@ abstract class Personne
     protected $id;
 
     /**
+     * @Gedmo\Versioned
      * @var string
+     * @Gedmo\Versioned
      * @ORM\Column(name="prenom", type="string", length=255)
      */
     protected $prenom;
@@ -32,11 +37,13 @@ abstract class Personne
     /**
      * @var string
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="sexe", type="string", columnDefinition="ENUM('Homme', 'Femme')")
      */
     protected $sexe;
 
     /**
+     * @Gedmo\Versioned
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Contact", cascade={"persist"}, fetch="EAGER")
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
      */
@@ -45,6 +52,7 @@ abstract class Personne
     /**
      * @var string
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="iban", type="string", length=255, nullable=true)
      */
     protected $iban;
