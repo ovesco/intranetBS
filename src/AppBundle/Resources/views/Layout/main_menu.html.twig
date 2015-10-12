@@ -2,12 +2,12 @@
     <div class="item">
         <a class="ui logo icon image" href="{{ path('interne_homepage') }}">
 
-            {% image '@AppBundle/Resources/public/images/logo.png' %}
-                <img src="{{ asset_url }}" id="main-logo" alt="Logo" />
-            {% endimage %}
+            <img src="{{ parametreService.get('group_logo') }}" alt="Logo">
+
+
 
         </a>
-        <a href="{{ path('interne_homepage') }}" ><b>{{ parametreService.getValue('intranet','nom') }}</b></a>
+        <a href="{{ path('interne_homepage') }}" ><b>{{ parametreService.get('app_name') }}</b></a>
     </div>
 
 
@@ -136,7 +136,7 @@
         <div class="ui small  inverted header">Divers</div>
         <div class="menu">
 
-            <a class="item" href="{{ path('interne_parametres_liste') }}">Paramètres</a>
+            <a class="item" href="{{ path('interne_parametre_list') }}">Paramètres</a>
 
             <a class="item" href="{{path('app_bundle_statistics')}}">Statistiques</a>
 

@@ -105,10 +105,10 @@
     <form action="{{ path('login_check') }}" method="post">
 
         <header>
-            <img src="{{ asset('bundles/app/images/logo.png') }}" alt="logo" />
+            <img src="{{ parametreService.get('group_logo') }}" alt="Logo">
         </header>
 
-        <p id="title">{{ parametreService.getValue('intranet','nom') }} | Connection</p>
+        <p id="title">{{ parametreService.get('app_name') }} | Connection</p>
         <div id="inputs">
             <input type="text" id="username" placeholder="username" name="_username" value="{{ last_username }}" />
             <input type="password" placeholder="mot de passe" id="password" name="_password" />

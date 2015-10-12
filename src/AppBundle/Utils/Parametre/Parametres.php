@@ -2,8 +2,11 @@
 
 namespace AppBundle\Utils\Parametre;
 
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Yaml\Parser;
+
+use Doctrine\ORM\EntityManager;
 
 
 /**
@@ -29,65 +32,57 @@ use Symfony\Component\Yaml\Parser;
  */
 class Parametres
 {
+    /** @var  EntityManager */
+    private $em;
 
-    public $groupesOfParametres; //fichier de config parsé
-    private $kernel;
-    private $path;
-
-    public function __construct($kernel)
+    public function __construct(EntityManager $em)
     {
-
-        $this->kernel = $kernel;
-        $this->path = $this->kernel->getRootDir() . '/../src/AppBundle/Utils/Parametre';
-
-        /*
-         * On récupère le tableau de parametre.
-         */
-        $yaml = new Parser();
-        try {
-            $this->groupesOfParametres = $yaml->parse(file_get_contents($this->path.'/Parametre.yml'));
-        } catch (ParseException $e) {
-            printf("Unable to parse the YAML string: %s", $e->getMessage());
-        }
-
-        /*
-         * On controle ici que la hierarchie des fichiers existe.
-         * Si il manque un fichier, on l'ajoute.
-         */
-        foreach($this->groupesOfParametres as $groupeName => $groupe)
-        {
-            foreach($groupe['parametres'] as $parameterName => $parametre)
-            {
-
-                $dirPath = $this->path.'/values';
-                if (!file_exists($dirPath)) {
-                    mkdir($dirPath, 0777, true);
-                }
-
-
-                $valuePath = $dirPath.'/'.$groupeName.'_'.$parameterName.'.txt';
-
-                if (!file_exists($valuePath)) {
-                    $file = fopen($valuePath, "w");
-                    if(isset($parametre['default'])){
-                        fwrite($file,$parametre['default']);
-                    }
-                    fclose($file);
-                }
-
-            }
-        }
-
+        $this->em = $em;
     }
 
+
     /**
-     * @param $groupe
-     * @param $name
-     * @return null|string
+     * Cette méthode est utilisée pour récupérer un parametre via le
+     * service.
+     *
+     * @param string $parameterName
+     * @return mixed
      */
+    public function get($parameterName)
+    {
+        $parameter = $this->em->getRepository('AppBundle:Parameter')->findOneBy(array('name'=>$parameterName));
+        if($parameter != null)
+        {
+            return $parameter->getData();
+        }
+        else
+        {
+            throw new Exception("Parameter '".$parameterName."' is not currently stored in database. Check the parameters.yml and maybe launch the ParameterCommand.php");
+        }
+    }
+
+
+
+
+    /*
+     *
+     *
+     *
+     *
+     *
+     * tout ce qui est en dessous de ceci est plus d'acutalité
+     *
+     *
+     *
+     *
+     *
+     */
+
+
     public function getType($groupe,$name)
     {
-        return $this->groupesOfParametres[$groupe]['parametres'][$name]['type'];
+        throw new Exception("Cette fonction du service parametre est désactivée...ne plus l'utiliser. question:->uffer");
+        //return $this->groupesOfParametres[$groupe]['parametres'][$name]['type'];
     }
 
     /**
@@ -97,6 +92,8 @@ class Parametres
      */
     public function getParametres()
     {
+        throw new Exception("Cette fonction du service parametre est désactivée...ne plus l'utiliser. question:->uffer");
+        /*
         $parameters = $this->groupesOfParametres;
         foreach($parameters as $k_groupe => $groupe)
         {
@@ -109,6 +106,7 @@ class Parametres
         }
 
         return $parameters;
+        */
     }
 
     /**
@@ -121,6 +119,9 @@ class Parametres
     public function getValue($groupe,$name)
     {
 
+        throw new Exception("Cette fonction du service parametre est désactivée...ne plus l'utiliser. question:->uffer");
+
+        /*
 
         $valuePath = $this->path.'/values/'.$groupe.'_'.$name.'.txt';
 
@@ -143,6 +144,7 @@ class Parametres
         }
 
         return null;
+        */
 
 
 
@@ -157,10 +159,14 @@ class Parametres
      */
     public function setValue($groupe,$name,$value)
     {
+        throw new Exception("Cette fonction du service parametre est désactivée...ne plus l'utiliser. question:->uffer");
+
+        /*
         //on reconstruit le chemin pour le fichier
         $valuePath = $this->path.'/values/'.$groupe.'_'.$name.'.txt';
         //on recrite le contenu
         file_put_contents($valuePath,$value);
+        */
     }
 
 
@@ -169,9 +175,13 @@ class Parametres
      */
     public function save()
     {
+        throw new Exception("Cette fonction du service parametre est désactivée...ne plus l'utiliser. question:->uffer");
+
+        /*
         $dumper = new Dumper();
         $yaml = $dumper->dump($this->groupesOfParametres,3);
         file_put_contents($this->path.'/Parametre.yml', $yaml);
+        */
     }
 
 

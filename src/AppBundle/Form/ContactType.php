@@ -31,6 +31,6 @@ class ContactType extends AbstractType
 
     public function getName()
     {
-        return 'apprbundle_contacttype';
+        return 'appbundle_contacttype';
     }
 }

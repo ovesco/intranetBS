@@ -89,8 +89,7 @@ class BugReportController extends Controller
                     /*
                      * Generation de l'email
                      */
-                    $parametres = $this->get('parametres');
-                    $adresse = $parametres->getValue('intranet','email_debug');
+                    $adresse = $this->container->getParameter('bug_report_email');
                     /** @var Email $message */
                     $message = $this->get('email');
                     $message

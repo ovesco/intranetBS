@@ -260,8 +260,8 @@ class EnvoiController extends Controller{
             foreach($regroupementEmails as $adresseEmail => $tokens)
             {
 
-                $senderMail = $parametres->getValue('service_mailer','noReplyEmail');
-                $nomGroupe = $parametres->getValue('info_groupe','nom');
+                $senderMail = $parametres->get('no_reply_email');
+                $nomGroupe = $parametres->get('group_name');
                 $emailToSend = clone $email;
                 $emailToSend
                     ->setSubject($nomGroupe.': Envoi automatique de documents')

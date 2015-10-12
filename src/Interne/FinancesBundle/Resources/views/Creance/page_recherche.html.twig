@@ -1,6 +1,5 @@
 {% extends "AppBundle:Layout:layout.html.twig" %}
 
-
 {% block titre %}Recherche de créances{% endblock %}
 
 {% block content %}
@@ -8,35 +7,18 @@
     <div class="ui page grid">
         <div class="row">
             <div class="four wide column">
-
                 {% include "InterneFinancesBundle:Creance:searchForm.html.twig" with {'searchForm':searchForm} %}
-
-
             </div>
-
-
             <div class="twelve wide column">
-
-
                 {% if creances is not empty %}
-
-
                     {% include "InterneFinancesBundle:Creance:liste_search_results.html.twig" with {'creances':creances} %}
-
-
                 {% endif %}
-
-
-
             </div>
         </div>
     </div>
-
-
 {% endblock %}
 
 {% block js %}
-
 
     {% javascripts
     '@InterneFinancesBundle/Resources/public/js/model/*'
@@ -45,6 +27,5 @@
     %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
-
 
 {% endblock %}

@@ -4,13 +4,21 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 
+/* routing */
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
+/* Entity */
+use AppBundle\Entity\Parameter;
+
+/* Form */
+use AppBundle\Form\ParameterType;
 
 /**
- *
+ * Ce controller est utilisé pour la gestion des pages de list et d'édition des parametres de l'applications.
  *
  * Class ParametreController
  * @package AppBundle\Controller
@@ -19,51 +27,48 @@ use Symfony\Component\HttpFoundation\Request;
 class ParametreController extends Controller
 {
 
-
     /**
-     * @Route("/liste", name="interne_parametres_liste")
-     * @Template("AppBundle:Parametre:page_parametre_liste_and_edit.html.twig")
+     * @Route("/list", name="interne_parametre_list")
+     * @Template("AppBundle:Parametre:page_list.html.twig")
      *
      * @return Response
      */
-    public  function listeParametresAction()
+    public  function listAction()
     {
-        $parametres = $this->get('parametres')->getParametres();
-
-        //remet en form le fichier parametre.yml...
-        //TODO: on peut enlever ca une fois le dév terminer.
-        $this->get('parametres')->save();
-
-        return array('parametres' => $parametres);
+        $parameters = $this->getDoctrine()->getRepository('AppBundle:Parameter')->findAll();
+        return array('parameters' => $parameters);
     }
 
 
-    /*
-     * Edition en ajax des parametres depuis la page d'affichage
-     */
+
+
     /**
-     * @Route("/update_ajax", name="interne_parametre_update_ajax", options={"expose"=true})
+     * @Route("/edit/{parameter}", name="interne_parametre_edit")
+     * @Template("AppBundle:Parametre:page_edit.html.twig")
+     * @param Parameter $parameter
+     * @ParamConverter("parameter", class="AppBundle:Parameter")
      * @param Request $request
      * @return Response
      */
-    public function updateAjaxAction(Request $request)
+    public  function editAction(Request $request,Parameter $parameter)
     {
+        $form = $this->createForm(new ParameterType(),$parameter);
 
-        if($request->isXmlHttpRequest()) {
+        $form->handleRequest($request);
 
-            $groupe = $request->request->get('groupe');
-            $value = $request->request->get('value');
-            $parametre = $request->request->get('parametre');
 
-            $this->get('parametres')->setValue($groupe,$parametre,$value);
+        if($form->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($parameter);
+            $em->flush();
 
-            return new Response();
-
+            return $this->redirect($this->generateUrl('interne_parametre_list'));
         }
-        return new Response();
+
+        return array('form'=>$form->createView());
 
     }
-
 
 
 

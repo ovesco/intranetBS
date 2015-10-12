@@ -27,22 +27,21 @@ class AppController extends Controller
     /**
      * @route("test")
      */
-    public function test()
+    public function testAction()
     {
 
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-        $members = $em->getRepository('AppBundle:Membre')->findBy(array(), array(), 20);
+        $parametre = $this->get('parametres_container')->getParamter('bidon');
 
-        /** @var ListContainer $container */
-        $container = $this->get('list_container');
+        return new Response();
+    }
 
-        /** @var ListRenderer $list */
-        $list = $container->getMemberListRenderer();
-        $list->setItems($members);
-        $list->setName('un_nom');
 
-        return new Response($list->render());
+    /**
+     * @route("hello/{nom}", name="exemple_hello_word")
+     */
+    public function helloWordAction($nom)
+    {
+        return new Response("Salut les ".$nom);
     }
 
 }
