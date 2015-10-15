@@ -2,8 +2,17 @@
 ## Acquérir les sources
 * Cloner le dépôt Git
 * Installer composer sur le serveur
+```bash
+#obtenir le composer en version php (composer.phar)
+curl -sS https://getcomposer.org/installer | php
+```
 * Installer les dépendances à l'aide de composer
 ```bash
+#si compser.phar en php dans le répertoire du projet
+php composer.phar self-update
+php composer.phar update
+
+#si composer installé dans le rep /bin.
 composer update
 ```
 
