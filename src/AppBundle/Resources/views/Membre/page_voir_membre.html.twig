@@ -83,22 +83,23 @@
                                 <div class="ui small info message">
 
                                     {% set    ae = membre.adresseExpedition %}
-                                    {% set    ownerEntity = ae['ownerEntity'] %}
-                                    {% set    lf = '<a href="' ~path('interne_voir_famille', {famille: membre.famille.id}) ~ '">' %}
+                                    {% if     ae != null %}
+                                        {% set    ownerEntity = ae['ownerEntity'] %}
+                                        {% set    lf = '<a href="' ~path('interne_voir_famille', {famille: membre.famille.id}) ~ '">' %}
 
-
-                                    {% if     ownerEntity.className == class_name_membre %}
-                                        {% set aeowner = 'la sienne' %}
-                                    {% elseif ownerEntity.className == class_name_famille %}
-                                        {% set aeowner = lf ~ 'celle de sa famille</a>' %}
-                                    {% elseif ownerEntity.className == class_name_mere %}
-                                        {% set aeowner = lf ~ 'celle de sa mère</a>' %}
-                                    {% elseif ownerEntity.className == class_name_pere %}
-                                        {% set aeowner = lf ~ 'celle de son père</a>' %}
-                                    {% else %}
-                                        {% set aeowner = ', aucune idée en vrai.' %}
-                                    {% endif %}
+                                        {% if     ownerEntity.className == class_name_membre %}
+                                            {% set aeowner = 'la sienne' %}
+                                        {% elseif ownerEntity.className == class_name_famille %}
+                                            {% set aeowner = lf ~ 'celle de sa famille</a>' %}
+                                        {% elseif ownerEntity.className == class_name_mere %}
+                                            {% set aeowner = lf ~ 'celle de sa mère</a>' %}
+                                        {% elseif ownerEntity.className == class_name_pere %}
+                                            {% set aeowner = lf ~ 'celle de son père</a>' %}
+                                        {% else %}
+                                            {% set aeowner = ', aucune idée en vrai.' %}
+                                        {% endif %}
                                     <div class="content">Actuellement, l'adresse de facturation de ce membre est <b>{{ aeowner|raw }}</b></div>
+                                    {% endif %}
                                 </div>
 
                                 {{ form_row(membreForm.contact.adresse.rue) }}
