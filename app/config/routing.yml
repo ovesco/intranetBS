@@ -26,5 +26,9 @@ finances:
 galerie:
     resource: "@InterneGalerieBundle/Resources/config/routing.yml"
 
+seance:
+    resource: "@InterneSeanceBundle/Resources/config/routing.yml"
+    prefix:   /interne/seance
+
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
