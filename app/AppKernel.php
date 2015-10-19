@@ -44,7 +44,7 @@ class AppKernel extends Kernel
             new Interne\OrganisationBundle\InterneOrganisationBundle(),
             new Interne\HistoryBundle\InterneHistoryBundle(),
             new Interne\MatBundle\MatBundle(),
-
+            new Interne\SeanceBundle\InterneSeanceBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
