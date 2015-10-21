@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a2480ac5ecf6d6807ec060ce008c1b65",
-    "content-hash": "cccf295f517db7fe40a6777fb97bb52e",
+    "hash": "b0661c951ede6eca8984cd530967232d",
+    "content-hash": "7a0829b43feab65aadf5911dc9185c7a",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1189,12 +1189,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Atlantic18/DoctrineExtensions.git",
-                "reference": "33778a4dd886734077c491056862653f81b2dbdd"
+                "reference": "8bf241d036a6888895bfb97f7bc278ddf20a2524"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/33778a4dd886734077c491056862653f81b2dbdd",
-                "reference": "33778a4dd886734077c491056862653f81b2dbdd",
+                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/8bf241d036a6888895bfb97f7bc278ddf20a2524",
+                "reference": "8bf241d036a6888895bfb97f7bc278ddf20a2524",
                 "shasum": ""
             },
             "require": {
@@ -1260,7 +1260,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2015-10-02 13:27:34"
+            "time": "2015-10-21 16:29:25"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -1312,6 +1312,46 @@
                 "parameters management"
             ],
             "time": "2015-06-03 08:27:03"
+        },
+        {
+            "name": "interne/seancebundle",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sulazix/SeanceBundle.git",
+                "reference": "49ae412cd5c4f4aa4caf2510ba60cdfcceb46d38"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sulazix/SeanceBundle/zipball/49ae412cd5c4f4aa4caf2510ba60cdfcceb46d38",
+                "reference": "49ae412cd5c4f4aa4caf2510ba60cdfcceb46d38",
+                "shasum": ""
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Interne\\SeanceBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alaskan - Robin Fave",
+                    "email": "alaskan@vieux-mazel.ch"
+                },
+                {
+                    "name": "Cabiai - Florian Alonso",
+                    "email": "florian.alonso@flonso.com"
+                }
+            ],
+            "description": "Séance Bundle for Net BS Intranet",
+            "keywords": [
+                "seance meeting bundle"
+            ],
+            "time": "2015-10-21 14:05:44"
         },
         {
             "name": "itbz/fpdf",
@@ -3039,17 +3079,17 @@
         },
         {
             "name": "sensio/distribution-bundle",
-            "version": "v3.0.31",
+            "version": "v3.0.32",
             "target-dir": "Sensio/Bundle/DistributionBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioDistributionBundle.git",
-                "reference": "3a900814bd57bf20f9453ae81ff8772bc95d7fff"
+                "reference": "e46293aa6dd94f054c500ef990538d822c763ebd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/3a900814bd57bf20f9453ae81ff8772bc95d7fff",
-                "reference": "3a900814bd57bf20f9453ae81ff8772bc95d7fff",
+                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/e46293aa6dd94f054c500ef990538d822c763ebd",
+                "reference": "e46293aa6dd94f054c500ef990538d822c763ebd",
                 "shasum": ""
             },
             "require": {
@@ -3095,7 +3135,7 @@
                 "configuration",
                 "distribution"
             ],
-            "time": "2015-08-03 10:07:12"
+            "time": "2015-10-20 06:53:22"
         },
         {
             "name": "sensio/framework-extra-bundle",
@@ -3325,12 +3365,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "8911853e55931543f7fd8a9f5a50dd0f162be0eb"
+                "reference": "d1a7ca3ed5c2b4d176436bb72e229c4da25d649e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/8911853e55931543f7fd8a9f5a50dd0f162be0eb",
-                "reference": "8911853e55931543f7fd8a9f5a50dd0f162be0eb",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/d1a7ca3ed5c2b4d176436bb72e229c4da25d649e",
+                "reference": "d1a7ca3ed5c2b4d176436bb72e229c4da25d649e",
                 "shasum": ""
             },
             "require": {
@@ -3363,7 +3403,7 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2015-10-11 09:14:55"
+            "time": "2015-10-18 20:24:22"
         },
         {
             "name": "symfony/monolog-bundle",
@@ -3871,7 +3911,8 @@
         "symfony/filesystem": 20,
         "knplabs/knp-snappy-bundle": 20,
         "coresphere/console-bundle": 20,
-        "gedmo/doctrine-extensions": 20
+        "gedmo/doctrine-extensions": 20,
+        "interne/seancebundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
