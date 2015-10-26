@@ -30,3 +30,7 @@ Le but du NetBS est d'offir une interface gratuite de gestion de groupe scoute. 
 #Documentation
 
 [La documentation se trouve ici!!!](/doc/index.md)
+
+#Autres informations
+
+- [Cahier des charges](/doc/cdc/cdc_index.md)
