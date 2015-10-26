@@ -6,14 +6,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Interne\GalerieBundle\Entity\Dossier;
 use Interne\GalerieBundle\Form\DossierType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Symfony\Component\Routing\Annotation\Route;
 
 
 /**
@@ -23,7 +21,7 @@ use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 class GalerieAdminController extends Controller
 {
     /**
-     * @route("global-managing", name="galerie_interne_global_managing")
+     * @Route("global-managing", name="galerie_interne_global_managing")
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function globalManagingAction()
@@ -50,7 +48,7 @@ class GalerieAdminController extends Controller
      * Renvoie ensuite une redirection vers la page de gestion du dossier si la page était atteinte sans ajax
      * @param string $picture
      * @return Response
-     * @route("image/remove/{picture}", name="interne_galerie_remove_picture", options={"expose"=true})
+     * @Route("image/remove/{picture}", name="interne_galerie_remove_picture", options={"expose"=true})
      */
     public function removeImageAction($picture) {
 
@@ -89,7 +87,7 @@ class GalerieAdminController extends Controller
 
 
     /**
-     * @route("dossier/ajouter", name="galerie_interne_ajouter_dossier")
+     * @Route("dossier/ajouter", name="galerie_interne_ajouter_dossier")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -141,7 +139,7 @@ class GalerieAdminController extends Controller
 
 
     /**
-     * @route("dossier/manage-lock/{lock}/{dossier}", name="galerie_interne_manage_lock_dossier", options={"expose"=true})
+     * @Route("dossier/manage-lock/{lock}/{dossier}", name="galerie_interne_manage_lock_dossier", options={"expose"=true})
      * @paramConverter("dossier", class="InterneGalerieBundle:Dossier")
      * Permet de gérer l'état du lock d'un dossier
      * @param Dossier $dossier
@@ -168,7 +166,7 @@ class GalerieAdminController extends Controller
 
     /**
      * Permet de modifier un dossier depuis la page global managing
-     * @route("modify-dossier", name="interne_galerie_modify_dossier")
+     * @Route("modify-dossier", name="interne_galerie_modify_dossier")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */

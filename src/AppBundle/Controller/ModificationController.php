@@ -20,7 +20,7 @@ class ModificationController extends Controller
      * Les requêtes sont efféctuées en AJAX à l'aide de X::Editable. Pour changer la valeur, on génère un formulaire
      * dynamique pour le champ voulu, on le modifie, et BAM ca fait des PUTAIN de chocapics.
      *
-     * @route("validation/ajax/modify-property", name="interne_ajax_app_modify_property", options={"expose"=true})
+     * @Route("validation/ajax/modify-property", name="interne_ajax_app_modify_property", options={"expose"=true})
      * @return JsonResponse
      */
     public function modifyPropertyAction(Request $request) {
@@ -80,7 +80,7 @@ class ModificationController extends Controller
 
     /**
      * Permet de gérer les modifications
-     * @route("modification/global-view", name="interne_modification_vue_globale")
+     * @Route("modification/global-view", name="interne_modification_vue_globale")
      */
     public function modificationViewAction() {
 

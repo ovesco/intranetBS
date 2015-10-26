@@ -23,7 +23,7 @@ use AppBundle\Utils\Data\Sanitizer as Useful;
 class DossierAdminController extends Controller
 {
     /**
-     * @route("manage-dossier/{dossier}", name="interne_galerie_dossier_managing", options={"expose"=true})
+     * @Route("manage-dossier/{dossier}", name="interne_galerie_dossier_managing", options={"expose"=true})
      * @paramConverter("dossier", class="InterneGalerieBundle:Dossier")
      * @param Dossier $dossier
      * @return Response
@@ -41,7 +41,7 @@ class DossierAdminController extends Controller
     }
 
     /**
-     * @route("{dossier}/ajouter-album", name="interne_galerie_dossier_nouvel_album")
+     * @Route("{dossier}/ajouter-album", name="interne_galerie_dossier_nouvel_album")
      */
     public function addAlbumAction(Dossier $dossier, Request $request) {
 
@@ -70,7 +70,7 @@ class DossierAdminController extends Controller
 
 
     /**
-     * @route("ajax-view/manage-album/{album}", name="interne_galerie_dossier_manage_album_view", options={"expose"=true})
+     * @Route("ajax-view/manage-album/{album}", name="interne_galerie_dossier_manage_album_view", options={"expose"=true})
      * @paramConverter("album", class="InterneGalerieBundle:Album")
      * @param Album $album
      * @return Response
@@ -91,7 +91,7 @@ class DossierAdminController extends Controller
 
     /**
      * Méthode appelée par dropzone pour réaliser l'upload des photos
-     * @route("add-photos", name="interne_galerie_album_add_photos", options={"expose"=true})
+     * @Route("add-photos", name="interne_galerie_album_add_photos", options={"expose"=true})
      * @param Request $request
      * @return Response
      */
@@ -185,7 +185,7 @@ class DossierAdminController extends Controller
 
     /**
      * Supprimme un album entier
-     * @route("remove-album/{album}", name="interne_galerie_dossier_supprimer_album")
+     * @Route("remove-album/{album}", name="interne_galerie_dossier_supprimer_album")
      * @paramConverter("album", class="InterneGalerieBundle:Album")
      * @param Album $album
      * @return Response

@@ -27,7 +27,7 @@ class EnvoiController extends Controller{
     /**
      * Genere la page principale d'action sur les envois
      *
-     * @route("/liste", name="utils_envoi_liste")
+     * @Route("/liste", name="utils_envoi_liste")
      * @Template("AppBundle:Envoi:page_listeEnvoi.html.twig")
      * @return Response
      */
@@ -40,7 +40,7 @@ class EnvoiController extends Controller{
 
 
     /**
-     * @route("/clear", name="utils_envoi_clear")
+     * @Route("/clear", name="utils_envoi_clear")
      * @Template("AppBundle:Envoi:page_listeEnvoi.html.twig")
      * @return Response
      */
@@ -54,7 +54,7 @@ class EnvoiController extends Controller{
 
     /**
      * @param $token
-     * @route("/remove_token/{token}", name="utils_envoi_remove_by_token", options={"expose"=true})
+     * @Route("/remove_token/{token}", name="utils_envoi_remove_by_token", options={"expose"=true})
      * @Template("AppBundle:Envoi:page_listeEnvoi.html.twig")
      * @return Response
      */
@@ -72,7 +72,7 @@ class EnvoiController extends Controller{
 
     /**
      *
-     * @route("/document_form", name="utils_envoi_document_form", options={"expose"=true})
+     * @Route("/document_form", name="utils_envoi_document_form", options={"expose"=true})
      * @param Request $request
      * @Template("AppBundle:Envoi:envoi_document_modale_form.html.twig")
      * @return Response
@@ -169,7 +169,7 @@ class EnvoiController extends Controller{
 
 
     /**
-     * @route("/process", name="utils_envoi_process" , options={"expose"=true})
+     * @Route("/process", name="utils_envoi_process" , options={"expose"=true})
      */
     public function processAction()
     {

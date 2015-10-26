@@ -4,12 +4,14 @@ namespace Interne\SecurityBundle\Controller;
 
 use AppBundle\Entity\Fonction;
 use Interne\SecurityBundle\Entity\Role;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @route("interne/roles/")
+ * @Route("interne/roles/")
  * @package Interne\SecurityBundle\Controller
  */
 class RolesController extends Controller
@@ -17,7 +19,7 @@ class RolesController extends Controller
 
     /**
      * page permettant de lier des roles et des fonctions
-     * @route("matching-fonctions", name="interne_roles_match_fonctions")
+     * @Route("matching-fonctions", name="interne_roles_match_fonctions")
      */
     public function matchingFonctionsAction(Request $request) {
 
@@ -49,9 +51,9 @@ class RolesController extends Controller
      * Retire un role d'une fonction
      * @param Fonction $fonction
      * @param Role $role
-     * @route("unlink-fonction/{fonction}/{role}", name="interne_role_unlink_fonction", options={"expose"=true})
-     * @paramConverter("role", class="InterneSecurityBundle:Role")
-     * @paramConverter("fonction", class="AppBundle:Fonction")
+     * @Route("unlink-fonction/{fonction}/{role}", name="interne_role_unlink_fonction", options={"expose"=true})
+     * @ParamConverter("role", class="InterneSecurityBundle:Role")
+     * @ParamConverter("fonction", class="AppBundle:Fonction")
      * @return Response
      */
     public function unlinkRoleFonction(Fonction $fonction, Role $role) {

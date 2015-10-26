@@ -380,7 +380,7 @@ class PayementController extends Controller
 
 
     /**
-     * @route("/repartition_payement", name="interne_finances_payement_repartition_ajax", options={"expose"=true})
+     * @Route("/repartition_payement", name="interne_finances_payement_repartition_ajax", options={"expose"=true})
      * @param Request $request
      * @return Response
      */
@@ -410,39 +410,8 @@ class PayementController extends Controller
         }
     }
 
-
-
-
-    private function repartitionMontantInFacture($request,$facture)
-    {
-        $InterneFinancesBundleFactureRepartitionType = null;
-        $serializedForm = $request->request->get('form');
-        /**
-         * Parse_str va crée le tableau $InterneFinancesBundleFactureRepartitionType
-         */
-        parse_str($serializedForm);
-        $repartitionArray = $InterneFinancesBundleFactureRepartitionType;
-
-
-        //validation des créances de la factures
-        $index = 0;
-        foreach($facture->getCreances() as $creance)
-        {
-            $creance->setMontantRecu($repartitionArray['creances'][$index]['montantRecu']);
-            $index++;
-        }
-
-        //validationd des rappels de la facture
-        $index = 0;
-        foreach($facture->getRappels() as $rappel)
-        {
-            $rappel->setMontantRecu($repartitionArray['rappels'][$index]['montantRecu']);
-            $index++;
-        }
-    }
-
     /**
-     * @route("/validation", name="interne_finances_payement_validation", options={"expose"=true})
+     * @Route("/validation", name="interne_finances_payement_validation", options={"expose"=true})
      * @param Request $request
      * @return Response
      */
@@ -565,6 +534,32 @@ class PayementController extends Controller
         }
 
         return new Response();
+    }
+
+    private function repartitionMontantInFacture($request, $facture)
+    {
+        $InterneFinancesBundleFactureRepartitionType = null;
+        $serializedForm = $request->request->get('form');
+        /**
+         * Parse_str va crée le tableau $InterneFinancesBundleFactureRepartitionType
+         */
+        parse_str($serializedForm);
+        $repartitionArray = $InterneFinancesBundleFactureRepartitionType;
+
+
+        //validation des créances de la factures
+        $index = 0;
+        foreach ($facture->getCreances() as $creance) {
+            $creance->setMontantRecu($repartitionArray['creances'][$index]['montantRecu']);
+            $index++;
+        }
+
+        //validationd des rappels de la facture
+        $index = 0;
+        foreach ($facture->getRappels() as $rappel) {
+            $rappel->setMontantRecu($repartitionArray['rappels'][$index]['montantRecu']);
+            $index++;
+        }
     }
 
 

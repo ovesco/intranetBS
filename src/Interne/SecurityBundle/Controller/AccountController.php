@@ -4,18 +4,19 @@ namespace Interne\SecurityBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Le controller de compte utilisateur. Réunit toutes les tâches relatives à la gestion du compte utilisateur d'un
  * membre
- * @route("account/")
+ * @Route("account/")
  * @package Interne\SecurityBundle\Controller
  */
 class AccountController extends Controller
 {
     /**
      * Affiche la page de gestion de compte
-     * @route("my_account", name="security_my_account")
+     * @Route("my_account", name="security_my_account")
      */
     public function myAccountAction(){
 
@@ -26,7 +27,7 @@ class AccountController extends Controller
 
     /**
      * Permet à un utilisateur de modifier son mot de passe
-     * @route("modify-password", name="security_modify_password")
+     * @Route("modify-password", name="security_modify_password")
      */
     public function modifyPasswordAction(Request $request) {
 

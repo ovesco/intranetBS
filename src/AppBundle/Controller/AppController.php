@@ -22,7 +22,7 @@ class AppController extends Controller
     }
 
     /**
-     * @route("test")
+     * @Route("test")
      */
     public function testAction()
     {
@@ -34,7 +34,7 @@ class AppController extends Controller
 
 
     /**
-     * @route("hello/{nom}", name="exemple_hello_word")
+     * @Route("hello/{nom}", name="exemple_hello_word")
      */
     public function helloWordAction($nom)
     {
@@ -42,7 +42,7 @@ class AppController extends Controller
     }
 
     /**
-     * @route("test2")
+     * @Route("test2")
      */
     public function test2() {
 

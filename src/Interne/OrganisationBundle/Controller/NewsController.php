@@ -13,13 +13,13 @@ use AppBundle\Entity\Membre;
 /**
  * Class NewsController
  * @package Interne\OrganisationBundle\Controller
- * @route("/news")
+ * @Route("/news")
  */
 class NewsController extends Controller
 {
     /**
      * @return Response
-     * @route("", name="interne_organisation_news_show")
+     * @Route("", name="interne_organisation_news_show")
      */
     public function showAction()
     {
@@ -32,7 +32,7 @@ class NewsController extends Controller
 
     /**
      * @return Response
-     * @route("/get_form", name="interne_organisation_news_get_form", options={"expose"=true})
+     * @Route("/get_form", name="interne_organisation_news_get_form", options={"expose"=true})
      * @param Request $request
      */
     public function getFormAction(Request $request)

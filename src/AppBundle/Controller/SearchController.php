@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class SearchController
  * @package AppBundle\Controller
- * @route("/search")
+ * @Route("/search")
  */
 class SearchController extends Controller
 {
@@ -65,12 +65,45 @@ class SearchController extends Controller
     }
 
     /**
+     * Effectue une recherche sur les membres pour un pattern donné
+     * @param string $pattern
+     * @return array
+     */
+    private function searchMembres($pattern)
+    {
+
+        return $this->get('fos_elastica.finder.search.membre')->find($pattern);
+    }
+
+    /**
+     * Effectue une recherche sur les familles pour un pattern donné
+     * @param string $pattern
+     * @return array
+     */
+    private function searchFamilles($pattern)
+    {
+
+        return $this->get('fos_elastica.finder.search.famille')->find($pattern);
+    }
+
+    /**
+     * Effectue une recherche sur les groupes pour un pattern donné
+     * @param string $pattern
+     * @return array
+     */
+    private function searchGroupes($pattern)
+    {
+
+        return $this->get('fos_elastica.finder.search.groupe')->find($pattern);
+    }
+
+    /**
      * Appelée par la page de recherche, permet de lancer une recherche plus poussée sur un objet particulier
      * La méthode appelle ensuite une des fonctions de recherche atitrée, génère le tableau correspondant parmi les vues
      * et le retourne. Ca permet d'éviter d'avoir à sérializer des données en Json et tout
      * @param Request $request
      * @return Response
-     * @route("/advanced-search", name="interne_search_advanced", options={"expose"=true})
+     * @Route("/advanced-search", name="interne_search_advanced", options={"expose"=true})
      */
     public function advancedSearchAction(Request $request) {
 
@@ -118,35 +151,5 @@ class SearchController extends Controller
 
         return new Response($this->get('jms_serializer')->serialize($returned,'json'));//JsonResponse($returned);
 
-    }
-
-    /**
-     * Effectue une recherche sur les membres pour un pattern donné
-     * @param string $pattern
-     * @return array
-     */
-    private function searchMembres($pattern) {
-
-        return $this->get('fos_elastica.finder.search.membre')->find($pattern);
-    }
-
-    /**
-     * Effectue une recherche sur les familles pour un pattern donné
-     * @param string $pattern
-     * @return array
-     */
-    private function searchFamilles($pattern) {
-
-        return $this->get('fos_elastica.finder.search.famille')->find($pattern);
-    }
-
-    /**
-     * Effectue une recherche sur les groupes pour un pattern donné
-     * @param string $pattern
-     * @return array
-     */
-    private function searchGroupes($pattern) {
-
-        return $this->get('fos_elastica.finder.search.groupe')->find($pattern);
     }
 }
