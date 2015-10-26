@@ -2,13 +2,25 @@
 ## Acquérir les sources
 * Cloner le dépôt Git
 * Installer composer sur le serveur
+```bash
+#obtenir le composer en version php (composer.phar)
+curl -sS https://getcomposer.org/installer | php
+```
 * Installer les dépendances à l'aide de composer
 ```bash
+#si compser.phar en php dans le répertoire du projet
+php composer.phar self-update
+php composer.phar update
+
+#si composer installé dans le rep /bin.
 composer update
 ```
 
 
 ## Mise en route
+
+La suite des commandes ci-dessous explique la procèdure pour démarrer la base de donnée correctement. Pour faire tout ceci en une fois, on peut utiliser le script suivant: [restart_dev.sh](/sh_script/restart_dev.sh).
+
 * Initialiser la base de données
 ```bash
 php app/console doctrine:schema:create

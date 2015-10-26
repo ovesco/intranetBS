@@ -181,16 +181,6 @@ class RequirementCollection implements IteratorAggregate
     }
 
     /**
-     * Adds a Requirement.
-     *
-     * @param Requirement $requirement A Requirement instance
-     */
-    public function add(Requirement $requirement)
-    {
-        $this->requirements[] = $requirement;
-    }
-
-    /**
      * Adds a mandatory requirement.
      *
      * @param bool        $fulfilled   Whether the requirement is fulfilled
@@ -201,6 +191,16 @@ class RequirementCollection implements IteratorAggregate
     public function addRequirement($fulfilled, $testMessage, $helpHtml, $helpText = null)
     {
         $this->add(new Requirement($fulfilled, $testMessage, $helpHtml, $helpText, false));
+    }
+
+    /**
+     * Adds a Requirement.
+     *
+     * @param Requirement $requirement A Requirement instance
+     */
+    public function add(Requirement $requirement)
+    {
+        $this->requirements[] = $requirement;
     }
 
     /**
@@ -445,6 +445,12 @@ class SymfonyRequirements extends RequirementCollection
                 'Your default timezone is not supported by PHP. Check for typos in your <strong>php.ini</strong> file and have a look at the list of deprecated timezones at <a href="http://php.net/manual/en/timezones.others.php">http://php.net/manual/en/timezones.others.php</a>.'
             );
         }
+
+        $this->addRequirement(
+            function_exists('iconv'),
+            'iconv() must be available',
+            'Install and enable the <strong>iconv</strong> extension.'
+        );
 
         $this->addRequirement(
             function_exists('json_encode'),

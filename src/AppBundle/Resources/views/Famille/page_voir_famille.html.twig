@@ -148,7 +148,7 @@
                         </div>
 
                         <div class="ui bottom attached segment">
-                            {{ macro.listeMembres('liste_membres', famille.membres) }}
+                            {{ list_container.getModel(constant('AppBundle\\Utils\\ListRenderer\\Model::Membre'), famille.membres).render|raw }}
                         </div>
 
                     </div>

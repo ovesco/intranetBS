@@ -2,11 +2,8 @@
 
 namespace AppBundle\Utils\Parametre;
 
-use Symfony\Component\Config\Definition\Exception\Exception;
-use Symfony\Component\Yaml\Dumper;
-use Symfony\Component\Yaml\Parser;
-
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 
 /**
@@ -51,17 +48,25 @@ class Parametres
     public function get($parameterName)
     {
         $parameter = $this->em->getRepository('AppBundle:Parameter')->findOneBy(array('name'=>$parameterName));
+
         if($parameter != null)
         {
             return $parameter->getData();
         }
         else
         {
+            return "";
             throw new Exception("Parameter '".$parameterName."' is not currently stored in database. Check the parameters.yml and maybe launch the ParameterCommand.php");
         }
     }
 
 
+    public function exist($parameterName)
+    {
+        $parameter = $this->em->getRepository('AppBundle:Parameter')->findOneBy(array('name' => $parameterName));
+
+        return $parameter != null;
+    }
 
 
     /*
@@ -70,7 +75,7 @@ class Parametres
      *
      *
      *
-     * tout ce qui est en dessous de ceci est plus d'acutalité
+     * tout ce qui est en dessous de ceci n'est plus d'acutalité
      *
      *
      *

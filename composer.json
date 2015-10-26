@@ -32,8 +32,8 @@
         "knplabs/knp-snappy-bundle": "dev-master",
         "coresphere/console-bundle": "dev-master",
         "phpunit/phpunit": "4.7.6",
-        "gedmo/doctrine-extensions":"dev-master"
-
+      "gedmo/doctrine-extensions": "dev-master",
+      "interne/seancebundle": "dev-master"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

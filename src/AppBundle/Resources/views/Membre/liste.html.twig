@@ -4,32 +4,5 @@
     vitales au travers d'une api chillos
 #}
 
-<table class="ui table membre-datatable" data-swag="it">
-    <thead>
-    <tr>
-        <th>
-            <input type="checkbox" class="table-checkbox" />
-        </th>
-        <th>Nom</th>
-        <th>Dans la BS</th>
-        <th>Naissance</th>
-        <th>Numéro BS</th>
-        <th>Options</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for membre in membres %}
-        <tr data-membre-id="{{ membre.id }}">
-            <td></td>
-            <td>
-                <a data-position="left center" class="popupable" href="{{ path('interne_voir_membre', {membre: membre.id}) }}">{{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}</a>
-                {% include 'AppBundle:Popup:popup_membre.html.twig' with {'membre' : membre, 'blocks' : ['personal', 'famille']} %}
-            </td>
-            <td>{{ membre.activeAttribution.fonction.nom|capitalize }} - {{ membre.activeAttribution.groupe.nom|capitalize }}</td>
-            <td>{{ membre.naissance|date("d.m.Y") }}</td>
-            <td>{{ membre.numeroBs }}</td>
-            <td></td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+
+{{ list_container.getModel(constant('AppBundle\\Utils\\ListRenderer\\Model::Membre'), membres).render|raw }}

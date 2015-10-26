@@ -22,11 +22,16 @@
             <a class="item" href="#" id="main-listing-button">Listes</a>
 
             <div class="ui dropdown item">
-                {{ app.user.membre.prenom|capitalize }} {{ app.user.membre.nom|capitalize }} <i class="dropdown icon"></i>
-                <div class="menu">
-                    <a class="item" href="{{ path('security_my_account') }}" ><i class="user icon"></i>Mon compte</a>
-                    <a class="item" href="{{ path('logout') }}" ><i class="delete icon"></i>Déconnexion</a>
-                </div>
+                {% if app.user != null %}
+                    {{ app.user.membre.prenom|capitalize }} {{ app.user.membre.nom|capitalize }} <i
+                        class="dropdown icon"></i>
+                    <div class="menu">
+                        <a class="item" href="{{ path('security_my_account') }}"><i class="user icon"></i>Mon compte</a>
+                        <a class="item" href="{{ path('logout') }}"><i class="delete icon"></i>Déconnexion</a>
+                    </div>
+                {% else %}
+                    Non connecté
+                {% endif %}
             </div>
         </div>
     </div>

@@ -7,6 +7,7 @@ use AppBundle\Utils\ListRenderer\ListModels\ListModelsDistinctions;
 use AppBundle\Utils\ListRenderer\ListModels\ListModelsMembre;
 use Interne\FinancesBundle\Utils\ListModels\ListModelsCreances;
 use Interne\FinancesBundle\Utils\ListModels\ListModelsFactures;
+use Symfony\Component\Routing\Router;
 use Twig_Environment;
 
 
@@ -28,6 +29,7 @@ class Model
 
     private function __construct()
     {
+
     }
 
     /**
@@ -64,10 +66,12 @@ class ListContainer
 
     private $definedModels;
 
-    public function __construct(Twig_Environment $twig)
+    private $router;
+
+    public function __construct(\Twig_Environment $twig, Router $router)
     {
         $this->twig = $twig;
-
+        $this->router = $router;
         $this->definedModels = Model::getInstance();
     }
 
@@ -78,34 +82,34 @@ class ListContainer
      */
     public function getNewListRenderer()
     {
-        return new ListRenderer($this->twig);
+        return new ListRenderer($this->twig, $this->router);
     }
 
     public function getModel($type, $items)
     {
         switch ($type) {
             case Model::Membre:
-                return ListModelsMembre::getDefault($this->twig, $items);
+                return ListModelsMembre::getDefault($this->twig, $this->router, $items);
                 break;
 
             case Model::MembreFraterie:
-                return ListModelsMembre::getFraterie($this->twig, $items);
+                return ListModelsMembre::getFraterie($this->twig, $this->router, $items);
                 break;
 
             case Model::Attribution:
-                return ListModelsAttributions::getDefault($this->twig, $items);
+                return ListModelsAttributions::getDefault($this->twig, $this->router, $items);
                 break;
 
             case Model::Distinction:
-                return ListModelsDistinctions::getDefault($this->twig, $items);
+                return ListModelsDistinctions::getDefault($this->twig, $this->router, $items);
                 break;
 
             case Model::Creance:
-                return ListModelsCreances::getDefault($this->twig, $items);
+                return ListModelsCreances::getDefault($this->twig, $this->router, $items);
                 break;
 
             case Model::Facture:
-                return ListModelsFactures::getDefault($this->twig, $items);
+                return ListModelsFactures::getDefault($this->twig, $this->router, $items);
                 break;
 
         }
