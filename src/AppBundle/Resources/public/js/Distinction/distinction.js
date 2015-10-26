@@ -1,6 +1,10 @@
 $('#ajouter-distinction').click(function () {
-    var idMembre = {idMembre: $(this).data('membre-id')};
-    getModal(idMembre, Routing.generate('obtention-distinction_add_modal'));
+    getModal(null, Routing.generate('obtentiondistinction_add_modal', {membre: $(this).data('membre-id')}));
+});
+
+$('#supprimer-distinction').click(function () {
+    if (removeDistinction($(this).data('distinction-id')))
+        $(btn).parent().parent().remove();
 });
 
 

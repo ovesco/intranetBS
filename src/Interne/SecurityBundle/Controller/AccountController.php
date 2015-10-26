@@ -3,10 +3,6 @@
 namespace Interne\SecurityBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -37,7 +33,7 @@ class AccountController extends Controller
         $errors  = array();
 
         /** @var \Interne\SecurityBundle\Entity\User $user */
-        $user    = $this->get('security.context')->getToken()->getUser();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $encoder = $this->get('security.password_encoder');
         $current = $encoder->encodePassword($user, $request->request->get('current_password'));
         $new     = $encoder->encodePassword($user, $request->request->get('new_password'));

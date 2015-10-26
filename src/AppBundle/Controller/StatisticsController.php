@@ -2,13 +2,11 @@
 
 namespace AppBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use AppBundle\Entity\Groupe;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-
-use AppBundle\Entity\Groupe;
-
 
 
 /**
@@ -28,7 +26,7 @@ class StatisticsController extends Controller
     {
         $groupes = $this->getDoctrine()->getManager()->getRepository('AppBundle:Groupe')->findAll();
 
-        return $this->render('AppBundle:statistics:page_statistics.html.twig',array('groupes'=>$groupes));
+        return $this->render('AppBundle:Statistics:page_statistics.html.twig', array('groupes' => $groupes));
     }
 
 
@@ -75,68 +73,6 @@ class StatisticsController extends Controller
             default:
                 return $this->getEffectifsPieCharts($options);
         }
-
-    }
-
-    private function getGroupeData($groupeRepo,Groupe $groupeParent, $nbTotalMembre,$niveau,$niveauMax,$series,$color = null)
-    {
-
-        $niveauMax = $niveauMax-1;
-
-        for($niv = 0; $niv <= $niveauMax; $niv++)
-        {
-            //on commence par crée les series pour chaque niveau
-            if(!isset($series[$niv]))
-            {
-                $series[$niv]['name'] = $niv;
-                $series[$niv]['size'] = ((100/($niveauMax+1))*($niv+1)).'%';
-                $series[$niv]['innerSize'] = ((100/($niveauMax+1))*($niv)).'%';
-                $series[$niv]['data'] = array();
-            }
-        }
-
-
-
-        if($niveau <= $niveauMax)
-        {
-
-            $effectifDirect = $groupeRepo->findNumberOfMembreAtDate($groupeParent->getId());
-
-            if($color == null)
-                $color = 'rgba('.mt_rand(0,255).','.mt_rand(0,255).','.mt_rand(0,255).', 1)';
-
-            for($niv = $niveau; $niv <= $niveauMax; $niv++) {
-
-                //effectif direct du groupe.
-                $data = array();
-                $data['name'] = 'Eff. direct '.$groupeParent->getNom().' ('.$effectifDirect.' pers.)';
-                $data['y'] = (($effectifDirect / $nbTotalMembre) * 100);
-                $data['color'] = $color;
-                array_push($series[$niv]['data'], $data);
-            }
-
-
-            $color = 'rgba('.mt_rand(0,255).','.mt_rand(0,255).','.mt_rand(0,255).', 1)';
-
-
-            foreach($groupeParent->getEnfants() as $enfant) {
-                $effectif = $groupeRepo->findNumberOfMembreAtDateRecursive($enfant->getId());
-                $data = array();
-                $data['name'] = $enfant->getNom().' ('.$effectif.' pers.)';
-                $data['y'] = (($effectif / $nbTotalMembre) * 100);
-                $data['color'] = $color;
-                array_push($series[$niveau]['data'], $data);
-            }
-
-            foreach($groupeParent->getEnfants() as $enfant) {
-                $series = $this->getGroupeData($groupeRepo,$enfant,$nbTotalMembre,$niveau+1,$niveauMax+1,$series,$color);
-            }
-        }
-
-        return $series;
-
-
-
 
     }
 
@@ -203,6 +139,61 @@ class StatisticsController extends Controller
         return $graphData;
     }
 
+    private function getGroupeData($groupeRepo, Groupe $groupeParent, $nbTotalMembre, $niveau, $niveauMax, $series, $color = null)
+    {
+
+        $niveauMax = $niveauMax - 1;
+
+        for ($niv = 0; $niv <= $niveauMax; $niv++) {
+            //on commence par crée les series pour chaque niveau
+            if (!isset($series[$niv])) {
+                $series[$niv]['name'] = $niv;
+                $series[$niv]['size'] = ((100 / ($niveauMax + 1)) * ($niv + 1)) . '%';
+                $series[$niv]['innerSize'] = ((100 / ($niveauMax + 1)) * ($niv)) . '%';
+                $series[$niv]['data'] = array();
+            }
+        }
+
+
+        if ($niveau <= $niveauMax) {
+
+            $effectifDirect = $groupeRepo->findNumberOfMembreAtDate($groupeParent->getId());
+
+            if ($color == null)
+                $color = 'rgba(' . mt_rand(0, 255) . ',' . mt_rand(0, 255) . ',' . mt_rand(0, 255) . ', 1)';
+
+            for ($niv = $niveau; $niv <= $niveauMax; $niv++) {
+
+                //effectif direct du groupe.
+                $data = array();
+                $data['name'] = 'Eff. direct ' . $groupeParent->getNom() . ' (' . $effectifDirect . ' pers.)';
+                $data['y'] = (($effectifDirect / $nbTotalMembre) * 100);
+                $data['color'] = $color;
+                array_push($series[$niv]['data'], $data);
+            }
+
+
+            $color = 'rgba(' . mt_rand(0, 255) . ',' . mt_rand(0, 255) . ',' . mt_rand(0, 255) . ', 1)';
+
+
+            foreach ($groupeParent->getEnfants() as $enfant) {
+                $effectif = $groupeRepo->findNumberOfMembreAtDateRecursive($enfant->getId());
+                $data = array();
+                $data['name'] = $enfant->getNom() . ' (' . $effectif . ' pers.)';
+                $data['y'] = (($effectif / $nbTotalMembre) * 100);
+                $data['color'] = $color;
+                array_push($series[$niveau]['data'], $data);
+            }
+
+            foreach ($groupeParent->getEnfants() as $enfant) {
+                $series = $this->getGroupeData($groupeRepo, $enfant, $nbTotalMembre, $niveau + 1, $niveauMax + 1, $series, $color);
+            }
+        }
+
+        return $series;
+
+
+    }
 
     private function getEvolutionEffectifChart($options)
     {

@@ -2,10 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Membre;
-use AppBundle\Utils\ListRenderer\ListContainer;
-use AppBundle\Utils\ListRenderer\ListRenderer;
-use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,7 +27,7 @@ class AppController extends Controller
     public function testAction()
     {
 
-        $parametre = $this->get('parametres_container')->getParamter('bidon');
+        //$parametre = $this->get('parametres_container')->getParamter('bidon');
 
         return new Response();
     }

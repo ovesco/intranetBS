@@ -220,11 +220,8 @@ class AttributionController extends Controller
             'action' => $this->generateUrl('attribution_add')
         ));
 
-        $attribution->setMembre($membre);
-
         return $this->render('AppBundle:Attribution:attribution_form_modal.html.twig', array(
-                'form' => $attributionForm->createView(),
-                'postform' => $attributionForm)
+                'form' => $attributionForm->createView())
         );
     }
 

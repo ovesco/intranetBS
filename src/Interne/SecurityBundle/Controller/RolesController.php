@@ -3,16 +3,10 @@
 namespace Interne\SecurityBundle\Controller;
 
 use AppBundle\Entity\Fonction;
-use AppBundle\Form\FonctionType;
 use Interne\SecurityBundle\Entity\Role;
-use Interne\SecurityBundle\Utils\RolesUtil;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @route("interne/roles/")

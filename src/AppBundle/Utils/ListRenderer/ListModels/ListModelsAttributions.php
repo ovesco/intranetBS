@@ -39,7 +39,7 @@ class ListModelsAttributions
         },
             'date(global_date_format)'));
 
-        $list->addAction(new ActionLigne('Terminer', 'zoom icon popupable', 'event_attribution_end'));
+        $list->addAction(new ActionLigne('Terminer', 'ban icon popupable', 'event_attribution_end'));
         $list->addAction(new ActionLigne('Supprimer', 'delete icon popupable', 'event_attribution_delete'));
 
         $list->setDatatable(false);

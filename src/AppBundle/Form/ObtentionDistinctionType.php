@@ -6,7 +6,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ObtentionDistinctionType extends AbstractType
 {
@@ -20,7 +19,7 @@ class ObtentionDistinctionType extends AbstractType
             $obtention = $event->getData();
             $form = $event->getForm();
 
-            /* We have to check that is doesn't exist because of form inheritance */
+            /* We have to check that it doesn't exist because of form inheritance */
             if (!$form->has('membre')) {
                 if (null !== $obtention->getMembre()) {
                     $form->add('membre', 'hidden', array(

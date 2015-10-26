@@ -3,11 +3,9 @@
 namespace AppBundle\Test\Controller;
 
 use AppBundle\Entity\Categorie;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\BrowserKit\Cookie;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Bundle\FrameworkBundle\Client;
 use Doctrine\ORM\EntityManager;
+use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * @group app_bundle
@@ -20,30 +18,19 @@ class RoutingTest extends WebTestCase
     /** @var Client client */
     private $client;
 
-    public function setUp()
-    {
-        /** @var Client client */
-        $this->client = static::createClient(array(), array(
-            'PHP_AUTH_USER' => 'admin',
-            'PHP_AUTH_PW'   => 'admin',
-        ));
-    }
-
     /**
      * @dataProvider urlProvider
      */
     public function testPageIsSuccessful($route)
     {
-
         //echo PHP_EOL,'start testing route: '.$route,PHP_EOL;
         $this->client->request('GET', $route);
-        $this->assertTrue($this->client->getResponse()->isSuccessful(),'Test route: '.$route);
+        $this->assertTrue($this->client->getResponse()->isSuccessful(), 'Test route: ' . $route);
         //echo PHP_EOL,'end testing route: '.$route,PHP_EOL;
     }
 
     public function urlProvider()
     {
-
         $this->setUp();
 
         /** @var EntityManager $em */
@@ -63,6 +50,38 @@ class RoutingTest extends WebTestCase
 
 
         return $routes;
+    }
+
+    public function setUp()
+    {
+        /** @var Client client */
+        $this->client = static::createClient(array(), array(
+            'PHP_AUTH_USER' => 'admin',
+            'PHP_AUTH_PW' => 'admin',
+        ));
+    }
+
+    private function routeBugReportController()
+    {
+        return array(
+            array('/interne/bug_report/form'),
+        );
+    }
+
+    private function routeMembreController()
+    {
+        return array(
+            array('/interne/membre/ajouter'),
+        );
+    }
+
+    private function routeStructureController()
+    {
+        return array(
+            array('/interne/structure/gestion_fonction'),
+            array('/interne/structure/gestion_model'),
+            //array('/interne/structure/gestion_groupe'),
+        );
     }
 
     private function routeAppController()
@@ -98,29 +117,6 @@ class RoutingTest extends WebTestCase
             array('/interne/attribution/remove/'.$idAttribution),
 
 
-        );
-    }
-
-    private function routeBugReportController()
-    {
-        return array(
-            array('/interne/bug_report/form'),
-        );
-    }
-
-    private function routeMembreController()
-    {
-        return array(
-            array('/interne/membre/ajouter'),
-        );
-    }
-
-    private function routeStructureController()
-    {
-        return array(
-            array('/interne/structure/gestion_fonction'),
-            array('/interne/structure/gestion_model'),
-            //array('/interne/structure/gestion_groupe'),
         );
     }
 

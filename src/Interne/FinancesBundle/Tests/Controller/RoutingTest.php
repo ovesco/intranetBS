@@ -2,15 +2,13 @@
 
 namespace Interne\FinancesBundle\Test\Controller;
 
+use Doctrine\ORM\EntityManager;
 use Interne\FinancesBundle\Entity\Creance;
 use Interne\FinancesBundle\Entity\Facture;
 use Interne\FinancesBundle\Entity\Payement;
 use Interne\FinancesBundle\Entity\Rappel;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\BrowserKit\Cookie;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Bundle\FrameworkBundle\Client;
-use Doctrine\ORM\EntityManager;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * Class RoutingTest
@@ -26,23 +24,13 @@ class RoutingTest extends WebTestCase
     /** @var Client client */
     private $client = null;
 
-    public function setUp()
-    {
-        /** @var Client client */
-        $this->client = static::createClient(array(), array(
-            'PHP_AUTH_USER' => 'admin',
-            'PHP_AUTH_PW'   => 'admin',
-        ));
-
-    }
-
     /**
      * @dataProvider urlProvider
      */
     public function testPageIsSuccessful($route)
     {
         $this->client->request('GET', $route);
-        $this->assertTrue($this->client->getResponse()->isSuccessful(),'Test route: '.$route);
+        $this->assertTrue($this->client->getResponse()->isSuccessful(), 'Test route : ' . $route);
         //echo PHP_EOL,'Testing route: '.$route,PHP_EOL;
     }
 
@@ -68,6 +56,16 @@ class RoutingTest extends WebTestCase
         $routes = array_merge($routes,$this->debiteurRoute($famille));
 
         return $routes;
+    }
+
+    public function setUp()
+    {
+        /** @var Client client */
+        $this->client = static::createClient(array(), array(
+            'PHP_AUTH_USER' => 'admin',
+            'PHP_AUTH_PW' => 'admin',
+        ));
+
     }
 
     private function creanceRoute(EntityManager $em, $ownerEntity){
