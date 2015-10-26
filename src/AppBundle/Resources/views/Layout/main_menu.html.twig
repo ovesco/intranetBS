@@ -67,42 +67,16 @@
         </div>
     </div>
 
-    <div class="item">
-        <div class="ui small  inverted header">Structure</div>
-        <div class="menu">
-
-       {#
-            <a class="item" href="{{ path('hierarchie') }}">Hierarchie du groupe(JS)</a>
-        #}
-
-            <a class="item" href="{{ path('structure_gestion_groupe') }}">Gestion des groupes</a>
-
-            <a class="item" href="{{ path('structure_gestion_fonctions') }}">Gestion des fonctions</a>
-
-            <a class="item" href="{{ path('structure_gestion_model') }}">Gestion des modèles</a>
-
-            <a class="item" href="{{ path('categorie_liste') }}">Gestion des Categories</a>
-
-
-
-        </div>
+    <div class="item popup-menu"  data-html='{% include 'AppBundle:Menu:structure.htm.twig' %}'>
+        Structure
     </div>
 
-    <div class="item">
-        <div class="ui small  inverted header">Paramètres</div>
-        <div class="menu">
-
-            {#
-            <a class="item" href="{{ path('validation_vue_globale') }}">
-                Validation
-            </a>
-            #}
-
-            <a class="item" href="#">
-                Paramètres avancés
-            </a>
-
-        </div>
+    <div class="item popup-menu"  data-html='
+            <div class="ui vertical menu">
+                <a class="item" href="{{ path('interne_parametre_list') }}"><i class="ui database icon"></i>Paramètres</a>
+            </div>
+        '>
+        Paramètres
     </div>
 
     <div class="item">
@@ -128,15 +102,14 @@
         </div>
     </div>
 
-    <div class="item">
-        {% include 'InterneFinancesBundle:Layout:menu.html.twig' %}
+    <div class="item popup-menu"  data-html='{% include 'InterneFinancesBundle:Layout:menu.html.twig' %}'>
+        Fiances
     </div>
 
     <div class="item">
         <div class="ui small  inverted header">Divers</div>
         <div class="menu">
 
-            <a class="item" href="{{ path('interne_parametre_list') }}">Paramètres</a>
 
             <a class="item" href="{{path('app_bundle_statistics')}}">Statistiques</a>
 

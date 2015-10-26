@@ -16,7 +16,7 @@
         '@AppBundle/Resources/public/css/Layout/*'
         '@AppBundle/Resources/public/css/Editable/*'
         '@AppBundle/Resources/public/css/bs.css'
-
+        '@AppBundle/Resources/public/css/BugReport/feedback.min.css'
         output='css/layout.css' %}
             <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
@@ -26,16 +26,43 @@
         {# doit rester la pour que le bug report marche #}
         <script src="{{ asset('assetic/jquery.js') }}"></script>
 
-        {# Bug report doit rester la car il faut pouvoir loader la modal de rapport meme si le reste de la page subit un bug...#}
+        {# Bug report doit rester la car il faut pouvoir loader la modal de rapport meme si le reste de la page subit un bug...#
         {% javascripts
         '@AppBundle/Resources/public/js/BugReport/bug_report.js'
+        '@AppBundle/Resources/public/js/BugReport/feedback.js'
         output="js/head.js"
         %}
         <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
 
+        {% javascripts
+        '@AppBundle/Resources/public/js/BugReport/html2canvas.min.js'
+        output="js/html2canvas.js"
+        %}
+        {# on a besoin de l'url pour initialiser correctement le script du feedback #
+        {% set html2canevasUrl = asset_url %}
+        <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+        #}
+
+
 
         {% block headjs %}{% endblock %}
+
+        {# script d'initialisation du feedback
+        <script type="text/javascript">
+            document.addEventListener('DOMContentLoaded',
+                function () {
+                    $.feedback({
+                        ajaxURL: 'http://localhost:8888/FeedbackAPI/web/app_dev.php/api/feedbacks',
+                        html2canvasURL: '{{ html2canevasUrl }}',
+                        initButtonText: 'Nous faire part d\'un bug',
+                        onClose: function() { window.location.reload(); }
+                    });
+                }, false);
+        </script>
+        #}
+
 
     </head>
 
