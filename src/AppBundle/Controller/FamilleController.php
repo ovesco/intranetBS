@@ -2,19 +2,14 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Form\FamilleType;
-
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-use AppBundle\Entity\Membre;
 use AppBundle\Entity\Famille;
-
+use AppBundle\Form\FamilleType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class FamilleController
@@ -28,7 +23,7 @@ class FamilleController extends Controller {
      * @param $famille Famille la famille
      * @return Response la vue
      *
-     * @paramConverter("famille", class="AppBundle:Famille")
+     * @ParamConverter("famille", class="AppBundle:Famille")
      * @Route("/voir/{famille}", name="interne_voir_famille")
      * @Template("AppBundle:Famille:page_voir_famille.html.twig")
      */

@@ -5,6 +5,7 @@ namespace Interne\GalerieBundle\Controller;
 use Doctrine\Common\Collections\ArrayCollection;
 use Interne\GalerieBundle\Entity\Dossier;
 use Interne\GalerieBundle\Form\DossierType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -140,7 +141,7 @@ class GalerieAdminController extends Controller
 
     /**
      * @Route("dossier/manage-lock/{lock}/{dossier}", name="galerie_interne_manage_lock_dossier", options={"expose"=true})
-     * @paramConverter("dossier", class="InterneGalerieBundle:Dossier")
+     * @ParamConverter("dossier", class="InterneGalerieBundle:Dossier")
      * Permet de gérer l'état du lock d'un dossier
      * @param Dossier $dossier
      * @param boolean $lock

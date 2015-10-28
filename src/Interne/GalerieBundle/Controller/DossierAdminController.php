@@ -2,20 +2,18 @@
 
 namespace Interne\GalerieBundle\Controller;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Utils\Data\Sanitizer as Useful;
 use Interne\GalerieBundle\Entity\Album;
 use Interne\GalerieBundle\Entity\Dossier;
 use Interne\GalerieBundle\Form\AlbumType;
-use Interne\GalerieBundle\Form\DossierType;
 use Interne\GalerieBundle\Utils\Photo;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\HttpFoundation\Session\Session;
-use AppBundle\Utils\Data\Sanitizer as Useful;
+
 /**
  * Gère toutes les routes et actions internes, c'est-à-dire accessible uniquement aux personnes authentifiées
  * @package Interne\GalerieBundle\Controller
@@ -24,7 +22,7 @@ class DossierAdminController extends Controller
 {
     /**
      * @Route("manage-dossier/{dossier}", name="interne_galerie_dossier_managing", options={"expose"=true})
-     * @paramConverter("dossier", class="InterneGalerieBundle:Dossier")
+     * @ParamConverter("dossier", class="InterneGalerieBundle:Dossier")
      * @param Dossier $dossier
      * @return Response
      */
@@ -71,7 +69,7 @@ class DossierAdminController extends Controller
 
     /**
      * @Route("ajax-view/manage-album/{album}", name="interne_galerie_dossier_manage_album_view", options={"expose"=true})
-     * @paramConverter("album", class="InterneGalerieBundle:Album")
+     * @ParamConverter("album", class="InterneGalerieBundle:Album")
      * @param Album $album
      * @return Response
      */
@@ -186,7 +184,7 @@ class DossierAdminController extends Controller
     /**
      * Supprimme un album entier
      * @Route("remove-album/{album}", name="interne_galerie_dossier_supprimer_album")
-     * @paramConverter("album", class="InterneGalerieBundle:Album")
+     * @ParamConverter("album", class="InterneGalerieBundle:Album")
      * @param Album $album
      * @return Response
      */
