@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
 /**
  * Le controller de compte utilisateur. Réunit toutes les tâches relatives à la gestion du compte utilisateur d'un
  * membre
