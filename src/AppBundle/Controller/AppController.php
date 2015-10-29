@@ -9,7 +9,6 @@ use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use AppBundle\Utils\Menu\Menu;
 
 
 class AppController extends Controller
@@ -17,7 +16,6 @@ class AppController extends Controller
     /**
      * Page d'accueil de l'application
      * @Route("", name="interne_homepage")
-     * @Menu("home page", block="home block")
      */
     public function homePageAction()
     {
@@ -28,17 +26,19 @@ class AppController extends Controller
     }
 
     /**
-     * @route("test", name="test_menu")
+     * @Route("test")
      * @Menu("youyhouh",block="block test",order=1)
      */
     public function testAction()
     {
-        return $this->render('AppBundle:Menu:menu_test.html.twig');
+
+
+        return new Response();
     }
 
 
     /**
-     * @route("hello/{nom}", name="exemple_hello_word")
+     * @Route("hello/{nom}", name="exemple_hello_word")
      * @Menu("coucou")
      */
     public function helloWordAction($nom)
@@ -47,7 +47,7 @@ class AppController extends Controller
     }
 
     /**
-     * @route("test2")
+     * @Route("test2")
      * @Menu(order=3)
      */
     public function test2() {
