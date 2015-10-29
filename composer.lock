@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b0661c951ede6eca8984cd530967232d",
+    "hash": "7a2ede643fd5cd88b743a1a9505a41e6",
     "content-hash": "7a0829b43feab65aadf5911dc9185c7a",
     "packages": [
         {
@@ -1189,12 +1189,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Atlantic18/DoctrineExtensions.git",
-                "reference": "8bf241d036a6888895bfb97f7bc278ddf20a2524"
+                "reference": "e899830607a4e13d73f9cee4cb91bd55fec648d6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/8bf241d036a6888895bfb97f7bc278ddf20a2524",
-                "reference": "8bf241d036a6888895bfb97f7bc278ddf20a2524",
+                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/e899830607a4e13d73f9cee4cb91bd55fec648d6",
+                "reference": "e899830607a4e13d73f9cee4cb91bd55fec648d6",
                 "shasum": ""
             },
             "require": {
@@ -1260,7 +1260,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2015-10-21 16:29:25"
+            "time": "2015-10-23 06:34:45"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -1319,12 +1319,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sulazix/SeanceBundle.git",
-                "reference": "49ae412cd5c4f4aa4caf2510ba60cdfcceb46d38"
+                "reference": "32abc6427e46680586dc4e8ad3112e5daeed1e3c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sulazix/SeanceBundle/zipball/49ae412cd5c4f4aa4caf2510ba60cdfcceb46d38",
-                "reference": "49ae412cd5c4f4aa4caf2510ba60cdfcceb46d38",
+                "url": "https://api.github.com/repos/sulazix/SeanceBundle/zipball/32abc6427e46680586dc4e8ad3112e5daeed1e3c",
+                "reference": "32abc6427e46680586dc4e8ad3112e5daeed1e3c",
                 "shasum": ""
             },
             "type": "symfony-bundle",
@@ -1351,7 +1351,7 @@
             "keywords": [
                 "seance meeting bundle"
             ],
-            "time": "2015-10-21 14:05:44"
+            "time": "2015-10-26 20:37:17"
         },
         {
             "name": "itbz/fpdf",

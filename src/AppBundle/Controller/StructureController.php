@@ -18,6 +18,8 @@ use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Form\FonctionType;
 use AppBundle\Entity\Fonction;
 
+use AppBundle\Utils\Menu\Menu;
+
 /**
  * Class StructureController
  * @package AppBundle\Controller
@@ -32,7 +34,7 @@ class StructureController extends Controller
      * @Route("/gestion_groupe", name="structure_gestion_groupe", options={"expose"=true})
      * @param Request $request
      * @return Response
-     *
+     * @Menu("Gestion des groupes", block="structure", order=1)
      */
     public function gestionGroupeAction(Request $request)
     {
@@ -56,7 +58,7 @@ class StructureController extends Controller
      *
      * @param Request $request
      * @return Response
-     *
+     * @Menu("Gestion des fonctions", block="structure")
      */
     public function gestionFonctionAction(Request $request) {
 
@@ -78,7 +80,7 @@ class StructureController extends Controller
      * @Route("/gestion_model", name="structure_gestion_model", options={"expose"=true})
      * @param Request $request
      * @return Response
-     *
+     * @Menu("Gestion des modes", block="structure", order=2)
      */
     public function gestionModelAction(Request $request) {
 

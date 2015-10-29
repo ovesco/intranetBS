@@ -38,6 +38,7 @@ twig:
     globals:
         parametreService: "@parametres"
         list_container: "@list_container"
+        menu: "@menu"
     form:
         resources:
             - 'Templates/Form/Widgets/default_widgets.html.twig'

@@ -67,9 +67,23 @@
         </div>
     </div>
 
+
+    {#
     <div class="item popup-menu"  data-html='{% include 'AppBundle:Menu:structure.htm.twig' %}'>
         Structure
     </div>
+    #}
+    <div class="item">
+        <div class="header">Structure</div>
+        <div class="menu">
+            {% for item in menu.bloc('structure') %}
+                <a class="item" href="{{ item.path }}">{{ item.label }}</a>
+            {% endfor %}
+        </div>
+    </div>
+
+
+
 
     <div class="item popup-menu"  data-html='
             <div class="ui vertical menu">
@@ -102,9 +116,13 @@
         </div>
     </div>
 
+
+
+
     <div class="item popup-menu"  data-html='{% include 'InterneFinancesBundle:Layout:menu.html.twig' %}'>
         Fiances
     </div>
+
 
     <div class="item">
         <div class="ui small  inverted header">Divers</div>

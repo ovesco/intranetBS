@@ -46,6 +46,12 @@ services:
             - @twig
             - @router
 
+    menu:
+        class: AppBundle\Utils\Menu\MenuRenderer
+        arguments:
+            - @annotation_reader
+            - @kernel
+
 
     # Twig
     # Extensions twig qui permettent de mettre en place des filtres
