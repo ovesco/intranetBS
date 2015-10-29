@@ -3,23 +3,20 @@
 namespace Interne\SecurityBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Le controller de compte utilisateur. Réunit toutes les tâches relatives à la gestion du compte utilisateur d'un
  * membre
- * @route("account/")
+ * @Route("account/")
  * @package Interne\SecurityBundle\Controller
  */
 class AccountController extends Controller
 {
     /**
      * Affiche la page de gestion de compte
-     * @route("my_account", name="security_my_account")
+     * @Route("my_account", name="security_my_account")
      */
     public function myAccountAction(){
 
@@ -30,14 +27,14 @@ class AccountController extends Controller
 
     /**
      * Permet à un utilisateur de modifier son mot de passe
-     * @route("modify-password", name="security_modify_password")
+     * @Route("modify-password", name="security_modify_password")
      */
     public function modifyPasswordAction(Request $request) {
 
         $errors  = array();
 
         /** @var \Interne\SecurityBundle\Entity\User $user */
-        $user    = $this->get('security.context')->getToken()->getUser();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $encoder = $this->get('security.password_encoder');
         $current = $encoder->encodePassword($user, $request->request->get('current_password'));
         $new     = $encoder->encodePassword($user, $request->request->get('new_password'));

@@ -4,12 +4,10 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Groupe;
 use AppBundle\Form\VoirGroupeType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -26,8 +24,8 @@ class GroupeController extends Controller
      * @param $groupe Groupe le groupe
      * @return Response la vue
      *
-     * @paramConverter("groupe", class="AppBundle:Groupe")
-     * @route("/voir/{groupe}", name="interne_voir_groupe", options={"expose"=true})
+     * @ParamConverter("groupe", class="AppBundle:Groupe")
+     * @Route("/voir/{groupe}", name="interne_voir_groupe", options={"expose"=true})
      * @Template("AppBundle:Groupe:page_voir_groupe.html.twig", vars={"groupe"})
      */
     public function showGroupeAction($groupe) {

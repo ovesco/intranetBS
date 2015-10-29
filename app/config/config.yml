@@ -57,6 +57,7 @@ assetic:
         - InterneGalerieBundle
         - InterneOrganisationBundle
         - AppBundle
+        - InterneSeanceBundle
     write_to:       %kernel.root_dir%/../web/static/
 
     #java: /usr/bin/java

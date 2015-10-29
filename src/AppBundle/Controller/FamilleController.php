@@ -2,24 +2,19 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Form\FamilleType;
-
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-use AppBundle\Entity\Membre;
 use AppBundle\Entity\Famille;
-
+use AppBundle\Form\FamilleType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class FamilleController
  * @package AppBundle\Controller
- * @route("/famille")
+ * @Route("/famille")
  */
 class FamilleController extends Controller {
 
@@ -28,8 +23,8 @@ class FamilleController extends Controller {
      * @param $famille Famille la famille
      * @return Response la vue
      *
-     * @paramConverter("famille", class="AppBundle:Famille")
-     * @route("/voir/{famille}", name="interne_voir_famille")
+     * @ParamConverter("famille", class="AppBundle:Famille")
+     * @Route("/voir/{famille}", name="interne_voir_famille")
      * @Template("AppBundle:Famille:page_voir_famille.html.twig")
      */
     public function showFamilleAction(Famille $famille) {
@@ -50,7 +45,7 @@ class FamilleController extends Controller {
      * @param $property la proprieté à atteindre
      * @return mixed proprieté
      *
-     * @route("/ajax/get-property/{famille}/{property}", name="interne_ajax_famille_get_property", options={"expose"=true})
+     * @Route("/ajax/get-property/{famille}/{property}", name="interne_ajax_famille_get_property", options={"expose"=true})
      * @ParamConverter("famille", class="AppBundle:Famille")
      */
     public function getFamillePropertyAction(Famille $famille, $property) {
@@ -64,7 +59,7 @@ class FamilleController extends Controller {
 
     /**
      * Retourne la liste de toutes les familles disponibles sous la forme d'un objet JSON
-     * @route("/ajax/get-familles-as-json", name="interne_ajax_get_familles_as_json", options={"expose"=true})
+     * @Route("/ajax/get-familles-as-json", name="interne_ajax_get_familles_as_json", options={"expose"=true})
      */
     public function getFamillesAsJson() {
 
@@ -90,7 +85,7 @@ class FamilleController extends Controller {
      * @param $famille Famille la famille
      * @return mixed proprieté
      *
-     * @route("ajax/get-adresses/{famille}", name="interne_ajax_famille_get_adresses", options={"expose"=true})
+     * @Route("ajax/get-adresses/{famille}", name="interne_ajax_famille_get_adresses", options={"expose"=true})
      * @ParamConverter("famille", class="AppBundle:Famille")
      */
     public function getFamilleAdressesAction(Famille $famille) {

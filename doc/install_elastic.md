@@ -53,7 +53,7 @@ wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add 
 echo "deb http://packages.elastic.co/elasticsearch/1.5/debian stable main" | sudo tee -a /etc/apt/sources.list
 sudo apt-get update && sudo apt-get install elasticsearch
 sudo mkdir /usr/share/elasticsearch/data
-sudo chown elasticsearch:elasticsearch usr/share/elasticsearch/data -R
+sudo chown elasticsearch:elasticsearch /usr/share/elasticsearch/data -R
 (optional) start @boot
 sudo update-rc.d elasticsearch defaults 95 10
 ```

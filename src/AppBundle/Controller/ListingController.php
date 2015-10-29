@@ -13,14 +13,14 @@ use AppBundle\Utils\Listing\Lister;
 /**
  * Class ListingController
  * @package AppBundle\Controller
- * @route("/listing")
+ * @Route("/listing")
  */
 class ListingController extends Controller
 {
 
     /**
      * Gébère la barre qui s'affiche dans chaque page
-     * @route("/generate-bar", name="listing_generate_top_bar", options={"expose"=true})
+     * @Route("/generate-bar", name="listing_generate_top_bar", options={"expose"=true})
      * @Template("AppBundle:Listing:top_layout_listing.html.twig")
      */
     public function listingBarAction() {
@@ -30,7 +30,7 @@ class ListingController extends Controller
 
     /**
      * Retourne la liste des listes actuelles en json
-     * @route("/listes-as-json", name="listing_load_listes_as_json", options={"expose"=true})
+     * @Route("/listes-as-json", name="listing_load_listes_as_json", options={"expose"=true})
      */
     public function loadListesAsJsonAction() {
 
@@ -50,7 +50,7 @@ class ListingController extends Controller
     /**
      * Permet d'avoir une vue d'ensemble des listes dynamiques disponibles
      * @return Response la vue
-     * @route("/", name="listing_page")
+     * @Route("/", name="listing_page")
      */
     public function listingDashboardAction() {
 
@@ -66,7 +66,7 @@ class ListingController extends Controller
     /**
      * @param $token
      * @return Response
-     * @route("/view/liste/{token}", name="listing_view_liste_by_token", options={"expose"=true})
+     * @Route("/view/liste/{token}", name="listing_view_liste_by_token", options={"expose"=true})
      */
     public function viewListe($token) {
 
@@ -81,7 +81,7 @@ class ListingController extends Controller
     /**
      * Permet de créer une liste
      * @return Response redirection vers la page du listing
-     * @route("/add/{name}", name="listing_add", options={"expose"=true})
+     * @Route("/add/{name}", name="listing_add", options={"expose"=true})
      */
     public function addListeAction($name) {
 
@@ -97,7 +97,7 @@ class ListingController extends Controller
      * Permet de supprimer une liste du listing
      * @param $token string le token de la liste
      * @return Response redirection vers la page du listing
-     * @route("/remove/{token}", name="listing_remove_liste", options={"expose"=true})
+     * @Route("/remove/{token}", name="listing_remove_liste", options={"expose"=true})
      */
     public function removeListeAction($token) {
 
@@ -114,7 +114,7 @@ class ListingController extends Controller
      * @param $token string le token de la liste
      * @param $ids array les membres à virer
      * @return Response Json vide
-     * @route("/remove-members-by-id/{token}/{ids}", name="listing_remove_members_by_id", options={"expose"=true})
+     * @Route("/remove-members-by-id/{token}/{ids}", name="listing_remove_members_by_id", options={"expose"=true})
      */
     public function removeFromListingByIds($token, $ids) {
 
@@ -131,7 +131,7 @@ class ListingController extends Controller
      * @param $token string le token de la liste
      * @param $ids array les membres à ajouter
      * @return Response Json vide
-     * @route("/add-members-by-id/{token}/{ids}", name="listing_add_members_by_id", options={"expose"=true})
+     * @Route("/add-members-by-id/{token}/{ids}", name="listing_add_members_by_id", options={"expose"=true})
      */
     public function addToListingByIds($token, $ids) {
 

@@ -24,7 +24,7 @@ class AttributionController extends Controller
 {
     /**
      * @param Request $request
-     * @route("/modal-or-persist", name="interne_attribution_render_modale_or_persist")
+     * @Route("/modal-or-persist", name="interne_attribution_render_modale_or_persist")
      * Pour ajouter des attributions, c'est un peu plus compliqué que de simplement afficher le formulaire.
      * En effet on peut être tenté d'ajouter plusieurs attributions. Pour ce fait, on génère un formulaire dynamique
      * suivant le nombre de personnes qui ont besoin d'une attribution
@@ -105,7 +105,7 @@ class AttributionController extends Controller
 
 
     /**
-     * @route("/render-form", name="interne_attribution_render_formulaire_modal", options={"expose"=true});
+     * @Route("/render-form", name="interne_attribution_render_formulaire_modal", options={"expose"=true});
      * @param Request $request
      * @return Response
      */
@@ -130,7 +130,7 @@ class AttributionController extends Controller
     /**
      * Appelée pour terminer une chiée d'attributions en même temps
      *
-     * @route("/terminer-attributions", name="interne_attribution_terminer")
+     * @Route("/terminer-attributions", name="interne_attribution_terminer")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
@@ -156,8 +156,8 @@ class AttributionController extends Controller
 
     /**
      * Supprimme une attribution
-     * @route("/remove/{attribution}", name="attribution_remove", options={"expose"=true})
-     * @paramConverter("attribution", class="AppBundle:Attribution")
+     * @Route("/remove/{attribution}", name="attribution_remove", options={"expose"=true})
+     * @ParamConverter("attribution", class="AppBundle:Attribution")
      * @param $attribution
      * @return JsonResponse
      */
@@ -220,11 +220,8 @@ class AttributionController extends Controller
             'action' => $this->generateUrl('attribution_add')
         ));
 
-        $attribution->setMembre($membre);
-
         return $this->render('AppBundle:Attribution:attribution_form_modal.html.twig', array(
-                'form' => $attributionForm->createView(),
-                'postform' => $attributionForm)
+                'form' => $attributionForm->createView())
         );
     }
 

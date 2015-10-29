@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class MembreController
  * @package AppBundle\Controller
- * @route("/membre")
+ * @Route("/membre")
  */
 class MembreController extends Controller {
 
@@ -139,7 +139,7 @@ class MembreController extends Controller {
      * @param $property la proprieté à atteindre
      * @return mixed proprieté
      *
-     * @route("ajax/get-property/{membre}/{property}", name="interne_ajax_membre_get_property", options={"expose"=true})
+     * @Route("ajax/get-property/{membre}/{property}", name="interne_ajax_membre_get_property", options={"expose"=true})
      * @ParamConverter("membre", class="AppBundle:Membre")
      */
     public function getMembrePropertyAction(Membre $membre, $property) {
@@ -154,7 +154,7 @@ class MembreController extends Controller {
 
 
     /**
-     * @route("/voir/{membre}", name="interne_voir_membre", requirements={"membre" = "\d+"})
+     * @Route("/voir/{membre}", name="interne_voir_membre", requirements={"membre" = "\d+"})
      * @ParamConverter("membre", class="AppBundle:Membre")
      */
     public function voirMembreAction($membre) {
@@ -172,7 +172,7 @@ class MembreController extends Controller {
 
 
     /**
-     * @route("/voir/{membre}/pdf", name="membre_voir_pdf", requirements={"membre" = "\d+"})
+     * @Route("/voir/{membre}/pdf", name="membre_voir_pdf", requirements={"membre" = "\d+"})
      * @ParamConverter("membre", class="AppBundle:Membre")
      */
     public function voirMembrePdfAction($membre)
@@ -205,7 +205,7 @@ class MembreController extends Controller {
      * @param $type string 'attribution' ou 'distinction'
      * @param $obj int l'id de l'attribution ou distinction
      * @return jsonresponse
-     * @route("/ajax/remove-attribution-or-distinction/{membre}/{type}/{obj}", name="interne_ajax_membre_remove_attr_dist", options={"expose"=true})
+     * @Route("/ajax/remove-attribution-or-distinction/{membre}/{type}/{obj}", name="interne_ajax_membre_remove_attr_dist", options={"expose"=true})
      * @ParamConverter("membre", class="AppBundle:Membre")
      */
     public function removeAttributionOrDistinctionAction(Membre $membre, $type, $obj) {
@@ -230,7 +230,7 @@ class MembreController extends Controller {
      * Vérifie si un numéro BS est déjà attribué ou pas
      * @param $numero le numéro BS
      * @return boolean
-     * @route("/ajax/verify-numero-bs/{numero}", name="interne_membre_ajax_verify_numero_bs", options={"expose"=true}, requirements={"numero" = "\d+"})
+     * @Route("/ajax/verify-numero-bs/{numero}", name="interne_membre_ajax_verify_numero_bs", options={"expose"=true}, requirements={"numero" = "\d+"})
      */
     public function isNumeroBsTakenAction($numero) {
 
@@ -248,7 +248,7 @@ class MembreController extends Controller {
      * @return jsonresponse
      * @ParamConverter("membre", class="AppBundle:Membre")
      * @ParamConverter("famille", class="AppBundle:Famille")
-     * @route("/ajax/modify-famille/{membre}/{famille}", name="membre_modify_famille", options={"expose"=true})
+     * @Route("/ajax/modify-famille/{membre}/{famille}", name="membre_modify_famille", options={"expose"=true})
      */
     public function modifyFamilleAction(Membre $membre, Famille $famille) {
 

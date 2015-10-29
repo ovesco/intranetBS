@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class PublicController extends Controller
 {
     /**
-     * @route("", name="public_galerie_accueil")
+     * @Route("", name="public_galerie_accueil")
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function accueilGalerieAction()
@@ -38,7 +38,7 @@ class PublicController extends Controller
     }
 
     /**
-     * @route("dossier/{dossier}", name="public_galerie_voir_dossier")
+     * @Route("dossier/{dossier}", name="public_galerie_voir_dossier")
      * @param Dossier $dossier
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -69,7 +69,7 @@ class PublicController extends Controller
     }
 
     /**
-     * @route("album/{album}", name="public_galerie_voir_album")
+     * @Route("album/{album}", name="public_galerie_voir_album")
      * @param Album $album
      * @return \Symfony\Component\HttpFoundation\Response
      */

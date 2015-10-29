@@ -16,13 +16,13 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class PDFController
  * @package AppBundle\Controller
- * @route("PDF/generator/")
+ * @Route("PDF/generator/")
  */
 class PDFController extends Controller {
 
     /**
      * Affiche la page qui permet de génerer des PDFs
-     * @route("", name="pdf_generator")
+     * @Route("", name="pdf_generator")
      * @template("PDF/generator.html.twig")
      */
     public function PDFGeneratorAction() {
@@ -40,7 +40,7 @@ class PDFController extends Controller {
     /**
      * Cette méthode génère un fichier PDF à partir des données choisies par l'utilisateur. Le PDF est donc mis à jour
      * de manière dynamique. Pour permettre cela, le PDF est stocké en session, et actualisé au fur et à mesure
-     * @route("renderer", name="pdf_renderer", options={"expose"=true})
+     * @Route("renderer", name="pdf_renderer", options={"expose"=true})
      */
     public function PDFRendererAction() {
 
@@ -113,8 +113,35 @@ class PDFController extends Controller {
 
     }
 
+    private function getDefaultParameters()
+    {
+
+        return array(
+
+            'type' => 'base',
+            'liste' => null,
+            'template' => null,
+            'template_height' => 30,
+            'fields' => array('nom', 'prenom', 'adresse', 'telephone')
+        );
+    }
+
+    private function queryListe($liste)
+    {
+
+        $membres = null;
+        $params = explode('__', $liste);
+
+        if (count($params) == 2)
+            $membres = $this->getDoctrine()->getRepository('AppBundle:Groupe')->find($params[1])->getMembersRecursive();
+
+        else $membres = $this->get('listing')->getByToken($liste)->getAll();
+
+        return $membres;
+    }
+
     /**
-     * @route("load-template", name="pdf_load_template", options={"expose"=true})
+     * @Route("load-template", name="pdf_load_template", options={"expose"=true})
      */
     public function loadPDFTemplateAction(Request $request) {
 
@@ -133,7 +160,7 @@ class PDFController extends Controller {
     }
 
     /**
-     * @route("pdf-params-update", name="pdf_generator_update", options={"expose"=true})
+     * @Route("pdf-params-update", name="pdf_generator_update", options={"expose"=true})
      */
     public function paramsUpdateAction(Request $request) {
 
@@ -160,35 +187,10 @@ class PDFController extends Controller {
     }
 
     /**
-     * @route("pdf-generator-reinitialise", name="pdf_generator_reinitialise", options={"expose"=true})
+     * @Route("pdf-generator-reinitialise", name="pdf_generator_reinitialise", options={"expose"=true})
      */
     public function reinitialiseAction() {
 
         $this->get('session')->set('pdf-generator', $this->getDefaultParameters());
-    }
-
-    private function getDefaultParameters() {
-
-        return array(
-
-            'type'              => 'base',
-            'liste'             => null,
-            'template'          => null,
-            'template_height'   => 30,
-            'fields'            => array('nom', 'prenom', 'adresse', 'telephone')
-        );
-    }
-
-    private function queryListe($liste) {
-
-        $membres = null;
-        $params  = explode('__', $liste);
-
-        if(count($params) == 2)
-            $membres = $this->getDoctrine()->getRepository('AppBundle:Groupe')->find($params[1])->getMembersRecursive();
-
-        else $membres = $this->get('listing')->getByToken($liste)->getAll();
-
-        return $membres;
     }
 }

@@ -22,14 +22,18 @@ class ObtentionDistinctionController extends Controller
 {
 
     /**
-     * @Route("/modal/add", name="obtention-distinction_add_modal", options={"expose"=true})
+     * @Route("/modal/add/{membre}", name="obtentiondistinction_add_modal", options={"expose"=true})
      *
      * @param Request $request
+     * @param Membre $membre
+     * @ParamConverter("membre", class="AppBundle:Membre")
      * @return Response
      */
-    public function getAddModalAction(Request $request)
+    public function getAddModalAction(Request $request, Membre $membre)
     {
         $obtention = new ObtentionDistinction();
+
+        $obtention->setMembre($membre);
 
         $obtentionForm = $this->createForm(new ObtentionDistinctionType(), $obtention, array(
             'action' => $this->generateUrl('obtention-distinction_add')

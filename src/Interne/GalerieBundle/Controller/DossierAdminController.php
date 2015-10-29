@@ -2,20 +2,18 @@
 
 namespace Interne\GalerieBundle\Controller;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Utils\Data\Sanitizer as Useful;
 use Interne\GalerieBundle\Entity\Album;
 use Interne\GalerieBundle\Entity\Dossier;
 use Interne\GalerieBundle\Form\AlbumType;
-use Interne\GalerieBundle\Form\DossierType;
 use Interne\GalerieBundle\Utils\Photo;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\HttpFoundation\Session\Session;
-use AppBundle\Utils\Data\Sanitizer as Useful;
+
 /**
  * Gère toutes les routes et actions internes, c'est-à-dire accessible uniquement aux personnes authentifiées
  * @package Interne\GalerieBundle\Controller
@@ -23,8 +21,8 @@ use AppBundle\Utils\Data\Sanitizer as Useful;
 class DossierAdminController extends Controller
 {
     /**
-     * @route("manage-dossier/{dossier}", name="interne_galerie_dossier_managing", options={"expose"=true})
-     * @paramConverter("dossier", class="InterneGalerieBundle:Dossier")
+     * @Route("manage-dossier/{dossier}", name="interne_galerie_dossier_managing", options={"expose"=true})
+     * @ParamConverter("dossier", class="InterneGalerieBundle:Dossier")
      * @param Dossier $dossier
      * @return Response
      */
@@ -41,7 +39,7 @@ class DossierAdminController extends Controller
     }
 
     /**
-     * @route("{dossier}/ajouter-album", name="interne_galerie_dossier_nouvel_album")
+     * @Route("{dossier}/ajouter-album", name="interne_galerie_dossier_nouvel_album")
      */
     public function addAlbumAction(Dossier $dossier, Request $request) {
 
@@ -70,8 +68,8 @@ class DossierAdminController extends Controller
 
 
     /**
-     * @route("ajax-view/manage-album/{album}", name="interne_galerie_dossier_manage_album_view", options={"expose"=true})
-     * @paramConverter("album", class="InterneGalerieBundle:Album")
+     * @Route("ajax-view/manage-album/{album}", name="interne_galerie_dossier_manage_album_view", options={"expose"=true})
+     * @ParamConverter("album", class="InterneGalerieBundle:Album")
      * @param Album $album
      * @return Response
      */
@@ -91,7 +89,7 @@ class DossierAdminController extends Controller
 
     /**
      * Méthode appelée par dropzone pour réaliser l'upload des photos
-     * @route("add-photos", name="interne_galerie_album_add_photos", options={"expose"=true})
+     * @Route("add-photos", name="interne_galerie_album_add_photos", options={"expose"=true})
      * @param Request $request
      * @return Response
      */
@@ -185,8 +183,8 @@ class DossierAdminController extends Controller
 
     /**
      * Supprimme un album entier
-     * @route("remove-album/{album}", name="interne_galerie_dossier_supprimer_album")
-     * @paramConverter("album", class="InterneGalerieBundle:Album")
+     * @Route("remove-album/{album}", name="interne_galerie_dossier_supprimer_album")
+     * @ParamConverter("album", class="InterneGalerieBundle:Album")
      * @param Album $album
      * @return Response
      */

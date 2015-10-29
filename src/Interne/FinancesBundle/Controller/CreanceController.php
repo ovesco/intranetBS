@@ -4,33 +4,32 @@ namespace Interne\FinancesBundle\Controller;
 
 
 /* Symfony */
+use AppBundle\Entity\Groupe;
+use AppBundle\Utils\Listing\Liste;
+use AppBundle\Utils\Listing\Lister;
+use Interne\FinancesBundle\Entity\Creance;
+use Interne\FinancesBundle\Form\CreanceAddType;
+use Interne\FinancesBundle\Form\CreanceSearchType;
+use Interne\FinancesBundle\SearchClass\CreanceSearch;
+use Interne\FinancesBundle\SearchRepository\CreanceToFamilleRepository;
+use Interne\FinancesBundle\SearchRepository\CreanceToMembreRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\HttpFoundation\Response;
 
 
 /* Service */
-use AppBundle\Utils\Listing\Liste;
-use AppBundle\Utils\Listing\Lister;
 
 /* Form */
-use Interne\FinancesBundle\Form\CreanceAddType;
-use Interne\FinancesBundle\Form\CreanceSearchType;
 
 /* Entity */
-use Interne\FinancesBundle\Entity\Creance;
-use AppBundle\Entity\Groupe;
 
 /* Elastica repository */
-use Interne\FinancesBundle\SearchRepository\CreanceToMembreRepository;
-use Interne\FinancesBundle\SearchRepository\CreanceToFamilleRepository;
-use Interne\FinancesBundle\SearchClass\CreanceSearch;
 
 /* routing */
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 
 /**
@@ -94,7 +93,7 @@ class CreanceController extends Controller
 
         $creanceSearch = new CreanceSearch();
 
-        $searchForm = $this->createForm(new CreanceSearchType,$creanceSearch);
+        $searchForm = $this->createForm(new CreanceSearchType, $creanceSearch);
 
         $results = array();
 
@@ -116,7 +115,7 @@ class CreanceController extends Controller
 
             $resultsCreanceToFamille = $repository->search($creanceSearch);
 
-            $results = array_merge($resultsCreanceToMembre,$resultsCreanceToFamille);
+            $results = array_merge($resultsCreanceToMembre, $resultsCreanceToFamille);
 
         }
 

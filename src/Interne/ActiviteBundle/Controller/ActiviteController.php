@@ -3,22 +3,16 @@
 namespace Interne\ActiviteBundle\Controller;
 
 use AppBundle\Utils\Entities\UtilGroupe;
-use Interne\ActiviteBundle\Utils\UtilParticipants;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-
 use Interne\ActiviteBundle\Entity\Activite;
 use Interne\ActiviteBundle\Entity\Depense;
-
 use Interne\ActiviteBundle\Form\ActiviteType;
 use Interne\ActiviteBundle\Form\DepenseType;
-
-use Doctrine\Common\Collections\ArrayCollection;
+use Interne\ActiviteBundle\Utils\UtilParticipants;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 class ActiviteController extends Controller
 {
@@ -130,7 +124,7 @@ class ActiviteController extends Controller
     /**
      * @param Activite $activite
      * @return Response
-     * @route("activite-dashboard/{activite}", name="activite_dashboard")
+     * @Route("activite-dashboard/{activite}", name="activite_dashboard")
      * @ParamConverter("activite", class="InterneActiviteBundle:Activite")
      */
     public function activiteDashboardAction(Activite $activite) {
@@ -155,7 +149,7 @@ class ActiviteController extends Controller
 
     /**
      * Permet de retirer un organisateur de l'activité
-     * @route("activite/organisateurs/remove/{activite}/{organisateur}", name="activite_remove_organisateur")
+     * @Route("activite/organisateurs/remove/{activite}/{organisateur}", name="activite_remove_organisateur")
      * @ParamConverter("activite", class="InterneActiviteBundle:Activite")
      * @ParamConverter("organisateur", class="AppBundle:Membre")
      */
