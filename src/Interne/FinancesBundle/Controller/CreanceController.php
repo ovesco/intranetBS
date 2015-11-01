@@ -2,8 +2,6 @@
 
 namespace Interne\FinancesBundle\Controller;
 
-
-/* Symfony */
 use AppBundle\Entity\Groupe;
 use AppBundle\Utils\Listing\Liste;
 use AppBundle\Utils\Listing\Lister;
@@ -16,20 +14,11 @@ use Interne\FinancesBundle\SearchRepository\CreanceToMembreRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use AppBundle\Utils\Menu\Menu;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-
-/* Service */
-
-/* Form */
-
-/* Entity */
-
-/* Elastica repository */
-
-/* routing */
 
 
 /**
@@ -86,6 +75,7 @@ class CreanceController extends Controller
 
     /**
      * @Route("/search", name="interne_finances_creance_search", options={"expose"=true})
+     * @Menu("Recherche de créances",block="finances",order=1,icon="search")
      * @param Request $request
      * @return Response
      */

@@ -27,6 +27,7 @@ use Interne\FinancesBundle\SearchClass\FactureSearch;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use AppBundle\Utils\Menu\Menu;
 
 /* Service */
 use AppBundle\Utils\Export\Pdf;
@@ -42,6 +43,7 @@ class FactureController extends Controller
 
     /**
      * @Route("/search", name="interne_finances_facture_search", options={"expose"=true})
+     * @Menu("Recherche de factures",block="finances",order=2,icon="search")
      * @param Request $request
      * @return Response
      */

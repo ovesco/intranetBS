@@ -95,9 +95,14 @@ class MenuRenderer {
      *
      * @param $blockName
      * @return null|ArrayCollection
+     * @throws \Exception
      */
     public function bloc($blockName)
     {
+        if(!$this->container->containsKey($blockName))
+        {
+            throw new \Exception("Menu container didn't contain a block named: ".$blockName);
+        }
         return $this->container->get($blockName);
     }
 

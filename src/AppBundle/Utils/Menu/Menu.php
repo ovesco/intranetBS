@@ -12,7 +12,7 @@
  *
  *      /**
  *       * @Route("/exemple", name="exemple")
- *       * @Menu("An Exemple", block="exemple", order=1)
+ *       * @Menu("An Exemple", block="exemple", order=1, expanded=true, icon="add")
  *       */
 
 
@@ -26,19 +26,36 @@ namespace AppBundle\Utils\Menu;
 class Menu {
 
     /**
+     * The label used in the display
      * @var string
      */
     private $label;
 
     /**
+     * The block were the menu is displayed
      * @var string
      */
     private $block;
 
     /**
+     * The order of display in the block
      * @var integer
      */
     private $order;
+
+    /**
+     * True if the menu should be always shown
+     * @var boolean
+     */
+    private $expanded;
+
+    /**
+     * The icon associated to this menu item
+     * @var string
+     */
+    private $icon;
+
+
 
     /**
      * @param $options
@@ -50,6 +67,8 @@ class Menu {
         $this->label = null;
         $this->block = null;
         $this->order = null;
+        $this->expanded = false;
+        $this->icon = null;
 
         //first argument @menu("label")
         if (isset($options['value'])) {
@@ -79,5 +98,15 @@ class Menu {
     public function getOrder()
     {
         return $this->order;
+    }
+
+    public function getExpanded()
+    {
+        return $this->expanded;
+    }
+
+    public function getIcon()
+    {
+        return $this->icon;
     }
 }

@@ -6,13 +6,16 @@ use AppBundle\Entity\Famille;
 use AppBundle\Entity\Membre;
 use AppBundle\Form\AddMembreType;
 use AppBundle\Form\VoirMembreType;
-use AppBundle\Utils\Data\Useful as clearer;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
+/* annotations */
+use AppBundle\Utils\Menu\Menu;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 
 /**
@@ -26,6 +29,7 @@ class MembreController extends Controller {
      * Affiche la page d'ajout de membre -> Membre/page_ajouter_membre.html.twig
      * et valide le formulaire si celui-ci est soumis
      * @Route("/ajouter", name="interne_ajouter_membre")
+     * @Menu("Ajouter un membre",block="database",order=1, icon="add", expanded=true)
      * @param Request $request
      * @return Response
      */
