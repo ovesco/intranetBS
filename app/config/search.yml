@@ -8,7 +8,11 @@ fos_elastica:
                 membre:
                     mappings:
                         prenom: ~
-                        famille: ~
+                        famille:
+                            type: "nested"
+                            properties:
+                                id: { type: integer }
+                                nom: ~
                         naissance: ~
                         remarques: ~
                         numeroBs: ~

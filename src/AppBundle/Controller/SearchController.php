@@ -2,14 +2,19 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Search\MembreSearch;
+use AppBundle\Search\MembreSearchType;
+use AppBundle\Search\MembreRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+
 /* Annotations */
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Utils\Menu\Menu;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 
 /**
@@ -21,12 +26,36 @@ class SearchController extends Controller
 {
     /**
      * Affiche la page permettant de lancer une recherche
+     *
      * @Route("/search", name="interne_search")
      * @Menu("Rechercher",block="database",order=2, icon="search", expanded=true)
+     * @Template("AppBundle:Search:page_search.html.twig")
      */
-    public function indexAction()
+    public function searchAction(Request $request)
     {
-        return $this->render('AppBundle:Search:search.html.twig');
+
+        $membreSearch = new MembreSearch();
+        $membreForm = $this->createForm(new MembreSearchType(),$membreSearch);
+
+        $results = array();
+
+        $membreForm->handleRequest($request);
+
+        if ($membreForm->isValid()) {
+
+            $membreSearch = $membreForm->getData();
+
+            $elasticaManager = $this->container->get('fos_elastica.manager');
+
+            /** @var MembreRepository $repository */
+            $repository = $elasticaManager->getRepository('AppBundle:Membre');
+
+            $results = $repository->search($membreSearch);
+
+
+        }
+
+        return array('membreForm'=>$membreForm->createView(),'results'=>$results);
     }
 
     /**

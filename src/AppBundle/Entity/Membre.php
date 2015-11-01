@@ -7,9 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Interne\FinancesBundle\Entity\DebiteurInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
-
-
-//FinancesBundle
+use FOS\ElasticaBundle\Configuration\Search;
 
 /**
  * Membre
@@ -17,6 +15,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity
  * @Gedmo\Loggable
  * @ORM\Table(name="app_membres")
+ * @Search(repositoryClass="AppBundle\Search\MembreRepository")
+ *
  */
 class Membre extends Personne implements ExpediableInterface,DebiteurInterface
 {

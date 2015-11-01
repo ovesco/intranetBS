@@ -1,0 +1,112 @@
+{% extends 'AppBundle:Layout:layout.html.twig' %}
+
+{% block titre %}
+Recherche
+{% endblock %}
+
+
+
+{% block content %}
+<div class="ui page grid">
+    <div class="row">
+        <div class="column">
+
+            <div class="ui attached blue form segment">
+
+                <div class="ui grid">
+                    <div class="row">
+
+
+                        <div class="five wide column">
+
+                            <h4>Objet de la recherche</h4>
+
+                            <div id="advanced-search-objet" class="ui selection dropdown">
+                                <input type="hidden" name="advanced-search-objet">
+                                <div class="default text">Choisir...</div>
+                                <i class="dropdown icon"></i>
+                                <div class="menu">
+                                    <div class="item" data-value="membres">Membre</div>
+                                    <!--
+                                    <div class="item" data-value="familles">Famille</div>
+                                    <div class="item" data-value="groupes">Groupe</div>
+                                    -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="eleven wide column">
+
+                            <h4>Terme de recherche</h4>
+
+                            <div class="ui fluid action input">
+                                <input id="advanced-search-pattern" type="text" placeholder="Rechercher...">
+                                <div onclick="search();" class="ui teal button">Rechercher</div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="column">
+
+                            <h4>Recherche détaillée</h4>
+
+
+                            {% include 'AppBundle:Search:search_membre_form.html.twig'  with {'searchForm':membreForm}%}
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="ui attached segment">
+
+                <h2>Resultats</h2>
+
+                <div id="results">
+
+                    {{ dump(results) }}
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block js %}
+
+    <script type="text/javascript">
+
+        function search() {
+
+            var type = $('#advanced-search-objet').dropdown('get value'),
+                pattern = $('#advanced-search-pattern').val();
+
+            if(type == '' || pattern == '') alerte.send('Il manque des informations pour effectuer la recherche.', 'warning', 4000);
+            else {
+
+                $.ajax({
+
+                    url: Routing.generate('interne_search_advanced'),
+                    type: 'POST',
+                    data: {type: type, pattern: pattern},
+                    success: function (data) {
+                        $('#results').html(data);
+                    },
+
+                    error: function (data) {
+                        $('#debug').html(data.responseText);
+                    }
+                });
+            }
+        }
+
+    </script>
+{% endblock %}
