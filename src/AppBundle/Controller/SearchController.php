@@ -3,10 +3,14 @@
 namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
+/* Annotations */
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use AppBundle\Utils\Menu\Menu;
+
 
 /**
  * Class SearchController
@@ -18,6 +22,7 @@ class SearchController extends Controller
     /**
      * Affiche la page permettant de lancer une recherche
      * @Route("/search", name="interne_search")
+     * @Menu("Rechercher",block="database",order=2, icon="search", expanded=true)
      */
     public function indexAction()
     {

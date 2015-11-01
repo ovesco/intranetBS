@@ -3,13 +3,9 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Groupe;
-use AppBundle\Entity\GroupeModel;
-use AppBundle\Form\GroupeModelType;
 use AppBundle\Form\GroupeType;
 use Doctrine\Common\Collections\ArrayCollection;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,7 +14,11 @@ use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Form\FonctionType;
 use AppBundle\Entity\Fonction;
 
+/* Annotation */
 use AppBundle\Utils\Menu\Menu;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /**
  * Class StructureController
@@ -34,7 +34,7 @@ class StructureController extends Controller
      * @Route("/gestion_groupe", name="structure_gestion_groupe", options={"expose"=true})
      * @param Request $request
      * @return Response
-     * @Menu("Gestion des groupes", block="structure", order=1)
+     * @Menu("Gestion des groupes", block="structure", order=1, icon="users")
      */
     public function gestionGroupeAction(Request $request)
     {
@@ -58,7 +58,7 @@ class StructureController extends Controller
      *
      * @param Request $request
      * @return Response
-     * @Menu("Gestion des fonctions", block="structure")
+     * @Menu("Gestion des fonctions", block="structure", order=2, icon="tag")
      */
     public function gestionFonctionAction(Request $request) {
 
@@ -80,7 +80,7 @@ class StructureController extends Controller
      * @Route("/gestion_model", name="structure_gestion_model", options={"expose"=true})
      * @param Request $request
      * @return Response
-     * @Menu("Gestion des modes", block="structure", order=2)
+     * @Menu("Gestion des modes", block="structure", order=3, icon="bookmark")
      */
     public function gestionModelAction(Request $request) {
 

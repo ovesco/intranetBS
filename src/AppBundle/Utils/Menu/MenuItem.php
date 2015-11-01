@@ -26,15 +26,47 @@ use AppBundle\Utils\Menu\Menu as MenuAnnotation;
  */
 class MenuItem {
 
+    /**
+     * From route
+     * @var string
+     */
     public $path;
 
+    /**
+     * From route
+     * @var string
+     */
     public $routeName;
 
+    /**
+     * From menu
+     * @var string
+     */
     public $label;
 
+    /**
+     * From menu
+     * @var null|string
+     */
     public $block;
 
+    /**
+     * From menu
+     * @var int|null
+     */
     public $order;
+
+    /**
+     * From menu
+     * @var boolean
+     */
+    public $expanded;
+
+    /**
+     * From menu
+     * @var null|string
+     */
+    public $icon;
 
     public function __construct(MenuAnnotation $menu,RouteAnnotation $route)
     {
@@ -44,6 +76,8 @@ class MenuItem {
         $this->label = ($menu->getLabel() != null ? $menu->getLabel() : $this->path);
         $this->block = $menu->getBlock();
         $this->order = $menu->getOrder();
+        $this->expanded = $menu->getExpanded();
+        $this->icon = $menu->getIcon();
     }
 
 }

@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use AppBundle\Utils\Menu\Menu;
 
 /* Entity */
 use Interne\FinancesBundle\Entity\Facture;
@@ -50,6 +51,7 @@ class PayementController extends Controller
      * Page for searching payement
      *
      * @Route("/search", name="interne_finances_payement_search", options={"expose"=true})
+     * @Menu("Recherche de payement",block="finances",order=3,icon="search")
      * @param Request $request
      * @return Response
      * @Template("InterneFinancesBundle:Payement:page_recherche.html.twig")
@@ -98,6 +100,7 @@ class PayementController extends Controller
      * Page for adding new payement (manualy or by uploading file)
      *
      * @Route("/add", name="interne_finances_payement_add", options={"expose"=true})
+     * @Menu("Ajout de payements",block="finances",order=4,icon="add")
      * @param Request $request
      * @Template("InterneFinancesBundle:Payement:page_saisie.html.twig")
      * @return Response
@@ -219,6 +222,7 @@ class PayementController extends Controller
      * Page for validation of payements
      *
      * @Route("/validation", name="interne_finances_payement_validation_list", options={"expose"=true})
+     * @Menu("Validation des payements",block="finances",order=5,icon="checkmark")
      * @param Request $request
      * @Template("InterneFinancesBundle:Payement:page_validation.html.twig")
      * @return Response

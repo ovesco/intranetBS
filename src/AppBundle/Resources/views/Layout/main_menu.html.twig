@@ -1,16 +1,61 @@
+{% import _self as macro_menu %}
+
+
+{% macro display_block(block_label, block) %}
+
+    <div class="item popup-menu"  data-html='
+            <div class="ui vertical menu">
+                {% for item in menu.bloc(block) %}
+                    <a class="item" href="{{ item.path }}">{% if item.icon is not null %}<i class="ui {{ item.icon }} icon"></i>{% endif %}{{ item.label }}</a>
+                {% endfor %}
+            </div>
+        '>
+        <div class="header">{{ block_label }}</div>
+        <div class="menu">
+            {% for item in menu.bloc(block) %}
+                {% if item.expanded %}
+                <a class="item" href="{{ item.path }}">{% if item.icon is not null %}<i class="ui {{ item.icon }} icon"></i>{% endif %}{{ item.label }}</a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+{% endmacro %}
+
+
 <div id="main-menu" class="ui vertical inverted sidebar menu">
     <div class="item">
         <a class="ui logo icon image" href="{{ path('interne_homepage') }}">
-
             <img src="{{ parametreService.get('group_logo') }}" alt="Logo">
-
-
-
         </a>
         <a href="{{ path('interne_homepage') }}" ><b>{{ parametreService.get('app_name') }}</b></a>
     </div>
 
 
+
+    {{ macro_menu.display_block('Base de donnée','database') }}
+
+    {{ macro_menu.display_block('Strucuture','structure') }}
+
+    <div class="item">
+        <div class="header">Groupe{% if groups|length > 1 %}s{% endif %}</div>
+        <div class="menu">
+            {%  for group in groups %}
+                <a class="item" href="{{ path('interne_voir_groupe', {'groupe' : group.id }) }}">{{ group.nom }}</a>
+            {% endfor %}
+        </div>
+    </div>
+
+
+    {{ macro_menu.display_block('Paramètres','parameter') }}
+
+    {{ macro_menu.display_block('Sécurité','security') }}
+
+    {{ macro_menu.display_block('Envois','envois') }}
+
+
+
+    {#
     <div class="item">
         <div class="ui small active  inverted header">Intranet</div>
         <div class="menu">
@@ -31,89 +76,24 @@
 
         </div>
     </div>
+    #}
 
-    <div class="item">
-        <div class="ui small inverted header">Base de donnée</div>
-        <div class="menu">
 
-            <a class="item" href="{{ path('interne_ajouter_membre') }}">
-                Ajouter un membre
-            </a>
 
-            <a class="item" href="{{ path('interne_search') }}">
-                Rechercher
-            </a>
 
-            <a class="item" href="{{ path('listing_page') }}">
-                Listes personnalisées
-            </a>
 
-        </div>
-    </div>
-
-    <div class="item">
-        <div class="ui small  inverted header">Groupe{% if groups|length > 1 %}s{% endif %}</div>
-        <div class="menu">
-            {%  for group in groups %}
-                <a class="item" href="{{ path('interne_voir_groupe', {'groupe' : group.id }) }}">{{ group.nom }}</a>
-            {% endfor %}
-        </div>
-    </div>
-
+{#
     <div class="item">
         <div class="ui small  inverted header">Galerie</div>
         <div class="menu">
             <a class="item" href="{{ path('galerie_interne_global_managing') }}">Administration générale</a>
         </div>
     </div>
-
-
-    <div class="item">
-        <div class="header">Structure</div>
-        <div class="menu">
-            {% for item in menu.bloc('structure') %}
-                <a class="item" href="{{ item.path }}">{{ item.label }}</a>
-            {% endfor %}
-        </div>
-    </div>
+#}
 
 
 
-
-    <div class="item popup-menu"  data-html='
-            <div class="ui vertical menu">
-                <a class="item" href="{{ path('interne_parametre_list') }}"><i class="ui database icon"></i>Paramètres</a>
-            </div>
-        '>
-        Paramètres
-    </div>
-
-    <div class="item">
-        <div class="ui small  inverted header">Sécurité</div>
-        <div class="menu">
-
-            <a class="item" href="{{ path('interne_roles_match_fonctions') }}">
-                Matching droits - fonctions
-            </a>
-
-        </div>
-    </div>
-
-    <div class="item">
-        <div class="ui small  inverted header">Mes envois</div>
-        <div class="menu">
-
-            <a class="item" href="{{ path('utils_envoi_liste') }}">
-                Liste des envois
-            </a>
-
-
-        </div>
-    </div>
-
-    <div class="item popup-menu"  data-html='{% include 'InterneFinancesBundle:Layout:menu.html.twig' %}'>
-        Fiances
-    </div>
+    {#
 
     <div class="item">
         <div class="ui small  inverted header">Divers</div>
@@ -124,4 +104,6 @@
 
         </div>
     </div>
+
+    #}
 </div>

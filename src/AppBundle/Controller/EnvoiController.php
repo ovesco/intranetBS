@@ -3,8 +3,7 @@
 namespace AppBundle\Controller;
 
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -14,6 +13,11 @@ use AppBundle\Utils\Email\Email;
 use \Swift_Attachment;
 use AppBundle\Utils\Export\Pdf;
 use Symfony\Component\HttpFoundation\Request;
+
+/* Annotation */
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use AppBundle\Utils\Menu\Menu;
 
 /**
  * Class EnvoiController
@@ -28,6 +32,7 @@ class EnvoiController extends Controller{
      * Genere la page principale d'action sur les envois
      *
      * @Route("/liste", name="utils_envoi_liste")
+     * @Menu("Ma liste d'envois",block="envois",icon="send")
      * @Template("AppBundle:Envoi:page_listeEnvoi.html.twig")
      * @return Response
      */

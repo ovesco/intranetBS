@@ -6,10 +6,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
-/* routing */
+/* Annotation */
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use AppBundle\Utils\Menu\Menu;
 
 /* Entity */
 use AppBundle\Entity\Parameter;
@@ -20,17 +21,17 @@ use AppBundle\Form\ParameterType;
 /**
  * Ce controller est utilisé pour la gestion des pages de list et d'édition des parametres de l'applications.
  *
- * Class ParametreController
+ * Class ParameterController
  * @package AppBundle\Controller
- * @Route("/parametre")
+ * @Route("/parameter")
  */
-class ParametreController extends Controller
+class ParameterController extends Controller
 {
 
     /**
      * @Route("/list", name="interne_parametre_list")
      * @Template("AppBundle:Parametre:page_list.html.twig")
-     *
+     * @Menu("Configuration", block="parameter", icon="configure")
      * @return Response
      */
     public  function listAction()

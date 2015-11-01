@@ -4,11 +4,14 @@ namespace Interne\SecurityBundle\Controller;
 
 use AppBundle\Entity\Fonction;
 use Interne\SecurityBundle\Entity\Role;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+
+/* Annotation */
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use AppBundle\Utils\Menu\Menu;
 
 /**
  * @Route("interne/roles/")
@@ -20,6 +23,7 @@ class RolesController extends Controller
     /**
      * page permettant de lier des roles et des fonctions
      * @Route("matching-fonctions", name="interne_roles_match_fonctions")
+     * @Menu("Matching droit-fonctions", block="security", icon="compress")
      */
     public function matchingFonctionsAction(Request $request) {
 
