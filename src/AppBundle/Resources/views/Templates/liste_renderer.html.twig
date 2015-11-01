@@ -47,8 +47,11 @@
 
                 <td>
                     {% for action in list.actions %}
-                        <i class="{{ action.icon }}" data-content="{{ action.label }}"
-                           data-id="{{ list.getRowId(item) }}" data-event="{{ action.event }}"></i>
+                        <i class="{{ action.icon }} event"
+                           data-content="{{ action.label }}"
+                           data-event-route="{{ action.route }}"
+                           data-event-parameters="{{ action.routeParameters(item) }}"
+                           data-event-postactions="{{ action.getPostActions }}"></i>
                     {% endfor %}
                 </td>
 

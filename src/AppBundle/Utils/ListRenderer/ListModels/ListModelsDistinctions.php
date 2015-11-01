@@ -32,7 +32,13 @@ class ListModelsDistinctions
         },
             'date(global_date_format)'));
 
-        $list->addAction(new ActionLigne('Supprimer', 'delete icon popupable', 'event_attribution_delete'));
+        $obtentionParameters = function (ObtentionDistinction $obtention) {
+            return array(
+                "obtention-distinction" => $obtention->getId()
+            );
+        };
+
+        $list->addAction(new ActionLigne('Supprimer', 'delete icon popupable', 'obtention-distinction_delete', $obtentionParameters));
 
         $list->setDatatable(false);
         $list->setStyle('very basic');

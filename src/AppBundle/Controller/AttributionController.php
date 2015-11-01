@@ -156,7 +156,7 @@ class AttributionController extends Controller
 
     /**
      * Supprimme une attribution
-     * @Route("/remove/{attribution}", name="attribution_remove", options={"expose"=true})
+     * @Route("/remove/{attribution}", name="attribution_delete", options={"expose"=true})
      * @ParamConverter("attribution", class="AppBundle:Attribution")
      * @param $attribution
      * @return JsonResponse

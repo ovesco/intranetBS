@@ -133,6 +133,24 @@ class ObtentionDistinctionController extends Controller
     {
         //TODO: modifier une obtention (ou peut-être ne veut-on que les supprimer ?)
     }
+
+    /**
+     * Supprime une obtention-distinction
+     * @Route("/remove/{obtention-distinction}", name="obtention-distinction_delete", options={"expose"=true})
+     * @ParamConverter("obtention-distinction", class="AppBundle:ObtentionDistinction")
+     * @param $obtentionDistinction
+     * @return JsonResponse
+     */
+    public function removeAttributionAction(ObtentionDistinction $obtentionDistinction)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $em->remove($obtentionDistinction);
+        $em->flush();
+
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+    }
 }
 
 ?>

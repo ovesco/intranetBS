@@ -154,7 +154,7 @@ class MembreController extends Controller {
 
 
     /**
-     * @Route("/voir/{membre}", name="interne_voir_membre", requirements={"membre" = "\d+"})
+     * @Route("/voir/{membre}", name="interne_voir_membre", options={"expose"=true}, requirements={"membre" = "\d+"})
      * @ParamConverter("membre", class="AppBundle:Membre")
      */
     public function voirMembreAction($membre) {
