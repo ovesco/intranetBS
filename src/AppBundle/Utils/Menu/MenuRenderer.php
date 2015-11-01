@@ -48,6 +48,7 @@ class MenuRenderer {
      */
     protected $router;
 
+
     /**
      * @var string
      */
@@ -125,7 +126,7 @@ class MenuRenderer {
             /** @var MenuItem $item */
             foreach($block as $item)
             {
-                $returned[] = array('title'=>$item->label,'url'=>$item->url);
+                $returned[] = array('title'=>$item->label,'url'=>$this->router->generate($item->routeName));
             }
         }
 
@@ -192,9 +193,7 @@ class MenuRenderer {
             {
                 if($routeAnnotation != null)
                 {
-                    $routeName = $routeAnnotation->getName();
-                    $url = $this->router->generate($routeName);
-                    $this->addMenuItem(new MenuItem($menuAnnotation,$url));
+                    $this->addMenuItem(new MenuItem($menuAnnotation,$routeAnnotation));
                 }
                 else
                 {

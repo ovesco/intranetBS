@@ -28,9 +28,16 @@ use Symfony\Component\Routing\Router;
 class MenuItem {
 
     /**
+     * From route
      * @var string
      */
-    public $url;
+    public $path;
+
+    /**
+     * From route
+     * @var string
+     */
+    public $routeName;
 
     /**
      * From menu
@@ -62,11 +69,12 @@ class MenuItem {
      */
     public $icon;
 
-    public function __construct(MenuAnnotation $menu, $url)
+    public function __construct(MenuAnnotation $menu, RouteAnnotation $route)
     {
-        $this->url = $url;
+        $this->path = $route->getPath();
+        $this->routeName = $route->getName();
         //if null, label is replaced by path
-        $this->label = ($menu->getLabel() != null ? $menu->getLabel() : $this->$url);
+        $this->label = ($menu->getLabel() != null ? $menu->getLabel() : $this->path);
         $this->block = $menu->getBlock();
         $this->order = $menu->getOrder();
         $this->expanded = $menu->getExpanded();
