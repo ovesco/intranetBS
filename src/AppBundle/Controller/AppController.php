@@ -27,41 +27,13 @@ class AppController extends Controller
     }
 
     /**
-     * @Route("test")
-     * @Menu("youyhouh",block="block test",order=1)
+     * @Route("test", name="test")
+     * @Menu("Test",block="test",order=1)
      */
     public function testAction()
     {
-
-
         return new Response();
     }
 
-
-    /**
-     * @Route("hello/{nom}", name="exemple_hello_word")
-     * @Menu("coucou")
-     */
-    public function helloWordAction($nom)
-    {
-        return new Response("Salut les ".$nom);
-    }
-
-    /**
-     * @Route("test2")
-     * @Menu(order=3)
-     */
-    public function test2() {
-
-        $em = $this->getDoctrine()->getManager();
-        $article = $em->find('AppBundle:Membre', 1 /*article id*/);
-        $article->setPrenom('Guillaumeus');
-        $em->persist($article);
-        $em->flush();
-
-        echo $article->getPrenom(); // prints "my title"
-
-        return new Response();
-    }
 
 }

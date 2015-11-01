@@ -44,6 +44,11 @@ class MenuRenderer {
     protected $kernel;
 
     /**
+     * @var Router
+     */
+    protected $router;
+
+    /**
      * @var string
      */
     protected $menuAnnotationClass = 'AppBundle\\Utils\\Menu\\Menu';
@@ -63,9 +68,10 @@ class MenuRenderer {
      */
     protected $container;
 
-    public function __construct(Reader $reader,Kernel $kernel){
+    public function __construct(Reader $reader,Kernel $kernel,Router $router){
         $this->reader = $reader;
         $this->kernel = $kernel;
+        $this->router = $router;
         $this->container = new ArrayCollection();
 
         /* Load controllers class */
@@ -105,6 +111,26 @@ class MenuRenderer {
         }
         return $this->container->get($blockName);
     }
+
+    /**
+     *
+     */
+    public function allBlockToCategorySearch()
+    {
+        $returned    = array();
+
+        /** @var ArrayCollection $block */
+        foreach($this->container as $block)
+        {
+            /** @var MenuItem $item */
+            foreach($block as $item)
+            {
+                $returned[] = array('title'=>$item->label,'url'=>$item->url);
+            }
+        }
+
+        return $returned;
+}
 
 
     /**
@@ -166,7 +192,9 @@ class MenuRenderer {
             {
                 if($routeAnnotation != null)
                 {
-                    $this->addMenuItem(new MenuItem($menuAnnotation,$routeAnnotation));
+                    $routeName = $routeAnnotation->getName();
+                    $url = $this->router->generate($routeName);
+                    $this->addMenuItem(new MenuItem($menuAnnotation,$url));
                 }
                 else
                 {

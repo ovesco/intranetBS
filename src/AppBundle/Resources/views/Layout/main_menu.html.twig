@@ -6,7 +6,7 @@
     <div class="item popup-menu"  data-html='
             <div class="ui vertical menu">
                 {% for item in menu.bloc(block) %}
-                    <a class="item" href="{{ item.path }}">{% if item.icon is not null %}<i class="ui {{ item.icon }} icon"></i>{% endif %}{{ item.label }}</a>
+                    <a class="item" href="{{ item.url }}">{% if item.icon is not null %}<i class="ui {{ item.icon }} icon"></i>{% endif %}{{ item.label }}</a>
                 {% endfor %}
             </div>
         '>
@@ -14,7 +14,7 @@
         <div class="menu">
             {% for item in menu.bloc(block) %}
                 {% if item.expanded %}
-                <a class="item" href="{{ item.path }}">{% if item.icon is not null %}<i class="ui {{ item.icon }} icon"></i>{% endif %}{{ item.label }}</a>
+                <a class="item" href="{{ item.url }}">{% if item.icon is not null %}<i class="ui {{ item.icon }} icon"></i>{% endif %}{{ item.label }}</a>
                 {% endif %}
             {% endfor %}
         </div>
@@ -52,6 +52,8 @@
     {{ macro_menu.display_block('Sécurité','security') }}
 
     {{ macro_menu.display_block('Envois','envois') }}
+
+    {{ macro_menu.display_block('Finances','finances') }}
 
 
 

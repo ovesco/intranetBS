@@ -14,6 +14,20 @@
                 </div>
             </div>
 
+            <div class="item">
+
+                <div id="menu_search" class="ui input search">
+                        <input class="prompt" type="text" placeholder="Quick menu...">
+                    <div class="results"></div>
+                    <script>
+                        $(document).ready(function(){
+                            var menu_data = {{ menu.allBlockToCategorySearch()|json_encode(constant('JSON_PRETTY_PRINT'))|raw }};
+                            $('#menu_search').search({source: menu_data});
+                        });
+                    </script>
+                </div>
+            </div>
+
         </div>
         <div class="right menu">
 

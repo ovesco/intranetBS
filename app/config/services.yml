@@ -51,6 +51,7 @@ services:
         arguments:
             - @annotation_reader
             - @kernel
+            - @router
 
 
     # Twig
