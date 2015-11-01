@@ -9,6 +9,6 @@ class ActionMasse extends Action
     {
         $this->label = $label;
         $this->icon = $icon;
-        $this->event = $event;
+        $this->route = $route;
     }
 }

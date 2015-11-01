@@ -37,7 +37,13 @@ class ListModelsMembre
         },
             'date(global_date_format)'));
 
-        $list->addAction(new ActionLigne('Afficher', 'zoom icon popupable', 'event_membre_show_page'));
+        $membreParameters = function (Membre $membre) {
+            return array(
+                "membre" => $membre->getId()
+            );
+        };
+
+        $list->addAction(new ActionLigne('Afficher', 'zoom icon popupable', 'interne_voir_membre', $membreParameters));
         $list->addAction(new ActionLigne('Supprimer', 'delete icon popupable', 'event_liste_delete_element'));
 
         return $list;
@@ -59,7 +65,13 @@ class ListModelsMembre
         },
             'date(global_date_format)'));
 
-        $list->addAction(new ActionLigne('Afficher', 'zoom icon popupable', 'event_membre_show_page'));
+        $membreParameters = function (Membre $membre) {
+            return array(
+                "membre" => $membre->getId()
+            );
+        };
+
+        $list->addAction(new ActionLigne('Afficher', 'zoom icon popupable', 'interne_voir_membre', $membreParameters));
 
         $list->setDatatable(false);
         $list->setStyle('very basic');

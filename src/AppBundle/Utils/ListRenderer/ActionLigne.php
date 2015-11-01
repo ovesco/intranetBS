@@ -7,12 +7,14 @@ class ActionLigne extends Action
 
     private $condition;
 
-    function __construct($label, $icon, $event = null, $condition = null)
+    function __construct($label, $icon, $route, $routeParameters = null, $postActions = null, $condition = null)
     {
         $this->label = $label;
         $this->icon = $icon;
-        $this->event = $event;
+        $this->route = $route;
+        $this->routeParameters = $routeParameters;
         $this->condition = $condition;
+        $this->postActions = $postActions;
     }
 
     /**
@@ -30,4 +32,5 @@ class ActionLigne extends Action
     {
         $this->condition = $condition;
     }
+
 }

@@ -4,6 +4,7 @@
 namespace AppBundle\Utils\ListRenderer\ListModels;
 
 use AppBundle\Entity\Attribution;
+use AppBundle\Utils\Event\EventPostAction;
 use AppBundle\Utils\ListRenderer\ActionLigne;
 use AppBundle\Utils\ListRenderer\Column;
 use AppBundle\Utils\ListRenderer\ListRenderer;
@@ -39,8 +40,14 @@ class ListModelsAttributions
         },
             'date(global_date_format)'));
 
-        $list->addAction(new ActionLigne('Terminer', 'ban icon popupable', 'event_attribution_end'));
-        $list->addAction(new ActionLigne('Supprimer', 'delete icon popupable', 'event_attribution_delete'));
+        $attributionParameters = function (Attribution $attribution) {
+            return array(
+                "attribution" => $attribution->getId()
+            );
+        };
+
+        $list->addAction(new ActionLigne('Terminer', 'ban icon popupable', 'attribution_edit_modal', $attributionParameters, EventPostAction::ShowModal));
+        $list->addAction(new ActionLigne('Supprimer', 'delete icon popupable', 'attribution_delete', $attributionParameters, EventPostAction::RefreshList));
 
         $list->setDatatable(false);
         $list->setStyle('very basic');

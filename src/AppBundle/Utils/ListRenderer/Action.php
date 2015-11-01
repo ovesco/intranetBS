@@ -12,7 +12,13 @@ abstract class Action
     protected $icon;
 
     /** @var String */
-    protected $event;
+    protected $route;
+
+    /** @var String */
+    protected $routeParameters;
+
+    /** @var String */
+    protected $postActions;
 
     /**
      * @return String
@@ -49,17 +55,34 @@ abstract class Action
     /**
      * @return String
      */
-    public function getEvent()
+    public function getRoute()
     {
-        return $this->event;
+        return $this->route;
     }
 
     /**
-     * @param String $event
+     * @param String $route
      */
-    public function setEvent($event)
+    public function setRoute($route)
     {
-        $this->event = $event;
+        $this->route = $route;
     }
 
+    /**
+     * @return String
+     */
+    public function getRouteParameters($item)
+    {
+        /* Petite subtilité pour pouvoir appler la fonction */
+        $function = $this->routeParameters;
+        return json_encode($function($item));
+    }
+
+    /**
+     * @return String
+     */
+    public function getPostActions()
+    {
+        return $this->postActions;
+    }
 }
