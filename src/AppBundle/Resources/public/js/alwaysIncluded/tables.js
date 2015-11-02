@@ -5,7 +5,7 @@ var datatables = [];
 
 $.fn.dataTableExt.oStdClasses.sPageButton = "item";
 
-$('.membre-datatable').each(function(i) {
+$('.datatable').each(function (i) {
 
     $(this).attr("data-table-id", i);
 
@@ -15,16 +15,16 @@ $('.membre-datatable').each(function(i) {
         "oLanguage": {
             "sSortAscending": " - clic pour trier de manière ascendante",
             "sSortDescending": " - clic pour trier de manière descendante",
-            "sFirst": "premier",
-            "sLast" : "dernier",
-            "sNext": "Suivant",
-            "sPrevious":"Précédent",
+            "sFirst": "Premiers",
+            "sLast": "Derniers",
+            "sNext": "Suivants",
+            "sPrevious": "Précédents",
             "sEmptyTable": "Rien dans la table",
-            "sInfo": "_TOTAL_ entrées totales (_START_ à _END_ affichées)",
+            "sInfo": "_TOTAL_ lignes au total (_START_ à _END_ affichées)",
             "sInfoEmpty": "Rien à afficher",
             "sInfoFiltered": " - filtré de _MAX_ entrées",
             "sInfoPostFix": "",
-            "sLengthMenu": "Afficher _MENU_ entrées",
+            "sLengthMenu": "Afficher _MENU_ lignes",
             "sLoadingRecords": "Patiente fils",
             "sProcessing": "Laisse moi bosser un peu",
             "sSearch": "Rechercher : ",
@@ -54,7 +54,7 @@ $('.table-checkbox').change(function() {
 /**
  * Toggle un element d'une liste
  */
-$('.membre-datatable').on( 'click', 'tr', function () {
+$('.datatable').on('click', 'tr', function () {
     $(this).toggleClass('selected');
 } );
 

@@ -1,4 +1,4 @@
-<div class="data-liste" data-name="{{ list.name }}">
+<div class="data-list" data-name="{{ list.name }}">
 
     {% if list.hasToolbar %}
         <div class="data-liste-toolbar">
@@ -13,7 +13,7 @@
         </div>
     {% endif %}
 
-    <table class="ui table{% if list.datatable %} membre-datatable{% endif %} {{ list.style }}">
+    <table class="ui table{% if list.datatable %} datatable{% endif %} {{ list.style }}">
 
         <thead>
         <tr>
@@ -45,20 +45,44 @@
                     </td>
                 {% endfor %}
 
+                {% if list.actions|length != 0 %}
                 <td>
                     {% for action in list.actions %}
-                        <i class="{{ action.icon }} event"
+                        <i class="{{ action.icon }} icon popupable event"
                            data-content="{{ action.label }}"
                            data-event-route="{{ action.route }}"
                            data-event-parameters="{{ action.routeParameters(item) }}"
                            data-event-postactions="{{ action.getPostActions }}"></i>
                     {% endfor %}
                 </td>
+                {% endif %}
 
             </tr>
             {% endfor %}
         </tbody>
     </table>
+
+
+    {% if list.actions|length != 0 %}
+        <div class="ui compact menu">
+            <div class="ui simple dropdown item">
+                Actions
+                <i class="dropdown icon"></i>
+
+                <div class="menu">
+                    {% for action in list.actions %}
+                        <div class="item">
+                            <i class="{{ action.icon }} icon event_mass"
+                               data-content="{{ action.label }}"
+                               data-event-route="{{ action.route }}"
+                               data-event-postactions="{{ action.getPostActions }}"></i>
+                            {{ action.label }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
 
 </div>
 

@@ -75,7 +75,6 @@ $('.popupable.onclick').popup({
 
 //modal
 function showModal(id) {
-
     $(id).modal('show');
 }
 
