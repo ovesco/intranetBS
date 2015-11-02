@@ -129,3 +129,9 @@ swiftmailer:
         type: file
         path: "%kernel.cache_dir%/swiftmailer/spool"
     delivery_address:  dev.sauvabelin@gmail.com # Option de Dév. qui permet de réaiguiller tout les mails sur cette adresse.
+
+fos_rest:
+    body_listener: true # to receive json encoded requests
+    routing_loader:
+        default_format: json
+        include_format: false

@@ -26,6 +26,11 @@ finances:
 galerie:
     resource: "@InterneGalerieBundle/Resources/config/routing.yml"
 
+seance_api:
+    type:     rest
+    resource: "@InterneSeanceBundle/Resources/config/routing_rest.yml"
+    prefix:   /api
+
 seance:
     resource: "@InterneSeanceBundle/Resources/config/routing.yml"
     prefix:   /interne/seance
