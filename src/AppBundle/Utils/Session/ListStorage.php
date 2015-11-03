@@ -45,16 +45,16 @@ class ListStorage {
         return $this->session->get($key,new ArrayCollection());
     }
 
-    /*
+    /**
      * @param string $containerKey
      * @param ArrayCollection $container
-     *
+     */
     private function setContainer($containerKey,ArrayCollection $container)
     {
         $key = ListStorage::SESSION_STORAGE_KEY.$containerKey;
         $this->session->set($key,$container);
     }
-    */
+
 
     /**
      * @param String $containerKey
@@ -67,9 +67,12 @@ class ListStorage {
         {
             throw new \Exception("ListStorage: can't store objects without -getId()- methode");
         }
-        if(!$this->getContainer($containerKey)->contains($object->getId()))
+        /** @var ArrayCollection $container */
+        $container = $this->getContainer($containerKey);
+        if(!$container->contains($object->getId()))
         {
-            $this->getContainer($containerKey)->add($object->getId());
+            $container->add($object->getId());
+            $this->setContainer($containerKey,$container);
         }
     }
 
@@ -84,9 +87,12 @@ class ListStorage {
         {
             throw new \Exception("ListStorage: can't store objects without -getId()- methode");
         }
-        if($this->getContainer($containerKey)->contains($object->getId()))
+        /** @var ArrayCollection $container */
+        $container = $this->getContainer($containerKey);
+        if($container->contains($object->getId()))
         {
-            $this->getContainer($containerKey)->removeElement($object->getId());
+            $container->removeElement($object->getId());
+            $this->setContainer($containerKey,$container);
         }
     }
 

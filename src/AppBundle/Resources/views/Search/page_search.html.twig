@@ -69,6 +69,10 @@ Recherche
 
                 <div id="results">
 
+
+
+                    {{ list_container.getModel(constant('AppBundle\\Utils\\ListRenderer\\Model::Membre'), results).render|raw }}
+
                     {{ dump(results) }}
 
                 </div>

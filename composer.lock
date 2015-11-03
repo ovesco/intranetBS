@@ -215,16 +215,16 @@
         },
         {
             "name": "doctrine/cache",
-            "version": "v1.5.0",
+            "version": "v1.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
-                "reference": "eb8a73619af4f1c8711e2ce482f5de3643258a1f"
+                "reference": "2b9cec5a5e722010cbebc91713d4c11eaa064d5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/eb8a73619af4f1c8711e2ce482f5de3643258a1f",
-                "reference": "eb8a73619af4f1c8711e2ce482f5de3643258a1f",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/2b9cec5a5e722010cbebc91713d4c11eaa064d5e",
+                "reference": "2b9cec5a5e722010cbebc91713d4c11eaa064d5e",
                 "shasum": ""
             },
             "require": {
@@ -281,7 +281,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2015-10-28 11:27:45"
+            "time": "2015-11-02 18:35:48"
         },
         {
             "name": "doctrine/collections",
@@ -1189,12 +1189,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Atlantic18/DoctrineExtensions.git",
-                "reference": "3974d8b0b1821a33ada9c8ec15e742eec43e7429"
+                "reference": "ae8974e4920a20c27b3a660ab89580b260b569a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/3974d8b0b1821a33ada9c8ec15e742eec43e7429",
-                "reference": "3974d8b0b1821a33ada9c8ec15e742eec43e7429",
+                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/ae8974e4920a20c27b3a660ab89580b260b569a8",
+                "reference": "ae8974e4920a20c27b3a660ab89580b260b569a8",
                 "shasum": ""
             },
             "require": {
@@ -1260,7 +1260,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2015-10-30 18:20:50"
+            "time": "2015-11-03 10:52:13"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -1319,12 +1319,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sulazix/SeanceBundle.git",
-                "reference": "d20dc30f9524019607ec0fbed2f27b3f0da66d03"
+                "reference": "82a5a897f4dd75559e3d70213355b1f711e5bd5b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sulazix/SeanceBundle/zipball/d20dc30f9524019607ec0fbed2f27b3f0da66d03",
-                "reference": "d20dc30f9524019607ec0fbed2f27b3f0da66d03",
+                "url": "https://api.github.com/repos/sulazix/SeanceBundle/zipball/82a5a897f4dd75559e3d70213355b1f711e5bd5b",
+                "reference": "82a5a897f4dd75559e3d70213355b1f711e5bd5b",
                 "shasum": ""
             },
             "type": "symfony-bundle",
@@ -1351,7 +1351,7 @@
             "keywords": [
                 "seance meeting bundle"
             ],
-            "time": "2015-10-30 14:32:49"
+            "time": "2015-11-02 22:33:18"
         },
         {
             "name": "itbz/fpdf",
