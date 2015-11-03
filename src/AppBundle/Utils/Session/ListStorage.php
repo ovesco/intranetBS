@@ -10,7 +10,6 @@ namespace AppBundle\Utils\Session;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Doctrine\ORM\EntityRepository;
 
 /**
  * Ce service permet le stockage d'une liste d'ID en session avec des méthodes qui facilite
@@ -46,15 +45,16 @@ class ListStorage {
         return $this->session->get($key,new ArrayCollection());
     }
 
-    /**
+    /*
      * @param string $containerKey
      * @param ArrayCollection $container
-     */
+     *
     private function setContainer($containerKey,ArrayCollection $container)
     {
         $key = ListStorage::SESSION_STORAGE_KEY.$containerKey;
         $this->session->set($key,$container);
     }
+    */
 
     /**
      * @param String $containerKey
