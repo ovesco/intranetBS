@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Utils\Session\ListStorage;
 
 
 /* Annotations */
@@ -24,6 +25,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  */
 class SearchController extends Controller
 {
+    const SEARCH_RESULTS = "search_results";
     /**
      * Affiche la page permettant de lancer une recherche
      *
@@ -52,6 +54,16 @@ class SearchController extends Controller
 
             $results = $repository->search($membreSearch);
 
+            /** @var ListStorage $sessionContainer */
+            $sessionContainer = $this->get('list_storage');
+
+            $sessionContainer->addObjects(SearchController::SEARCH_RESULTS,$results);
+
+            //$sessionContainer->removeObjects(SearchController::SEARCH_RESULTS,$results);
+
+
+
+            $results = $sessionContainer->getObjects(SearchController::SEARCH_RESULTS,$this->getDoctrine()->getRepository('AppBundle:Membre'));
 
         }
 

@@ -53,6 +53,11 @@ services:
             - @kernel
             - @router
 
+    list_storage:
+        class: AppBundle\Utils\Session\ListStorage
+        arguments:
+            - @session
+
 
     # Twig
     # Extensions twig qui permettent de mettre en place des filtres
