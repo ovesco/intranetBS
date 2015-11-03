@@ -3,13 +3,33 @@
 namespace AppBundle\Utils\ListRenderer\ListModels;
 
 use AppBundle\Entity\Membre;
-use AppBundle\Utils\ListRenderer\ActionLigne;
+use AppBundle\Utils\Event\EventPostAction;
+use AppBundle\Utils\ListRenderer\Action;
 use AppBundle\Utils\ListRenderer\Column;
 use AppBundle\Utils\ListRenderer\ListRenderer;
 use Symfony\Component\Routing\Router;
 
 class ListModelsMembre
 {
+
+    static public function getEffectifs(\Twig_Environment $twig, Router $router, $items)
+    {
+        $list = ListModelsMembre::getDefault($twig, $router, $items);
+
+        $list->setName('effectifs');
+
+        $attributionParameters = function (Membre $membre) {
+            // TODO: ne marche pas s'il y a plusieurs attributions
+            return array(
+                "attribution" => $membre->getActiveAttribution()->getId()
+            );
+        };
+
+        /* Supprimer l'attribution courante */
+        $list->addAction(new Action('Supprimer', 'delete', 'attribution_delete', $attributionParameters, EventPostAction::RefreshList));
+
+        return $list;
+    }
 
     /**
      * @param \Twig_Environment $twig
@@ -37,18 +57,8 @@ class ListModelsMembre
         },
             'date(global_date_format)'));
 
-        $membreParameters = function (Membre $membre) {
-            return array(
-                "membre" => $membre->getId()
-            );
-        };
-
-        $list->addAction(new ActionLigne('Afficher', 'zoom icon popupable', 'interne_voir_membre', $membreParameters));
-        $list->addAction(new ActionLigne('Supprimer', 'delete icon popupable', 'event_liste_delete_element'));
-
         return $list;
     }
-
 
     static public function getFraterie(\Twig_Environment $twig, Router $router, $items)
     {
@@ -64,14 +74,6 @@ class ListModelsMembre
             return $membre->GetNaissance();
         },
             'date(global_date_format)'));
-
-        $membreParameters = function (Membre $membre) {
-            return array(
-                "membre" => $membre->getId()
-            );
-        };
-
-        $list->addAction(new ActionLigne('Afficher', 'zoom icon popupable', 'interne_voir_membre', $membreParameters));
 
         $list->setDatatable(false);
         $list->setStyle('very basic');

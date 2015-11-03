@@ -14,6 +14,7 @@ use Twig_Environment;
 class Model
 {
     const Membre = 'Membre';
+    const MembreEffectifs = 'MembreEffectifs';
     const MembreFraterie = 'MembreFraterie';
     const Attribution = 'Attribution';
     const Distinction = 'Distinction';
@@ -90,6 +91,10 @@ class ListContainer
         switch ($type) {
             case Model::Membre:
                 return ListModelsMembre::getDefault($this->twig, $this->router, $items);
+                break;
+
+            case Model::MembreEffectifs:
+                return ListModelsMembre::getEffectifs($this->twig, $this->router, $items);
                 break;
 
             case Model::MembreFraterie:

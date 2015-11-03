@@ -4,7 +4,7 @@
 namespace AppBundle\Utils\ListRenderer\ListModels;
 
 use AppBundle\Entity\ObtentionDistinction;
-use AppBundle\Utils\ListRenderer\ActionLigne;
+use AppBundle\Utils\ListRenderer\Action;
 use AppBundle\Utils\ListRenderer\Column;
 use AppBundle\Utils\ListRenderer\ListRenderer;
 use Symfony\Component\Routing\Router;
@@ -38,7 +38,7 @@ class ListModelsDistinctions
             );
         };
 
-        $list->addAction(new ActionLigne('Supprimer', 'delete icon popupable', 'obtention-distinction_delete', $obtentionParameters));
+        $list->addAction(new Action('Supprimer', 'delete', 'obtention-distinction_delete', $obtentionParameters));
 
         $list->setDatatable(false);
         $list->setStyle('very basic');

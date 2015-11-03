@@ -182,6 +182,11 @@ class ListRenderer
         $this->columns->add($col);
     }
 
+    public function addAction(Action $action)
+    {
+        $this->actions->add($action);
+    }
+
     /**
      * @return ArrayCollection
      */
@@ -189,15 +194,6 @@ class ListRenderer
     {
         return $this->actions;
     }
-
-    /**
-     * @param Action $action
-     */
-    public function addAction($action)
-    {
-        $this->actions->add($action);
-    }
-
 
     public function getRowId($item)
     {

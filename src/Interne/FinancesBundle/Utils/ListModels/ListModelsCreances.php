@@ -3,7 +3,7 @@
 
 namespace Interne\FinancesBundle\Utils\ListModels;
 
-use AppBundle\Utils\ListRenderer\ActionLigne;
+use AppBundle\Utils\ListRenderer\Action;
 use AppBundle\Utils\ListRenderer\Column;
 use AppBundle\Utils\ListRenderer\ListRenderer;
 use Interne\FinancesBundle\Entity\Creance;
@@ -39,8 +39,8 @@ class ListModelsCreances
             return $item->getMontantRecu();
         }, "number_format(2, '.', ',')"));
 
-        $list->addAction(new ActionLigne('Afficher', 'zoom icon popupable', 'event_creance_show'));
-        $list->addAction(new ActionLigne('Supprimer', 'delete icon popupable', 'event_creance_delete'));
+        $list->addAction(new Action('Afficher', 'zoom icon popupable', 'event_creance_show'));
+        $list->addAction(new Action('Supprimer', 'delete icon popupable', 'event_creance_delete'));
 
         $list->setDatatable(false);
 

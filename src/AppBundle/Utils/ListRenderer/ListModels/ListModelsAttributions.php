@@ -5,7 +5,7 @@ namespace AppBundle\Utils\ListRenderer\ListModels;
 
 use AppBundle\Entity\Attribution;
 use AppBundle\Utils\Event\EventPostAction;
-use AppBundle\Utils\ListRenderer\ActionLigne;
+use AppBundle\Utils\ListRenderer\Action;
 use AppBundle\Utils\ListRenderer\Column;
 use AppBundle\Utils\ListRenderer\ListRenderer;
 use Symfony\Component\Routing\Router;
@@ -22,6 +22,8 @@ class ListModelsAttributions
     static public function getDefault(\Twig_Environment $twig, Router $router, $items)
     {
         $list = new ListRenderer($twig, $items);
+
+        $list->setName('attributions');
 
         $list->setSearchBar(true);
 
@@ -46,8 +48,9 @@ class ListModelsAttributions
             );
         };
 
-        $list->addAction(new ActionLigne('Terminer', 'ban icon popupable', 'attribution_edit_modal', $attributionParameters, EventPostAction::ShowModal));
-        $list->addAction(new ActionLigne('Supprimer', 'delete icon popupable', 'attribution_delete', $attributionParameters, EventPostAction::RefreshList));
+        $list->addAction(new Action('Modifier', 'edit', 'attribution_edit_modal', $attributionParameters, EventPostAction::ShowModal));
+        $list->addAction(new Action('Terminer', 'ban', 'attribution_edit_modal', $attributionParameters, EventPostAction::ShowModal));
+        $list->addAction(new Action('Supprimer', 'delete', 'attribution_delete', $attributionParameters, EventPostAction::RefreshList));
 
         $list->setDatatable(false);
         $list->setStyle('very basic');

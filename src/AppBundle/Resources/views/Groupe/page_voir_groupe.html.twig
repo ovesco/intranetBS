@@ -118,7 +118,7 @@
                 </div>
 
                 <div class="ui bottom attached segment">
-                    {{ list_container.getModel(constant('AppBundle\\Utils\\ListRenderer\\Model::Membre'), groupe.members).render|raw }}
+                    {{ list_container.getModel(constant('AppBundle\\Utils\\ListRenderer\\Model::MembreEffectifs'), groupe.members).render|raw }}
                 </div>
 
                 {% if groupe.model.affichageEffectifs %}
@@ -136,7 +136,7 @@
                         </div>
 
                         <div class="ui bottom attached segment">
-                            {{ list_container.getModel(constant('AppBundle\\Utils\\ListRenderer\\Model::Membre'), groupeEnfant.members).render|raw }}
+                            {{ list_container.getModel(constant('AppBundle\\Utils\\ListRenderer\\Model::MembreEffectifs'), groupeEnfant.members).render|raw }}
                         </div>
                     {% endfor %}
                 {% endif %}
