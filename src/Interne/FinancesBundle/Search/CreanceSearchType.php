@@ -1,6 +1,6 @@
 <?php
 
-namespace Interne\FinancesBundle\Form;
+namespace Interne\FinancesBundle\Search;
 
 
 use Symfony\Component\Form\AbstractType;
@@ -22,13 +22,14 @@ class CreanceSearchType extends AbstractType
             ->add('toMontantEmis','number',array('label' => 'à', 'required' => false))
             ->add('fromMontantRecu','number',array('label' => 'De', 'required' => false))
             ->add('toMontantRecu','number',array('label' => 'à', 'required' => false))
+            /*
             ->add('idFacture','number',array('label' => 'Facture (n°)', 'required' => false))
             ->add('nomMembre','text',array('label' => 'Nom', 'required' => false))
             ->add('prenomMembre','text',array('label' => 'Prénom', 'required' => false))
             ->add('nomFamille','text',array('label' => 'Nom de famille', 'required' => false))
             ->add('factured','choice',array('label'=>'Facturée?','choices'=>array('yes'=>'oui','no'=>'non'),'required'  => false))
             ->add('payed','choice',array('label'=>'Payée?','choices'=>array('yes'=>'oui','no'=>'non'),'required'  => false))
-
+*/
         ;
 
     }
@@ -36,14 +37,14 @@ class CreanceSearchType extends AbstractType
     public function configureOptions( \Symfony\Component\OptionsResolver\OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Interne\FinancesBundle\SearchClass\CreanceSearch'
+            'data_class' => 'Interne\FinancesBundle\Search\CreanceSearch'
         ));
     }
 
 
     public function getName()
     {
-        return 'InterneFinancesBundle_CreanceSearch_Type';
+        return 'InterneFinancesBundle_creance_search_type';
     }
 
 }

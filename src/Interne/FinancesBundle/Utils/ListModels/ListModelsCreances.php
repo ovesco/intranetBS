@@ -22,16 +22,21 @@ class ListModelsCreances
 
         $list->setSearchBar(true);
 
+        /*
+
         $list->addColumn(new Column('Facture', function (Creance $item) {
             if ($item->getFacture() != null)
                 return 'N°' . $item->getFacture()->GetId();
             else
                 return '<i class="bordered inverted orange wait icon popupable" data-content="En attente"></i>';
         }));
+        */
 
         $list->addColumn(new Column('Motif', function (Creance $item) {
             return $item->getTitre();
         }));
+
+        /*
         $list->addColumn(new Column('Montant', function (Creance $item) {
             return $item->getMontantEmis();
         }, "number_format(2, '.', ',')"));
@@ -42,7 +47,8 @@ class ListModelsCreances
         $list->addAction(new Action('Afficher', 'zoom icon popupable', 'event_creance_show'));
         $list->addAction(new Action('Supprimer', 'delete icon popupable', 'event_creance_delete'));
 
-        $list->setDatatable(false);
+        */
+        //$list->setDatatable(true);
 
         return $list;
     }

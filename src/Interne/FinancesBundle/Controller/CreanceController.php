@@ -7,10 +7,9 @@ use AppBundle\Utils\Listing\Liste;
 use AppBundle\Utils\Listing\Lister;
 use Interne\FinancesBundle\Entity\Creance;
 use Interne\FinancesBundle\Form\CreanceAddType;
-use Interne\FinancesBundle\Form\CreanceSearchType;
-use Interne\FinancesBundle\SearchClass\CreanceSearch;
-use Interne\FinancesBundle\SearchRepository\CreanceToFamilleRepository;
-use Interne\FinancesBundle\SearchRepository\CreanceToMembreRepository;
+use Interne\FinancesBundle\Search\CreanceSearch;
+use Interne\FinancesBundle\Search\CreanceSearchType;
+use Interne\FinancesBundle\Search\CreanceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -83,7 +82,7 @@ class CreanceController extends Controller
 
         $creanceSearch = new CreanceSearch();
 
-        $searchForm = $this->createForm(new CreanceSearchType, $creanceSearch);
+        $searchForm = $this->createForm(new CreanceSearchType(), $creanceSearch);
 
         $results = array();
 
@@ -95,17 +94,10 @@ class CreanceController extends Controller
 
             $elasticaManager = $this->container->get('fos_elastica.manager');
 
-            /** @var CreanceToMembreRepository $repository */
-            $repository = $elasticaManager->getRepository('InterneFinancesBundle:CreanceToMembre');
+            /** @var CreanceRepository $repository */
+            $repository = $elasticaManager->getRepository('InterneFinancesBundle:Creance');
 
-            $resultsCreanceToMembre = $repository->search($creanceSearch);
-
-            /** @var CreanceToFamilleRepository $repository */
-            $repository = $elasticaManager->getRepository('InterneFinancesBundle:CreanceToFamille');
-
-            $resultsCreanceToFamille = $repository->search($creanceSearch);
-
-            $results = array_merge($resultsCreanceToMembre, $resultsCreanceToFamille);
+            $results = $repository->search($creanceSearch);
 
         }
 

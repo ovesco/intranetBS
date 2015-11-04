@@ -1,22 +1,41 @@
 <?php
 
-namespace Interne\FinancesBundle\SearchRepository;
+namespace Interne\FinancesBundle\Search;
 
-
-use Interne\FinancesBundle\SearchClass\CreanceSearch;
 use FOS\ElasticaBundle\Repository;
-
+use AppBundle\Utils\Elastic\QueryBuilder;
 
 class CreanceRepository extends Repository
 {
 
-    public function search(CreanceSearch $creanceSearch){
+    public function search(CreanceSearch $creance){
 
+
+
+        $builder = new QueryBuilder($this,true,5000);
+
+        $builder
+            ->addTextMatch('titre',$creance->titre)
+            ->addNumberInRange('montantEmis',$creance->fromMontantEmis,$creance->toMontantEmis)
+        /*
+            ->addNestedTextMatch('montantEmis',$membre->nom)
+            ->addDateGreaterOrEqual('naissance',$membre->fromNaissance)
+            ->addDateLessOrEqual('naissance',$membre->toNaissance)
+            ->addTextMatch('sexe',$membre->sexe)
+            ->addNestedTextMatch('attributions.groupe',$membre->attribution->groupe)
+            ->addNestedTextMatch('attributions.fonction',$membre->attribution->fonction)
+        */
+        ;
+
+        return $builder->getResults();
+
+
+        /*
         $query = new \Elastica\Query();
 
         /*
          * fixme ceci n'est pas propre mais par defaut la taille est 10...je prend un peu de marge ;-)
-         */
+         *
         $query->setSize(50000);
 
         $emptyQuery = true;
@@ -90,7 +109,7 @@ class CreanceRepository extends Repository
 
         /*
          * fixme il y a encore un problème si on cherche le meme jours en from et to...y a aucun résultats...
-         */
+         *
         $fromDateCreation = $creanceSearch->getFromDateCreation();
         if($fromDateCreation != null)
         {
@@ -118,7 +137,7 @@ class CreanceRepository extends Repository
             $emptyQuery = false;
             /*
              * si facturée, on exclu tout les facture en attente et on regarde si le num de réf est spécifié.
-             */
+             *
 
             $termQuery = new \Elastica\Query\Term(array('isFactured'=>true));
             $boolQuery->addMust($termQuery);
@@ -181,6 +200,7 @@ class CreanceRepository extends Repository
 
         return array('mainQuery'=>$query,'boolQuery'=>$boolQuery,'emptyQuery'=>$emptyQuery);
 
+        */
 
 
     }

@@ -55,15 +55,15 @@ class SearchController extends Controller
             $results = $repository->search($membreSearch);
 
             /** @var ListStorage $sessionContainer */
-            $sessionContainer = $this->get('list_storage');
+            //$sessionContainer = $this->get('list_storage');
 
-            $sessionContainer->addObjects(SearchController::SESSION_RESULTS,$results);
+            //$sessionContainer->addObjects(SearchController::SESSION_RESULTS,$results);
 
             //$sessionContainer->removeObjects(SearchController::SEARCH_RESULTS,$results);
 
 
 
-            $results = $sessionContainer->getObjects(SearchController::SESSION_RESULTS,$this->getDoctrine()->getRepository('AppBundle:Membre'));
+            //$results = $sessionContainer->getObjects(SearchController::SESSION_RESULTS,$this->getDoctrine()->getRepository('AppBundle:Membre'));
 
         }
 

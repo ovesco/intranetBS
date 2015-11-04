@@ -10,7 +10,12 @@ use Interne\FinancesBundle\Utils\ListModels\ListModelsFactures;
 use Symfony\Component\Routing\Router;
 use Twig_Environment;
 
-
+/**
+ * Pattern: Singelton
+ *
+ * Class Model
+ * @package AppBundle\Utils\ListRenderer
+ */
 class Model
 {
     const Membre = 'Membre';
@@ -28,10 +33,7 @@ class Model
      */
     private static $_instance = null;
 
-    private function __construct()
-    {
-
-    }
+    private function __construct() { }
 
     /**
      * Méthode qui créé l'unique instance de la classe
@@ -42,11 +44,9 @@ class Model
      */
     public static function getInstance()
     {
-
         if (is_null(self::$_instance)) {
             self::$_instance = new Model();
         }
-
         return self::$_instance;
     }
 }
@@ -54,7 +54,7 @@ class Model
 
 /**
  * Cette class est un service disponible dans chaque controller.
- * Cela permet d'appeler tout les liste dàjà écrites rapidement.
+ * Cela permet d'appeler tout les liste déjà écrites rapidement.
  *
  * Class ListContainer
  * @package AppBundle\Utils\ListRenderer

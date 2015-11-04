@@ -12,12 +12,26 @@ namespace AppBundle\Search;
 
 class MembreSearch {
 
+    /** @var  string */
     public $nom;
 
+    /** @var  string */
     public $prenom;
+
 
     public $fromId;
 
     public $toId;
 
+    /** @var  \Datetime */
+    public $fromNaissance;
+
+    /** @var  \Datetime */
+    public $toNaissance;
+
+    /** @var  string */
+    public $sexe;
+
+    /** @var  AttributionSearch */
+    public $attribution;
 }

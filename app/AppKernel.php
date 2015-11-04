@@ -6,7 +6,7 @@ use Symfony\Component\HttpKernel\Kernel;
 class AppKernel extends Kernel
 {
     /*
-     * Surchage pour configurer le time zone dans la base de donnée
+     * Surchage pour configurer le time zone correct
      * Author: Uffer
      */
     /**

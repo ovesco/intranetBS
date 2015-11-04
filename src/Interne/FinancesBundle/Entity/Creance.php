@@ -3,6 +3,7 @@
 namespace Interne\FinancesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use FOS\ElasticaBundle\Configuration\Search;
 
 
 
@@ -11,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="finances_bundle_creances")
  * @ORM\Entity
+ * @Search(repositoryClass="Interne\FinancesBundle\Search\CreanceRepository")
  *
  */
 class Creance
