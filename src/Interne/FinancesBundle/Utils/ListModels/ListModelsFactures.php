@@ -28,29 +28,62 @@ class ListModelsFactures
         $list->addColumn(new Column('Num. ref', function (Facture $facture) use ($router) {
             return '<a href="' . $router->generate('interne_finances_facture_show', array('facture' => $facture->getId())) . '">N°' . $facture->getId() . '</a>';
         }));
-        $list->addColumn(new Column('Statut', function (Facture $facture) {
-            switch ($facture->getStatut()) {
-                case 'payee':
-                    return '<i class="bordered inverted green checkmark icon popupable" data-content="Payée"></i>';
-                    break;
 
-                case 'ouverte':
-                    return '<i class="bordered inverted blue ellipsis horizontal icon popupable" data-content="En attente de payement"></i>';
-                    break;
-            }
-        }));
+        $list->addColumn(new Column('Statut', function (Facture $facture) { return $facture;}, 'facture_is_payed|raw'));
+
         $list->addColumn(new Column('Créances', function (Facture $facture) {
             return $facture->getMontantEmisCreances();
-        }, "number_format(2, '.', ',')"));
+        }, "money"));
         $list->addColumn(new Column('Rappels', function (Facture $facture) {
             return $facture->getMontantEmisRappels();
-        }, "number_format(2, '.', ',')"));
+        }, "money"));
         $list->addColumn(new Column('Total', function (Facture $facture) {
             return $facture->getMontantEmis();
-        }, "number_format(2, '.', ',')"));
+        }, "money"));
         $list->addColumn(new Column('Reçu', function (Facture $facture) {
             return $facture->getMontantRecu();
-        }, "number_format(2, '.', ',')"));
+        }, "money"));
+
+
+        $factureParameters = function (Facture $facture) {
+            return array(
+                'facture' => $facture->getId()
+            );
+        };
+
+        $list->addAction(new Action('Supprimer', 'delete', 'interne_finances_facture_delete', $factureParameters, EventPostAction::RefreshList));
+
+        $list->setDatatable(true);
+
+        return $list;
+    }
+
+    /**
+     * @param \Twig_Environment $twig
+     * @param Router $router
+     * @param $items
+     * @return ListRenderer
+     */
+    static public function getSearchResults(\Twig_Environment $twig, Router $router, $items)
+    {
+        $list = new ListRenderer($twig, $items);
+
+        $list->setSearchBar(true);
+
+        $list->addColumn(new Column('Num. ref', function (Facture $facture) use ($router) {
+            return '<a href="' . $router->generate('interne_finances_facture_show', array('facture' => $facture->getId())) . '">N°' . $facture->getId() . '</a>';
+        }));
+        $list->addColumn(new Column('Statut', function (Facture $facture) { return $facture;}, 'facture_is_payed|raw'));
+
+        $list->addColumn(new Column('Nb. Rappels', function (Facture $facture) {
+            return $facture->getNombreRappels();
+        }));
+        $list->addColumn(new Column('Total', function (Facture $facture) {
+            return $facture->getMontantEmis();
+        }, "money"));
+        $list->addColumn(new Column('Reçu', function (Facture $facture) {
+            return $facture->getMontantRecu();
+        }, "money"));
 
 
         $factureParameters = function (Facture $facture) {

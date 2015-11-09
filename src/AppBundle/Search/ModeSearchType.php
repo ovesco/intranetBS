@@ -23,7 +23,11 @@ class ModeSearchType extends AbstractType
                 Mode::MODE_STANDARD => 'Standard',
                 Mode::MODE_INCLUDE=> 'Inclure prédédentes',
                 Mode::MODE_EXCLUDE=> 'Exclure prédédentes',
-            )
+            ),
+            'mapped'=>false,
+            'required'=>true,
+            'label'=>'Mode de recherche'
+
         ));
     }
 

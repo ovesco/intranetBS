@@ -1,11 +1,13 @@
 <?php
 
-namespace Interne\FinancesBundle\Form;
+namespace Interne\FinancesBundle\Search;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
+use AppBundle\Search\NumericIntervalSearchType;
+use AppBundle\Search\DateIntervalSearchType;
+use Interne\FinancesBundle\Entity\Facture;
 
 class FactureSearchType extends AbstractType
 {
@@ -13,21 +15,24 @@ class FactureSearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            /*
-             * Elements appartenant aux factures
-             */
+
             ->add('id','number',array('label' => 'Num. de référance', 'required' => false))
+            ->add('intervalDateCreation',new DateIntervalSearchType() ,array('label' => 'Date de création', 'required' => false))
+            ->add('intervalDatePayement',new DateIntervalSearchType() ,array('label' => 'Date de payement', 'required' => false))
+            ->add('intervalMontantEmis',new NumericIntervalSearchType(),array('label' => 'Montant emis', 'required' => false))
+            ->add('intervalMontantRecu',new NumericIntervalSearchType(),array('label' => 'Montant reçu', 'required' => false))
+            ->add('statut','choice',array(
+                'label' => 'Statut',
+                'required' => false,
+                'choices' => array(Facture::OUVERTE=>'Ouverte', Facture::PAYEE=>'Payée'),
+                ))
+            ->add('nombreRappels','integer',array('label' => 'Nombre de rappels', 'required' => false))
+            ->add('debiteur','text',array('label' => 'Propriétaire', 'required' => false))
+            ->add('titreCreance','text',array('label' => 'Titre d\'une créances', 'required' => false))
 
+            /*
 
-            ->add('fromMontantEmis','number',array('label' => 'De', 'required' => false))
-            ->add('toMontantEmis','number',array('label' => 'a', 'required' => false))
-            ->add('fromMontantEmisCreances','number',array('label' => 'De', 'required' => false))
-            ->add('toMontantEmisCreances','number',array('label' => 'a', 'required' => false))
-            ->add('fromMontantEmisRappels','number',array('label' => 'De', 'required' => false))
-            ->add('toMontantEmisRappels','number',array('label' => 'a', 'required' => false))
-
-            ->add('fromDateCreation','date',array('label' => 'De', 'required' => false))
-            ->add('toDateCreation','date',array('label' => 'à', 'required' => false))
+         eCreation','date',array('label' => 'à', 'required' => false))
 
             ->add('titreCreance','text',array('label' => 'Titre de la créance', 'required' => false))
             ->add('fromMontantEmisCreance','number',array('label' => 'De', 'required' => false))
@@ -51,6 +56,7 @@ class FactureSearchType extends AbstractType
 
             ->add('statut','choice',array('label' => 'Statut','required' => false,'choices' => array('ouverte'=>'Ouverte', 'payee'=>'Payée'), 'required' => false))
 
+            */
 
 
 
@@ -63,7 +69,7 @@ class FactureSearchType extends AbstractType
     public function configureOptions( \Symfony\Component\OptionsResolver\OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Interne\FinancesBundle\SearchClass\FactureSearch'
+            'data_class' => 'Interne\FinancesBundle\Search\FactureSearch'
         ));
     }
 

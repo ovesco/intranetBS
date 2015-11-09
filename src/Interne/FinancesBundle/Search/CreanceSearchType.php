@@ -3,6 +3,7 @@
 namespace Interne\FinancesBundle\Search;
 
 
+use AppBundle\Search\ModeSearchType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -18,6 +19,7 @@ class CreanceSearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('mode',new ModeSearchType())
             ->add('titre','text',array('label' => 'Titre', 'required' => false))
             ->add('remarque','textarea',array('label' => 'Remarque', 'required' => false))
             ->add('intervalDateCreation',new DateIntervalSearchType() ,array('label' => 'Date de création', 'required' => false))
@@ -27,8 +29,6 @@ class CreanceSearchType extends AbstractType
             ->add('isFactured','boolean',array('label' => 'Facturée', 'required' => false))
             ->add('isPayed','boolean',array('label' => 'Payée', 'required' => false))
             ->add('debiteur','text',array('label' => 'Propriétaire', 'required' => false))
-
-
         ;
 
     }

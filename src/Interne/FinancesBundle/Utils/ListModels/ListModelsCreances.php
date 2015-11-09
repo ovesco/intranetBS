@@ -32,10 +32,10 @@ class ListModelsCreances
 
         $list->addColumn(new Column('Montant', function (Creance $item) {
             return $item->getMontantEmis();
-        }, "number_format(2, '.', ',')"));
+        }, "money"));
         $list->addColumn(new Column('Montant perçu', function (Creance $item) {
             return $item->getMontantRecu();
-        }, "number_format(2, '.', ',')"));
+        }, "money"));
 
         //$list->addAction(new Action('Afficher', 'zoom icon popupable', 'event_creance_show'));
         //$list->addAction(new Action('Supprimer', 'delete icon popupable', 'event_creance_delete'));
@@ -70,10 +70,10 @@ class ListModelsCreances
 
         $list->addColumn(new Column('Montant', function (Creance $item) {
             return $item->getMontantEmis();
-        }, "number_format(2, '.', ',')"));
+        }, "money"));
         $list->addColumn(new Column('Montant perçu', function (Creance $item) {
             return $item->getMontantRecu();
-        }, "number_format(2, '.', ',')"));
+        }, "money"));
 
         //$list->addAction(new Action('Afficher', 'zoom icon popupable', 'event_creance_show'));
         //$list->addAction(new Action('Supprimer', 'delete icon popupable', 'event_creance_delete'));

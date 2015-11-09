@@ -238,5 +238,18 @@ class QueryBuilder {
         return $this;
     }
 
+    public function addNumber($field,$number)
+    {
+        if((!is_null($number)) && (is_numeric($number)))
+        {
+            $this->empty = false;
+
+            $query = new \Elastica\Query\Term();
+            $query->setTerm($field,$number);
+
+            $this->boolQuery->addMust($query);
+        }
+        return $this;
+    }
 
 }

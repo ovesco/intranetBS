@@ -22,7 +22,7 @@ class MembreSearchType extends AbstractType
     {
 
         $builder
-            ->add('mode',new ModeSearchType(),array('mapped'=>false))
+            ->add('mode',new ModeSearchType())
             ->add('prenom','text',array('label' => 'Prénom','required'=>false))
             ->add('nom','text',array('label' => 'Nom','required'=>false))
             ->add('fromNaissance','datepicker',array('label' => 'Naissance de','required'=>false))

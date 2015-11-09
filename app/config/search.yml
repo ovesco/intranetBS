@@ -78,23 +78,34 @@ fos_elastica:
                     mappings:
                         id: ~
                         montantEmis: ~
+                        montantRecu: ~
                         montantEmisCreances: ~
                         montantEmisRappels: ~
+                        statut: ~
                         nombreRappels: ~
                         dateCreation: { type: date}
                         datePayement: { type: date}
-                        montantRecu: ~
                         creances:
                             type: "nested"
                             properties:
                                 titre: ~
                                 montantEmis: ~
+                                montantRecu: ~
                                 dateCreation: { type: date}
                         rappels:
-                            type: "nested"
-                            properties:
-                                montantEmis: ~
-                                dateCreation: { type: date}
+                             type: "nested"
+                             properties:
+                                 montantEmis: ~
+                                 montantRecu: ~
+                                 dateCreation: { type: date}
+                        payement:
+                             type: "nested"
+                             properties:
+                                 montantRecu: ~
+                        debiteur:
+                             type: "nested"
+                             properties:
+                                 getOwnerAsString: ~
                     persistence:
                         driver: orm
                         model: Interne\FinancesBundle\Entity\Facture

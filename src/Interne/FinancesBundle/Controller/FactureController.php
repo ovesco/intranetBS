@@ -15,13 +15,12 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 /* Entity */
 use Interne\FinancesBundle\Entity\Facture;
 
-/* Form */
-use Interne\FinancesBundle\Form\FactureSearchType;
+
 
 /* Elastica repository */
-use Interne\FinancesBundle\SearchRepository\FactureToFamilleRepository;
-use Interne\FinancesBundle\SearchRepository\FactureToMembreRepository;
-use Interne\FinancesBundle\SearchClass\FactureSearch;
+use Interne\FinancesBundle\Search\FactureRepository;
+use Interne\FinancesBundle\Search\FactureSearch;
+use Interne\FinancesBundle\Search\FactureSearchType;
 
 /* routing */
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -52,7 +51,7 @@ class FactureController extends Controller
 
         $factureSearch = new FactureSearch();
 
-        $searchForm = $this->createForm(new FactureSearchType,$factureSearch);
+        $searchForm = $this->createForm(new FactureSearchType(),$factureSearch);
 
         $results = array();
 
@@ -62,20 +61,13 @@ class FactureController extends Controller
 
             $factureSearch = $searchForm->getData();
 
-
             $elasticaManager = $this->container->get('fos_elastica.manager');
 
-            /** @var FactureToMembreRepository $repository */
-            $repository = $elasticaManager->getRepository('InterneFinancesBundle:FactureToMembre');
+            /** @var FactureRepository $repository */
+            $repository = $elasticaManager->getRepository('InterneFinancesBundle:Facture');
 
-            $resultsFactureToMembre = $repository->search($factureSearch);
+            $results = $repository->search($factureSearch);
 
-            /** @var FactureToFamilleRepository $repository */
-            $repository = $elasticaManager->getRepository('InterneFinancesBundle:FactureToFamille');
-
-            $resultsFactureToFamille = $repository->search($factureSearch);
-
-            $results = array_merge($resultsFactureToMembre,$resultsFactureToFamille);
 
         }
 

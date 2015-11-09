@@ -5,12 +5,15 @@ namespace Interne\FinancesBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use FOS\ElasticaBundle\Configuration\Search;
 
 /**
  * Class Facture
  *
  * @ORM\Table(name="finances_bundle_factures")
  * @ORM\Entity
+ * @Search(repositoryClass="Interne\FinancesBundle\Search\FactureRepository")
+ *
  */
 class Facture
 {
@@ -73,12 +76,6 @@ class Facture
     private $debiteur;
 
 
-
-
-    /*
-     * ============= FONCTIONS ============
-     */
-
     public function __construct()
     {
         $this->rappels = new ArrayCollection();
@@ -117,6 +114,11 @@ class Facture
     public function getStatut()
     {
         return $this->statut;
+    }
+
+    public function isPayed()
+    {
+        return (Facture::PAYEE == $this->statut? true:false);
     }
 
     /**

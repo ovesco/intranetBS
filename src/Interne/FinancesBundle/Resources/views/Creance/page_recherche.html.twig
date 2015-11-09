@@ -17,14 +17,3 @@
     </div>
 {% endblock %}
 
-{% block js %}
-
-    {% javascripts
-    '@InterneFinancesBundle/Resources/public/js/model/*'
-    '@InterneFinancesBundle/Resources/public/js/event_catcher.js'
-    output='js/finances_recherche_creances.js'
-    %}
-    <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-
-{% endblock %}

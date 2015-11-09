@@ -11,22 +11,11 @@
 
                 {% include "InterneFinancesBundle:Facture:searchForm.html.twig" with {'searchForm':searchForm} %}
 
-
             </div>
-
 
             <div class="twelve wide column">
 
-
-                {% if factures is not empty %}
-
-
-                    {% include "InterneFinancesBundle:Facture:liste_search_results.html.twig" with {'factures':factures} %}
-
-
-                {% endif %}
-
-
+                {{ list_container.getModel(constant('AppBundle\\Utils\\ListRenderer\\Model::FactureSearchResults'), factures).render|raw }}
 
             </div>
         </div>
@@ -35,16 +24,3 @@
 
 {% endblock %}
 
-{% block js %}
-
-
-    {% javascripts
-    '@InterneFinancesBundle/Resources/public/js/model/*.js'
-    '@InterneFinancesBundle/Resources/public/js/event_catcher.js'
-    output='js/finances_recherche_factures.js'
-    %}
-    <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-
-
-{% endblock %}

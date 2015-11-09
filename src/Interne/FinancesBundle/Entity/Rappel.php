@@ -21,9 +21,6 @@ class Rappel
      */
     private $id;
 
-    /*
-     * =========== RELATIONS ===============
-     */
 
     /**
      * @var Facture
@@ -33,9 +30,6 @@ class Rappel
      */
     private $facture;
 
-    /*
-     * ========== VARIABLES =================
-     */
 
     /**
      * @var \DateTime

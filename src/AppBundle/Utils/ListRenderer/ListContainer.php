@@ -26,6 +26,7 @@ class Model
     const CreanceSearchResults = 'CreanceSearchResults';
     const Creance = 'Creance';
     const Facture = 'Facture';
+    const FactureSearchResults = 'FactureSearchResults';
 
     /**
      * @var Model
@@ -114,6 +115,8 @@ class ListContainer
             case Model::Facture:
                 return ListModelsFactures::getDefault($this->twig, $this->router, $items);
 
+            case Model::FactureSearchResults:
+                return ListModelsFactures::getSearchResults($this->twig, $this->router, $items);
         }
     }
 }

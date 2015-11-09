@@ -29,6 +29,7 @@ class FinancesExtension extends \Twig_Extension
             new \Twig_SimpleFilter('statut_label', array($this, 'statut_label')),
             new \Twig_SimpleFilter('creance_facture_status', array($this, 'creance_facture_status')),
             new \Twig_SimpleFilter('creance_is_payed', array($this, 'creance_is_payed')),
+            new \Twig_SimpleFilter('facture_is_payed', array($this, 'facture_is_payed')),
         );
     }
 
@@ -51,6 +52,8 @@ class FinancesExtension extends \Twig_Extension
         }
 
     }
+
+
 
 
     public function creance_is_payed(Creance $creance)
@@ -79,19 +82,20 @@ class FinancesExtension extends \Twig_Extension
 
     }
 
+    public function facture_is_payed(Facture $facture){
+        if($facture->isPayed())
+        {
+            return '<i class="bordered inverted green checkmark icon popupable" data-content="Payée"></i>';
+        }
+        else
+        {
+            return '<i class="bordered inverted red remove icon popupable" data-content="Impayée"></i>';
+        }
+    }
 
     public function statut_label($statut)
     {
-        if($statut == Facture::PAYEE){
-            return '<div class="ui label blue">Ouverte</div>';
-        }
-        elseif($statut == Facture::OUVERTE){
-            return '<div class="ui label green">Payée</div>';
-        }
-        elseif($statut == Creance::EN_ATTENTE){
-            return '<div class="ui label orange">En attente</div>';
-        }
-        return null;
+        throw new \Exception('this filter should be replaced by creance_is_payed or creance_facture_status');
     }
 
 
