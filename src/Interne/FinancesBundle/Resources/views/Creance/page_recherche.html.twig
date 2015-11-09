@@ -11,16 +11,7 @@
                 {% include "InterneFinancesBundle:Creance:searchForm.html.twig" with {'searchForm':searchForm} %}
             </div>
             <div class="twelve wide column">
-                {{ list_container.getModel(constant('AppBundle\\Utils\\ListRenderer\\Model::Creance'), creances).render|raw }}
-
-
-                {{ dump(creances) }}
-
-                {#
-                {% if creances is not empty %}
-                    {% include "InterneFinancesBundle:Creance:liste_search_results.html.twig" with {'creances':creances} %}
-                {% endif %}
-                #}
+                {{ list_container.getModel(constant('AppBundle\\Utils\\ListRenderer\\Model::CreanceSearchResults'), creances).render|raw }}
             </div>
         </div>
     </div>

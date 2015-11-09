@@ -7,6 +7,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+use AppBundle\Search\NumericIntervalSearchType;
+use AppBundle\Search\DateIntervalSearchType;
+
+use AppBundle\Field\BooleanType;
 
 class CreanceSearchType extends AbstractType
 {
@@ -16,20 +20,15 @@ class CreanceSearchType extends AbstractType
         $builder
             ->add('titre','text',array('label' => 'Titre', 'required' => false))
             ->add('remarque','textarea',array('label' => 'Remarque', 'required' => false))
-            ->add('fromDateCreation','date',array('label' => 'De', 'required' => false))
-            ->add('toDateCreation','date',array('label' => 'à', 'required' => false))
-            ->add('fromMontantEmis','number',array('label' => 'De', 'required' => false))
-            ->add('toMontantEmis','number',array('label' => 'à', 'required' => false))
-            ->add('fromMontantRecu','number',array('label' => 'De', 'required' => false))
-            ->add('toMontantRecu','number',array('label' => 'à', 'required' => false))
-            /*
-            ->add('idFacture','number',array('label' => 'Facture (n°)', 'required' => false))
-            ->add('nomMembre','text',array('label' => 'Nom', 'required' => false))
-            ->add('prenomMembre','text',array('label' => 'Prénom', 'required' => false))
-            ->add('nomFamille','text',array('label' => 'Nom de famille', 'required' => false))
-            ->add('factured','choice',array('label'=>'Facturée?','choices'=>array('yes'=>'oui','no'=>'non'),'required'  => false))
-            ->add('payed','choice',array('label'=>'Payée?','choices'=>array('yes'=>'oui','no'=>'non'),'required'  => false))
-*/
+            ->add('intervalDateCreation',new DateIntervalSearchType() ,array('label' => 'Date de création', 'required' => false))
+            ->add('intervalDatePayement',new DateIntervalSearchType() ,array('label' => 'Date de payement', 'required' => false))
+            ->add('intervalMontantEmis',new NumericIntervalSearchType(),array('label' => 'Montant emis', 'required' => false))
+            ->add('intervalMontantRecu',new NumericIntervalSearchType(),array('label' => 'Montant reçu', 'required' => false))
+            ->add('isFactured','boolean',array('label' => 'Facturée', 'required' => false))
+            ->add('isPayed','boolean',array('label' => 'Payée', 'required' => false))
+            ->add('debiteur','text',array('label' => 'Propriétaire', 'required' => false))
+
+
         ;
 
     }

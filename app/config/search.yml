@@ -56,15 +56,18 @@ fos_elastica:
                         remarque: ~
                         montantEmis: ~
                         montantRecu: ~
-                        isFactured:
-                            type: boolean
-                        isPayed:
-                            type: boolean
+                        isFactured: { type: boolean }
+                        isPayed: { type: boolean }
                         dateCreation: { type: date }
+                        datePayement: { type: date }
                         facture:
                             type: "nested"
                             properties:
                                 id: { type: integer }
+                        debiteur:
+                            type: "nested"
+                            properties:
+                                getOwnerAsString: ~
                     persistence:
                         driver: orm
                         model: Interne\FinancesBundle\Entity\Creance

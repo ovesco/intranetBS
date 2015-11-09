@@ -2,6 +2,9 @@
 
 namespace Interne\FinancesBundle\Search;
 
+use AppBundle\Search\NumericIntervalSearch;
+use AppBundle\Search\DateIntervalSearch;
+
 
 class CreanceSearch
 {
@@ -24,40 +27,51 @@ class CreanceSearch
     public $remarque;
 
     /**
-     * @var \DateTime
+     * @var DateIntervalSearch
      *
      */
-    public $toDateCreation;
+    public $intervalDateCreation;
 
     /**
-     * @var \DateTime
+     * @var DateIntervalSearch
      *
      */
-    public $fromDateCreation;
+    public $intervalDatePayement;
+
 
     /**
-     * @var float
-     *
+     * @var NumericIntervalSearch
      */
-    public $toMontantEmis;
+    public $intervalMontantEmis;
 
     /**
-     * @var float
+     * @var NumericIntervalSearch
      *
      */
-    public $fromMontantEmis;
+    public $intervalMontantRecu;
 
     /**
-     * @var float
-     *
+     * @var boolean
      */
-    public $toMontantRecu;
+    public $isFactured;
 
     /**
-     * @var float
-     *
+     * @var boolean
      */
-    public $fromMontantRecu;
+    public $isPayed;
+
+    /**
+     * @var string
+     */
+    public $debiteur;
+
+    public function __construct(){
+        $this->intervalMontantEmis = new NumericIntervalSearch();
+        $this->intervalMontantRecu = new NumericIntervalSearch();
+        $this->intervalDatePayement = new DateIntervalSearch();
+        $this->intervalDateCreation = new DateIntervalSearch();
+    }
+
 
 }
 

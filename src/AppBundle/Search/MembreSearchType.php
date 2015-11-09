@@ -2,6 +2,7 @@
 
 namespace AppBundle\Search;
 
+use AppBundle\Search\ModeSearchType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,23 +18,16 @@ use AppBundle\Entity\Membre;
 
 class MembreSearchType extends AbstractType
 {
-
-    /**
-     * Formulaire pour ajouter un membre, gestion automatique de la détection de famille
-     */
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
         $builder
+            ->add('mode',new ModeSearchType(),array('mapped'=>false))
             ->add('prenom','text',array('label' => 'Prénom','required'=>false))
             ->add('nom','text',array('label' => 'Nom','required'=>false))
             ->add('fromNaissance','datepicker',array('label' => 'Naissance de','required'=>false))
             ->add('toNaissance','datepicker',array('label' => 'Naissance à','required'=>false))
-            ->add('sexe','choice',
-                array(
-                    'label' => 'Sexe',
-                    'choices'=>array(Membre::FEMME=>Membre::FEMME,Membre::HOMME=>Membre::HOMME),
-                    'required'=>false))
+            ->add('sexe','genre',array('label' => 'Sexe','required'=>false))
             ->add('attribution',new AttributionSearchType())
             ;
     }

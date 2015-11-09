@@ -18,11 +18,6 @@ class MembreSearch {
     /** @var  string */
     public $prenom;
 
-
-    public $fromId;
-
-    public $toId;
-
     /** @var  \Datetime */
     public $fromNaissance;
 

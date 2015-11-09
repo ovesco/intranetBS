@@ -23,6 +23,7 @@ class Model
     const MembreFraterie = 'MembreFraterie';
     const Attribution = 'Attribution';
     const Distinction = 'Distinction';
+    const CreanceSearchResults = 'CreanceSearchResults';
     const Creance = 'Creance';
     const Facture = 'Facture';
 
@@ -91,31 +92,27 @@ class ListContainer
         switch ($type) {
             case Model::Membre:
                 return ListModelsMembre::getDefault($this->twig, $this->router, $items);
-                break;
 
             case Model::MembreEffectifs:
                 return ListModelsMembre::getEffectifs($this->twig, $this->router, $items);
-                break;
 
             case Model::MembreFraterie:
                 return ListModelsMembre::getFraterie($this->twig, $this->router, $items);
-                break;
 
             case Model::Attribution:
                 return ListModelsAttributions::getDefault($this->twig, $this->router, $items);
-                break;
 
             case Model::Distinction:
                 return ListModelsDistinctions::getDefault($this->twig, $this->router, $items);
-                break;
 
             case Model::Creance:
                 return ListModelsCreances::getDefault($this->twig, $this->router, $items);
-                break;
+
+            case Model::CreanceSearchResults:
+                return ListModelsCreances::getSearchResults($this->twig, $this->router, $items);
 
             case Model::Facture:
                 return ListModelsFactures::getDefault($this->twig, $this->router, $items);
-                break;
 
         }
     }

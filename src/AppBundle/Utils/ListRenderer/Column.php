@@ -12,6 +12,12 @@ class Column
     /** @var String */
     private $name;
 
+    /**
+     * @param $name
+     * @param $itemRenderer
+     * @param null $twig_filters
+     * @param null $pattern
+     */
     public function __construct($name, $itemRenderer, $twig_filters = null, $pattern = null)
     {
         $this->name = $name;

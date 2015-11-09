@@ -11,42 +11,37 @@
                 <td>Remarque</td>
                 <td>{{ creance.remarque }}</td>
             </tr>
-            {% if creance.facture is not empty %}
             <tr>
                 <td>Facture</td>
                 <td>
-                    N°{{ creance.facture.id }}
+                    {{ creance|creance_facture_status|raw }}
 
+                    {% if creance.isFactured %}
                     <a onclick="showFacture({{ creance.facture.id }});" >
                         <i class="zoom icon"></i>
                     </a>
+                    {% endif %}
                 </td>
             </tr>
-            {% endif %}
             <tr>
-                <td>Statut</td>
+                <td>Etat</td>
                 <td>
-                    {{ creance.statut|statut_label|raw }}
+                    {{ creance|creance_is_payed|raw }}
                 </td>
             </tr>
-
-
-
 
             <tr>
                 <td>Date de création</td>
-                <td>{{ creance.dateCreation|date("d/m/Y") }}</td>
+                <td>{{ creance.dateCreation|date(global_date_format) }}</td>
             </tr>
 
 
 
-            {% if creance.facture is not empty %}
+            {% if creance.isPayed %}
             <tr>
                 <td>Date de payement</td>
                 <td>
-                    {% if creance.facture.payement is not null %}
-                        {{ creance.datePayement|date(global_date_format) }}
-                    {% endif %}
+                    {{ creance.datePayement|date(global_date_format) }}
                 </td>
             </tr>
             {% endif %}

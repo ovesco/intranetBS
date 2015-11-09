@@ -82,12 +82,20 @@ class AppExtension extends \Twig_Extension
     {
         $reflect = new ReflectionClass($object);
         return $reflect->getShortName();
-
     }
 
+    /**
+     *
+     * @param string|Personne $value
+     * @return string
+     */
     public function genre_filter($value)
     {
-        return ($value == 'm') ? Personne::HOMME : Personne::FEMME;
+        if($value instanceof Personne)
+        {
+            return  ($value->getSexe() == Personne::HOMME) ? Personne::HOMME : Personne::FEMME;
+        }
+        return ($value == Personne::HOMME) ? Personne::HOMME : Personne::FEMME;
     }
 
     /**
@@ -112,9 +120,17 @@ class AppExtension extends \Twig_Extension
         $template_file_name = $filters.'.html.twig';
         $template_path = $template_dir_path.'/'.$template_file_name;
 
+        //create cache dir if dont exist
+        if(!$fs->exists($env->getCache()))
+        {
+            $fs-mkdir($env->getCache());
+        }
+
         //create dir for templates in twig cache
         if(!$fs->exists($template_dir_path))
+        {
             $fs-mkdir($template_dir_path);
+        }
 
         if(!$fs->exists($template_path))
         {

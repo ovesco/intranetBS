@@ -7,6 +7,7 @@ use AppBundle\Utils\ListRenderer\Action;
 use AppBundle\Utils\ListRenderer\Column;
 use AppBundle\Utils\ListRenderer\ListRenderer;
 use Interne\FinancesBundle\Entity\Facture;
+use Symfony\Component\Routing\Router;
 
 class ListModelsFactures
 {
@@ -16,7 +17,7 @@ class ListModelsFactures
      * @param $items
      * @return ListRenderer
      */
-    static public function getDefault(\Twig_Environment $twig, $items)
+    static public function getDefault(\Twig_Environment $twig, Router $router, $items)
     {
         $list = new ListRenderer($twig, $items);
 

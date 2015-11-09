@@ -123,6 +123,27 @@ class ListStorage {
     }
 
     /**
+     * @param String $containerKey
+     * @param Array|ArrayCollection $objects
+     * @throws \Exception
+     */
+    public function setObjects($containerKey,$objects)
+    {
+        //clear the container
+        /** @var ArrayCollection $container */
+        $container = $this->getContainer($containerKey);
+        $container->clear();
+        $this->setContainer($containerKey,$container);
+
+        //add the new objects
+        foreach($objects as $object)
+        {
+            $this->addObject($containerKey,$object);
+        }
+    }
+
+
+    /**
      * @param $containerKey
      * @param $repository
      * @return array

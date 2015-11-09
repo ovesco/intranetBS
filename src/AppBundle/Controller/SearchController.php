@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Search\MembreSearch;
 use AppBundle\Search\MembreSearchType;
 use AppBundle\Search\MembreRepository;
+use AppBundle\Search\Mode;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,11 +30,11 @@ class SearchController extends Controller
     /**
      * Affiche la page permettant de lancer une recherche
      *
-     * @Route("/search", name="interne_search")
+     * @Route("/membre", name="interne_search")
      * @Menu("Rechercher",block="database",order=2, icon="search", expanded=true)
      * @Template("AppBundle:Search:page_search.html.twig")
      */
-    public function searchAction(Request $request)
+    public function membreAction(Request $request)
     {
 
         $membreSearch = new MembreSearch();
@@ -48,22 +49,32 @@ class SearchController extends Controller
             $membreSearch = $membreForm->getData();
 
             $elasticaManager = $this->container->get('fos_elastica.manager');
-
             /** @var MembreRepository $repository */
             $repository = $elasticaManager->getRepository('AppBundle:Membre');
-
             $results = $repository->search($membreSearch);
 
-            /** @var ListStorage $sessionContainer */
-            //$sessionContainer = $this->get('list_storage');
+            //get the search mode
+            $mode = $membreForm->get("mode")->getData();
+            switch($mode)
+            {
+                case Mode::MODE_INCLUDE: //include new results with the previous
+                    /** @var ListStorage $sessionContainer */
+                    $sessionContainer = $this->get('list_storage');
+                    $sessionContainer->addObjects(SearchController::SESSION_RESULTS,$results);
+                    break;
+                case Mode::MODE_EXCLUDE: //exclude new results to the previous
+                    /** @var ListStorage $sessionContainer */
+                    $sessionContainer = $this->get('list_storage');
+                    $sessionContainer->removeObjects(SearchController::SESSION_RESULTS,$results);
+                    break;
+                case Mode::MODE_STANDARD:
+                default:
+                    /** @var ListStorage $sessionContainer */
+                    $sessionContainer = $this->get('list_storage');
+                    $sessionContainer->setObjects(SearchController::SESSION_RESULTS,$results);
 
-            //$sessionContainer->addObjects(SearchController::SESSION_RESULTS,$results);
-
-            //$sessionContainer->removeObjects(SearchController::SEARCH_RESULTS,$results);
-
-
-
-            //$results = $sessionContainer->getObjects(SearchController::SESSION_RESULTS,$this->getDoctrine()->getRepository('AppBundle:Membre'));
+            }
+            $results = $sessionContainer->getObjects(SearchController::SESSION_RESULTS,$this->getDoctrine()->getRepository('AppBundle:Membre'));
 
         }
 

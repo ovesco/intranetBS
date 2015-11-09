@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use AppBundle\Transformer\BooleanToStringTransformer;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use AppBundle\Transformer\BooleanToIntegerTransformer;
 
 /**
  * @package AppBundle\Form
@@ -17,16 +18,18 @@ class BooleanType extends AbstractType
     {
         $resolver->setDefaults(array(
             'choices' => array(
-                "1"   => "Oui",
-                "0"   => "Non"
+                true   => "Oui",
+                false   => "Non"
             )
         ));
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->addModelTransformer(new BooleanToIntegerTransformer());
         $builder->addViewTransformer(new BooleanToStringTransformer("Oui", "Non"));
     }
+
 
 
     public function getParent()

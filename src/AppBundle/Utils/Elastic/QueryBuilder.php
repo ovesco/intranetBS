@@ -47,14 +47,6 @@ class QueryBuilder {
         $this->elasticRepository = $elasticRepository;
     }
 
-    /**
-     * @return \Elastica\Query
-     */
-    private function getQuery(){
-        $this->mainQuery->setQuery($this->boolQuery);
-        return $this->mainQuery;
-    }
-
 
     public function getResults()
     {
@@ -80,7 +72,7 @@ class QueryBuilder {
 
     public function addTextMatch($field,$text,$MinimumShouldMatchPercentage = "100%")
     {
-        if(($text != null) && ($text != ''))
+        if((!is_null($text)) && ($text != ''))
         {
             $this->empty = false;
             $query = new \Elastica\Query\Match();
@@ -115,7 +107,7 @@ class QueryBuilder {
 
     public function addNestedTextMatch($field,$text)
     {
-        if(($text != null) && ($text != ''))
+        if((!is_null($text)) && ($text != ''))
         {
             $text = strtolower($text);
             $this->nestedQuery($field,$text);
@@ -125,7 +117,7 @@ class QueryBuilder {
 
     public function addNestedNumber($field,$number)
     {
-        if(($number != null) && is_numeric($number))
+        if((!is_null($number)) && is_numeric($number))
         {
             $this->nestedQuery($field,$number);
         }
@@ -134,7 +126,7 @@ class QueryBuilder {
 
     public function addNestedBoolean($field,$boolean)
     {
-        if(($boolean != null) && is_numeric($boolean))
+        if((!is_null($boolean)) && is_bool($boolean))
         {
             $this->nestedQuery($field,$boolean);
         }
@@ -143,7 +135,7 @@ class QueryBuilder {
 
     private function numberRangeQuery($field,$number,$operation)
     {
-        if(($number != null) && (is_numeric($number)))
+        if((!is_null($number)) && (is_numeric($number)))
         {
             $this->empty = false;
             $query = new \Elastica\Query\Range($field,array($operation=>$number));
@@ -153,7 +145,7 @@ class QueryBuilder {
 
     private function dateRangeQuery($field,$date,$operation)
     {
-        if(($date != null) && ($date instanceof \DateTime))
+        if((!is_null($date)) && ($date instanceof \DateTime))
         {
 
             /*
@@ -234,10 +226,13 @@ class QueryBuilder {
 
     public function addBoolean($field,$boolean)
     {
-        if(($boolean != null) && (is_bool($boolean)))
+        if((!is_null($boolean)) && (is_bool($boolean)))
         {
             $this->empty = false;
-            $query = new \Elastica\Query\Term(array($field=>$boolean));
+
+            $query = new \Elastica\Query\Term();
+            $query->setTerm($field,$boolean);
+
             $this->boolQuery->addMust($query);
         }
         return $this;

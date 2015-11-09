@@ -54,4 +54,11 @@ class DebiteurMembre extends Debiteur
     {
         return $this->getMembre();
     }
+
+    /**
+     * @return string
+     */
+    public function getOwnerAsString(){
+        return $this->getMembre()->getPrenom().' '.$this->getMembre()->getNom();
+    }
 }

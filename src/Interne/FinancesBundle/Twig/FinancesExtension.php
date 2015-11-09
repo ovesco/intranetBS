@@ -27,6 +27,8 @@ class FinancesExtension extends \Twig_Extension
             new \Twig_SimpleFilter('payement_state_color', array($this, 'payement_state_color')),
             new \Twig_SimpleFilter('payement_state_text', array($this, 'payement_state_text')),
             new \Twig_SimpleFilter('statut_label', array($this, 'statut_label')),
+            new \Twig_SimpleFilter('creance_facture_status', array($this, 'creance_facture_status')),
+            new \Twig_SimpleFilter('creance_is_payed', array($this, 'creance_is_payed')),
         );
     }
 
@@ -49,6 +51,34 @@ class FinancesExtension extends \Twig_Extension
         }
 
     }
+
+
+    public function creance_is_payed(Creance $creance)
+    {
+        if($creance->isFactured())
+        {
+            if($creance->isPayed())
+            {
+                return '<i class="bordered inverted green checkmark icon popupable" data-content="Payée"></i>';
+            }
+        }
+        return '<i class="bordered inverted red remove icon popupable" data-content="Impayée"></i>';
+    }
+
+
+    public function creance_facture_status(Creance $creance){
+        if($creance->isFactured())
+        {
+            return 'N° '.$creance->getFacture()->getId();
+
+        }
+        else
+        {
+            return '<i class="bordered inverted orange wait icon popupable" data-content="En attente de facturation"></i>';
+        }
+
+    }
+
 
     public function statut_label($statut)
     {

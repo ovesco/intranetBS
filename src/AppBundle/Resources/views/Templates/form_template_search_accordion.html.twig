@@ -1,0 +1,76 @@
+{% block form_widget %}
+    {% spaceless %}
+        {% if compound %}
+            {{ block('form_widget_compound') }}
+        {% else %}
+            {{ block('form_widget_simple') }}
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_widget %}
+
+{% block form_widget_simple %}
+    {% spaceless %}
+        {% set type = type|default('text') %}
+        <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} placeholder="{{ label }}"/>
+    {% endspaceless %}
+{% endblock form_widget_simple %}
+
+{% block form_widget_compound %}
+    {% spaceless %}
+        <div {{ block('widget_container_attributes') }}>
+            {% if form.parent is empty %}
+                {{ form_errors(form) }}
+            {% endif %}
+            {{ block('form_rows') }}
+            {{ form_rest(form) }}
+        </div>
+    {% endspaceless %}
+{% endblock form_widget_compound %}
+
+{% block textarea_widget %}
+    {% spaceless %}
+        <textarea {{ block('widget_attributes') }} placeholder="{{ label }}">{{ value }}</textarea>
+    {% endspaceless %}
+{% endblock textarea_widget %}
+
+
+{% block datepicker_widget -%}
+    <div class="field">
+        <input type="text" class="datepicker" {{ block('widget_attributes') }} value="{{ value }}" placeholder="{{ label }}"/>
+    </div>
+{%- endblock datepicker_widget %}
+
+
+
+{# SINGLE ROW #}
+{% block form_row -%}
+    <div class=" title">
+        <i class="dropdown icon"></i>
+        {{- form_label(form) -}}
+    </div>
+    <div class="content">
+        <div class="field">
+            {{- form_widget(form) -}} {# Recursive call #}
+            {{- form_errors(form) -}}
+        </div>
+    </div>
+{%- endblock form_row %}
+
+
+{% block AppBundle_numeric_interval_search_widget %}
+    <table>
+        <tr>
+            <td>{{ form_widget(form.lower) }}</td>
+            <td>{{ form_widget(form.higher) }}</td>
+        </tr>
+    </table>
+{% endblock AppBundle_numeric_interval_search_widget %}
+
+{% block AppBundle_date_interval_search_widget %}
+    <table>
+        <tr>
+            <td>{{ form_widget(form.lower) }}</td>
+            <td>{{ form_widget(form.higher) }}</td>
+        </tr>
+    </table>
+{% endblock AppBundle_date_interval_search_widget %}

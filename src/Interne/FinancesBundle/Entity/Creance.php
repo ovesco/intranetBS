@@ -173,10 +173,12 @@ class Creance
      */
     public function getDatePayement()
     {
-        if($this->facture == null)
-            return null;
-        else
+        if($this->isPayed())
+        {
             return $this->facture->getDatePayement();
+        }
+        else
+            return null;
     }
 
     /**
@@ -285,6 +287,10 @@ class Creance
     }
 
 
+    /**
+     * @deprecated
+     * @return string
+     */
     public function getStatut()
     {
         if($this->isFactured())

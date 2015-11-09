@@ -46,8 +46,18 @@ class DebiteurFamille extends Debiteur
         return $this->famille;
     }
 
+    /**
+     * @return Famille
+     */
     public function getOwner()
     {
         return $this->getFamille();
+    }
+
+    /**
+     * @return string
+     */
+    public function getOwnerAsString(){
+        return 'Famille '.$this->getFamille()->getNom();
     }
 }

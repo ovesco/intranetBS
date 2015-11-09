@@ -25,7 +25,13 @@ abstract class Debiteur
      */
     private $id;
 
+
     abstract function getOwner();
+
+    /**
+     * @return string
+     */
+    abstract function getOwnerAsString();
 
     /**
      * Get id
