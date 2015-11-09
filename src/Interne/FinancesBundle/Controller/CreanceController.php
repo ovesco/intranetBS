@@ -5,19 +5,18 @@ namespace Interne\FinancesBundle\Controller;
 use AppBundle\Entity\Groupe;
 use AppBundle\Utils\Listing\Liste;
 use AppBundle\Utils\Listing\Lister;
+use AppBundle\Utils\Menu\Menu;
 use Interne\FinancesBundle\Entity\Creance;
 use Interne\FinancesBundle\Form\CreanceAddType;
+use Interne\FinancesBundle\Search\CreanceRepository;
 use Interne\FinancesBundle\Search\CreanceSearch;
 use Interne\FinancesBundle\Search\CreanceSearchType;
-use Interne\FinancesBundle\Search\CreanceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use AppBundle\Utils\Menu\Menu;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 
 
 /**
@@ -51,10 +50,10 @@ class CreanceController extends Controller
             $em->flush();
 
             $response = new Response();
-            return $response->setStatusCode(200);//OK
+            return $response->setStatusCode(200); // OK
         }
         $response = new Response();
-        return $response->setStatusCode(409);//Conflict
+        return $response->setStatusCode(409, "Impossible de supprimer une créance facturée, supprimez d'abord la facture"); // Conflict
     }
 
 

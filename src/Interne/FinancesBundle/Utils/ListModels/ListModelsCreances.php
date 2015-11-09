@@ -3,6 +3,7 @@
 
 namespace Interne\FinancesBundle\Utils\ListModels;
 
+use AppBundle\Utils\Event\EventPostAction;
 use AppBundle\Utils\ListRenderer\Action;
 use AppBundle\Utils\ListRenderer\Column;
 use AppBundle\Utils\ListRenderer\ListRenderer;
@@ -14,6 +15,7 @@ class ListModelsCreances
 
     /**
      * @param \Twig_Environment $twig
+     * @param Router $router
      * @param $items
      * @return ListRenderer
      */
@@ -23,31 +25,41 @@ class ListModelsCreances
 
         $list->setSearchBar(true);
 
-        $list->addColumn(new Column('Facture', function (Creance $item) { return $item; },'creance_facture_status|raw'));
-        $list->addColumn(new Column('Etat', function (Creance $item) { return $item; },'creance_is_payed|raw'));
+        $list->addColumn(new Column('Facture', function (Creance $item) {
+            if ($item->getFacture() != null)
+                return 'N°' . $item->getFacture()->GetId();
+            else
+                return '<i class="bordered inverted orange wait icon popupable" data-content="En attente"></i>';
+        }));
 
         $list->addColumn(new Column('Motif', function (Creance $item) {
             return $item->getTitre();
         }));
-
         $list->addColumn(new Column('Montant', function (Creance $item) {
             return $item->getMontantEmis();
-        }, "money"));
+        }, "number_format(2, '.', ',')"));
         $list->addColumn(new Column('Montant perçu', function (Creance $item) {
             return $item->getMontantRecu();
-        }, "money"));
-
-        //$list->addAction(new Action('Afficher', 'zoom icon popupable', 'event_creance_show'));
-        //$list->addAction(new Action('Supprimer', 'delete icon popupable', 'event_creance_delete'));
+        }, "number_format(2, '.', ',')"));
 
 
-        //$list->setDatatable(true);
+        $creanceParameters = function (Creance $creance) {
+            return array(
+                'creance' => $creance->getId()
+            );
+        };
+
+        $list->addAction(new Action('Supprimer', 'delete', 'interne_finances_creance_delete', $creanceParameters, EventPostAction::RefreshList));
+
+
+        $list->setDatatable(true);
 
         return $list;
     }
 
     /**
      * @param \Twig_Environment $twig
+     * @param Router $router
      * @param $items
      * @return ListRenderer
      */
@@ -57,29 +69,35 @@ class ListModelsCreances
 
         $list->setSearchBar(true);
 
-        $list->addColumn(new Column('Facture', function (Creance $item) { return $item; },'creance_facture_status|raw'));
-        $list->addColumn(new Column('Etat', function (Creance $item) { return $item; },'creance_is_payed|raw'));
-
-        $list->addColumn(new Column('Motif', function (Creance $item) {
-            return $item->getTitre();
+        $list->addColumn(new Column('Facture', function (Creance $item) {
+            if ($item->getFacture() != null)
+                return 'N°' . $item->getFacture()->GetId();
+            else
+                return '<i class="bordered inverted orange wait icon popupable" data-content="En attente"></i>';
         }));
 
-        $list->addColumn(new Column('Debiteur', function (Creance $item) {
-            return $item->getDebiteur()->getOwnerAsString();
+        $list->addColumn(new Column('Motif', function (Creance $creance) use ($router) {
+            return '<a href="' . $router->generate('interne_finances_creance_show', array('creance' => $creance->getId())) . '">' . $creance->getTitre() . '</a>';
         }));
 
-        $list->addColumn(new Column('Montant', function (Creance $item) {
-            return $item->getMontantEmis();
-        }, "money"));
-        $list->addColumn(new Column('Montant perçu', function (Creance $item) {
-            return $item->getMontantRecu();
-        }, "money"));
+        $list->addColumn(new Column('Montant', function (Creance $creance) {
+            return $creance->getMontantEmis();
+        }, "number_format(2, '.', ',')"));
 
-        //$list->addAction(new Action('Afficher', 'zoom icon popupable', 'event_creance_show'));
-        //$list->addAction(new Action('Supprimer', 'delete icon popupable', 'event_creance_delete'));
+        $list->addColumn(new Column('Montant perçu', function (Creance $creance) {
+            return $creance->getMontantRecu();
+        }, "number_format(2, '.', ',')"));
 
 
-        //$list->setDatatable(true);
+        $creanceParameters = function (Creance $creance) {
+            return array(
+                'creance' => $creance->getId()
+            );
+        };
+
+        $list->addAction(new Action('Supprimer', 'delete', 'interne_finances_creance_delete', $creanceParameters, EventPostAction::RefreshList));
+
+        $list->setDatatable(true);
 
         return $list;
     }
