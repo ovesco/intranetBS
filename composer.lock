@@ -994,23 +994,24 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSJsRoutingBundle.git",
-                "reference": "cc33cfd500cb056808a9f937d6c2e589b23ba936"
+                "reference": "e481171a0826e9372bfec28acd6bf5fb50c4106a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSJsRoutingBundle/zipball/cc33cfd500cb056808a9f937d6c2e589b23ba936",
-                "reference": "cc33cfd500cb056808a9f937d6c2e589b23ba936",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSJsRoutingBundle/zipball/e481171a0826e9372bfec28acd6bf5fb50c4106a",
+                "reference": "e481171a0826e9372bfec28acd6bf5fb50c4106a",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2",
-                "symfony/console": "~2.3",
-                "symfony/framework-bundle": "~2.3",
-                "symfony/serializer": "~2.0",
+                "symfony/console": "~2.3|~3.0",
+                "symfony/framework-bundle": "~2.3|~3.0",
+                "symfony/serializer": "~2.0|~3.0",
                 "willdurand/jsonp-callback-validator": "~1.0"
             },
             "require-dev": {
-                "symfony/expression-language": "~2.4"
+                "symfony/expression-language": "~2.4|~3.0",
+                "symfony/phpunit-bridge": "~2.7|~3.0"
             },
             "type": "symfony-bundle",
             "extra": {
@@ -1044,7 +1045,7 @@
                 "javascript",
                 "routing"
             ],
-            "time": "2015-07-31 09:51:44"
+            "time": "2015-11-10 12:47:06"
         },
         {
             "name": "friendsofsymfony/rest-bundle",
@@ -1264,21 +1265,21 @@
         },
         {
             "name": "incenteev/composer-parameter-handler",
-            "version": "v2.1.1",
+            "version": "v2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Incenteev/ParameterHandler.git",
-                "reference": "84a205fe80a46101607bafbc423019527893ddd0"
+                "reference": "d7ce7f06136109e81d1cb9d57066c4d4a99cf1cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Incenteev/ParameterHandler/zipball/84a205fe80a46101607bafbc423019527893ddd0",
-                "reference": "84a205fe80a46101607bafbc423019527893ddd0",
+                "url": "https://api.github.com/repos/Incenteev/ParameterHandler/zipball/d7ce7f06136109e81d1cb9d57066c4d4a99cf1cc",
+                "reference": "d7ce7f06136109e81d1cb9d57066c4d4a99cf1cc",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
-                "symfony/yaml": "~2.0"
+                "symfony/yaml": "~2.3|~3.0"
             },
             "require-dev": {
                 "composer/composer": "1.0.*@dev",
@@ -1311,7 +1312,7 @@
             "keywords": [
                 "parameters management"
             ],
-            "time": "2015-06-03 08:27:03"
+            "time": "2015-11-10 17:04:01"
         },
         {
             "name": "interne/seancebundle",
@@ -1319,12 +1320,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sulazix/SeanceBundle.git",
-                "reference": "be8b816c117de43821707d2c478fbff8c73a42f5"
+                "reference": "a1447f818b1a504e153491db055be043aa9f6015"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sulazix/SeanceBundle/zipball/be8b816c117de43821707d2c478fbff8c73a42f5",
-                "reference": "be8b816c117de43821707d2c478fbff8c73a42f5",
+                "url": "https://api.github.com/repos/sulazix/SeanceBundle/zipball/a1447f818b1a504e153491db055be043aa9f6015",
+                "reference": "a1447f818b1a504e153491db055be043aa9f6015",
                 "shasum": ""
             },
             "type": "symfony-bundle",
@@ -1351,7 +1352,7 @@
             "keywords": [
                 "seance meeting bundle"
             ],
-            "time": "2015-11-06 00:03:44"
+            "time": "2015-11-09 21:28:46"
         },
         {
             "name": "itbz/fpdf",
@@ -3139,25 +3140,25 @@
         },
         {
             "name": "sensio/framework-extra-bundle",
-            "version": "v3.0.10",
+            "version": "v3.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioFrameworkExtraBundle.git",
-                "reference": "18fc2063c4d6569cdca47a39fbac32342eb65f3c"
+                "reference": "a79e205737b58d557c05caef6dfa8f94d8084bca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/18fc2063c4d6569cdca47a39fbac32342eb65f3c",
-                "reference": "18fc2063c4d6569cdca47a39fbac32342eb65f3c",
+                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/a79e205737b58d557c05caef6dfa8f94d8084bca",
+                "reference": "a79e205737b58d557c05caef6dfa8f94d8084bca",
                 "shasum": ""
             },
             "require": {
                 "doctrine/common": "~2.2",
-                "symfony/framework-bundle": "~2.3"
+                "symfony/framework-bundle": "~2.3|~3.0"
             },
             "require-dev": {
-                "symfony/expression-language": "~2.4",
-                "symfony/security-bundle": "~2.4"
+                "symfony/expression-language": "~2.4|~3.0",
+                "symfony/security-bundle": "~2.4|~3.0"
             },
             "suggest": {
                 "symfony/expression-language": "",
@@ -3190,7 +3191,7 @@
                 "annotations",
                 "controllers"
             ],
-            "time": "2015-08-03 11:59:27"
+            "time": "2015-10-28 15:47:04"
         },
         {
             "name": "sensiolabs/security-checker",
@@ -3365,12 +3366,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "61087e5e80b081a4140c29497152bbc15a697c72"
+                "reference": "232aa96494f0b44d25c8b7a11163c742e568c1a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/61087e5e80b081a4140c29497152bbc15a697c72",
-                "reference": "61087e5e80b081a4140c29497152bbc15a697c72",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/232aa96494f0b44d25c8b7a11163c742e568c1a7",
+                "reference": "232aa96494f0b44d25c8b7a11163c742e568c1a7",
                 "shasum": ""
             },
             "require": {
@@ -3406,7 +3407,7 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2015-10-30 23:35:59"
+            "time": "2015-11-10 13:34:42"
         },
         {
             "name": "symfony/monolog-bundle",
