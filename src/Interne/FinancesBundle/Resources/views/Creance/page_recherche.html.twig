@@ -11,7 +11,9 @@
                 {% include "InterneFinancesBundle:Creance:searchForm.html.twig" with {'searchForm':searchForm} %}
             </div>
             <div class="twelve wide column">
-                {{ list_container.getModel(constant('AppBundle\\Utils\\ListRenderer\\Model::CreanceSearchResults'), creances).render|raw }}
+
+                {{ list_caller.listInSession(list_key)|raw }}
+
             </div>
         </div>
     </div>

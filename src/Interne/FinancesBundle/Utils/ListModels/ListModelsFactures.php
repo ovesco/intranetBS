@@ -4,25 +4,30 @@
 namespace Interne\FinancesBundle\Utils\ListModels;
 
 use AppBundle\Utils\Event\EventPostAction;
-use AppBundle\Utils\ListRenderer\Action;
-use AppBundle\Utils\ListRenderer\Column;
-use AppBundle\Utils\ListRenderer\ListRenderer;
+use AppBundle\Utils\ListUtils\Action;
+use AppBundle\Utils\ListUtils\Column;
+use AppBundle\Utils\ListUtils\ListModelInterface;
+use AppBundle\Utils\ListUtils\ListRenderer;
 use Interne\FinancesBundle\Entity\Facture;
 use Symfony\Component\Routing\Router;
 
-class ListModelsFactures
+class ListModelsFactures implements ListModelInterface
 {
+    static public function getRepresentedClass(){
+        return 'Interne\FinancesBundle\Entity\Facture';
+    }
 
     /**
      * @param \Twig_Environment $twig
      * @param Router $router
      * @param $items
+     * @param string $url
      * @return ListRenderer
      */
-    static public function getDefault(\Twig_Environment $twig, Router $router, $items)
+    static public function getDefault(\Twig_Environment $twig, Router $router, $items,$url = null)
     {
         $list = new ListRenderer($twig, $items);
-
+        $list->setUrl($url);
         $list->setSearchBar(true);
 
         $list->addColumn(new Column('Num. ref', function (Facture $facture) use ($router) {
@@ -64,9 +69,10 @@ class ListModelsFactures
      * @param $items
      * @return ListRenderer
      */
-    static public function getSearchResults(\Twig_Environment $twig, Router $router, $items)
+    static public function getSearchResults(\Twig_Environment $twig, Router $router, $items, $url = null)
     {
         $list = new ListRenderer($twig, $items);
+        $list->setUrl($url);
 
         $list->setSearchBar(true);
 

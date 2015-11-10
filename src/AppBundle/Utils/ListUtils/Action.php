@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Utils\ListRenderer;
+namespace AppBundle\Utils\ListUtils;
 
 class Action
 {

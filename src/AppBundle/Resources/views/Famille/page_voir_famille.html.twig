@@ -139,7 +139,6 @@
 
                 <div class="row"> <!-- Membres dans la famille -->
 
-                    {# TODO ajouter la liste a uffer :D #}
 
                     <div class="sixteen wide column">
 
@@ -148,7 +147,9 @@
                         </div>
 
                         <div class="ui bottom attached segment">
-                            {{ list_container.getModel(constant('AppBundle\\Utils\\ListRenderer\\Model::Membre'), famille.membres).render|raw }}
+                            {{ list_caller.listById(constant('AppBundle\\Utils\\ListUtils\\ListContainer::Membre'),famille.membres|ids_for_routing)|raw }}
+
+
                         </div>
 
                     </div>

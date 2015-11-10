@@ -6,10 +6,12 @@
  * Time: 23:26
  */
 
-namespace AppBundle\Utils\Session;
+
+namespace AppBundle\Utils\ListUtils;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Ce service permet le stockage d'une liste d'ID en session avec des méthodes qui facilite
@@ -19,20 +21,70 @@ use Symfony\Component\HttpFoundation\Session\Session;
  *
  *
  * Class ListStorage
- * @package AppBundle\Utils\Session
+ * @package AppBundle\Utils\ListRenderer
  */
 class ListStorage {
 
     const SESSION_STORAGE_KEY = "utils_session_list_storage_";
+    const REPOSITORY_KEY = "repository";
+    const MODEL_KEY = "model";
 
     /**
      * @var Session
      */
     private $session;
 
-    public function __construct(Session $session)
+    /**
+     * @var EntityManager
+     */
+    private $em;
+
+    public function __construct(Session $session,EntityManager $em)
     {
         $this->session = $session;
+        $this->em = $em;
+    }
+
+
+    /**
+     * @param string $containerKey
+     * @param string $model
+     */
+    public function setModel($containerKey,$model)
+    {
+        $key = ListStorage::SESSION_STORAGE_KEY.$containerKey.ListStorage::MODEL_KEY;
+        $this->session->set($key,$model);
+    }
+
+    /**
+     * @param string $containerKey
+     * @return string
+     */
+    public function getModel($containerKey)
+    {
+        $key = ListStorage::SESSION_STORAGE_KEY.$containerKey.ListStorage::MODEL_KEY;
+        return $this->session->get($key);
+    }
+
+
+    /**
+     * @param string $containerKey
+     * @param string $entityRepositoryName
+     */
+    public function setRepository($containerKey,$entityRepositoryName)
+    {
+        $key = ListStorage::SESSION_STORAGE_KEY.$containerKey.ListStorage::REPOSITORY_KEY;
+        $this->session->set($key,$entityRepositoryName);
+    }
+
+    /**
+     * @param string $containerKey
+     * @return string
+     */
+    public function getRepository($containerKey)
+    {
+        $key = ListStorage::SESSION_STORAGE_KEY.$containerKey.ListStorage::REPOSITORY_KEY;
+        return $this->session->get($key);
     }
 
     /**
@@ -145,12 +197,15 @@ class ListStorage {
 
     /**
      * @param $containerKey
-     * @param $repository
      * @return array
      * @throws
      */
-    public function getObjects($containerKey,$repository)
+    public function getObjects($containerKey)
     {
+        $repoName = $this->getRepository($containerKey);
+
+        $repository = $this->em->getRepository($repoName);
+
         if(!method_exists($repository,"findBy"))
         {
             throw new \Exception("ListStorage:getObjects: can't pass repositpry without -findBy()- methode");

@@ -1,3 +1,95 @@
+
+{{ list.url }} {#todo @christian: je sais pas ou tu veux mettre ca...#}
+
+<div class="data-list" data-name="{{ list.name }}">
+
+    {% if list.hasToolbar %}
+        <div class="data-liste-toolbar">
+
+            {% if list.hasSearchBar %}
+                <div class="ui mini icon input">
+                    <input class="data-liste-search" type="text" placeholder="Rechercher...">
+                    <i class="search icon"></i>
+                </div>
+            {% endif %}
+
+        </div>
+    {% endif %}
+
+    <table class="ui table{% if list.datatable %} datatable{% endif %} {{ list.style }}">
+
+        <thead>
+        <tr>
+            {% for column in list.columns %}
+                <th>
+                    {{ column.name }}
+                </th>
+            {% endfor %}
+
+            {% if list.actions|length != 0 %}
+                <th>
+                    Actions
+                </th>
+            {% endif %}
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in list.items %}
+            <tr data-id="{{ list.getRowId(item) }}">
+                {% for column in list.columns %}
+                    <td>
+                        {% if column.twigFilters is null %}
+                            {{ column.render(item)|raw }}
+                        {% else %}
+                            {% set value = column.render(item) %}
+                            {{ value|apply_filters(column.twigFilters)|raw }}
+                        {% endif %}
+                    </td>
+                {% endfor %}
+
+                {% if list.actions|length != 0 %}
+                <td>
+                    {% for action in list.actions %}
+                        <i class="{{ action.icon }} icon popupable event"
+                           data-content="{{ action.label }}"
+                           data-event-route="{{ action.route }}"
+                           data-event-parameters="{{ action.routeParameters(item) }}"
+                           data-event-postactions="{{ action.getPostActions }}"></i>
+                    {% endfor %}
+                </td>
+                {% endif %}
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+    {% if list.actions|length != 0 %}
+        <div class="ui compact menu">
+            <div class="ui simple dropdown item">
+                Actions
+                <i class="dropdown icon"></i>
+
+                <div class="menu">
+                    {% for action in list.actions %}
+                        <div class="item">
+                            <i class="{{ action.icon }} icon event_mass"
+                               data-content="{{ action.label }}"
+                               data-event-route="{{ action.route }}"
+                               data-event-postactions="{{ action.getPostActions }}"></i>
+                            {{ action.label }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+</div>
+
+
 {% macro liste(name, data, headers, columns, actions, patterns, filters, toolbar) %}
 
     {% import _self as liste_macro %}
@@ -37,9 +129,6 @@
 
                     {% endif %}
                 {% endif %}
-
-
-
 
 
                 {% if toolbar['masse_actions'] is defined %}

@@ -17,6 +17,8 @@ use AppBundle\Utils\Menu\Menu;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Utils\ListUtils\ListStorage;
+use AppBundle\Utils\ListUtils\ListContainer;
 
 
 
@@ -27,6 +29,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CreanceController extends Controller
 {
+
+    const SEARCH_RESULTS_LIST = "creance_search_results";
+
     /**
      *
      * Supprime une cérance.
@@ -77,6 +82,7 @@ class CreanceController extends Controller
      * @Menu("Recherche de créances",block="finances",order=1,icon="search")
      * @param Request $request
      * @return Response
+     * @Template("InterneFinancesBundle:Creance:page_recherche.html.twig")
      */
     public function searchAction(Request $request){
 
@@ -87,6 +93,7 @@ class CreanceController extends Controller
         $results = array();
 
         $searchForm->handleRequest($request);
+
 
         if ($searchForm->isValid()) {
 
@@ -99,12 +106,17 @@ class CreanceController extends Controller
 
             $results = $repository->search($creanceSearch);
 
+            /** @var ListStorage $sessionContainer */
+            $sessionContainer = $this->get('list_storage');
+            $sessionContainer->setRepository(CreanceController::SEARCH_RESULTS_LIST,'InterneFinancesBundle:Creance');
+            $sessionContainer->setModel(CreanceController::SEARCH_RESULTS_LIST,ListContainer::CreanceSearchResults);
+            $sessionContainer->setObjects(CreanceController::SEARCH_RESULTS_LIST,$results);
+
         }
 
-        return $this->render('InterneFinancesBundle:Creance:page_recherche.html.twig',
-            array('searchForm'=>$searchForm->createView(),'creances'=>$results));
+        return array('searchForm'=>$searchForm->createView(),
+                'list_key'=>CreanceController::SEARCH_RESULTS_LIST);
     }
-
 
 
 

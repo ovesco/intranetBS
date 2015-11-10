@@ -33,31 +33,37 @@ services:
         arguments:
             - @session
             - @doctrine.orm.entity_manager
-
+    #recuperation des parametres de l'application gérés par les utilisateurs
     parametres:
         class: AppBundle\Utils\Parametre\Parametres
         arguments:
             - @doctrine.orm.entity_manager
 
-
+    #Contient touts des models de liste disponibles
     list_container:
-        class: AppBundle\Utils\ListRenderer\ListContainer
+        class: AppBundle\Utils\ListUtils\ListContainer
         arguments:
             - @twig
             - @router
-
+    #Permet le rendu des annotation @menu
     menu:
         class: AppBundle\Utils\Menu\MenuRenderer
         arguments:
             - @annotation_reader
             - @kernel
             - @router
-
+    #Contient les listes stockée en session
     list_storage:
-        class: AppBundle\Utils\Session\ListStorage
+        class: AppBundle\Utils\ListUtils\ListStorage
         arguments:
             - @session
+            - @doctrine.orm.entity_manager
 
+    #Permet d'appeler des liste depuis twig
+    list_caller:
+        class: AppBundle\Controller\ListCallerController
+        arguments:
+            - @service_container
 
     # Twig
     # Extensions twig qui permettent de mettre en place des filtres
@@ -70,13 +76,6 @@ services:
             - @doctrine.orm.entity_manager
         tags:
             - { name: twig.extension }
-
-    #app.twig.parser_extension:
-    #    class: AppBundle\Twig\ParserExtension
-    #    arguments:
-    #        - @parser
-    #    tags:
-    #        - { name: twig.extension }
 
     app.twig.groupby:
         class: AppBundle\Twig\GroupByExtension

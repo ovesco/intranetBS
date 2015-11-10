@@ -37,7 +37,9 @@ twig:
     strict_variables: "%kernel.debug%"
     globals:
         parametreService: "@parametres"
-        list_container: "@list_container"
+        #Service d'appel des liste dans twig
+        list_caller: "@list_caller"
+        #service de generation des menu. Permet d'obtenir les route liée aux annotations @menu
         menu: "@menu"
     form:
         resources:

@@ -67,7 +67,8 @@ class AppExtension extends \Twig_Extension
             new \Twig_SimpleFilter('boolean', array($this, 'boolean_filter')),
             new \Twig_SimpleFilter('genre', array($this, 'genre_filter')),
             new \Twig_SimpleFilter('get_class', array($this, 'get_class_filter')),
-            new \Twig_SimpleFilter('apply_filters',array($this, 'apply_filters'), array('needs_environment' => true,'needs_context' => true,))
+            new \Twig_SimpleFilter('apply_filters',array($this, 'apply_filters'), array('needs_environment' => true,'needs_context' => true,)),
+            new \Twig_SimpleFilter('ids_for_routing', array($this, 'ids_for_routing')),
         );
     }
 
@@ -82,6 +83,16 @@ class AppExtension extends \Twig_Extension
     {
         $reflect = new ReflectionClass($object);
         return $reflect->getShortName();
+    }
+
+    public function ids_for_routing($objects)
+    {
+        $ids = '';
+        foreach($objects as $object)
+        {
+            $ids = $ids.$object->getId().'-';
+        }
+        return $ids;
     }
 
     /**

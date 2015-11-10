@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Utils\ListRenderer;
+namespace AppBundle\Utils\ListUtils;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Twig_Environment;
@@ -39,12 +39,15 @@ class ListRenderer
     /** @var String */
     private $style;
 
+    /** @var  string */
+    private $url;
 
 
     /**
      * @param Twig_Environment $twig
      * @param array $items
      * @param null $itemIdAccessor
+     * @param string $url ------------- Url to regenerate the liste
      */
     public function __construct(Twig_Environment $twig, $items = array(), $itemIdAccessor = null)
     {
@@ -56,6 +59,7 @@ class ListRenderer
         $this->actions = new ArrayCollection();
         $this->datatable = true;
         $this->style = '';
+
 
         //most of the time objects have getId funciton.
         if ($itemIdAccessor == null) {
@@ -78,7 +82,7 @@ class ListRenderer
     public function render()
     {
         return $this->twig->render(
-            'AppBundle:Templates:liste_renderer.html.twig',
+            'AppBundle:Templates:list_template.html.twig',
             array('list' => $this)
         );
     }
@@ -200,5 +204,19 @@ class ListRenderer
         /* Oui, oui, ca parait bizarre mais ca marche!! */
         $function = $this->itemIdAccessor;
         return $function($item);
+    }
+
+    /**
+     * @param string $url
+     * @return string
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+    }
+
+    public function getUrl()
+    {
+        return $this->url;
     }
 }

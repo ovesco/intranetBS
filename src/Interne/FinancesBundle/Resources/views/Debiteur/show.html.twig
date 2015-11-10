@@ -1,4 +1,4 @@
-{% import "@App/Templates/liste.html.twig" as macro %}
+
 
 
             <div id="infoFinanceContent">
@@ -32,11 +32,12 @@
                     <div class="row">
                         <div class="eight wide column">
                             <h4 class="header">Créances</h4>
-                            {{ list_container.getModel(constant('AppBundle\\Utils\\ListRenderer\\Model::Creance'), debiteur.creances).render|raw }}
+                            {{ list_caller.listById(constant('AppBundle\\Utils\\ListUtils\\ListContainer::Creance'),debiteur.creances|ids_for_routing)|raw }}
+
                         </div>
                         <div class="eight wide column">
                             <h4 class="header">Facture</h4>
-                            {{ list_container.getModel(constant('AppBundle\\Utils\\ListRenderer\\Model::Facture'), debiteur.factures).render|raw }}
+                            {{ list_caller.listById(constant('AppBundle\\Utils\\ListUtils\\ListContainer::Facture'),debiteur.factures|ids_for_routing)|raw }}
                         </div>
                     </div>
                 </div>

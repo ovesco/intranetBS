@@ -1,20 +1,25 @@
 <?php
 
-namespace AppBundle\Utils\ListRenderer\ListModels;
+namespace AppBundle\Utils\ListUtils\ListModels;
 
 use AppBundle\Entity\Membre;
 use AppBundle\Utils\Event\EventPostAction;
-use AppBundle\Utils\ListRenderer\Action;
-use AppBundle\Utils\ListRenderer\Column;
-use AppBundle\Utils\ListRenderer\ListRenderer;
+use AppBundle\Utils\ListUtils\Action;
+use AppBundle\Utils\ListUtils\Column;
+use AppBundle\Utils\ListUtils\ListRenderer;
 use Symfony\Component\Routing\Router;
+use AppBundle\Utils\ListUtils\ListModelInterface;
 
-class ListModelsMembre
+class ListModelsMembre implements ListModelInterface
 {
 
-    static public function getEffectifs(\Twig_Environment $twig, Router $router, $items)
+    static public function getRepresentedClass(){
+        return 'AppBundle\Entity\Membre';
+    }
+
+    static public function getEffectifs(\Twig_Environment $twig, Router $router, $items, $url = null)
     {
-        $list = ListModelsMembre::getDefault($twig, $router, $items);
+        $list = ListModelsMembre::getDefault($twig, $router, $items, $url);
 
         $list->setName('effectifs');
 
@@ -35,11 +40,13 @@ class ListModelsMembre
      * @param \Twig_Environment $twig
      * @param Router $router
      * @param $items
+     * @param string $url
      * @return ListRenderer
      */
-    static public function getDefault(\Twig_Environment $twig, Router $router, $items)
+    static public function getDefault(\Twig_Environment $twig, Router $router, $items, $url = null)
     {
         $list = new ListRenderer($twig, $items);
+        $list->setUrl($url);
 
         $list->setSearchBar(true);
 
@@ -60,9 +67,10 @@ class ListModelsMembre
         return $list;
     }
 
-    static public function getFraterie(\Twig_Environment $twig, Router $router, $items)
+    static public function getFraterie(\Twig_Environment $twig, Router $router, $items, $url= null)
     {
         $list = new ListRenderer($twig, $items);
+        $list->setUrl($url);
 
         $list->addColumn(new Column('Prénom', function (Membre $membre) use ($router) {
             return '<a href="' . $router->generate('interne_voir_membre', array('membre' => $membre->getId())) . '">' . $membre->getPrenom() . '</a>';
