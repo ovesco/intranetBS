@@ -2,18 +2,21 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Interne\FinancesBundle\Entity\CreanceToFamille;
+use Interne\FinancesBundle\Entity\FactureToFamille;
 use Symfony\Component\Validator\Constraints as Assert;
 
-use AppBundle\Entity\Geniteur;
+//FinancesBundle
 
 /**
  * Famille
+ *
  * @ORM\Entity
  * @ORM\Table(name="app_familles")
  */
- 
-class Famille
+class Famille implements ExpediableInterface
 {
     /**
      * @var integer
@@ -25,41 +28,21 @@ class Famille
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Membre", mappedBy="famille", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Membre", mappedBy="famille", cascade={"persist"})
+     * @ORM\JoinColumn(name="membres_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $membres;
-    
-	
-    /**
-     * @orm\OneToOne(targetEntity="AppBundle\Entity\Adresse", cascade={"persist", "remove"})
-     */
-    private $adresse;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="telephone", type="string", nullable=true)
-     */
-    protected $telephone;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", nullable=true)
-     */
-    protected $email;
-
-
-    /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Geniteur", cascade={"persist", "remove"}, fetch="EAGER")
-     * @ORM\JoinColumn(name="pere_id", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Pere", mappedBy="famille", cascade={"persist"})
+     * @ORM\JoinColumn(name="pere_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $pere;
 
     /**
-     * 
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Geniteur", cascade={"persist", "remove"}, fetch="EAGER")
-     * @ORM\JoinColumn(name="mere_id", referencedColumnName="id")
+     *
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Mere", mappedBy="famille", cascade={"persist"})
+     * @ORM\JoinColumn(name="mere_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $mere;
 
@@ -79,13 +62,41 @@ class Famille
      */
     private $validity;
 
+    /**
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Contact", cascade={"persist"})
+     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    private $contact;
+
+
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToOne(targetEntity="Interne\FinancesBundle\Entity\DebiteurFamille",
+     *                mappedBy="famille", cascade={"persist","remove"})
+     */
+    private $debiteur;
+
 
     /**
      * Constructor
+     *
+     * @param string $nom
      */
-    public function __construct()
+    public function __construct($nom = '')
     {
-        $this->membres = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->membres = new ArrayCollection();
+
+        /*
+         * FinancesBundle
+         */
+        $this->creances = new ArrayCollection();
+        $this->factures = new ArrayCollection();
+
+        $this->validity = true;
+
+        $this->nom = $nom;
     }
 
     /**
@@ -107,61 +118,61 @@ class Famille
         return $this;
     }
 
-
     /**
-     * Get membres
+     * Add membres
      *
-     * @return array
-     */
-    public function getMembres()
-    {
-        return $this->membres;
-    }
-
-    /**
-     * Set pere
-     *
-     * @param \AppBundle\Entity\Geniteur
+     * @param \AppBundle\Entity\Membre $membres
      * @return Famille
      */
-    public function setPere( \AppBundle\Entity\Geniteur $pere = null)
+    public function addMembre(\AppBundle\Entity\Membre $membres)
     {
-        $this->pere = $pere;
-
+        $this->membres[] = $membres;
+        $membres->setFamille($this);
         return $this;
     }
 
     /**
-     * Get pere
+     * Remove membres
      *
-     * @return \AppBundle\Entity\Geniteur
+     * @param \AppBundle\Entity\Membre $membres
      */
-    public function getPere()
+    public function removeMembre(\AppBundle\Entity\Membre $membres)
     {
-        return $this->pere;
+        $this->membres->removeElement($membres);
     }
 
     /**
-     * Set mere
+     * Doit renvoyer quelque chose qui permet d'identifier (humainement) une famille
+     * Le nom n'est pas suffisant p.ex puisqu'il peut y avoir plusieurs famille avec le même nom
+     * du coup on renvoie la localité derrière
      *
-     * @param  \AppBundle\Entity\Geniteur
-     * @return Famille
+     * @return string
      */
-    public function setMere( \AppBundle\Entity\Geniteur $mere = null)
+    public function __toString()
     {
-        $this->mere = $mere;
 
-        return $this;
+        $string = "Les " . $this->getNom();
+
+        if ($this->getContact() != null)
+        {
+            if ($this->getContact()->getAdresse() != NULL) {
+                $string .= " de " . $this->getContact()->getAdresse()->getLocalite();
+            }
+        }
+
+
+        return $string;
+
     }
 
     /**
-     * Get mere
+     * Get nom
      *
-     * @return \AppBundle\Entity\Geniteur
+     * @return string
      */
-    public function getMere()
+    public function getNom()
     {
-        return $this->mere;
+        return ucwords($this->nom);
     }
 
     /**
@@ -178,143 +189,361 @@ class Famille
     }
 
     /**
-     * Get nom
+     * Get contact
      *
+     * @return Contact
+     */
+    public function getContact()
+    {
+        return $this->contact;
+    }
+
+    /**
+     * Set contact
+     *
+     * @param Contact $contact
+     * @return Famille
+     */
+    public function setContact(Contact $contact = null)
+    {
+        $this->contact = $contact;
+
+        return $this;
+    }
+
+    /**
+     * Get validity
+     *
+     * @return integer
+     */
+    public function getValidity()
+    {
+        return $this->validity;
+    }
+
+    /**
+     * Set validity
+     *
+     * @param integer $validity
+     * @return Famille
+     */
+    public function setValidity($validity)
+    {
+        $this->validity = $validity;
+
+        return $this;
+    }
+
+    /**
+     * Is classe
+     *
+     * @param string $className
+     * @return boolean
+     */
+    public function isClass($className)
+    {
+        if ($className == 'Famille')
+            return true;
+        else
+            return false;
+    }
+
+    /**
      * @return string
      */
-    public function getNom()
+    public function getClass()
     {
-        return ucwords($this->nom);
+        return 'Famille';
     }
 
-
     /**
-     * Add membres
+     * Set facture
      *
-     * @param \AppBundle\Entity\Membre $membres
+     * @param ArrayCollection $factures
      * @return Famille
      */
-    public function addMembre(\AppBundle\Entity\Membre $membres)
+    public function setFacture(ArrayCollection $factures)
     {
-        $this->membres[] = $membres;
-    	$membres->setFamille($this);
-        return $this;
-    }
+        $this->factures = $factures;
 
-    /**
-     * Remove membres
-     *
-     * @param \AppBundle\Entity\Membre $membres
-     */
-    public function removeMembre(\AppBundle\Entity\Membre $membres)
-    {
-        $this->membres->removeElement($membres);
-    }
-
-    /**
-     * Set adresse
-     *
-     * @param \AppBundle\Entity\Adresse $adresse
-     * @return Famille
-     */
-    public function setAdresse(\AppBundle\Entity\Adresse $adresse = null)
-    {
-        $this->adresse = $adresse;
-
-        return $this;
-    }
-
-    /**
-     * Get adresse
-     *
-     * @return \AppBundle\Entity\Adresse
-     */
-    public function getAdressePrincipale()
-    {
-        $potentiel = null;
-
-        $adresses = array(
-            'famille' => $this->getAdresse(),
-            'mere' => ($this->getMere() == null) ? null : $this->getMere()->getAdresse(),
-            'pere' => ($this->getPere() == null) ? null : $this->getPere()->getAdresse()
-        );
-
-        foreach($adresses as $k => $adresse) {
-
-            if(!is_null($adresse)) {
-
-                if ($adresse->getFacturable() == true) {
-
-                    return array('adresse' => $adresse, 'origine' => $k);
-                }
-
-                if ($potentiel == null)
-                    $potentiel = array('adresse' => $adresse, 'origine' => $k);
-            }
-
+        foreach ($factures as $facture) {
+            $facture->setFamille($this);
         }
 
-        return $potentiel;
+        return $this;
     }
 
-    public function getAdresse() {
-
-        return $this->adresse;
-    }
-
-    /**
-     * Doit renvoyer quelque chose qui permet d'identifier (humainement) une famille
-     * Le nom n'est pas suffisant p.ex puisqu'il peut y avoir plusieurs famille avec le même nom
-     *
-     * @return string
+    /*
+     * ====== FinancesBundle =======
      */
-    public function __toString() {
-        return "Les " . $this->getNom() . " de " . $this->getAdresse()->getLocalite(); // . " (" . sizeof($this->getMembres()) . ")";
+
+    /**
+     * Get facture
+     *
+     * @return ArrayCollection
+     */
+    public function getFactures()
+    {
+        return $this->factures;
     }
 
     /**
-     * Set telephone
+     * Add facture
      *
-     * @param string $telephone
+     * @param FactureToFamille $facture
      * @return Famille
      */
-    public function setTelephone($telephone)
+    public function addFacture(FactureToFamille $facture)
     {
-        $this->telephone = $telephone;
+        $this->factures[] = $facture;
+        $facture->setFamille($this);
 
         return $this;
     }
 
     /**
-     * Get telephone
+     * Remove facture
      *
-     * @return string 
-     */
-    public function getTelephone()
-    {
-        return $this->telephone;
-    }
-
-    /**
-     * Set email
-     *
-     * @param string $email
+     * @param FactureToFamille $facture
      * @return Famille
      */
-    public function setEmail($email)
+    public function removeFacture(FactureToFamille $facture)
     {
-        $this->email = $email;
+        $this->factures->remove($facture);
+        $facture->setFamille(null);
 
         return $this;
     }
 
     /**
-     * Get email
+     * Add creance
      *
-     * @return string 
+     * @param CreanceToFamille $creance
+     * @return Famille
      */
-    public function getEmail()
+    public function addCreance(CreanceToFamille $creance)
     {
-        return $this->email;
+        $this->creances[] = $creance;
+        $creance->setFamille($this);
+
+        return $this;
     }
+
+    /**
+     * Remove creance
+     *
+     * @param CreanceToFamille $creance
+     * @return Famille
+     */
+    public function removeCreance(CreanceToFamille $creance)
+    {
+        $this->creances->remove($creance);
+        $creance->setFamille(null);
+
+        return $this;
+    }
+
+    /**
+     * Get creances
+     *
+     * @return ArrayCollection
+     */
+    public function getCreances()
+    {
+        return $this->creances;
+    }
+
+    /**
+     * Set creances
+     *
+     * @param ArrayCollection $creances
+     * @return Famille
+     */
+    public function setCreances(ArrayCollection $creances)
+    {
+        $this->creances = $creances;
+
+        foreach ($creances as $creance) {
+            $creance->setFamille($this);
+        }
+
+        return $this;
+    }
+
+    public function getAdresseExpedition()
+    {
+        $adresse = $this->getContact()->getAdresse();
+        if (!is_null($adresse)) {
+            if ($adresse->isExpediable()) {
+                return array('adresse' => $adresse,
+                    'owner' => array(
+                        'prenom' => null,
+                        'nom' => $this->getNom(),
+                        'class' => 'Famille',
+                    ));
+            }
+        }
+
+        $mere = $this->getMere();
+        if (!is_null($mere)) {
+            $adresse = $mere->getContact()->getAdresse();
+
+            if (!is_null($adresse)) {
+                if ($adresse->isExpediable()) {
+                    return array('adresse' => $adresse,
+                        'owner' => array(
+                            'prenom' => $mere->getPrenom(),
+                            'nom' => $this->getNom(),
+                            'class' => 'Famille',
+                        ));
+                }
+            }
+        }
+
+        $pere = $this->getPere();
+        if (!is_null($pere)) {
+            $adresse = $pere->getContact()->getAdresse();
+
+            if (!is_null($adresse)) {
+                if ($adresse->isExpediable()) {
+                    return array('adresse' => $adresse,
+                        'owner' => array(
+                            'prenom' => $pere->getPrenom(),
+                            'nom' => $this->getNom(),
+                            'class' => 'Famille',
+                        ));
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Get mere
+     *
+     * @return \AppBundle\Entity\Geniteur
+     */
+    public function getMere()
+    {
+        return $this->mere;
+    }
+
+    /**
+     * Set mere
+     *
+     * @param  Mere $mere
+     * @return Famille
+     */
+    public function setMere($mere = null)
+    {
+        $this->mere = $mere;
+        if ($mere != null) {
+            $mere->setFamille($this);
+        }
+        return $this;
+    }
+
+    /**
+     * Get pere
+     *
+     * @return \AppBundle\Entity\Geniteur
+     */
+    public function getPere()
+    {
+        return $this->pere;
+    }
+
+    /**
+     * Set pere
+     *
+     * @param Pere $pere
+     * @return Famille
+     */
+    public function setPere($pere = null)
+    {
+        $this->pere = $pere;
+        if ($pere != null) {
+            $pere->setFamille($this);
+        }
+        return $this;
+    }
+
+    public function getListeEmailsExpedition()
+    {
+        $liste = array();
+
+
+        $emails = $this->getContact()->getEmails();
+        if (!is_null($emails))
+        {
+            foreach ($emails as $email) {
+                if ($email->isExpediable()) {
+                    $liste['Famille'] = $email->getEmail();
+                }
+
+            }
+        }
+
+
+        $mere = $this->getMere();
+        if(!is_null($mere))
+        {
+            $emails = $mere->getContact()->getEmails();
+            if (!is_null($emails))
+            {
+                foreach ($emails as $email) {
+                    if ($email->isExpediable()) {
+                        $liste['Mère'] = $email->getEmail();
+                    }
+
+                }
+            }
+        }
+
+
+        $pere = $this->getPere();
+        if(!is_null($pere))
+        {
+            $emails = $pere->getContact()->getEmails();
+            if (!is_null($emails))
+            {
+                foreach ($emails as $email) {
+                    if ($email->isExpediable()) {
+                        $liste['Père'] = $email->getEmail();
+                    }
+
+                }
+            }
+        }
+
+
+        return $liste;
+    }
+
+    public function getListePrenomEnfants()
+    {
+        $enfants = $this->getMembres();
+
+        $listOfPrenom = array();
+        foreach ($enfants as $enfant)
+        {
+            /** @var Membre $enfant */
+            $listOfPrenom[] = $enfant->getPrenom();
+        }
+        return $listOfPrenom;
+    }
+
+    /**
+     * Get membres
+     *
+     * @return array
+     */
+    public function getMembres()
+    {
+        return $this->membres;
+    }
+
+
+
 }

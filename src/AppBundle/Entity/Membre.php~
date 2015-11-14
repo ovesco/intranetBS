@@ -2,31 +2,28 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Proxies\__CG__\AppBundle\Entity\Fonction;
+use Interne\FinancesBundle\Entity\CreanceToMembre;
+use Interne\FinancesBundle\Entity\FactureToMembre;
 use Symfony\Component\Validator\Constraints as Assert;
+
+
+//FinancesBundle
 
 /**
  * Membre
+ *
  * @ORM\Entity
  * @ORM\Table(name="app_membres")
  */
-class Membre extends Personne
+class Membre extends Personne implements ExpediableInterface
 {
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
 
     /**
      * @var Famille
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Famille", inversedBy="membres")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Famille", inversedBy="membres", cascade={"persist"}, fetch="EAGER")
      * @ORM\JoinColumn(name="famille_id", referencedColumnName="id")
      */
     private $famille;
@@ -74,14 +71,14 @@ class Membre extends Personne
     private $statut;
 
     /**
-     * @var date
+     * @var \Datetime
      *
      * @ORM\Column(name="inscription", type="date")
      */
     private $inscription;
 
     /**
-     * @var text
+     * @var string
      *
      * @ORM\Column(name="remarques", type="text", nullable=true)
      */
@@ -95,32 +92,109 @@ class Membre extends Personne
     private $validity;
 
 
-    public function __construct()
+
+
+    /*
+     * ====== FinancesBundle =======
+     */
+
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToOne(targetEntity="Interne\FinancesBundle\Entity\DebiteurMembre",
+     *                mappedBy="membre", cascade={"persist","remove"})
+     */
+    private $debiteur;
+
+
+
+    /**
+     * Cette propriété détermine si les cérances détenues par ce membre sont facturées
+     * à la famille ou au membre lui même.
+     *
+     * @var string envoiFacture
+     *
+     * @ORM\Column(name="envoi_facture", type="string", columnDefinition="ENUM('Famille', 'Membre')")
+     *
+     */
+    private $envoiFacture = 'Membre';
+
+
+    /*
+     * ===== History Bundle ====
+     */
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Interne\HistoryBundle\Entity\MemberHistory", mappedBy="modifiedMember", cascade={"persist","remove"})
+     */
+    private $historique;
+
+
+    /*
+     * ===== MatBundle
+     *
+    /*
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Membre", mappedBy="membre", cascade={"persist", "remove"})
+     *
+    private $bookings;
+    //*/
+
+    /**
+     * Constructor
+     *
+     * @param string $prenom
+     * @param string $nom Nom de la famille nouvellement créée
+     */
+    public function __construct($prenom = '', $nom = '')
     {
         $this->inscription = new \Datetime();
         $this->naissance   = new \Datetime();
+
+        /*
+         * FinancesBundle
+         */
+        $this->creances = new ArrayCollection();
+        $this->factures = new ArrayCollection();
+
+        $this->validity = true;
+
+        $this->prenom = $prenom;
+        $this->famille = new Famille($nom);
     }
 
     /**
-     * Get id
+     * Représentation string du membre
+     * On ajoute le numéro BS pour le log de données sur lequel on effectuera des recherches
      *
-     * @return integer
+     * @return string
      */
-    public function getId()
+    public function __toString() {
+        return ucfirst($this->getPrenom() . ' ' . $this->getNom());
+    }
+
+    /**
+     * Get nom
+     *
+     * @return string
+     */
+    public function getNom()
     {
-        return $this->id;
+        if ($this->getFamille() != null)
+            return $this->getFamille()->getNom();
+        else
+            return "Pas dans une famille...";
     }
 
     /**
-     * Set id
+     * Get famille
      *
-     * @param integer $id
-     * @return Membre
+     * @return Famille
      */
-    public function setId($id) {
-
-        $this->id = $id;
-        return $this;
+    public function getFamille()
+    {
+        return $this->famille;
     }
 
     /**
@@ -137,30 +211,14 @@ class Membre extends Personne
     }
 
     /**
-     * Get famille
+     * Get distinctions
      *
-     * @return Famille
+     * @return array
      */
-    public function getFamille()
+    public function getDistinctions()
     {
-        return $this->famille;
+        return $this->distinctions;
     }
-
-
-    /**
-     * Get nom
-     *
-     * @return string
-     */
-    public function getNom()
-    {
-
-        if ($this->getFamille() != null)
-            return $this->getFamille()->getNom();
-        else
-            return "Pas dans une famille...";
-    }
-
 
     /**
      * Set distinctions
@@ -176,13 +234,13 @@ class Membre extends Personne
     }
 
     /**
-     * Get distinctions
+     * Get numeroBs
      *
-     * @return array
+     * @return integer
      */
-    public function getDistinctions()
+    public function getNumeroBs()
     {
-        return $this->distinctions;
+        return $this->numeroBs;
     }
 
     /**
@@ -199,13 +257,13 @@ class Membre extends Personne
     }
 
     /**
-     * Get numeroBs
+     * Get numeroAvs
      *
-     * @return integer
+     * @return string
      */
-    public function getNumeroBs()
+    public function getNumeroAvs()
     {
-        return $this->numeroBs;
+        return $this->numeroAvs;
     }
 
     /**
@@ -222,13 +280,13 @@ class Membre extends Personne
     }
 
     /**
-     * Get numeroAvs
+     * Get statut
      *
      * @return string
      */
-    public function getNumeroAvs()
+    public function getStatut()
     {
-        return $this->numeroAvs;
+        return $this->statut;
     }
 
     /**
@@ -245,15 +303,14 @@ class Membre extends Personne
     }
 
     /**
-     * Get statut
+     * Get naissance
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getStatut()
+    public function getNaissance()
     {
-        return $this->statut;
+        return $this->naissance;
     }
-
 
     /**
      * Set naissance
@@ -269,13 +326,13 @@ class Membre extends Personne
     }
 
     /**
-     * Get naissance
+     * Get inscription
      *
      * @return \DateTime
      */
-    public function getNaissance()
+    public function getInscription()
     {
-        return $this->naissance;
+        return $this->inscription;
     }
 
     /**
@@ -290,17 +347,6 @@ class Membre extends Personne
 
         return $this;
     }
-
-    /**
-     * Get inscription
-     *
-     * @return \DateTime
-     */
-    public function getInscription()
-    {
-        return $this->inscription;
-    }
-
 
     /**
      * Add attributions
@@ -335,26 +381,6 @@ class Membre extends Personne
         return $this->attributions;
     }
 
-
-    /**
-     * Get active attributions
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getActiveAttributions()
-    {
-        $attrs = array();
-        $today = new \Datetime("now");
-
-        foreach($this->attributions as $attr) {
-
-            if($attr->getDateFin() >= $today || $attr->getDateFin() == null)
-                $attrs[] = $attr;
-        }
-
-        return $attrs;
-    }
-
     /**
      * Retourne la première attribution active si elle existe, en renvoie une vide sinon pour simplifier l'affichage
      */
@@ -375,16 +401,41 @@ class Membre extends Personne
     }
 
     /**
-     * Set remarques
-     *
-     * @param $remarques
-     * @return Membre
+     * Retourne un tableau de groupe ou le membre est actuellemnt.
+     * @return Groupe[]
      */
-    public function setRemarques($remarques)
+    public function getActiveGroupes()
     {
-        $this->remarques = $remarques;
+        /** @var Attribution[] $attributions */
+        $attributions = $this->getActiveAttributions();
 
-        return $this;
+        /** @var Groupe[] $groups */
+        $groups = array();
+
+        /** @var Attribution $attribution */
+        foreach($attributions as $attribution) {
+            $groups[] = $attribution->getGroupe();
+        }
+        return $groups;
+    }
+
+    /**
+     * Get active attributions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActiveAttributions()
+    {
+        $attrs = array();
+        $today = new \Datetime("now");
+
+        foreach ($this->attributions as $attr) {
+
+            if ($attr->getDateFin() >= $today || $attr->getDateFin() == null)
+                $attrs[] = $attr;
+        }
+
+        return $attrs;
     }
 
     /**
@@ -397,6 +448,24 @@ class Membre extends Personne
         return $this->remarques;
     }
 
+    /**
+     * Set remarques
+     *
+     * @param $remarques
+     * @return Membre
+     */
+    public function setRemarques($remarques)
+    {
+        $this->remarques = $remarques;
+
+        return $this;
+    }
+
+    public function getUsername()
+    {
+        // TODO: récupérer le username depuis le User
+        return strtolower($this->getPrenom()) . '.' . strtolower($this->getNom());
+    }
 
     /**
      * Add distinction
@@ -422,38 +491,210 @@ class Membre extends Personne
     }
 
     /**
-     * Retourne l'adresse principale suivant le schéma membre -> famille -> mere -> pere en s'arrêtant
-     * à la première facturable
-     * @return Adresse
+     * Get validity
+     *
+     * @return integer
      */
-    public function getAdressePrincipale() {
+    public function getValidity()
+    {
+        return $this->validity;
+    }
 
-        //On commence par récupérer la première adresse potentielle
-        $potentiel = null;
+    /**
+     * Set validity
+     *
+     * @param integer $validity
+     * @return Membre
+     */
+    public function setValidity($validity)
+    {
+        $this->validity = $validity;
 
-        $adresses = array(
-            'membre' => $this->getAdresse(),
-            'famille' => $this->getFamille()->getAdresse(),
-            'mere' => ($this->getFamille()->getMere() == null) ? null : $this->getFamille()->getMere()->getAdresse(),
-            'pere' => ($this->getFamille()->getPere() == null) ? null : $this->getFamille()->getPere()->getAdresse()
+        return $this;
+    }
+
+
+
+
+    /**
+     * @param String $className
+     * @return bool
+     */
+    public function isClass($className)
+    {
+        if($className == 'Membre')
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClass()
+    {
+        return 'Membre';
+    }
+
+
+    /**
+     * Get envoiFacture
+     *
+     * @return string
+     */
+    public function getEnvoiFacture()
+    {
+        return $this->envoiFacture;
+    }
+
+    /**
+     * Set envoiFacture
+     *
+     * @param string $envoiFacture
+     * @return Membre
+     */
+    public function setEnvoiFacture($envoiFacture)
+    {
+        $this->envoiFacture = $envoiFacture;
+
+        return $this;
+    }
+
+    /**
+     * Retourne l'adresse d'expédition du membre, c'est-à-dire son adresse principale
+     * @return array|null
+     */
+    public function getAdresseExpedition()
+    {
+        $pere       = $this->getFamille()->getPere();
+        $mere       = $this->getFamille()->getMere();
+        $adresse    = null;
+        $generator  = function($type, $adresse) {
+
+            return array('owner' => $type, 'adresse' => $adresse);
+        };
+
+        // On liste d'abord les adresses potentielles
+        $adresses   = array(
+            'membre'    => $this->getContact()->getAdresse(),
+            'famille'   => $this->getFamille()->getContact()->getAdresse(),
+            'pere'      => ($pere == null) ? null : $pere->getContact()->getAdresse(),
+            'mere'      => ($mere == null) ? null : $mere->getContact()->getAdresse()
         );
 
-        foreach($adresses as $k => $adresse) {
+        /** @var Adresse $adr */
+        foreach($adresses as $k => $adr) {
 
-            if(!is_null($adresse)) {
+            if($adr != null && $adr->getExpediable())
+                return $generator($k, $adr);
 
-                if ($adresse->getFacturable() == true) {
-
-                    return array('adresse' => $adresse, 'origine' => $k);
-                }
-
-                if ($potentiel == null)
-                    $potentiel = array('adresse' => $adresse, 'origine' => $k);
-            }
-
+            else if($adr != null) $adresse = $generator($k, $adr);
         }
 
-        return $potentiel;
+        if($adresse['adresse'] == null) return null;
+        else return $adresse;
+    }
 
+
+    public function getListeEmailsExpedition()
+    {
+        $liste = array();
+
+        $emails = $this->getContact()->getEmails();
+        if(!is_null($emails))
+        {
+            foreach($emails as $email){
+                if($email->isExpediable())
+                {
+                    $liste['Membre'] = $email->getEmail();
+                }
+
+            }
+        }
+
+
+        $emails = $this->getFamille()->getContact()->getEmails();
+        if(!is_null($emails))
+        {
+            foreach($emails as $email){
+                if($email->isExpediable())
+                {
+                    $liste['Famille'] = $email->getEmail();
+                }
+
+            }
+        }
+
+
+
+        $mere = $this->getFamille()->getMere();
+        if(!is_null($mere))
+        {
+            $emails = $mere->getContact()->getEmails();
+            if(!is_null($emails))
+            {
+                foreach($emails as $email){
+                    if($email->isExpediable())
+                    {
+                        $liste['Mère'] = $email->getEmail();
+                    }
+
+                }
+            }
+        }
+
+
+        $pere = $this->getFamille()->getPere();
+        if(!is_null($pere))
+        {
+            $emails = $pere->getContact()->getEmails();
+            if(!is_null($emails))
+            {
+                foreach($emails as $email){
+                    if($email->isExpediable())
+                    {
+                        $liste['Père'] = $email->getEmail();
+                    }
+
+                }
+            }
+        }
+
+        return $liste;
+    }
+
+
+    /**
+     * Add historique
+     *
+     * @param \Interne\HistoryBundle\Entity\MemberHistory $historique
+     *
+     * @return Membre
+     */
+    public function addHistorique(\Interne\HistoryBundle\Entity\MemberHistory $historique)
+    {
+        $this->historique[] = $historique;
+
+        return $this;
+    }
+
+    /**
+     * Remove historique
+     *
+     * @param \Interne\HistoryBundle\Entity\MemberHistory $historique
+     */
+    public function removeHistorique(\Interne\HistoryBundle\Entity\MemberHistory $historique)
+    {
+        $this->historique->removeElement($historique);
+    }
+
+    /**
+     * Get historique
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getHistorique()
+    {
+        return $this->historique;
     }
 }
