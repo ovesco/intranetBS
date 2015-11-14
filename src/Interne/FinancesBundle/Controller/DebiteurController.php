@@ -25,7 +25,7 @@ class DebiteurController extends Controller
 {
 
     /**
-     * @Route("/show/{debiteur}", name="interne_finances_debiteur_show", options={"expose"=true})
+     * @Route("/show/{debiteur}", options={"expose"=true})
      * @param Request $request
      * @param Debiteur $debiteur
      * @ParamConverter("debiteur", class="InterneFinancesBundle:Debiteur")

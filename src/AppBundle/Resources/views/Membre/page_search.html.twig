@@ -67,15 +67,9 @@ Recherche
 
                 <h2>Resultats</h2>
 
-                <div id="results">
 
+                {{ list_caller.listInSession(list_key)|raw }}
 
-
-                    {{ list_container.getModel(constant('AppBundle\\Utils\\ListRenderer\\Model::Membre'), results).render|raw }}
-
-                    {{ dump(results) }}
-
-                </div>
 
             </div>
         </div>

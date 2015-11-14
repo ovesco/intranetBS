@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /* Annotations */
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -13,10 +14,13 @@ use Symfony\Component\DependencyInjection\Container;
 /**
  * Ce controller est un service et un controller!!!
  *
+ * (note: by calling the service "list_caller" in the route annotation,
+ * the constructor is called)
  *
  * Class ListCallerController
  * @package AppBundle\Controller
- * @Route("/list_call")
+ * @Route("/list_call", service="list_caller")
+ *
  */
 class ListCallerController extends Controller
 {
@@ -26,14 +30,12 @@ class ListCallerController extends Controller
      * où il est instancier comme service.
      * Dans le cas du controller, le container est autrement (dans le framework).
      *
-     * @param Container $container
+     * @param ContainerInterface $container
      */
-    public function __construct(Container $container = null){
+    public function __construct(ContainerInterface $container = null){
 
-        if(!is_null($container))
-        {
-            $this->setContainer($container);
-        }
+        $this->setContainer($container);
+
 
     }
 
@@ -48,7 +50,7 @@ class ListCallerController extends Controller
     {
         $objects = $this->get('list_storage')->getObjects($key);
         $model = $this->get('list_storage')->getModel($key);
-        $url = $this->generateUrl('list_render_session',array('key'=>$key));
+        $url = $this->generateUrl('app_listcaller_session',array('key'=>$key));
         return $this->get('list_container')->getModel($model,$objects,$url)->render();
     }
 
@@ -65,13 +67,13 @@ class ListCallerController extends Controller
         $class = $this->get('list_container')->getRepresentedClass($model);
         $repo = $this->getDoctrine()->getRepository($class);
         $objects = $repo->findBy(array('id'=>$idsParsed));
-        $url = $this->generateUrl('list_render_entity',array('model'=>$model,'ids'=>$ids));
+        $url = $this->generateUrl('app_listcaller_entity',array('model'=>$model,'ids'=>$ids));
         return $this->get('list_container')->getModel($model,$objects,$url)->render();
     }
 
     /**
      *
-     * @Route("/session_list/{key}", name="list_render_session")
+     * @Route("/session_list/{key}")
      *
      */
     public function sessionAction($key)
@@ -82,7 +84,7 @@ class ListCallerController extends Controller
 
     /**
      * Pattern of ids exemple: 23-34-5-6-7
-     * @Route("/entity_list/{model}/{ids}", name="list_render_entity", requirements={ "ids": "([0-9]+-?)+"})
+     * @Route("/entity_list/{model}/{ids}", requirements={ "ids": "([0-9]+-?)+"})
      *
      */
     public function entityAction($model, $ids)

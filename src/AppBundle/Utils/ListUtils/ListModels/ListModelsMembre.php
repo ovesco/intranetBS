@@ -51,7 +51,7 @@ class ListModelsMembre implements ListModelInterface
         $list->setSearchBar(true);
 
         $list->addColumn(new Column('Prénom', function (Membre $membre) use ($router) {
-            return '<a href="' . $router->generate('interne_voir_membre', array('membre' => $membre->getId())) . '">' . $membre->getPrenom() . '</a>';
+            return '<a href="' . $router->generate('app_membre_add', array('membre' => $membre->getId())) . '">' . $membre->getPrenom() . '</a>';
         }));
         $list->addColumn(new Column('Nom', function (Membre $membre) use ($router) {
             return '<a href="' . $router->generate('interne_voir_famille', array('famille' => $membre->getFamille()->getId())) . '">' . $membre->getNom() . '</a>';
@@ -73,7 +73,7 @@ class ListModelsMembre implements ListModelInterface
         $list->setUrl($url);
 
         $list->addColumn(new Column('Prénom', function (Membre $membre) use ($router) {
-            return '<a href="' . $router->generate('interne_voir_membre', array('membre' => $membre->getId())) . '">' . $membre->getPrenom() . '</a>';
+            return '<a href="' . $router->generate('app_membre_show', array('membre' => $membre->getId())) . '">' . $membre->getPrenom() . '</a>';
         }));
         $list->addColumn(new Column('Fonction', function (Membre $membre) {
             return $membre->getActiveAttribution()->getFonction();

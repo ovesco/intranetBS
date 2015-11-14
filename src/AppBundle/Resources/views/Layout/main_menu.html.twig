@@ -5,14 +5,14 @@
 
     <div class="item popup-menu"  data-html='
             <div class="ui vertical menu">
-                {% for item in menu.bloc(block) %}
+                {% for item in menu.getBloc(block) %}
                     <a class="item" href="{{ path(item.routeName) }}">{% if item.icon is not null %}<i class="ui {{ item.icon }} icon"></i>{% endif %}{{ item.label }}</a>
                 {% endfor %}
             </div>
         '>
         <div class="header">{{ block_label }}</div>
         <div class="menu">
-            {% for item in menu.bloc(block) %}
+            {% for item in menu.getBloc(block) %}
                 {% if item.expanded %}
                 <a class="item" href="{{ path(item.routeName) }}">{% if item.icon is not null %}<i class="ui {{ item.icon }} icon"></i>{% endif %}{{ item.label }}</a>
                 {% endif %}
@@ -25,10 +25,10 @@
 
 <div id="main-menu" class="ui vertical inverted sidebar menu">
     <div class="item">
-        <a class="ui logo icon image" href="{{ path('interne_homepage') }}">
+        <a class="ui logo icon image" href="{{ path('app_app_home') }}">
             <img src="{{ parametreService.get('group_logo') }}" alt="Logo">
         </a>
-        <a href="{{ path('interne_homepage') }}" ><b>{{ parametreService.get('app_name') }}</b></a>
+        <a href="{{ path('app_app_home') }}" ><b>{{ parametreService.get('app_name') }}</b></a>
     </div>
 
 

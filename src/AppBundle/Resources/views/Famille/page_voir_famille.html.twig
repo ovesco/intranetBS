@@ -37,7 +37,6 @@
 {% endmacro %}
 
 {% import _self as macral %}
-{% import "@App/Templates/liste_membres.html.twig" as macro %}
 
 
 {% form_theme familleForm 'Templates/form_to_xEditable.html.twig' %}
@@ -136,6 +135,23 @@
                     </div>
 
                 </div> <!-- /informations de base -->
+
+
+                <div class="row"> <!-- /informations du débiteur -->
+                    <div class="column">
+                        <div class="ui top attached message">
+                            <div class="header"><h3><i class="money icon"></i>Créances et factures</h3></div>
+                        </div>
+
+                        <div class="ui bottom attached segment">
+
+                            {{ render(controller('InterneFinancesBundle:Debiteur:show', { 'debiteur': famille.debiteur.id })) }}
+
+                        </div>
+
+                    </div>
+                </div>
+
 
                 <div class="row"> <!-- Membres dans la famille -->
 

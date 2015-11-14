@@ -27,59 +27,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  */
 class SearchController extends Controller
 {
-    const SEARCH_RESULTS = "session_results";
-    /**
-     * Affiche la page permettant de lancer une recherche
-     *
-     * @Route("/membre", name="interne_search")
-     * @Menu("Rechercher",block="database",order=2, icon="search", expanded=true)
-     * @Template("AppBundle:Search:page_search.html.twig")
-     */
-    public function membreAction(Request $request)
-    {
 
-        $membreSearch = new MembreSearch();
-        $membreForm = $this->createForm(new MembreSearchType(),$membreSearch);
-
-        $results = array();
-
-        $membreForm->handleRequest($request);
-
-        if ($membreForm->isValid()) {
-
-            $membreSearch = $membreForm->getData();
-
-            $elasticaManager = $this->container->get('fos_elastica.manager');
-            /** @var MembreRepository $repository */
-            $repository = $elasticaManager->getRepository('AppBundle:Membre');
-            $results = $repository->search($membreSearch);
-
-            /** @var ListStorage $sessionContainer */
-            $sessionContainer = $this->get('list_storage');
-            $sessionContainer->setRepository(SearchController::SEARCH_RESULTS,'AppBundle:Membre');
-            $sessionContainer->setModel(SearchController::SEARCH_RESULTS,ListContainer::Membre);
-
-            //get the search mode
-            $mode = $membreForm->get("mode")->getData();
-            switch($mode)
-            {
-                case Mode::MODE_INCLUDE: //include new results with the previous
-                    $sessionContainer->addObjects(SearchController::SEARCH_RESULTS,$results);
-                    break;
-                case Mode::MODE_EXCLUDE: //exclude new results to the previous
-                    $sessionContainer->removeObjects(SearchController::SEARCH_RESULTS,$results);
-                    break;
-                case Mode::MODE_STANDARD:
-                default:
-                    $sessionContainer->setObjects(SearchController::SEARCH_RESULTS,$results);
-
-            }
-            $results = $sessionContainer->getObjects(SearchController::SEARCH_RESULTS);
-
-        }
-
-        return array('membreForm'=>$membreForm->createView(),'results'=>$results);
-    }
 
     /**
      * Effectue une recherche complète parmi les membres, groupes et familles

@@ -1,0 +1,16 @@
+
+{% form_theme searchForm 'AppBundle:Templates:form_template.html.twig' %}
+
+<h4 class="ui header">Formulaire de recherche</h4>
+
+{{ form_start(searchForm, {'attr': {'class': 'ui form'}}) }}
+
+
+{{ form_rest(searchForm) }}
+
+
+<input type="submit" value="Rechercher" class="ui blue submit button">
+
+{{ form_end(searchForm) }}
+
+

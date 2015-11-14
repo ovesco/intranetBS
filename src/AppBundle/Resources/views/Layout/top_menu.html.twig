@@ -20,8 +20,9 @@
                         <input class="prompt" type="text" placeholder="Quick menu...">
                     <div class="results"></div>
                     <script>
+
                         $(document).ready(function(){
-                            var menu_data = {{ menu.allBlockToCategorySearch()|json_encode(constant('JSON_PRETTY_PRINT'))|raw }};
+                            var menu_data = {{ menu.getAllBlocksToCategorySearch()|json_encode(constant('JSON_PRETTY_PRINT'))|raw }};
                             $('#menu_search').search({source: menu_data});
                         });
                     </script>
@@ -30,8 +31,6 @@
 
         </div>
         <div class="right menu">
-
-            <div id="bug_report" class="item"><div class="ui icon button red"><i class="bug icon"></i>Signaler un problème!</div></div>
 
             <a class="item" href="#" id="main-listing-button">Listes</a>
 

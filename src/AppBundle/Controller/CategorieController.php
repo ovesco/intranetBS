@@ -31,7 +31,7 @@ class CategorieController extends Controller
     /**
      * Page qui affiche les categorie de groupes
      *
-     * @Route("/liste", name="categorie_liste", options={"expose"=true})
+     * @Route("/liste", options={"expose"=true})
      * @param Request $request
      * @return Response
      *
@@ -50,7 +50,7 @@ class CategorieController extends Controller
     }
 
     /**
-     * @Route("/new", name="categorie_new", options={"expose"=true})
+     * @Route("/new", options={"expose"=true})
      * @Template("AppBundle:Categorie:modal_form.html.twig")
      * @param Request $request
      * @return Response
@@ -59,7 +59,7 @@ class CategorieController extends Controller
     {
         $new = new Categorie();
         $newForm = $this->createForm(new CategorieType(),$new,
-            array('action' => $this->generateUrl('categorie_new')));
+            array('action' => $this->generateUrl('app_categorie_new')));
 
         $newForm->handleRequest($request);
 
@@ -68,7 +68,7 @@ class CategorieController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($new);
             $em->flush();
-            return $this->redirect($this->generateUrl('categorie_liste'));
+            return $this->redirect($this->generateUrl('app_categorie_liste'));
         }
 
         return array('form'=>$newForm->createView());
@@ -76,7 +76,7 @@ class CategorieController extends Controller
 
 
     /**
-     * @Route("/edit/{categorie}", name="categorie_edit", options={"expose"=true})
+     * @Route("/edit/{categorie}", options={"expose"=true})
      * @param Request $request
      * @param Categorie $categorie
      * @return Response
@@ -86,20 +86,20 @@ class CategorieController extends Controller
     public function editAction(Categorie $categorie,Request $request)
     {
         $editedForm = $this->createForm(new CategorieType(),$categorie,
-            array('action' => $this->generateUrl('categorie_edit',array('categorie'=>$categorie->getId()))));
+            array('action' => $this->generateUrl('app_categorie_edit',array('categorie'=>$categorie->getId()))));
 
         $editedForm->handleRequest($request);
         if($editedForm->isValid())
         {
             $em = $this->getDoctrine()->getManager();
             $em->flush();
-            return $this->redirect($this->generateUrl('categorie_liste'));
+            return $this->redirect($this->generateUrl('app_categorie_liste'));
         }
         return array('form'=>$editedForm->createView());
     }
 
     /**
-     * @Route("/remove/{categorie}", name="categorie_remove", options={"expose"=true})
+     * @Route("/remove/{categorie}", options={"expose"=true})
      * @param Request $request
      * @param Categorie $categorie
      * @return Response
@@ -125,7 +125,7 @@ class CategorieController extends Controller
                 'Impossible de supprimer cette categorie'
             );
         }
-        return $this->redirect($this->generateUrl('categorie_liste'));
+        return $this->redirect($this->generateUrl('app_categorie_liste'));
     }
 
 

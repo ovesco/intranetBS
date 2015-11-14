@@ -16,18 +16,18 @@ class AppController extends Controller
 {
     /**
      * Page d'accueil de l'application
-     * @Route("", name="interne_homepage")
+     * @Route("")
      */
-    public function homePageAction()
+    public function homeAction()
     {
         $em = $this->getDoctrine()->getManager();
         $lastNews = $em->getRepository('InterneOrganisationBundle:News')->findForPaging(0, 1);
 
-        return $this->render("AppBundle:Homepage:page_homepage.html.twig", array('lastNews' => $lastNews, 'user' => $this->getUser()));
+        return $this->render("AppBundle:App:page_home.html.twig", array('lastNews' => $lastNews, 'user' => $this->getUser()));
     }
 
     /**
-     * @Route("test", name="test")
+     * @Route("test")
      * @Menu("Test",block="test",order=1)
      */
     public function testAction()

@@ -105,7 +105,7 @@ class AttributionController extends Controller
 
 
     /**
-     * @Route("/render-form", name="interne_attribution_render_formulaire_modal", options={"expose"=true});
+     * @Route("/render-form", options={"expose"=true});
      * @param Request $request
      * @return Response
      */
@@ -227,7 +227,7 @@ class AttributionController extends Controller
 
 
     /**
-     * @Route("/modal/edit/{attribution}", name="attribution_edit_modal", options={"expose"=true})
+     * @Route("/modal/edit/{attribution}", name="app_attribution_edit_ajax", options={"expose"=true})
      *
      * @param Attribution $attribution
      * @ParamConverter("attribution", class="AppBundle:Attribution")
@@ -245,7 +245,7 @@ class AttributionController extends Controller
     }
 
     /**
-     * @Route("/modal/terminate/{attribution}/{dateFin}", name="attribution_terminate", options={"expose"=true})
+     * @Route("/modal/terminate/{attribution}/{dateFin}", options={"expose"=true})
      *
      * @param Attribution $attribution
      * @param \DateTime $dateFin
@@ -269,12 +269,12 @@ class AttributionController extends Controller
 
 
     /**
-     * @Route("/add", name="attribution_add", options={"expose"=true})
+     * @Route("/add", options={"expose"=true})
      *
      * @param Request $request
      * @return Response
      */
-    public function addAttributionAction(Request $request)
+    public function addAction(Request $request)
     {
 
         $newAttribution = new Attribution();
@@ -297,12 +297,12 @@ class AttributionController extends Controller
     }
 
     /**
-     * @Route("/add-multimembre", name="attribution_add_multimembre", options={"expose"=true})
+     * @Route("/add-multi-membre", name="app_attribution_add_multi_membre", options={"expose"=true})
      *
      * @param Request $request
      * @return Response
      */
-    public function addAttributionMultiMembreAction(Request $request)
+    public function addMultiMembreAction(Request $request)
     {
 
         $newAttribution = new Attribution();
@@ -326,14 +326,14 @@ class AttributionController extends Controller
     }
 
     /**
-     * @Route("/edit/{attribution}", name="attribution_edit", options={"expose"=true})
+     * @Route("/edit/{attribution}", options={"expose"=true})
      *
      * @param Request $request
      * @param Attribution $attribution
      * @return Response
      * @ParamConverter("attribution", class="AppBundle:Attribution")
      */
-    public function editAttribution(Request $request, Attribution $attribution)
+    public function editAction(Request $request, Attribution $attribution)
     {
         $attributionForm = $this->createForm(new AttributionType(), $attribution);
         $attributionForm->handleRequest($request);

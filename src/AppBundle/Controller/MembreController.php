@@ -12,10 +12,20 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+use AppBundle\Utils\ListUtils\ListStorage;
+use AppBundle\Utils\ListUtils\ListContainer;
+
+use AppBundle\Search\MembreSearch;
+use AppBundle\Search\MembreSearchType;
+use AppBundle\Search\MembreRepository;
+
+use AppBundle\Search\Mode;
+
 /* annotations */
 use AppBundle\Utils\Menu\Menu;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 
 /**
@@ -28,19 +38,19 @@ class MembreController extends Controller {
     /**
      * Affiche la page d'ajout de membre -> Membre/page_ajouter_membre.html.twig
      * et valide le formulaire si celui-ci est soumis
-     * @Route("/ajouter", name="interne_ajouter_membre")
+     *
+     * @Route("/add")
      * @Menu("Ajouter un membre",block="database",order=1, icon="add", expanded=true)
      * @param Request $request
      * @return Response
+     * @Template("AppBundle:Membre:page_add.html.twig")
      */
-    public function ajouterMembreAction(Request $request) {
+    public function addAction(Request $request) {
 
         $membre             = new Membre();
         $membreForm         = $this->createForm(new AddMembreType, $membre);
 
-        return $this->render('AppBundle:Membre:page_ajouter_membre.html.twig', array(
-            'membreForm'        => $membreForm->createView(),
-        ));
+        return array('membreForm'=> $membreForm->createView());
 
 
         /*
@@ -143,7 +153,7 @@ class MembreController extends Controller {
      * @param $property la proprieté à atteindre
      * @return mixed proprieté
      *
-     * @Route("ajax/get-property/{membre}/{property}", name="interne_ajax_membre_get_property", options={"expose"=true})
+     * @Route("ajax/get-property/{membre}/{property}", options={"expose"=true})
      * @ParamConverter("membre", class="AppBundle:Membre")
      */
     public function getMembrePropertyAction(Membre $membre, $property) {
@@ -158,33 +168,38 @@ class MembreController extends Controller {
 
 
     /**
-     * @Route("/voir/{membre}", name="interne_voir_membre", options={"expose"=true}, requirements={"membre" = "\d+"})
+     * @Route("/show/{membre}", options={"expose"=true}, requirements={"membre" = "\d+"})
      * @ParamConverter("membre", class="AppBundle:Membre")
+     * @param Request $request
+     * @param Membre $membre
+     * @return Response
+     * @Template("AppBundle:Membre:page_show.html.twig")
      */
-    public function voirMembreAction($membre) {
+    public function showAction(Request $request, Membre $membre) {
 
         $membreForm = $this->createForm(new VoirMembreType(), $membre);
 
-        return $this->render('AppBundle:Membre:page_voir_membre.html.twig', array(
-
-                'membre'            => $membre,
-                'listing'           => $this->get('listing'),
-                'membreForm'        => $membreForm->createView(),
-            )
+        return array(
+            'membre'            => $membre,
+            'listing'           => $this->get('listing'),
+            'membreForm'        => $membreForm->createView(),
         );
     }
 
 
     /**
-     * @Route("/voir/{membre}/pdf", name="membre_voir_pdf", requirements={"membre" = "\d+"})
+     * @Route("/show/{membre}/pdf", requirements={"membre" = "\d+"})
      * @ParamConverter("membre", class="AppBundle:Membre")
+     * @param Request $request
+     * @param Membre $membre
+     * @return Response
      */
-    public function voirMembrePdfAction($membre)
+    public function toPdfAction(Request $request, Membre $membre)
     {
 
         $membreForm = $this->createForm(new VoirMembreType(), $membre);
 
-        $html = $this->render('AppBundle:Membre:pdf_voir_membre.html.twig', array(
+        $html = $this->render('pdf_show.html.twig', array(
 
                 'membre' => $membre,
                 'listing' => $this->get('listing'),
@@ -209,7 +224,7 @@ class MembreController extends Controller {
      * @param $type string 'attribution' ou 'distinction'
      * @param $obj int l'id de l'attribution ou distinction
      * @return jsonresponse
-     * @Route("/ajax/remove-attribution-or-distinction/{membre}/{type}/{obj}", name="interne_ajax_membre_remove_attr_dist", options={"expose"=true})
+     * @Route("/ajax/remove-attribution-or-distinction/{membre}/{type}/{obj}", name="app_membre_ajax_remove_attr_dist", options={"expose"=true})
      * @ParamConverter("membre", class="AppBundle:Membre")
      */
     public function removeAttributionOrDistinctionAction(Membre $membre, $type, $obj) {
@@ -234,7 +249,7 @@ class MembreController extends Controller {
      * Vérifie si un numéro BS est déjà attribué ou pas
      * @param $numero le numéro BS
      * @return boolean
-     * @Route("/ajax/verify-numero-bs/{numero}", name="interne_membre_ajax_verify_numero_bs", options={"expose"=true}, requirements={"numero" = "\d+"})
+     * @Route("/ajax/verify-numero-bs/{numero}", name="app_membre_ajax_verify_numero_bs", options={"expose"=true}, requirements={"numero" = "\d+"})
      */
     public function isNumeroBsTakenAction($numero) {
 
@@ -252,7 +267,7 @@ class MembreController extends Controller {
      * @return jsonresponse
      * @ParamConverter("membre", class="AppBundle:Membre")
      * @ParamConverter("famille", class="AppBundle:Famille")
-     * @Route("/ajax/modify-famille/{membre}/{famille}", name="membre_modify_famille", options={"expose"=true})
+     * @Route("/ajax/modify-famille/{membre}/{famille}", name="app_membre_modify_famille", options={"expose"=true})
      */
     public function modifyFamilleAction(Membre $membre, Famille $famille) {
 
@@ -268,4 +283,64 @@ class MembreController extends Controller {
 
         return new JsonResponse('');
     }
+
+
+
+    const SEARCH_RESULTS = "session_results";
+    /**
+     * Affiche la page permettant de lancer une recherche
+     *
+     * @Route("/search")
+     * @Menu("Rechercher un membre",block="database",order=2, icon="search", expanded=true)
+     * @Template("AppBundle:Search:page_search.html.twig")
+     */
+    public function searchAction(Request $request)
+    {
+
+        $membreSearch = new MembreSearch();
+        $membreForm = $this->createForm(new MembreSearchType(),$membreSearch);
+
+        $results = array();
+
+        $membreForm->handleRequest($request);
+
+        if ($membreForm->isValid()) {
+
+            $membreSearch = $membreForm->getData();
+
+            $elasticaManager = $this->container->get('fos_elastica.manager');
+            /** @var MembreRepository $repository */
+            $repository = $elasticaManager->getRepository('AppBundle:Membre');
+            $results = $repository->search($membreSearch);
+
+            /** @var ListStorage $sessionContainer */
+            $sessionContainer = $this->get('list_storage');
+            $sessionContainer->setRepository(MembreController::SEARCH_RESULTS,'AppBundle:Membre');
+            $sessionContainer->setModel(MembreController::SEARCH_RESULTS,ListContainer::Membre);
+
+            //get the search mode
+            $mode = $membreForm->get("mode")->getData();
+            switch($mode)
+            {
+                case Mode::MODE_INCLUDE: //include new results with the previous
+                    $sessionContainer->addObjects(MembreController::SEARCH_RESULTS,$results);
+                    break;
+                case Mode::MODE_EXCLUDE: //exclude new results to the previous
+                    $sessionContainer->removeObjects(MembreController::SEARCH_RESULTS,$results);
+                    break;
+                case Mode::MODE_STANDARD:
+                default:
+                    $sessionContainer->setObjects(MembreController::SEARCH_RESULTS,$results);
+
+            }
+            $results = $sessionContainer->getObjects(MembreController::SEARCH_RESULTS);
+
+        }
+
+        return array('membreForm'=>$membreForm->createView(),'results'=>$results);
+    }
+
+
+
+
 }

@@ -49,7 +49,7 @@ services:
     menu:
         class: AppBundle\Utils\Menu\MenuRenderer
         arguments:
-            - @annotation_reader
+            - @annotations.reader
             - @kernel
             - @router
     #Contient les listes stockée en session

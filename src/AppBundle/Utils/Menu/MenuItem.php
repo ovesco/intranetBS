@@ -14,9 +14,7 @@
 
 namespace AppBundle\Utils\Menu;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route as RouteAnnotation;
 use AppBundle\Utils\Menu\Menu as MenuAnnotation;
-use Symfony\Component\Routing\Router;
 
 /**
  * Class MenuItem
@@ -26,12 +24,6 @@ use Symfony\Component\Routing\Router;
  *
  */
 class MenuItem {
-
-    /**
-     * From route
-     * @var string
-     */
-    public $path;
 
     /**
      * From route
@@ -69,12 +61,15 @@ class MenuItem {
      */
     public $icon;
 
-    public function __construct(MenuAnnotation $menu, RouteAnnotation $route)
+    /**
+     * @param Menu $menu
+     * @param $routeName
+     */
+    public function __construct(MenuAnnotation $menu,$routeName)
     {
-        $this->path = $route->getPath();
-        $this->routeName = $route->getName();
-        //if null, label is replaced by path
-        $this->label = ($menu->getLabel() != null ? $menu->getLabel() : $this->path);
+        $this->routeName = $routeName;
+        //if null, label is replaced by routeName
+        $this->label = ($menu->getLabel() != null ? $menu->getLabel() : $this->routeName);
         $this->block = $menu->getBlock();
         $this->order = $menu->getOrder();
         $this->expanded = $menu->getExpanded();

@@ -39,7 +39,7 @@ twig:
         parametreService: "@parametres"
         #Service d'appel des liste dans twig
         list_caller: "@list_caller"
-        #service de generation des menu. Permet d'obtenir les route liée aux annotations @menu
+        #service de generation des menu. Permet d'obtenir les routes liée aux annotations @menu
         menu: "@menu"
     form:
         resources:

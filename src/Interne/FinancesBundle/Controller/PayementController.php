@@ -50,7 +50,7 @@ class PayementController extends Controller
     /**
      * Page for searching payement
      *
-     * @Route("/search", name="interne_finances_payement_search", options={"expose"=true})
+     * @Route("/search", options={"expose"=true})
      * @Menu("Recherche de payement",block="finances",order=3,icon="search")
      * @param Request $request
      * @return Response
@@ -85,7 +85,7 @@ class PayementController extends Controller
     /**
      * Return modal of the payement
      *
-     * @Route("/show/{payement}", name="interne_finances_payement_show", options={"expose"=true})
+     * @Route("/show/{payement}", options={"expose"=true})
      * @param Payement $payement
      * @ParamConverter("payement", class="InterneFinancesBundle:Payement")
      * @Template("InterneFinancesBundle:Payement:showModal.html.twig")
@@ -99,7 +99,7 @@ class PayementController extends Controller
     /**
      * Page for adding new payement (manualy or by uploading file)
      *
-     * @Route("/add", name="interne_finances_payement_add", options={"expose"=true})
+     * @Route("/add", options={"expose"=true})
      * @Menu("Ajout de payements",block="finances",order=4,icon="add")
      * @param Request $request
      * @Template("InterneFinancesBundle:Payement:page_saisie.html.twig")
@@ -221,7 +221,7 @@ class PayementController extends Controller
     /**
      * Page for validation of payements
      *
-     * @Route("/validation", name="interne_finances_payement_validation_list", options={"expose"=true})
+     * @Route("/validation", options={"expose"=true})
      * @Menu("Validation des payements",block="finances",order=5,icon="checkmark")
      * @param Request $request
      * @Template("InterneFinancesBundle:Payement:page_validation.html.twig")
@@ -246,7 +246,7 @@ class PayementController extends Controller
     /**
      * Validation form
      *
-     * @Route("/validation_form/{payement}", name="interne_finances_payement_validation_form", options={"expose"=true})
+     * @Route("/validation_form/{payement}", options={"expose"=true})
      * @param Request $request
      * @param Payement $payement
      * @ParamConverter("payement", class="InterneFinancesBundle:Payement")
@@ -300,7 +300,7 @@ class PayementController extends Controller
     /**
      * delete a payement
      *
-     * @Route("/delete/{payement}", name="interne_finances_payement_delete", options={"expose"=true})
+     * @Route("/delete/{payement}", options={"expose"=true})
      * @param Payement $payement
      * @ParamConverter("payement", class="InterneFinancesBundle:Payement")
      * @return Response
@@ -319,19 +319,6 @@ class PayementController extends Controller
         $response = new Response();
         return $response->setStatusCode(409);//Conflict
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

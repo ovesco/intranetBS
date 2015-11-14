@@ -21,60 +21,53 @@
 
 namespace AppBundle\Utils\Menu;
 
-use Doctrine\Common\Annotations\Reader;
+use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route as RouteAnnotation;
 use AppBundle\Utils\Menu\Menu as MenuAnnotation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\Routing\Router;
-
+use Symfony\Component\Routing\RouterInterface as Router;
+use Symfony\Component\Routing\Route;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 
 class MenuRenderer {
 
-    /**
-     * @var Reader
-     */
+    /** @var Reader  */
     protected $reader;
 
-    /**
-     * @var Kernel
-     */
+    /** @var Kernel  */
     protected $kernel;
 
-    /**
-     * @var Router
-     */
+    /** @var Router  */
     protected $router;
 
-
-    /**
-     * @var string
-     */
-    protected $menuAnnotationClass = 'AppBundle\\Utils\\Menu\\Menu';
-
-    /**
-     * @var string
-     */
-    protected $routeAnnotationClass = 'Symfony\\Component\\Routing\\Annotation\\Route';
-
-    /**
-     * @var array
-     */
+    /** @var  array */
     protected $controllersClass;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection  */
     protected $container;
+
+    /** @var boolean */
+    protected $compiled;
 
     public function __construct(Reader $reader,Kernel $kernel,Router $router){
         $this->reader = $reader;
         $this->kernel = $kernel;
         $this->router = $router;
         $this->container = new ArrayCollection();
+        $this->compiled = false;
+    }
 
+    /**
+     * La logique du service est mise dans cette fonction car elle ne doit pas
+     * avoir lieu dans le constructueur, cela evite les CircularDependencyInjectionException...
+     *
+     * On effectue cette methode à la premiere requete sur ce service.
+     */
+    public function compile()
+    {
         /* Load controllers class */
         $this->findControllersClass();
 
@@ -85,7 +78,10 @@ class MenuRenderer {
         }
         /* reoder menu item in collection */
         $this->reorderMenuItem();
+
+        $this->compiled = true;
     }
+
 
     /**
      * Return all the menu collection
@@ -94,6 +90,8 @@ class MenuRenderer {
      */
     public function getContainer()
     {
+        if(!$this->compiled){$this->compile();};
+
         return $this->container;
     }
 
@@ -104,8 +102,10 @@ class MenuRenderer {
      * @return null|ArrayCollection
      * @throws \Exception
      */
-    public function bloc($blockName)
+    public function getBloc($blockName)
     {
+        if(!$this->compiled){$this->compile();};
+
         if(!$this->container->containsKey($blockName))
         {
             throw new \Exception("Menu container didn't contain a block named: ".$blockName);
@@ -113,11 +113,11 @@ class MenuRenderer {
         return $this->container->get($blockName);
     }
 
-    /**
-     *
-     */
-    public function allBlockToCategorySearch()
+
+    public function getAllBlocksToCategorySearch()
     {
+        if(!$this->compiled){$this->compile();};
+
         $returned    = array();
 
         /** @var ArrayCollection $block */
@@ -156,50 +156,39 @@ class MenuRenderer {
         }
     }
 
-    /**
-     * @param $controlerClass
-     * @throws \InvalidArgumentException
-     */
-    protected function loadController($controlerClass)
+
+    protected function loadController($controllerClass)
     {
-        if (!class_exists($controlerClass)) {
-            throw new \InvalidArgumentException(sprintf('Class "%s" does not exist.', $controlerClass));
+        if (!class_exists($controllerClass)) {
+            throw new \InvalidArgumentException(sprintf('Class "%s" does not exist.', $controllerClass));
         }
 
-        $class = new \ReflectionClass($controlerClass);
+        /* create an class of the controller */
+        $class = new \ReflectionClass($controllerClass);
         if ($class->isAbstract()) {
-            throw new \InvalidArgumentException(sprintf('Annotations from class "%s" cannot be read as it is abstract.', $controlerClass));
+            throw new \InvalidArgumentException(sprintf('Annotations from class "%s" cannot be read as it is abstract.', $controllerClass));
         }
 
+        /* search in each method of the controller */
         foreach ($class->getMethods() as $method) {
-
-            /** @var MenuAnnotation $menuAnnotation */
-            $menuAnnotation = null;
-
-            /** @var RouteAnnotation $routeAnnotation */
-            $routeAnnotation = null;
-
+            /* search in each annotation of the method */
             foreach ($this->reader->getMethodAnnotations($method) as $annotation) {
 
-                if ($annotation instanceof $this->menuAnnotationClass) {
-                    $menuAnnotation = $annotation;
-                }
-                if ($annotation instanceof $this->routeAnnotationClass) {
-                    $routeAnnotation = $annotation;
-                }
-            }
+                if ($annotation instanceof MenuAnnotation) {
+                    /* search the corresponding route */
+                    /** @var Route $route */
+                    foreach($this->router->getRouteCollection() as $routeName => $route)
+                    {
+                        /* the class and method corresponding to this route */
+                        $routeController = $route->getDefault('_controller');
 
-            if($menuAnnotation != null)
-            {
-                if($routeAnnotation != null)
-                {
-                    $this->addMenuItem(new MenuItem($menuAnnotation,$routeAnnotation));
-                }
-                else
-                {
-                    throw new \InvalidArgumentException(
-                        sprintf('@Menu annotation should be accompanied with a @Route annotation in "%s", "%s" ',
-                            $method->class, $method->getName()));
+                        if($routeController == $controllerClass.'::'.$method->getName())
+                        {
+                            $this->addMenuItem(new MenuItem($annotation,$routeName));
+                        }
+                    }
+
+
                 }
             }
         }
