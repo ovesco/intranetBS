@@ -163,7 +163,8 @@
                         </div>
 
                         <div class="ui bottom attached segment">
-                            {{ list_caller.listById(constant('AppBundle\\Utils\\ListUtils\\ListContainer::Membre'),famille.membres|ids_for_routing)|raw }}
+
+                            {{ list_caller.FamilleMembres(famille)|raw }}
 
 
                         </div>

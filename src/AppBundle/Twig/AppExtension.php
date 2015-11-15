@@ -134,13 +134,14 @@ class AppExtension extends \Twig_Extension
         //create cache dir if dont exist
         if(!$fs->exists($env->getCache()))
         {
-            $fs-mkdir($env->getCache());
+            $fs->mkdir($env->getCache());
         }
 
         //create dir for templates in twig cache
         if(!$fs->exists($template_dir_path))
         {
-            $fs-mkdir($template_dir_path);
+
+            $fs->mkdir($template_dir_path);
         }
 
         if(!$fs->exists($template_path))

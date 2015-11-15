@@ -32,12 +32,12 @@
                     <div class="row">
                         <div class="eight wide column">
                             <h4 class="header">Créances</h4>
-                            {{ list_caller.listById(constant('AppBundle\\Utils\\ListUtils\\ListContainer::Creance'),debiteur.creances|ids_for_routing)|raw }}
+                            {{ list_caller.DebiteurCreances(debiteur)|raw }}
 
                         </div>
                         <div class="eight wide column">
                             <h4 class="header">Facture</h4>
-                            {{ list_caller.listById(constant('AppBundle\\Utils\\ListUtils\\ListContainer::Facture'),debiteur.factures|ids_for_routing)|raw }}
+                            {{ list_caller.DebiteurFactures(debiteur)|raw }}
                         </div>
                     </div>
                 </div>

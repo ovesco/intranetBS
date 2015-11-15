@@ -54,7 +54,7 @@ Recherche
                             <h4>Recherche détaillée</h4>
 
 
-                            {% include 'AppBundle:Search:search_membre_form.html.twig'  with {'searchForm':membreForm}%}
+                            {% include 'AppBundle:Membre:form_search.html.twig'  with {'searchForm':membreForm}%}
 
                         </div>
                     </div>
@@ -67,8 +67,7 @@ Recherche
 
                 <h2>Resultats</h2>
 
-
-                {{ list_caller.listInSession(list_key)|raw }}
+                {{ list_caller.Session(list_key)|raw }}
 
 
             </div>

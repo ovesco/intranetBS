@@ -141,7 +141,7 @@
                         </div>
 
                         <div class="ui bottom attached segment">
-                            {{ list_caller.listById(constant('AppBundle\\Utils\\ListUtils\\ListContainer::MembreFraterie'),membre.famille.membres|ids_for_routing)|raw }}
+                            {{ list_caller.MembreFraterie(membre)|raw }}
                         </div>
 
                     </div> <!-- /informations famille -->
@@ -163,7 +163,7 @@
                         </div>
 
                         <div class="ui bottom attached segment">
-                            {{ list_caller.listById(constant('AppBundle\\Utils\\ListUtils\\ListContainer::Attribution'),membre.attributions|ids_for_routing)|raw }}
+                            {{ list_caller.MembreAttributions(membre)|raw }}
 
                         </div>
                     </div>
@@ -179,8 +179,8 @@
                         </div>
 
                         <div class="ui bottom attached segment">
-                            {{ list_caller.listById(constant('AppBundle\\Utils\\ListUtils\\ListContainer::Distinction'),membre.distinctions|ids_for_routing)|raw }}
 
+                            {{ list_caller.MembreDistinctions(membre)|raw }}
                         </div>
 
                     </div>

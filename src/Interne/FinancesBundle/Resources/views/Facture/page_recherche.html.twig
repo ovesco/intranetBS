@@ -15,7 +15,7 @@
 
             <div class="twelve wide column">
 
-                {{ list_container.getModel(constant('AppBundle\\Utils\\ListRenderer\\Model::FactureSearchResults'), factures).render|raw }}
+                {{ list_caller.Session(list_key)|raw }}
 
             </div>
         </div>

@@ -39,12 +39,6 @@ services:
         arguments:
             - @doctrine.orm.entity_manager
 
-    #Contient touts des models de liste disponibles
-    list_container:
-        class: AppBundle\Utils\ListUtils\ListContainer
-        arguments:
-            - @twig
-            - @router
     #Permet le rendu des annotation @menu
     menu:
         class: AppBundle\Utils\Menu\MenuRenderer
@@ -59,7 +53,7 @@ services:
             - @session
             - @doctrine.orm.entity_manager
 
-    #Permet d'appeler des liste depuis twig
+    #Contient tout les listes crée: - Permet d'appeler les listes depuis twig - Permet d'appeler les liste depuis une route
     list_caller:
         class: AppBundle\Controller\ListCallerController
         arguments:

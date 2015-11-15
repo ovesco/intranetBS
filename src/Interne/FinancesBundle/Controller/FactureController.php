@@ -3,6 +3,7 @@
 namespace Interne\FinancesBundle\Controller;
 
 /* Symfony */
+use AppBundle\Utils\ListUtils\ListKey;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +31,8 @@ use AppBundle\Utils\Menu\Menu;
 
 /* Service */
 use AppBundle\Utils\Export\Pdf;
-
+use AppBundle\Utils\ListUtils\ListStorage;
+use AppBundle\Utils\ListUtils\ListContainer;
 /**
  * Class FactureController
  * @package Interne\FinancesBundle\Controller
@@ -53,10 +55,13 @@ class FactureController extends Controller
 
         $searchForm = $this->createForm(new FactureSearchType(),$factureSearch);
 
-        $results = array();
+
+        /** @var ListStorage $sessionContainer */
+        $sessionContainer = $this->get('list_storage');
+        $sessionContainer->setRepository(ListKey::FACTURES_SEARCH_RESULTS,'InterneFinancesBundle:Creance');
+
 
         $searchForm->handleRequest($request);
-
         if ($searchForm->isValid()) {
 
             $factureSearch = $searchForm->getData();
@@ -68,12 +73,14 @@ class FactureController extends Controller
 
             $results = $repository->search($factureSearch);
 
+            //set results in session
+            $sessionContainer->setObjects(ListKey::FACTURES_SEARCH_RESULTS,$results);
 
         }
 
 
         return $this->render('InterneFinancesBundle:Facture:page_recherche.html.twig',
-            array('searchForm'=>$searchForm->createView(),'factures'=>$results));
+            array('searchForm'=>$searchForm->createView(),'list_key'=>ListKey::FACTURES_SEARCH_RESULTS));
 
     }
 

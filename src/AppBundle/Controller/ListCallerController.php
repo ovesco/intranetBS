@@ -6,6 +6,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use AppBundle\Entity\Membre;
+use Interne\FinancesBundle\Entity\Debiteur;
+use AppBundle\Entity\Famille;
+use AppBundle\Utils\ListUtils\ListKey;
+
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use AppBundle\Utils\ListUtils\ListModels\ListModelsAttributions;
+use AppBundle\Utils\ListUtils\ListModels\ListModelsDistinctions;
+use AppBundle\Utils\ListUtils\ListModels\ListModelsMembre;
+use Interne\FinancesBundle\Utils\ListModels\ListModelsCreances;
+use Interne\FinancesBundle\Utils\ListModels\ListModelsFactures;
 
 /* Annotations */
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -19,78 +31,175 @@ use Symfony\Component\DependencyInjection\Container;
  *
  * Class ListCallerController
  * @package AppBundle\Controller
- * @Route("/list_call", service="list_caller")
+ * @Route("/list", service="list_caller")
  *
  */
 class ListCallerController extends Controller
 {
 
+    const CALL_BY_ROUTE = "route";
+    const CALL_BY_TWIG = "twig";
+    
     /**
-     * Ce constructeur est applé avec une valeur non null dans le cas
-     * où il est instancier comme service.
-     * Dans le cas du controller, le container est autrement (dans le framework).
-     *
      * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container = null){
 
         $this->setContainer($container);
-
-
     }
 
     /**
-     * Permet d'appeler une liste (de session) depuis le service disponible dans twig.
+     * Do not put this in constructor: this avoid circular referance of service
      *
-     * @param $key
-     * @return string
-     * @throws \Exception
+     * @return \Symfony\Bundle\FrameworkBundle\Routing\Router
      */
-    public function listInSession($key)
+    private function getRouter()
     {
-        $objects = $this->get('list_storage')->getObjects($key);
-        $model = $this->get('list_storage')->getModel($key);
+        return $this->get('router');
+    }
+
+    /**
+     * Do not put this in constructor: this avoid circular referance of service
+     *
+     * @return \Twig_Environment
+     */
+    private function getTwig()
+    {
+        return $this->get('twig');
+    }
+
+    /**
+     * Permet de retourner une liste en adaptant le rendu
+     * selon si l'appel est fait dans twig ou depuis une route
+     * @param $list
+     * @param $call
+     * @return Response
+     */
+    private function returnList($list,$call){
+        if($call == ListCallerController::CALL_BY_ROUTE){
+            return new Response($list);
+        }
+        else{
+            return $list;
+        }
+    }
+
+    
+    /**
+     * Permet d'appeler une liste (de session)
+     *
+     * @Route("/session/{key}/{call}", defaults={"call"="route"})
+     *
+     */
+    public function Session($key,$call = ListCallerController::CALL_BY_TWIG)
+    {
+        $items = $this->get('list_storage')->getObjects($key);
         $url = $this->generateUrl('app_listcaller_session',array('key'=>$key));
-        return $this->get('list_container')->getModel($model,$objects,$url)->render();
+        switch($key)
+        {
+            case ListKey::CREANCES_SEARCH_RESULTS:
+                $list = ListModelsCreances::getSearchResults($this->getTwig(),$this->getRouter(),$items,$url)->render();
+                return $this->returnList($list,$call);
+            case ListKey::FACTURES_SEARCH_RESULTS:
+                $list = ListModelsFactures::getSearchResults($this->getTwig(),$this->getRouter(),$items,$url)->render();
+                return $this->returnList($list,$call);
+            case ListKey::MEMBRES_SEARCH_RESULTS:
+                $list = ListModelsMembre::getDefault($this->getTwig(),$this->getRouter(),$items,$url)->render();
+                return $this->returnList($list,$call);
+
+        }
+
     }
+    
 
     /**
-     * Permet d'appeler une liste (d'entité) depuis le service disponible dans twig.
-     *
-     * @param $model
-     * @param $ids
-     * @return string
+     * @route("/membre/fraterie/{membre}/{call}", defaults={"call"="route"})
+     * @ParamConverter("membre", class="AppBundle:Membre")
+     * @param Membre $membre
+     * @param $call
+     * @return mixed
      */
-    public function listById($model,$ids){
-
-        $idsParsed = array_map('intval', explode('-', $ids));
-        $class = $this->get('list_container')->getRepresentedClass($model);
-        $repo = $this->getDoctrine()->getRepository($class);
-        $objects = $repo->findBy(array('id'=>$idsParsed));
-        $url = $this->generateUrl('app_listcaller_entity',array('model'=>$model,'ids'=>$ids));
-        return $this->get('list_container')->getModel($model,$objects,$url)->render();
-    }
-
-    /**
-     *
-     * @Route("/session_list/{key}")
-     *
-     */
-    public function sessionAction($key)
+    public function MembreFraterie(Membre $membre,$call = ListCallerController::CALL_BY_TWIG)
     {
-        return new Response($this->listInSession($key));
+        $items = $membre->getFamille()->getMembres();
+        $url = $this->getRouter()->generate('app_listcaller_membrefraterie',array('membre'=>$membre->getId()));
+        $list = ListModelsMembre::getFraterie($this->getTwig(),$this->getRouter(),$items,$url)->render();
+        return $this->returnList($list,$call);
     }
-
 
     /**
-     * Pattern of ids exemple: 23-34-5-6-7
-     * @Route("/entity_list/{model}/{ids}", requirements={ "ids": "([0-9]+-?)+"})
-     *
+     * @route("/membre/attributions/{membre}/{call}", defaults={"call"="route"})
+     * @ParamConverter("membre", class="AppBundle:Membre")
+     * @param Membre $membre
+     * @param $call
+     * @return mixed
      */
-    public function entityAction($model, $ids)
+    public function MembreAttributions(Membre $membre,$call = ListCallerController::CALL_BY_TWIG)
     {
-        return new Response($this->listById($model,$ids));
+        $items = $membre->getAttributions();
+        $url = $this->getRouter()->generate('app_listcaller_membreattributions',array('membre'=>$membre->getId()));
+        $list = ListModelsAttributions::getDefault($this->getTwig(),$this->getRouter(),$items,$url)->render();
+        return $this->returnList($list,$call);
     }
 
+    /**
+     * @route("/membre/distinctions/{membre}/{call}", defaults={"call"="route"})
+     * @ParamConverter("membre", class="AppBundle:Membre")
+     * @param Membre $membre
+     * @param $call
+     * @return mixed
+     */
+    public function MembreDistinctions(Membre $membre,$call = ListCallerController::CALL_BY_TWIG)
+    {
+        $items = $membre->getDistinctions();
+        $url = $this->getRouter()->generate('app_listcaller_membredistinctions',array('membre'=>$membre->getId()));
+        $list = ListModelsDistinctions::getDefault($this->getTwig(),$this->getRouter(),$items,$url)->render();
+        return $this->returnList($list,$call);
+    }
+
+    /**
+     * @route("/debiteur/creances/{debiteur}/{call}", defaults={"call"="route"})
+     * @ParamConverter("debiteur", class="InterneFinancesBundle:Debiteur")
+     * @param Debiteur $debiteur
+     * @param $call
+     * @return mixed
+     */
+    public function DebiteurCreances(Debiteur $debiteur,$call = ListCallerController::CALL_BY_TWIG)
+    {
+        $items = $debiteur->getCreances();
+        $url = $this->getRouter()->generate('app_listcaller_debiteurcreances',array('debiteur'=>$debiteur->getId()));
+        $list = ListModelsCreances::getDefault($this->getTwig(),$this->getRouter(),$items,$url)->render();
+        return $this->returnList($list,$call);
+    }
+
+    /**
+     * @route("/debiteur/factures/{debiteur}/{call}", defaults={"call"="route"})
+     * @ParamConverter("debiteur", class="InterneFinancesBundle:Debiteur")
+     * @param Debiteur $debiteur
+     * @param $call
+     * @return mixed
+     */
+    public function DebiteurFactures(Debiteur $debiteur,$call = ListCallerController::CALL_BY_TWIG)
+    {
+        $items = $debiteur->getFactures();
+        $url = $this->getRouter()->generate('app_listcaller_debiteurfactures',array('debiteur'=>$debiteur->getId()));
+        $list = ListModelsFactures::getDefault($this->getTwig(),$this->getRouter(),$items,$url)->render();
+        return $this->returnList($list,$call);
+    }
+
+    /**
+     * @route("/famille/membres/{famille}/{call}", defaults={"call"="route"})
+     * @ParamConverter("famille", class="AppBundle:Famille")
+     * @param Famille $famille
+     * @param $call
+     * @return mixed
+     */
+    public function FamilleMembres(Famille $famille,$call = ListCallerController::CALL_BY_TWIG)
+    {
+        $items = $famille->getMembres();
+        $url = $this->getRouter()->generate('app_listcaller_famillemembres',array('famille'=>$famille->getId()));
+        $list = ListModelsMembre::getDefault($this->getTwig(),$this->getRouter(),$items,$url)->render();
+        return $this->returnList($list,$call);
+    }
 
 }

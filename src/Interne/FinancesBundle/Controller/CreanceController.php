@@ -11,6 +11,7 @@ use Interne\FinancesBundle\Form\CreanceAddType;
 use Interne\FinancesBundle\Search\CreanceRepository;
 use Interne\FinancesBundle\Search\CreanceSearch;
 use Interne\FinancesBundle\Search\CreanceSearchType;
+use Interne\FinancesBundle\Utils\ListModels\ListModelsCreances;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -18,7 +19,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Utils\ListUtils\ListStorage;
-use AppBundle\Utils\ListUtils\ListContainer;
+
+use AppBundle\Utils\ListUtils\ListKey;
 
 
 /**
@@ -89,11 +91,12 @@ class CreanceController extends Controller
 
         $searchForm = $this->createForm(new CreanceSearchType(), $creanceSearch);
 
-        $results = array();
+        /** @var ListStorage $sessionContainer */
+        $sessionContainer = $this->get('list_storage');
+        $sessionContainer->setRepository(ListKey::CREANCES_SEARCH_RESULTS,'InterneFinancesBundle:Creance');
+
 
         $searchForm->handleRequest($request);
-
-
         if ($searchForm->isValid()) {
 
             $creanceSearch = $searchForm->getData();
@@ -105,15 +108,12 @@ class CreanceController extends Controller
 
             $results = $repository->search($creanceSearch);
 
-            /** @var ListStorage $sessionContainer */
-            $sessionContainer = $this->get('list_storage');
-            $sessionContainer->setRepository(CreanceController::SEARCH_RESULTS_LIST,'InterneFinancesBundle:Creance');
-            $sessionContainer->setModel(CreanceController::SEARCH_RESULTS_LIST,ListContainer::CreanceSearchResults);
-            $sessionContainer->setObjects(CreanceController::SEARCH_RESULTS_LIST,$results);
+            //set results in session
+            $sessionContainer->setObjects(ListKey::CREANCES_SEARCH_RESULTS,$results);
 
         }
 
         return array('searchForm'=>$searchForm->createView(),
-                'list_key'=>CreanceController::SEARCH_RESULTS_LIST);
+                'list_key'=>ListKey::CREANCES_SEARCH_RESULTS);
     }
 }

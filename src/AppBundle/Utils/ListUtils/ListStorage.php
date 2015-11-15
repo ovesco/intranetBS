@@ -48,27 +48,6 @@ class ListStorage {
 
     /**
      * @param string $containerKey
-     * @param string $model
-     */
-    public function setModel($containerKey,$model)
-    {
-        $key = ListStorage::SESSION_STORAGE_KEY.$containerKey.ListStorage::MODEL_KEY;
-        $this->session->set($key,$model);
-    }
-
-    /**
-     * @param string $containerKey
-     * @return string
-     */
-    public function getModel($containerKey)
-    {
-        $key = ListStorage::SESSION_STORAGE_KEY.$containerKey.ListStorage::MODEL_KEY;
-        return $this->session->get($key);
-    }
-
-
-    /**
-     * @param string $containerKey
      * @param string $entityRepositoryName
      */
     public function setRepository($containerKey,$entityRepositoryName)
@@ -210,7 +189,13 @@ class ListStorage {
         {
             throw new \Exception("ListStorage:getObjects: can't pass repositpry without -findBy()- methode");
         }
-        return $repository->findBy(array('id' => $this->getContainer($containerKey)->toArray()));
+        if($this->getContainer($containerKey)->isEmpty()){
+            return array();
+        }
+        else{
+            return $repository->findBy(array('id' => $this->getContainer($containerKey)->toArray()));
+        }
+
     }
 
 

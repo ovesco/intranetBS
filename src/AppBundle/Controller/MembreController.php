@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use AppBundle\Utils\ListUtils\ListStorage;
-use AppBundle\Utils\ListUtils\ListContainer;
+
 
 use AppBundle\Search\MembreSearch;
 use AppBundle\Search\MembreSearchType;
@@ -26,6 +26,8 @@ use AppBundle\Utils\Menu\Menu;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
+use AppBundle\Utils\ListUtils\ListKey;
 
 
 /**
@@ -292,7 +294,7 @@ class MembreController extends Controller {
      *
      * @Route("/search")
      * @Menu("Rechercher un membre",block="database",order=2, icon="search", expanded=true)
-     * @Template("AppBundle:Search:page_search.html.twig")
+     * @Template("AppBundle:Membre:page_search.html.twig")
      */
     public function searchAction(Request $request)
     {
@@ -300,7 +302,10 @@ class MembreController extends Controller {
         $membreSearch = new MembreSearch();
         $membreForm = $this->createForm(new MembreSearchType(),$membreSearch);
 
-        $results = array();
+
+        /** @var ListStorage $sessionContainer */
+        $sessionContainer = $this->get('list_storage');
+        $sessionContainer->setRepository(ListKey::MEMBRES_SEARCH_RESULTS,'AppBundle:Membre');
 
         $membreForm->handleRequest($request);
 
@@ -313,31 +318,26 @@ class MembreController extends Controller {
             $repository = $elasticaManager->getRepository('AppBundle:Membre');
             $results = $repository->search($membreSearch);
 
-            /** @var ListStorage $sessionContainer */
-            $sessionContainer = $this->get('list_storage');
-            $sessionContainer->setRepository(MembreController::SEARCH_RESULTS,'AppBundle:Membre');
-            $sessionContainer->setModel(MembreController::SEARCH_RESULTS,ListContainer::Membre);
 
             //get the search mode
             $mode = $membreForm->get("mode")->getData();
             switch($mode)
             {
                 case Mode::MODE_INCLUDE: //include new results with the previous
-                    $sessionContainer->addObjects(MembreController::SEARCH_RESULTS,$results);
+                    $sessionContainer->addObjects(ListKey::MEMBRES_SEARCH_RESULTS,$results);
                     break;
                 case Mode::MODE_EXCLUDE: //exclude new results to the previous
-                    $sessionContainer->removeObjects(MembreController::SEARCH_RESULTS,$results);
+                    $sessionContainer->removeObjects(ListKey::MEMBRES_SEARCH_RESULTS,$results);
                     break;
                 case Mode::MODE_STANDARD:
                 default:
-                    $sessionContainer->setObjects(MembreController::SEARCH_RESULTS,$results);
+                    $sessionContainer->setObjects(ListKey::MEMBRES_SEARCH_RESULTS,$results);
 
             }
-            $results = $sessionContainer->getObjects(MembreController::SEARCH_RESULTS);
 
         }
 
-        return array('membreForm'=>$membreForm->createView(),'results'=>$results);
+        return array('membreForm'=>$membreForm->createView(),'list_key'=>ListKey::MEMBRES_SEARCH_RESULTS);
     }
 
 

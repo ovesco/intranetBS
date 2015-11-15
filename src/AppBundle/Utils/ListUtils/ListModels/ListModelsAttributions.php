@@ -38,7 +38,7 @@ class ListModelsAttributions implements ListModelInterface
             return $attribution->getFonction();
         }));
         $list->addColumn(new Column('Unité', function (Attribution $attribution) use ($router) {
-            return '<a href="' . $router->generate('interne_voir_groupe', array('groupe' => $attribution->getGroupe()->getId())) . '">' . $attribution->getGroupe() . '</a>';
+            return '<a href="' . $router->generate('app_groupe_show', array('groupe' => $attribution->getGroupe()->getId())) . '">' . $attribution->getGroupe() . '</a>';
         }));
         $list->addColumn(new Column('Depuis le', function (Attribution $attribution) {
             return $attribution->getDateDebut();
