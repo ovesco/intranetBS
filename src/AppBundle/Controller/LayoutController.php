@@ -22,7 +22,7 @@ class LayoutController extends Controller
     public function mainMenuGenerateAction()
     {
         /** @var Membre $membre */
-        // FIXME : le suer devrait être validé en amont
+        // FIXME : le user devrait être validé en amont
         if ($this->getUser() != null) {
             $membre = $this->getUser()->getMembre();
             $groupes = $membre->getActiveGroupes();

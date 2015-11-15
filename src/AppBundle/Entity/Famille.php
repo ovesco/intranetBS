@@ -6,8 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
-
-//FinancesBundle
+use Interne\MailBundle\Entity\ReceiverFamille;
+use Interne\FinancesBundle\Entity\DebiteurFamille;
 
 /**
  * Famille
@@ -76,12 +76,20 @@ class Famille implements ExpediableInterface,ClassNameInterface
 
 
     /**
-     * @var ArrayCollection
+     * @var DebiteurFamille
      *
      * @ORM\OneToOne(targetEntity="Interne\FinancesBundle\Entity\DebiteurFamille",
      *                inversedBy="famille", cascade={"persist","remove"})
      */
     private $debiteur;
+
+    /**
+     * @var ReceiverFamille
+     *
+     * @ORM\OneToOne(targetEntity="Interne\MailBundle\Entity\ReceiverFamille",
+     *                inversedBy="membre", cascade={"persist","remove"})
+     */
+    private $receiver;
 
 
     /**
@@ -395,5 +403,30 @@ class Famille implements ExpediableInterface,ClassNameInterface
     {
         $this->getDebiteur()->addFacture($facture);
         return $this;
+    }
+
+    /**
+     * Set receiver
+     *
+     * @param \Interne\MailBundle\Entity\ReceiverFamille $receiver
+     *
+     * @return Famille
+     */
+    public function setReceiver(\Interne\MailBundle\Entity\ReceiverFamille $receiver = null)
+    {
+        $this->receiver = $receiver;
+        if(is_null($receiver->getFamille()))
+            $receiver->setFamille($this);
+        return $this;
+    }
+
+    /**
+     * Get receiver
+     *
+     * @return \Interne\MailBundle\Entity\ReceiverFamille
+     */
+    public function getReceiver()
+    {
+        return $this->receiver;
     }
 }

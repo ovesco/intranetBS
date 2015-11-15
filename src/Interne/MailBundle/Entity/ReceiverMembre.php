@@ -1,22 +1,21 @@
 <?php
 
-namespace Interne\FinancesBundle\Entity;
+namespace Interne\MailBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
 use AppBundle\Entity\Membre;
+
 /**
- * DebiteurMembre
- *
+ * Receiver
  *
  * @ORM\Entity
  */
-class DebiteurMembre extends Debiteur
+class ReceiverMembre extends Receiver
 {
     /**
      * @var Membre
      *
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Membre", mappedBy="debiteur")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Membre", mappedBy="receiver")
      * @ORM\JoinColumn(name="membre_id", referencedColumnName="id")
      */
     private $membre;
@@ -26,13 +25,13 @@ class DebiteurMembre extends Debiteur
      *
      * @param \AppBundle\Entity\Membre $membre
      *
-     * @return DebiteurMembre
+     * @return ReceiverMembre
      */
     public function setMembre(\AppBundle\Entity\Membre $membre = null)
     {
         $this->membre = $membre;
-
-
+        if(is_null($membre->getReceiver()))
+            $membre->setReceiver($this);
         return $this;
     }
 
@@ -45,19 +44,5 @@ class DebiteurMembre extends Debiteur
     {
         return $this->membre;
     }
-
-    /**
-     * @return Membre
-     */
-    public function getOwner()
-    {
-        return $this->getMembre();
-    }
-
-    /**
-     * @return string
-     */
-    public function getOwnerAsString(){
-        return $this->getMembre()->getPrenom().' '.$this->getMembre()->getNom();
-    }
 }
+

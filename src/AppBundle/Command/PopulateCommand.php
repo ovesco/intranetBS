@@ -9,6 +9,10 @@ use AppBundle\Entity\Telephone;
 use AppBundle\Utils\Email\Email;
 use ClassesWithParents\F;
 
+use Interne\MailBundle\Entity\MailElectronic;
+use Interne\MailBundle\Entity\MailPost;
+use Interne\MailBundle\Entity\ReceiverFamille;
+use Interne\MailBundle\Entity\ReceiverMembre;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -189,6 +193,19 @@ class PopulateCommand extends ContainerAwareCommand
                         $membre->addFacture($this->getFacture($membre->getDebiteur()));
                     }
 
+                    //ajout d'envois
+
+                    $receiver = new ReceiverMembre();
+                    $pmail = new MailPost();
+                    $pmail->setTitle('Envoi par poste');
+                    $receiver->addMail($pmail);
+                    $email = new MailElectronic();
+                    $email->setTitle('Envoi par e-mail');
+                    $receiver->addMail($email);
+                    $em->persist($receiver);
+                    $membre->setReceiver($receiver);
+
+
                     $famille->addMembre($membre);
                 }
 
@@ -204,6 +221,18 @@ class PopulateCommand extends ContainerAwareCommand
                 for($n = 0; $n < $nbFacture; $n++) {
                     $famille->addFacture($this->getFacture($famille->getDebiteur()));
                 }
+
+                //ajout d'envois
+
+                $receiver = new ReceiverFamille();
+                $pmail = new MailPost();
+                $pmail->setTitle('Envoi par poste');
+                $receiver->addMail($pmail);
+                $email = new MailElectronic();
+                $email->setTitle('Envoi par e-mail');
+                $receiver->addMail($email);
+                $em->persist($receiver);
+                $famille->setReceiver($receiver);
 
 
                 $em->persist($famille);

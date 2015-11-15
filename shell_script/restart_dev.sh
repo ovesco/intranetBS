@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-sh restart_database.sh
-sh fill_dev_database.sh
+sh shell_script/restart_database.sh
+sh shell_script/fill_dev_database.sh

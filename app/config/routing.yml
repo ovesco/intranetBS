@@ -38,5 +38,11 @@ seance:
     resource: "@InterneSeanceBundle/Resources/config/routing.yml"
     prefix:   /intranet/seance
 
+interne_mail:
+    resource: "@InterneMailBundle/Resources/config/routing.yml"
+    prefix:   /intranet/mail
+
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+
+

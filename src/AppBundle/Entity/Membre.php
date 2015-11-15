@@ -8,6 +8,8 @@ use Interne\FinancesBundle\Entity\DebiteurInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use FOS\ElasticaBundle\Configuration\Search;
+use Interne\FinancesBundle\Entity\DebiteurMembre;
+use Interne\MailBundle\Entity\ReceiverMembre;
 
 /**
  * Membre
@@ -116,12 +118,21 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     private $envoiFacture = 'Membre';
 
     /**
-     * @var ArrayCollection
+     * @var DebiteurMembre
      *
      * @ORM\OneToOne(targetEntity="Interne\FinancesBundle\Entity\DebiteurMembre",
      *                inversedBy="membre", cascade={"persist","remove"})
      */
     private $debiteur;
+
+    /**
+     * @var ReceiverMembre
+     *
+     * @ORM\OneToOne(targetEntity="Interne\MailBundle\Entity\ReceiverMembre",
+     *                inversedBy="membre", cascade={"persist","remove"})
+     */
+    private $receiver;
+
 
     /**
      * @var ArrayCollection
@@ -669,4 +680,29 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
         return $this;
     }
 
+
+    /**
+     * Set receiver
+     *
+     * @param \Interne\MailBundle\Entity\ReceiverMembre $receiver
+     *
+     * @return Membre
+     */
+    public function setReceiver(\Interne\MailBundle\Entity\ReceiverMembre $receiver = null)
+    {
+        $this->receiver = $receiver;
+        if(is_null($receiver->getMembre()))
+            $receiver->setMembre($this);
+        return $this;
+    }
+
+    /**
+     * Get receiver
+     *
+     * @return \Interne\MailBundle\Entity\ReceiverMembre
+     */
+    public function getReceiver()
+    {
+        return $this->receiver;
+    }
 }
