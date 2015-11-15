@@ -37,6 +37,9 @@ class Mode{
  * Avaliable formats: bold, underscore, blink, reverse.
  *
  *
+ * verbosity: VERBOSITY_DEBUG > VERBOSITY_VERY_VERBOSE > VERBOSITY_VERBOSE > VERBOSITY_NORMAL
+ *
+ *
  * Class CustomOutput
  * @package AppBundle\Command
  */

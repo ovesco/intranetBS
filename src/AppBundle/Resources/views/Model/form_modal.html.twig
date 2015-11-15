@@ -3,14 +3,14 @@
     {%  set buttonText = 'Ajouter' %}
 {% else %}
     {%  set header = 'Modifier le model' %}
-    {%  set buttonText = 'Ajouter' %}
+    {%  set buttonText = 'Modifier' %}
 {% endif %}
 
 
 <div id="form_model_modale" class="ui small modal">
     <i class="close icon"></i>
     <div class="header">
-        Ajouter un model de groupe
+        {{ header }}
     </div>
 
     <div class="content">

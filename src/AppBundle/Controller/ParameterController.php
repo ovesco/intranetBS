@@ -29,7 +29,7 @@ class ParameterController extends Controller
 {
 
     /**
-     * @Route("/list", name="interne_parametre_list")
+     * @Route("/list")
      * @Template("AppBundle:Parametre:page_list.html.twig")
      * @Menu("Configuration", block="parameter", icon="configure")
      * @return Response
@@ -40,11 +40,8 @@ class ParameterController extends Controller
         return array('parameters' => $parameters);
     }
 
-
-
-
     /**
-     * @Route("/edit/{parameter}", name="interne_parametre_edit")
+     * @Route("/edit/{parameter}")
      * @Template("AppBundle:Parametre:page_edit.html.twig")
      * @param Parameter $parameter
      * @ParamConverter("parameter", class="AppBundle:Parameter")
@@ -64,7 +61,7 @@ class ParameterController extends Controller
             $em->persist($parameter);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('interne_parametre_list'));
+            return $this->redirect($this->generateUrl('app_parameter_list'));
         }
 
         return array('form'=>$form->createView());

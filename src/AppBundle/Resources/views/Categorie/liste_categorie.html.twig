@@ -24,7 +24,7 @@
                 </div>
 
                 {% if categorie.isRemovable %}
-                <a class="ui mini icon red button popupable " data-content="Supprimer la catégorie" href="{{ path('categorie_remove',{categorie: categorie.id}) }}">
+                <a class="ui mini icon red button popupable " data-content="Supprimer la catégorie" href="{{ path('app_categorie_remove',{categorie: categorie.id}) }}">
                     <i class="remove icon"></i>
                 </a>
                 {% endif %}

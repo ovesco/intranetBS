@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Groupe;
+use AppBundle\Form\GroupeType;
 use AppBundle\Form\VoirGroupeType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -10,7 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
+use AppBundle\Utils\Menu\Menu;
 /**
  * Class GroupeController
  * @package AppBundle\Controller
@@ -21,14 +22,34 @@ class GroupeController extends Controller
 {
 
     /**
+     * Page qui affiche la hierarchie des groupes
+     *
+     * @Route("/gestion", options={"expose"=true})
+     * @param Request $request
+     * @return Response
+     * @Menu("Gestion des groupes", block="structure", order=1, icon="users")
+     */
+    public function gestionAction(Request $request)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $hiestGroupes = $em->getRepository('AppBundle:Groupe')->findHighestGroupes();
+
+        return $this->render('AppBundle:Groupe:page_gestion.html.twig', array(
+            'highestGroupes' => $hiestGroupes
+        ));
+    }
+
+    /**
      * @param $groupe Groupe le groupe
      * @return Response la vue
      *
      * @ParamConverter("groupe", class="AppBundle:Groupe")
-     * @Route("/voir/{groupe}", name="interne_voir_groupe", options={"expose"=true})
+     * @Route("/show/{groupe}", options={"expose"=true})
      * @Template("AppBundle:Groupe:page_voir_groupe.html.twig", vars={"groupe"})
      */
-    public function showGroupeAction($groupe) {
+    public function showAction($groupe) {
 
         return array(
             'listing'       => $this->get('listing'),
@@ -38,14 +59,14 @@ class GroupeController extends Controller
     }
 
     /**
-     * @Route("/edit/{groupe}", name="groupe_edit", options={"expose"=true})
+     * @Route("/edit/{groupe}", options={"expose"=true})
      *
      * @param Request $request
      * @param Groupe $groupe
      * @return Response
      * @ParamConverter("groupe", class="AppBundle:Groupe")
      */
-    public function editGroupeAction(Groupe $groupe,Request $request)
+    public function editAction(Groupe $groupe,Request $request)
     {
 
         //$editedGroupe = new Groupe();
@@ -64,18 +85,18 @@ class GroupeController extends Controller
 
         }
 
-        return $this->redirect($this->generateUrl('structure_hierarchie_groupe'));
+        return $this->redirect($this->generateUrl('app_groupe_gestion'));
     }
 
 
 
     /**
-     * @Route("/add", name="groupe_add", options={"expose"=true})
+     * @Route("/add", options={"expose"=true})
      *
      * @param Request $request
      * @return Response
      */
-    public function addGroupeAction(Request $request)
+    public function addAction(Request $request)
     {
         $newGroupe = new Groupe();
         $newGroupeForm = $this->createForm(new GroupeType(),$newGroupe);
@@ -89,17 +110,17 @@ class GroupeController extends Controller
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('structure_hierarchie_groupe'));
+        return $this->redirect($this->generateUrl('app_groupe_gestion'));
     }
 
 
     /**
-     * @Route("/get_form_modale", name="groupe_get_form_modale", options={"expose"=true})
+     * @Route("/get_form", options={"expose"=true})
      *
      * @param Request $request
      * @return Response
      */
-    public function getGroupeFormAjaxAction(Request $request)
+    public function getFormAction(Request $request)
     {
         if($request->isXmlHttpRequest())
         {
@@ -124,7 +145,7 @@ class GroupeController extends Controller
                 $groupe->setParent($groupeParent);
 
                 $groupeForm = $this->createForm(new GroupeType(),$groupe,
-                    array('action' => $this->generateUrl('groupe_add')));
+                    array('action' => $this->generateUrl('app_groupe_add')));
 
                 return $this->render('AppBundle:Groupe:groupe_modale_form.html.twig',array('form'=>$groupeForm->createView()));
 
@@ -135,7 +156,7 @@ class GroupeController extends Controller
                  * Modification d'un groupe existant
                  */
                 $groupeForm = $this->createForm(new GroupeType(),$groupe,
-                    array('action' => $this->generateUrl('groupe_edit',array('groupe'=>$idGroupe))));
+                    array('action' => $this->generateUrl('app_groupe_edit',array('groupe'=>$idGroupe))));
 
                 return $this->render('AppBundle:Groupe:groupe_modale_form.html.twig',array('form'=>$groupeForm->createView()));
             }

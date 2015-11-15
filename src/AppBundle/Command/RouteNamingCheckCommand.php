@@ -15,7 +15,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Route;
 
-use Doctrine\Common\Annotations\Reader;
+use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route as RouteAnnotation;
 
 class RouteNamingCheckCommand extends ContainerAwareCommand
@@ -54,12 +54,14 @@ class RouteNamingCheckCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $output->setVerbosity(OutputInterface::VERBOSITY_DEBUG);//set debug mode
+
         $this->customOutput = new CustomOutput($output);
         $this->output = $output;
         $this->input = $input;
 
         /** @var Reader reader */
-        $this->reader = $this->getContainer()->get('annotation_reader');
+        $this->reader = $this->getContainer()->get('annotations.reader');
 
         /** @var RouterInterface $router */
         $this->router = $this->getContainer()->get('router');

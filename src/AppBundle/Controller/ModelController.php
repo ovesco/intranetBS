@@ -10,7 +10,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
+use AppBundle\Utils\Menu\Menu;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /**
  * Class ModelController
@@ -22,93 +23,72 @@ class ModelController extends Controller
 {
 
     /**
-     * @Route("/get_form_modale", name="model_get_form_modale", options={"expose"=true})
+     * Page qui affiche les models de groupes
      *
+     * @Route("/gestion", options={"expose"=true})
      * @param Request $request
      * @return Response
+     * @Menu("Gestion des models", block="structure", order=3, icon="bookmark")
+     * @Template("AppBundle:Model:page_gestion.html.twig")
      */
-    public function getGroupeModelFormAjaxAction(Request $request)
-    {
+    public function gestionAction(Request $request) {
 
-        if ($request->isXmlHttpRequest()) {
+        //retourne toutes les fonctions
+        $models = $this->getDoctrine()->getRepository('AppBundle:Model')->findAll();
 
-            $em = $this->getDoctrine()->getManager();
+        return array('models' =>$models);
 
-            /*
-             * On envoie le formulaire en modal
-             */
-            $id = $request->request->get('idModel');
 
-            $model = null;
-            $modelForm = null;
-            if($id == null)
-            {
-                /*
-                 * Ajout
-                 */
-                $model = new Model();
-                $modelForm = $this->createForm(new ModelType(),$model,
-                    array('action' => $this->generateUrl('model_add')));
-            }
-            else
-            {
-                $model = $em->getRepository('AppBundle:Model')->find($id);
-                $modelForm = $this->createForm(new ModelType(),$model,
-                    array('action' => $this->generateUrl('model_edit',array('model'=>$id))));
-            }
-
-            return $this->render('AppBundle:Model:model_modale_form.html.twig',array('form'=>$modelForm->createView()));
-
-        }
-        return new Response();
     }
 
+
     /**
-     * @Route("/add", name="model_add", options={"expose"=true})
-     *
+     * @Route("/add", options={"expose"=true})
+     * @Template("AppBundle:Model:form_modal.html.twig")
      * @param Request $request
      * @return Response
      */
-    public function addGroupeModelAction(Request $request)
+    public function addAction(Request $request)
     {
-        $newModel = new Model();
-        $newModelForm = $this->createForm(new ModelType(),$newModel);
+        $model = new Model();
+        $modelForm = $this->createForm(new ModelType(),$model,array('action' => $this->generateUrl('app_model_add')));
 
-        $newModelForm->handleRequest($request);
+        $modelForm->handleRequest($request);
 
-        if($newModelForm->isValid())
+        if($modelForm->isValid())
         {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($newModel);
+            $em->persist($model);
             $em->flush();
+            return $this->redirect($this->generateUrl('app_model_gestion'));
         }
 
-        return $this->redirect($this->generateUrl('structure_gestion_model'));
+        return array('form'=>$modelForm->createView());
     }
 
     /**
-     * @Route("/edit/{model}", name="model_edit", options={"expose"=true})
-     *
+     * @Route("/edit/{model}", options={"expose"=true})
+     * @Template("AppBundle:Model:form_modal.html.twig")
      * @param Request $request
      * @param Model $model
      * @return Response
      * @ParamConverter("model", class="AppBundle:Model")
      */
-    public function editFonctionction(Model $model,Request $request)
+    public function editAction(Request $request,Model $model)
     {
 
-        $editedForm = $this->createForm(new ModelType(),$model);
+        $editedForm = $this->createForm(new ModelType(),$model,array('action' => $this->generateUrl('app_model_edit',array('model'=>$model->getId()))));
 
         $editedForm->handleRequest($request);
 
         if($editedForm->isValid())
         {
             $em = $this->getDoctrine()->getManager();
+            $em->persist($model);
             $em->flush();
-
+            return $this->redirect($this->generateUrl('app_model_gestion'));
         }
-
-        return $this->redirect($this->generateUrl('structure_gestion_model'));
+        return array('form'=>$editedForm->createView());
     }
 
 }

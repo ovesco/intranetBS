@@ -18,7 +18,7 @@
                             <div class="ui breadcrumb">
                                 {% for parent in groupe.parentsRecursive %}
                                     {% if groupe.id != parent.id %}
-                                        <a href="{{ path('interne_voir_groupe', {groupe: parent.id}) }}" class="section">{{ parent.nom }}</a>
+                                        <a href="{{ path('app_groupe_show', {groupe: parent.id}) }}" class="section">{{ parent.nom }}</a>
 
                                         {% if not loop.last %}
                                             <i class="right chevron icon divider"></i>
@@ -62,7 +62,7 @@
                                     </a>
 
                                     {% for enfant in groupe.enfants %}
-                                        <a href="{{ path('interne_voir_groupe', {groupe: enfant.id}) }}" class="item">
+                                        <a href="{{ path('app_groupe_show', {groupe: enfant.id}) }}" class="item">
                                             <div class="right floated ui blue circular label">{{ enfant.membersRecursive|length }}</div>
                                             <div class="content">
                                                 <p>{{ enfant.nom }}</p>

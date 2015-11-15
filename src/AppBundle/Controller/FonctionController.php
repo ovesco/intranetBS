@@ -2,16 +2,17 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\GroupeModel;
-use AppBundle\Form\GroupeModelType;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use AppBundle\Utils\Menu\Menu;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Form\FonctionType;
 use AppBundle\Entity\Fonction;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /**
  * Class StructureController
@@ -23,94 +24,74 @@ class FonctionController extends Controller
 {
 
     /**
-     * @Route("/get_form_modale", name="fonction_get_form_modale", options={"expose"=true})
+     * Page qui affiche les fonctions
      *
+     * @Route("/gestion", options={"expose"=true})
      * @param Request $request
      * @return Response
+     * @Menu("Gestion des fonctions", block="structure", order=2, icon="tag")
+     * @Template("AppBundle:Fonction:page_gestion.html.twig")
      */
-    public function getFonctionFormAjaxAction(Request $request)
-    {
+    public function gestionAction(Request $request) {
 
-        if ($request->isXmlHttpRequest()) {
+        //retourne toutes les fonctions
+        $fonctions = $this->getDoctrine()->getRepository('AppBundle:Fonction')->findAll();
 
-            $em = $this->getDoctrine()->getManager();
-            /*
-             * On envoie le formulaire en modal
-             */
-            $id = $request->request->get('idFonction');
-
-            $fonction = null;
-            $fonctionForm = null;
-            if ($id == null) {
-                /*
-                 * Ajout
-                 */
-                $fonction = new Fonction();
-                $fonctionForm = $this->createForm(new FonctionType(), $fonction,
-                    array('action' => $this->generateUrl('fonction_add')));
-
-            } else {
-                /*
-                 * Modification
-                 */
-                $fonction = $em->getRepository('AppBundle:Fonction')->find($id);
-                $fonctionForm = $this->createForm(new FonctionType(), $fonction,
-                    array('action' => $this->generateUrl('fonction_edit',array('fonction'=>$id))));
-
-            }
-
-            return $this->render('AppBundle:Fonction:fonction_modale_form.html.twig', array('form' => $fonctionForm->createView()));
-
-        }
+        return array('fonctions' =>$fonctions);
     }
 
     /**
-     * @Route("/add", name="fonction_add", options={"expose"=true})
-     *
+     * @Route("/add", options={"expose"=true})
      * @param Request $request
      * @return Response
+     * @Template("AppBundle:Fonction:form_modal.html.twig")
      */
-    public function addFonctionAction(Request $request)
+    public function addAction(Request $request)
     {
-        $newFonction = new Fonction();
-        $newFonctionForm = $this->createForm(new FonctionType(),$newFonction);
+        $fonction = new Fonction();
+        $addForm = $this->createForm(new FonctionType(),$fonction,array('action' => $this->generateUrl('app_fonction_add')));
 
-        $newFonctionForm->handleRequest($request);
+        $addForm->handleRequest($request);
 
-        if($newFonctionForm->isValid())
+        if($addForm->isValid())
         {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($newFonction);
+            $em->persist($fonction);
             $em->flush();
+            return $this->redirect($this->generateUrl('app_fonction_gestion'));
         }
 
-        return $this->redirect($this->generateUrl('structure_gestion_fonctions'));
+        return array('form'=>$addForm->createView());
     }
 
     /**
-     * @Route("/edit/{fonction}", name="fonction_edit", options={"expose"=true})
-     *
+     * @Route("/edit/{fonction}", options={"expose"=true})
      * @param Request $request
      * @param Fonction $fonction
      * @return Response
      * @ParamConverter("fonction", class="AppBundle:Fonction")
+     * @Template("AppBundle:Fonction:form_modal.html.twig")
      */
-    public function editFonctionction(Fonction $fonction,Request $request)
+    public function editAction(Request $request,Fonction $fonction)
     {
 
-        //$editedGroupe = new Groupe();
-        $editedForm = $this->createForm(new FonctionType(),$fonction);
+        $editedForm = $this->createForm(
+            new FonctionType(),
+            $fonction,
+            array('action' => $this->generateUrl('app_fonction_edit',array('fonction'=>$fonction->getId()))));
 
         $editedForm->handleRequest($request);
 
         if($editedForm->isValid())
         {
             $em = $this->getDoctrine()->getManager();
+            $em->persist($fonction);
             $em->flush();
+            return $this->redirect($this->generateUrl('app_fonction_gestion'));
 
         }
 
-        return $this->redirect($this->generateUrl('structure_gestion_fonctions'));
+        return array('form'=>$editedForm->createView());
     }
 
 }

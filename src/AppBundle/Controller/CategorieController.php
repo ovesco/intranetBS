@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManager;
+use AppBundle\Utils\Menu\Menu;
 
 /* Entity */
 use AppBundle\Entity\Categorie;
@@ -31,35 +32,31 @@ class CategorieController extends Controller
     /**
      * Page qui affiche les categorie de groupes
      *
-     * @Route("/liste", options={"expose"=true})
+     * @Route("/list", options={"expose"=true})
      * @param Request $request
      * @return Response
-     *
+     * @Menu("Gestion des catégories", block="structure", order=4, icon="list")
      */
-    public function listeAction(Request $request) {
-
-        $em = $this->getDoctrine()->getManager();
+    public function listAction(Request $request) {
 
         //retourne toutes les fonctions
-        $categories = $em->getRepository('AppBundle:Categorie')->findAll();
+        $categories = $this->getDoctrine()->getRepository('AppBundle:Categorie')->findAll();
 
         return $this->render('AppBundle:Categorie:page_liste.html.twig',array(
             'categories' =>$categories));
-
-
     }
 
     /**
-     * @Route("/new", options={"expose"=true})
+     * @Route("/add", options={"expose"=true})
      * @Template("AppBundle:Categorie:modal_form.html.twig")
      * @param Request $request
      * @return Response
      */
-    public function newAction(Request $request)
+    public function addAction(Request $request)
     {
         $new = new Categorie();
         $newForm = $this->createForm(new CategorieType(),$new,
-            array('action' => $this->generateUrl('app_categorie_new')));
+            array('action' => $this->generateUrl('app_categorie_add')));
 
         $newForm->handleRequest($request);
 
@@ -68,7 +65,7 @@ class CategorieController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($new);
             $em->flush();
-            return $this->redirect($this->generateUrl('app_categorie_liste'));
+            return $this->redirect($this->generateUrl('app_categorie_list'));
         }
 
         return array('form'=>$newForm->createView());
@@ -93,7 +90,7 @@ class CategorieController extends Controller
         {
             $em = $this->getDoctrine()->getManager();
             $em->flush();
-            return $this->redirect($this->generateUrl('app_categorie_liste'));
+            return $this->redirect($this->generateUrl('app_categorie_list'));
         }
         return array('form'=>$editedForm->createView());
     }
@@ -125,7 +122,7 @@ class CategorieController extends Controller
                 'Impossible de supprimer cette categorie'
             );
         }
-        return $this->redirect($this->generateUrl('app_categorie_liste'));
+        return $this->redirect($this->generateUrl('app_categorie_list'));
     }
 
 
