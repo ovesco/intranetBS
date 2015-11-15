@@ -17,7 +17,7 @@ security:
             form_login:
                 login_path: /login
                 check_path: /login_check
-                default_target_path: /interne
+                default_target_path: /intranet
 
             logout:
                 path:   /logout
@@ -25,4 +25,4 @@ security:
 
 
     access_control:
-        - { path: ^/interne, roles: ROLE_ADMIN}
+        - { path: ^/intranet, roles: ROLE_ADMIN}
