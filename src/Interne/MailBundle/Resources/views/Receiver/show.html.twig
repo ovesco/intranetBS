@@ -1,0 +1,12 @@
+
+<div class="ui button" id="addMailToReceiver" data-id="{{ receiver.id }}">Ajouter un envois</div>
+
+{{ list_caller.ReceiverMails(receiver)|raw }}
+
+
+{# javscript pour l'interface du receiver  #}
+{% javascripts
+'@InterneMailBundle/Resources/public/js/Receiver/show.js'
+%}
+<script src="{{ asset_url }}"></script>
+{% endjavascripts %}

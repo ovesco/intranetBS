@@ -19,6 +19,10 @@ namespace AppBundle\Entity;
  */
 class Expediable
 {
+    const OWNER_ENTITY = "ownerEntity";
+    const ADDRESS = "adresse";
+    const EMAIL = "email";
+
     private $callerEntity;
     private $callerClass;
 
@@ -68,7 +72,7 @@ class Expediable
                 $adresse = $entity->getContact()->getAdresse();
                 if (!is_null($adresse)) {
                     if ($adresse->isExpediable()) {
-                        return array('ownerEntity'=>$entity,'adresse'=>$adresse);
+                        return array(Expediable::OWNER_ENTITY=>$entity,Expediable::ADDRESS=>$adresse);
                     }
                 }
             }
@@ -89,7 +93,7 @@ class Expediable
                     foreach($emails as $email)
                     {
                         if ($email->isExpediable()) {
-                            $listeEmails[] = array('ownerEntity'=>$entity,'email'=>$email);
+                            $listeEmails[] = array(Expediable::OWNER_ENTITY=>$entity,Expediable::EMAIL=>$email);
                         }
                     }
                 }

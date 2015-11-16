@@ -17,6 +17,7 @@ class AppKernel extends Kernel
     {
         date_default_timezone_set('Europe/Zurich');
         parent::__construct($environment, $debug);
+        //ini_set('memory_limit', '256M');
     }
 
     public function registerBundles()

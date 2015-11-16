@@ -43,6 +43,7 @@ abstract class Receiver
      *                mappedBy="receiver", cascade={"persist","remove"})
      */
     private $mails;
+
     /**
      * Constructor
      */
@@ -50,6 +51,8 @@ abstract class Receiver
     {
         $this->mails = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
+    abstract function getOwner();
 
     /**
      * Add mail
@@ -61,7 +64,10 @@ abstract class Receiver
     public function addMail(\Interne\MailBundle\Entity\Mail $mail)
     {
         $this->mails[] = $mail;
-
+        if($mail->getReceiver() != $this)
+        {
+            $mail->setReceiver($this);
+        }
         return $this;
     }
 
@@ -73,6 +79,7 @@ abstract class Receiver
     public function removeMail(\Interne\MailBundle\Entity\Mail $mail)
     {
         $this->mails->removeElement($mail);
+        $mail->setReceiver(null);
     }
 
     /**

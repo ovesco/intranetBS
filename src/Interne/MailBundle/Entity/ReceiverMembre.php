@@ -4,6 +4,7 @@ namespace Interne\MailBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\Membre;
+use AppBundle\Entity\ExpediableInterface;
 
 /**
  * Receiver
@@ -41,6 +42,14 @@ class ReceiverMembre extends Receiver
      * @return \AppBundle\Entity\Membre
      */
     public function getMembre()
+    {
+        return $this->membre;
+    }
+
+    /**
+     * @return ExpediableInterface
+     */
+    public function getOwner()
     {
         return $this->membre;
     }

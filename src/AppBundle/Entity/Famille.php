@@ -87,7 +87,7 @@ class Famille implements ExpediableInterface,ClassNameInterface
      * @var ReceiverFamille
      *
      * @ORM\OneToOne(targetEntity="Interne\MailBundle\Entity\ReceiverFamille",
-     *                inversedBy="membre", cascade={"persist","remove"})
+     *                inversedBy="famille", cascade={"persist","remove"})
      */
     private $receiver;
 

@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller;
 
+use Interne\MailBundle\Utils\ListModels\ListModelsMail;
+use Interne\MailBundle\Entity\Receiver;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -202,4 +204,18 @@ class ListCallerController extends Controller
         return $this->returnList($list,$call);
     }
 
+    /**
+     * @route("/receiver/mails/{receiver}/{call}", defaults={"call"="route"})
+     * @ParamConverter("receiver", class="InterneMailBundle:Receiver")
+     * @param Receiver $receiver
+     * @param $call
+     * @return mixed
+     */
+    public function ReceiverMails(Receiver $receiver,$call = ListCallerController::CALL_BY_TWIG)
+    {
+        $items = $receiver->getMails();
+        $url = $this->getRouter()->generate('app_listcaller_receivermails',array('receiver'=>$receiver->getId()));
+        $list = ListModelsMail::getDefault($this->getTwig(),$this->getRouter(),$items,$url)->render();
+        return $this->returnList($list,$call);
+    }
 }

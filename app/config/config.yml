@@ -30,6 +30,8 @@ framework:
     http_method_override: true
     serializer:
         enabled: true
+    profiler:
+        collect: true
 
 # Twig Configuration
 twig:
@@ -60,6 +62,7 @@ assetic:
         - InterneOrganisationBundle
         - AppBundle
         - InterneSeanceBundle
+        - InterneMailBundle
     write_to:       %kernel.root_dir%/../web/static/
 
     #java: /usr/bin/java

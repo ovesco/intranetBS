@@ -173,7 +173,7 @@ class Email
      *
      * @param \AppBundle\Entity\Contact $contact
      *
-     * @return ContactInformation
+     * @return Email
      */
     public function setContact(\AppBundle\Entity\Contact $contact = null)
     {

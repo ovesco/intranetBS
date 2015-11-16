@@ -97,6 +97,11 @@ class Adresse
         return  $this->getRue() . ', ' . $this->getNpa() . ' ' . $this->getLocalite();
     }
 
+    public function toPostalFormat()
+    {
+        return  $this->getRue() .PHP_EOL. $this->getNpa() . ' ' . $this->getLocalite();
+    }
+
     /**
      * Get rue
      *
@@ -237,7 +242,7 @@ class Adresse
      *
      * @param \AppBundle\Entity\Contact $contact
      *
-     * @return ContactInformation
+     * @return Contact
      */
     public function setContact(\AppBundle\Entity\Contact $contact = null)
     {

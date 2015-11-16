@@ -214,6 +214,25 @@
                     </div>
                 </div> <!-- history -->
 
+
+                <div class="row">
+                    <div class="column">
+                        <div class="ui top attached message">
+                            <div class="header"><h3><i class="money icon"></i>Envois</h3></div>
+                        </div>
+
+                        <div class="ui bottom attached segment">
+
+
+                            {{ render(controller('InterneMailBundle:Receiver:show', { 'receiver': membre.receiver.id })) }}
+
+
+                        </div>
+
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </div>

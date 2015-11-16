@@ -9,8 +9,7 @@ use AppBundle\Entity\Telephone;
 use AppBundle\Utils\Email\Email;
 use ClassesWithParents\F;
 
-use Interne\MailBundle\Entity\MailElectronic;
-use Interne\MailBundle\Entity\MailPost;
+use Interne\MailBundle\Entity\Mail;
 use Interne\MailBundle\Entity\ReceiverFamille;
 use Interne\MailBundle\Entity\ReceiverMembre;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -196,10 +195,10 @@ class PopulateCommand extends ContainerAwareCommand
                     //ajout d'envois
 
                     $receiver = new ReceiverMembre();
-                    $pmail = new MailPost();
+                    $pmail = new Mail();
                     $pmail->setTitle('Envoi par poste');
                     $receiver->addMail($pmail);
-                    $email = new MailElectronic();
+                    $email = new Mail();
                     $email->setTitle('Envoi par e-mail');
                     $receiver->addMail($email);
                     $em->persist($receiver);
@@ -225,10 +224,10 @@ class PopulateCommand extends ContainerAwareCommand
                 //ajout d'envois
 
                 $receiver = new ReceiverFamille();
-                $pmail = new MailPost();
+                $pmail = new Mail();
                 $pmail->setTitle('Envoi par poste');
                 $receiver->addMail($pmail);
-                $email = new MailElectronic();
+                $email = new Mail();
                 $email->setTitle('Envoi par e-mail');
                 $receiver->addMail($email);
                 $em->persist($receiver);
