@@ -9,9 +9,9 @@ use AppBundle\Entity\Telephone;
 use AppBundle\Utils\Email\Email;
 use ClassesWithParents\F;
 
-use Interne\MailBundle\Entity\Mail;
-use Interne\MailBundle\Entity\ReceiverFamille;
-use Interne\MailBundle\Entity\ReceiverMembre;
+use AppBundle\Entity\Mail;
+use AppBundle\Entity\ReceiverFamille;
+use AppBundle\Entity\ReceiverMembre;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -197,9 +197,11 @@ class PopulateCommand extends ContainerAwareCommand
                     $receiver = new ReceiverMembre();
                     $pmail = new Mail();
                     $pmail->setTitle('Envoi par poste');
+                    $pmail->setSender($membre->getSender());
                     $receiver->addMail($pmail);
                     $email = new Mail();
                     $email->setTitle('Envoi par e-mail');
+                    $email->setSender($membre->getSender());
                     $receiver->addMail($email);
                     $em->persist($receiver);
                     $membre->setReceiver($receiver);

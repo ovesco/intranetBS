@@ -2,8 +2,9 @@
 
 namespace AppBundle\Controller;
 
-use Interne\MailBundle\Utils\ListModels\ListModelsMail;
-use Interne\MailBundle\Entity\Receiver;
+use AppBundle\Utils\ListUtils\ListModels\ListModelsMail;
+use AppBundle\Entity\Receiver;
+use AppBundle\Entity\Sender;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -108,9 +109,7 @@ class ListCallerController extends Controller
             case ListKey::MEMBRES_SEARCH_RESULTS:
                 $list = ListModelsMembre::getDefault($this->getTwig(),$this->getRouter(),$items,$url)->render();
                 return $this->returnList($list,$call);
-
         }
-
     }
     
 
@@ -216,6 +215,36 @@ class ListCallerController extends Controller
         $items = $receiver->getMails();
         $url = $this->getRouter()->generate('app_listcaller_receivermails',array('receiver'=>$receiver->getId()));
         $list = ListModelsMail::getDefault($this->getTwig(),$this->getRouter(),$items,$url)->render();
+        return $this->returnList($list,$call);
+    }
+
+    /**
+     * @route("/sender/mails/not_sent/{sender}/{call}", defaults={"call"="route"})
+     * @ParamConverter("sender", class="InterneMailBundle:Sender")
+     * @param Sender $sender
+     * @param $call
+     * @return mixed
+     */
+    public function SenderMailsNotSent(Sender $sender,$call = ListCallerController::CALL_BY_TWIG)
+    {
+        $items = $sender->getNotSentMails();
+        $url = $this->getRouter()->generate('app_listcaller_sendermailsnotsent',array('sender'=>$sender->getId()));
+        $list = ListModelsMail::getMyMail($this->getTwig(),$this->getRouter(),$items,$url)->render();
+        return $this->returnList($list,$call);
+    }
+
+    /**
+     * @route("/sender/mails/sent/{sender}/{call}", defaults={"call"="route"})
+     * @ParamConverter("sender", class="InterneMailBundle:Sender")
+     * @param Sender $sender
+     * @param $call
+     * @return mixed
+     */
+    public function SenderMailsSent(Sender $sender,$call = ListCallerController::CALL_BY_TWIG)
+    {
+        $items = $sender->getSentMails();
+        $url = $this->getRouter()->generate('app_listcaller_sendermailssent',array('sender'=>$sender->getId()));
+        $list = ListModelsMail::getMyMail($this->getTwig(),$this->getRouter(),$items,$url)->render();
         return $this->returnList($list,$call);
     }
 }

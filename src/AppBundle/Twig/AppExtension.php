@@ -42,7 +42,8 @@ class AppExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'apply_filter' => new \Twig_Function_Method($this, 'applyFilter')
+            'apply_filter' => new \Twig_Function_Method($this, 'applyFilter'),
+            'help' => new \Twig_Function_Method($this, 'help',array('is_safe' => array('html')))//is_sage = raw filter
         );
     }
 
@@ -112,7 +113,15 @@ class AppExtension extends \Twig_Extension
     /**
      * Apply twig filter of the environment by using theirs names (as string).
      *
+     * This is usefull for using twig filter as string variable (cf. exemple).
+     *
+     * Exemple:
+     *      {% set variable = "upper" %}
+     *      {{ value|apply_filter(variable) }}
+     *
      * Exemple: {{ value|apply_filter("upper|lower") }}
+     *
+     * @author Uffer
      *
      * @param \Twig_Environment $env
      * @param array $context
@@ -165,6 +174,19 @@ class AppExtension extends \Twig_Extension
         $env->setLoader($old_loader);
 
         return $rendered;
+    }
+
+    /**
+     * This method print a help icon with a text as popup
+     *
+     * @author Uffer 18.11.2015
+     * @param $html_popup
+     * @return string
+     */
+    public function help($html_popup)
+    {
+        $help =  '<i class="ui help circle orange icon popupable" data-html="'.$html_popup.'"></i>';
+        return $help;
     }
 
 }

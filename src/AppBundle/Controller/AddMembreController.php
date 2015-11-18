@@ -58,12 +58,6 @@ use AppBundle\Form\AddMembre\InfosMembreType;
  *
  *
  *
- *
- *
- *
- *
- *
- *
  * Class AddMembreController
  * @package AppBundle\Controller
  * @Route("/add_membre")

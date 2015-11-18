@@ -1,3 +1,0 @@
-interne_mail_controllers:
-    resource: "@InterneMailBundle/Controller/"
-    type:     annotation

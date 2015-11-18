@@ -49,6 +49,9 @@ class Contact
     {
         $this->telephones = new ArrayCollection();
         $this->emails = new ArrayCollection();
+
+        //un contact à forcement une adresse (même vide)
+        $this->adresse = new Adresse();
     }
 
     /**

@@ -1,5 +1,0 @@
-services:
-    interne_mail.document_storage:
-        class: Interne\MailBundle\Utils\DocumentStorage
-        arguments:
-            - %kernel.root_dir%

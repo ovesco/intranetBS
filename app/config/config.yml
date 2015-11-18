@@ -56,13 +56,12 @@ assetic:
     debug:          "%kernel.debug%"
     use_controller: false
     bundles:
+        - AppBundle
         - InterneFinancesBundle
         - InterneSecurityBundle
         - InterneGalerieBundle
         - InterneOrganisationBundle
-        - AppBundle
         - InterneSeanceBundle
-        - InterneMailBundle
     write_to:       %kernel.root_dir%/../web/static/
 
     #java: /usr/bin/java

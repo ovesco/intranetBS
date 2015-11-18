@@ -11,9 +11,11 @@
     <div class="row">
         <div class="column">
 
-            <h3>Liste des paramètres de l'intranet</h3>
+            <h3>Liste des paramètres de l'intranet
+                {{ help("Les paramètres de l'application permettent de modifier certaines valeurs utilisées dans de nombeux endroits, tel que le nom du groupe scout par exemple.") }}
+            </h3>
 
-            <p>Les paramètres de l'application permettent de modifier certaines valeurs utilisées dans de nombeux endroits, tel que le nom du groupe scout par exemple.</p>
+
 
             <div class="ui accordion segment">
                 {% for parameter in parameters %}

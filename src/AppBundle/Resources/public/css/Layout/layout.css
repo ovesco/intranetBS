@@ -12,3 +12,13 @@ a.anchor {
 }
 
 
+#main-menu #main-logo {
+    width: 49px;
+    height: 52px;
+    margin-right: 10px
+}
+
+#layout-search-input:focus {
+    background: rgba(255, 255, 255, 0.92)
+}
+

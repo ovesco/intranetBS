@@ -1,0 +1,37 @@
+{% extends 'AppBundle:Layout:layout.html.twig' %}
+
+{% block titre %}Mes envois{% endblock %}
+
+{% block content %}
+
+<div class="ui page grid">
+    <div class="row">
+        <div class="column">
+            <div class="ui top attached message">
+                <div class="header"><h3><i class="send icon"></i>Mes envois en attente {{ help("Il s'agit des envois qui n'on encore jamais été envoyé par e-mail, ni imprimé.") }} </h3></div>
+            </div>
+            <div class="ui bottom attached segment">
+                {{ list_caller.SenderMailsNotSent(sender)|raw }}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="column">
+            <div class="ui top attached message">
+                <div class="header"><h3><i class="send icon"></i>Mes envois déjà effectué {{ help("il s'agit des envois déjà envoyé par e-mail ou imprimé.") }}</h3></div>
+            </div>
+            <div class="ui bottom attached segment">
+                {{ list_caller.SenderMailsSent(sender)|raw }}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+
+
+

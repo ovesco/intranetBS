@@ -65,10 +65,15 @@ services:
         arguments:
             - @service_container
 
+    #Sauve un document uploader dans le bon dossier
+    document_storage:
+        class: AppBundle\Utils\Document\DocumentStorage
+        arguments:
+            - %kernel.root_dir%
+
     # Twig
     # Extensions twig qui permettent de mettre en place des filtres
     # personnalisés
-
     app.twig.validation_extension:
         class: AppBundle\Twig\ValidationExtension
         arguments:

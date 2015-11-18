@@ -9,7 +9,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use FOS\ElasticaBundle\Configuration\Search;
 use Interne\FinancesBundle\Entity\DebiteurMembre;
-use Interne\MailBundle\Entity\ReceiverMembre;
 
 /**
  * Membre
@@ -103,9 +102,7 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     private $validity;
 
 
-    /*
-     * ====== FinancesBundle =======
-     */
+
     /**
      * Cette propriété détermine si les cérances détenues par ce membre sont facturées
      * à la famille ou au membre lui même.
@@ -128,11 +125,18 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     /**
      * @var ReceiverMembre
      *
-     * @ORM\OneToOne(targetEntity="Interne\MailBundle\Entity\ReceiverMembre",
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\ReceiverMembre",
      *                inversedBy="membre", cascade={"persist","remove"})
      */
     private $receiver;
 
+    /**
+     * @var SenderMembre
+     *
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\SenderMembre",
+     *                inversedBy="membre", cascade={"persist","remove"})
+     */
+    private $sender;
 
     /**
      * @var ArrayCollection
@@ -141,10 +145,6 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
      */
     private $historique;
 
-
-    /*
-     * ===== History Bundle ====
-     */
 
     /**
      * Constructor
@@ -161,9 +161,15 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
 
         //un membre a forcement un debiteur
         $this->debiteur = new DebiteurMembre();
+        $this->debiteur->setMembre($this);
 
         //un membre a forcement un receiver
         $this->receiver = new ReceiverMembre();
+        $this->receiver->setMembre($this);
+
+        //un membre a forcement un sender
+        $this->sender = new SenderMembre();
+        $this->sender->setMembre($this);
     }
 
 
@@ -681,11 +687,11 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     /**
      * Set receiver
      *
-     * @param \Interne\MailBundle\Entity\ReceiverMembre $receiver
+     * @param ReceiverMembre $receiver
      *
      * @return Membre
      */
-    public function setReceiver(\Interne\MailBundle\Entity\ReceiverMembre $receiver = null)
+    public function setReceiver(ReceiverMembre $receiver = null)
     {
         $this->receiver = $receiver;
         if(is_null($receiver->getMembre()))
@@ -696,10 +702,35 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     /**
      * Get receiver
      *
-     * @return \Interne\MailBundle\Entity\ReceiverMembre
+     * @return ReceiverMembre
      */
     public function getReceiver()
     {
         return $this->receiver;
+    }
+
+    /**
+     * Set sender
+     *
+     * @param SenderMembre $sender
+     *
+     * @return Membre
+     */
+    public function setSender(SenderMembre $sender = null)
+    {
+        $this->sender = $sender;
+        if(is_null($sender->getMembre()))
+            $sender->setMembre($this);
+        return $this;
+    }
+
+    /**
+     * Get sender
+     *
+     * @return SenderMembre
+     */
+    public function getSender()
+    {
+        return $this->sender;
     }
 }

@@ -1,0 +1,14 @@
+{# ce template définit les modals! à utiliser un max!!! #}
+
+<div class="ui {% block class %}{% endblock %} modal">
+    <i class="close icon"></i>
+    <div class="header">
+        {% block header %}{% endblock %}
+    </div>
+    <div class="content">
+
+        {% block content %}{% endblock %}
+
+        {% block script %}{% endblock %}
+    </div>
+</div>

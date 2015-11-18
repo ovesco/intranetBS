@@ -1,0 +1,34 @@
+{% form_theme form 'AppBundle:Templates:form_template.html.twig' %}
+
+{% extends 'AppBundle:Templates:modal_small.html.twig' %}
+
+{% block header %}
+    <h4>Ajouter un envois</h4>
+{% endblock %}
+
+{% block content %}
+    {{ form_start(form, {'attr': {'class': 'ui form' }}) }}
+
+    {{ form_rest(form) }}
+
+    <div class="ui field">
+        <input type="submit" class="ui green button" value="Ajouter" />
+    </div>
+
+    {{ form_end(form) }}
+
+{% endblock %}
+
+
+
+{% block script %}
+    <script>
+        //to activate the dropdown field in the form
+        $('.ui.dropdown').dropdown();
+    </script>
+{% endblock %}
+
+
+
+
+

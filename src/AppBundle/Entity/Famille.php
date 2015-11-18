@@ -6,7 +6,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Interne\MailBundle\Entity\ReceiverFamille;
 use Interne\FinancesBundle\Entity\DebiteurFamille;
 
 /**
@@ -86,7 +85,7 @@ class Famille implements ExpediableInterface,ClassNameInterface
     /**
      * @var ReceiverFamille
      *
-     * @ORM\OneToOne(targetEntity="Interne\MailBundle\Entity\ReceiverFamille",
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\ReceiverFamille",
      *                inversedBy="famille", cascade={"persist","remove"})
      */
     private $receiver;
@@ -408,11 +407,11 @@ class Famille implements ExpediableInterface,ClassNameInterface
     /**
      * Set receiver
      *
-     * @param \Interne\MailBundle\Entity\ReceiverFamille $receiver
+     * @param ReceiverFamille $receiver
      *
      * @return Famille
      */
-    public function setReceiver(\Interne\MailBundle\Entity\ReceiverFamille $receiver = null)
+    public function setReceiver(ReceiverFamille $receiver = null)
     {
         $this->receiver = $receiver;
         if(is_null($receiver->getFamille()))
@@ -423,7 +422,7 @@ class Famille implements ExpediableInterface,ClassNameInterface
     /**
      * Get receiver
      *
-     * @return \Interne\MailBundle\Entity\ReceiverFamille
+     * @return ReceiverFamille
      */
     public function getReceiver()
     {
