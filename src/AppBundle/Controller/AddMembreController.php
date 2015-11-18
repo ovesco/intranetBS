@@ -340,7 +340,7 @@ class AddMembreController extends Controller {
 
         }
 
-        return $this->render('AppBundle:Membre/AddForm:FamilleAdd.html.twig',
+        return $this->render('AppBundle:Membre/AddForm:Infos.html.twig',
             array('form'=>$form->createView(),
                 'membre'=>$membre,
                 'previous'=>$this->generateUrl('app_addmembre_base'),
