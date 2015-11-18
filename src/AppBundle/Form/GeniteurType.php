@@ -9,6 +9,13 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use AppBundle\Form\ContactType;
 use AppBundle\Form\AdresseType;
 
+
+/**
+ * todo checker si cette class est utilisée qqpart...je crois que c'est pas vraiment très utils vu que geniteur est abstract. (uffer 16.11.2015)
+ *
+ * Class GeniteurType
+ * @package AppBundle\Form
+ */
 class GeniteurType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)

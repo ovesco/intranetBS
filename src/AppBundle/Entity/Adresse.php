@@ -35,7 +35,7 @@ class Adresse
      * @var string
      *
      * @Gedmo\Versioned
-     * @ORM\Column(name="rue", type="string", length=255)
+     * @ORM\Column(name="rue", type="string", length=255, nullable=true)
      */
     private $rue;
 
@@ -43,7 +43,7 @@ class Adresse
      * @var integer
      *
      * @Gedmo\Versioned
-     * @ORM\Column(name="npa", type="integer")
+     * @ORM\Column(name="npa", type="integer", nullable=true)
      */
     private $npa;
 
@@ -51,7 +51,7 @@ class Adresse
      * @var string
      *
      * @Gedmo\Versioned
-     * @ORM\Column(name="localite", type="string", length=255)
+     * @ORM\Column(name="localite", type="string", length=255, nullable=true)
      */
     private $localite;
 
@@ -73,7 +73,7 @@ class Adresse
     private $contact;
 
 
-    public function __construct($rue = '', $npa = null, $localite = '', $expediable = true)
+    public function __construct($rue = '', $npa = null, $localite = '', $expediable = false)
     {
         $this->rue = $rue;
         $this->npa = $npa;

@@ -1,4 +1,6 @@
 
+
+/*
 $('#membre_famille_famille').change(function() {
 
     if($(this).val() == 'NOEXIST') $('#famille-form-segment').fadeIn();
@@ -9,7 +11,7 @@ $('#membre_famille_famille').change(function() {
          * première chose, on met à jour les éléments visuels
          * Ensuite, on va envoyer une requête au serveur pour récupérer l'adresse de la famille déjà enregistrée,
          * puis on va l'afficher
-         */
+         *
         var famille = $(this).val();
 
         $('#adresse-segment').attr("class", 'ui loading segment');
@@ -27,7 +29,7 @@ $('#membre_famille_famille').change(function() {
                 if(data != null) {
                     /*
                      * On va remplir les adresses disponibles pour la famille avec les données récupérées
-                     */
+                     *
                     //Famille
                     var famille = JSON.parse(data.famille);
 
@@ -72,3 +74,5 @@ $('#membre_famille_famille').change(function() {
         $('#famille-form-segment').fadeOut();
     }
 });
+
+*/

@@ -5,6 +5,21 @@
 {% block content %}
 
 
+<div class="ui page grid">
+    <div class="row">
+        <div class="column">
+
+            <div id="membre_add_form">
+                {{ render(controller('AppBundle:AddMembre:Base')) }}
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+    {#
+
 
     {{ form_start(membreForm,{'attr': {'class': 'ui form'}}) }}
 
@@ -134,12 +149,15 @@
 
    {{ form_end(membreForm) }}
 
+
+    #}
 {% endblock %}
 
 {% block js %}
 
+    {# '@AppBundle/Resources/public/js/specials/ajouter_membre_famille_toggle.js' #}
     {% javascripts
-    '@AppBundle/Resources/public/js/specials/ajouter_membre_famille_toggle.js'
+
     '@AppBundle/Resources/public/js/Membre/page_ajouter_membre.js'%}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}

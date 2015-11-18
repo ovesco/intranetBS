@@ -1,0 +1,37 @@
+<div class="ui top attached message">
+    <div class="header"><h3><i class="add icon"></i>{% block title %}{% endblock %}</h3></div>
+</div>
+<div class="ui bottom attached segment">
+
+        <div class="ui inverted dimmer">
+            <div class="ui text loader">Processing...</div>
+        </div>
+
+
+        {% block membre %}{% endblock %}
+
+        {% block form %}{% endblock %}
+
+
+        {% if previous is defined %}
+            <div class="ui blue button" id="previous" data-previous="{{ previous }}">
+                {% block previous_step %}{% endblock %}
+            </div>
+        {% endif %}
+
+        {% if next is defined %}
+            <div class="ui blue button" id="next" data-next="{{ next }}">
+                {% block next_step %}{% endblock %}
+            </div>
+        {% endif %}
+
+        <a class="ui red button" href="{{ path('app_addmembre_reset') }}">
+            reset
+        </a>
+
+</div>
+
+
+
+
+

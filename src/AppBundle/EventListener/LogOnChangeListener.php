@@ -44,7 +44,11 @@ class LogOnChangeListener {
         if($this->token_storage->getToken() != NULL)
             $editorMember = $this->token_storage->getToken()->getUser()->getMembre();
         else
-            $editorMember = new Membre('John', 'Doe'); // TODO : we may find someone else than this guy for default
+        {
+            $editorMember = new Membre(); // TODO : we may find someone else than this guy for default
+            $editorMember->setPrenom('John');
+        }
+
 
         /* Get all updated entities */
         foreach ($uow->getScheduledEntityUpdates() as $entity) {
@@ -63,7 +67,7 @@ class LogOnChangeListener {
             }
 
             /* Log ContactInformation changes */
-            if($entity instanceof ContactInformation) {
+            if($entity instanceof Contact) {
                 $contactInformation = $entity;
 
                 $modifiedMember = $eventArgs->getEntityManager()->getRepository('AppBundle:Membre')->find($contactInformation->getContact()->getId());

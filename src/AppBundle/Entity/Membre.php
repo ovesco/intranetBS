@@ -149,24 +149,21 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     /**
      * Constructor
      *
-     * @param string $prenom
-     * @param string $nom Nom de la famille nouvellement créée
      */
-    public function __construct($prenom = '', $nom = '')
+    public function __construct()
     {
         $this->inscription = new \Datetime();
         $this->naissance = new \Datetime();
-
-        /*
-         * FinancesBundle
-         */
-        $this->creances = new ArrayCollection();
-        $this->factures = new ArrayCollection();
-
         $this->validity = true;
 
-        $this->prenom = $prenom;
-        $this->famille = new Famille($nom);
+        //un membre a forcement un contact
+        $this->contact = new Contact();
+
+        //un membre a forcement un debiteur
+        $this->debiteur = new DebiteurMembre();
+
+        //un membre a forcement un receiver
+        $this->receiver = new ReceiverMembre();
     }
 
 

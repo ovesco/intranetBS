@@ -13,7 +13,7 @@ use Interne\FinancesBundle\Entity\DebiteurFamille;
  * Famille
  *
  * @Gedmo\Loggable
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\FamilleRepository")
  * @ORM\Table(name="app_familles")
  */
 class Famille implements ExpediableInterface,ClassNameInterface

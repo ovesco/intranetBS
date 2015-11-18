@@ -6,6 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
+ *
+ *
  * Class GenreType
  *
  * Type à utiliser pour un champ définissant le genre dans un formulaire

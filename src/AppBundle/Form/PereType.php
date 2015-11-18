@@ -6,28 +6,29 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+use AppBundle\Form\ContactType;
+use AppBundle\Form\AdresseType;
 
-class FamilleType extends AbstractType
+class PereType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nom',        'text', array('required'	=> false, 'label' => 'Nom de famille'))
-            ->add('pere',       new PereType, array('required' => false))
-            ->add('mere',       new MereType, array('required' => false))
-            ->add('contact',    new ContactType())
+            ->add('prenom', 'text', array('required' => false, 'label' => 'Prénom'))
+            ->add('profession', 'text', array('required' => false, 'label' => 'Profession'))
+            ->add('contact', new ContactType())
         ;
     }
 
     public function configureOptions( \Symfony\Component\OptionsResolver\OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Famille',
+            'data_class' => 'AppBundle\Entity\Pere'
         ));
     }
 
     public function getName()
     {
-        return 'AppBundle_famille';
+        return 'appbundle_pere_type';
     }
 }

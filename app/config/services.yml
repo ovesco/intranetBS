@@ -59,6 +59,12 @@ services:
         arguments:
             - @service_container
 
+    #Converti le résultat d'une requete elastic en entité gérée par l'EntityManager
+    elastic_to_doctrine:
+        class: AppBundle\Utils\Elastic\ElasticToDoctrine
+        arguments:
+            - @service_container
+
     # Twig
     # Extensions twig qui permettent de mettre en place des filtres
     # personnalisés
