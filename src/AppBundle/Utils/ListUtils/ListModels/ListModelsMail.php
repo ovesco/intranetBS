@@ -13,6 +13,7 @@ use AppBundle\Entity\Mail;
 use AppBundle\Entity\ReceiverMembre;
 use AppBundle\Entity\ReceiverFamille;
 use Symfony\Component\Routing\Router;
+use AppBundle\Twig\AppExtension;
 
 class ListModelsMail implements ListModelInterface
 {
@@ -150,7 +151,9 @@ class ListModelsMail implements ListModelInterface
                     $date_info = 'Dernière impresssion: '.$date;
                 }
 
-                return '<i class="'.$color.' mail icon popupable" data-html="'.$date_info.'<br>'.$adresse.'"></i>';
+                /** @var AppExtension $ext */
+                $ext = $twig->getExtension('app_extension');
+                return $ext->popup('<i class="'.$color.' mail icon"></i>',$date_info.'<br>'.$adresse);
             }
             return '-';
 

@@ -16,3 +16,16 @@ function getModal(data, url) {
         }
     });
 }
+
+$(document).ready(function(){
+
+    /**
+     * Appel une modal (cf. Twig:AppExtension:modal_caller)
+     */
+    $(document).on('click','.modal_caller',function(){
+        var url = $(this).data('modal-url');
+        getModal(null,url);
+
+    });
+
+});

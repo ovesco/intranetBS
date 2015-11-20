@@ -30,7 +30,7 @@ class AppController extends Controller
      */
     public function testAction()
     {
-        return new Response();
+        return $this->render('AppBundle:App:page_test.html.twig');
     }
 
 

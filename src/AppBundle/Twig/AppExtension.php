@@ -43,7 +43,9 @@ class AppExtension extends \Twig_Extension
     {
         return array(
             'apply_filter' => new \Twig_Function_Method($this, 'applyFilter'),
-            'help' => new \Twig_Function_Method($this, 'help',array('is_safe' => array('html')))//is_sage = raw filter
+            'help' => new \Twig_Function_Method($this, 'help',array('is_safe' => array('html'))),//is_safe = raw filter (only html..no js)
+            'popup' => new \Twig_Function_Method($this, 'popup',array('is_safe' => array('all'))),//is_safe = raw filter
+            'modal_caller' => new \Twig_Function_Method($this, 'modal_caller',array('is_safe' => array('all')))//is_safe = raw filter
         );
     }
 
@@ -59,6 +61,8 @@ class AppExtension extends \Twig_Extension
             'class_name_famille'=>Famille::className(),
             'class_name_pere'=>Pere::className(),
             'class_name_mere'=>Mere::className(),
+            'popup_selector'=>'popupable',
+            'modal_caller_selector'=>'modal_caller',
         );
     }
 
@@ -185,9 +189,124 @@ class AppExtension extends \Twig_Extension
      */
     public function help($html_popup)
     {
-        $help =  '<i class="ui help circle orange icon popupable" data-html="'.$html_popup.'"></i>';
+        $popupClass = $this->environment->getGlobals()['popup_selector'];
+        $help =  '<i class="ui help circle orange icon '.$popupClass.'" data-html="'.$html_popup.'"></i>';
         return $help;
     }
+
+    /**
+     * cette fonction crée un popup dans une balise html.
+     *
+     * Par exemple:
+     *
+     * <div class="bidon1 bidon2">my popup</div>
+     *
+     * sera convertit en:
+     *
+     * <div class="bidon1 bidon2 popupable" data-html="contenu du popup" >my popup</div>
+     *
+     *
+     * @param $html_display
+     * @param $html_content
+     * @return mixed
+     */
+    public function popup($html_display,$html_content)
+    {
+        $popupClass = $this->environment->getGlobals()['popup_selector'];
+
+        $matches = array();
+        /*
+         * Ne marche que si un attribut "class=" est trouvé dans $html_display
+         */
+        if(preg_match('/class[ \t]*=[ \t]*"[^"]+"/', $html_display, $matches))
+        {
+            $class = $matches[0];
+
+            preg_match('/\".*?\"/', $class, $matches);//match word
+
+            preg_match_all('/([a-zA-Z0-9-_]+)/', $matches[0], $matches);//match word
+
+            if(!in_array($popupClass,$matches[0]))
+            {
+                $matches[0][] = $popupClass;
+            }
+            $compiledClass = 'class="';
+            foreach($matches[0] as $class)
+            {
+                $compiledClass = $compiledClass.$class.' ';
+            }
+            $compiledClass = $compiledClass.'" data-html="'.$html_content.'" ';
+
+            return preg_replace('/class[ \t]*=[ \t]*"[^"]+"/' ,  $compiledClass ,$html_display,1);//1 = premier occurance
+        }
+        else{
+            preg_match('/\<.*?\>/', $html_display, $matches);
+
+            $startBalise =  preg_replace('/>/' ,  ' class="'.$popupClass.'" data-html="'.$html_content.'">' ,$matches[0],1);//1 = premier occurance
+
+            return preg_replace('/\<.*?\>/' ,  $startBalise ,$html_display,1);//1 = premier occurance
+
+        }
+
+    }
+
+
+    /**
+     *
+     * cette fonction crée un appel a une modal dans une balise
+     *
+     * Par exemple:
+     *
+     * <div class="bidon1 bidon2">my modal call</div>
+     *
+     * sera convertit en:
+     *
+     * <div class="bidon1 bidon2 modal_caller" data-modal-url="url d'appel de la modal" >my modal call</div>
+     *
+     * @param $html_display
+     * @param $urlModal
+     * @return mixed
+     */
+    public function modal_caller($html_display,$urlModal)
+    {
+        $modalClass = $this->environment->getGlobals()['modal_caller_selector'];
+
+        $matches = array();
+        /*
+         * Ne marche que si un attribut "class=" est trouvé dans $html_display
+         */
+        if(preg_match('/class[ \t]*=[ \t]*"[^"]+"/', $html_display, $matches))
+        {
+            $class = $matches[0];
+
+            preg_match('/\".*?\"/', $class, $matches);//match word
+
+            preg_match_all('/([a-zA-Z0-9-_]+)/', $matches[0], $matches);//match word
+
+            if(!in_array($modalClass,$matches[0]))
+            {
+                $matches[0][] = $modalClass;
+            }
+            $compiledClass = 'class="';
+            foreach($matches[0] as $class)
+            {
+                $compiledClass = $compiledClass.$class.' ';
+            }
+            $compiledClass = $compiledClass.'" data-modal-url="'.$urlModal.'" ';
+
+            return preg_replace('/class[ \t]*=[ \t]*"[^"]+"/' ,  $compiledClass ,$html_display,1);//1 = premier occurance
+        }
+        else{
+            preg_match('/\<.*?\>/', $html_display, $matches);
+
+            $startBalise =  preg_replace('/>/' ,  ' class="'.$modalClass.'" data-modal-url="'.$urlModal.'">' ,$matches[0],1);//1 = premier occurance
+
+            return preg_replace('/\<.*?\>/' ,  $startBalise ,$html_display,1);//1 = premier occurance
+
+        }
+
+    }
+
 
 }
 
