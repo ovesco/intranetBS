@@ -1,0 +1,21 @@
+{% extends "AppBundle:Layout:layout.html.twig" %}
+
+
+{% block titre %}Recherche de créances{% endblock %}
+
+{% block content %}
+
+    <div class="ui page grid">
+        <div class="row">
+            <div class="four wide column">
+                {% include "AppBundle:Creance:searchForm.html.twig" with {'searchForm':searchForm} %}
+            </div>
+            <div class="twelve wide column">
+
+                {{ list_caller.Session(list_key)|raw }}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

@@ -35,11 +35,11 @@ use Interne\SecurityBundle\Entity\Role;
 use Interne\SecurityBundle\Entity\User;
 
 /* FinanceBundle */
-use Interne\FinancesBundle\Entity\Rappel;
-use Interne\FinancesBundle\Entity\Facture;
-use Interne\FinancesBundle\Entity\Creance;
-use Interne\FinancesBundle\Entity\DebiteurFamille;
-use Interne\FinancesBundle\Entity\DebiteurMembre;
+use AppBundle\Entity\Rappel;
+use AppBundle\Entity\Facture;
+use AppBundle\Entity\Creance;
+use AppBundle\Entity\DebiteurFamille;
+use AppBundle\Entity\DebiteurMembre;
 
 
 class PopulateCommand extends ContainerAwareCommand

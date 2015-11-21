@@ -1,7 +1,5 @@
 # Learn more about services, parameters and containers at
 # http://symfony.com/doc/current/book/service_container.html
-parameters:
-
 services:
     listing:
         class: AppBundle\Utils\Listing\Lister
@@ -71,6 +69,19 @@ services:
         arguments:
             - %kernel.root_dir%
 
+    #analyse les fichier de facture fournit par la poste
+    payement_file_parser:
+        class: AppBundle\Utils\Finances\PayementFileParser
+
+    #permet de faire un pdf avec une facture
+    facture_printer:
+        class: AppBundle\Utils\Finances\FacturePrinter
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @parametres
+            - @pdf
+
+
     # Twig
     # Extensions twig qui permettent de mettre en place des filtres
     # personnalisés
@@ -88,10 +99,14 @@ services:
             - { name: twig.extension }
 
     app.twig.app_extension:
-            class: AppBundle\Twig\AppExtension
-            tags:
-                - { name: twig.extension }
+        class: AppBundle\Twig\AppExtension
+        tags:
+            - { name: twig.extension }
 
+    app.twig.finances_extension:
+        class: AppBundle\Twig\FinancesExtension
+        tags:
+            - { name: twig.extension }
 
 
     # Types

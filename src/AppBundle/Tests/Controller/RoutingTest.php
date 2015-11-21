@@ -36,6 +36,9 @@ class RoutingTest extends WebTestCase
         /** @var EntityManager $em */
         $em = $this->client->getContainer()->get('doctrine.orm.entity_manager');
 
+        $membre = $em->getRepository('AppBundle:Membre')->findOneBy(array());
+        $famille = $em->getRepository('AppBundle:Famille')->findOneBy(array());
+
         $routes = array();
         //$routes = array_merge($routes,$this->routeAppController());
 
@@ -46,6 +49,13 @@ class RoutingTest extends WebTestCase
         $routes = array_merge($routes,$this->routeMembreController()); //ok
         $routes = array_merge($routes,$this->routeStructureController()); //ok
         //$routes = array_merge($routes,$this->routeCategorieController($em)); //error
+        $routes = array_merge($routes,$this->creanceRoute($em,$membre));
+        $routes = array_merge($routes,$this->creanceRoute($em,$famille));
+        $routes = array_merge($routes,$this->factureRoute($em,$membre));
+        $routes = array_merge($routes,$this->factureRoute($em,$famille));
+        $routes = array_merge($routes,$this->payementRoute($em));
+        $routes = array_merge($routes,$this->debiteurRoute($membre));
+        $routes = array_merge($routes,$this->debiteurRoute($famille));
 
 
 
@@ -134,6 +144,92 @@ class RoutingTest extends WebTestCase
             array('/interne/categorie/remove/'.$id)
         );
 
+    }
+
+    private function creanceRoute(EntityManager $em, $ownerEntity){
+
+        $creance = new Creance();
+        $creance->setTitre('WebTestCase');
+        $creance->setDateCreation(new \DateTime());
+        $creance->setMontantEmis(999.99);
+        $ownerEntity->getDebiteur()->addCreance($creance);
+
+        $em->persist($creance);
+        $em->flush();
+
+        $idCreance = $creance->getId();
+
+
+        return array(
+            array('/interne/finances/creance/search'),
+            array('/interne/finances/creance/show/'.$idCreance),
+            array('/interne/finances/creance/delete/'.$idCreance),
+        );
+    }
+
+    private function factureRoute(EntityManager $em, $ownerEntity){
+        $facture = new Facture();
+        $facture->setDateCreation(new \DateTime());
+
+        $ownerEntity->getDebiteur()->addFacture($facture);
+
+        $creanceForFacture = new Creance();
+        $creanceForFacture->setTitre('WebTestCase');
+        $creanceForFacture->setDateCreation(new \DateTime());
+        $creanceForFacture->setMontantEmis(999.99);
+
+        $ownerEntity->getDebiteur()->addCreance($creanceForFacture);
+        $rappel = new Rappel();
+        $rappel->setDateCreation(new \DateTime());
+        $rappel->setMontantEmis(99.99);
+
+
+        $facture->addCreance($creanceForFacture);
+        $facture->addRappel($rappel);
+
+        $em->persist($facture);
+        $em->flush();
+
+        $idFacture = $facture->getId();
+
+        return array(
+            array('/interne/finances/facture/search'),
+            array('/interne/finances/facture/show/'.$idFacture),
+            array('/interne/finances/facture/print/'.$idFacture),
+            array('/interne/finances/facture/delete/'.$idFacture),
+        );
+    }
+
+    private function payementRoute(EntityManager $em){
+
+        $payement = new Payement();
+        $payement->setDate(new \DateTime());
+        $payement->setIdFacture(1243123);
+        $payement->setMontantRecu(1234.23);
+        $payement->setValidated(false);
+        $payement->setState(Payement::NOT_FOUND);
+
+        $em->persist($payement);
+        $em->flush();
+
+        $idPayement = $payement->getId();
+
+        return array(
+            array('/interne/finances/payement/search'),
+            array('/interne/finances/payement/show/'.$idPayement),
+            array('/interne/finances/payement/add'),
+            array('/interne/finances/payement/validation'),
+            array('/interne/finances/payement/validation_form/'.$idPayement),
+            array('/interne/finances/payement/delete/'.$idPayement),
+        );
+    }
+
+    private function debiteurRoute($ownerEntity)
+    {
+        $id = $ownerEntity->getDebiteur()->getId();
+        return array(
+            array('/interne/finances/debiteur/show/'.$id),
+        );
     }
 
 }

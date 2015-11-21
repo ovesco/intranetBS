@@ -5,11 +5,10 @@ use Symfony\Component\HttpKernel\Kernel;
 
 class AppKernel extends Kernel
 {
-    /*
-     * Surchage pour configurer le time zone correct
-     * Author: Uffer
-     */
+
     /**
+     * Surchage pour configurer le time zone correct
+     * @author nicolas uffer
      * @param string $environment
      * @param bool $debug
      */
@@ -17,7 +16,6 @@ class AppKernel extends Kernel
     {
         date_default_timezone_set('Europe/Zurich');
         parent::__construct($environment, $debug);
-        //ini_set('memory_limit', '256M');
     }
 
     public function registerBundles()
@@ -39,7 +37,6 @@ class AppKernel extends Kernel
             new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
 
             new AppBundle\AppBundle(),
-            new Interne\FinancesBundle\InterneFinancesBundle(),
             new Interne\GalerieBundle\InterneGalerieBundle(),
             new Interne\SecurityBundle\InterneSecurityBundle(),
             new Interne\OrganisationBundle\InterneOrganisationBundle(),

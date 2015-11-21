@@ -70,7 +70,7 @@ fos_elastica:
                                 getOwnerAsString: ~
                     persistence:
                         driver: orm
-                        model: Interne\FinancesBundle\Entity\Creance
+                        model: AppBundle\Entity\Creance
                         provider: ~
                         listener: ~
                         finder: ~
@@ -108,7 +108,7 @@ fos_elastica:
                                  getOwnerAsString: ~
                     persistence:
                         driver: orm
-                        model: Interne\FinancesBundle\Entity\Facture
+                        model: AppBundle\Entity\Facture
                         provider: ~
                         listener: ~
                         finder: ~
@@ -121,7 +121,7 @@ fos_elastica:
                         idFacture: ~
                     persistence:
                         driver: orm
-                        model: Interne\FinancesBundle\Entity\Payement
+                        model: AppBundle\Entity\Payement
                         provider: ~
                         listener: ~
                         finder: ~

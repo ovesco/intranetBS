@@ -4,11 +4,11 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Interne\FinancesBundle\Entity\DebiteurInterface;
+use AppBundle\Entity\DebiteurInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use FOS\ElasticaBundle\Configuration\Search;
-use Interne\FinancesBundle\Entity\DebiteurMembre;
+use AppBundle\Entity\DebiteurMembre;
 
 /**
  * Membre
@@ -117,7 +117,7 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     /**
      * @var DebiteurMembre
      *
-     * @ORM\OneToOne(targetEntity="Interne\FinancesBundle\Entity\DebiteurMembre",
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\DebiteurMembre",
      *                inversedBy="membre", cascade={"persist","remove"})
      */
     private $debiteur;
@@ -640,7 +640,7 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     }
 
     /**
-     * @param \Interne\FinancesBundle\Entity\Creance $creance
+     * @param \AppBundle\Entity\Creance $creance
      * @return Membre
      */
     public function addCreance($creance)
@@ -652,7 +652,7 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     /**
      * Get debiteur
      *
-     * @return \Interne\FinancesBundle\Entity\DebiteurMembre
+     * @return \AppBundle\Entity\DebiteurMembre
      */
     public function getDebiteur()
     {
@@ -662,7 +662,7 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     /**
      * Set debiteur
      *
-     * @param \Interne\FinancesBundle\Entity\DebiteurMembre $debiteur
+     * @param \AppBundle\Entity\DebiteurMembre $debiteur
      *
      * @return Membre
      */
@@ -674,7 +674,7 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     }
 
     /**
-     * @param \Interne\FinancesBundle\Entity\Facture $facture
+     * @param \AppBundle\Entity\Facture $facture
      * @return Membre
      */
     public function addFacture($facture)

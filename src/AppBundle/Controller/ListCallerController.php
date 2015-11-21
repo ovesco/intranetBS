@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use AppBundle\Entity\Membre;
-use Interne\FinancesBundle\Entity\Debiteur;
+use AppBundle\Entity\Debiteur;
 use AppBundle\Entity\Famille;
 use AppBundle\Utils\ListUtils\ListKey;
 
@@ -19,8 +19,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsAttributions;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsDistinctions;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsMembre;
-use Interne\FinancesBundle\Utils\ListModels\ListModelsCreances;
-use Interne\FinancesBundle\Utils\ListModels\ListModelsFactures;
+use AppBundle\Utils\ListUtils\ListModels\ListModelsCreances;
+use AppBundle\Utils\ListUtils\ListModels\ListModelsFactures;
 
 /* Annotations */
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Interne\FinancesBundle\Entity\DebiteurFamille;
+use AppBundle\Entity\DebiteurFamille;
 
 /**
  * Famille
@@ -77,7 +77,7 @@ class Famille implements ExpediableInterface,ClassNameInterface
     /**
      * @var DebiteurFamille
      *
-     * @ORM\OneToOne(targetEntity="Interne\FinancesBundle\Entity\DebiteurFamille",
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\DebiteurFamille",
      *                inversedBy="famille", cascade={"persist","remove"})
      */
     private $debiteur;
@@ -361,7 +361,7 @@ class Famille implements ExpediableInterface,ClassNameInterface
     }
 
     /**
-     * @param \Interne\FinancesBundle\Entity\Creance $creance
+     * @param \AppBundle\Entity\Creance $creance
      * @return Famille
      */
     public function addCreance($creance)
@@ -373,7 +373,7 @@ class Famille implements ExpediableInterface,ClassNameInterface
     /**
      * Get debiteur
      *
-     * @return \Interne\FinancesBundle\Entity\DebiteurFamille
+     * @return \AppBundle\Entity\DebiteurFamille
      */
     public function getDebiteur()
     {
@@ -383,7 +383,7 @@ class Famille implements ExpediableInterface,ClassNameInterface
     /**
      * Set debiteur
      *
-     * @param \Interne\FinancesBundle\Entity\DebiteurFamille $debiteur
+     * @param \AppBundle\Entity\DebiteurFamille $debiteur
      *
      * @return Famille
      */
@@ -395,7 +395,7 @@ class Famille implements ExpediableInterface,ClassNameInterface
     }
 
     /**
-     * @param \Interne\FinancesBundle\Entity\Facture $facture
+     * @param \AppBundle\Entity\Facture $facture
      * @return Famille
      */
     public function addFacture($facture)

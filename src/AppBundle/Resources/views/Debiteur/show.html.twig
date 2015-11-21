@@ -1,0 +1,50 @@
+
+
+
+            <div id="infoFinanceContent">
+
+                <div class="ui grid">
+                    {#
+                    <div class="row">
+                        <div class="eight wide column">
+
+                            <div class="ui info message">
+                                {% if ownerEntity.isClass('Membre') %}
+                                    {% if ownerEntity.envoiFacture == 'Membre' %}
+                                        <i class="icon user"></i>
+                                        Les créances de ce membre lui sont directement facturées
+                                    {% elseif ownerEntity.envoiFacture == 'Famille' %}
+                                        <i class="icon users"></i>
+                                        Les créances de ce membre sont facturée à la famille {{ ownerEntity.famille.nom }}
+                                    {% endif %}
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+                        <div class="eight wide column">
+
+                            <div id="interface-add-creance" class="ui button" data-id="{{ ownerEntity.id  }}" data-class="{{ ownerEntity.class }}">Ajouter une créance</div>
+                        </div>
+                    </div>
+                    #}
+                    <div class="row">
+                        <div class="eight wide column">
+                            <h4 class="header">Créances</h4>
+                            {{ list_caller.DebiteurCreances(debiteur)|raw }}
+
+                        </div>
+                        <div class="eight wide column">
+                            <h4 class="header">Facture</h4>
+                            {{ list_caller.DebiteurFactures(debiteur)|raw }}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+

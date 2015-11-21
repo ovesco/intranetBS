@@ -57,7 +57,6 @@ assetic:
     use_controller: false
     bundles:
         - AppBundle
-        - InterneFinancesBundle
         - InterneSecurityBundle
         - InterneGalerieBundle
         - InterneOrganisationBundle

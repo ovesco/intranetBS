@@ -9,11 +9,6 @@ app:
     type:     annotation
     prefix:   /intranet
 
-finances:
-    resource: "@InterneFinancesBundle/Controller/"
-    type:     annotation
-    prefix:   /intranet/finances
-
 mat:
     resource: "@MatBundle/Controller/"
     type:     annotation
