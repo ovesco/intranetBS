@@ -10,8 +10,7 @@ php app/console fos:elastica:populate
 #buil role hierarchy
 php app/console security:roles:build roles.yml
 
-#reset all the intranet_parameters defined in parameters.yml
-php app/console parameter reset
+
 
 
 

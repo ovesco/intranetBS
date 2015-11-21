@@ -8,7 +8,7 @@ use AppBundle\Entity\Document;
 
 class DocumentStorage
 {
-    const DOCUMENTS_PATH = "/../uploads/documents/";
+    const DOCUMENTS_PATH = "/documents/";
 
     /** @var string */
     protected $rootDirkernel;

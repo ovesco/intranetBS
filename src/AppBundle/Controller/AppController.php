@@ -30,6 +30,11 @@ class AppController extends Controller
      */
     public function testAction()
     {
+
+
+        var_dump($this->get('parametres')->get('group_name'));
+
+
         return $this->render('AppBundle:App:page_test.html.twig');
     }
 

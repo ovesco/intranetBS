@@ -105,9 +105,7 @@
     <form action="{{ path('login_check') }}" method="post">
 
         <header>
-            {% if parametreService.exist('group_logo') %}
                 <img src="{{ parametreService.get('group_logo') }}" alt="Logo">
-            {% endif %}
         </header>
 
         <p id="title">{{ parametreService.get('app_name') }} | Connection</p>

@@ -6,6 +6,9 @@ imports:
     - { resource: log.yml }
     - { resource: doctrine_extensions.yml }
 
+#définition des parametres fixes lié a AppBundle
+app:
+    upload_path: %kernel.root_dir%/../uploads
 
 framework:
     #esi:             ~
@@ -51,7 +54,6 @@ twig:
             - 'Templates/Form/Widgets/semantic_widget.html.twig'
 
 # Assetic Configuration
-
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false

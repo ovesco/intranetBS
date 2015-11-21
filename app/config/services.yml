@@ -36,6 +36,7 @@ services:
         class: AppBundle\Utils\Parametre\Parametres
         arguments:
             - @doctrine.orm.entity_manager
+            - %intranet_parameters%
 
     #Permet le rendu des annotation @menu
     menu:
@@ -67,7 +68,7 @@ services:
     document_storage:
         class: AppBundle\Utils\Document\DocumentStorage
         arguments:
-            - %kernel.root_dir%
+            - %app.upload_path%
 
     #analyse les fichier de facture fournit par la poste
     payement_file_parser:
