@@ -30,7 +30,7 @@ class RappelRepartitionType extends AbstractType
 
     public function getName()
     {
-        return 'app_bundleRappelRepartitionType';
+        return 'app_bundle_rappel_repartition';
     }
 
 }

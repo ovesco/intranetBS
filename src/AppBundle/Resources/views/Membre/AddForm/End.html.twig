@@ -1,0 +1,10 @@
+{% extends 'AppBundle:Membre/AddForm:addFormLayout.html.twig' %}
+
+{% block title %}
+    Fin de l'ajout du membre
+{% endblock %}
+
+
+{% block message %}
+  Aller voir le <a href="{{ path('app_membre_show',{'membre':membre.id}) }}">membre</a> - Aller voir la famille
+{% endblock %}

@@ -21,6 +21,7 @@ use AppBundle\Utils\ListUtils\ListModels\ListModelsDistinctions;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsMembre;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsCreances;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsFactures;
+use AppBundle\Utils\ListUtils\ListModels\ListModelsFamille;
 
 /* Annotations */
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -108,6 +109,9 @@ class ListCallerController extends Controller
                 return $this->returnList($list,$call);
             case ListKey::MEMBRES_SEARCH_RESULTS:
                 $list = ListModelsMembre::getDefault($this->getTwig(),$this->getRouter(),$items,$url)->render();
+                return $this->returnList($list,$call);
+            case ListKey::FAMILLE_SEARCH_RESULTS_ADD_MEMBRE:
+                $list = ListModelsFamille::getSearchResults($this->getTwig(),$this->getRouter(),$items,$url)->render();
                 return $this->returnList($list,$call);
         }
     }
@@ -247,4 +251,6 @@ class ListCallerController extends Controller
         $list = ListModelsMail::getMyMail($this->getTwig(),$this->getRouter(),$items,$url)->render();
         return $this->returnList($list,$call);
     }
+
+
 }

@@ -82,6 +82,12 @@ services:
             - @parametres
             - @pdf
 
+    #permet de faire un pdf avec une facture
+    app.search:
+        class: AppBundle\Utils\Elastic\Search
+        arguments:
+            - @fos_elastica.manager
+
 
     # Twig
     # Extensions twig qui permettent de mettre en place des filtres

@@ -19,4 +19,6 @@ class ListKey
     const CREANCES_SEARCH_RESULTS = "creances_search_results";
     const FACTURES_SEARCH_RESULTS = "factures_search_results";
     const MEMBRES_SEARCH_RESULTS = "membres_search_results";
+    const FAMILLE_SEARCH_RESULTS = "famille_search_results";
+    const FAMILLE_SEARCH_RESULTS_ADD_MEMBRE = "famille_search_results_add_membre";
 }

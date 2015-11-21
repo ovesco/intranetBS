@@ -13,9 +13,9 @@ namespace AppBundle\Search;
 class AttributionSearch {
 
     /** @var  string */
-    public $groupe;
+    public $groupe = null;
 
     /** @var  string */
-    public $fonction;
+    public $fonction = null;
 
 }

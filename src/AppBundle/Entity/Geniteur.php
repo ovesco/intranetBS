@@ -31,7 +31,11 @@ abstract class Geniteur extends Personne
      */
     protected $profession;
 
-
+    /**
+     * La relation est définie dans Pere et Mere
+     *
+     * @var Famille
+     */
     protected $famille;
 
     /**

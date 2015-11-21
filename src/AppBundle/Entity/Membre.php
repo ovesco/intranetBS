@@ -112,7 +112,7 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
      * @ORM\Column(name="envoi_facture", type="string", columnDefinition="ENUM('Famille', 'Membre')")
      *
      */
-    private $envoiFacture = 'Membre';
+    private $envoiFacture = 'Famille';
 
     /**
      * @var DebiteurMembre
@@ -233,7 +233,10 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     public function setFamille($famille)
     {
         $this->famille = $famille;
-
+        if(!$famille->getMembres()->contains($this))
+        {
+            $famille->addMembre($this);
+        }
         return $this;
     }
 

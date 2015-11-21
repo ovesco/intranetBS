@@ -4,9 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Famille;
 use AppBundle\Entity\Membre;
-use AppBundle\Form\AddMembreType;
-use AppBundle\Form\Membre\AddStepOneMembreType;
-use AppBundle\Form\VoirMembreType;
+use AppBundle\Form\Membre\MembreShowType;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,11 +13,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 use AppBundle\Utils\ListUtils\ListStorage;
 
-use AppBundle\Form\Membre\AddStepTwoMembreType;
 
 use AppBundle\Search\MembreSearch;
 use AppBundle\Search\MembreSearchType;
-use AppBundle\Search\MembreRepository;
 
 use AppBundle\Search\Mode;
 
@@ -88,7 +84,7 @@ class MembreController extends Controller {
      */
     public function showAction(Request $request, Membre $membre) {
 
-        $membreForm = $this->createForm(new VoirMembreType(), $membre);
+        $membreForm = $this->createForm(new MembreShowType(), $membre);
 
         return array(
             'membre'            => $membre,
@@ -108,7 +104,7 @@ class MembreController extends Controller {
     public function toPdfAction(Request $request, Membre $membre)
     {
 
-        $membreForm = $this->createForm(new VoirMembreType(), $membre);
+        $membreForm = $this->createForm(new MembreShowType(), $membre);
 
         $html = $this->render('pdf_show.html.twig', array(
 
@@ -220,13 +216,7 @@ class MembreController extends Controller {
 
         if ($membreForm->isValid()) {
 
-            $membreSearch = $membreForm->getData();
-
-            $elasticaManager = $this->container->get('fos_elastica.manager');
-            /** @var MembreRepository $repository */
-            $repository = $elasticaManager->getRepository('AppBundle:Membre');
-            $results = $repository->search($membreSearch);
-
+            $results = $this->container->get('app.search')->Membre($membreSearch);
 
             //get the search mode
             $mode = $membreForm->get("mode")->getData();

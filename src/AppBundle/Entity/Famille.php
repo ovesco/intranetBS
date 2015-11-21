@@ -7,13 +7,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use AppBundle\Entity\DebiteurFamille;
+use FOS\ElasticaBundle\Configuration\Search;
 
 /**
  * Famille
  *
  * @Gedmo\Loggable
- * @ORM\Entity(repositoryClass="AppBundle\Entity\FamilleRepository")
+ * @ORM\Entity
  * @ORM\Table(name="app_familles")
+ * @Search(repositoryClass="AppBundle\Search\Famille\FamilleRepository")
  */
 class Famille implements ExpediableInterface,ClassNameInterface
 {
@@ -147,7 +149,10 @@ class Famille implements ExpediableInterface,ClassNameInterface
     public function addMembre(\AppBundle\Entity\Membre $membres)
     {
         $this->membres[] = $membres;
-        $membres->setFamille($this);
+        if($membres->getFamille() != $this)
+        {
+            $membres->setFamille($this);
+        }
         return $this;
     }
 
@@ -353,7 +358,7 @@ class Famille implements ExpediableInterface,ClassNameInterface
     /**
      * Get membres
      *
-     * @return array
+     * @return ArrayCollection
      */
     public function getMembres()
     {

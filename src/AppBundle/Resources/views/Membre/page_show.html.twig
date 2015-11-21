@@ -85,7 +85,7 @@
                                     {% set    ae = membre.adresseExpedition %}
                                     {% if     ae != null %}
                                         {% set    ownerEntity = ae['ownerEntity'] %}
-                                        {% set    lf = '<a href="' ~path('interne_voir_famille', {famille: membre.famille.id}) ~ '">' %}
+                                        {% set    lf = '<a href="' ~path('app_famille_show', {'famille': membre.famille.id}) ~ '">' %}
 
                                         {% if     ownerEntity.className == class_name_membre %}
                                             {% set aeowner = 'la sienne' %}
@@ -130,7 +130,7 @@
                             <div class="header"><h3><i class="users icon"></i>Famille</h3></div>
                         </div>
 
-                        <div onclick="location.href='{{ path('interne_voir_famille', {famille: membre.famille.id}) }}'" class="ui bottom attached segment">
+                        <div onclick="location.href='{{ path('app_famille_show', {famille: membre.famille.id}) }}'" class="ui bottom attached segment">
                             <div class="ui list">
                                 {% include 'AppBundle:Contact:show.html.twig' with {'contact' : membre.famille.contact} %}
                             </div>

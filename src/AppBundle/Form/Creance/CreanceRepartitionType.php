@@ -32,7 +32,7 @@ class CreanceRepartitionType extends AbstractType
 
     public function getName()
     {
-        return 'app_bundle_creance_repartition_type';
+        return 'app_bundle_creance_repartition';
     }
 
 }

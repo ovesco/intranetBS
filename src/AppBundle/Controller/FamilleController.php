@@ -3,7 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Famille;
-use AppBundle\Form\FamilleType;
+use AppBundle\Form\Famille\FamilleType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -24,10 +24,10 @@ class FamilleController extends Controller {
      * @return Response la vue
      *
      * @ParamConverter("famille", class="AppBundle:Famille")
-     * @Route("/voir/{famille}", name="interne_voir_famille")
+     * @Route("/show/{famille}")
      * @Template("AppBundle:Famille:page_voir_famille.html.twig")
      */
-    public function showFamilleAction(Famille $famille) {
+    public function showAction(Famille $famille) {
 
         $familleForm = $this->createForm(new FamilleType, $famille);
 

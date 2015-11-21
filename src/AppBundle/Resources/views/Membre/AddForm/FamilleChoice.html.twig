@@ -4,15 +4,10 @@
     Choisiez une famille
 {% endblock %}
 
-{% block membre %}
-
-    {{ dump(membre) }}
-
-{% endblock %}
 
 {% block form %}
 
-
+    {{ list_caller.Session(list_key)|raw }}
 
     {{ form_start(form,{'attr': {'class': 'ui form'}}) }}
 

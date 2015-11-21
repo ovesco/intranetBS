@@ -29,4 +29,9 @@ class MembreSearch {
 
     /** @var  AttributionSearch */
     public $attribution;
+
+    public  function __construct()
+    {
+        $this->attribution = new AttributionSearch();
+    }
 }

@@ -54,7 +54,7 @@ class ListModelsMembre implements ListModelInterface
             return '<a href="' . $router->generate('app_membre_add', array('membre' => $membre->getId())) . '">' . $membre->getPrenom() . '</a>';
         }));
         $list->addColumn(new Column('Nom', function (Membre $membre) use ($router) {
-            return '<a href="' . $router->generate('interne_voir_famille', array('famille' => $membre->getFamille()->getId())) . '">' . $membre->getNom() . '</a>';
+            return '<a href="' . $router->generate('app_famille_show', array('famille' => $membre->getFamille()->getId())) . '">' . $membre->getNom() . '</a>';
         }));
         $list->addColumn(new Column('Fonction', function (Membre $membre) use ($router) {
             return $membre->getActiveAttribution();

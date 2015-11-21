@@ -4,13 +4,13 @@ $(document).ready(function(){
     var $add_form_container = $('#membre_add_form');
 
     $add_form_container.on('click','#previous',function(){
-        //$add_form_container.find('.dimmer').addClass('active');
+        $add_form_container.find('.dimmer').addClass('active');
         var previous_url = $(this).data('previous');
         AddMembreCallPreviousForm(previous_url);
     });
 
     $add_form_container.on('click','#next',function(){
-        //$add_form_container.find('.dimmer').addClass('active');
+        $add_form_container.find('.dimmer').addClass('active');
         var next_url = $(this).data('next');
         AddMembreCallNextForm(next_url);
     });
