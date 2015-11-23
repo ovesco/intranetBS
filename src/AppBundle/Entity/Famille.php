@@ -102,11 +102,16 @@ class Famille implements ExpediableInterface,ClassNameInterface
     {
         $this->membres = new ArrayCollection();
 
-        /*
-         * FinancesBundle
-         */
-        $this->creances = new ArrayCollection();
-        $this->factures = new ArrayCollection();
+        //une famille a forcement un contact
+        $this->contact = new Contact();
+
+        //une famille a forcement un debiteur
+        $this->debiteur = new DebiteurFamille();
+        $this->debiteur->setFamille($this);
+
+        //un membre a forcement un receiver
+        $this->receiver = new ReceiverFamille();
+        $this->receiver->setFamille($this);
 
         $this->validity = true;
 
@@ -365,15 +370,7 @@ class Famille implements ExpediableInterface,ClassNameInterface
         return $this->membres;
     }
 
-    /**
-     * @param \AppBundle\Entity\Creance $creance
-     * @return Famille
-     */
-    public function addCreance($creance)
-    {
-        $this->getDebiteur()->addCreance($creance);
-        return $this;
-    }
+
 
     /**
      * Get debiteur
@@ -399,15 +396,7 @@ class Famille implements ExpediableInterface,ClassNameInterface
         return $this;
     }
 
-    /**
-     * @param \AppBundle\Entity\Facture $facture
-     * @return Famille
-     */
-    public function addFacture($facture)
-    {
-        $this->getDebiteur()->addFacture($facture);
-        return $this;
-    }
+
 
     /**
      * Set receiver

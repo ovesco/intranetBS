@@ -76,6 +76,11 @@ class Attribution
     private $remarques;
 
 
+    public function __construct()
+    {
+        $this->dateDebut = new \DateTime();
+    }
+
     public function __tostring()
     {
         return $this->getFonction() . ' à ' . $this->getGroupe();

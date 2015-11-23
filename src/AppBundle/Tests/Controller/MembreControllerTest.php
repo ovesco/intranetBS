@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Test\Controller;
+namespace AppBundle\Tests\Controller;
 
 
 ?>

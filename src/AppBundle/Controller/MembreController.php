@@ -95,7 +95,7 @@ class MembreController extends Controller {
 
 
     /**
-     * @Route("/show/{membre}/pdf", requirements={"membre" = "\d+"})
+     * @Route("/show_pdf/{membre}", requirements={"membre" = "\d+"})
      * @ParamConverter("membre", class="AppBundle:Membre")
      * @param Request $request
      * @param Membre $membre

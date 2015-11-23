@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AppBundle\Tests\Entity;
 
 
 /**
@@ -11,7 +11,7 @@ namespace AppBundle\Entity;
  * @group entity_finances_bundle
  * @group entity
  */
-class EntityTest extends \PHPUnit_Framework_TestCase
+class EntityTest_todo extends \PHPUnit_Framework_TestCase
 {
     public $creance;
     public $facture;

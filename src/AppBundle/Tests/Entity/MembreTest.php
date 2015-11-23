@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Test\Entity;
+namespace AppBundle\Tests\Entity;
 
 use AppBundle\Entity\Attribution;
 use AppBundle\Entity\Distinction;

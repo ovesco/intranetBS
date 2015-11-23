@@ -414,7 +414,7 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     }
 
     /**
-     * Retourne la première attribution active si elle existe, en renvoie une vide sinon pour simplifier l'affichage
+     * Retourne la première attribution active si elle existe
      */
     public function getActiveAttribution() {
 
@@ -424,12 +424,19 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
             if($attr->getDateFin() >= $today || $attr->getDateFin() == null)
                 return $attr;
         }
+        return null;
+    }
 
-        $empty = new Attribution;
-        $empty->setFonction(new Fonction());
-        $empty->setGroupe(new Groupe());
-
-        return $empty;
+    /**
+     * @return bool
+     */
+    public function hasActiveAttributions()
+    {
+        $attr = $this->getActiveAttributions();
+        if(empty($attr))
+            return false;
+        else
+            return true;
     }
 
     /**

@@ -12,8 +12,8 @@ class EmailType extends AbstractType
     {
         $builder
             ->add('email','text',array('required' => false, 'label' => 'Email'))
-            ->add('remarques','textarea',array('required' => false, 'label' => 'Remarque'))
-            ->add('expediable', 'hidden',     array('required' => false, 'label' => 'Expediable'))
+            ->add('remarques','remarque_accordion',array('required' => false))
+            ->add('expediable', 'boolean', array('required' => true, 'label' => 'Expediable'))
         ;
     }
 

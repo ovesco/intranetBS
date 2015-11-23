@@ -25,14 +25,12 @@ class AppController extends Controller
     }
 
     /**
-     * @Route("test")
+     * @Route("/test")
      * @Menu("Test",block="test",order=1)
      */
     public function testAction()
     {
 
-
-        var_dump($this->get('parametres')->get('group_name'));
 
 
         return $this->render('AppBundle:App:page_test.html.twig');

@@ -18,7 +18,7 @@ use AppBundle\Utils\Menu\Menu;
 use AppBundle\Entity\Categorie;
 
 /* Form */
-use AppBundle\Form\CategorieType;
+use AppBundle\Form\Categorie\CategorieType;
 
 /**
  * Class CategorieController

@@ -1,0 +1,55 @@
+{# custom_collection_widget #}
+{% block custom_collection_widget -%}
+
+    {# unique key pour cette collection, il peut y en avoir plusieur par page #}
+    {% set collection_key = random() %}
+
+    <div id="collection_{{ collection_key }}_add" class="ui button">add</div>
+    {% set delete = '<div class="ui red button collection_'~ collection_key ~'_delete">x</div>' %}
+
+    {% if prototype is defined %}
+        {%- set attr = attr|merge({'data-prototype': '<div class="collection_item" >' ~ delete ~ form_widget(prototype) ~ '</div>' }) -%}
+    {% endif %}
+
+    {# doit etre une class car id est déjà définit dans le widget attributes #}
+    <div class="collection_holder_{{ collection_key }}"  {{ block('widget_attributes') }}>
+
+        {% for child in form.children %}
+
+        <div class="collection_item">
+            {{ delete|raw }}
+            {{ form_widget(child) }}
+            {{ form_errors(child) }}
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <script>
+        $(document).on('click','#collection_{{ collection_key }}_add',function(){
+
+
+            var collectionHolder = $('.collection_holder_{{ collection_key }}');
+            var firstChildren = collectionHolder.children().first();
+            var prototype = collectionHolder.data('prototype');
+
+            var newForm = prototype.replace(/__name__/g, collectionHolder.children().length);
+            firstChildren.before(newForm);
+
+        });
+
+        $(document).on('click','.collection_{{ collection_key }}_delete',function(){
+            var collectionHolder = $('.collection_holder_{{ collection_key }}');
+            alert('delete');
+            if(collectionHolder.children().length > 1)
+            {
+                $(this).closest('.collection_item').remove();
+            }
+
+        });
+
+    </script>
+
+{%- endblock custom_collection_widget %}
+

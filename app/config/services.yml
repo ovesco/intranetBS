@@ -126,10 +126,16 @@ services:
             - { name: form.type, alias: genre }
 
     app.type.boolean:
-            class: AppBundle\Field\BooleanType
-            tags:
-                - { name: form.type, alias: boolean }
+        class: AppBundle\Field\BooleanType
+        tags:
+            - { name: form.type, alias: boolean }
+
     app.type.remarque_accordion:
-            class: AppBundle\Field\RemarqueAccordionType
-            tags:
-                - { name: form.type, alias: remarque_accordion }
+        class: AppBundle\Field\RemarqueAccordionType
+        tags:
+            - { name: form.type, alias: remarque_accordion }
+
+    app.type.custom_collection:
+        class: AppBundle\Field\CustomCollectionType
+        tags:
+            - { name: form.type, alias: custom_collection }

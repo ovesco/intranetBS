@@ -21,7 +21,13 @@
                             <i class="user icon"></i>
                             <div class="content">
                                 {{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}
-                                <div class="sub header">{{ membre.activeAttribution.fonction.nom }} - {{ membre.activeAttribution.groupe.nom|capitalize }}</div>
+                                <div class="sub header">
+                                    {% if membre.hasActiveAttributions %}
+                                        {{ membre.activeAttribution.fonction.nom }} - {{ membre.activeAttribution.groupe.nom|capitalize }}
+                                    {% else %}
+                                        Aucune attribution courrante...
+                                    {% endif %}
+                                </div>
                             </div>
                         </h2>
                     </div>
