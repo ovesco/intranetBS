@@ -41,7 +41,7 @@ class CRONCommand extends ContainerAwareCommand
     {
         $this
             ->setName('cron')
-            ->setDescription('Tests sur l\'application')
+            ->setDescription('Taches CRON sur l\'application')
             ->addArgument('mode', InputArgument::OPTIONAL, 'mode')
         ;
 

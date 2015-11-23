@@ -12,8 +12,8 @@ class MembreNomPrenomType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('prenom','text',array('label' => 'Prénom'))
-            ->add('nom','text',array('label' => 'Nom','mapped'=>false))
+            ->add('prenom','text',array('label' => 'Prénom','required'=>true))
+            ->add('nom','text',array('label' => 'Nom','mapped'=>false,'required'=>true))
         ;
     }
 

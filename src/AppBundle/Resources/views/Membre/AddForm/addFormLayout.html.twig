@@ -15,14 +15,15 @@
         {% endif %}
 
 
-        {% block form %}{% endblock %}
+        {% block form %}
+
+        {% endblock %}
+
+        <a class="ui red button" href="{{ path('app_addmembre_reset') }}">
+            Reset
+        </a>
 
 
-        {% if previous is defined %}
-            <div class="ui blue button" id="previous" data-previous="{{ previous }}">
-                {% block previous_step %}{% endblock %}
-            </div>
-        {% endif %}
 
         {% if next is defined %}
             <div class="ui blue button" id="next" data-next="{{ next }}">
@@ -30,9 +31,7 @@
             </div>
         {% endif %}
 
-        <a class="ui red button" href="{{ path('app_addmembre_reset') }}">
-            Reset
-        </a>
+
 
 </div>
 

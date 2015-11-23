@@ -4,6 +4,19 @@
 
 $(document).ready(function(){
 
+    semantic_init();
+
+});
+
+/**
+ * Cette fonction initialise tout les composant Semantic UI
+ * nécaissaire au fonctionnement des page.
+ * On peut l'appeler à tout moment si la strucuture DOM
+ * a changé (apèrs AJAX par exemple).
+ * Elle est applée aussi lors du chargement de la page.
+ */
+function semantic_init()
+{
     //Menu principal, s'ouvre lorsqu'on clique sur le bouton du menu
     $('#main-menu-button').click(function() {
         $('#main-menu').sidebar('toggle');
@@ -17,10 +30,9 @@ $(document).ready(function(){
 
 
     /*
-     * Enable popup with two class name: popupable
+     * Enable popup with class name: popupable
      *
      */
     $('.popupable').popup();
     $('.popupable.onclick').popup({on:'click'});
-
-});
+}

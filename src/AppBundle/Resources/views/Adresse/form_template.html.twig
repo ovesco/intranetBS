@@ -1,0 +1,14 @@
+{# forumlaire standard pour un adresse #}
+
+{{ form_row(form.rue)  }}
+
+<div class="ui fields">
+    {{ form_row(form.npa)  }}
+    {{ form_row(form.localite)  }}
+</div>
+
+{{ form_row(form.expediable)  }}
+
+{{ form_widget(form.remarques)  }}
+
+{{ form_rest(form)  }}

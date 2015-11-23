@@ -52,6 +52,10 @@ twig:
             - 'Templates/Form/Widgets/famille_value_widget.html.twig'
             - 'Templates/Form/Widgets/datepicker_widget.html.twig'
             - 'Templates/Form/Widgets/semantic_widget.html.twig'
+            - 'Templates/Form/Widgets/remarque_accordion_widget.html.twig'
+    #template de base pour tout les formulaires ou ce n'est pas spécifier
+    form_themes:
+        - 'AppBundle:Templates:form_fields.html.twig'
 
 # Assetic Configuration
 assetic:

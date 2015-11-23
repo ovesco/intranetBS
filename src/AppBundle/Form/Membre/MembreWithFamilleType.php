@@ -2,21 +2,23 @@
 
 namespace AppBundle\Form\Membre;
 
+use AppBundle\Form\Famille\FamilleDisabledNomType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 
 
 
-class MembreWithoutFamilleType extends MembreType
+class MembreWithFamilleType extends MembreType
 {
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder,$options);
-        $builder->remove('famille');
-        $builder->remove('prenom');
-        $builder->add('prenom', 'text', array('required' => false, 'label' => 'Prénom','disabled'=>true));
+        $builder->remove('prenom')
+            ->add('prenom', 'text', array('required' => false, 'label' => 'Prénom','disabled'=>true));
+        $builder->remove('famille')
+            ->add('famille',new FamilleDisabledNomType());
 
 
     }
@@ -31,7 +33,7 @@ class MembreWithoutFamilleType extends MembreType
 
     public function getName()
     {
-        return 'appbundle_membre_add_without_famille';
+        return 'appbundle_membre_add_with_famille';
     }
 
 }

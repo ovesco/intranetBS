@@ -12,6 +12,25 @@
 
     {{ form_start(form,{'attr': {'class': 'ui form'}}) }}
 
+    <h4 class="ui dividing header">Information sur le membre</h4>
+
+    <div class="fields">
+        {{ form_row(form.prenom) }}
+        {{ form_row(form.naissance) }}
+        {{ form_row(form.statut) }}
+        {{ form_row(form.inscription) }}
+
+    </div>
+
+
+
+    {% include 'AppBundle:Contact:form_template.html.twig' with {'form':form.contact} %}
+
+
+    <h4 class="ui dividing header">Information sur la famille</h4>
+
+    {{ form_row(form.famille) }}
+
     {{ form_rest(form) }}
 
     {{ form_end(form) }}
@@ -20,6 +39,5 @@
 
 {% endblock %}
 
-{% block previous_step %}Etape Précédent{% endblock %}
 
-{% block next_step %}Etape suivante{% endblock %}
+{% block next_step %}Engregistrer{% endblock %}

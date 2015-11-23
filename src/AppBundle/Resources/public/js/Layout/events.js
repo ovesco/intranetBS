@@ -4,7 +4,7 @@ $('.event').click(function () {
 
     if ($(this).data('event-postactions').indexOf('ShowModal') >= 0) {
         getModal(null, route);
-        return;
+        return null;
     }
     else {
         var callback = {
@@ -61,7 +61,7 @@ $('.event_mass').click(function () {
 
     if ($(this).data('event-postactions').indexOf('ShowModal') >= 0) {
         getModal(null, route);
-        return;
+        return null;
     }
     else {
         var callback = {

@@ -52,6 +52,13 @@ class Contact
 
         //un contact à forcement une adresse (même vide)
         $this->adresse = new Adresse();
+
+        //un contact à forcement au moins une addresse email
+        $this->addEmail(new Email());
+
+        //un contact à forcement au moins un numero de téléphone
+        $this->addTelephone(new Telephone());
+
     }
 
     /**

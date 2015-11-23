@@ -26,11 +26,7 @@ services:
     email:
         class: AppBundle\Utils\Email\Email
 
-    listeEnvoi:
-        class: AppBundle\Utils\Envoi\ListeEnvoi
-        arguments:
-            - @session
-            - @doctrine.orm.entity_manager
+
     #recuperation des parametres de l'application gérés par les utilisateurs
     parametres:
         class: AppBundle\Utils\Parametre\Parametres
@@ -58,11 +54,6 @@ services:
         arguments:
             - @service_container
 
-    #Converti le résultat d'une requete elastic en entité gérée par l'EntityManager
-    elastic_to_doctrine:
-        class: AppBundle\Utils\Elastic\ElasticToDoctrine
-        arguments:
-            - @service_container
 
     #Sauve un document uploader dans le bon dossier
     document_storage:
@@ -138,3 +129,7 @@ services:
             class: AppBundle\Field\BooleanType
             tags:
                 - { name: form.type, alias: boolean }
+    app.type.remarque_accordion:
+            class: AppBundle\Field\RemarqueAccordionType
+            tags:
+                - { name: form.type, alias: remarque_accordion }

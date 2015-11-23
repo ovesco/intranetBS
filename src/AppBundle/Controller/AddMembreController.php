@@ -7,7 +7,7 @@ use AppBundle\Entity\Membre;
 use AppBundle\Form\Membre\MembreWithoutFamilleType;
 use AppBundle\Form\Membre\MembreFamilleChoiceType;
 use AppBundle\Form\Membre\MembreNomPrenomType;
-use AppBundle\Form\Membre\MembreType;
+use AppBundle\Form\Membre\MembreWithFamilleType;
 use AppBundle\Search\Famille\FamilleSearch;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -235,7 +235,7 @@ class AddMembreController extends Controller
             $famille = new Famille();
             $famille->setNom($nom);
             $membre->setFamille($famille);
-            $form = $this->createForm(new MembreType(),$membre);
+            $form = $this->createForm(new MembreWithFamilleType(),$membre);
             $template = 'AppBundle:Membre/AddForm:AddMembre.html.twig';
         }
 

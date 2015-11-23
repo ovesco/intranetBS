@@ -109,4 +109,9 @@ class CustomOutput
         $this->writeCustom($string,Color::GREEN,Color::WHITE);
     }
 
+    public function error($string){
+        $this->writeMode($string,Mode::ERROR);
+        $this->writeln();
+    }
+
 }

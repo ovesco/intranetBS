@@ -170,6 +170,8 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
         //un membre a forcement un sender
         $this->sender = new SenderMembre();
         $this->sender->setMembre($this);
+
+        $this->addAttribution(new Attribution());
     }
 
 

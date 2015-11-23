@@ -41,7 +41,7 @@ class MembreType extends PersonneType
 
             ->add(
                 'remarques',
-                'textarea',
+                'remarque_accordion',
                 array(
                     'required' => false
                 )

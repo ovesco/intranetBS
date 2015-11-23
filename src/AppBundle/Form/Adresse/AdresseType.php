@@ -16,7 +16,7 @@ class AdresseType extends AbstractType
             ->add('rue',        'text',         array('required' => false, 'label' => 'Rue'))
             ->add('npa',        'number',       array('required' => false, 'label' => 'NPA'))
             ->add('localite',   'text',         array('required' => false, 'label' => 'Localité'))
-            ->add('remarques',  'textarea',     array('required' => false, 'label' => 'Remarques'))
+            ->add('remarques',  'remarque_accordion',     array('required' => false))
         ;
     }
 
