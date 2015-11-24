@@ -185,11 +185,11 @@ class PopulateCommand extends ContainerAwareCommand
                     $membre->setDebiteur($debiteurM);
                     $nbCreanceEnAttente = mt_rand(1,3);
                     for($n = 0; $n < $nbCreanceEnAttente; $n++) {
-                        $membre->addCreance($this->getCreance($membre->getDebiteur()));
+                        $membre->getDebiteur()->addCreance($this->getCreance($membre->getDebiteur()));
                     }
                     $nbFacture = mt_rand(1,3);
                     for($n = 0; $n < $nbFacture; $n++) {
-                        $membre->addFacture($this->getFacture($membre->getDebiteur()));
+                        $membre->getDebiteur()->addFacture($this->getFacture($membre->getDebiteur()));
                     }
 
                     //ajout d'envois
@@ -216,11 +216,11 @@ class PopulateCommand extends ContainerAwareCommand
                 $famille->setDebiteur($debiteur);
                 $nbCreanceEnAttente = mt_rand(1,3);
                 for($n = 0; $n < $nbCreanceEnAttente; $n++) {
-                    $famille->addCreance($this->getCreance($famille->getDebiteur()));
+                    $famille->getDebiteur()->addCreance($this->getCreance($famille->getDebiteur()));
                 }
                 $nbFacture = mt_rand(1,3);
                 for($n = 0; $n < $nbFacture; $n++) {
-                    $famille->addFacture($this->getFacture($famille->getDebiteur()));
+                    $famille->getDebiteur()->addFacture($this->getFacture($famille->getDebiteur()));
                 }
 
                 //ajout d'envois
