@@ -2,10 +2,10 @@
 
 namespace Interne\SecurityBundle\Entity;
 
-use Interne\SecurityBundle\Utils\RolesUtil;
-use Symfony\Component\Security\Core\User\UserInterface;
+use AppBundle\Entity\Attribution;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User
@@ -73,16 +73,17 @@ class User implements UserInterface, \Serializable
         $this->role 	= new ArrayCollection();
     }
 
-    public function setUsername($username){
-        $this->username = $username;
-    }
-
     /**
      * @inheritDoc
      */
     public function getUsername()
     {
         return $this->username;
+    }
+
+    public function setUsername($username)
+    {
+        $this->username = $username;
     }
 
     /**
@@ -148,20 +149,6 @@ class User implements UserInterface, \Serializable
     }
     
     /**
-     * Retourne les roles de l'utilisateur
-     */
-    public function getRoles()
-    {
-        $roles = $this->roles->toArray();
-
-        foreach($this->getMembre()->getActiveAttributions() as $attr)
-            foreach($attr->getFonction()->getRoles() as $r)
-                $roles[] = $r;
-
-        return $roles;
-    }
-
-    /**
      * Vérifie que l'utilisateur possède un role donné
      * @param string $role
      * @return boolean
@@ -174,29 +161,23 @@ class User implements UserInterface, \Serializable
 
         return false;
     }
-    
+
     /**
-     * Add roles
-     *
-     * @param \Interne\SecurityBundle\Entity\Role roles
-     * @return User
+     * Retourne les roles de l'utilisateur
      */
-    public function addRole(\Interne\SecurityBundle\Entity\Role $roles) {
-    	
-    	$this->roles[] = $roles;
-    	return $this;
-    }
-    
-    /**
-     * Remove roles
-     *
-     * @param \Interne\SecurityBundle\Entity\Role roles
-     */
-    public function removeRole(\Interne\SecurityBundle\Entity\Role $roles)
+    public function getRoles()
     {
-        $this->roles->removeElement($roles);
+        $roles = $this->roles->toArray();
+
+        /** @var Attribution $attr */
+        foreach ($this->getMembre()->getActiveAttributions() as $attr) {
+            foreach ($attr->getFonction()->getRoles() as $r)
+                $roles[] = $r;
+        }
+
+        return $roles;
     }
-   
+    
     /**
      * Get membre
      *
@@ -219,6 +200,29 @@ class User implements UserInterface, \Serializable
     }
 
     /**
+     * Add roles
+     *
+     * @param \Interne\SecurityBundle\Entity\Role roles
+     * @return User
+     */
+    public function addRole(\Interne\SecurityBundle\Entity\Role $roles)
+    {
+
+        $this->roles[] = $roles;
+        return $this;
+    }
+
+    /**
+     * Remove roles
+     *
+     * @param \Interne\SecurityBundle\Entity\Role roles
+     */
+    public function removeRole(\Interne\SecurityBundle\Entity\Role $roles)
+    {
+        $this->roles->removeElement($roles);
+    }
+
+    /**
      * Get id
      *
      * @return integer 
@@ -226,6 +230,16 @@ class User implements UserInterface, \Serializable
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
     }
 
     /**
@@ -242,13 +256,13 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Get isActive
+     * Get lastConnexion
      *
-     * @return boolean 
+     * @return \DateTime
      */
-    public function getIsActive()
+    public function getLastConnexion()
     {
-        return $this->isActive;
+        return $this->lastConnexion;
     }
 
     /**
@@ -262,15 +276,5 @@ class User implements UserInterface, \Serializable
         $this->lastConnexion = $lastConnexion;
 
         return $this;
-    }
-
-    /**
-     * Get lastConnexion
-     *
-     * @return \DateTime 
-     */
-    public function getLastConnexion()
-    {
-        return $this->lastConnexion;
     }
 }

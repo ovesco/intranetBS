@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Groupe;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsMail;
 use AppBundle\Entity\Receiver;
 use AppBundle\Entity\Sender;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use AppBundle\Entity\Membre;
@@ -43,23 +43,40 @@ class ListCallerController extends Controller
 
     const CALL_BY_ROUTE = "route";
     const CALL_BY_TWIG = "twig";
-    
+
     /**
      * @param ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container = null){
+    public function __construct(ContainerInterface $container = null)
+    {
 
         $this->setContainer($container);
     }
 
     /**
-     * Do not put this in constructor: this avoid circular referance of service
+     * Permet d'appeler une liste (de session)
      *
-     * @return \Symfony\Bundle\FrameworkBundle\Routing\Router
+     * @Route("/session/{key}/{call}", defaults={"call"="route"})
+     *
      */
-    private function getRouter()
+    public function Session($key, $call = ListCallerController::CALL_BY_TWIG)
     {
-        return $this->get('router');
+        $items = $this->get('list_storage')->getObjects($key);
+        $url = $this->generateUrl('app_listcaller_session', array('key' => $key));
+        switch ($key) {
+            case ListKey::CREANCES_SEARCH_RESULTS:
+                $list = ListModelsCreances::getSearchResults($this->getTwig(), $this->getRouter(), $items, $url)->render();
+                return $this->returnList($list, $call);
+            case ListKey::FACTURES_SEARCH_RESULTS:
+                $list = ListModelsFactures::getSearchResults($this->getTwig(), $this->getRouter(), $items, $url)->render();
+                return $this->returnList($list, $call);
+            case ListKey::MEMBRES_SEARCH_RESULTS:
+                $list = ListModelsMembre::getDefault($this->getTwig(), $this->getRouter(), $items, $url)->render();
+                return $this->returnList($list, $call);
+            case ListKey::FAMILLE_SEARCH_RESULTS_ADD_MEMBRE:
+                $list = ListModelsFamille::getSearchResults($this->getTwig(), $this->getRouter(), $items, $url)->render();
+                return $this->returnList($list, $call);
+        }
     }
 
     /**
@@ -73,49 +90,30 @@ class ListCallerController extends Controller
     }
 
     /**
+     * Do not put this in constructor: this avoid circular referance of service
+     *
+     * @return \Symfony\Bundle\FrameworkBundle\Routing\Router
+     */
+    private function getRouter()
+    {
+        return $this->get('router');
+    }
+
+    /**
      * Permet de retourner une liste en adaptant le rendu
      * selon si l'appel est fait dans twig ou depuis une route
      * @param $list
      * @param $call
      * @return Response
      */
-    private function returnList($list,$call){
-        if($call == ListCallerController::CALL_BY_ROUTE){
+    private function returnList($list, $call)
+    {
+        if ($call == ListCallerController::CALL_BY_ROUTE) {
             return new Response($list);
-        }
-        else{
+        } else {
             return $list;
         }
     }
-
-    
-    /**
-     * Permet d'appeler une liste (de session)
-     *
-     * @Route("/session/{key}/{call}", defaults={"call"="route"})
-     *
-     */
-    public function Session($key,$call = ListCallerController::CALL_BY_TWIG)
-    {
-        $items = $this->get('list_storage')->getObjects($key);
-        $url = $this->generateUrl('app_listcaller_session',array('key'=>$key));
-        switch($key)
-        {
-            case ListKey::CREANCES_SEARCH_RESULTS:
-                $list = ListModelsCreances::getSearchResults($this->getTwig(),$this->getRouter(),$items,$url)->render();
-                return $this->returnList($list,$call);
-            case ListKey::FACTURES_SEARCH_RESULTS:
-                $list = ListModelsFactures::getSearchResults($this->getTwig(),$this->getRouter(),$items,$url)->render();
-                return $this->returnList($list,$call);
-            case ListKey::MEMBRES_SEARCH_RESULTS:
-                $list = ListModelsMembre::getDefault($this->getTwig(),$this->getRouter(),$items,$url)->render();
-                return $this->returnList($list,$call);
-            case ListKey::FAMILLE_SEARCH_RESULTS_ADD_MEMBRE:
-                $list = ListModelsFamille::getSearchResults($this->getTwig(),$this->getRouter(),$items,$url)->render();
-                return $this->returnList($list,$call);
-        }
-    }
-    
 
     /**
      * @route("/membre/fraterie/{membre}/{call}", defaults={"call"="route"})
@@ -124,12 +122,12 @@ class ListCallerController extends Controller
      * @param $call
      * @return mixed
      */
-    public function MembreFraterie(Membre $membre,$call = ListCallerController::CALL_BY_TWIG)
+    public function MembreFraterie(Membre $membre, $call = ListCallerController::CALL_BY_TWIG)
     {
         $items = $membre->getFamille()->getMembres();
-        $url = $this->getRouter()->generate('app_listcaller_membrefraterie',array('membre'=>$membre->getId()));
-        $list = ListModelsMembre::getFraterie($this->getTwig(),$this->getRouter(),$items,$url)->render();
-        return $this->returnList($list,$call);
+        $url = $this->getRouter()->generate('app_listcaller_membrefraterie', array('membre' => $membre->getId()));
+        $list = ListModelsMembre::getFraterie($this->getTwig(), $this->getRouter(), $items, $url)->render();
+        return $this->returnList($list, $call);
     }
 
     /**
@@ -139,12 +137,12 @@ class ListCallerController extends Controller
      * @param $call
      * @return mixed
      */
-    public function MembreAttributions(Membre $membre,$call = ListCallerController::CALL_BY_TWIG)
+    public function MembreAttributions(Membre $membre, $call = ListCallerController::CALL_BY_TWIG)
     {
         $items = $membre->getAttributions();
-        $url = $this->getRouter()->generate('app_listcaller_membreattributions',array('membre'=>$membre->getId()));
-        $list = ListModelsAttributions::getDefault($this->getTwig(),$this->getRouter(),$items,$url)->render();
-        return $this->returnList($list,$call);
+        $url = $this->getRouter()->generate('app_listcaller_membreattributions', array('membre' => $membre->getId()));
+        $list = ListModelsAttributions::getDefault($this->getTwig(), $this->getRouter(), $items, $url)->render();
+        return $this->returnList($list, $call);
     }
 
     /**
@@ -154,12 +152,27 @@ class ListCallerController extends Controller
      * @param $call
      * @return mixed
      */
-    public function MembreDistinctions(Membre $membre,$call = ListCallerController::CALL_BY_TWIG)
+    public function MembreDistinctions(Membre $membre, $call = ListCallerController::CALL_BY_TWIG)
     {
         $items = $membre->getDistinctions();
-        $url = $this->getRouter()->generate('app_listcaller_membredistinctions',array('membre'=>$membre->getId()));
-        $list = ListModelsDistinctions::getDefault($this->getTwig(),$this->getRouter(),$items,$url)->render();
-        return $this->returnList($list,$call);
+        $url = $this->getRouter()->generate('app_listcaller_membredistinctions', array('membre' => $membre->getId()));
+        $list = ListModelsDistinctions::getDefault($this->getTwig(), $this->getRouter(), $items, $url)->render();
+        return $this->returnList($list, $call);
+    }
+
+    /**
+     * @route("/groupe/effectifs/{groupe}/{call}", defaults={"call"="route"})
+     * @ParamConverter("groupe", class="AppBundle:Groupe")
+     * @param Groupe $groupe
+     * @param $call
+     * @return mixed
+     */
+    public function GroupeEffectifs(Groupe $groupe, $call = ListCallerController::CALL_BY_TWIG)
+    {
+        $items = $groupe->getMembers();
+        $url = $this->getRouter()->generate('app_listcaller_groupeeffectifs', array('groupe' => $groupe->getId()));
+        $list = ListModelsMembre::getEffectifs($this->getTwig(), $this->getRouter(), $items, $url)->render();
+        return $this->returnList($list, $call);
     }
 
     /**
@@ -169,12 +182,12 @@ class ListCallerController extends Controller
      * @param $call
      * @return mixed
      */
-    public function DebiteurCreances(Debiteur $debiteur,$call = ListCallerController::CALL_BY_TWIG)
+    public function DebiteurCreances(Debiteur $debiteur, $call = ListCallerController::CALL_BY_TWIG)
     {
         $items = $debiteur->getCreances();
-        $url = $this->getRouter()->generate('app_listcaller_debiteurcreances',array('debiteur'=>$debiteur->getId()));
-        $list = ListModelsCreances::getDefault($this->getTwig(),$this->getRouter(),$items,$url)->render();
-        return $this->returnList($list,$call);
+        $url = $this->getRouter()->generate('app_listcaller_debiteurcreances', array('debiteur' => $debiteur->getId()));
+        $list = ListModelsCreances::getDefault($this->getTwig(), $this->getRouter(), $items, $url)->render();
+        return $this->returnList($list, $call);
     }
 
     /**
@@ -184,12 +197,12 @@ class ListCallerController extends Controller
      * @param $call
      * @return mixed
      */
-    public function DebiteurFactures(Debiteur $debiteur,$call = ListCallerController::CALL_BY_TWIG)
+    public function DebiteurFactures(Debiteur $debiteur, $call = ListCallerController::CALL_BY_TWIG)
     {
         $items = $debiteur->getFactures();
-        $url = $this->getRouter()->generate('app_listcaller_debiteurfactures',array('debiteur'=>$debiteur->getId()));
-        $list = ListModelsFactures::getDefault($this->getTwig(),$this->getRouter(),$items,$url)->render();
-        return $this->returnList($list,$call);
+        $url = $this->getRouter()->generate('app_listcaller_debiteurfactures', array('debiteur' => $debiteur->getId()));
+        $list = ListModelsFactures::getDefault($this->getTwig(), $this->getRouter(), $items, $url)->render();
+        return $this->returnList($list, $call);
     }
 
     /**
@@ -199,12 +212,12 @@ class ListCallerController extends Controller
      * @param $call
      * @return mixed
      */
-    public function FamilleMembres(Famille $famille,$call = ListCallerController::CALL_BY_TWIG)
+    public function FamilleMembres(Famille $famille, $call = ListCallerController::CALL_BY_TWIG)
     {
         $items = $famille->getMembres();
-        $url = $this->getRouter()->generate('app_listcaller_famillemembres',array('famille'=>$famille->getId()));
-        $list = ListModelsMembre::getDefault($this->getTwig(),$this->getRouter(),$items,$url)->render();
-        return $this->returnList($list,$call);
+        $url = $this->getRouter()->generate('app_listcaller_famillemembres', array('famille' => $famille->getId()));
+        $list = ListModelsMembre::getDefault($this->getTwig(), $this->getRouter(), $items, $url)->render();
+        return $this->returnList($list, $call);
     }
 
     /**
@@ -214,12 +227,12 @@ class ListCallerController extends Controller
      * @param $call
      * @return mixed
      */
-    public function ReceiverMails(Receiver $receiver,$call = ListCallerController::CALL_BY_TWIG)
+    public function ReceiverMails(Receiver $receiver, $call = ListCallerController::CALL_BY_TWIG)
     {
         $items = $receiver->getMails();
-        $url = $this->getRouter()->generate('app_listcaller_receivermails',array('receiver'=>$receiver->getId()));
-        $list = ListModelsMail::getDefault($this->getTwig(),$this->getRouter(),$items,$url)->render();
-        return $this->returnList($list,$call);
+        $url = $this->getRouter()->generate('app_listcaller_receivermails', array('receiver' => $receiver->getId()));
+        $list = ListModelsMail::getDefault($this->getTwig(), $this->getRouter(), $items, $url)->render();
+        return $this->returnList($list, $call);
     }
 
     /**
@@ -229,12 +242,12 @@ class ListCallerController extends Controller
      * @param $call
      * @return mixed
      */
-    public function SenderMailsNotSent(Sender $sender,$call = ListCallerController::CALL_BY_TWIG)
+    public function SenderMailsNotSent(Sender $sender, $call = ListCallerController::CALL_BY_TWIG)
     {
         $items = $sender->getNotSentMails();
-        $url = $this->getRouter()->generate('app_listcaller_sendermailsnotsent',array('sender'=>$sender->getId()));
-        $list = ListModelsMail::getMyMail($this->getTwig(),$this->getRouter(),$items,$url)->render();
-        return $this->returnList($list,$call);
+        $url = $this->getRouter()->generate('app_listcaller_sendermailsnotsent', array('sender' => $sender->getId()));
+        $list = ListModelsMail::getMyMail($this->getTwig(), $this->getRouter(), $items, $url)->render();
+        return $this->returnList($list, $call);
     }
 
     /**
@@ -244,12 +257,12 @@ class ListCallerController extends Controller
      * @param $call
      * @return mixed
      */
-    public function SenderMailsSent(Sender $sender,$call = ListCallerController::CALL_BY_TWIG)
+    public function SenderMailsSent(Sender $sender, $call = ListCallerController::CALL_BY_TWIG)
     {
         $items = $sender->getSentMails();
-        $url = $this->getRouter()->generate('app_listcaller_sendermailssent',array('sender'=>$sender->getId()));
-        $list = ListModelsMail::getMyMail($this->getTwig(),$this->getRouter(),$items,$url)->render();
-        return $this->returnList($list,$call);
+        $url = $this->getRouter()->generate('app_listcaller_sendermailssent', array('sender' => $sender->getId()));
+        $list = ListModelsMail::getMyMail($this->getTwig(), $this->getRouter(), $items, $url)->render();
+        return $this->returnList($list, $call);
     }
 
 

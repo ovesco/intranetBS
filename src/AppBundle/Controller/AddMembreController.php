@@ -110,7 +110,7 @@ class AddMembreController extends Controller
             return $this->redirect($this->generateUrl('app_addmembre_famillechoice'));
 
         }
-        return $this->render('AppBundle:Membre/AddForm:Start.html.twig',
+        return $this->render('AppBundle:Membre/AddForm:start.html.twig',
             array('form' => $form->createView(), 'next' => $this->generateUrl('app_addmembre_start')));
     }
 

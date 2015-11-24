@@ -1,8 +1,0 @@
-{#
-    Cette partiale affiche une liste pour afficher des membres. Il faudrait
-    l'utiliser au maximum pour standardiser l'affichage des tables. Elle supporte toutes les actions
-    vitales au travers d'une api chillos
-#}
-
-
-{{ list_container.getModel(constant('AppBundle\\Utils\\ListRenderer\\Model::Membre'), membres).render|raw }}

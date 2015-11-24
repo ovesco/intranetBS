@@ -3,8 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Groupe;
-use AppBundle\Form\GroupeType;
-use AppBundle\Form\VoirGroupeType;
+use AppBundle\Form\Groupe\GroupeShowType;
+use AppBundle\Form\Groupe\GroupeType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Utils\Menu\Menu;
+
 /**
  * Class GroupeController
  * @package AppBundle\Controller
@@ -54,7 +55,7 @@ class GroupeController extends Controller
         return array(
             'listing'       => $this->get('listing'),
             'groupe'        => $groupe,
-            'groupeForm'    => $this->createForm(new VoirGroupeType(), $groupe)->createView()
+            'groupeForm' => $this->createForm(new GroupeShowType(), $groupe)->createView()
         );
     }
 
@@ -70,7 +71,7 @@ class GroupeController extends Controller
     {
 
         //$editedGroupe = new Groupe();
-        $editedGroupeForm = $this->createForm(new GroupeType(),$groupe);
+        $editedGroupeForm = $this->createForm(new GroupeShowType(), $groupe);
 
         $editedGroupeForm->handleRequest($request);
 

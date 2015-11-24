@@ -2,8 +2,8 @@
 
 namespace AppBundle\Utils\Data;
 
-use AppBundle\Entity\Membre;
 use AppBundle\Entity\Famille;
+use AppBundle\Entity\Membre;
 use Symfony\Component\Routing\Router;
 
 class JsonParser {
@@ -29,7 +29,7 @@ class JsonParser {
             return array(
 
                 'title'         => ucwords($entity->getPrenom() . ' ' . $entity->getNom()),
-                'url'           => $this->router->generate('interne_voir_membre', array('membre' => $entity->getId())),
+                'url' => $this->router->generate('app_membre_show', array('membre' => $entity->getId())),
                 'description'   => "Naissance : " . $entity->getNaissance()->format('d.m.Y') . " - Numéro BS: " . $entity->getNumeroBs(),
             );
         }
@@ -39,7 +39,7 @@ class JsonParser {
             return array(
 
                 'title'         => $entity->getNom(),
-                'url'           => $this->router->generate('interne_voir_famille', array('famille' => $entity->getId())),
+                'url' => $this->router->generate('app_famille_show', array('famille' => $entity->getId())),
                 'description'   => ($entity->getAdresseExpedition() == null) ? 'Aucune adresse trouvée' : "de " . $entity->getAdresseExpedition()['adresse']->getLocalite()
             );
         }
@@ -49,7 +49,7 @@ class JsonParser {
             return array(
 
                 'title'         => $entity->getNom(),
-                'url'           => $this->router->generate('interne_voir_groupe', array('groupe' => $entity->getId())),
+                'url' => $this->router->generate('app_groupe_show', array('groupe' => $entity->getId())),
                 'description'   => count($entity->getMembersRecursive()) . " membres"
             );
         }

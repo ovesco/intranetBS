@@ -2,8 +2,8 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 
 
 trait MailableTrait
@@ -12,7 +12,7 @@ trait MailableTrait
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Mail", mappedby="mail cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Mail", mappedBy="mail", cascade={"persist"})
      */
     private $mails;
 

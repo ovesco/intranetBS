@@ -4,14 +4,9 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use AppBundle\Entity\DebiteurInterface;
-use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
 use FOS\ElasticaBundle\Configuration\Search;
-use AppBundle\Entity\DebiteurMembre;
-use Doctrine\ORM\Mapping\AssociationOverrides;
-use Doctrine\ORM\Mapping\AssociationOverride;
-use Doctrine\ORM\Mapping\JoinColumn;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Membre
@@ -26,7 +21,7 @@ use Doctrine\ORM\Mapping\JoinColumn;
  *
  *
  */
-class Membre extends Personne implements ExpediableInterface,DebiteurInterface
+class Membre extends Personne implements ExpediableInterface, DebiteurInterface
 {
 
     use MailableTrait;
@@ -426,8 +421,9 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
      * Retourne la première attribution active si elle existe
      */
     public function getActiveAttribution() {
-
         $today = new \Datetime("now");
+
+        /** @var Attribution $attr */
         foreach($this->attributions as $attr) {
 
             if($attr->getDateFin() >= $today || $attr->getDateFin() == null)
@@ -441,11 +437,29 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
      */
     public function hasActiveAttributions()
     {
-        $attr = $this->getActiveAttributions();
-        if(empty($attr))
+        if ($this->getActiveAttributions()->isEmpty())
             return false;
         else
             return true;
+    }
+
+    /**
+     * Get active attributions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActiveAttributions()
+    {
+        $attrs = new ArrayCollection();
+        $today = new \Datetime("now");
+
+        /** @var Attribution $attr */
+        foreach ($this->attributions as $attr) {
+            if ($attr->getDateFin() >= $today || $attr->getDateFin() == null)
+                $attrs[] = $attr;
+        }
+
+        return $attrs;
     }
 
     /**
@@ -465,25 +479,6 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
             $groups[] = $attribution->getGroupe();
         }
         return $groups;
-    }
-
-    /**
-     * Get active attributions
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getActiveAttributions()
-    {
-        $attrs = array();
-        $today = new \Datetime("now");
-
-        foreach ($this->attributions as $attr) {
-
-            if ($attr->getDateFin() >= $today || $attr->getDateFin() == null)
-                $attrs[] = $attr;
-        }
-
-        return $attrs;
     }
 
     /**
@@ -704,6 +699,15 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
         return $this;
     }
 
+    /**
+     * Get receiver
+     *
+     * @return ReceiverMembre
+     */
+    public function getReceiver()
+    {
+        return $this->receiver;
+    }
 
     /**
      * Set receiver
@@ -721,13 +725,13 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
     }
 
     /**
-     * Get receiver
+     * Get sender
      *
-     * @return ReceiverMembre
+     * @return SenderMembre
      */
-    public function getReceiver()
+    public function getSender()
     {
-        return $this->receiver;
+        return $this->sender;
     }
 
     /**
@@ -743,15 +747,5 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
         if(is_null($sender->getMembre()))
             $sender->setMembre($this);
         return $this;
-    }
-
-    /**
-     * Get sender
-     *
-     * @return SenderMembre
-     */
-    public function getSender()
-    {
-        return $this->sender;
     }
 }

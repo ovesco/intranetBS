@@ -117,7 +117,7 @@
                 </div>
 
                 <div class="ui bottom attached segment">
-                    {{ list_caller.listById(constant('AppBundle\\Utils\\ListUtils\\ListContainer::MembreEffectifs'),  groupe.members|ids_for_routing)|raw }}
+                    {{ list_caller.GroupeEffectifs(groupe)|raw }}
                 </div>
 
                 {% if groupe.model.affichageEffectifs %}
@@ -135,7 +135,7 @@
                         </div>
 
                         <div class="ui bottom attached segment">
-                            {{ list_caller.listById(constant('AppBundle\\Utils\\ListUtils\\ListContainer::MembreEffectifs'),  groupeEnfant.members|ids_for_routing)|raw }}
+                            {{ list_caller.GroupeEffectifs(groupeEnfant)|raw }}
                         </div>
                     {% endfor %}
                 {% endif %}
@@ -215,16 +215,5 @@
 
     #}
 
-
-{% endblock %}
-
-{% block js %}
-
-    {% javascripts
-    '@AppBundle/Resources/public/js/Groupe/page_voir_groupe.js'
-    '@AppBundle/Resources/public/js/Envoi/display_form_envoi_document.js'%}
-    <script src="{{ asset_url }}"></script>
-
-    {% endjavascripts %}
 
 {% endblock %}

@@ -22,7 +22,7 @@
                             <tr>
                                 <td>Ma page</td>
                                 <td>
-                                    <a href="{{ path('interne_voir_membre', {membre: app.user.membre.id}) }}">
+                                    <a href="{{ path('app_membre_show', {membre: app.user.membre.id}) }}">
                                         {{ app.user.membre.prenom|capitalize }}
                                         {{ app.user.membre.nom|capitalize }}
                                     </a>

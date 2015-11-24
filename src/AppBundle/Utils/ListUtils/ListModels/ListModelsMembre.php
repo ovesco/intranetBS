@@ -6,9 +6,9 @@ use AppBundle\Entity\Membre;
 use AppBundle\Utils\Event\EventPostAction;
 use AppBundle\Utils\ListUtils\Action;
 use AppBundle\Utils\ListUtils\Column;
+use AppBundle\Utils\ListUtils\ListModelInterface;
 use AppBundle\Utils\ListUtils\ListRenderer;
 use Symfony\Component\Routing\Router;
-use AppBundle\Utils\ListUtils\ListModelInterface;
 
 class ListModelsMembre implements ListModelInterface
 {
@@ -51,7 +51,7 @@ class ListModelsMembre implements ListModelInterface
         $list->setSearchBar(true);
 
         $list->addColumn(new Column('Prénom', function (Membre $membre) use ($router) {
-            return '<a href="' . $router->generate('app_membre_add', array('membre' => $membre->getId())) . '">' . $membre->getPrenom() . '</a>';
+            return '<a href="' . $router->generate('app_membre_show', array('membre' => $membre->getId())) . '">' . $membre->getPrenom() . '</a>';
         }));
         $list->addColumn(new Column('Nom', function (Membre $membre) use ($router) {
             return '<a href="' . $router->generate('app_famille_show', array('famille' => $membre->getFamille()->getId())) . '">' . $membre->getNom() . '</a>';

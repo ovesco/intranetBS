@@ -3,34 +3,27 @@
 namespace AppBundle\Command;
 
 /* Specifics class for command */
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use AppBundle\Command\CustomOutput;
-use Symfony\Component\Console\Input\ArrayInput;
-use Doctrine\Common\Collections\ArrayCollection;
 
 
 class ScriptCommand extends ContainerAwareCommand
 {
-    /** @var  CustomOutput */
-    protected $customOutput;
-
-    /** @var InputInterface */
-    protected $input;
-
-    /** @var OutputInterface */
-    protected $output;
-
-    /** @var  ArrayCollection */
-    protected $commands;
-
     const SCRIPT_RESTART_DEV = 'restart_dev';
     const SCRIPT_RESTART_DATABASE = 'restart_database';
-    const SCRIPT_INSTALL = 'install';
+    /** @var  CustomOutput */
+    protected $customOutput;
+    /** @var InputInterface */
+    protected $input;
+    /** @var OutputInterface */
+    protected $output;
+    /** @var  ArrayCollection */
+    protected $commands;
 
     protected function configure()
     {
@@ -48,52 +41,34 @@ class ScriptCommand extends ContainerAwareCommand
         $this->commands = new ArrayCollection();
 
         $script = $this->input->getArgument('script_name');
-        $this->customOutput->blueLabel('start script:'.$script);
+
         switch($script)
         {
-            case ScriptCommand::SCRIPT_INSTALL:
-                $this->scriptComposerInstall();
-                $this->scriptRestartDatabase();
-                break;
             case ScriptCommand::SCRIPT_RESTART_DEV:
-                $this->scriptRestartDatabase();
-                $this->scriptFillFaker();
+                $this->commands->add(new ConsoleCommand('cache:clear'));
+                $this->commands->add(new ShellCommand('rm -rf '.$this->getContainer()->getParameter('app.upload_path')));
+                $this->commands->add(new ConsoleCommand('doctrine:database:drop',array('--force'=>true)));
+                $this->commands->add(new ConsoleCommand('doctrine:database:create'));
+                $this->commands->add(new ConsoleCommand('doctrine:schema:update',array('--force'=>true)));
+                $this->commands->add(new ConsoleCommand('fos:elastica:reset'));
+                $this->commands->add(new ConsoleCommand('security:roles:build',array('filename'=>'roles.yml')));
+                $this->commands->add(new ConsoleCommand('app:populate',array('action'=>'create')));
+                $this->commands->add(new ConsoleCommand('app:populate',array('action'=>'fill','members'=>200)));
+                $this->commands->add(new ConsoleCommand('app:populate',array('action'=>'create_admin')));
+                $this->commands->add(new ConsoleCommand('fos:elastica:populate'));
                 break;
             case ScriptCommand::SCRIPT_RESTART_DATABASE:
-                $this->scriptRestartDatabase();
+                $this->commands->add(new ConsoleCommand('cache:clear'));
+                $this->commands->add(new ShellCommand('rm -rf '.$this->getContainer()->getParameter('app.upload_path')));
+                $this->commands->add(new ConsoleCommand('doctrine:database:drop',array('--force'=>true)));
+                $this->commands->add(new ConsoleCommand('doctrine:database:create'));
+                $this->commands->add(new ConsoleCommand('doctrine:schema:update',array('--force'=>true)));
+                $this->commands->add(new ConsoleCommand('fos:elastica:reset'));
                 break;
         }
 
-
-
         $this->runScript();
     }
-
-    protected function scriptComposerInstall()
-    {
-        $this->commands->add(new ShellCommand('php -r "readfile(\'https://getcomposer.org/installer\');" | php'));
-        $this->commands->add((new ShellCommand('php composer.phar install')));
-    }
-
-    protected function scriptRestartDatabase()
-    {
-        $this->commands->add(new ConsoleCommand('cache:clear'));
-        $this->commands->add(new ShellCommand('rm -rf '.$this->getContainer()->getParameter('app.upload_path')));
-        $this->commands->add(new ConsoleCommand('doctrine:database:drop',array('--force'=>true)));
-        $this->commands->add(new ConsoleCommand('doctrine:database:create'));
-        $this->commands->add(new ConsoleCommand('doctrine:schema:update',array('--force'=>true)));
-        $this->commands->add(new ConsoleCommand('fos:elastica:reset'));
-    }
-
-    protected function scriptFillFaker()
-    {
-        $this->commands->add(new ConsoleCommand('security:roles:build',array('filename'=>'roles.yml')));
-        $this->commands->add(new ConsoleCommand('app:populate',array('action'=>'create')));
-        $this->commands->add(new ConsoleCommand('app:populate',array('action'=>'fill','members'=>200)));
-        $this->commands->add(new ConsoleCommand('app:populate',array('action'=>'create_admin')));
-        $this->commands->add(new ConsoleCommand('fos:elastica:populate'));
-    }
-
 
     protected function runScript()
     {
