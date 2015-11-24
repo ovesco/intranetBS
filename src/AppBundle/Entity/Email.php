@@ -15,6 +15,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class Email
 {
+    use RemarquableTrait;
 
     /**
      * @var integer
@@ -39,14 +40,6 @@ class Email
      * @Gedmo\Versioned
      */
     private $email;
-
-    /**
-     * @var string
-     *
-     * @Gedmo\Versioned
-     * @ORM\Column(name="remarques", type="text", nullable=true)
-     */
-    private $remarques;
 
     /**
      * @var Contact
@@ -130,29 +123,6 @@ class Email
     public function setExpediable($expediable)
     {
         $this->expediable = $expediable;
-
-        return $this;
-    }
-
-    /**
-     * Get remarques
-     *
-     * @return string
-     */
-    public function getRemarques()
-    {
-        return $this->remarques;
-    }
-
-    /**
-     * Set remarques
-     *
-     * @param string $remarques
-     * @return Email
-     */
-    public function setRemarques($remarques)
-    {
-        $this->remarques = $remarques;
 
         return $this;
     }

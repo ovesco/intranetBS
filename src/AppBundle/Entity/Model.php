@@ -53,6 +53,10 @@ class Model
 
     /**
      * @ORM\ManyToMany(targetEntity="Categorie", inversedBy="models")
+     * @ORM\JoinTable(name="app_model_categorie",
+     *      joinColumns={@ORM\JoinColumn(name="model_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="categorie_id", referencedColumnName="id")}
+     *      )
      */
     private $categories;
 

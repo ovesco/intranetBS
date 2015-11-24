@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityManager;
 /**
  * Payement
  *
- * @ORM\Table(name="app_bundle_payement")
+ * @ORM\Table(name="app_payement")
  * @ORM\Entity
  * @Search(repositoryClass="AppBundle\Search\Payement\PayementRepository")
  */

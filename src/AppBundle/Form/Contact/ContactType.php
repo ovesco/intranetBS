@@ -15,11 +15,11 @@ class ContactType extends AbstractType
     {
         $builder
             ->add('adresse',new AdresseType())
-            ->add('emails', 'custom_collection', array(
+            ->add('emails', 'dynamic_collection', array(
                 // chaque item du tableau sera un champ « email »
                 'type'   => new EmailType()))
 
-            ->add('telephones', 'custom_collection', array(
+            ->add('telephones', 'dynamic_collection', array(
                 // chaque item du tableau sera un champ « email »
                 'type'   => new TelephoneType()))
         ;

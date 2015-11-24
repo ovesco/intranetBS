@@ -135,7 +135,15 @@ services:
         tags:
             - { name: form.type, alias: remarque_accordion }
 
-    app.type.custom_collection:
-        class: AppBundle\Field\CustomCollectionType
+    app.type.dynamic_collection:
+        class: AppBundle\Field\DynamicCollectionType
         tags:
-            - { name: form.type, alias: custom_collection }
+            - { name: form.type, alias: dynamic_collection }
+
+
+
+    #EVENTS
+#    app.dynamic_relation_subscriber:
+#        class: AppBundle\EventSubscriber\DynamicRelationSubscriber
+#        tags:
+#            - { name: doctrine.event_subscriber, connection: default }

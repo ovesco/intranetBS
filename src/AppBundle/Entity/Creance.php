@@ -10,7 +10,7 @@ use FOS\ElasticaBundle\Configuration\Search;
 /**
  * Class Creance
  *
- * @ORM\Table(name="app_bundle_creances")
+ * @ORM\Table(name="app_creances")
  * @ORM\Entity
  * @Search(repositoryClass="AppBundle\Search\Creance\CreanceRepository")
  *

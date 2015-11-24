@@ -1,9 +1,11 @@
-
 {#
 
-FICHIER depreacated!!! voir form_field.html.twig
+Ce fichier définit tout les champ de base pour les formulaire de l'application.
+Ce template s'applique à tout formulaire ou ce n'est pas spécifier.
 
 #}
+
+
 {% block date_widget %}
     {% spaceless %}
 
@@ -36,7 +38,16 @@ FICHIER depreacated!!! voir form_field.html.twig
 {% block form_widget_simple %}
     {% spaceless %}
         {% set type = type|default('text') %}
-        <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+        <input
+                type="{{ type }}"
+                {{ block('widget_attributes') }}
+                {% if value is not empty %}
+                    value="{{ value }}"
+                {% endif %}
+                {% if disabled %}
+                    style="background-color: rgba(0, 180, 83, 0.38);"
+                {% endif %}
+        />
     {% endspaceless %}
 {% endblock form_widget_simple %}
 
@@ -60,6 +71,7 @@ FICHIER depreacated!!! voir form_field.html.twig
 {% block form_row -%}
 
     <div class="field">
+
         {{- form_label(form) -}}
 
         {{- form_widget(form) -}} {# Recursive call #}
@@ -116,4 +128,32 @@ FICHIER depreacated!!! voir form_field.html.twig
         <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
     {% endspaceless %}
 {% endblock textarea_widget %}
+
+
+
+
+{%- block form_label -%}
+    {% if label is not same as(false) -%}
+        {% if not compound -%}
+    {% set label_attr = label_attr|merge({'for': id}) %}
+{%- endif -%}
+        {% if required -%}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+    {% set label = label ~ '<span style="color:red">*</span>' %}
+{%- endif -%}
+        {% if label is empty -%}
+    {%- if label_format is not empty -%}
+        {% set label = label_format|replace({
+        '%name%': name,
+        '%id%': id,
+        }) %}
+    {%- else -%}
+        {% set label = name|humanize %}
+    {%- endif -%}
+{%- endif -%}
+        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ (translation_domain is same as(false) ? label : label|trans({}, translation_domain))|raw }}</label>
+    {%- endif -%}
+{%- endblock form_label -%}
+
+
 

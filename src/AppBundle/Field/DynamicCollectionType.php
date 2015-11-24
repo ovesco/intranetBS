@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 
-class CustomCollectionType extends AbstractType
+class DynamicCollectionType extends AbstractType
 {
 
     public function configureOptions( \Symfony\Component\OptionsResolver\OptionsResolver $resolver)
@@ -26,6 +26,6 @@ class CustomCollectionType extends AbstractType
 
     public function getName()
     {
-        return 'custom_collection';
+        return 'dynamic_collection';
     }
 }

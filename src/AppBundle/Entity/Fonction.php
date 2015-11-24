@@ -42,7 +42,7 @@ class Fonction
 
     /**
      * @ORM\ManyToMany(targetEntity="Interne\SecurityBundle\Entity\Role")
-     * @ORM\JoinTable(name="fonctions_roles",
+     * @ORM\JoinTable(name="app_fonctions_roles",
      *      joinColumns={@ORM\JoinColumn(name="fonction_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
      *      )

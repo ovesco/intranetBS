@@ -10,7 +10,7 @@ use FOS\ElasticaBundle\Configuration\Search;
 /**
  * Class Facture
  *
- * @ORM\Table(name="app_bundle_factures")
+ * @ORM\Table(name="app_factures")
  * @ORM\Entity
  * @Search(repositoryClass="AppBundle\Search\Facture\FactureRepository")
  *

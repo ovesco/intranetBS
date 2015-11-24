@@ -16,6 +16,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class Telephone
 {
+    use RemarquableTrait;
+
     /**
      * @var integer
      *
@@ -33,14 +35,6 @@ class Telephone
      * @Assert\NotBlank()
      */
     private $telephone;
-
-    /**
-     * @var string
-     *
-     * @Gedmo\Versioned
-     * @ORM\Column(name="remarques", type="text", nullable=true)
-     */
-    private $remarques;
 
     /**
      * @var Contact
@@ -97,28 +91,6 @@ class Telephone
         return $this;
     }
 
-    /**
-     * Get remarques
-     *
-     * @return string
-     */
-    public function getRemarques()
-    {
-        return $this->remarques;
-    }
-
-    /**
-     * Set remarques
-     *
-     * @param string $remarques
-     * @return Telephone
-     */
-    public function setRemarques($remarques)
-    {
-        $this->remarques = $remarques;
-
-        return $this;
-    }
 
     /**
      * Get contact
@@ -135,7 +107,7 @@ class Telephone
      *
      * @param \AppBundle\Entity\Contact $contact
      *
-     * @return ContactInformation
+     * @return Contact
      */
     public function setContact(\AppBundle\Entity\Contact $contact = null)
     {

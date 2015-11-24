@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Debiteur
  *
- * @ORM\Table(name="app_bundle_debiteur")
+ * @ORM\Table(name="app_debiteur")
  * @ORM\Entity
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="proprietaire", type="string")

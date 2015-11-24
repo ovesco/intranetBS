@@ -9,6 +9,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use FOS\ElasticaBundle\Configuration\Search;
 use AppBundle\Entity\DebiteurMembre;
+use Doctrine\ORM\Mapping\AssociationOverrides;
+use Doctrine\ORM\Mapping\AssociationOverride;
+use Doctrine\ORM\Mapping\JoinColumn;
 
 /**
  * Membre
@@ -18,9 +21,15 @@ use AppBundle\Entity\DebiteurMembre;
  * @ORM\Table(name="app_membres")
  * @Search(repositoryClass="AppBundle\Search\MembreRepository")
  *
+ *
+ *
+ *
+ *
  */
 class Membre extends Personne implements ExpediableInterface,DebiteurInterface
 {
+
+    use MailableTrait;
 
     /**
      * @var Famille
@@ -171,7 +180,7 @@ class Membre extends Personne implements ExpediableInterface,DebiteurInterface
         $this->sender = new SenderMembre();
         $this->sender->setMembre($this);
 
-        $this->addAttribution(new Attribution());
+
     }
 
 

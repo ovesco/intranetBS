@@ -31,6 +31,9 @@ class AppController extends Controller
     public function testAction()
     {
 
+        /** @var Membre $m */
+        $m = $this->getDoctrine()->getRepository('AppBundle:Membre')->find(3);
+
 
 
         return $this->render('AppBundle:App:page_test.html.twig');

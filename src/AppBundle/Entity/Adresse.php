@@ -15,6 +15,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Adresse
 {
+    use RemarquableTrait;
+
     /**
      * @var integer
      *
@@ -55,14 +57,6 @@ class Adresse
      */
     private $localite;
 
-    
-    /**
-     * @var text
-     *
-     * @Gedmo\Versioned
-     * @ORM\Column(name="remarques", type="text", nullable=true)
-     */
-     private $remarques;
 
     /**
      * @var Contact
@@ -204,28 +198,7 @@ class Adresse
         return $this;
     }
 
-    /**
-     * Get remarques
-     *
-     * @return string
-     */
-    public function getRemarques()
-    {
-        return $this->remarques;
-    }
 
-    /**
-     * Set remarques
-     *
-     * @param string $remarques
-     * @return Adresse
-     */
-    public function setRemarques($remarques)
-    {
-        $this->remarques = $remarques;
-
-        return $this;
-    }
 
     /**
      * Get contact

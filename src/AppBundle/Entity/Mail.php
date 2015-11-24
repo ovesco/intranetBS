@@ -17,10 +17,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Mail
 {
 
+
+    private $mailable;
+
     const METHOD_EMAIL = "email";
     const METHOD_POST = "post";
     const METHOD_EMAIL_AND_POST = "email_and_post";
     const METHOD_DEFAULT = Mail::METHOD_EMAIL_AND_POST;
+
 
     /**
      * @var integer
@@ -61,6 +65,10 @@ class Mail
      * @ORM\JoinColumn(name="receiver_id", referencedColumnName="id")
      */
     private $receiver;
+
+
+
+
 
     /**
      * @var \Datetime

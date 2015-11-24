@@ -1,5 +1,5 @@
 {# custom_collection_widget #}
-{% block custom_collection_widget -%}
+{% block dynamic_collection_widget -%}
 
     {# unique key pour cette collection, il peut y en avoir plusieur par page #}
     {% set collection_key = random() %}
@@ -51,5 +51,5 @@
 
     </script>
 
-{%- endblock custom_collection_widget %}
+{%- endblock dynamic_collection_widget %}
 
