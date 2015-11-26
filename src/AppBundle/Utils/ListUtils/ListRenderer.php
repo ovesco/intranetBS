@@ -31,7 +31,10 @@ class ListRenderer
     private $toolbar;
 
     /** @var ArrayCollection */
-    private $actions;
+    private $actionsLine;
+
+    /** @var ArrayCollection */
+    private $actionsList;
 
     /** @var bool */
     private $datatable;
@@ -56,7 +59,8 @@ class ListRenderer
         $this->searchBar = false;
         $this->toolbar = false;
         $this->columns = new ArrayCollection();
-        $this->actions = new ArrayCollection();
+        $this->actionsLine = new ArrayCollection();
+        $this->actionsList = new ArrayCollection();
         $this->datatable = true;
         $this->style = '';
 
@@ -186,17 +190,30 @@ class ListRenderer
         $this->columns->add($col);
     }
 
-    public function addAction(Action $action)
+    public function addActionLine(ActionLine $action)
     {
-        $this->actions->add($action);
+        $this->actionsLine->add($action);
     }
 
     /**
      * @return ArrayCollection
      */
-    public function getActions()
+    public function getActionsLine()
     {
-        return $this->actions;
+        return $this->actionsLine;
+    }
+
+    public function addActionList(ActionList $action)
+    {
+        $this->actionsList->add($action);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getActionsList()
+    {
+        return $this->actionsList;
     }
 
     public function getRowId($item)
@@ -206,6 +223,11 @@ class ListRenderer
         return $function($item);
     }
 
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
     /**
      * @param string $url
      * @return string
@@ -213,10 +235,5 @@ class ListRenderer
     public function setUrl($url)
     {
         $this->url = $url;
-    }
-
-    public function getUrl()
-    {
-        return $this->url;
     }
 }

@@ -4,11 +4,7 @@
     Informations sur le membre et sa famille
 {% endblock %}
 
-
-
 {% block form %}
-
-
 
     {{ form_start(form,{'attr': {'class': 'ui form'}}) }}
 
@@ -22,11 +18,6 @@
 
     </div>
 
-
-
-    {% include 'AppBundle:Contact:form_template.html.twig' with {'form':form.contact} %}
-
-
     <h4 class="ui dividing header">Information sur la famille</h4>
 
     {{ form_row(form.famille) }}
@@ -35,9 +26,6 @@
 
     {{ form_end(form) }}
 
-
-
 {% endblock %}
-
 
 {% block next_step %}Engregistrer{% endblock %}

@@ -4,7 +4,7 @@
 namespace AppBundle\Utils\ListUtils\ListModels;
 
 use AppBundle\Utils\Event\EventPostAction;
-use AppBundle\Utils\ListUtils\Action;
+use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\Column;
 use AppBundle\Utils\ListUtils\ListModelInterface;
 use AppBundle\Utils\ListUtils\ListRenderer;
@@ -56,7 +56,7 @@ class ListModelsFactures implements ListModelInterface
             );
         };
 
-        $list->addAction(new Action('Supprimer', 'delete', 'interne_finances_facture_delete', $factureParameters, EventPostAction::RefreshList));
+        $list->addActionLine(new ActionLine('Supprimer', 'delete', 'interne_finances_facture_delete', $factureParameters, EventPostAction::RefreshList));
 
         $list->setDatatable(true);
 
@@ -98,7 +98,7 @@ class ListModelsFactures implements ListModelInterface
             );
         };
 
-        $list->addAction(new Action('Supprimer', 'delete', 'app_facture_delete', $factureParameters, EventPostAction::RefreshList));
+        $list->addActionLine(new ActionLine('Supprimer', 'delete', 'app_facture_delete', $factureParameters, EventPostAction::RefreshList));
 
         $list->setDatatable(true);
 

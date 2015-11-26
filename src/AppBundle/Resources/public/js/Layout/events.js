@@ -1,8 +1,10 @@
 $('.event').click(function () {
 
-    var route = Routing.generate($(this).data('event-route'), $(this).data('event-parameters'));
+    var event_container = $(this).find('[data-event-route]');
 
-    if ($(this).data('event-postactions').indexOf('ShowModal') >= 0) {
+    var route = Routing.generate(event_container.data('event-route'), event_container.data('event-parameters'));
+
+    if (event_container.data('event-postactions').indexOf('ShowModal') >= 0) {
         getModal(null, route);
         return null;
     }
@@ -49,18 +51,20 @@ $('.event').click(function () {
 
 $('.event_mass').click(function () {
 
+    var event_container = $(this).find('[data-event-route]');
+
     var $table = $(this).closest('.data-list').find('table');
-    var routeName = $(this).data('event-route');
+    var routeName = event_container.data('event-route');
 
     var $selected = $table.find('tr.selected');
 
     var selectedParameters = [];
     $selected.each(function (i) {
-        selectedParameters.push($(this).find('[data-event-route=' + routeName + ']').data('event-parameters'));
+        selectedParameters.push(event_container.find('[data-event-route=' + routeName + ']').data('event-parameters'));
     });
 
-    if ($(this).data('event-postactions').indexOf('ShowModal') >= 0) {
-        getModal(null, route);
+    if (event_container.data('event-postactions').indexOf('ShowModal') >= 0) {
+        getModal(null, routeName);
         return null;
     }
     else {

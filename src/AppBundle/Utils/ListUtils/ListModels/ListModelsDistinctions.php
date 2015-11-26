@@ -3,9 +3,11 @@
 
 namespace AppBundle\Utils\ListUtils\ListModels;
 
+use AppBundle\Entity\Membre;
 use AppBundle\Entity\ObtentionDistinction;
 use AppBundle\Utils\Event\EventPostAction;
-use AppBundle\Utils\ListUtils\Action;
+use AppBundle\Utils\ListUtils\ActionLine;
+use AppBundle\Utils\ListUtils\ActionList;
 use AppBundle\Utils\ListUtils\Column;
 use AppBundle\Utils\ListUtils\ListModelInterface;
 use AppBundle\Utils\ListUtils\ListRenderer;
@@ -46,7 +48,16 @@ class ListModelsDistinctions implements ListModelInterface
             );
         };
 
-        $list->addAction(new Action('Supprimer', 'delete', 'obtention-distinction_delete', $obtentionParameters, EventPostAction::RefreshList));
+        $membreParameters = function (Membre $membre) {
+            return array(
+                "membre" => $membre->getId()
+            );
+        };
+
+
+        $list->addActionLine(new ActionLine('Supprimer', 'delete', 'obtention-distinction_delete', $obtentionParameters, EventPostAction::RefreshList));
+
+        $list->addActionList(new ActionList('Ajouter', 'add', 'app_obtention_modaladd', $membreParameters, EventPostAction::ShowModal));
 
         $list->setDatatable(false);
         $list->setStyle('very basic');

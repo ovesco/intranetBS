@@ -161,16 +161,12 @@
 
                         <div class="ui top attached message">
                             <div class="header">
-                                <h3><i class="tags icon"></i>Roles dans la brigade - <a href="#"
-                                                                                        id="ajouter-attribution"
-                                                                                        data-membre-id="{{ membre.id }}">ajouter</a>
-                                </h3>
+                                <h3><i class="tags icon"></i>Roles dans la brigade</h3>
                             </div>
                         </div>
 
                         <div class="ui bottom attached segment">
                             {{ list_caller.MembreAttributions(membre)|raw }}
-
                         </div>
                     </div>
 
@@ -178,14 +174,11 @@
 
                         <div class="ui top attached message">
                             <div class="header">
-                                <h3><i class="star icon"></i>Distinctions - <a href="#" id="ajouter-distinction"
-                                                                               data-membre-id="{{ membre.id }}">ajouter</a>
-                                </h3>
+                                <h3><i class="star icon"></i>Distinctions</h3>
                             </div>
                         </div>
 
                         <div class="ui bottom attached segment">
-
                             {{ list_caller.MembreDistinctions(membre)|raw }}
                         </div>
 
@@ -208,6 +201,20 @@
                     </div>
                 </div>
 
+                <div class="row"> <!-- envois -->
+                    <div class="column">
+                        <div class="ui top attached message">
+                            <div class="header"><h3><i class="send icon"></i>Envois
+                                    - {{ modal_caller('<a>ajouter</a>',path('app_mail_addtoreceiver',{'receiver':membre.receiver.id})) }}
+                                </h3></div>
+                        </div>
+
+                        <div class="ui bottom attached segment">
+                            {{ render(controller('AppBundle:Receiver:show', { 'receiver': membre.receiver.id })) }}
+                        </div>
+                    </div>
+                </div> <!-- envois -->
+
                 <div class="row"> <!-- history -->
                     <div class="sixteen wide column">
                         <div class="ui top attached message">
@@ -220,35 +227,9 @@
                     </div>
                 </div> <!-- history -->
 
-
-                <div class="row">
-                    <div class="column">
-                        <div class="ui top attached message">
-                            <div class="header"><h3><i class="send icon"></i>Envois - {{ modal_caller('<a>ajouter</a>',path('app_mail_addtoreceiver',{'receiver':membre.receiver.id})) }}</h3></div>
-                        </div>
-
-                        <div class="ui bottom attached segment">
-
-
-                            {{ render(controller('AppBundle:Receiver:show', { 'receiver': membre.receiver.id })) }}
-
-
-                        </div>
-
-                    </div>
-                </div>
-
-
             </div>
         </div>
     </div>
-    {#
-        <!-- La modale pour ajouter un téléphone -->
-        {{ render(controller('AppBundle:Contact:renderModalTelephone')) }}
-
-        <!-- et celle pour ajouter un email -->
-        {{ render(controller('AppBundle:Contact:renderModalEmail')) }}
-    #}
 
 {% endblock %}
 

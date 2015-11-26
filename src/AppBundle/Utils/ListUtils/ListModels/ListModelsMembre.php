@@ -4,7 +4,7 @@ namespace AppBundle\Utils\ListUtils\ListModels;
 
 use AppBundle\Entity\Membre;
 use AppBundle\Utils\Event\EventPostAction;
-use AppBundle\Utils\ListUtils\Action;
+use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\Column;
 use AppBundle\Utils\ListUtils\ListModelInterface;
 use AppBundle\Utils\ListUtils\ListRenderer;
@@ -31,7 +31,7 @@ class ListModelsMembre implements ListModelInterface
         };
 
         /* Supprimer l'attribution courante */
-        $list->addAction(new Action('Supprimer', 'delete', 'attribution_delete', $attributionParameters, EventPostAction::RefreshList));
+        $list->addActionLine(new ActionLine('Supprimer', 'delete', 'attribution_delete', $attributionParameters, EventPostAction::RefreshList));
 
         return $list;
     }
@@ -76,7 +76,8 @@ class ListModelsMembre implements ListModelInterface
             return '<a href="' . $router->generate('app_membre_show', array('membre' => $membre->getId())) . '">' . $membre->getPrenom() . '</a>';
         }));
         $list->addColumn(new Column('Fonction', function (Membre $membre) {
-            return $membre->getActiveAttribution()->getFonction();
+            if ($membre->getActiveAttribution() != null)
+                return $membre->getActiveAttribution()->getFonction();
         }));
         $list->addColumn(new Column('Naissance', function (Membre $membre) {
             return $membre->GetNaissance();

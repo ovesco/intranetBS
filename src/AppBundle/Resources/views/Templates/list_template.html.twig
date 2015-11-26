@@ -1,7 +1,4 @@
-
-{{ list.url }} {#todo @christian: je sais pas ou tu veux mettre ca...#}
-
-<div class="data-list" data-name="{{ list.name }}">
+<div class="data-list" data-name="{{ list.name }}" data-url="{{ list.url }}">
 
     {% if list.hasToolbar %}
         <div class="data-liste-toolbar">
@@ -26,7 +23,7 @@
                 </th>
             {% endfor %}
 
-            {% if list.actions|length != 0 %}
+            {% if list.actionsLine|length != 0 %}
                 <th>
                     Actions
                 </th>
@@ -48,9 +45,9 @@
                     </td>
                 {% endfor %}
 
-                {% if list.actions|length != 0 %}
+                {% if list.actionsLine|length != 0 %}
                 <td>
-                    {% for action in list.actions %}
+                    {% for action in list.actionsLine %}
                         <i class="{{ action.icon }} icon popupable event"
                            data-content="{{ action.label }}"
                            data-event-route="{{ action.route }}"
@@ -66,16 +63,32 @@
     </table>
 
 
-    {% if list.actions|length != 0 %}
+    {# List actions #}
+    {% if list.actionsList|length != 0 %}
+
+        {% for action in list.actionsList %}
+            <button class="ui icon button event">
+                <i class="{{ action.icon }} icon"
+                   data-content="{{ action.label }}"
+                   data-event-route="{{ action.route }}"
+                   data-event-postactions="{{ action.getPostActions }}"></i>
+                {{ action.label }}
+            </button>
+        {% endfor %}
+
+    {% endif %}
+
+    {% if list.actionsLine|length != 0 %}
         <div class="ui compact menu">
             <div class="ui simple dropdown item">
+                <i class="list icon"></i>
                 Actions
                 <i class="dropdown icon"></i>
 
                 <div class="menu">
-                    {% for action in list.actions %}
-                        <div class="item">
-                            <i class="{{ action.icon }} icon event_mass"
+                    {% for action in list.actionsLine %}
+                        <div class="item event_mass">
+                            <i class="{{ action.icon }} icon"
                                data-content="{{ action.label }}"
                                data-event-route="{{ action.route }}"
                                data-event-postactions="{{ action.getPostActions }}"></i>

@@ -1,22 +1,14 @@
 
-{% form_theme searchForm 'AppBundle:Templates:form_template_search_accordion.html.twig' %}
-
 <div class="ui top attached message">
     <h4 class="ui header">Formulaire de recherche</h4>
 </div>
+
 <div class="ui bottom attached segment">
-
-
     {{ form_start(searchForm, {'attr': {'class': 'ui form accordion'}}) }}
 
-
     {{ form_rest(searchForm) }}
-
 
     <input type="submit" value="Rechercher" class="ui blue submit button">
 
     {{ form_end(searchForm) }}
-
-
-
 </div>

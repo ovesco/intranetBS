@@ -3,7 +3,7 @@
 
 namespace AppBundle\Utils\ListUtils\ListModels;
 
-use AppBundle\Utils\ListUtils\Action;
+use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\Column;
 use AppBundle\Utils\ListUtils\ListModelInterface;
 use AppBundle\Utils\ListUtils\ListRenderer;

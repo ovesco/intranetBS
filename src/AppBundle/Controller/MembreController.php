@@ -37,6 +37,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class MembreController extends Controller {
 
 
+    const SEARCH_RESULTS = "session_results";
+
     /**
      * Affiche la page d'ajout de membre
      *
@@ -49,7 +51,6 @@ class MembreController extends Controller {
     public function addAction(Request $request) {
         return array();
     }
-
 
     /**
      * todo: je crois que cette fonciton n'est plus utilisée...a checké (uffer, 16 nov 2015)
@@ -72,8 +73,6 @@ class MembreController extends Controller {
         return new JsonResponse($data);
     }
 
-
-
     /**
      * @Route("/show/{membre}", options={"expose"=true}, requirements={"membre" = "\d+"})
      * @ParamConverter("membre", class="AppBundle:Membre")
@@ -92,7 +91,6 @@ class MembreController extends Controller {
             'membreForm'        => $membreForm->createView(),
         );
     }
-
 
     /**
      * @Route("/show_pdf/{membre}", requirements={"membre" = "\d+"})
@@ -125,7 +123,6 @@ class MembreController extends Controller {
 
     }
 
-
     /**
      * @param $membre membre le membre
      * @param $type string 'attribution' ou 'distinction'
@@ -133,6 +130,8 @@ class MembreController extends Controller {
      * @return jsonresponse
      * @Route("/ajax/remove-attribution-or-distinction/{membre}/{type}/{obj}", name="app_membre_ajax_remove_attr_dist", options={"expose"=true})
      * @ParamConverter("membre", class="AppBundle:Membre")
+     *
+     * TODO : pourquoi pas removeAttributionAction et removeDistinctionAction ?
      */
     public function removeAttributionOrDistinctionAction(Membre $membre, $type, $obj) {
 
@@ -151,7 +150,6 @@ class MembreController extends Controller {
         return new JsonResponse(1);
     }
 
-
     /**
      * Vérifie si un numéro BS est déjà attribué ou pas
      * @param $numero le numéro BS
@@ -166,7 +164,6 @@ class MembreController extends Controller {
         else return new JsonResponse(true);
     }
 
-
     /**
      * Permet de modifier la famille d'un membre
      * @param $membre membre le membre
@@ -175,6 +172,8 @@ class MembreController extends Controller {
      * @ParamConverter("membre", class="AppBundle:Membre")
      * @ParamConverter("famille", class="AppBundle:Famille")
      * @Route("/ajax/modify-famille/{membre}/{famille}", name="app_membre_modify_famille", options={"expose"=true})
+     *
+     * TODO: il faut changer la famille du membre et faire un update, doctrine gère le reste. Cette fonction devrait s'appeler setFamilleAction
      */
     public function modifyFamilleAction(Membre $membre, Famille $famille) {
 
@@ -191,9 +190,6 @@ class MembreController extends Controller {
         return new JsonResponse('');
     }
 
-
-
-    const SEARCH_RESULTS = "session_results";
     /**
      * Affiche la page permettant de lancer une recherche
      *

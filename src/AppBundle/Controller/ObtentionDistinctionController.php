@@ -4,7 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\ObtentionDistinction;
-use AppBundle\Form\ObtentionDistinctionType;
+use AppBundle\Form\ObtentionDistinction\ObtentionDistinctionType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

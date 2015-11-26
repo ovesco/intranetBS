@@ -6,8 +6,6 @@
     {%  set buttonText = 'Modifier' %}
 {% endif %}
 
-{% form_theme form '@App/Templates/form_template.html.twig' %}
-
 <div id="modal-add-attribution" class="ui small modal">
     <div class="header">
         {{ header }}
@@ -31,14 +29,13 @@
             {{ form_row(form_line) }}
         {% endfor %}
 
-
         <div class="ui field">
             <input type="submit" class="ui green button" value="{{ buttonText }}" />
         </div>
 
         {{ form_end(form) }}
-
     </div>
+
     <div class="actions">
         <div class="ui button">Annuler</div>
     </div>

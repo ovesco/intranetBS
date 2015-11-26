@@ -4,8 +4,10 @@
 namespace AppBundle\Utils\ListUtils\ListModels;
 
 use AppBundle\Entity\Attribution;
+use AppBundle\Entity\Membre;
 use AppBundle\Utils\Event\EventPostAction;
-use AppBundle\Utils\ListUtils\Action;
+use AppBundle\Utils\ListUtils\ActionLine;
+use AppBundle\Utils\ListUtils\ActionList;
 use AppBundle\Utils\ListUtils\Column;
 use AppBundle\Utils\ListUtils\ListModelInterface;
 use AppBundle\Utils\ListUtils\ListRenderer;
@@ -55,9 +57,17 @@ class ListModelsAttributions implements ListModelInterface
             );
         };
 
-        $list->addAction(new Action('Modifier', 'edit', 'attribution_edit_modal', $attributionParameters, EventPostAction::ShowModal));
-        $list->addAction(new Action('Terminer', 'ban', 'attribution_edit_modal', $attributionParameters, EventPostAction::ShowModal));
-        $list->addAction(new Action('Supprimer', 'delete', 'attribution_delete', $attributionParameters, EventPostAction::RefreshList));
+        $membreParameters = function (Membre $membre) {
+            return array(
+                "membre" => $membre->getId()
+            );
+        };
+
+        $list->addActionLine(new ActionLine('Modifier', 'edit', 'app_attribution_modaledit', $attributionParameters, EventPostAction::ShowModal));
+        $list->addActionLine(new ActionLine('Terminer', 'ban', 'app_attribution_modaledit', $attributionParameters, EventPostAction::ShowModal));
+        $list->addActionLine(new ActionLine('Supprimer', 'delete', 'app_attribution_delete', $attributionParameters, EventPostAction::RefreshList));
+
+        $list->addActionList(new ActionList('Ajouter', 'add', 'app_attribution_modaladd', $membreParameters, EventPostAction::ShowModal));
 
         $list->setDatatable(false);
         $list->setStyle('very basic');

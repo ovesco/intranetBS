@@ -1,45 +1,26 @@
-{% form_theme creanceForm 'AppBundle:Templates:form_template.html.twig' %}
+<i class="close icon"></i>
+<div class="header">
+    <h4 class="modal-title">Ajouter une créance</h4>
+</div>
 
-    <i class="close icon"></i>
-    <div class="header">
+<div class="content" style="overflow-y:auto">
 
-            <h4 class="modal-title" >Ajouter une créance</h4>
+    {% set idForm = 'addCreanceForm' %}
 
+    {{ form_start(creanceForm, {'attr': {'id': idForm }}) }}
 
-
+    <div class="ui form">
+        {{ form_row(creanceForm.titre) }}
+        {{ form_row(creanceForm.remarque) }}
+        {{ form_row(creanceForm.montantEmis) }}
+        {{ form_rest(creanceForm) }}
     </div>
-    <div class="content" style="overflow-y:auto">
 
-
-        {% set idForm = 'addCreanceForm' %}
-
-        {{ form_start(creanceForm, {'attr': {'id': idForm }}) }}
-
-        <div class="ui form">
-
-            {{ form_row(creanceForm.titre) }}
-            {{ form_row(creanceForm.remarque) }}
-            {{ form_row(creanceForm.montantEmis) }}
-            {{ form_rest(creanceForm) }}
-
-        </div>
-
-
-        {{ form_end(creanceForm) }}
-
-    </div>
-    <div class="actions">
-
-        <div class="ui button blue addCreanceFromModal"  data-form="{{ idForm }}">Ajouter</div>
-
-
-
-    </div>
+    {{ form_end(creanceForm) }}
 
 </div>
 
-
-
-
-
+<div class="actions">
+    <div class="ui button blue addCreanceFromModal" data-form="{{ idForm }}">Ajouter</div>
+</div>
 

@@ -201,10 +201,10 @@ class Attribution
     /**
      * Set membre
      *
-     * @param \AppBundle\Entity\Membre $membre
+     * @param Membre $membre
      * @return Attribution
      */
-    public function setMembre(\AppBundle\Entity\Membre $membre = null)
+    public function setMembre(Membre $membre)
     {
         $this->membre = $membre;
         return $this;
