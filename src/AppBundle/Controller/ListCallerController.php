@@ -2,16 +2,16 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Debiteur;
+use AppBundle\Entity\Famille;
 use AppBundle\Entity\Groupe;
-use AppBundle\Utils\ListUtils\ListModels\ListModelsMail;
+use AppBundle\Entity\Membre;
 use AppBundle\Entity\Receiver;
 use AppBundle\Entity\Sender;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use AppBundle\Entity\Membre;
-use AppBundle\Entity\Debiteur;
-use AppBundle\Entity\Famille;
+
 use AppBundle\Utils\ListUtils\ListKey;
 use Doctrine\ORM\EntityManager;
 
@@ -21,9 +21,11 @@ use AppBundle\Utils\ListUtils\ListModels\ListModelsAttributions;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsDistinctions;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsMembre;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsCreances;
+
 use AppBundle\Utils\ListUtils\ListModels\ListModelsFactures;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsFamille;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsModel;
+
 
 /* Annotations */
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -153,7 +155,7 @@ class ListCallerController extends Controller
     {
         $items = $membre->getAttributions();
         $url = $this->getRouter()->generate('app_listcaller_membreattributions', array('membre' => $membre->getId()));
-        $list = ListModelsAttributions::getDefault($this->getTwig(), $this->getRouter(), $items, $url)->render();
+        $list = ListModelsAttributions::getDefault($this->getTwig(), $this->getRouter(), $items, $membre, $url)->render();
         return $this->returnList($list, $call);
     }
 
@@ -168,7 +170,7 @@ class ListCallerController extends Controller
     {
         $items = $membre->getDistinctions();
         $url = $this->getRouter()->generate('app_listcaller_membredistinctions', array('membre' => $membre->getId()));
-        $list = ListModelsDistinctions::getDefault($this->getTwig(), $this->getRouter(), $items, $url)->render();
+        $list = ListModelsDistinctions::getDefault($this->getTwig(), $this->getRouter(), $items, $membre, $url)->render();
         return $this->returnList($list, $call);
     }
 

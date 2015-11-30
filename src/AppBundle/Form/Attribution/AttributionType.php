@@ -7,7 +7,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class AttributionType extends AbstractType
 {
@@ -43,7 +42,9 @@ class AttributionType extends AbstractType
 
         $builder
             ->add('dateDebut', 'datepicker')
-            ->add('dateFin', 'datepicker')
+            ->add('dateFin', 'datepicker', array(
+                'required' => false
+            ))
 
             ->add('groupe', 'entity', array(
                 'class'		=> 'AppBundle:Groupe'

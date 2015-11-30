@@ -4,20 +4,24 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Interne\FinancesBundle\Entity\CreanceToMembre;
-use Interne\FinancesBundle\Entity\FactureToMembre;
+use Interne\FinancesBundle\Entity\DebiteurInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-
-
-//FinancesBundle
+use Gedmo\Mapping\Annotation as Gedmo;
+use FOS\ElasticaBundle\Configuration\Search;
+use Interne\FinancesBundle\Entity\DebiteurMembre;
+use Interne\MailBundle\Entity\ReceiverMembre;
+use Interne\MailBundle\Entity\SenderMembre;
 
 /**
  * Membre
  *
  * @ORM\Entity
+ * @Gedmo\Loggable
  * @ORM\Table(name="app_membres")
+ * @Search(repositoryClass="AppBundle\Search\MembreRepository")
+ *
  */
-class Membre extends Personne implements ExpediableInterface
+class Membre extends Personne implements ExpediableInterface,DebiteurInterface
 {
 
     /**
@@ -25,6 +29,7 @@ class Membre extends Personne implements ExpediableInterface
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Famille", inversedBy="membres", cascade={"persist"}, fetch="EAGER")
      * @ORM\JoinColumn(name="famille_id", referencedColumnName="id")
+     * @Gedmo\Versioned
      */
     private $famille;
 
@@ -43,8 +48,9 @@ class Membre extends Personne implements ExpediableInterface
     private $distinctions;
 
     /**
-     * @var date
+     * @var \Datetime
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="naissance", type="date")
      */
     private $naissance;
@@ -52,6 +58,7 @@ class Membre extends Personne implements ExpediableInterface
     /**
      * @var integer
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="numero_bs", type="integer", nullable=true)
      */
     private $numeroBs;
@@ -59,6 +66,7 @@ class Membre extends Personne implements ExpediableInterface
     /**
      * @var string
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="numero_avs", type="string", length=255, nullable=true)
      */
     private $numeroAvs;
@@ -66,6 +74,7 @@ class Membre extends Personne implements ExpediableInterface
     /**
      * @var string
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="statut", type="string", length=255, nullable=true)
      */
     private $statut;
@@ -73,6 +82,7 @@ class Membre extends Personne implements ExpediableInterface
     /**
      * @var \Datetime
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="inscription", type="date")
      */
     private $inscription;
@@ -80,6 +90,7 @@ class Membre extends Personne implements ExpediableInterface
     /**
      * @var string
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="remarques", type="text", nullable=true)
      */
     private $remarques;
@@ -87,28 +98,15 @@ class Membre extends Personne implements ExpediableInterface
     /**
      * @var integer
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="validity", type="integer")
      */
     private $validity;
 
 
-
-
     /*
      * ====== FinancesBundle =======
      */
-
-
-    /**
-     * @var ArrayCollection
-     *
-     * @ORM\OneToOne(targetEntity="Interne\FinancesBundle\Entity\DebiteurMembre",
-     *                mappedBy="membre", cascade={"persist","remove"})
-     */
-    private $debiteur;
-
-
-
     /**
      * Cette propriété détermine si les cérances détenues par ce membre sont facturées
      * à la famille ou au membre lui même.
@@ -120,16 +118,60 @@ class Membre extends Personne implements ExpediableInterface
      */
     private $envoiFacture = 'Membre';
 
-
-    /*
-     * ===== History Bundle ====
+    /**
+     * @var DebiteurMembre
+     *
+     * @ORM\OneToOne(targetEntity="Interne\FinancesBundle\Entity\DebiteurMembre",
+     *                inversedBy="membre", cascade={"persist","remove"})
      */
+    private $debiteur;
+
+    /**
+     * @var ReceiverMembre
+     *
+     * @ORM\OneToOne(targetEntity="Interne\MailBundle\Entity\ReceiverMembre",
+     *                inversedBy="membre", cascade={"persist","remove"})
+     */
+    private $receiver;
+
+    /**
+     * @var SenderMembre
+     *
+     * @ORM\OneToOne(targetEntity="Interne\MailBundle\Entity\SenderMembre",
+     *                inversedBy="membre", cascade={"persist","remove"})
+     */
+    private $sender;
+
     /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Interne\HistoryBundle\Entity\MemberHistory", mappedBy="modifiedMember", cascade={"persist","remove"})
      */
     private $historique;
+
+
+    /**
+     * Constructor
+     *
+     */
+    public function __construct()
+    {
+        $this->inscription = new \Datetime();
+        $this->naissance = new \Datetime();
+        $this->validity = true;
+
+        //un membre a forcement un contact
+        $this->contact = new Contact();
+
+        //un membre a forcement un debiteur
+        $this->debiteur = new DebiteurMembre();
+
+        //un membre a forcement un receiver
+        $this->receiver = new ReceiverMembre();
+
+        //un membre a forcement un receiver
+        $this->sender = new SenderMembre();
+    }
 
 
     /*
@@ -142,26 +184,12 @@ class Membre extends Personne implements ExpediableInterface
     //*/
 
     /**
-     * Constructor
-     *
-     * @param string $prenom
-     * @param string $nom Nom de la famille nouvellement créée
+     * Return the class name
+     * @return string
      */
-    public function __construct($prenom = '', $nom = '')
+    static public function className()
     {
-        $this->inscription = new \Datetime();
-        $this->naissance   = new \Datetime();
-
-        /*
-         * FinancesBundle
-         */
-        $this->creances = new ArrayCollection();
-        $this->factures = new ArrayCollection();
-
-        $this->validity = true;
-
-        $this->prenom = $prenom;
-        $this->famille = new Famille($nom);
+        return __CLASS__;
     }
 
     /**
@@ -171,7 +199,7 @@ class Membre extends Personne implements ExpediableInterface
      * @return string
      */
     public function __toString() {
-        return ucfirst($this->getPrenom() . ' ' . $this->getNom());
+        return $this->getPrenom() . ' ' . $this->getNom();
     }
 
     /**
@@ -182,7 +210,7 @@ class Membre extends Personne implements ExpediableInterface
     public function getNom()
     {
         if ($this->getFamille() != null)
-            return $this->getFamille()->getNom();
+            return ucwords($this->getFamille()->getNom());
         else
             return "Pas dans une famille...";
     }
@@ -566,101 +594,15 @@ class Membre extends Personne implements ExpediableInterface
      */
     public function getAdresseExpedition()
     {
-        $pere       = $this->getFamille()->getPere();
-        $mere       = $this->getFamille()->getMere();
-        $adresse    = null;
-        $generator  = function($type, $adresse) {
-
-            return array('owner' => $type, 'adresse' => $adresse);
-        };
-
-        // On liste d'abord les adresses potentielles
-        $adresses   = array(
-            'membre'    => $this->getContact()->getAdresse(),
-            'famille'   => $this->getFamille()->getContact()->getAdresse(),
-            'pere'      => ($pere == null) ? null : $pere->getContact()->getAdresse(),
-            'mere'      => ($mere == null) ? null : $mere->getContact()->getAdresse()
-        );
-
-        /** @var Adresse $adr */
-        foreach($adresses as $k => $adr) {
-
-            if($adr != null && $adr->getExpediable())
-                return $generator($k, $adr);
-
-            else if($adr != null) $adresse = $generator($k, $adr);
-        }
-
-        if($adresse['adresse'] == null) return null;
-        else return $adresse;
+        $expediable = new Expediable($this);
+        return $expediable->getAdresse();
     }
 
 
     public function getListeEmailsExpedition()
     {
-        $liste = array();
-
-        $emails = $this->getContact()->getEmails();
-        if(!is_null($emails))
-        {
-            foreach($emails as $email){
-                if($email->isExpediable())
-                {
-                    $liste['Membre'] = $email->getEmail();
-                }
-
-            }
-        }
-
-
-        $emails = $this->getFamille()->getContact()->getEmails();
-        if(!is_null($emails))
-        {
-            foreach($emails as $email){
-                if($email->isExpediable())
-                {
-                    $liste['Famille'] = $email->getEmail();
-                }
-
-            }
-        }
-
-
-
-        $mere = $this->getFamille()->getMere();
-        if(!is_null($mere))
-        {
-            $emails = $mere->getContact()->getEmails();
-            if(!is_null($emails))
-            {
-                foreach($emails as $email){
-                    if($email->isExpediable())
-                    {
-                        $liste['Mère'] = $email->getEmail();
-                    }
-
-                }
-            }
-        }
-
-
-        $pere = $this->getFamille()->getPere();
-        if(!is_null($pere))
-        {
-            $emails = $pere->getContact()->getEmails();
-            if(!is_null($emails))
-            {
-                foreach($emails as $email){
-                    if($email->isExpediable())
-                    {
-                        $liste['Père'] = $email->getEmail();
-                    }
-
-                }
-            }
-        }
-
-        return $liste;
+        $expediable = new Expediable($this);
+        return $expediable->getListeEmails();
     }
 
 
@@ -696,5 +638,75 @@ class Membre extends Personne implements ExpediableInterface
     public function getHistorique()
     {
         return $this->historique;
+    }
+
+    /**
+     * @param \Interne\FinancesBundle\Entity\Creance $creance
+     * @return Membre
+     */
+    public function addCreance($creance)
+    {
+        $this->getDebiteur()->addCreance($creance);
+        return $this;
+    }
+
+    /**
+     * Get debiteur
+     *
+     * @return \Interne\FinancesBundle\Entity\DebiteurMembre
+     */
+    public function getDebiteur()
+    {
+        return $this->debiteur;
+    }
+
+    /**
+     * Set debiteur
+     *
+     * @param \Interne\FinancesBundle\Entity\DebiteurMembre $debiteur
+     *
+     * @return Membre
+     */
+    public function setDebiteur($debiteur = null)
+    {
+        $this->debiteur = $debiteur;
+        $debiteur->setMembre($this);
+        return $this;
+    }
+
+    /**
+     * @param \Interne\FinancesBundle\Entity\Facture $facture
+     * @return Membre
+     */
+    public function addFacture($facture)
+    {
+        $this->getDebiteur()->addFacture($facture);
+        return $this;
+    }
+
+
+    /**
+     * Set receiver
+     *
+     * @param \Interne\MailBundle\Entity\ReceiverMembre $receiver
+     *
+     * @return Membre
+     */
+    public function setReceiver(\Interne\MailBundle\Entity\ReceiverMembre $receiver = null)
+    {
+        $this->receiver = $receiver;
+        if(is_null($receiver->getMembre()))
+            $receiver->setMembre($this);
+        return $this;
+    }
+
+    /**
+     * Get receiver
+     *
+     * @return \Interne\MailBundle\Entity\ReceiverMembre
+     */
+    public function getReceiver()
+    {
+        return $this->receiver;
     }
 }

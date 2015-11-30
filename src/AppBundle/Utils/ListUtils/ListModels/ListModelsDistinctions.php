@@ -9,11 +9,10 @@ use AppBundle\Utils\Event\EventPostAction;
 use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\ActionList;
 use AppBundle\Utils\ListUtils\Column;
-use AppBundle\Utils\ListUtils\ListModelInterface;
 use AppBundle\Utils\ListUtils\ListRenderer;
 use Symfony\Component\Routing\Router;
 
-class ListModelsDistinctions implements ListModelInterface
+class ListModelsDistinctions
 {
 
     static public function getRepresentedClass(){
@@ -24,10 +23,11 @@ class ListModelsDistinctions implements ListModelInterface
      * @param \Twig_Environment $twig
      * @param Router $router
      * @param $items
+     * @param Membre $membre
      * @param string $url
      * @return ListRenderer
      */
-    static public function getDefault(\Twig_Environment $twig, Router $router, $items, $url = null)
+    static public function getDefault(\Twig_Environment $twig, Router $router, $items, Membre $membre, $url = null)
     {
         $list = new ListRenderer($twig, $items);
         $list->setUrl($url);
@@ -48,7 +48,7 @@ class ListModelsDistinctions implements ListModelInterface
             );
         };
 
-        $membreParameters = function (Membre $membre) {
+        $membreParameters = function () use ($membre) {
             return array(
                 "membre" => $membre->getId()
             );

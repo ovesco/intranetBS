@@ -9,11 +9,10 @@ use AppBundle\Utils\Event\EventPostAction;
 use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\ActionList;
 use AppBundle\Utils\ListUtils\Column;
-use AppBundle\Utils\ListUtils\ListModelInterface;
 use AppBundle\Utils\ListUtils\ListRenderer;
 use Symfony\Component\Routing\Router;
 
-class ListModelsAttributions implements ListModelInterface
+class ListModelsAttributions
 {
 
     static public function getRepresentedClass(){
@@ -24,10 +23,11 @@ class ListModelsAttributions implements ListModelInterface
      * @param \Twig_Environment $twig
      * @param Router $router
      * @param $items
+     * @param Membre $membre
      * @param string $url
      * @return ListRenderer
      */
-    static public function getDefault(\Twig_Environment $twig, Router $router, $items,$url = null)
+    static public function getDefault(\Twig_Environment $twig, Router $router, $items, Membre $membre, $url = null)
     {
         $list = new ListRenderer($twig, $items);
         $list->setUrl($url);
@@ -57,17 +57,17 @@ class ListModelsAttributions implements ListModelInterface
             );
         };
 
-        $membreParameters = function (Membre $membre) {
+        $membreParameters = function () use ($membre) {
             return array(
                 "membre" => $membre->getId()
             );
         };
 
-        $list->addActionLine(new ActionLine('Modifier', 'edit', 'app_attribution_modaledit', $attributionParameters, EventPostAction::ShowModal));
-        $list->addActionLine(new ActionLine('Terminer', 'ban', 'app_attribution_modaledit', $attributionParameters, EventPostAction::ShowModal));
+        $list->addActionLine(new ActionLine('Modifier', 'edit', 'app_attribution_edit', $attributionParameters, EventPostAction::ShowModal, null, false));
+        $list->addActionLine(new ActionLine('Terminer', 'ban', 'app_attribution_edit', $attributionParameters, EventPostAction::ShowModal));
         $list->addActionLine(new ActionLine('Supprimer', 'delete', 'app_attribution_delete', $attributionParameters, EventPostAction::RefreshList));
 
-        $list->addActionList(new ActionList('Ajouter', 'add', 'app_attribution_modaladd', $membreParameters, EventPostAction::ShowModal));
+        $list->addActionList(new ActionList('Ajouter', 'add', 'app_attribution_add_tomembre', $membreParameters, EventPostAction::ShowModal));
 
         $list->setDatatable(false);
         $list->setStyle('very basic');
