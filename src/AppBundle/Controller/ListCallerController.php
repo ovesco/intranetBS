@@ -13,6 +13,7 @@ use AppBundle\Entity\Membre;
 use AppBundle\Entity\Debiteur;
 use AppBundle\Entity\Famille;
 use AppBundle\Utils\ListUtils\ListKey;
+use Doctrine\ORM\EntityManager;
 
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -22,6 +23,7 @@ use AppBundle\Utils\ListUtils\ListModels\ListModelsMembre;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsCreances;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsFactures;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsFamille;
+use AppBundle\Utils\ListUtils\ListModels\ListModelsModel;
 
 /* Annotations */
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -97,6 +99,16 @@ class ListCallerController extends Controller
     private function getRouter()
     {
         return $this->get('router');
+    }
+
+    /**
+     * Do not put this in constructor: this avoid circular referance of service
+     *
+     * @return EntityManager
+     */
+    private function getEntityManager()
+    {
+        return $this->get('doctrine.orm.entity_manager');
     }
 
     /**
@@ -262,6 +274,19 @@ class ListCallerController extends Controller
         $items = $sender->getSentMails();
         $url = $this->getRouter()->generate('app_listcaller_sendermailssent', array('sender' => $sender->getId()));
         $list = ListModelsMail::getMyMail($this->getTwig(), $this->getRouter(), $items, $url)->render();
+        return $this->returnList($list, $call);
+    }
+
+    /**
+     * @route("/model/all", defaults={"call"="route"})
+     * @param $call
+     * @return mixed
+     */
+    public function modelAll( $call = ListCallerController::CALL_BY_TWIG)
+    {
+        $items = $this->getEntityManager()->getRepository('AppBundle:Model')->findAll();
+        $url = $this->getRouter()->generate('app_listcaller_modelall');
+        $list = ListModelsModel::getDefault($this->getTwig(), $this->getRouter(), $items, $url)->render();
         return $this->returnList($list, $call);
     }
 

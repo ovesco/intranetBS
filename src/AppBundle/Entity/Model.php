@@ -334,4 +334,13 @@ class Model
     {
         $this->categories->removeElement($category);
     }
+
+    public function isRemovable()
+    {
+        if(!$this->groupes->isEmpty())
+            return false;
+        else
+            return true;
+    }
+
 }

@@ -13,10 +13,11 @@ class ModelType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nom')
+            ->add('nom','text',array('label'=>'Nom'))
             ->add('fonctionChef', 'entity', array(
                 'class'		=> 'AppBundle:Fonction',
                 'property'	=> 'nom',
+                'label'=>'Fonction chef'
             ))
             ->add('fonctions', 'entity', array(
                 'class'		=> 'AppBundle:Fonction',
@@ -24,6 +25,7 @@ class ModelType extends AbstractType
                 'multiple'=>true,
                 'expanded'=>false,
                 'required'=>false,
+                'label' =>'Fonctions'
             ))
             ->add('affichageEffectifs','checkbox',array('label'=>'Affichage des effectifs?','required'=>false))
 

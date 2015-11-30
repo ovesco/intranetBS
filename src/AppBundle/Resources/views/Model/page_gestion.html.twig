@@ -7,7 +7,9 @@
     <div class="ui page grid">
         <div class="row">
             <div class="column">
-                <h3>Gestion des modèles</h3>
+                <h3>Gestion des modèles de groupe
+                    {{ help("Les modeles de groupe sont directement lié au groupe. Ils définissent entièrement les propriété des groupes") }}
+                </h3>
                 <div class="ui segment">
 
 
@@ -16,7 +18,9 @@
                         Ajouter un model
                     </div>
 
-                    {% include "AppBundle:Model:liste_model.html.twig" with { 'models' : models } %}
+
+
+                    {{ list_caller.modelAll()|raw }}
 
                 </div>
             </div>

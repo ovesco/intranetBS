@@ -1,3 +1,5 @@
+{% extends 'AppBundle:Templates:modal_small.html.twig' %}
+
 {% if form.nom.vars.value == '' %}
     {%  set header = 'Ajouter un model' %}
     {%  set buttonText = 'Ajouter' %}
@@ -6,50 +8,46 @@
     {%  set buttonText = 'Modifier' %}
 {% endif %}
 
+{% block header %}
+    {{ header }}
+{% endblock %}
 
-<div id="form_model_modale" class="ui small modal">
-    <i class="close icon"></i>
-    <div class="header">
-        {{ header }}
+{% block content %}
+
+    {{ form_start(form,{'attr': {'class': 'ui form'}}) }}
+
+
+    <div class="field">
+        {{ form_row(form.nom) }}
     </div>
 
-    <div class="content">
-
-        {{ form_start(form,{'attr': {'class': 'ui form'}}) }}
-
-
-        <div class="field">
-            {{ form_widget(form.nom) }}
-        </div>
-
-        <div class="field">
-            {{ form_widget(form.fonctionChef) }}
-        </div>
-
-        <div class="field">
-            {{ form_widget(form.fonctions) }}
-        </div>
-
-        <div class="field">
-            {{ form_widget(form.affichageEffectifs) }}
-        </div>
-
-        {{ form_widget(form.categories) }}
-
-
-
-
-        {{ form_rest(form) }}
-
-
-        <div class="ui field">
-            <input type="submit" class="ui green button" value="{{ buttonText }}" />
-        </div>
-
-        {{ form_end(form) }}
-
+    <div class="field">
+        {{ form_row(form.fonctionChef) }}
     </div>
-    <div class="actions">
-        <div class="ui button">Annuler</div>
+
+    <div class="field">
+        {{ form_row(form.fonctions) }}
     </div>
-</div>
+
+    <div class="field">
+        {{ form_row(form.affichageEffectifs) }}
+    </div>
+
+    {{ form_row(form.categories) }}
+
+
+
+
+    {{ form_rest(form) }}
+
+
+    <div class="ui field">
+        <input type="submit" class="ui green button" value="{{ buttonText }}" />
+    </div>
+
+    {{ form_end(form) }}
+
+{% endblock %}
+
+
+

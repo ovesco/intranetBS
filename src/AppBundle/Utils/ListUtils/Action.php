@@ -20,7 +20,7 @@ abstract class Action
     /** @var String */
     protected $postActions;
 
-    /** @var String */
+    /** @var mixed c'est une fonction */
     protected $condition;
 
 

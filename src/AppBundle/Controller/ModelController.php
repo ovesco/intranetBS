@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Utils\Menu\Menu;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use AppBundle\Utils\Response\ResponseFactory;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Class ModelController
@@ -32,13 +34,7 @@ class ModelController extends Controller
      * @Template("AppBundle:Model:page_gestion.html.twig")
      */
     public function gestionAction(Request $request) {
-
-        //retourne toutes les fonctions
-        $models = $this->getDoctrine()->getRepository('AppBundle:Model')->findAll();
-
-        return array('models' =>$models);
-
-
+        return array();
     }
 
 
@@ -60,7 +56,7 @@ class ModelController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($model);
             $em->flush();
-            return $this->redirect($this->generateUrl('app_model_gestion'));
+            return ResponseFactory::ok();
         }
 
         return array('form'=>$modelForm->createView());
@@ -83,12 +79,37 @@ class ModelController extends Controller
 
         if($editedForm->isValid())
         {
+            /** @var EntityManager $em */
             $em = $this->getDoctrine()->getManager();
             $em->persist($model);
             $em->flush();
-            return $this->redirect($this->generateUrl('app_model_gestion'));
+            return ResponseFactory::ok();
         }
         return array('form'=>$editedForm->createView());
+    }
+
+    /**
+     * @Route("/edit/{model}", options={"expose"=true})
+     * @Template("AppBundle:Model:form_modal.html.twig")
+     * @param Request $request
+     * @param Model $model
+     * @return Response
+     * @ParamConverter("model", class="AppBundle:Model")
+     */
+    public function removeAction(Request $request,Model $model)
+    {
+        if($model->isRemovable())
+        {
+            /** @var EntityManager $em */
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($model);
+            $em->flush();
+            return ResponseFactory::ok();
+        }
+        else
+        {
+            return ResponseFactory::forbidden();
+        }
     }
 
 }

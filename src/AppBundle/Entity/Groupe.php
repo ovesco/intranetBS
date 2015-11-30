@@ -10,6 +10,9 @@ use AppBundle\Entity\Model;
 /**
  * Groupe
  *
+ * Un groupe est un regroupement de membre via des attributions. Chaque groupe à
+ * un nom ainsi qu'un model.
+ *
  * @ORM\Table(name="app_groupes")
  * @Gedmo\Loggable
  * @ORM\Entity(repositoryClass="AppBundle\Entity\GroupeRepository")
