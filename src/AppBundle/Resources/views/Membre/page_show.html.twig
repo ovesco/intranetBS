@@ -193,11 +193,8 @@
                         </div>
 
                         <div class="ui bottom attached segment">
-
                             {{ render(controller('AppBundle:Debiteur:show', { 'debiteur': membre.debiteur.id })) }}
-
                         </div>
-
                     </div>
                 </div>
 
@@ -243,31 +240,13 @@
 
 {% block js %}
 
-
-
-
     {% javascripts
-    '@AppBundle/Resources/public/js/Attribution/attribution.js'
-    '@AppBundle/Resources/public/js/Distinction/distinction.js'
     '@AppBundle/Resources/public/js/Membre/page_voir_membre.js'
     %}
+
     <script src="{{ asset_url }}"></script>
 
     {% endjavascripts %}
-
-
-{#
-
-    {% javascripts
-    '@AppBundle/Resources/public/js/editable.js'
-    '@AppBundle/Resources/public/js/specials/validation_popup_generation.js'
-    '@AppBundle/Resources/public/js/Contact/contact_form.js'
-    %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-
-
-#}
 
 {% endblock %}
 

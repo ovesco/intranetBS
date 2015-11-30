@@ -1,3 +1,5 @@
+{% extends "AppBundle:Templates:modal_small.html.twig" %}
+
 {% if form.id is not defined %}
     {%  set header = 'Ajouter une attribution' %}
     {%  set buttonText = 'Ajouter' %}
@@ -6,44 +8,25 @@
     {%  set buttonText = 'Modifier' %}
 {% endif %}
 
-<div id="modal-add-attribution" class="ui small modal">
-    <div class="header">
-        {{ header }}
+{% block header %}
+    {{ header }}
+{% endblock %}
+
+{% block content %}
+
+    {{ form_start(form, {'attr': {'class': 'ui form ajax'}}) }}
+
+    {{ form_errors(form) }}
+
+    {% for form_line in form %}
+        {{ form_row(form_line) }}
+    {% endfor %}
+
+    <div class="ui field">
+        <input type="submit" class="ui green button" value="{{ buttonText }}"/>
     </div>
 
-    <div class="content">
+    {{ form_end(form) }}
 
-        <div id="message-box" class="ui icon message">
-            <i class="exclamation icon"></i>
-            <div class="content">
-                <div class="header"></div>
-                <p id="messages"></p>
-            </div>
-        </div>
+{% endblock %}
 
-        {{ form_start(form, {'attr': {'class': 'ui form ajax'}}) }}
-
-        {{ form_errors(form) }}
-
-        {% for form_line in form %}
-            {{ form_row(form_line) }}
-        {% endfor %}
-
-        <div class="ui field">
-            <input type="submit" class="ui green button" value="{{ buttonText }}" />
-        </div>
-
-        {{ form_end(form) }}
-    </div>
-
-    <div class="actions">
-        <div class="ui button">Annuler</div>
-    </div>
-
-    <script>
-        $(document).ready(function(){
-            bindForm();
-        });
-    </script>
-
-</div>

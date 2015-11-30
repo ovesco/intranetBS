@@ -1,6 +1,6 @@
 $('.event').click(function () {
 
-    var event_container = $(this).find('[data-event-route]');
+    var event_container = $(this);
 
     var route = Routing.generate(event_container.data('event-route'), event_container.data('event-parameters'));
 

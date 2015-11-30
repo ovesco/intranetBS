@@ -48,11 +48,13 @@
                 {% if list.actionsLine|length != 0 %}
                 <td>
                     {% for action in list.actionsLine %}
-                        <i class="{{ action.icon }} icon popupable event"
-                           data-content="{{ action.label }}"
-                           data-event-route="{{ action.route }}"
-                           data-event-parameters="{{ action.routeParameters(item) }}"
-                           data-event-postactions="{{ action.getPostActions }}"></i>
+                        {% if action.isInLine %}
+                            <i class="{{ action.icon }} icon popupable event"
+                               data-content="{{ action.label }}"
+                               data-event-route="{{ action.route }}"
+                               data-event-parameters="{{ action.routeParameters(item) }}"
+                               data-event-postactions="{{ action.getPostActions }}"></i>
+                        {% endif %}
                     {% endfor %}
                 </td>
                 {% endif %}
@@ -67,11 +69,12 @@
     {% if list.actionsList|length != 0 %}
 
         {% for action in list.actionsList %}
-            <button class="ui icon button event">
-                <i class="{{ action.icon }} icon"
-                   data-content="{{ action.label }}"
-                   data-event-route="{{ action.route }}"
-                   data-event-postactions="{{ action.getPostActions }}"></i>
+            <button class="ui icon button event"
+                    data-content="{{ action.label }}"
+                    data-event-route="{{ action.route }}"
+                    data-event-parameters="{{ action.routeParameters }}"
+                    data-event-postactions="{{ action.getPostActions }}">
+                <i class="{{ action.icon }} icon"></i>
                 {{ action.label }}
             </button>
         {% endfor %}
@@ -87,13 +90,15 @@
 
                 <div class="menu">
                     {% for action in list.actionsLine %}
-                        <div class="item event_mass">
-                            <i class="{{ action.icon }} icon"
-                               data-content="{{ action.label }}"
-                               data-event-route="{{ action.route }}"
-                               data-event-postactions="{{ action.getPostActions }}"></i>
-                            {{ action.label }}
-                        </div>
+                        {% if action.isInMass %}
+                            <div class="item event_mass">
+                                <i class="{{ action.icon }} icon"
+                                   data-content="{{ action.label }}"
+                                   data-event-route="{{ action.route }}"
+                                   data-event-postactions="{{ action.getPostActions }}"></i>
+                                {{ action.label }}
+                            </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>
@@ -102,305 +107,3 @@
 
 </div>
 
-
-{% macro liste(name, data, headers, columns, actions, patterns, filters, toolbar) %}
-
-    {% import _self as liste_macro %}
-
-    {#  #}
-    <div class="data-liste" data-name="{{ name }}">
-        {# Partie toolbar de la liste #}
-        {% if toolbar is not null %}
-            <div class="data-liste-toolbar">
-
-                {% if toolbar['sizing_label'] is defined %}
-
-                    <div class="ui blue circular label">{{ data|length }} {{ toolbar['sizing_label'] }}</div>
-
-                {% endif %}
-
-
-                {% if toolbar['search_bar'] is defined %}
-                    {% if toolbar['search_bar'] %}
-                        <div class="ui mini icon input">
-                            <input class="data-liste-search" type="text" placeholder="Rechercher...">
-                            <i class="search icon"></i>
-                        </div>
-                    {% endif %}
-                {% endif %}
-
-
-                {% if toolbar['selection_buttons'] is defined %}
-                    {% if toolbar['selection_buttons'] %}
-
-                        <div class="ui mini basic buttons">
-                            <div class="ui button data-liste-button-selection" data-action="select"><i
-                                        class="plus icon"></i></div>
-                            <div class="ui button data-liste-button-selection" data-action="unselect"><i
-                                        class="minus icon"></i></div>
-                        </div>
-
-                    {% endif %}
-                {% endif %}
-
-
-                {% if toolbar['masse_actions'] is defined %}
-
-                    <div class="ui tiny basic button dropdown">
-                        Actions
-                        <i class="dropdown icon"></i>
-
-                        <div class="menu">
-                            {% for action in toolbar['masse_actions'] %}
-
-                                {% set icon_action = action[0] %}
-                                {% set label_action = action[1] %}
-                                {% set event_action = action[2] %}
-
-                                <div class="data-liste-button item" data-event="{{ event_action }}"><i
-                                            class="icon {{ icon_action }}"></i>{{ label_action }}</div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% endif %}
-
-                {% if toolbar['masse_export'] is defined %}
-
-                    <div class="ui tiny basic button dropdown">
-                        Export
-                        <i class="dropdown icon"></i>
-                        <div class="menu">
-                            {% for export in toolbar['masse_export'] %}
-
-                                {% set icon_export = export[0] %}
-                                {% set label_export = export[1] %}
-                                {% set event_export = export[2] %}
-
-                                <div class="data-liste-button item" data-event="{{ event_export }}"><i
-                                            class="icon {{ icon_export }}"></i>{{ label_export }}</div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% endif %}
-
-            </div>
-        {% endif %}
-
-
-        <table class="ui table data-liste-table">
-
-            <thead>
-            {% for header in headers %}
-                <tr>
-                    {% for header_item in header %}
-                        <th>{{ header_item }}</th>
-                    {% endfor %}
-
-                    {# Si aucune actions n'est définie, on n'ajoute pas cette colonne. #}
-                    {% if actions|default(null) is not null %}
-                        <th></th>
-                    {% endif %}
-                </tr>
-            {% endfor %}
-            </thead>
-            <tbody>
-            {% for row in data %}
-                {{ liste_macro.row(row,columns,actions,patterns,filters) }}
-            {% endfor %}
-            </tbody>
-
-        </table>
-
-
-        {% if toolbar is not null %}
-            <div class="data-liste-toolbar">
-
-                {% if toolbar['paging'] is defined %}
-                    <div class="data-liste-paging ui mini basic buttons">
-                        <div class="ui button data-liste-paging-navig" data-action="previous"><i
-                                    class="caret left icon"></i></div>
-                        <div class="ui button data-liste-paging-active">1</div>
-
-                        <div class="ui mini basic button dropdown">
-                            <span class="text">{{ toolbar['paging'][0] }}/page</span>
-
-                            <div class="menu">
-                                {% for numberByPage in toolbar['paging'] %}
-                                    <div class="item data-liste-paging-value"
-                                         data-value="{{ numberByPage }}">{{ numberByPage }}/page
-                                    </div>
-                                {% endfor %}
-                                <div class="item data-liste-paging-value" data-value="{{ data|length }}">Tout afficher
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="ui button data-liste-paging-navig" data-action="next"><i
-                                    class="caret right icon"></i></div>
-                    </div>
-                {% endif %}
-            </div>
-        {% endif %}
-
-    </div>
-{% endmacro %}
-
-
-{% macro row(row,columns,actions,patterns,filters) %}
-
-    {% if row.id is defined %}
-        {% set rowId = row.id %}
-    {% else %}
-        {% set rowId = null %}
-    {% endif %}
-
-    {# On stock l'id de l'objet dans la ligne #}
-    <tr data-id="{{ rowId }}">
-
-        {# On crée un tableau pour sauver les valeurs des colomnes#}
-
-        {% set valuesArray = { 'id': rowId } %}
-
-        {# on affiche chaque colonne #}
-        {% for value in columns %}
-
-                {% set object = row %}
-                {# on splite value au '.' afin de cherche la donnée de manière récursive. (ex. membre.famille.id) #}
-                {%  set keys = value|split('.') %}
-
-                {# Recherche récursive de la valeur à afficher #}
-                {% for key in keys %}
-                    {% if attribute(object, key) is defined %}
-                        {% set object = attribute(object, key) %}
-
-                    {% else %}
-                        {% set object = null %}
-                    {% endif %}
-                {% endfor %}
-
-                {# on sauve la valeur #}
-                {% set dataValue = object %}
-
-                {# on sauve la valeur #}
-                {% set valuesArray = valuesArray|merge({(value):(dataValue)}) %}
-
-                {# Différents paramettre de gestion des balise de patterne et des filtres #}
-                {% set openBalise = null %}
-                {% set closeBalise = null %}
-                {% set printData = true %}
-                {% set applayedFilter = null %}
-
-                {# Gestion des patterne #}
-                {% for pattern in patterns %}
-                    {% if pattern[value] is defined %}
-
-                        {% set applyPattern = true %}
-
-                        {# Liste des conditions de patterne possible #}
-                        {% if pattern['equal']  is defined %}
-                            {% if pattern['equal'] !=  dataValue%}
-                                {% set applyPattern = false %}
-                            {% endif %}
-                        {% elseif pattern['inf']  is defined %}
-                            {% if pattern['inf'] <=  dataValue%}
-                                {% set applyPattern = false %}
-                            {% endif %}
-                        {% elseif pattern['sup']  is defined %}
-                            {% if pattern['sup'] >=  dataValue%}
-                                {% set applyPattern = false %}
-                            {% endif %}
-                        {% elseif pattern['diff']  is defined %}
-                            {% if pattern['diff'] ==  dataValue%}
-                                {% set applyPattern = false %}
-                            {% endif %}
-                        {% endif %}
-
-                        {# Création des balises en vue de l'application du patterne #}
-                        {% if applyPattern %}
-                            {# Si le patterne ne contient pas "[data]“ alors la valeur ne sera pas affichée #}
-                            {%  set balises = pattern[value]|split('[data]') %}
-                            {% if balises|length == 2 %}
-                                {%  set openBalise = balises[0] %}
-                                {%  set closeBalise = balises[1] %}
-                            {% else %}
-                                {%  set openBalise = balises[0] %}
-                                {% set printData = false %}
-                            {% endif %}
-                        {% endif %}
-
-                    {% endif %}
-                {% endfor %}
-
-                {# Recherche des filtre. #}
-                {% for filter in filters %}
-                    {% if filter[value] is defined %}
-                        {% set applayedFilter = filter[value] %}
-                    {% endif %}
-                {% endfor %}
-
-                {% if printData %}
-                    {# impression de la donnée et éventuellement de son filtre #}
-                    {% if applayedFilter is null %}
-                        {# sans filtre #}
-                        {% set print = dataValue %}
-                    {% elseif  applayedFilter == 'number_2'%}
-                        {% set print = dataValue|number_format(2, '.', ',') %}
-                    {% elseif  applayedFilter == 'date'%}
-                        {% set print = dataValue|date(global_date_format) %}
-                    {% endif %}
-                {% else %}
-                    {% set print = '' %}
-                {% endif %}
-
-
-            {# on stoke toute ces informations en balise, le but et de pouvoir réutiliser ceci lors d'un modification. todo#}
-            <td data-key="{{ value }}" data-openbalise="{{ openBalise }}" data-closebalise="{{ closeBalise }}" data-print="{{ print }}">
-                {# le filtre raw permet d'insérer des balises html #}
-                {{ openBalise|raw }}
-                {{ print }}
-                {# le filtre raw permet d'insérer des balises html #}
-                {{ closeBalise|raw }}
-            </td>
-
-        {% endfor %}
-        {% if actions|default(null) is not null %}
-            <td>
-                {# Gestiond des actions possible pour chaque ligne #}
-                {% for action in actions %}
-                    {% set applyAction = true %}
-                    {% set icon_action = action['icon'] %}
-                    {% set label_action = action['label'] %}
-                    {% set event_action = action['event'] %}
-                    {% if action['conditions'] is defined %}
-                        {% for condition in action['conditions'] %}
-                            {% set column = condition[0] %}
-                            {% set operator = condition[1] %}
-                            {% set value = condition[2] %}
-
-                            {% set applyAction = false %}
-
-                            {% if operator == 'equal' %}
-                                {% if valuesArray[column] == value %}
-                                    {% set applyAction = true %}
-                                {% endif %}
-
-                            {% elseif operator == 'diff' %}
-                                {#todo#}
-
-                            {% endif %}
-
-                        {% endfor %}
-                    {% endif %}
-
-                    {% if applyAction %}
-
-                        <i class="data-liste-row-action {{ icon_action }} icon popupable" data-content="{{ label_action }}" data-id="{{ row.id }}" data-event="{{ event_action }}"></i>
-
-                    {% endif %}
-                {% endfor %}
-            </td>
-
-        {% endif %}
-    </tr>
-
-{% endmacro %}

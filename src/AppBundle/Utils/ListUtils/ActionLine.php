@@ -11,7 +11,7 @@ class ActionLine extends Action
     protected $inMass;
 
 
-    function __construct($label, $icon, $route, $routeParameters = null, $postActions = null, $condition = null, $inLine = true, $inMass = true)
+    function __construct($label, $icon, $route, $routeParameters = null, $postActions = null, $condition = null, $inMass = true, $inLine = true)
     {
         parent::__construct($label, $icon, $route, $routeParameters, $postActions, $condition);
 

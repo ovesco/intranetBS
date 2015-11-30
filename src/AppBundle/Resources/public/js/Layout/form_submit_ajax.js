@@ -1,3 +1,26 @@
+/**
+ * Cette méthode catch les événements submit d'un formulaire pour envoyer les requetes
+ * en ajax. C'est utilisé dans les modal par exemple ou on veut catcher la réponse pour
+ * mettre à jour la modal plutot que de charger une nouvelle page
+ */
+function bindForm() {
+
+    $('form.ajax').submit(function (e) {
+        e.preventDefault();
+
+        postForm($(this));
+
+        return false;
+    });
+}
+
+/**
+ * Envoie un formulaire en ajax
+ *
+ * Fait des notifications en cas d'erreur
+ *
+ * @param $form Un formulaire à envoyer
+ */
 function postForm( $form ){
 
     /*
@@ -7,8 +30,6 @@ function postForm( $form ){
     $.each( $form.serializeArray(), function(i, field) {
         values[field.name] = field.value;
     });
-
-    $('#message-box').hide();
 
     /*
      * Throw the form values to the server!
@@ -30,32 +51,12 @@ function postForm( $form ){
                 $(data).modal('show');
 
                 /* Add error */
-                $('#message-box .header').html("Erreur lors de l'envoi du formulaire");
-                $('#message-box').addClass('error');
-                $('#message-box').show();
+                alerte.send("Erreur lors de l'envoi du formulaire");
             }
 
         },
-        error       : function(xhr, ajaxOptions, thrownError) {
-            $('#message-box .header').html("Erreur lors de l'envoi du formulaire");
-            $('#message-box #messages').html("Détails : " + xhr.status + " / " + thrownError);
-            $('#message-box').addClass('error');
-            $('#message-box').show();
+        error: function (xhr, ajaxOptions, thrownError) {
+            alerte.send("Erreur lors de l'envoi du formulaire\nDétails : " + xhr.status + " / " + thrownError, 'error');
         }
     });
-}
-
-function bindForm() {
-
-    $('#progress-bar').hide();
-    $('#message-box').hide();
-
-    $('form.ajax').submit( function( e ){
-        e.preventDefault();
-
-        postForm( $(this) );
-
-        return false;
-    });
-
 }
