@@ -28,7 +28,7 @@ class ScriptCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('script')
+            ->setName('app:script')
             ->setDescription('Permet d\'effectuer des script sur le projet ')
             ->addArgument('script_name', InputArgument::REQUIRED, 'script_name');
     }
@@ -81,6 +81,7 @@ class ScriptCommand extends ContainerAwareCommand
                 $returnCode = $console->run($input, $this->output);
                 if($returnCode != 0) {
                     $this->customOutput->error('Error with command: '.$command->command);
+                    $this->customOutput->writeln();
                     return null;
                 }
             }

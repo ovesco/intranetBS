@@ -22,7 +22,7 @@ class TestsCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('tests')
+            ->setName('app:tests')
             ->setDescription('Tests sur l\'application')
             ->addArgument('group', InputArgument::OPTIONAL, 'group:groupeName')
             ->addOption('log',null,InputOption::VALUE_NONE,'log messages in file: app/logs/TestsCommand.log')

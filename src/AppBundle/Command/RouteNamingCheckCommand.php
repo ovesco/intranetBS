@@ -46,7 +46,7 @@ class RouteNamingCheckCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('route:naming:check')
+            ->setName('app:check:route')
             ->setDescription('Effectue un check sur la nomencalture de l\'ensemble des route de l\'application')
         ;
 

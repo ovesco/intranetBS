@@ -69,7 +69,6 @@ class CustomOutput
 
     public function writeMode($string = null,$mode = Mode::STANDARD){
 
-        if (OutputInterface::VERBOSITY_VERBOSE <= $this->output->getVerbosity()) {
 
             switch($mode){
                 case Mode::STANDARD:
@@ -86,7 +85,7 @@ class CustomOutput
                     break;
             }
             $this->output->write($string);
-        }
+
     }
 
     public function writeCustom($string,$colorBackground = Color::NONE,$colorFont = Color::NONE,$format = Format::NONE)
@@ -111,7 +110,16 @@ class CustomOutput
 
     public function error($string){
         $this->writeMode($string,Mode::ERROR);
-        $this->writeln();
     }
+
+    public function info($string){
+        $this->writeMode($string,Mode::INFO);
+    }
+
+    public function comment($string){
+        $this->writeMode($string,Mode::COMMENT);
+    }
+
+
 
 }
