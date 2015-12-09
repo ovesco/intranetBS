@@ -1,0 +1,22 @@
+{% extends 'AppBundle:Layout:layout.html.twig' %}
+
+
+{% block titre %}Catégories{% endblock %}
+
+{% block content %}
+
+    <div class="ui page grid">
+        <div class="row">
+            <div class="column">
+                <h3>Gestion des catégories</h3>
+                <div class="ui segment">
+                   {{ list_caller.categorieAll()|raw }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+

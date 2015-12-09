@@ -2,7 +2,6 @@
 
 namespace AppBundle\Entity;
 
-use AppBundle\Form\GroupeType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -86,12 +85,11 @@ class Categorie
      * Set nom
      *
      * @param string $nom
-     * @return GroupeType
+     * @return Categorie
      */
     public function setNom($nom)
     {
         $this->nom = $nom;
-
         return $this;
     }
 
@@ -109,7 +107,7 @@ class Categorie
      * Set description
      *
      * @param string $description
-     * @return GroupeType
+     * @return Categorie
      */
     public function setDescription($description)
     {
@@ -127,6 +125,9 @@ class Categorie
     public function addModel(Model $model)
     {
         $this->models[] = $model;
+        if(!$model->getCategories()->contains($this)){
+            $model->addCategorie($this);
+        }
 
         return $this;
     }
@@ -139,6 +140,9 @@ class Categorie
     public function removeModel(Model $model)
     {
         $this->models->removeElement($model);
+        if($model->getCategories()->contains($this)) {
+            $model->removeCategorie($this);
+        }
     }
 
     /**
@@ -158,7 +162,16 @@ class Categorie
      */
     public function setModels($models)
     {
-        $this->models = $models;
+        /** @var Model $model */
+        foreach($this->models as $model)
+        {
+            $this->removeModel($model);
+        }
+        /** @var Model $model */
+        foreach($models as $model)
+        {
+            $this->addModel($model);
+        }
     }
 
     /**

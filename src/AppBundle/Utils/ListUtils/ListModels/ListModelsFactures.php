@@ -13,9 +13,7 @@ use Symfony\Component\Routing\Router;
 
 class ListModelsFactures implements ListModelInterface
 {
-    static public function getRepresentedClass(){
-        return 'AppBundle\Entity\Facture';
-    }
+
 
     /**
      * @param \Twig_Environment $twig

@@ -13,9 +13,6 @@ use Symfony\Component\Routing\Router;
 class ListModelsCreances implements ListModelInterface
 {
 
-    static public function getRepresentedClass(){
-        return 'AppBundle\Entity\Creance';
-    }
 
     /**
      * @param \Twig_Environment $twig

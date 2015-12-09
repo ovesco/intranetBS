@@ -13,9 +13,6 @@ use Symfony\Component\Routing\Router;
 class ListModelsMembre implements ListModelInterface
 {
 
-    static public function getRepresentedClass(){
-        return 'AppBundle\Entity\Membre';
-    }
 
     static public function getEffectifs(\Twig_Environment $twig, Router $router, $items, $url = null)
     {

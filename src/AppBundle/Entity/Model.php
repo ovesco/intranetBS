@@ -270,7 +270,9 @@ class Model
     public function addCategorie(Categorie $categorie)
     {
         $this->categories[] = $categorie;
-        $categorie->addModel($this);
+        if(!$categorie->getModels()->contains($this)){
+            $categorie->addModel($this);
+        }
         return $this;
     }
 
@@ -282,6 +284,9 @@ class Model
     public function removeCategorie(Categorie $categorie)
     {
         $this->categories->removeElement($categorie);
+        if(!$categorie->getModels()->contains($this)){
+            $categorie->removeModel($this);
+        }
     }
 
     /**
@@ -306,33 +311,6 @@ class Model
             $categorie->addModel($this);
         }
 
-    }
-
-
-
-
-    /**
-     * Add category
-     *
-     * @param \AppBundle\Entity\Categorie $category
-     *
-     * @return Model
-     */
-    public function addCategory(\AppBundle\Entity\Categorie $category)
-    {
-        $this->categories[] = $category;
-
-        return $this;
-    }
-
-    /**
-     * Remove category
-     *
-     * @param \AppBundle\Entity\Categorie $category
-     */
-    public function removeCategory(\AppBundle\Entity\Categorie $category)
-    {
-        $this->categories->removeElement($category);
     }
 
     public function isRemovable()

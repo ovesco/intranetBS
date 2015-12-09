@@ -1,3 +1,5 @@
+{% extends 'AppBundle:Templates:modal_small.html.twig' %}
+
 {% if form.nom.vars.value == '' %}
     {%  set header = 'Ajouter une catégorie' %}
     {%  set buttonText = 'Ajouter' %}
@@ -7,36 +9,26 @@
 {% endif %}
 
 
-<div id="form_categorie_modale" class="ui small modal">
-    <i class="close icon"></i>
-    <div class="header">
-        {{ header }}
+{% block header %}
+    {{ header }}
+{% endblock %}
+
+{% block content %}
+
+    {{ form_start(form,{'attr': {'class': 'ui form'}}) }}
+
+    {{ form_row(form.nom) }}
+
+    {{ form_row(form.description) }}
+
+
+    {{ form_rest(form) }}
+
+
+    <div class="ui field">
+        <input type="submit" class="ui green button" value="{{ buttonText }}" />
     </div>
 
-    <div class="content">
+    {{ form_end(form) }}
 
-        {{ form_start(form,{'attr': {'class': 'ui form'}}) }}
-
-
-
-        {{ form_widget(form.nom) }}
-
-
-        {{ form_widget(form.description) }}
-
-
-
-        {{ form_rest(form) }}
-
-
-        <div class="ui field">
-            <input type="submit" class="ui green button" value="{{ buttonText }}" />
-        </div>
-
-        {{ form_end(form) }}
-
-    </div>
-    <div class="actions">
-        <div class="ui button">Annuler</div>
-    </div>
-</div>
+{% endblock %}

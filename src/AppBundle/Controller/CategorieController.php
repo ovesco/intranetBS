@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Utils\Menu\Menu;
+use AppBundle\Utils\Response\ResponseFactory;
 
 /* Entity */
 use AppBundle\Entity\Categorie;
@@ -32,18 +33,14 @@ class CategorieController extends Controller
     /**
      * Page qui affiche les categorie de groupes
      *
-     * @Route("/list", options={"expose"=true})
+     * @Route("/gestion", options={"expose"=true})
      * @param Request $request
      * @return Response
      * @Menu("Gestion des catégories", block="structure", order=4, icon="list")
+     * @Template("AppBundle:Categorie:page_gestion.html.twig")
      */
-    public function listAction(Request $request) {
-
-        //retourne toutes les fonctions
-        $categories = $this->getDoctrine()->getRepository('AppBundle:Categorie')->findAll();
-
-        return $this->render('AppBundle:Categorie:page_liste.html.twig',array(
-            'categories' =>$categories));
+    public function gestionAction(Request $request) {
+        return array();
     }
 
     /**
@@ -65,7 +62,7 @@ class CategorieController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($new);
             $em->flush();
-            return $this->redirect($this->generateUrl('app_categorie_list'));
+            return ResponseFactory::ok();
         }
 
         return array('form'=>$newForm->createView());
@@ -90,7 +87,7 @@ class CategorieController extends Controller
         {
             $em = $this->getDoctrine()->getManager();
             $em->flush();
-            return $this->redirect($this->generateUrl('app_categorie_list'));
+            return ResponseFactory::ok();
         }
         return array('form'=>$editedForm->createView());
     }
@@ -110,19 +107,12 @@ class CategorieController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->remove($categorie);
             $em->flush();
-            $this->get('session')->getFlashBag()->add(
-                'info',
-                'Categorie supprimée'
-            );
+            return ResponseFactory::ok();
         }
         else
         {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                'Impossible de supprimer cette categorie'
-            );
+            return ResponseFactory::forbidden();
         }
-        return $this->redirect($this->generateUrl('app_categorie_list'));
     }
 
 

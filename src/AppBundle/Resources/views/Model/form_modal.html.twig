@@ -16,27 +16,15 @@
 
     {{ form_start(form,{'attr': {'class': 'ui form'}}) }}
 
+    {{ form_row(form.nom) }}
 
-    <div class="field">
-        {{ form_row(form.nom) }}
-    </div>
+    {{ form_row(form.fonctionChef) }}
 
-    <div class="field">
-        {{ form_row(form.fonctionChef) }}
-    </div>
+    {{ form_row(form.fonctions) }}
 
-    <div class="field">
-        {{ form_row(form.fonctions) }}
-    </div>
-
-    <div class="field">
-        {{ form_row(form.affichageEffectifs) }}
-    </div>
+    {{ form_row(form.affichageEffectifs) }}
 
     {{ form_row(form.categories) }}
-
-
-
 
     {{ form_rest(form) }}
 

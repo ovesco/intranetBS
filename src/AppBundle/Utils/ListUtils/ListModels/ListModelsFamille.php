@@ -12,9 +12,6 @@ use Symfony\Component\Routing\Router;
 class ListModelsFamille implements ListModelInterface
 {
 
-    static public function getRepresentedClass(){
-        return 'AppBundle\Entity\Famille';
-    }
 
 
     /**

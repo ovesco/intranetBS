@@ -21,11 +21,10 @@ use AppBundle\Utils\ListUtils\ListModels\ListModelsAttributions;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsDistinctions;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsMembre;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsCreances;
-
 use AppBundle\Utils\ListUtils\ListModels\ListModelsFactures;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsFamille;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsModel;
-
+use AppBundle\Utils\ListUtils\ListModels\ListModelsCategorie;
 
 /* Annotations */
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -292,5 +291,17 @@ class ListCallerController extends Controller
         return $this->returnList($list, $call);
     }
 
+    /**
+     * @route("/categorie/all", defaults={"call"="route"})
+     * @param $call
+     * @return mixed
+     */
+    public function categorieAll( $call = ListCallerController::CALL_BY_TWIG)
+    {
+        $items = $this->getEntityManager()->getRepository('AppBundle:Categorie')->findAll();
+        $url = $this->getRouter()->generate('app_listcaller_categorieall');
+        $list = ListModelsCategorie::getDefault($this->getTwig(), $this->getRouter(), $items, $url)->render();
+        return $this->returnList($list, $call);
+    }
 
 }

@@ -17,9 +17,6 @@ use AppBundle\Entity\Categorie;
 class ListModelsModel implements ListModelInterface
 {
 
-    static public function getRepresentedClass(){
-        return 'AppBundle\Entity\Model';
-    }
 
     /**
      * @param \Twig_Environment $twig
@@ -52,7 +49,7 @@ class ListModelsModel implements ListModelInterface
                 /** @var Fonction $fonction */
                 foreach($model->getFonctions() as $fonction)
                 {
-                    $fonctions = $fonctions.$fonction->getNom().', ';
+                    $fonctions = $fonctions.'<div class="ui blue basic label">'.$fonction->getNom().'</div> ';
                 }
                 return $fonctions;
             }
@@ -109,7 +106,7 @@ class ListModelsModel implements ListModelInterface
         $list->addActionLine($delete);
 
 
-        $list->addActionList(new ActionList('Ajouter', 'add', 'app_model_add', array(), EventPostAction::ShowModal));
+        $list->addActionList(new ActionList('Ajouter', 'add', 'app_model_add', function(){return array();}, EventPostAction::ShowModal));
 
 
         return $list;

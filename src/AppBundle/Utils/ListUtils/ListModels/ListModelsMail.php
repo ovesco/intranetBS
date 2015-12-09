@@ -18,9 +18,6 @@ use AppBundle\Twig\AppExtension;
 class ListModelsMail implements ListModelInterface
 {
 
-    static public function getRepresentedClass(){
-        return null;
-    }
 
     /**
      * @param \Twig_Environment $twig

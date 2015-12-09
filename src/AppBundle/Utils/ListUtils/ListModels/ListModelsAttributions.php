@@ -15,10 +15,6 @@ use Symfony\Component\Routing\Router;
 class ListModelsAttributions
 {
 
-    static public function getRepresentedClass(){
-        return 'AppBundle\Entity\Attribution';
-    }
-
     /**
      * @param \Twig_Environment $twig
      * @param Router $router

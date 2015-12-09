@@ -15,9 +15,6 @@ use Symfony\Component\Routing\Router;
 class ListModelsDistinctions
 {
 
-    static public function getRepresentedClass(){
-        return 'AppBundle\Entity\ObtentionDistinction';
-    }
 
     /**
      * @param \Twig_Environment $twig
