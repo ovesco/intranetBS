@@ -30,6 +30,9 @@ class Mode{
 }
 
 /**
+ * Cette class est déstinée à simplifier les output de nos commandes.
+ *
+ *
  * doc: http://symfony.com/doc/current/components/console/introduction.html
  *
  * Avaliable colors: black, red, green, yellow, blue, magenta, cyan, white.
@@ -39,11 +42,13 @@ class Mode{
  *
  * verbosity: VERBOSITY_DEBUG > VERBOSITY_VERY_VERBOSE > VERBOSITY_VERBOSE > VERBOSITY_NORMAL
  *
+ * todo: aller lire : http://symfony.com/blog/new-in-symfony-2-8-console-style-guide
  *
- * Class CustomOutput
+ *
+ * Class ConsoleOutput
  * @package AppBundle\Command
  */
-class CustomOutput
+class ConsoleOutput
 {
     /** @var OutputInterface  */
     private $output;

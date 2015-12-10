@@ -22,7 +22,7 @@ class RouteNamingCheckCommand extends ContainerAwareCommand
 {
 
     /**
-     * @var CustomOutput
+     * @var ConsoleOutput
      */
     protected $customOutput;
 
@@ -56,7 +56,7 @@ class RouteNamingCheckCommand extends ContainerAwareCommand
     {
         $output->setVerbosity(OutputInterface::VERBOSITY_DEBUG);//set debug mode
 
-        $this->customOutput = new CustomOutput($output);
+        $this->customOutput = new ConsoleOutput($output);
         $this->output = $output;
         $this->input = $input;
 

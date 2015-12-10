@@ -38,6 +38,8 @@ use Symfony\Component\Console\Helper\ProgressBar;
 
 
 /**
+ * todo mise à jours de ce ficier importante
+ *
  * Class FichierBsCommand
  * @package AppBundle\Command
  *

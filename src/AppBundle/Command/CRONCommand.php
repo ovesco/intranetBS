@@ -9,7 +9,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use AppBundle\Command\CustomOutput;
 
 /**
  * L'idée de cette commande est de s'affichir de la confifuration
@@ -23,55 +22,59 @@ use AppBundle\Command\CustomOutput;
  */
 class CRONCommand extends ContainerAwareCommand
 {
-
+    /** Fichier de sauvegarde des temps d'execution de chaque commande */
     const CRON_PATH = '/CRON/last_execution.txt';
 
-    const MODE_DEFAULT = null;
-    const MODE_RESET = 'reset';
-
-    /** @var CustomOutput */
+    /** @var ConsoleOutput */
     private $output;
+    /** @var InputInterface */
     private $input;
 
+    /** @var Integer Unix timestamp */
     private $now;
 
+    /** @var array Liste des tâches CRON */
     private $tasks;
+
 
     protected function configure()
     {
         $this
             ->setName('app:cron')
             ->setDescription('Taches CRON sur l\'application')
-            ->addArgument('mode', InputArgument::OPTIONAL, 'mode')
+            ->addOption('reset',null,InputOption::VALUE_NONE,'')
         ;
 
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->output = new CustomOutput($output);
+        $this->output = new ConsoleOutput($output);
         $this->input = $input;
-
         $this->now = time();
 
+
+        /*
+         * LISTE DES TACHES CRON
+         *
+         *
+         */
         $this->tasks = array(
-            new CRONTask('php app/console cache:clear',"40 seconds"),
-            new CRONTask('php app/console route:naming:check',"40 seconds"),
+            new CRONTask('php app/console cache:clear',"20 seconds"),
+            new CRONTask('php app/console swiftmailer:spool:send --env=dev',"1 day"),//todo NUR: changer si passage en mode prod
         );
 
-        $mode = $this->input->getArgument('mode');
-        switch($mode)
+
+        if(!$this->input->getOption('reset'))
         {
-            case CRONCommand::MODE_DEFAULT:
-                $this->load();
-                $this->runTasks();
-                $this->save();
-                break;
-            case CRONCommand::MODE_RESET:
-                $this->save();
-                break;
+            //if option --reset is not set
+            $this->load();
+            $this->runTasks();
         }
-        $this->output->yellowLabel('End CRON tasks (mode:'.$mode.')');
+
+        $this->save();
+
+        $this->output->yellowLabel('End CRON tasks');
         $this->output->writeln();
     }
 

@@ -16,7 +16,7 @@ class ScriptCommand extends ContainerAwareCommand
 {
     const SCRIPT_RESTART_DEV = 'restart_dev';
     const SCRIPT_RESTART_DATABASE = 'restart_database';
-    /** @var  CustomOutput */
+    /** @var  ConsoleOutput */
     protected $customOutput;
     /** @var InputInterface */
     protected $input;
@@ -35,7 +35,7 @@ class ScriptCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->customOutput = new CustomOutput($output);
+        $this->customOutput = new ConsoleOutput($output);
         $this->output = $output;
         $this->input = $input;
         $this->commands = new ArrayCollection();

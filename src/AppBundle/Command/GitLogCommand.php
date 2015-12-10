@@ -23,7 +23,7 @@ use Symfony\Component\Finder\Finder;
 class GitLogCommand extends ContainerAwareCommand
 {
 
-    /** @var CustomOutput */
+    /** @var ConsoleOutput */
     protected $customOutput;
 
     /** @var InputInterface */
@@ -50,7 +50,7 @@ class GitLogCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->customOutput = new CustomOutput($output);
+        $this->customOutput = new ConsoleOutput($output);
         $this->output = $output;
         $this->input = $input;
         $this->fileLogs = new ArrayCollection();
