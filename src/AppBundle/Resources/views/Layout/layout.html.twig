@@ -22,8 +22,6 @@
             <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
 
-        {% block css %}{% endblock %}
-
         {% javascripts
         '@AppBundle/Resources/public/js/LayoutHead/*'
         output="js/layout_head.js"
@@ -36,6 +34,8 @@
 
         {# include semantic files (js,css,icon and fonts #}
         {% include 'AppBundle:Layout:load_semantic.html.twig' %}
+
+        {% block css %}{% endblock %}
 
     </head>
 
