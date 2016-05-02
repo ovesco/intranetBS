@@ -43,6 +43,7 @@ class AppKernel extends Kernel
             new Interne\HistoryBundle\InterneHistoryBundle(),
             new Interne\MatBundle\MatBundle(),
             new Interne\SeanceBundle\InterneSeanceBundle(),
+            new Ensepar\Html2pdfBundle\EnseparHtml2pdfBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
