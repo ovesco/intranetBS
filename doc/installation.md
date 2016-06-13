@@ -19,12 +19,24 @@ composer update
 
 ## Mise en route
 
-La suite des commandes ci-dessous explique la procèdure pour démarrer la base de donnée correctement. Pour faire tout ceci en une fois, on peut utiliser le script suivant: [restart_dev.sh](/sh_script/restart_dev.sh).
+La suite des commandes ci-dessous explique la procèdure pour démarrer la base de donnée correctement. Pour faire tout ceci en une fois, on peut utiliser le script suivant:
+```bash
+php app/console app:script restart_dev
+```
 
 * Initialiser la base de données
+
+
 ```bash
+# Si la base de donnée n'existe pas encore
+php app/console doctrine:database:drop --force
+php app/console doctrine:database:create
+php app/console doctrine:schema:create
+
+# Si la base de donnée existe déjà, cette seul ligne de code suffit.
 php app/console doctrine:schema:create
 ```
+
 * Peupler la base de donnée
 ```bash
 php app/console doctrine:schema:update --force
