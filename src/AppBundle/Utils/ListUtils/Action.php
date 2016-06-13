@@ -20,7 +20,7 @@ abstract class Action
     /** @var String */
     protected $postActions;
 
-    /** @var mixed c'est une fonction */
+    /** @var String */
     protected $condition;
 
 
@@ -103,6 +103,27 @@ abstract class Action
     public function getPostActions()
     {
         return $this->postActions;
+    }
+
+
+    /**
+     * @return bool
+     */
+    public function hasCondition()
+    {
+        return $this->condition != null;
+    }
+
+    public function IsAllowedByCondition($item)
+    {
+        if($this->hasCondition())
+        {
+            //petit truc en php pour que ca marche
+            $fonction = $this->condition;
+            return $fonction($item);
+        }
+        return true;
+
     }
 
     /**

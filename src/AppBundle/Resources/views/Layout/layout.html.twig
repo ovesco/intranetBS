@@ -84,6 +84,7 @@
 
 
         {% javascripts
+        '@AppBundle/Resources/public/js/ExternalLib/*'
         '@AppBundle/Resources/public/js/Layout/*'
         output="js/layout.js"
         %}
@@ -96,7 +97,6 @@
              * Pour chaque flashbag contenu, sachant qu'ils ne contiennent
              * que des alertes et des messages, on génère
              * une alerte correspondante
-             *
              #}
             $(document).ready(function(){
                 {% for label, flashes in app.session.flashbag.all %}

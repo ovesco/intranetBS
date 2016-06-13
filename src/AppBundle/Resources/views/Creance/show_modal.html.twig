@@ -1,78 +1,74 @@
-<div class="ui small modal" id="modal-display" aria-hidden="true">
-    <div class="header">Détail de la créance</div>
-    <div class="content" style="overflow-y:auto">
+{% extends 'AppBundle:Templates:modal_small.html.twig' %}
+
+{% block header %}
+    Détail de la créance
+{% endblock %}
+
+{% block content %}
     <table class="ui definition table">
         <tbody>
-            <tr>
-                <td>Titre</td>
-                <td>{{ creance.titre }}</td>
-            </tr>
-            <tr>
-                <td>Remarque</td>
-                <td>{{ creance.remarque }}</td>
-            </tr>
-            <tr>
-                <td>Facture</td>
-                <td>
-                    {{ creance|creance_facture_status|raw }}
+        <tr>
+            <td>Titre</td>
+            <td>{{ creance.titre }}</td>
+        </tr>
+        <tr>
+            <td>Remarque</td>
+            <td>{{ creance.remarque }}</td>
+        </tr>
+        <tr>
+            <td>Facture</td>
+            <td>
+                {{ creance|creance_facture_status|raw }}
 
-                    {% if creance.isFactured %}
-                    <a onclick="showFacture({{ creance.facture.id }});" >
-                        <i class="zoom icon"></i>
-                    </a>
-                    {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <td>Etat</td>
-                <td>
-                    {{ creance|creance_is_payed|raw }}
-                </td>
-            </tr>
 
-            <tr>
-                <td>Date de création</td>
-                <td>{{ creance.dateCreation|date(global_date_format) }}</td>
-            </tr>
+            </td>
+        </tr>
+        <tr>
+            <td>Etat</td>
+            <td>
+                {{ creance|creance_is_payed|raw }}
+            </td>
+        </tr>
+
+        <tr>
+            <td>Date de création</td>
+            <td>{{ creance.dateCreation|date(global_date_format) }}</td>
+        </tr>
 
 
 
-            {% if creance.isPayed %}
+        {% if creance.isPayed %}
             <tr>
                 <td>Date de payement</td>
                 <td>
                     {{ creance.datePayement|date(global_date_format) }}
                 </td>
             </tr>
-            {% endif %}
+        {% endif %}
 
-            <tr>
-                <td>Montant émis</td>
-                <td>{{ creance.montantEmis|money }}</td>
-            </tr>
-            <tr>
-                <td>Montant reçu</td>
-                <td>{{ creance.montantRecu|money }}</td>
-            </tr>
-            <tr>
-                <td>Propriétaire</td>
-                <td>
-                    {{ creance.debiteur.owner.__toString }}
-                </td>
-            </tr>
-            <tr>
-                <td>Cible de facturation</td>
-                <td>
-                   TODO
-                </td>
-            </tr>
+        <tr>
+            <td>Montant émis</td>
+            <td>{{ creance.montantEmis|money }}</td>
+        </tr>
+        <tr>
+            <td>Montant reçu</td>
+            <td>{{ creance.montantRecu|money }}</td>
+        </tr>
+        <tr>
+            <td>Propriétaire</td>
+            <td>
+                {{ creance.debiteur.owner.__toString }}
+            </td>
+        </tr>
+        <tr>
+            <td>Cible de facturation</td>
+            <td>
+                TODO
+            </td>
+        </tr>
 
 
         </tbody>
     </table>
+{% endblock %}
 
-
-
-</div>
-    <div class="actions"></div>
-</div>

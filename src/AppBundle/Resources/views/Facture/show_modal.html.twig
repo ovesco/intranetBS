@@ -1,6 +1,10 @@
-<div class="ui small modal" id="modal-display" aria-hidden="true">
-    <div class="header">Détail de la facture N°{{ facture.id }}</div>
-    <div class="content" style="overflow-y:auto">
+{% extends 'AppBundle:Templates:modal_small.html.twig' %}
+
+{% block header %}
+    Détail de la facture N°{{ facture.id }}
+{% endblock %}
+
+{% block content %}
     <table class="ui definition table">
         <tbody>
         <tr>
@@ -69,61 +73,53 @@
         </tr>
         </thead>
         <tbody>
-            {% for creance in facture.creances %}
-                <tr>
-                    <td>
-                        <b>{{ creance.titre }}</b>
-                        <a onclick="openCreanceShow({{ creance.id }});" >
-                            <i class="zoom icon"></i>
-                        </a>
-
-                        {% if creance.remarque is not empty %}
-                            <br>
-
-                            Remarque: {{ creance.remarque }}
-                        {% endif %}
-                    </td>
-                    <td>{{ creance.montantEmis|number_format(2, '.', ',') }}</td>
-                    {% if creance.montantRecu >= creance.montantEmis %}
-                        <td class="positive">{{ creance.montantRecu|number_format(2, '.', ',') }}</td>
-                    {% else %}
-                        <td class="negative">{{ creance.montantRecu|number_format(2, '.', ',') }}</td>
-                    {% endif %}
-                </tr>
-
-
-
-            {% endfor %}
-            {% for rappel in facture.rappels %}
-                <tr>
-                    <td>Rappel N°{{ loop.index }}</td>
-                    <td>{{ rappel.montantEmis|number_format(2, '.', ',') }}</td>
-                    {% if rappel.montantRecu >= rappel.montantEmis %}
-                        <td class="positive">{{ rappel.montantRecu|number_format(2, '.', ',') }}</td>
-                    {% else %}
-                        <td class="negative">{{ rappel.montantRecu|number_format(2, '.', ',') }}</td>
-                    {% endif %}
-                </tr>
-            {% endfor %}
-
+        {% for creance in facture.creances %}
             <tr>
-                <td class="right aligned">Total</td>
-                <td>{{ facture.montantEmis|number_format(2, '.', ',') }}</td>
-                {% if facture.montantRecu >= facture.montantEmis %}
-                    <td class="positive">{{ facture.montantRecu|number_format(2, '.', ',') }}</td>
+                <td>
+                    <b>{{ creance.titre }}</b>
+                    <a onclick="openCreanceShow({{ creance.id }});" >
+                        <i class="zoom icon"></i>
+                    </a>
+
+                    {% if creance.remarque is not empty %}
+                        <br>
+
+                        Remarque: {{ creance.remarque }}
+                    {% endif %}
+                </td>
+                <td>{{ creance.montantEmis|number_format(2, '.', ',') }}</td>
+                {% if creance.montantRecu >= creance.montantEmis %}
+                    <td class="positive">{{ creance.montantRecu|number_format(2, '.', ',') }}</td>
                 {% else %}
-                    <td class="negative">{{ facture.montantRecu|number_format(2, '.', ',') }}</td>
+                    <td class="negative">{{ creance.montantRecu|number_format(2, '.', ',') }}</td>
                 {% endif %}
             </tr>
 
+
+
+        {% endfor %}
+        {% for rappel in facture.rappels %}
+            <tr>
+                <td>Rappel N°{{ loop.index }}</td>
+                <td>{{ rappel.montantEmis|number_format(2, '.', ',') }}</td>
+                {% if rappel.montantRecu >= rappel.montantEmis %}
+                    <td class="positive">{{ rappel.montantRecu|number_format(2, '.', ',') }}</td>
+                {% else %}
+                    <td class="negative">{{ rappel.montantRecu|number_format(2, '.', ',') }}</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+
+        <tr>
+            <td class="right aligned">Total</td>
+            <td>{{ facture.montantEmis|number_format(2, '.', ',') }}</td>
+            {% if facture.montantRecu >= facture.montantEmis %}
+                <td class="positive">{{ facture.montantRecu|number_format(2, '.', ',') }}</td>
+            {% else %}
+                <td class="negative">{{ facture.montantRecu|number_format(2, '.', ',') }}</td>
+            {% endif %}
+        </tr>
+
         </tbody>
     </table>
-
-</div>
-    <div class="actions">
-
-
-
-</div>
-
-</div>
+{% endblock %}
