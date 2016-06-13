@@ -23,16 +23,17 @@ La suite des commandes ci-dessous explique la procèdure pour démarrer la base 
 
 * Initialiser la base de données
 
-Si la base de donnée n'existe pas encore
+
 ```bash
+# Si la base de donnée n'existe pas encore
 php app/console doctrine:database:drop --force
 php app/console doctrine:database:create
 php app/console doctrine:schema:create
-```
-Si la base de donnée existe déjà, cette seul ligne de code suffit.
-```bash
+
+# Si la base de donnée existe déjà, cette seul ligne de code suffit.
 php app/console doctrine:schema:create
 ```
+
 * Peupler la base de donnée
 ```bash
 php app/console doctrine:schema:update --force
