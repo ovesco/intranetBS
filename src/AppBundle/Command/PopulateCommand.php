@@ -434,7 +434,7 @@ class PopulateCommand extends ContainerAwareCommand
      */
     private function getRandomAdresse($canBeNull = false) {
 
-        $faker   = \Faker\Factory::create('fr_FR');
+        $faker   = \Faker\Factory::create('fr_CH');
         $adresse = new Adresse();
 
         $adresse->setExpediable( (mt_rand(0,1) == 0) ? true : false );
@@ -492,7 +492,7 @@ class PopulateCommand extends ContainerAwareCommand
         $membre = new Membre();
         $sexe   = (mt_rand(1,10) > 5 ) ? Personne::FEMME : Personne::HOMME;
 
-        $frFaker   = \Faker\Factory::create('fr_FR');
+        $frFaker   = \Faker\Factory::create('fr_CH');
 
         $membre->setSexe($sexe);
         $membre->setPrenom($this->getPrenom($sexe));
@@ -1142,7 +1142,7 @@ class PopulateCommand extends ContainerAwareCommand
      */
     private function getPhone($canBeNull = false){
 
-        $frFaker = \Faker\Factory::create('fr_FR');
+        $frFaker = \Faker\Factory::create('fr_CH');
 
         if($canBeNull)
             return (rand(0,1) == 1) ? $frFaker->phoneNumber : null;
@@ -1157,7 +1157,7 @@ class PopulateCommand extends ContainerAwareCommand
      */
     private function getAdresseEmail($canBeNull = false){
 
-        $frFaker = \Faker\Factory::create('fr_FR');
+        $frFaker = \Faker\Factory::create('fr_CH');
 
         if($canBeNull)
             return (rand(0,1) == 1) ? $frFaker->email : null;
@@ -1187,7 +1187,7 @@ class PopulateCommand extends ContainerAwareCommand
      */
     private function getText($lenght, $canBeNull = false)
     {
-        $faker   = \Faker\Factory::create('fr_FR');
+        $faker   = \Faker\Factory::create('fr_CH');
         $text = $faker->text($lenght);
         if($canBeNull)
             return (rand(0,1) == 1) ? $text : null;

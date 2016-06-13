@@ -6,16 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Loggable\Entity\MappedSuperclass\AbstractLogEntry;
 
 /**
- * On override la LogEntry des doctrine extensions pour insérer nos propres champs
+ * On override la LogEntry des doctrine extensions pour insï¿½rer nos propres champs
  *
- * @ORM\Table(
- *     name="ext_log_entries",
- *  indexes={
- *      @ORM\Index(name="log_class_lookup_idx", columns={"object_class"}),
- *      @ORM\Index(name="log_date_lookup_idx", columns={"logged_at"}),
- *      @ORM\Index(name="log_version_lookup_idx", columns={"object_id", "object_class", "version"})
- *  }
- * )
  * @ORM\Entity(repositoryClass="Gedmo\Loggable\Entity\Repository\LogEntryRepository")
  */
 class CustomLogEntry extends AbstractLogEntry

@@ -59,7 +59,7 @@ class ListModelsAttributions
             );
         };
 
-        $list->addActionLine(new ActionLine('Modifier', 'edit', 'app_attribution_edit', $attributionParameters, EventPostAction::ShowModal, null, false));
+        $list->addActionLine(new ActionLine('Modifier', 'edit', 'app_attribution_edit', $attributionParameters, EventPostAction::ShowModal));
         $list->addActionLine(new ActionLine('Terminer', 'ban', 'app_attribution_edit', $attributionParameters, EventPostAction::ShowModal));
         $list->addActionLine(new ActionLine('Supprimer', 'delete', 'app_attribution_delete', $attributionParameters, EventPostAction::RefreshList));
 

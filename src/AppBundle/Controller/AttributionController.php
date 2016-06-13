@@ -53,7 +53,7 @@ class AttributionController extends Controller
         ));
 
         return $this->render('AppBundle:Attribution:attribution_form_modal.html.twig', array(
-                'form' => $attributionForm->createView())
+            'form' => $attributionForm->createView())
         );
     }
 
