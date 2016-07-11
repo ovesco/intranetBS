@@ -18,7 +18,7 @@ class QueryBuilder {
     private $mainQuery;
 
     /**
-     * @var \Elastica\Query\Bool
+     * @var \Elastica\Query\BoolQuery
      */
     private $boolQuery;
 
@@ -41,7 +41,7 @@ class QueryBuilder {
     {
         $this->mainQuery = new \Elastica\Query();
         $this->mainQuery->setSize($maxResultsNumber);
-        $this->boolQuery = new \Elastica\Query\Bool();
+        $this->boolQuery = new \Elastica\Query\BoolQuery();
         $this->empty = true;
         $this->matchAllIfEmpty = $matchAllIfEmpty;
         $this->elasticRepository = $elasticRepository;
@@ -92,7 +92,7 @@ class QueryBuilder {
 
         $term = new \Elastica\Filter\Term(array($field => $data));
 
-        $boolFilter = new \Elastica\Filter\Bool();
+        $boolFilter = new \Elastica\Filter\BoolFilter();
         $boolFilter->addMust($term);
 
         $nested = new \Elastica\Filter\Nested();

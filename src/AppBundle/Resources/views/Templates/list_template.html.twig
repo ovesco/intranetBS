@@ -49,11 +49,18 @@
                 <td>
                     {% for action in list.actionsLine %}
                         {% if action.isInLine %}
+                            {% if action.hasCondition and not action.IsAllowedByCondition(item) %}
+
+                                {# la condition n'est pas respectée, on affiche rien #}
+                            {% else %}
+
                             <i class="{{ action.icon }} icon popupable event"
                                data-content="{{ action.label }}"
                                data-event-route="{{ action.route }}"
                                data-event-parameters="{{ action.routeParameters(item) }}"
                                data-event-postactions="{{ action.getPostActions }}"></i>
+
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
                 </td>

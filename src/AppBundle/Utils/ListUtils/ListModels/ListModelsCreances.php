@@ -6,6 +6,7 @@ namespace AppBundle\Utils\ListUtils\ListModels;
 use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\Column;
 use AppBundle\Utils\ListUtils\ListModelInterface;
+use AppBundle\Utils\Event\EventPostAction;
 use AppBundle\Utils\ListUtils\ListRenderer;
 use AppBundle\Entity\Creance;
 use Symfony\Component\Routing\Router;
@@ -84,11 +85,30 @@ class ListModelsCreances implements ListModelInterface
         }, "money"));
 
 
-        //$list->addAction(new Action('Afficher', 'zoom icon popupable', 'event_creance_show'));
-        //$list->addAction(new Action('Supprimer', 'delete icon popupable', 'event_creance_delete'));
+        $creanceParameters = function (Creance $creance) {
+            return array(
+                "creance" => $creance->getId()
+            );
+        };
+
+        $list->addActionLine(new ActionLine('Afficher', 'zoom', 'app_creance_show', $creanceParameters, EventPostAction::ShowModal,null,true,false));
 
 
-        //$list->setDatatable(true);
+        //si la créance est déjà facturée, on donne la possibilité de visionner la facture.
+        $factureCondition = function (Creance $creance) {
+            return $creance->isFactured();
+        };
+
+        $factureParameters = function (Creance $creance) {
+            return array(
+                "facture" => ($creance->isFactured() ? $creance->getFacture()->getId() : null)
+            );
+        };
+
+
+        $list->addActionLine(new ActionLine('Afficher', 'edit', 'app_facture_show', $factureParameters, EventPostAction::ShowModal,$factureCondition,true,false));
+
+
 
         return $list;
     }

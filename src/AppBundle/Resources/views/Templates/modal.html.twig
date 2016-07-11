@@ -5,7 +5,7 @@
     <div class="header">
         {% block header %}{% endblock %}
     </div>
-    <div class="content">
+    <div class="content" style="overflow-y:auto">
 
         {% block content %}{% endblock %}
 
@@ -15,6 +15,7 @@
             /*  */
             $(document).ready(function () {
                 bindForm();
+                semantic_init();
             });
         </script>
     </div>

@@ -87,7 +87,7 @@
 {# checkbox #}
 {% block checkbox_widget -%}
     <div class="ui checkbox">
-        <input {{ block('widget_attributes') }} type="checkbox">
+        <input {{ block('widget_attributes') }} {% if value is defined %} value="{{value}}" {% endif %} {% if checked %} checked="checked" {% endif %} type="checkbox">
         {{ block('form_label') }}
     </div>
 {%- endblock checkbox_widget %}

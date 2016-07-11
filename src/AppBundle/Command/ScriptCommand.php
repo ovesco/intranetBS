@@ -11,11 +11,20 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-
+/**
+ * Cette commande permet de lancé des scripts. Chaque script est définit dans un
+ * "switch case" qui prend en argument le nom du script voulu.
+ *
+ *
+ * Class ScriptCommand
+ * @package AppBundle\Command
+ */
 class ScriptCommand extends ContainerAwareCommand
 {
     const SCRIPT_RESTART_DEV = 'restart_dev';
     const SCRIPT_RESTART_DATABASE = 'restart_database';
+
+
     /** @var  ConsoleOutput */
     protected $customOutput;
     /** @var InputInterface */
@@ -29,8 +38,8 @@ class ScriptCommand extends ContainerAwareCommand
     {
         $this
             ->setName('app:script')
-            ->setDescription('Permet d\'effectuer des script sur le projet ')
-            ->addArgument('script_name', InputArgument::REQUIRED, 'script_name');
+            ->setDescription('Permet d\'effectuer des script sur le projet. ')
+            ->addArgument('script_name', InputArgument::REQUIRED, 'script_name: la liste des scripts disponible est dans le fichier ScriptCommand.php');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -44,7 +53,7 @@ class ScriptCommand extends ContainerAwareCommand
 
         switch($script)
         {
-            case ScriptCommand::SCRIPT_RESTART_DEV:
+            case 'restart_dev':
                 $this->commands->add(new ConsoleCommand('cache:clear'));
                 $this->commands->add(new ShellCommand('rm -rf '.$this->getContainer()->getParameter('app.upload_path')));
                 $this->commands->add(new ConsoleCommand('doctrine:database:drop',array('--force'=>true)));
@@ -57,7 +66,7 @@ class ScriptCommand extends ContainerAwareCommand
                 $this->commands->add(new ConsoleCommand('app:populate',array('action'=>'create_admin')));
                 $this->commands->add(new ConsoleCommand('fos:elastica:populate'));
                 break;
-            case ScriptCommand::SCRIPT_RESTART_DATABASE:
+            case 'restart_database':
                 $this->commands->add(new ConsoleCommand('cache:clear'));
                 $this->commands->add(new ShellCommand('rm -rf '.$this->getContainer()->getParameter('app.upload_path')));
                 $this->commands->add(new ConsoleCommand('doctrine:database:drop',array('--force'=>true)));
@@ -70,6 +79,11 @@ class ScriptCommand extends ContainerAwareCommand
         $this->runScript();
     }
 
+    /**
+     * Execute la sucession de commande de chaque script.
+     *
+     * @return null
+     */
     protected function runScript()
     {
         foreach($this->commands as $command)
