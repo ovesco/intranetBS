@@ -39,7 +39,7 @@
         data-type="date"
 
     {% else %}
-        {{ dump(attr) }}
+
     {% endif %}
 
 {% endblock %}
@@ -73,19 +73,18 @@
     On déclare ensuite un B pour le nom du champ, et un A pour l'affichage de la donnée. le A
     possède également tous les attributs x-editable
 #}
-{% block form_row %}
 
-    <div class="modifiable-container">
-        {{ block('label') }}
-        {{ form_widget(form) }}
+
+{% block form_row %}
+    <div class="ui grid">
+        <div class="six wide column"><b>{{ form_label(form) }} :</b></div>
+        <div class="ten wide column">
+            {{ form_widget(form) }}
+            {{ form_errors(form) }}
+        </div>
     </div>
 {% endblock form_row %}
 
-
-{# label #}
-{% block label -%}
-    <b>{{ label }}</b>
-{%- endblock %}
 
 {#
     Widget simple, input text basique
@@ -95,31 +94,72 @@
     <a href="#" class="xeditable" {{ block('xeditable') }} >{{ value }}</a>
 {% endblock %}
 
+
+{% block form_errors %}
+    {% spaceless %}
+        {% if errors|length > 0 %}
+            <div class="ui error message">
+                <div class="header">Error</div>
+                <ul>
+                    {% for error in errors %}
+                        <li>{{ error.message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_errors %}
+
 {#
     On définit ici tous les widgets comme utilisant form_widget standard, je sais pas pourquoi ca marche
     pas par défaut
 #}
 {% block datepicker_widget %}
-
     {{ block('form_widget') }}
 {% endblock %}
 
 {% block form_widget_simple %}
-
     {{ block('form_widget') }}
 {% endblock %}
 
 {% block textarea_widget %}
-
     {{ block('form_widget') }}
 {% endblock %}
 
 {% block choice_widget %}
-
     {{ block('form_widget') }}
 {% endblock %}
 
 {% block checkbox_widget %}
-
     {{ block('form_widget') }}
 {% endblock %}
+
+{# remarque_accordion #}
+{% block remarque_accordion_widget -%}
+    <div class="ui accordion">
+        <div class="title">
+            <i class="dropdown icon"></i>
+            {{ block('form_label') }}
+        </div>
+        <div class="content">
+            <div class="field">
+                <div class="ui form">
+                    <div class="field">
+                        <textarea {{ block('widget_attributes') }}>
+                            {{ value }}
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{%- endblock remarque_accordion_widget %}
+
+
+{# date #}
+{% block date_widget -%}
+    <div class="field">
+        {# {{ block('form_label') }} #}
+        <input type="text" class="datepicker" {{ block('widget_attributes') }} value="{{ value }}"/>
+    </div>
+{%- endblock date_widget %}

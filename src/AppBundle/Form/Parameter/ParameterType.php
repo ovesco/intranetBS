@@ -2,10 +2,14 @@
 
 namespace AppBundle\Form\Paramter;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use AppBundle\Entity\Parameter;
+use AppBundle\Form\Email\EmailType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\File;
 
 class ParameterType extends AbstractType
@@ -16,40 +20,37 @@ class ParameterType extends AbstractType
         /** @var Parameter $parameter */
         $parameter = $builder->getData();
 
-        switch($parameter->getType())
-        {
+        switch ($parameter->getType()) {
             case Parameter::TYPE_STRING:
-                $builder->add('data','text',array('label'=>$parameter->getLabel()));
+                $builder->add('data', TextType::class, array('label' => $parameter->getLabel()));
                 break;
 
             case Parameter::TYPE_TEXT:
-                $builder->add('data','textarea',array('label'=>$parameter->getLabel()));
+                $builder->add('data', TextareaType::class, array('label' => $parameter->getLabel()));
                 break;
 
             case Parameter::TYPE_EMAIL:
-                $builder->add('data','email',array('label'=>$parameter->getLabel()));
+                $builder->add('data', EmailType::class, array('label' => $parameter->getLabel()));
                 break;
 
             case Parameter::TYPE_CHOICE:
 
                 $choices = array();
-                foreach($parameter->getOptions('choices') as $subarray)
-                {
-                    foreach($subarray as $key=>$value)
-                    {
-                        $choices[$key]=$value;
+                foreach ($parameter->getOptions('choices') as $subarray) {
+                    foreach ($subarray as $key => $value) {
+                        $choices[$key] = $value;
                     }
                 }
 
-                $builder->add('data','choice',array(
-                    'label'=>$parameter->getLabel(),
-                    'choices'=>$choices));
+                $builder->add('data', ChoiceType::class, array(
+                    'label' => $parameter->getLabel(),
+                    'choices' => $choices));
                 break;
 
             case Parameter::TYPE_PNG:
-                $builder->add('data','file',array(
-                    'label'=>$parameter->getLabel(),
-                    'data_class'=>null,
+                $builder->add('data', FileType::class, array(
+                    'label' => $parameter->getLabel(),
+                    'data_class' => null,
                     'constraints' => [
                         new File([
                             'maxSize' => '50k',
@@ -65,7 +66,7 @@ class ParameterType extends AbstractType
 
     }
 
-    public function configureOptions( \Symfony\Component\OptionsResolver\OptionsResolver $resolver)
+    public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\Parameter'

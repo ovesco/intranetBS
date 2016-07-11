@@ -2,70 +2,84 @@
 
 namespace AppBundle\Form\Membre;
 
+use AppBundle\Field\DatePickerType;
+use AppBundle\Field\RemarqueAccordionType;
 use AppBundle\Form\Attribution\AttributionType;
 use AppBundle\Form\Famille\FamilleType;
 use AppBundle\Form\ObtentionDistinction\ObtentionDistinctionType;
 use AppBundle\Form\Personne\PersonneType;
-use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class MembreType extends PersonneType
 {
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        parent::buildForm($builder,$options);
+        parent::buildForm($builder, $options);
 
         $builder
-            ->add('famille', new FamilleType())
-            ->add('attributions','collection', array('type' => new AttributionType()))
-            ->add('distinctions','collection', array('type' => new ObtentionDistinctionType()))
-            ->add('naissance','datepicker', array('label' => 'Date de naissance'))
-            ->add('numeroAvs','number',
+            ->add('famille', FamilleType::class)
+            ->add('attributions', CollectionType::class, array('type' => AttributionType::class))
+            ->add('distinctions', CollectionType::class, array('type' => ObtentionDistinctionType::class))
+            ->add('naissance', DatePickerType::class, array('label' => 'Date de naissance'))
+            ->add('numeroAvs', NumberType::class,
                 array(
                     'label' => 'Numéro AVS',
                     'required' => false,
                     'attr' => array(
                         'data-formatter' => 'true',
-                        'data-pattern'   => '{{9999999999999}}'
+                        'data-pattern' => '{{9999999999999}}'
                     )
                 )
             )
-            ->add('numeroBs','number',
+            ->add(
+                'numeroBs',
+                NumberType::class,
                 array(
                     'label' => 'Numéro BS',
                     'required' => false,
                 )
             )
-
             ->add(
                 'remarques',
-                'remarque_accordion',
+                RemarqueAccordionType::class,
                 array(
                     'required' => false
                 )
             )
-            ->add('envoiFacture','choice', array('choices' => array('Membre' => 'Membre', 'Famille' => 'Famille')))
-            ->add('inscription','datepicker',array('label' => 'Inscription'))
-            ->add('statut','text', array('label' => 'Statut'))
+            ->add(
+                'envoiFacture',
+                ChoiceType::class,
+                array(
+                    'choices' => array('Membre' => 'Membre', 'Famille' => 'Famille')
+                )
+            )
+            ->add('inscription', DatePickerType::class,
+                array(
+                    'label' => 'Inscription'
+                )
+            )
+            ->add('statut', TextType::class, array('label' => 'Statut'))
             ->add(
                 'id',
-                'hidden'
+                HiddenType::class
             );
     }
 
-    public function configureOptions( \Symfony\Component\OptionsResolver\OptionsResolver $resolver)
+    public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\Membre'
         ));
     }
 
-
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'app_bundle_membre';
     }
-
 }

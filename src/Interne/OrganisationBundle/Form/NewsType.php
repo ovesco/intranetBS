@@ -4,7 +4,6 @@ namespace Interne\OrganisationBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class NewsType extends AbstractType
 {
@@ -12,7 +11,7 @@ class NewsType extends AbstractType
     {
         $builder
             ->add('subject','text',array('required' => true, 'label' => 'Sujet'))
-            ->add('content','textarea',array('required' => true, 'label' => 'Contenu'))
+            ->add('content', TextareaType::class, array('required' => true, 'label' => 'Contenu'))
         ;
 
 

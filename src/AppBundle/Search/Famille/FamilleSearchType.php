@@ -4,12 +4,8 @@ namespace AppBundle\Search\Famille;
 
 use AppBundle\Search\ModeSearchType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 
 class FamilleSearchType extends AbstractType
@@ -18,8 +14,8 @@ class FamilleSearchType extends AbstractType
     {
 
         $builder
-            ->add('mode',new ModeSearchType())
-            ->add('nom','text',array('label' => 'Nom','required'=>false))
+            ->add('mode', ModeSearchType::class)
+            ->add('nom', TextType::class, array('label' => 'Nom', 'required' => false))
             ;
     }
 
@@ -31,7 +27,7 @@ class FamilleSearchType extends AbstractType
     }
 
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'AppBundle_famille_search';
     }

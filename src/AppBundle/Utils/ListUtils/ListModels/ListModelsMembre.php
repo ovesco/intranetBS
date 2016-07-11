@@ -28,7 +28,7 @@ class ListModelsMembre implements ListModelInterface
         };
 
         /* Supprimer l'attribution courante */
-        $list->addActionLine(new ActionLine('Supprimer', 'delete', 'attribution_delete', $attributionParameters, EventPostAction::RefreshList));
+        $list->addActionLine(new ActionLine('Supprimer', 'delete', 'app_attribution_delete', $attributionParameters, EventPostAction::RefreshList));
 
         return $list;
     }

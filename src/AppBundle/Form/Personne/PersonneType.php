@@ -2,21 +2,23 @@
 
 namespace AppBundle\Form\Personne;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
+use AppBundle\Field\GenreType;
 use AppBundle\Form\Contact\ContactType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class PersonneType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('prenom', 'text', array('required' => false, 'label' => 'Prénom'))
-            ->add('sexe','genre')
-            ->add('contact', new ContactType())
+            ->add('prenom', TextType::class, array('required' => false, 'label' => 'Prénom'))
+            ->add('sexe', GenreType::class)
+            ->add('contact', ContactType::class)
             ->add(
                 'iban',
-                'text',
+                TextType::class,
                 array(
                     'label' => 'IBAN',
                     'required' => false,

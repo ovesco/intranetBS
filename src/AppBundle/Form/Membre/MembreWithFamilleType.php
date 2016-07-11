@@ -3,10 +3,8 @@
 namespace AppBundle\Form\Membre;
 
 use AppBundle\Form\Famille\FamilleDisabledNomType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
-
 
 
 class MembreWithFamilleType extends MembreType
@@ -14,16 +12,21 @@ class MembreWithFamilleType extends MembreType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        parent::buildForm($builder,$options);
+        parent::buildForm($builder, $options);
+        
         $builder->remove('prenom')
-            ->add('prenom', 'text', array('required' => false, 'label' => 'Prénom','disabled'=>true));
+            ->add(
+                'prenom',
+                TextType::class,
+                array('required' => false, 'label' => 'Prénom', 'disabled' => true));
+
         $builder->remove('famille')
-            ->add('famille',new FamilleDisabledNomType());
+            ->add('famille', new FamilleDisabledNomType());
 
 
     }
 
-    public function configureOptions( \Symfony\Component\OptionsResolver\OptionsResolver $resolver)
+    public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\Membre'

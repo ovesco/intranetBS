@@ -4,9 +4,8 @@ namespace AppBundle\Form\Creance;
 
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Doctrine\ORM\EntityRepository;
 
 
 class CreanceRepartitionType extends AbstractType
@@ -15,9 +14,9 @@ class CreanceRepartitionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('titre','hidden',array('label' => false))
-            ->add('montantEmis','hidden',array('label' => false))
-            ->add('montantRecu','number', array('label' => false))
+            ->add('titre', HiddenType::class, array('label' => false))
+            ->add('montantEmis', HiddenType::class, array('label' => false))
+            ->add('montantRecu', NumberType::class, array('label' => false))
 
         ;//fin de fonction
     }

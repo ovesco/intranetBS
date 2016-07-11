@@ -3,6 +3,7 @@
 namespace AppBundle\Search;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class NumericIntervalSearchType extends AbstractType
@@ -14,8 +15,8 @@ class NumericIntervalSearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('lower', 'number', array('required'=>false,'label'=>'De'))
-            ->add('higher', 'number', array('required'=>false,'label'=>'à'))
+            ->add('lower', NumberType::class, array('required' => false, 'label' => 'De'))
+            ->add('higher', NumberType::class, array('required' => false, 'label' => 'à'))
             ;
 
     }

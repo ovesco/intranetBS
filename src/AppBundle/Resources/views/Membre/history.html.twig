@@ -1,25 +1,25 @@
 
 <table class="ui very basic table">
     <tbody>
-        {% if membre.historique|length > 0 %}
-            {% for modificationset in membre.historique|groupby('session') %}
-                <tr>
-                    <td class="collapsing">
-                        <h4>{{ modificationset.list[0].editor }}</h4>
-                        <h6>Le {{ modificationset.list[0].date|date('d M Y à H:m') }}</h6>
-                    </td>
+    {#{% if membre.historique|length > 0 %}#}
+    {#{% for modificationset in membre.historique|groupby('session') %}#}
+    {#<tr>#}
+    {#<td class="collapsing">#}
+    {#<h4>{{ modificationset.list[0].editor }}</h4>#}
+    {#<h6>Le {{ modificationset.list[0].date|date('d M Y à H:m') }}</h6>#}
+    {#</td>#}
 
-                    <td>
-                        <ul class="ui list">
-                            {% for modification in modificationset.list %}
-                                <li><b>{{ modification.modifiedProperty|capitalize }}</b> a été changé de <b>{{ modification.oldValue }}</b> à <b>{{ modification.newValue }}</b></li>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
-            {% endfor %}
-        {% else %}
-            Pas de modifications enregistrées
-        {% endif %}
+    {#<td>#}
+    {#<ul class="ui list">#}
+    {#{% for modification in modificationset.list %}#}
+    {#<li><b>{{ modification.modifiedProperty|capitalize }}</b> a été changé de <b>{{ modification.oldValue }}</b> à <b>{{ modification.newValue }}</b></li>#}
+    {#{% endfor %}#}
+    {#</ul>#}
+    {#</td>#}
+    {#</tr>#}
+    {#{% endfor %}#}
+    {#{% else %}#}
+    {#Pas de modifications enregistrées#}
+    {#{% endif %}#}
     </tbody>
 </table>

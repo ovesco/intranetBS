@@ -19,9 +19,6 @@ interne_organisation:
     type:     annotation
     prefix:   /intranet/organisation
 
-galerie:
-    resource: "@InterneGalerieBundle/Resources/config/routing.yml"
-
 seance_api:
     type:     rest
     resource: "@InterneSeanceBundle/Resources/config/routing_rest.yml"

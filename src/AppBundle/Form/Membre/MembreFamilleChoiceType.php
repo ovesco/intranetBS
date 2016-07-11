@@ -2,6 +2,7 @@
 
 namespace AppBundle\Form\Membre;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -22,20 +23,16 @@ class MembreFamilleChoiceType extends AbstractType
     {
 
         $builder
-            ->add('famille', 'entity', array(
-                'class'		=> 'AppBundle:Famille',
-                'multiple'=>false,
-                'required'=>false,
-                'choices'=>$this->familles,
+            ->add('famille', EntityType::class, array(
+                'class' => 'AppBundle:Famille',
+                'multiple' => false,
+                'required' => false,
+                'choices' => $this->familles,
                 'placeholder' => 'Aucune de ces familles',
-            ))
-
-
-
-        ;
+            ));
     }
 
-    public function configureOptions( \Symfony\Component\OptionsResolver\OptionsResolver $resolver)
+    public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\Membre'

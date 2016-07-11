@@ -37,10 +37,8 @@ class AppKernel extends Kernel
             new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
 
             new AppBundle\AppBundle(),
-            new Interne\GalerieBundle\InterneGalerieBundle(),
             new Interne\SecurityBundle\InterneSecurityBundle(),
             new Interne\OrganisationBundle\InterneOrganisationBundle(),
-            new Interne\HistoryBundle\InterneHistoryBundle(),
             new Interne\MatBundle\MatBundle(),
             new Interne\SeanceBundle\InterneSeanceBundle(),
             new Ensepar\Html2pdfBundle\EnseparHtml2pdfBundle(),
