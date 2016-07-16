@@ -20,14 +20,26 @@
                                 <td>{{ app.user.username }}</td>
                             </tr>
                             <tr>
-                                <td>Ma page</td>
+                                <td>Nom</td>
                                 <td>
-                                    <a href="{{ path('app_membre_show', {membre: app.user.membre.id}) }}">
-                                        {{ app.user.membre.prenom|capitalize }}
+                                    {% if app.user.hasMembre %}
                                         {{ app.user.membre.nom|capitalize }}
-                                    </a>
+                                    {% else %}
+                                        Sans membre
+                                    {% endif %}
                                 </td>
                             </tr>
+                            <tr>
+                                <td>Prénom</td>
+                                <td>
+                                    {% if app.user.hasMembre %}
+                                        {{ app.user.membre.prenom|capitalize }}
+                                    {% else %}
+                                        Sans membre
+                                    {% endif %}
+                                </td>
+                            </tr>
+
                         </table>
                     </div>
 

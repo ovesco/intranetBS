@@ -41,7 +41,7 @@ class Fonction
     private $abreviation;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Interne\SecurityBundle\Entity\Role")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Role")
      * @ORM\JoinTable(name="app_fonctions_roles",
      *      joinColumns={@ORM\JoinColumn(name="fonction_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
@@ -158,10 +158,10 @@ class Fonction
     /**
      * Add roles
      *
-     * @param \Interne\SecurityBundle\Entity\Role $roles
+     * @param Role $roles
      * @return Fonction
      */
-    public function addRole(\Interne\SecurityBundle\Entity\Role $roles)
+    public function addRole(Role $roles)
     {
         $this->roles[] = $roles;
 
@@ -171,9 +171,9 @@ class Fonction
     /**
      * Remove roles
      *
-     * @param \Interne\SecurityBundle\Entity\Role $roles
+     * @param Role $roles
      */
-    public function removeRole(\Interne\SecurityBundle\Entity\Role $roles)
+    public function removeRole(Role $roles)
     {
         $this->roles->removeElement($roles);
     }

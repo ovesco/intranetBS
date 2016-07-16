@@ -1,6 +1,6 @@
 <?php
 
-namespace Interne\SecurityBundle\Events;
+namespace AppBundle\EventListener;
 
 use Symfony\Component\Security\Core\Event\AuthenticationFailureEvent;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
@@ -27,6 +27,11 @@ class AuthentificationListener {
         $user = $this->user;
 
         // On crée une liste vide dans le listing parce que Muller
+        /*
+         * todo donner un meilleure raison que ca pour ce bout de code
+         * a terme, on devrais récupéré les listes pour que elle
+         * reste de session en ession
+         */
         /** @var \AppBundle\Utils\Listing\Lister $listing */
         $listing = $this->listing;
 

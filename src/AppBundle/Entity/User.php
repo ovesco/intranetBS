@@ -1,18 +1,20 @@
 <?php
 
-namespace Interne\SecurityBundle\Entity;
+namespace AppBundle\Entity;
 
-use AppBundle\Entity\Attribution;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * User
  *
- * @ORM\Table(name="security_users")
+ * @ORM\Table(name="app_users")
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity(fields="username",message="this username already exist")
+ *
  */
 class User implements UserInterface, \Serializable
 {
@@ -26,9 +28,9 @@ class User implements UserInterface, \Serializable
     private $id;
 
     /**
-     * @var string
+     * @var string $username
      *
-     * @ORM\Column(name="username", type="string", length=255)
+     * @ORM\Column(name="username", type="string", length=255, unique = true)
      */
     private $username;
 
@@ -50,8 +52,8 @@ class User implements UserInterface, \Serializable
     private $isActive;
     
     /**
-     * @ORM\ManyToMany(targetEntity="Interne\SecurityBundle\Entity\Role")
-     * @ORM\JoinTable(name="roles_users",
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Role")
+     * @ORM\JoinTable(name="app_roles_users",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
      *      )
@@ -68,6 +70,7 @@ class User implements UserInterface, \Serializable
 
     public function __construct()
     {
+        $this->membre = null;
         $this->isActive = true;
         $this->salt 	= md5(uniqid(null, true));
         $this->role 	= new ArrayCollection();
@@ -169,10 +172,14 @@ class User implements UserInterface, \Serializable
     {
         $roles = $this->roles->toArray();
 
-        /** @var Attribution $attr */
-        foreach ($this->getMembre()->getActiveAttributions() as $attr) {
-            foreach ($attr->getFonction()->getRoles() as $r)
-                $roles[] = $r;
+        //il est possible que le user ne soit pas lié a un membre
+        if($this->hasMembre())
+        {
+            /** @var Attribution $attr */
+            foreach ($this->getMembre()->getActiveAttributions() as $attr) {
+                foreach ($attr->getFonction()->getRoles() as $r)
+                    $roles[] = $r;
+            }
         }
 
         return $roles;
@@ -200,12 +207,19 @@ class User implements UserInterface, \Serializable
     }
 
     /**
+     * @return bool
+     */
+    public function hasMembre(){
+        return ($this->membre != null);
+    }
+
+    /**
      * Add roles
      *
-     * @param \Interne\SecurityBundle\Entity\Role roles
+     * @param \AppBundle\Entity\Role roles
      * @return User
      */
-    public function addRole(\Interne\SecurityBundle\Entity\Role $roles)
+    public function addRole(\AppBundle\Entity\Role $roles)
     {
 
         $this->roles[] = $roles;
@@ -215,9 +229,9 @@ class User implements UserInterface, \Serializable
     /**
      * Remove roles
      *
-     * @param \Interne\SecurityBundle\Entity\Role roles
+     * @param \AppBundle\Entity\Role roles
      */
-    public function removeRole(\Interne\SecurityBundle\Entity\Role $roles)
+    public function removeRole(\AppBundle\Entity\Role $roles)
     {
         $this->roles->removeElement($roles);
     }

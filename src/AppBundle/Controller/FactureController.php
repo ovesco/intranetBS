@@ -35,7 +35,7 @@ use AppBundle\Utils\ListUtils\ListStorage;
  * Class FactureController
  * @package AppBundle\Controller
  *
- * @Route("/facture")
+ * @Route("/intranet/facture")
  */
 class FactureController extends Controller
 {
@@ -56,7 +56,7 @@ class FactureController extends Controller
 
         /** @var ListStorage $sessionContainer */
         $sessionContainer = $this->get('list_storage');
-        $sessionContainer->setRepository(ListKey::FACTURES_SEARCH_RESULTS,'AppBundle:Creance');
+        $sessionContainer->setRepository(ListKey::FACTURES_SEARCH_RESULTS,'AppBundle:Facture');
 
 
         $searchForm->handleRequest($request);

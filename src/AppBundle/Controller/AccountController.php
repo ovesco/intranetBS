@@ -1,6 +1,6 @@
 <?php
 
-namespace Interne\SecurityBundle\Controller;
+namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -9,25 +9,25 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Le controller de compte utilisateur. Réunit toutes les tâches relatives à la gestion du compte utilisateur d'un
  * membre
- * @Route("account/")
+ * @Route("/intranet/account")
  * @package Interne\SecurityBundle\Controller
  */
 class AccountController extends Controller
 {
     /**
      * Affiche la page de gestion de compte
-     * @Route("my_account", name="security_my_account")
+     * @Route("", name="app_account")
      */
-    public function myAccountAction(){
+    public function accountAction(){
 
-        return $this->render('InterneSecurityBundle:Account:page_my_account.html.twig');
+        return $this->render('AppBundle:Account:page_account.html.twig');
     }
 
 
 
     /**
      * Permet à un utilisateur de modifier son mot de passe
-     * @Route("modify-password", name="security_modify_password")
+     * @Route("/modify-password", name="security_modify_password")
      */
     public function modifyPasswordAction(Request $request) {
 
@@ -69,6 +69,6 @@ class AccountController extends Controller
                 $this->get('session')->getFlashBag()->add('error', $error);
 
 
-        return $this->redirect($this->generateUrl('security_my_account'));
+        return $this->redirect($this->generateUrl('app_account'));
     }
 }

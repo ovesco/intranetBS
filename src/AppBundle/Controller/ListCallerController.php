@@ -39,10 +39,10 @@ use Symfony\Component\DependencyInjection\Container;
  *
  * Class ListCallerController
  * @package AppBundle\Controller
- * @Route("/list", service="list_caller")
+ * @Route("/intranet/list", service="list_caller")
  *
  */
-class   ListCallerController extends Controller
+class ListCallerController extends Controller
 {
 
     const CALL_BY_ROUTE = "route";

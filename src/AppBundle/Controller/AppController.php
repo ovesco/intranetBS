@@ -10,6 +10,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 use AppBundle\Utils\Menu\Menu;
 
+
+/**
+ * Class AppController
+ * @package AppBundle\Controller
+ * @Route("/intranet")
+ */
 class AppController extends Controller
 {
     /**

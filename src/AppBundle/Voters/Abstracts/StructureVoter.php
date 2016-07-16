@@ -1,6 +1,6 @@
 <?php
 
-namespace Interne\SecurityBundle\Voters\Abstracts;
+namespace AppBundle\Voters\Abstracts;
 
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 

@@ -1,30 +1,41 @@
 <?php
 
-namespace Interne\SecurityBundle\Controller;
+namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+/**
+ * Class SecurityController
+ * @package AppBundle\Controller
+ *
+ * Le controller de la sécurité ne doit pas avoir le préfix "/intranet" afin que
+ * la route / et /login soit atteniable avant le fierwall.
+ *
+ * @Route("")
+ */
 class SecurityController extends Controller
 {
 
     /**
      * Petite redirection vers la page de login
-     * @Route("", name="security_redirect_login")
+     * @Route("", name="app_security_redirect")
      */
-    public function baseIndexAction() {
+    public function redirectAction() {
 
-        return $this->redirect($this->generateUrl('security_login'));
+        return $this->redirect($this->generateUrl('app_security_login'));
     }
 
     /**
      * Affiche le formulaire de login
      * @param Request $request la requete
      * @return Response la vue
-     * @Route("/login", name="security_login")
+     * @Route("/login", name="app_security_login")
+     * @Template("AppBundle:Security:page_login.html.twig")
      */
     public function loginAction(Request $request) {
 
@@ -38,16 +49,15 @@ class SecurityController extends Controller
             $session->remove(Security::AUTHENTICATION_ERROR);
         }
 
-        return $this->render('InterneSecurityBundle:Login:page_login.html.twig', array(
-
+        return array(
             'last_username' => $session->get(Security::LAST_USERNAME),
             'error'         => $error,
-        ));
+        );
     }
 
     /**
      * Méthode vide, on l'utilise juste pour que la route ait quelque chose sur lequel pointer
-     * @Route("login_check", name="login_check")
+     * @Route("/login_check", name="app_security_check")
      */
     public function checkAction(){
 
@@ -55,7 +65,7 @@ class SecurityController extends Controller
 
     /**
      * Méthode vide, on l'utilise juste pour que la route ait quelque chose sur lequel pointer
-     * @Route("logout", name="logout")
+     * @Route("/logout", name="app_security_logout")
      */
     public function logoutAction(){
 

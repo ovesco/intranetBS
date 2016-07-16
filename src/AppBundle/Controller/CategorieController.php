@@ -25,7 +25,7 @@ use AppBundle\Form\Categorie\CategorieType;
  * Class CategorieController
  * @package AppBundle\Controller
  *
- * @Route("/categorie")
+ * @Route("/intranet/categorie")
  */
 class CategorieController extends Controller
 {

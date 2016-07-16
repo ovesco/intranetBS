@@ -65,7 +65,7 @@ assetic:
     use_controller: false
     bundles:
         - AppBundle
-        - InterneSecurityBundle
+        #- InterneSecurityBundle
         - InterneGalerieBundle
         - InterneOrganisationBundle
         - InterneSeanceBundle

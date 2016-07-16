@@ -32,7 +32,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 /**
  * Class MembreController
  * @package AppBundle\Controller
- * @Route("/membre")
+ * @Route("/intranet/membre")
  */
 class MembreController extends Controller {
 

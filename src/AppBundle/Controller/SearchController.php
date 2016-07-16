@@ -23,7 +23,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 /**
  * Class SearchController
  * @package AppBundle\Controller
- * @Route("/search")
+ * @Route("/intranet/search")
  */
 class SearchController extends Controller
 {

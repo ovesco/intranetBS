@@ -4,6 +4,7 @@ namespace Interne\HistoryBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\Membre;
+use AppBundle\Entity\User;
 
 /**
  * @ORM\MappedSuperclass
@@ -22,8 +23,11 @@ abstract class HistoryLogger
     /**
      * @var Membre
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Membre")
-     * @ORM\JoinColumn(name="editor_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\JoinColumn(name="editor_id", referencedColumnName="id", nullable=true)
+     *
+     * Il n'y a pas forcement un editeur, par exemple lors d'une modification via une commande console
+     *
      */
     protected $editor;
 
@@ -66,10 +70,10 @@ abstract class HistoryLogger
     /**
      * Set editor
      *
-     * @param \AppBundle\Entity\Membre $editor
+     * @param \AppBundle\Entity\User $editor
      * @return MemberHistory
      */
-    public function setEditor(\AppBundle\Entity\Membre $editor = null)
+    public function setEditor(\AppBundle\Entity\User $editor = null)
     {
         $this->editor = $editor;
 
@@ -79,7 +83,7 @@ abstract class HistoryLogger
     /**
      * Get editor
      *
-     * @return \AppBundle\Entity\Membre
+     * @return \AppBundle\Entity\User
      */
     public function getEditor()
     {

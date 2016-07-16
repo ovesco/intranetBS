@@ -52,7 +52,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
  *
  * Class AddMembreController
  * @package AppBundle\Controller
- * @Route("/add_membre")
+ * @Route("/intranet/add_membre")
  */
 class AddMembreController extends Controller
 {

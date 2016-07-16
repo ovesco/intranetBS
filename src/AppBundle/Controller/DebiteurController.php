@@ -18,7 +18,7 @@ use AppBundle\Entity\Debiteur;
 /**
  * Class DebiteurController
  * @package AppBundle\Controller
- * @Route("/debiteur")
+ * @Route("/intranet/debiteur")
  */
 class DebiteurController extends Controller
 {

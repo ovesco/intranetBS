@@ -94,15 +94,12 @@
             margin:10px 0 10px 0;
         }
 
-
-
-
     </style>
 </head>
 
 <body>
 
-    <form action="{{ path('login_check') }}" method="post">
+    <form action="{{ path('app_security_check') }}" method="post">
 
         <header>
                 <img src="{{ parametreService.get('group_logo') }}" alt="Logo">

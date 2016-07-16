@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Class ContactController
  * @package AppBundle\Controller
  *
- * @Route("/contact")
+ * @Route("/intranet/contact")
  */
 class ContactController extends Controller{
 

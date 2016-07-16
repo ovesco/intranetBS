@@ -1,6 +1,6 @@
 <?php
 
-namespace Interne\SecurityBundle\Entity;
+namespace AppBundle\Entity;
 
 use Symfony\Component\Security\Core\Role\RoleInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Role
- * @ORM\Table(name="security_roles")
+ * @ORM\Table(name="app_roles")
  * @ORM\Entity
  */
 class Role implements RoleInterface
@@ -25,7 +25,7 @@ class Role implements RoleInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
     private $name;
 
@@ -120,10 +120,10 @@ class Role implements RoleInterface
     /**
      * Set parent
      *
-     * @param \Interne\SecurityBundle\Entity\Role $parent
+     * @param \AppBundle\Entity\Role $parent
      * @return Role
      */
-    public function setParent(\Interne\SecurityBundle\Entity\Role $parent = null)
+    public function setParent(\AppBundle\Entity\Role $parent = null)
     {
         $this->parent = $parent;
 
@@ -133,7 +133,7 @@ class Role implements RoleInterface
     /**
      * Get parent
      *
-     * @return \Interne\SecurityBundle\Entity\Role 
+     * @return \AppBundle\Entity\Role 
      */
     public function getParent()
     {
@@ -143,10 +143,10 @@ class Role implements RoleInterface
     /**
      * Add enfants
      *
-     * @param \Interne\SecurityBundle\Entity\Role $enfants
+     * @param \AppBundle\Entity\Role $enfants
      * @return Role
      */
-    public function addEnfant(\Interne\SecurityBundle\Entity\Role $enfants)
+    public function addEnfant(\AppBundle\Entity\Role $enfants)
     {
         $this->enfants[] = $enfants;
         $enfants->setParent($this);
@@ -156,9 +156,9 @@ class Role implements RoleInterface
     /**
      * Remove enfants
      *
-     * @param \Interne\SecurityBundle\Entity\Role $enfants
+     * @param \AppBundle\Entity\Role $enfants
      */
-    public function removeEnfant(\Interne\SecurityBundle\Entity\Role $enfants)
+    public function removeEnfant(\AppBundle\Entity\Role $enfants)
     {
         $this->enfants->removeElement($enfants);
     }

@@ -4,6 +4,7 @@ namespace Interne\HistoryBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\Membre;
+use AppBundle\Entity\User;
 
 /**
  * MemberHistory
@@ -21,6 +22,13 @@ class MemberHistory extends HistoryLogger
      */
     private $modifiedMember;
 
+    /**
+     * @param User $editor
+     * @param Membre $modifiedMember
+     * @param $modifiedProperty
+     * @param string $oldValue
+     * @param string $newValue
+     */
     public function __construct($editor, $modifiedMember, $modifiedProperty, $oldValue = '', $newValue = '')
     {
         $this->setEditor($editor);

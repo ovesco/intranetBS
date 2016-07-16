@@ -1,6 +1,6 @@
 <?php
 
-namespace Interne\SecurityBundle\Voters;
+namespace AppBundle\Voters;
 
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authorization\Voter\RoleVoter;

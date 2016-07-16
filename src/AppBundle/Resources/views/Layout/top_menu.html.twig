@@ -20,7 +20,6 @@
                         <input class="prompt" type="text" placeholder="Quick menu...">
                     <div class="results"></div>
                     <script>
-
                         $(document).ready(function(){
                             var menu_data = {{ menu.getAllBlocksToCategorySearch()|json_encode(constant('JSON_PRETTY_PRINT'))|raw }};
                             $('#menu_search').search({source: menu_data});
@@ -36,11 +35,15 @@
 
             <div class="ui dropdown item">
                 {% if app.user != null %}
-                    {{ app.user.membre.prenom|capitalize }} {{ app.user.membre.nom|capitalize }} <i
-                        class="dropdown icon"></i>
+                    {% if app.user.hasMembre %}
+                        {{ app.user.membre.prenom|capitalize }} {{ app.user.membre.nom|capitalize }}
+                    {% else %}
+                        {{ app.user.username }}
+                    {% endif %}
+                    <i class="dropdown icon"></i>
                     <div class="menu">
-                        <a class="item" href="{{ path('security_my_account') }}"><i class="user icon"></i>Mon compte</a>
-                        <a class="item" href="{{ path('logout') }}"><i class="delete icon"></i>Déconnexion</a>
+                        <a class="item" href="{{ path('app_account') }}"><i class="user icon"></i>Mon compte</a>
+                        <a class="item" href="{{ path('app_security_logout') }}"><i class="delete icon"></i>Déconnexion</a>
                     </div>
                 {% else %}
                     Non connecté

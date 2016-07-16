@@ -22,7 +22,7 @@ use AppBundle\Utils\ListUtils\ListKey;
 /**
  * Class CreanceController
  * @package AppBundle\Controller
- * @Route("/creance")
+ * @Route("/intranet/creance")
  */
 class CreanceController extends Controller
 {

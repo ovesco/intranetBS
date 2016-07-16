@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Class ContactController
  * @package AppBundle\Controller
  *
- * @Route("/distinction/")
+ * @Route("/intranet/distinction/")
  */
 class DistinctionController extends Controller{
 

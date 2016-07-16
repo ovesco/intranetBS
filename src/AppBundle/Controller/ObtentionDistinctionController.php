@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Class ObtentionDistinctionController
  * @package AppBundle\Controller
  *
- * @Route("/obtention-distinction")
+ * @Route("/intranet/obtention-distinction")
  */
 class ObtentionDistinctionController extends Controller
 {

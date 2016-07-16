@@ -1,7 +1,8 @@
 <?php
 
-namespace Interne\SecurityBundle\Utils;
-use Interne\SecurityBundle\Entity\Role;
+namespace AppBundle\Utils\Security;
+
+use AppBundle\Entity\Role;
 
 /**
  * Fournit diverses méthodes utiles pour la gestion des roles

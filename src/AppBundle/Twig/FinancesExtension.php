@@ -28,8 +28,12 @@ class FinancesExtension extends \Twig_Extension
             new \Twig_SimpleFilter('payement_state_text', array($this, 'payement_state_text')),
             new \Twig_SimpleFilter('statut_label', array($this, 'statut_label')),
             new \Twig_SimpleFilter('creance_facture_status', array($this, 'creance_facture_status')),
+            new \Twig_SimpleFilter('creance_facture_status_detail', array($this, 'creance_facture_status_detail')),
             new \Twig_SimpleFilter('creance_is_payed', array($this, 'creance_is_payed')),
+            new \Twig_SimpleFilter('creance_is_payed_detail', array($this, 'creance_is_payed_detail')),
             new \Twig_SimpleFilter('facture_is_payed', array($this, 'facture_is_payed')),
+            new \Twig_SimpleFilter('facture_is_payed_detail', array($this, 'facture_is_payed_detail')),
+
         );
     }
 
@@ -68,6 +72,18 @@ class FinancesExtension extends \Twig_Extension
         return '<i class="bordered inverted red remove icon popupable" data-content="Impayée"></i>';
     }
 
+    public function creance_is_payed_detail(Creance $creance)
+    {
+        if($creance->isFactured())
+        {
+            if($creance->isPayed())
+            {
+                return '<div class="ui green label"><i class="check icon"></i>Payée</div>';
+            }
+        }
+        return '<div class="ui red label"><i class="remove icon"></i>Impayée</div>';
+    }
+
 
     public function creance_facture_status(Creance $creance){
         if($creance->isFactured())
@@ -82,6 +98,19 @@ class FinancesExtension extends \Twig_Extension
 
     }
 
+    public function creance_facture_status_detail(Creance $creance){
+        if($creance->isFactured())
+        {
+            return 'N° '.$creance->getFacture()->getId();
+
+        }
+        else
+        {
+            return '<div class="ui orange label"><i class="wait icon"></i>En attente de facturation</div>';
+        }
+
+    }
+
     public function facture_is_payed(Facture $facture){
         if($facture->isPayed())
         {
@@ -92,6 +121,19 @@ class FinancesExtension extends \Twig_Extension
             return '<i class="bordered inverted red remove icon popupable" data-content="Impayée"></i>';
         }
     }
+
+    public function facture_is_payed_detail(Facture $facture){
+        if($facture->isPayed())
+        {
+            return '<div class="ui green label"><i class="check icon"></i>Payée</div>';
+        }
+        else
+        {
+            return '<div class="ui red label"><i class="remove icon"></i>Impayée</div>';
+        }
+    }
+
+
 
     public function statut_label($statut)
     {

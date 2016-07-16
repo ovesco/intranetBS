@@ -2,14 +2,13 @@ security:
     providers:
         insiders:
             entity:
-                class: Interne\SecurityBundle\Entity\User
+                class: AppBundle\Entity\User
                 property: username
 
     encoders:
-        Interne\SecurityBundle\Entity\User: plaintext
+        AppBundle\Entity\User: plaintext
 
     firewalls:
-
         # Firewall principal
         interne:
             pattern:   ^/
@@ -25,4 +24,11 @@ security:
 
 
     access_control:
-        - { path: ^/intranet, roles: ROLE_ADMIN}
+        #acces general à n'importe quelle pages de l'app
+        - { path: ^/intranet, roles: ROLE_ACCESS_APP }
+
+        #acces à la partie finances de l'application
+        - { path: ^/intranet/payement, roles: ROLE_PAYEMENT }
+        - { path: ^/intranet/creance, roles: ROLE_CREANCE }
+        - { path: ^/intranet/facture, roles: ROLE_FACTURE }
+        - { path: ^/intranet/rappel, roles: ROLE_RAPPEL }

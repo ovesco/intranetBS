@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class FamilleController
  * @package AppBundle\Controller
- * @Route("/famille")
+ * @Route("/intranet/famille")
  */
 class FamilleController extends Controller {
 

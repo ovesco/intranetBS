@@ -1,11 +1,11 @@
 <?php
 
-namespace Interne\SecurityBundle\Voters;
+namespace AppBundle\Voters;
 
-use Interne\SecurityBundle\Voters\Abstracts\StructureVoter;
+use AppBundle\Voters\Abstracts\StructureVoter;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Interne\SecurityBundle\Utils\RolesUtil;
+use AppBundle\Utils\Security\RolesUtil;
 
 class GroupeVoter extends StructureVoter
 {

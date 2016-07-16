@@ -1,18 +1,18 @@
 <?php
 
-namespace Interne\SecurityBundle\Voters;
+namespace AppBundle\Voters;
 
-use Interne\SecurityBundle\Voters\Abstracts\StructureVoter;
+use AppBundle\Voters\Abstracts\StructureVoter;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Interne\SecurityBundle\Utils\RolesUtil;
+use AppBundle\Utils\Security\RolesUtil;
 
-class FamilleVoter extends StructureVoter
+class MembreVoter extends StructureVoter
 {
 
     public function supportsClass($class)
     {
-        return $class == 'AppBundle\Entity\Famille';
+        return $class == 'AppBundle\Entity\Membre';
     }
 
     function vote(TokenInterface $token, $object, array $attributes)
@@ -33,13 +33,10 @@ class FamilleVoter extends StructureVoter
 
         foreach($attributes as $attribute) {
 
-            $role = 'ROLE_' . strtoupper($attribute) . '_GROUPE';
+            $role = 'ROLE_' . strtoupper($attribute) . '_MEMBRE';
 
-            /*
-             * Comme on veut checker la famille, on va voir si au moins un membre de la famille est dans le groupe
-             * du user
-             */
-            if($attribute == 'view' && $user->getMembre()->getFamille() == $object)
+            //On autorise a regarder sa propre fiche
+            if($attribute == 'view' && $user->getMembre() == $object)
                 return $this::ACCESS_GRANTED;
 
             if(!in_array($role, $roles))
@@ -49,11 +46,10 @@ class FamilleVoter extends StructureVoter
              *Si il possède le role requis, on vérifie ensuite si le membre auquel il souhaite accéder possède au
              * moins une attribution avec un groupe en commun avec le user
              */
-            foreach($object->getMembres() as $membre)
-                foreach($membre->getActiveAttributions() as $mAttr)
-                    foreach($user->getMembre()->getActiveAttributions() as $uAttr)
-                        if(in_array($mAttr->getGroupe(), $uAttr->getGroupe()->getEnfantsRecursive(true)))
-                            return $this::ACCESS_GRANTED;
+            foreach($object->getActiveAttributions() as $oAttr)
+                foreach($user->getMembre()->getActiveAttributions() as $uAttr)
+                    if(in_array($oAttr->getGroupe(), $uAttr->getGroupe()->getEnfantsRecursive(true)))
+                        return $this::ACCESS_GRANTED;
 
             return $this::ACCESS_DENIED;
         }
