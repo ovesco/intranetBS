@@ -4,9 +4,8 @@ namespace AppBundle\Form\Document;
 
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Doctrine\ORM\EntityRepository;
 
 
 class DocumentType extends AbstractType
@@ -17,7 +16,7 @@ class DocumentType extends AbstractType
         $builder
             ->add(
                 'file',
-                'file',
+                FileType::class,
                 array('label' => 'Document à envoyer')
             );
 

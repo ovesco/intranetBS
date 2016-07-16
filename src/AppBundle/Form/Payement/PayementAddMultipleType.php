@@ -4,8 +4,8 @@ namespace AppBundle\Form\Payement;
 
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 
 class PayementAddMultipleType extends AbstractType
@@ -14,8 +14,7 @@ class PayementAddMultipleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-
-            ->add('multiple_payement','collection',array(
+            ->add('multiple_payement', CollectionType::class, array(
                 'allow_add'=>true,
                 'prototype'=>true,
                 'by_reference' => false,

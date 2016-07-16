@@ -2,26 +2,25 @@
 
 namespace AppBundle\Form\Contact;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use AppBundle\Field\DynamicCollectionType;
+use AppBundle\Form\Adresse\AdresseType;
 use AppBundle\Form\Email\EmailType;
 use AppBundle\Form\Telephone\TelephoneType;
-use AppBundle\Form\Adresse\AdresseType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class ContactType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('adresse',new AdresseType())
-            ->add('emails', 'dynamic_collection', array(
+            ->add('adresse', AdresseType::class)
+            ->add('emails', DynamicCollectionType::class, array(
                 // chaque item du tableau sera un champ « email »
-                'type'   => new EmailType()))
-
-            ->add('telephones', 'dynamic_collection', array(
+                'type' => EmailType::class))
+            ->add('telephones', DynamicCollectionType::class, array(
                 // chaque item du tableau sera un champ « email »
-                'type'   => new TelephoneType()))
+                'type' => TelephoneType::class))
         ;
     }
 

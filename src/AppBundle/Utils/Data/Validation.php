@@ -6,10 +6,7 @@ use AppBundle\Entity\Modification;
 use AppBundle\Entity\ModificationsContainer;
 use AppBundle\Utils\Accessor\Accessor;
 use AppBundle\Utils\Accessor\Parser;
-use Doctrine\DBAL\Exception\NotNullConstraintViolationException;
 use Doctrine\ORM\EntityManager;
-
-use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 
 /**
  * Class Validation
@@ -76,8 +73,6 @@ class Validation {
         $class  = \Doctrine\Common\Util\ClassUtils::getRealClass(get_class($entity));
         $emptyObjectName    = \Doctrine\Common\Util\ClassUtils::getRealClass(get_class($entity));
         $metaData           = $this->em->getClassMetadata($emptyObjectName);
-
-        var_dump($metaData);
     }
 
 

@@ -29,7 +29,10 @@
 
 {% block textarea_widget %}
     {% spaceless %}
-        <textarea {{ block('widget_attributes') }} placeholder="{{ label }}">{{ value }}</textarea>
+        <div class="field">
+            <label>{{ label }}</label>
+            <textarea {{ block('widget_attributes') }} placeholder="{{ label }}">{{ value }}</textarea>
+        </div>
     {% endspaceless %}
 {% endblock textarea_widget %}
 

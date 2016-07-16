@@ -2,8 +2,11 @@
 
 namespace AppBundle\Form\Attribution;
 
-use AppBundle\Entity\Attribution;
+use AppBundle\Field\DatePickerType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -23,36 +26,35 @@ class AttributionType extends AbstractType
             /* We have to check that it doesn't exist because of form inheritance */
             if (!$form->has('membre')) {
                 if (null !== $attribution->getMembre()) {
-                    $form->add('membre', 'hidden', array(
+                    $form->add('membre', HiddenType::class, array(
                         'data' => $attribution->getMembre()->GetId()
                     ));
                 } else {
-                    $form->add('membre', 'entity', array(
+                    $form->add('membre', EntityType::class, array(
                         'class' => 'AppBundle:Membre'
                     ));
                 }
             }
 
             if (null !== $attribution->getId()) {
-                $form->add('id', 'hidden', array(
+                $form->add('id', HiddenType::class, array(
                     'data' => $attribution->GetId()
                 ));
             }
         });
 
         $builder
-            ->add('dateDebut', 'datepicker')
-            ->add('dateFin', 'datepicker', array(
+            ->add('dateDebut', DatePickerType::class)
+            ->add('dateFin', DatePickerType::class, array(
                 'required' => false
             ))
-
-            ->add('groupe', 'entity', array(
+            ->add('groupe', EntityType::class, array(
                 'class'		=> 'AppBundle:Groupe'
             ))
-            ->add('fonction', 'entity', array(
+            ->add('fonction', EntityType::class, array(
                 'class'		=> 'AppBundle:Fonction'
             ))
-            ->add('remarques', 'textarea', array(
+            ->add('remarques', TextareaType::class, array(
                 'required'	=> false,
             ))
         ;

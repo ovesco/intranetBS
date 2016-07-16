@@ -4,9 +4,11 @@ namespace AppBundle\Form\Creance;
 
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Doctrine\ORM\EntityRepository;
 
 
 class CreanceAddType extends AbstractType
@@ -17,29 +19,29 @@ class CreanceAddType extends AbstractType
         $builder
             ->add(
                 'titre',
-                'text',
+                TextType::class,
                 array('label' => 'Titre')
             )
 
             ->add(
                 'remarque',
-                'textarea',
+                TextareaType::class,
                 array('label' => 'Remarque', 'required' => false)
             )
             ->add(
                 'montantEmis',
-                'number',
+                NumberType::class,
                 array('label' => 'Montant')
             )
             ->add(
                 'idOwner',
-                'hidden',
+                HiddenType::class,
                 array(  'required' => false,
                         'mapped' => false)
             )
             ->add(
                 'classOwner',
-                'hidden',
+                HiddenType::class,
                 array(  'required' => false,
                         'mapped' => false)
             )

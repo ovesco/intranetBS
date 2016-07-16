@@ -1,6 +1,6 @@
 {% extends 'AppBundle:Layout:layout.html.twig' %}
 
-{% form_theme groupeForm 'Templates/form_to_xEditable.html.twig' %}
+{% form_theme groupeForm 'AppBundle:Form:xeditable_widgets.html.twig' %}
 
 {% block titre %}{{ groupe.nom }}{% endblock %}
 

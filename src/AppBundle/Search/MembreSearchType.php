@@ -2,19 +2,11 @@
 
 namespace AppBundle\Search;
 
-use AppBundle\Search\ModeSearchType;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
-use AppBundle\Field\SemanticType;
-use AppBundle\Field\GenreType;
 use AppBundle\Field\DatePickerType;
-use AppBundle\Entity\Membre;
+use AppBundle\Field\GenreType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class MembreSearchType extends AbstractType
 {
@@ -22,17 +14,16 @@ class MembreSearchType extends AbstractType
     {
 
         $builder
-            ->add('mode',new ModeSearchType())
-            ->add('prenom','text',array('label' => 'Prénom','required'=>false))
-            ->add('nom','text',array('label' => 'Nom','required'=>false))
-            ->add('fromNaissance','datepicker',array('label' => 'Naissance de','required'=>false))
-            ->add('toNaissance','datepicker',array('label' => 'Naissance à','required'=>false))
-            ->add('sexe','genre',array('label' => 'Sexe','required'=>false))
-            ->add('attribution',new AttributionSearchType())
-            ;
+            ->add('mode', ModeSearchType::class)
+            ->add('prenom', TextType::class, array('label' => 'Prénom', 'required' => false))
+            ->add('nom', TextType::class, array('label' => 'Nom', 'required' => false))
+            ->add('fromNaissance', DatePickerType::class, array('label' => 'Naissance de', 'required' => false))
+            ->add('toNaissance', DatePickerType::class, array('label' => 'Naissance à', 'required' => false))
+            ->add('sexe', GenreType::class, array('label' => 'Sexe', 'required' => false))
+            ->add('attribution', AttributionSearchType::class);
     }
 
-    public function configureOptions( \Symfony\Component\OptionsResolver\OptionsResolver $resolver)
+    public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Search\MembreSearch'

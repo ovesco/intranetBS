@@ -3,8 +3,9 @@
 namespace AppBundle\Form\Rappel;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 
 class RappelType extends AbstractType
@@ -15,20 +16,20 @@ class RappelType extends AbstractType
         $builder
             ->add(
                 'dateCreation',
-                'date',
-                array('label' => 'Date du rappel',
-                    'data' => new \DateTime())
+                DateType::class,
+                array(
+                    'label' => 'Date du rappel',
+                    'data' => new \DateTime()
+                )
             )
             ->add(
                 'montantEmis',
-                'number',
-                array(  'label' => 'Frais de rappel',
-                        'required' => false
-
+                NumberType::class,
+                array(
+                    'label' => 'Frais de rappel',
+                    'required' => false
                 )
             );
-
-
     }
 
     public function configureOptions( \Symfony\Component\OptionsResolver\OptionsResolver $resolver)

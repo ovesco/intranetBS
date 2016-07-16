@@ -2,10 +2,10 @@
 
 namespace AppBundle\Form\Model;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
 
 
 class ModelType extends AbstractType
@@ -13,13 +13,13 @@ class ModelType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nom','text',array('label'=>'Nom'))
-            ->add('fonctionChef', 'entity', array(
+            ->add('nom', TextType::class, array('label' => 'Nom'))
+            ->add('fonctionChef', EntityType::class, array(
                 'class'		=> 'AppBundle:Fonction',
                 'property'	=> 'nom',
                 'label'=>'Fonction chef'
             ))
-            ->add('fonctions', 'entity', array(
+            ->add('fonctions', EntityType::class, array(
                 'class'		=> 'AppBundle:Fonction',
                 'property'	=> 'nom',
                 'multiple'=>true,
@@ -28,8 +28,7 @@ class ModelType extends AbstractType
                 'label' =>'Fonctions'
             ))
             ->add('affichageEffectifs','checkbox',array('label'=>'Affichage des effectifs?','required'=>false))
-
-            ->add('categories', 'entity', array(
+            ->add('categories', EntityType::class, array(
                 'class'		=> 'AppBundle:Categorie',
                 'property'	=> 'nom',
                 'multiple'=>true,

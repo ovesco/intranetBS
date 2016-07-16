@@ -2,7 +2,10 @@
 
 namespace AppBundle\Form\ObtentionDistinction;
 
+use AppBundle\Field\DatePickerType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -22,18 +25,18 @@ class ObtentionDistinctionType extends AbstractType
             /* We have to check that it doesn't exist because of form inheritance */
             if (!$form->has('membre')) {
                 if (null !== $obtention->getMembre()) {
-                    $form->add('membre', 'hidden', array(
+                    $form->add('membre', HiddenType::class, array(
                         'data' => $obtention->getMembre()->getId()
                     ));
                 } else {
-                    $form->add('membre', 'entity', array(
+                    $form->add('membre', EntityType::class, array(
                         'class' => 'AppBundle:Membre'
                     ));
                 }
             }
 
             if (null !== $obtention->getId()) {
-                $form->add('id', 'hidden', array(
+                $form->add('id', HiddenType::class, array(
                     'data' => $obtention->getId()
                 ));
             }
@@ -41,11 +44,10 @@ class ObtentionDistinctionType extends AbstractType
 
 
         $builder
-            ->add('date', 'datepicker', array('label' => "Reçu le"))
-            ->add('distinction', 'entity', array(
-                'class'		=> 'AppBundle:Distinction'
-            ))
-        ;
+            ->add('date', DatePickerType::class, array('label' => "Reçu le"))
+            ->add('distinction', EntityType::class, array(
+                'class' => 'AppBundle:Distinction'
+            ));
     }
 
     public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)

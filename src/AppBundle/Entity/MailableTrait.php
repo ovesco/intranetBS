@@ -12,7 +12,7 @@ trait MailableTrait
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Mail", mappedBy="mail", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Mail", mappedBy="sender", cascade={"persist"})
      */
     private $mails;
 

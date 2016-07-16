@@ -16,8 +16,8 @@ class ActiviteType extends AbstractType
     {
         $builder
             ->add('nom')
-            ->add('dateDebut', 'datepicker', array('label' => "Début de l'activité"))
-            ->add('dateFin', 'datepicker', array('label' => "Fin de l'activité"))
+            ->add('dateDebut', DatePickerType::class, array('label' => "Début de l'activité"))
+            ->add('dateFin', DatePickerType::class, array('label' => "Fin de l'activité"))
         ;
     }
     

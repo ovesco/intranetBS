@@ -3,8 +3,8 @@
 namespace AppBundle\Form\Fonction;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class FonctionType extends AbstractType
 {
@@ -15,13 +15,12 @@ class FonctionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nom','text')
-            ->add('abreviation','text')
-        ;
+            ->add('nom', TextType::class)
+            ->add('abreviation', TextType::class);
     }
-    
 
-    public function configureOptions( \Symfony\Component\OptionsResolver\OptionsResolver $resolver)
+
+    public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\Fonction',

@@ -3,7 +3,7 @@
 namespace AppBundle\Field;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 
 class RemarqueAccordionType extends AbstractType
@@ -19,7 +19,7 @@ class RemarqueAccordionType extends AbstractType
 
     public function getParent()
     {
-        return 'textarea';
+        return TextareaType::class;
     }
 
     public function getName()

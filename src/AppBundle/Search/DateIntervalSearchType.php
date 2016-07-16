@@ -2,9 +2,9 @@
 
 namespace AppBundle\Search;
 
+use AppBundle\Field\DatePickerType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use AppBundle\Field\DatePickerType;
 
 class DateIntervalSearchType extends AbstractType
 {
@@ -15,8 +15,8 @@ class DateIntervalSearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('lower', 'datepicker', array('required'=>false,'label'=>'De'))
-            ->add('higher', 'datepicker', array('required'=>false,'label'=>'à'))
+            ->add('lower', DatePickerType::class, array('required' => false, 'label' => 'De'))
+            ->add('higher', DatePickerType::class, array('required' => false, 'label' => 'à'))
             ;
 
     }

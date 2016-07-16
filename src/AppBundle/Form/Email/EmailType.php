@@ -2,22 +2,23 @@
 
 namespace AppBundle\Form\Email;
 
+use AppBundle\Field\BooleanType;
+use AppBundle\Field\RemarqueAccordionType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class EmailType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email','text',array('required' => false, 'label' => 'Email'))
-            ->add('remarques','remarque_accordion',array('required' => false))
-            ->add('expediable', 'boolean', array('required' => true, 'label' => 'Expediable'))
-        ;
+            ->add('email', TextType::class, array('required' => false, 'label' => 'Email'))
+            ->add('remarques', RemarqueAccordionType::class, array('required' => false))
+            ->add('expediable', BooleanType::class, array('required' => true, 'label' => 'Expediable'));
     }
 
-    public function configureOptions( \Symfony\Component\OptionsResolver\OptionsResolver $resolver)
+    public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\Email'

@@ -3,9 +3,8 @@
 namespace AppBundle\Field;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
+use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * A utiliser lorsqu'on veut une date
@@ -25,10 +24,5 @@ class DatePickerType extends AbstractType
     public function getParent()
     {
         return 'text';
-    }
-
-    public function getName()
-    {
-        return 'datepicker';
     }
 }

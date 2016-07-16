@@ -2,10 +2,8 @@
 
 namespace AppBundle\Form\Membre;
 
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
-
 
 
 class MembreWithoutFamilleType extends MembreType
@@ -16,7 +14,12 @@ class MembreWithoutFamilleType extends MembreType
         parent::buildForm($builder,$options);
         $builder->remove('famille');
         $builder->remove('prenom');
-        $builder->add('prenom', 'text', array('required' => false, 'label' => 'Prénom','disabled'=>true));
+        
+        $builder->add(
+            'prenom',
+            TextType::class,
+            array('required' => false, 'label' => 'Prénom', 'disabled' => true)
+        );
 
 
     }

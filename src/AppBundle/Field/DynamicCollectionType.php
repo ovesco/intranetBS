@@ -3,7 +3,6 @@
 namespace AppBundle\Field;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 
 class DynamicCollectionType extends AbstractType
@@ -26,6 +25,6 @@ class DynamicCollectionType extends AbstractType
 
     public function getName()
     {
-        return 'dynamic_collection';
+        return DynamicCollectionType::class;
     }
 }

@@ -2,20 +2,19 @@
 
 namespace AppBundle\Form\Geniteur;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
 use AppBundle\Form\Contact\ContactType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class GeniteurType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('prenom', 'text', array('required' => false, 'label' => 'Prénom'))
-            ->add('profession', 'text', array('required' => false, 'label' => 'Profession'))
-            ->add('contact', new ContactType())
+            ->add('prenom', TextType::class, array('required' => false, 'label' => 'Prénom'))
+            ->add('profession', TextType::class, array('required' => false, 'label' => 'Profession'))
+            ->add('contact', ContactType::class)
         ;
     }
 

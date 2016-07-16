@@ -4,7 +4,6 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use FOS\ElasticaBundle\Configuration\Search;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -142,13 +141,6 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface
      */
     private $sender;
 
-    /**
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Interne\HistoryBundle\Entity\MemberHistory", mappedBy="modifiedMember", cascade={"persist","remove"})
-     */
-    private $historique;
-
 
     /**
      * Constructor
@@ -174,7 +166,6 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface
         //un membre a forcement un sender
         $this->sender = new SenderMembre();
         $this->sender->setMembre($this);
-
 
     }
 
@@ -620,30 +611,6 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface
         return $expediable->getListeEmails();
     }
 
-
-    /**
-     * Add historique
-     *
-     * @param \Interne\HistoryBundle\Entity\MemberHistory $historique
-     *
-     * @return Membre
-     */
-    public function addHistorique(\Interne\HistoryBundle\Entity\MemberHistory $historique)
-    {
-        $this->historique[] = $historique;
-
-        return $this;
-    }
-
-    /**
-     * Remove historique
-     *
-     * @param \Interne\HistoryBundle\Entity\MemberHistory $historique
-     */
-    public function removeHistorique(\Interne\HistoryBundle\Entity\MemberHistory $historique)
-    {
-        $this->historique->removeElement($historique);
-    }
 
     /**
      * Get historique
