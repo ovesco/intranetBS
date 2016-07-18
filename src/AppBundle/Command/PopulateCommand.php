@@ -54,7 +54,7 @@ class PopulateCommand extends ContainerAwareCommand
         $this
             ->setName('app:populate')
             ->setDescription('Remplir la base de donnée')
-            ->addArgument('action', InputArgument::REQUIRED, 'Quel action souhaitez-vous faire? create: crée l\'arboresance / fill: remplir la base de donnée / create_admin: create user admin')
+            ->addArgument('action', InputArgument::REQUIRED, 'Quel action souhaitez-vous faire? create: crée l\'arboresance / fill: remplir la base de donnée')
             ->addArgument('members', InputArgument::OPTIONAL, 'Combien de membres souhaitez-vous génerer ?')            //nombre de membres souhaité
             ->addArgument('fonction', InputArgument::OPTIONAL, 'Abreviation de la fonction des attributions génerées')  //Abbreviation de la fonction des attributions souhaitées
             ->addArgument('type', InputArgument::OPTIONAL, 'ID du type des groupes des attributions génerées')          //ID du type de groupe souhaité
@@ -245,41 +245,7 @@ class PopulateCommand extends ContainerAwareCommand
 
             $progress->finish();
         }
-        elseif($action == 'create_admin')
-        {
-            $membre = new Membre();
-            $user = new User();
 
-            $membre->setPrenom('Admin');
-            $membre->setSexe(Personne::HOMME);
-            $membre->setValidity(0);
-
-
-            $user->setMembre($membre);
-            $user->setPassword('admin');
-            $user->setUsername('admin');
-            $user->setLastConnexion(new \Datetime);
-
-
-            $role = $em->getRepository('InterneSecurityBundle:Role')->findOneByRole('ROLE_ADMIN');
-
-            if($role == null)
-            {
-                $role = new Role();
-                $role->setRole('ROLE_ADMIN');
-                $role->setName('Admin');
-            }
-
-            $user->addRole($role);
-
-            $em->persist($membre);
-            $em->persist($user);
-            $em->persist($role);
-            $em->flush();
-
-            echo 'access for:'.$user->getUsername().' created!',PHP_EOL;
-
-        }
 
 
     }

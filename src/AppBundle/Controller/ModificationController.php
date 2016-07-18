@@ -12,6 +12,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class ModificationController
+ * @package AppBundle\Controller
+ * @route("/intranet")
+ */
 class ModificationController extends Controller
 {
 

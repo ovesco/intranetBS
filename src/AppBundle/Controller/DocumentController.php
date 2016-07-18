@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 /**
  * Class DocumentController
  * @package AppBundle\Controller
- * @Route("/document")
+ * @Route("/intranet/document")
  */
 class DocumentController extends Controller
 {

@@ -61,6 +61,7 @@
 
             <div class="five wide column">
 
+                {% if user.hasMembre %}
                 <div class="ui top attached message">
 
                     <div class="header"><h3><i class="user icon"></i>Moi</h3></div>
@@ -68,6 +69,7 @@
                 </div>
 
                 <div class="ui bottom attached segment">
+
 
                     <a href="{{ path('app_membre_show', {membre: user.membre.id}) }}" class="ui fluid teal button">Aller matter ma page</a>
 
@@ -91,6 +93,7 @@
                     </div>
 
                 </div>
+                {% endif %}
 
             </div>
         </div>

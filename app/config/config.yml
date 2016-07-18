@@ -58,7 +58,8 @@ assetic:
     use_controller: false
     bundles:
         - AppBundle
-        - InterneSecurityBundle
+        #- InterneSecurityBundle
+        - InterneGalerieBundle
         - InterneOrganisationBundle
         - InterneSeanceBundle
     write_to:       %kernel.root_dir%/../web/static/

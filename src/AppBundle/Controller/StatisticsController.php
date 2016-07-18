@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Class StatisticsController
  * @package AppBundle\Controller
- * @Route("/statistics")
+ * @Route("/intranet/statistics")
  *
  */
 class StatisticsController extends Controller

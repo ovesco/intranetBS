@@ -17,7 +17,7 @@ use AppBundle\Utils\Menu\Menu;
 /**
  * Class ListingController
  * @package AppBundle\Controller
- * @Route("/listing")
+ * @Route("/intranet/listing")
  */
 class ListingController extends Controller
 {

@@ -5,13 +5,16 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Attribution;
 use AppBundle\Entity\Groupe;
 use AppBundle\Entity\Membre;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use AppBundle\Entity\User;
 
 /**
  * Le layoutController s'occupe de génerer les éléments du layout comme le menu en fonction
  * des utilisateurs
  * Class LayoutController
  * @package AppBundle\Controller
+ * @route("/intranet/layout")
  */
 class LayoutController extends Controller
 {
@@ -21,11 +24,11 @@ class LayoutController extends Controller
      */
     public function mainMenuGenerateAction()
     {
-        /** @var Membre $membre */
-        // FIXME : le user devrait être validé en amont
-        if ($this->getUser() != null) {
-            $membre = $this->getUser()->getMembre();
-            $groupes = $membre->getActiveGroupes();
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if ($user->hasMembre()) {
+            $groupes = $user->getMembre()->getActiveGroupes();
         }
         else {
             $groupes = array();

@@ -7,7 +7,7 @@ class AppKernel extends Kernel
 {
 
     /**
-     * Surchage pour configurer le time zone correct
+     * Surchage pour configurer le time zone correct, ca fout la m... avec mon Mamp si c'est pas là
      * @author nicolas uffer
      * @param string $environment
      * @param bool $debug
@@ -37,8 +37,10 @@ class AppKernel extends Kernel
             new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
 
             new AppBundle\AppBundle(),
-            new Interne\SecurityBundle\InterneSecurityBundle(),
+            new Interne\GalerieBundle\InterneGalerieBundle(),
+            //new Interne\SecurityBundle\InterneSecurityBundle(),
             new Interne\OrganisationBundle\InterneOrganisationBundle(),
+            new Interne\HistoryBundle\InterneHistoryBundle(),
             new Interne\MatBundle\MatBundle(),
             new Interne\SeanceBundle\InterneSeanceBundle(),
             new Ensepar\Html2pdfBundle\EnseparHtml2pdfBundle(),

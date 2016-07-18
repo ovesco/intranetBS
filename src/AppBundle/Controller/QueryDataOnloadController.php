@@ -17,6 +17,7 @@ use AppBundle\Entity\Famille;
  * Le controller queryDataOnLoad permet de charger des données avec l'affichage des vues twig. Par exemple la liste
  * des distinctions à afficher dans la modale d'ajout de distinctions
  ** @package AppBundle\Controller
+ * @route("/intranet")
  */
 
 class QueryDataOnloadController extends Controller {

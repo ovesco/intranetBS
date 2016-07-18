@@ -18,7 +18,7 @@ use AppBundle\Entity\Mail;
 /**
  * Class ReceiverController
  * @package MailBundle\Controller
- * @Route("/mail")
+ * @Route("/intranet/mail")
  */
 class MailController extends Controller
 {

@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class MembreController
  * @package AppBundle\Controller
- * @Route("/membre")
+ * @Route("/intranet/membre")
  */
 class MembreController extends Controller {
 

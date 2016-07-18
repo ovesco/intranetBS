@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class ReceiverController
  * @package AppBundle\Controller
- * @Route("/receiver")
+ * @Route("/intranet/receiver")
  */
 class ReceiverController extends Controller
 {

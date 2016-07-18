@@ -1,13 +1,24 @@
 #pas de prefixe parce que l'on y trouve notamment /login pour se connecter
-security:
-    resource: "@InterneSecurityBundle/Controller/"
-    type:     annotation
-    prefix:   /
+#app_security_login:
+#    path:  /
+#    defaults: { _controller: AppBundle:Security:redirectLogin }
+#
+#app_security_login:
+#    path:  /login
+#    defaults: { _controller: AppBundle:Security:login }
+#
+#app_security_logincheck:
+#    path:  /login_check
+#    defaults: { _controller: AppBundle:Security:login_check }
+#
+#app_security_logout:
+#    path:  /logout
+#    defaults: { _controller: AppBundle:Security:logout }
 
 app:
-    resource: @AppBundle/Controller/
+    resource: "@AppBundle/Controller/"
     type:     annotation
-    prefix:   /intranet
+    prefix:   /
 
 mat:
     resource: "@MatBundle/Controller/"

@@ -17,7 +17,7 @@ use AppBundle\Utils\Menu\Menu;
  * Class GroupeController
  * @package AppBundle\Controller
  *
- * @Route("/groupe")
+ * @Route("/intranet/groupe")
  */
 class GroupeController extends Controller
 {

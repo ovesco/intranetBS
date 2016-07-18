@@ -23,7 +23,7 @@ use AppBundle\Form\ParameterType;
  *
  * Class ParameterController
  * @package AppBundle\Controller
- * @Route("/parameter")
+ * @Route("/intranet/parameter")
  */
 class ParameterController extends Controller
 {

@@ -63,6 +63,7 @@ class ConsoleOutput
         if(is_null($string))
             $string = ' ';
         $this->output->write($string);
+        return $this;
     }
 
     public function writeln($string = null)
@@ -70,6 +71,7 @@ class ConsoleOutput
         if(is_null($string))
             $string = ' ';
         $this->output->writeln($string);
+        return $this;
     }
 
     public function writeMode($string = null,$mode = Mode::STANDARD){
@@ -90,39 +92,47 @@ class ConsoleOutput
                     break;
             }
             $this->output->write($string);
+        return $this;
 
     }
 
     public function writeCustom($string,$colorBackground = Color::NONE,$colorFont = Color::NONE,$format = Format::NONE)
     {
         $this->output->write('<fg='.$colorFont.';bg='.$colorBackground.';options='.$format.'>'.$string.'</>');
+        return $this;
     }
 
     public function blueLabel($string)
     {
         $this->writeCustom($string,Color::BLUE,Color::WHITE);
+        return $this;
     }
 
     public function yellowLabel($string)
     {
         $this->writeCustom($string,Color::YELLOW,Color::BLACK);
+        return $this;
     }
 
     public function greenLabel($string)
     {
         $this->writeCustom($string,Color::GREEN,Color::WHITE);
+        return $this;
     }
 
     public function error($string){
         $this->writeMode($string,Mode::ERROR);
+        return $this;
     }
 
     public function info($string){
         $this->writeMode($string,Mode::INFO);
+        return $this;
     }
 
     public function comment($string){
         $this->writeMode($string,Mode::COMMENT);
+        return $this;
     }
 
 

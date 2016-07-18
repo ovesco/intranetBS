@@ -10,7 +10,7 @@
         <tr>
             <td>Statut</td>
             <td>
-                {{ facture.statut|statut_label|raw }}
+                {{ facture|facture_is_payed_detail|raw }}
             </td>
         </tr>
         <tr>
@@ -41,9 +41,10 @@
             <td>Envoie par courrier</td>
             <td>
 
+                {#
                 {% include 'AppBundle:Adresse:show_format_postal.html.twig' with {'adresseExpedition':facture.debiteur.owner.adresseExpedition} %}
 
-
+                #}
             </td>
         </tr>
 
@@ -51,8 +52,9 @@
 
             <td>Envoie par e-mail</td>
             <td>
+                {#
                 {% include 'AppBundle:Email:show_liste_expedition.html.twig' with {'listeEmailsExpedition':facture.debiteur.owner.listeEmailsExpedition} %}
-
+                #}
             </td>
         </tr>
 
@@ -77,9 +79,6 @@
             <tr>
                 <td>
                     <b>{{ creance.titre }}</b>
-                    <a onclick="openCreanceShow({{ creance.id }});" >
-                        <i class="zoom icon"></i>
-                    </a>
 
                     {% if creance.remarque is not empty %}
                         <br>
@@ -87,11 +86,11 @@
                         Remarque: {{ creance.remarque }}
                     {% endif %}
                 </td>
-                <td>{{ creance.montantEmis|number_format(2, '.', ',') }}</td>
+                <td>{{ creance.montantEmis|money }}</td>
                 {% if creance.montantRecu >= creance.montantEmis %}
-                    <td class="positive">{{ creance.montantRecu|number_format(2, '.', ',') }}</td>
+                    <td class="positive">{{ creance.montantRecu|money }}</td>
                 {% else %}
-                    <td class="negative">{{ creance.montantRecu|number_format(2, '.', ',') }}</td>
+                    <td class="negative">{{ creance.montantRecu|money }}</td>
                 {% endif %}
             </tr>
 
@@ -101,22 +100,22 @@
         {% for rappel in facture.rappels %}
             <tr>
                 <td>Rappel N°{{ loop.index }}</td>
-                <td>{{ rappel.montantEmis|number_format(2, '.', ',') }}</td>
+                <td>{{ rappel.montantEmis|money }}</td>
                 {% if rappel.montantRecu >= rappel.montantEmis %}
-                    <td class="positive">{{ rappel.montantRecu|number_format(2, '.', ',') }}</td>
+                    <td class="positive">{{ rappel.montantRecu|money }}</td>
                 {% else %}
-                    <td class="negative">{{ rappel.montantRecu|number_format(2, '.', ',') }}</td>
+                    <td class="negative">{{ rappel.montantRecu|money }}</td>
                 {% endif %}
             </tr>
         {% endfor %}
 
         <tr>
             <td class="right aligned">Total</td>
-            <td>{{ facture.montantEmis|number_format(2, '.', ',') }}</td>
+            <td>{{ facture.montantEmis|money }}</td>
             {% if facture.montantRecu >= facture.montantEmis %}
-                <td class="positive">{{ facture.montantRecu|number_format(2, '.', ',') }}</td>
+                <td class="positive">{{ facture.montantRecu|money }}</td>
             {% else %}
-                <td class="negative">{{ facture.montantRecu|number_format(2, '.', ',') }}</td>
+                <td class="negative">{{ facture.montantRecu|money }}</td>
             {% endif %}
         </tr>
 

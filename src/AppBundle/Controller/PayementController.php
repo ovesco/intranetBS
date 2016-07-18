@@ -42,7 +42,7 @@ use AppBundle\Utils\Finances\PayementFileParser;
 /**
  * Class PayementController
  * @package AppBundle\Controller
- * @Route("/payement")
+ * @Route("/intranet/payement")
  */
 class PayementController extends Controller
 {

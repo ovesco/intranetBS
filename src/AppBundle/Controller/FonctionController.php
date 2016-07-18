@@ -18,7 +18,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  * Class StructureController
  * @package AppBundle\Controller
  *
- * @Route("/fonctions")
+ * @Route("/intranet/fonctions")
  */
 class FonctionController extends Controller
 {

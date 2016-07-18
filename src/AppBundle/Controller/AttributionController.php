@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Class AttributionController
  * @package AppBundle\Controller
  *
- * @Route("/attribution")
+ * @Route("/intranet/attribution")
  */
 class AttributionController extends Controller
 {

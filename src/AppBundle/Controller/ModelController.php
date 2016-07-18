@@ -19,7 +19,7 @@ use Doctrine\ORM\EntityManager;
  * Class ModelController
  * @package AppBundle\Controller
  *
- * @Route("/model")
+ * @Route("/intranet/model")
  */
 class ModelController extends Controller
 {
