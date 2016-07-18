@@ -37,10 +37,7 @@ class AppKernel extends Kernel
             new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
 
             new AppBundle\AppBundle(),
-            new Interne\GalerieBundle\InterneGalerieBundle(),
-            //new Interne\SecurityBundle\InterneSecurityBundle(),
             new Interne\OrganisationBundle\InterneOrganisationBundle(),
-            new Interne\HistoryBundle\InterneHistoryBundle(),
             new Interne\MatBundle\MatBundle(),
             new Interne\SeanceBundle\InterneSeanceBundle(),
             new Ensepar\Html2pdfBundle\EnseparHtml2pdfBundle(),
@@ -51,7 +48,7 @@ class AppKernel extends Kernel
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
-            $bundles[] = new CoreSphere\ConsoleBundle\CoreSphereConsoleBundle();//Pour avoir la console dans la toobar symfony
+            //$bundles[] = new CoreSphere\ConsoleBundle\CoreSphereConsoleBundle();//Pour avoir la console dans la toobar symfony
         }
 
         return $bundles;
