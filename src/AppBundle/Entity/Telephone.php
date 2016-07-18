@@ -34,7 +34,7 @@ class Telephone
      * @Gedmo\Versioned
      * @Assert\NotBlank()
      */
-    private $telephone;
+    private $numero;
 
     /**
      * @var Contact
@@ -47,7 +47,7 @@ class Telephone
 
     public function __construct($telephone = null)
     {
-        $this->setTelephone($telephone);
+        $this->setNumero($telephone);
     }
 
     /**
@@ -62,7 +62,7 @@ class Telephone
 
     public function __tostring()
     {
-        return  $this->getTelephone();
+        return $this->getNumero();
     }
 
     /**
@@ -70,23 +70,23 @@ class Telephone
      *
      * @return string
      */
-    public function getTelephone()
+    public function getNumero()
     {
-        return $this->telephone;
+        return $this->numero;
     }
 
     /**
      * Set telephone
      *
-     * @param string $telephone
+     * @param string $numero
      * @return Telephone
      */
-    public function setTelephone($telephone)
+    public function setNumero($numero)
     {
 
-        preg_match_all("/[0-9]+/", $telephone, $matches);
+        preg_match_all("/[0-9]+/", $numero, $matches);
 
-        $this->telephone = implode($matches[0]);
+        $this->numero = implode($matches[0]);
 
         return $this;
     }
@@ -107,7 +107,7 @@ class Telephone
      *
      * @param \AppBundle\Entity\Contact $contact
      *
-     * @return Contact
+     * @return Telephone
      */
     public function setContact(\AppBundle\Entity\Contact $contact = null)
     {

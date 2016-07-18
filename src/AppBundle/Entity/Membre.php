@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -31,14 +32,14 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface
     private $famille;
 
     /**
-     * @var array
+     * @var Collection
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Attribution", mappedBy="membre", cascade={"persist", "remove"})
      */
     private $attributions;
 
     /**
-     * @var array
+     * @var Collection
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\ObtentionDistinction", mappedBy="membre", cascade={"persist", "remove"})
      */
@@ -236,7 +237,7 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface
     /**
      * Get distinctions
      *
-     * @return array
+     * @return Collection
      */
     public function getDistinctions()
     {

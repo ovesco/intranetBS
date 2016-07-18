@@ -1,0 +1,83 @@
+{% extends "@App/Layout/pdf.html.twig" %}
+
+{% block titre %}
+    {{ group.nom }}
+{% endblock %}
+
+
+{% block content %}
+    <h1>{{ group.nom }}</h1>
+
+    <table class="ui very basic table">
+        <thead>
+        <tr>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>Adresse</th>
+            <th>Tel</th>
+            <th>Mobile</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for member in group.members %}
+            <tr>
+                <td>{{ member.Prenom }}</td>
+                <td>{{ member.Nom }}</td>
+                <td>
+                    {{ member.Contact.Adresse.Rue }}<br/>
+                    {{ member.Contact.Adresse.Npa }} {{ member.Contact.Adresse.Localite }}
+                </td>
+                <td>021 907 23 98{{ (member.Contact.Telephones|first).Numero }}</td>
+                <td>021 907 23 98{{ (member.Contact.Telephones|first).Numero }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+    {% for subGroup in group.enfants %}
+        <h2>{{ subGroup.nom }}</h2>
+
+        <table class="ui very basic table">
+            <thead>
+            <tr>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Adresse</th>
+                <th>Tel</th>
+                <th>Mobile</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for member in subGroup.members %}
+                <tr>
+                    <td>{{ member.Prenom }}</td>
+                    <td>{{ member.Nom }}</td>
+                    <td>
+                        {{ member.Contact.Adresse.Rue }}<br/>
+                        {{ member.Contact.Adresse.Npa }} {{ member.Contact.Adresse.Localite }}
+                    </td>
+                    <td>021 907 23 98{{ (member.Contact.Telephones|first).Numero }}</td>
+                    <td>021 907 23 98{{ (member.Contact.Telephones|first).Numero }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    {% endfor %}
+{% endblock %}
+
+
+{% block css %}
+
+
+{% endblock %}
+
+
+{% block js %}
+
+
+{% endblock %}
+

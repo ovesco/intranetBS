@@ -44,7 +44,7 @@ class GroupeController extends Controller
 
     /**
      * @param $groupe Groupe le groupe
-     * @return Response la vue
+     * @return array Para a render dans le template
      *
      * @ParamConverter("groupe", class="AppBundle:Groupe")
      * @Route("/show/{groupe}", options={"expose"=true})
@@ -56,6 +56,48 @@ class GroupeController extends Controller
             'listing'       => $this->get('listing'),
             'groupe'        => $groupe,
             'groupeForm' => $this->createForm(new GroupeShowType(), $groupe)->createView()
+        );
+    }
+
+    /**
+     * @param $groupe Groupe le groupe
+     * @return Response PDF of the group members
+     *
+     * @ParamConverter("groupe", class="AppBundle:Groupe")
+     * @Route("/pdf/{groupe}", options={"expose"=true})
+     */
+    public function pdfAction($groupe)
+    {
+
+        $html = $this->renderView('@App/Groupe/pdf.html.twig', array(
+                'group' => $groupe
+            )
+        );
+
+        $snappy = $this->get('knp_snappy.pdf');
+
+        $snappy->setOption('header-center', 'Header');
+        $snappy->setOption('footer-center', '[page]');
+
+        $pdf = $snappy->getOutputFromHtml($html, array(
+            'enable-javascript' => true,
+            'javascript-delay' => 1000,
+            'no-stop-slow-scripts' => true,
+            'no-background' => false,
+            'lowquality' => false,
+            'encoding' => 'UTF-8',
+            'images' => true,
+            'cookie' => array(),
+            'dpi' => 300,
+            'image-dpi' => 300,
+            'enable-external-links' => true,
+            'enable-internal-links' => true,
+        ));
+
+        return new Response($pdf, 200,
+            array(
+                'Content-Type' => 'application/pdf'
+            )
         );
     }
 

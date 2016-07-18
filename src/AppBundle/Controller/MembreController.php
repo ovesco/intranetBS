@@ -95,13 +95,9 @@ class MembreController extends Controller {
     public function toPdfAction(Request $request, Membre $membre)
     {
 
-        $membreForm = $this->createForm(new MembreShowType(), $membre);
-
-        $html = $this->render('pdf_show.html.twig', array(
-
+        $html = $this->render('@App/Membre/pdf_show.html.twig', array(
                 'membre' => $membre,
                 'listing' => $this->get('listing'),
-                'membreForm' => $membreForm->createView(),
             )
         );
 
@@ -109,11 +105,10 @@ class MembreController extends Controller {
             $this->get('knp_snappy.pdf')->getOutputFromHtml($html),
             200,
             array(
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="file.pdf"'
+                'Content-Type' => 'application/pdf'
+                // 'Content-Disposition' => 'attachment; filename="file.pdf"'
             )
         );
-
     }
 
     /**

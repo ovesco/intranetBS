@@ -1304,7 +1304,7 @@ class PopulateCommand extends ContainerAwareCommand
     {
         $tel = new Telephone();
         $tel->setRemarques($this->getText(10,true));
-        $tel->setTelephone($this->getPhone());
+        $tel->setNumero($this->getPhone());
 
         if($canBeNull)
             return (rand(0,1) == 1) ? $tel : null;

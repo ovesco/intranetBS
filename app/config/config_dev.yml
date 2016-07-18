@@ -52,7 +52,7 @@ assetic:
 knp_snappy:
     pdf:
         enabled:    true
-        binary:     /usr/local/bin/wkhtmltopdf
+        binary:     /usr/bin/xvfb-run /usr/bin/wkhtmltopdf
         options:    []
     image:
         enabled:    true

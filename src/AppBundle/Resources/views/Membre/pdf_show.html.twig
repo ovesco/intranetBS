@@ -43,16 +43,9 @@
 
                         <div class="ui bottom attached segment">
 
-                            {# Informations de base sur le membre #}
-                            {{ form_row(membreForm.prenom) }}
-                            {{ form_row(membreForm.naissance) }}
-                            {{ form_row(membreForm.sexe) }}
-                            {{ form_row(membreForm.numeroAvs) }}
 
                             <div class="ui divider"></div>
 
-                            {{ form_row(membreForm.numeroBs) }}
-                            {{ form_row(membreForm.statut) }}
 
                         </div>
 
@@ -70,22 +63,9 @@
                             <div class="ui active tab basic segment" data-tab="adresse-{{ membre.prenom }}">
                                 <div class="ui small info message">
 
-                                    {% set    ae = membre.adresseExpedition %}
-                                    {% set    lf = '<a href="' ~path('interne_voir_famille', {famille: membre.famille.id}) ~ '">' %}
-                                    {% if     ae['owner'] == 'membre' %}{% set aeowner = 'la sienne' %}
-                                    {% elseif ae['owner'] == 'famille' %}{% set aeowner = lf ~ 'celle de sa famille</a>' %}
-                                    {% elseif ae['owner'] == 'mere' %}{% set aeowner = lf ~ 'celle de sa mère</a>' %}
-                                    {% elseif ae['owner'] == 'pere' %}{% set aeowner = lf ~ 'celle de son père</a>' %}
-                                    {% else %}{% set aeowner = ', aucune idée en vrai.' %}{% endif %}
-                                    <div class="content">Actuellement, l'adresse de facturation de ce membre est
-                                        <b>{{ aeowner|raw }}</b></div>
+
                                 </div>
 
-                                {{ form_row(membreForm.contact.adresse.rue) }}
-                                {{ form_row(membreForm.contact.adresse.npa) }}
-                                {{ form_row(membreForm.contact.adresse.localite) }}
-                                {{ form_row(membreForm.contact.adresse.expediable) }}
-                                {{ form_row(membreForm.contact.adresse.remarques) }}
                             </div>
 
 
@@ -94,13 +74,11 @@
                                 <h5 class="ui header">Téléphone(s) - <a href="#" class="button-add-telephone"
                                                                         data-contact-id="{{ membre.contact.id }}">ajouter</a>
                                 </h5>
-                                {% include 'AppBundle:Contact:list_phone_mail.html.twig' with {'type' : 'telephone', 'data' : membreForm.contact.telephones} %}
 
                                 <div class="ui divider"></div>
                                 <h5 class="ui header">E-mail(s) - <a href="#" class="button-add-email"
                                                                      data-contact-id="{{ membre.contact.id }}">ajouter</a>
                                 </h5>
-                                {% include 'AppBundle:Contact:list_phone_mail.html.twig' with {'type' : 'email', 'data' : membreForm.contact.emails} %}
                             </div>
 
                         </div>
@@ -113,19 +91,9 @@
                             <div class="header"><h3><i class="users icon"></i>Famille</h3></div>
                         </div>
 
-                        <div onclick="location.href='{{ path('interne_voir_famille', {famille: membre.famille.id}) }}'"
-                             class="ui bottom attached segment">
-                            <div class="ui list">
-                                {% include 'AppBundle:Contact:show.html.twig' with {'contact' : membre.famille.contact} %}
-                            </div>
-                        </div>
 
                         <div class="ui top attached message">
                             <div class="header"><h3><i class="child icon"></i>Frères et soeurs</h3></div>
-                        </div>
-
-                        <div class="ui bottom attached segment">
-                            {% include 'AppBundle:Famille:liste_fratrie.html.twig' with {'fratrie' : membre.famille.membres, 'membre' : membre} %}
                         </div>
 
                     </div>
@@ -148,9 +116,6 @@
                             </div>
                         </div>
 
-                        <div class="ui bottom attached segment">
-                            {% include 'AppBundle:Attribution:liste_attributions.html.twig' with {'attributions' : membre.attributions} %}
-                        </div>
                     </div>
 
                     <div class="five wide column">
@@ -163,9 +128,6 @@
                             </div>
                         </div>
 
-                        <div class="ui bottom attached segment">
-                            {% include 'AppBundle:ObtentionDistinction:liste_obtention_distinction.html.twig' with {'distinctions' : membre.distinctions} %}
-                        </div>
 
                     </div>
 
@@ -178,9 +140,6 @@
                             <div class="header"><h3><i class="money icon"></i>Créances et factures</h3></div>
                         </div>
 
-                        <div class="ui bottom attached segment">
-                            {% include "InterneFinancesBundle:Interface:interface.html.twig" with {'ownerEntity': membre } %}
-                        </div>
 
                     </div>
                 </div>
@@ -191,9 +150,6 @@
                             <div class="header"><h3><i class="wait icon"></i>Historique</h3></div>
                         </div>
 
-                        <div class="ui bottom attached segment">
-                            {% include 'AppBundle:Membre:history.html.twig' %}
-                        </div>
                     </div>
                 </div>
                 <!-- history -->

@@ -12,7 +12,7 @@ class TelephoneType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('telephone', TextType::class, array('required' => false, 'label' => 'Numéro'))
+            ->add('numero', TextType::class, array('required' => false, 'label' => 'Numéro'))
             ->add('remarques', TextareaType::class, array('required' => false, 'label' => 'Remarque'));
     }
 

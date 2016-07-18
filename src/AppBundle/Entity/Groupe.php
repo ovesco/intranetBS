@@ -136,7 +136,7 @@ class Groupe
     /**
      * Get parent
      *
-     * @return \stdClass 
+     * @return Groupe
      */
     public function getParent()
     {

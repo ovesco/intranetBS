@@ -120,7 +120,7 @@ abstract class Personne
      * Set iban
      *
      * @param string $iban
-     * @return Membre
+     * @return Personne
      */
     public function setIban($iban)
     {

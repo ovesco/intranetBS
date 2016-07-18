@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% block stylesheets %}
+        <link rel="stylesheet" type="text/css"
+              href="{{ asset('bundles/app/semantic/semantic.min.css', absolute=true) }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/app/Layout/pdf.css', absolute=true) }}">
+
+        <base href="http://{{ app.request.host }}">
+        <meta charset="UTF-8">
+
+    {% endblock %}
+</head>
+<body>
+{% block header %}
+    <p>Brigade de Sauvabelin</p>
+{% endblock %}
+
+{% block content %}
+
+{% endblock %}
+</body>
+</html>
