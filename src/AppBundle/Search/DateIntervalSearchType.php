@@ -29,7 +29,7 @@ class DateIntervalSearchType extends AbstractType
     }
 
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'AppBundle_date_interval_search';
     }

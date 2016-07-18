@@ -14,9 +14,17 @@ class FactureRepartitionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('creances', CollectionType::class, array('label' => 'Créances', 'type' => new CreanceRepartitionType()))
-            ->add('rappels', CollectionType::class, array('label' => 'Rappels', 'type' => new RappelRepartitionType()));;//fin de la fonction builder
+            ->add('creances', CollectionType::class,
+                array(
+                    'label' => 'Créances',
+                    'entry_type' => new CreanceRepartitionType()
+                ))
+            ->add('rappels', CollectionType::class,
+                array(
+                    'label' => 'Rappels',
+                    'entry_type' => new RappelRepartitionType()));
 
+        //fin de la fonction builder
     }
 
     public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
@@ -27,7 +35,7 @@ class FactureRepartitionType extends AbstractType
     }
 
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'app_bundle_facture_repartition';
     }

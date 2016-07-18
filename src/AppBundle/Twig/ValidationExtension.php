@@ -23,7 +23,7 @@ class ValidationExtension extends \Twig_Extension
      */
     public function getFunctions() {
         return array(
-            'modificationRoute' => new \Twig_Function_Method($this, 'modificationRoute'),
+            'modificationRoute' => new \Twig_SimpleFunction('modificationRoute', array($this, 'modificationRoute')),
             'class' => new \Twig_SimpleFunction('class', array($this, 'getClass'))
         );
     }

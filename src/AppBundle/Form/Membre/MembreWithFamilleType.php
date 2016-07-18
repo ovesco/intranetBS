@@ -15,15 +15,15 @@ class MembreWithFamilleType extends MembreType
         parent::buildForm($builder, $options);
         
         $builder->remove('prenom')
-            ->add(
-                'prenom',
+            ->add('prenom',
                 TextType::class,
-                array('required' => false, 'label' => 'Prénom', 'disabled' => true));
+                array(
+                    'required' => false,
+                    'label' => 'Prénom',
+                    'disabled' => true));
 
         $builder->remove('famille')
             ->add('famille', new FamilleDisabledNomType());
-
-
     }
 
     public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
@@ -34,7 +34,7 @@ class MembreWithFamilleType extends MembreType
     }
 
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'appbundle_membre_add_with_famille';
     }

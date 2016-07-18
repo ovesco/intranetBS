@@ -60,7 +60,7 @@ class CreanceAddType extends AbstractType
     }
 
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'app_bundle_creance_add_type';
     }

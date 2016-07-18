@@ -4,7 +4,6 @@ namespace Interne\MatBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class AddEquipmentType extends AbstractType
 {
@@ -25,7 +24,7 @@ class AddEquipmentType extends AbstractType
         ));
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'mat_bundle_equipmenttype';
     }

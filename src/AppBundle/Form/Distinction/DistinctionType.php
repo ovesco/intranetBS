@@ -4,7 +4,6 @@ namespace AppBundle\Form\Distinction;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class DistinctionType extends AbstractType
 {
@@ -23,7 +22,7 @@ class DistinctionType extends AbstractType
         ));
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'app_bundle_distinction';
     }

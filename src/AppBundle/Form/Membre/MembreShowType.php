@@ -12,7 +12,7 @@ class MembreShowType extends MembreType
         parent::buildForm($builder, $options);
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'app_bundle_membre_show';
     }

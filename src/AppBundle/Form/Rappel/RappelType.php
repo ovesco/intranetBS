@@ -40,7 +40,7 @@ class RappelType extends AbstractType
     }
 
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'app_bundle_rappelType';
     }

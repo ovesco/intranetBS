@@ -20,7 +20,7 @@ class SemanticType extends AbstractType
         return 'entity';
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'semantic';
     }

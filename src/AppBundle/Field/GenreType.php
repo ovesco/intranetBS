@@ -2,9 +2,8 @@
 
 namespace AppBundle\Field;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use AppBundle\Entity\Personne;
+use Symfony\Component\Form\AbstractType;
 
 /**
  * Class GenreType
@@ -30,7 +29,7 @@ class GenreType extends AbstractType
         return 'choice';
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'genre';
     }

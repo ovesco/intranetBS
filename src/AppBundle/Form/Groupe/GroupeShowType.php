@@ -2,9 +2,7 @@
 
 namespace AppBundle\Form\Groupe;
 
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class GroupeShowType extends GroupeType
 {
@@ -24,7 +22,7 @@ class GroupeShowType extends GroupeType
         ));
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'app_bundle_groupe_show';
     }

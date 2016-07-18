@@ -24,7 +24,7 @@ class NewsType extends AbstractType
         ));
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'InterneOrganisation_NewsType';
     }

@@ -18,7 +18,7 @@ class PayementAddMultipleType extends AbstractType
                 'allow_add'=>true,
                 'prototype'=>true,
                 'by_reference' => false,
-                'type'   => new PayementAddType()))
+                'entry_type' => new PayementAddType()))
         ;//fin de la fonction
 
 
@@ -32,7 +32,7 @@ class PayementAddMultipleType extends AbstractType
     }
 
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'app_bundlePayementAddMultipleType';
     }

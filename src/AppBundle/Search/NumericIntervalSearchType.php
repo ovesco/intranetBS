@@ -29,7 +29,7 @@ class NumericIntervalSearchType extends AbstractType
     }
 
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'AppBundle_numeric_interval_search';
     }

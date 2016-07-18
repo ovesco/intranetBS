@@ -26,7 +26,7 @@ class RappelRepartitionType extends AbstractType
     }
 
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'app_bundle_rappel_repartition';
     }

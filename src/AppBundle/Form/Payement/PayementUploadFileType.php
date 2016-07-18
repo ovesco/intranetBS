@@ -31,7 +31,7 @@ class PayementUploadFileType extends AbstractType
     }
 
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'app_bundlePayementUploadFileType';
     }

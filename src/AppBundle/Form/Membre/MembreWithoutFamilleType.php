@@ -18,7 +18,10 @@ class MembreWithoutFamilleType extends MembreType
         $builder->add(
             'prenom',
             TextType::class,
-            array('required' => false, 'label' => 'Prénom', 'disabled' => true)
+            array(
+                'required' => false,
+                'label' => 'Prénom',
+                'disabled' => true)
         );
 
 
@@ -31,10 +34,8 @@ class MembreWithoutFamilleType extends MembreType
         ));
     }
 
-
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'appbundle_membre_add_without_famille';
     }
-
 }

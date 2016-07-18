@@ -2,12 +2,11 @@
 
 namespace AppBundle\Field;
 
+use AppBundle\Transformer\BooleanToIntegerTransformer;
+use AppBundle\Transformer\BooleanToStringTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use AppBundle\Transformer\BooleanToStringTransformer;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use AppBundle\Transformer\BooleanToIntegerTransformer;
 
 /**
  * @package AppBundle\Form
@@ -37,7 +36,7 @@ class BooleanType extends AbstractType
         return 'choice';
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'boolean';
     }

@@ -33,7 +33,7 @@ class AttributionSearchType extends AbstractType
     }
 
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'AppBundle_attribution_search';
     }

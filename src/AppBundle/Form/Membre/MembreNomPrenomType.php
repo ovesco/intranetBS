@@ -12,8 +12,15 @@ class MembreNomPrenomType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('prenom', TextType::class, array('label' => 'Prénom', 'required' => true))
-            ->add('nom', TextType::class, array('label' => 'Nom', 'mapped' => false, 'required' => true));
+            ->add('prenom', TextType::class,
+                array(
+                    'label' => 'Prénom',
+                    'required' => true))
+            ->add('nom', TextType::class,
+                array(
+                    'label' => 'Nom',
+                    'mapped' => false,
+                    'required' => true));
     }
 
     public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
@@ -24,7 +31,7 @@ class MembreNomPrenomType extends AbstractType
     }
 
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'app_bundle_membre_nom_prenom';
     }

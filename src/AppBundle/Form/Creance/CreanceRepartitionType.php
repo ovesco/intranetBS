@@ -29,7 +29,7 @@ class CreanceRepartitionType extends AbstractType
     }
 
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'app_bundle_creance_repartition';
     }

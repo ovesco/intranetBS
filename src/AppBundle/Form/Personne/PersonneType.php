@@ -16,9 +16,7 @@ class PersonneType extends AbstractType
             ->add('prenom', TextType::class, array('required' => false, 'label' => 'Prénom'))
             ->add('sexe', GenreType::class)
             ->add('contact', ContactType::class)
-            ->add(
-                'iban',
-                TextType::class,
+            ->add('iban', TextType::class,
                 array(
                     'label' => 'IBAN',
                     'required' => false,
@@ -38,7 +36,7 @@ class PersonneType extends AbstractType
         ));
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'app_bundle_personne';
     }

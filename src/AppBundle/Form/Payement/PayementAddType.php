@@ -29,7 +29,7 @@ class PayementAddType extends AbstractType
     }
 
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'app_bundlePayementAddType';
     }

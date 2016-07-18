@@ -5,29 +5,18 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Famille;
 use AppBundle\Entity\Membre;
 use AppBundle\Form\Membre\MembreShowType;
-
+use AppBundle\Search\MembreSearch;
+use AppBundle\Search\MembreSearchType;
+use AppBundle\Search\Mode;
+use AppBundle\Utils\ListUtils\ListKey;
+use AppBundle\Utils\ListUtils\ListStorage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-use AppBundle\Utils\ListUtils\ListStorage;
-
-
-use AppBundle\Search\MembreSearch;
-use AppBundle\Search\MembreSearchType;
-
-use AppBundle\Search\Mode;
 
 /* annotations */
-use AppBundle\Utils\Menu\Menu;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
-use AppBundle\Utils\ListUtils\ListKey;
-
-use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Class MembreController
@@ -83,7 +72,7 @@ class MembreController extends Controller {
      */
     public function showAction(Request $request, Membre $membre) {
 
-        $membreForm = $this->createForm(new MembreShowType(), $membre);
+        $membreForm = $this->createForm(MembreShowType::class, $membre);
 
         return array(
             'membre'            => $membre,

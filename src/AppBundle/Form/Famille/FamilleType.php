@@ -28,7 +28,7 @@ class FamilleType extends AbstractType
         ));
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'AppBundle_famille';
     }

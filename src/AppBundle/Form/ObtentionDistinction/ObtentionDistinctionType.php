@@ -60,7 +60,7 @@ class ObtentionDistinctionType extends AbstractType
     /**
      * @return string
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'app_bundle_obtention_distinction';
     }

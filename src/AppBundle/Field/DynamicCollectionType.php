@@ -23,7 +23,7 @@ class DynamicCollectionType extends AbstractType
         return 'collection';
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return DynamicCollectionType::class;
     }

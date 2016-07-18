@@ -17,10 +17,10 @@ class ContactType extends AbstractType
             ->add('adresse', AdresseType::class)
             ->add('emails', DynamicCollectionType::class, array(
                 // chaque item du tableau sera un champ « email »
-                'type' => EmailType::class))
+                'entry_type' => EmailType::class))
             ->add('telephones', DynamicCollectionType::class, array(
                 // chaque item du tableau sera un champ « email »
-                'type' => TelephoneType::class))
+                'entry_type' => TelephoneType::class))
         ;
     }
 
@@ -31,7 +31,7 @@ class ContactType extends AbstractType
         ));
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'app_bundle_contact';
     }

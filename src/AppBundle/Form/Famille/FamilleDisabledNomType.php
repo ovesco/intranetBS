@@ -21,7 +21,7 @@ class FamilleDisabledNomType extends FamilleType
         ));
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'AppBundle_famille_disabled_nom';
     }

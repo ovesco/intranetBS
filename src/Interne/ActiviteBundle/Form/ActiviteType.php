@@ -34,7 +34,7 @@ class ActiviteType extends AbstractType
     /**
      * @return string
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'interne_activitebundle_activite';
     }

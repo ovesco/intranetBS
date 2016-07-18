@@ -23,7 +23,7 @@ class TelephoneType extends AbstractType
         ));
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'app_bundle_telephone';
     }

@@ -31,7 +31,7 @@ class MembreSearchType extends AbstractType
     }
 
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'AppBundle_membre_search';
     }

@@ -3,9 +3,7 @@
 namespace AppBundle\Form\Mere;
 
 use AppBundle\Form\Geniteur\GeniteurType;
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 
 class MereType extends GeniteurType
@@ -22,7 +20,7 @@ class MereType extends GeniteurType
         ));
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'appbundle_mere_type';
     }

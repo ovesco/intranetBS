@@ -8,7 +8,6 @@ use AppBundle\Entity\Mere;
 use AppBundle\Entity\Pere;
 use AppBundle\Entity\Personne;
 use ReflectionClass;
-use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -42,10 +41,10 @@ class AppExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'apply_filter' => new \Twig_Function_Method($this, 'applyFilter'),
-            'help' => new \Twig_Function_Method($this, 'help',array('is_safe' => array('html'))),//is_safe = raw filter (only html..no js)
-            'popup' => new \Twig_Function_Method($this, 'popup',array('is_safe' => array('all'))),//is_safe = raw filter
-            'modal_caller' => new \Twig_Function_Method($this, 'modal_caller',array('is_safe' => array('all')))//is_safe = raw filter
+            'apply_filter' => new \Twig_SimpleFunction('applyFilter', array($this, 'applyFilter')),
+            'help' => new \Twig_SimpleFunction('help', array($this, 'help'), array('is_safe' => array('html'))),//is_safe = raw filter (only html..no js)
+            'popup' => new \Twig_SimpleFunction('popup', array($this, 'popup'), array('is_safe' => array('all'))),//is_safe = raw filter
+            'modal_caller' => new \Twig_SimpleFunction('modal_caller', array($this, 'modal_caller'), array('is_safe' => array('all')))//is_safe = raw filter
         );
     }
 
@@ -54,15 +53,16 @@ class AppExtension extends \Twig_Extension
      *
      * @return array An array of global variables
      */
-    function getGlobals(){
+    function getGlobals()
+    {
         return array(
-            'global_date_format'=> 'd.m.Y',
-            'class_name_membre'=>Membre::className(),
-            'class_name_famille'=>Famille::className(),
-            'class_name_pere'=>Pere::className(),
-            'class_name_mere'=>Mere::className(),
-            'popup_selector'=>'popupable',
-            'modal_caller_selector'=>'modal_caller',
+            'global_date_format' => 'd.m.Y',
+            'class_name_membre' => Membre::className(),
+            'class_name_famille' => Famille::className(),
+            'class_name_pere' => Pere::className(),
+            'class_name_mere' => Mere::className(),
+            'popup_selector' => 'popupable',
+            'modal_caller_selector' => 'modal_caller',
         );
     }
 
@@ -72,15 +72,15 @@ class AppExtension extends \Twig_Extension
             new \Twig_SimpleFilter('boolean', array($this, 'boolean_filter')),
             new \Twig_SimpleFilter('genre', array($this, 'genre_filter')),
             new \Twig_SimpleFilter('get_class', array($this, 'get_class_filter')),
-            new \Twig_SimpleFilter('apply_filters',array($this, 'apply_filters'), array('needs_environment' => true,'needs_context' => true,)),
+            new \Twig_SimpleFilter('apply_filters', array($this, 'apply_filters'), array('needs_environment' => true, 'needs_context' => true,)),
             new \Twig_SimpleFilter('ids_for_routing', array($this, 'ids_for_routing')),
         );
     }
 
     public function boolean_filter($boolean)
     {
-        if($boolean) return 'Oui';
-        else if(!$boolean) return 'Non';
+        if ($boolean) return 'Oui';
+        else if (!$boolean) return 'Non';
         else return '';
     }
 
@@ -93,9 +93,8 @@ class AppExtension extends \Twig_Extension
     public function ids_for_routing($objects)
     {
         $ids = '';
-        foreach($objects as $object)
-        {
-            $ids = $ids.$object->getId().'-';
+        foreach ($objects as $object) {
+            $ids = $ids . $object->getId() . '-';
         }
         return $ids;
     }
@@ -107,9 +106,8 @@ class AppExtension extends \Twig_Extension
      */
     public function genre_filter($value)
     {
-        if($value instanceof Personne)
-        {
-            return  ($value->getSexe() == Personne::HOMME) ? Personne::HOMME : Personne::FEMME;
+        if ($value instanceof Personne) {
+            return ($value->getSexe() == Personne::HOMME) ? Personne::HOMME : Personne::FEMME;
         }
         return ($value == Personne::HOMME) ? Personne::HOMME : Personne::FEMME;
     }
@@ -140,28 +138,25 @@ class AppExtension extends \Twig_Extension
         $fs = new Filesystem();
 
         //set the needed path
-        $template_dir_path = $env->getCache().'/apply_filter';
-        $template_file_name = $filters.'.html.twig';
-        $template_path = $template_dir_path.'/'.$template_file_name;
+        $template_dir_path = $env->getCache() . '/apply_filter';
+        $template_file_name = $filters . '.html.twig';
+        $template_path = $template_dir_path . '/' . $template_file_name;
 
         //create cache dir if dont exist
-        if(!$fs->exists($env->getCache()))
-        {
+        if (!$fs->exists($env->getCache())) {
             $fs->mkdir($env->getCache());
         }
 
         //create dir for templates in twig cache
-        if(!$fs->exists($template_dir_path))
-        {
+        if (!$fs->exists($template_dir_path)) {
 
             $fs->mkdir($template_dir_path);
         }
 
-        if(!$fs->exists($template_path))
-        {
+        if (!$fs->exists($template_path)) {
             //write the new template if first call
             $template = sprintf('{{ value|%s }}', $filters);
-            file_put_contents($template_path,$template);
+            file_put_contents($template_path, $template);
         }
 
         //store the old loader (not sure that is necessary)
@@ -172,7 +167,7 @@ class AppExtension extends \Twig_Extension
         $env->setLoader($loader);
 
 
-        $rendered = $env->render($template_file_name,array("value" => $value));
+        $rendered = $env->render($template_file_name, array("value" => $value));
 
         //reload the previous loader
         $env->setLoader($old_loader);
@@ -190,7 +185,7 @@ class AppExtension extends \Twig_Extension
     public function help($html_popup)
     {
         $popupClass = $this->environment->getGlobals()['popup_selector'];
-        $help =  '<i class="ui help circle orange icon '.$popupClass.'" data-html="'.$html_popup.'"></i>';
+        $help = '<i class="ui help circle orange icon ' . $popupClass . '" data-html="' . $html_popup . '"></i>';
         return $help;
     }
 
@@ -210,7 +205,7 @@ class AppExtension extends \Twig_Extension
      * @param $html_content
      * @return mixed
      */
-    public function popup($html_display,$html_content)
+    public function popup($html_display, $html_content)
     {
         $popupClass = $this->environment->getGlobals()['popup_selector'];
 
@@ -218,33 +213,29 @@ class AppExtension extends \Twig_Extension
         /*
          * Ne marche que si un attribut "class=" est trouvé dans $html_display
          */
-        if(preg_match('/class[ \t]*=[ \t]*"[^"]+"/', $html_display, $matches))
-        {
+        if (preg_match('/class[ \t]*=[ \t]*"[^"]+"/', $html_display, $matches)) {
             $class = $matches[0];
 
             preg_match('/\".*?\"/', $class, $matches);//match word
 
             preg_match_all('/([a-zA-Z0-9-_]+)/', $matches[0], $matches);//match word
 
-            if(!in_array($popupClass,$matches[0]))
-            {
+            if (!in_array($popupClass, $matches[0])) {
                 $matches[0][] = $popupClass;
             }
             $compiledClass = 'class="';
-            foreach($matches[0] as $class)
-            {
-                $compiledClass = $compiledClass.$class.' ';
+            foreach ($matches[0] as $class) {
+                $compiledClass = $compiledClass . $class . ' ';
             }
-            $compiledClass = $compiledClass.'" data-html="'.$html_content.'" ';
+            $compiledClass = $compiledClass . '" data-html="' . $html_content . '" ';
 
-            return preg_replace('/class[ \t]*=[ \t]*"[^"]+"/' ,  $compiledClass ,$html_display,1);//1 = premier occurance
-        }
-        else{
+            return preg_replace('/class[ \t]*=[ \t]*"[^"]+"/', $compiledClass, $html_display, 1);//1 = premier occurance
+        } else {
             preg_match('/\<.*?\>/', $html_display, $matches);
 
-            $startBalise =  preg_replace('/>/' ,  ' class="'.$popupClass.'" data-html="'.$html_content.'">' ,$matches[0],1);//1 = premier occurance
+            $startBalise = preg_replace('/>/', ' class="' . $popupClass . '" data-html="' . $html_content . '">', $matches[0], 1);//1 = premier occurance
 
-            return preg_replace('/\<.*?\>/' ,  $startBalise ,$html_display,1);//1 = premier occurance
+            return preg_replace('/\<.*?\>/', $startBalise, $html_display, 1);//1 = premier occurance
 
         }
 
@@ -267,7 +258,7 @@ class AppExtension extends \Twig_Extension
      * @param $urlModal
      * @return mixed
      */
-    public function modal_caller($html_display,$urlModal)
+    public function modal_caller($html_display, $urlModal)
     {
         $modalClass = $this->environment->getGlobals()['modal_caller_selector'];
 
@@ -275,33 +266,29 @@ class AppExtension extends \Twig_Extension
         /*
          * Ne marche que si un attribut "class=" est trouvé dans $html_display
          */
-        if(preg_match('/class[ \t]*=[ \t]*"[^"]+"/', $html_display, $matches))
-        {
+        if (preg_match('/class[ \t]*=[ \t]*"[^"]+"/', $html_display, $matches)) {
             $class = $matches[0];
 
             preg_match('/\".*?\"/', $class, $matches);//match word
 
             preg_match_all('/([a-zA-Z0-9-_]+)/', $matches[0], $matches);//match word
 
-            if(!in_array($modalClass,$matches[0]))
-            {
+            if (!in_array($modalClass, $matches[0])) {
                 $matches[0][] = $modalClass;
             }
             $compiledClass = 'class="';
-            foreach($matches[0] as $class)
-            {
-                $compiledClass = $compiledClass.$class.' ';
+            foreach ($matches[0] as $class) {
+                $compiledClass = $compiledClass . $class . ' ';
             }
-            $compiledClass = $compiledClass.'" data-modal-url="'.$urlModal.'" ';
+            $compiledClass = $compiledClass . '" data-modal-url="' . $urlModal . '" ';
 
-            return preg_replace('/class[ \t]*=[ \t]*"[^"]+"/' ,  $compiledClass ,$html_display,1);//1 = premier occurance
-        }
-        else{
+            return preg_replace('/class[ \t]*=[ \t]*"[^"]+"/', $compiledClass, $html_display, 1);//1 = premier occurance
+        } else {
             preg_match('/\<.*?\>/', $html_display, $matches);
 
-            $startBalise =  preg_replace('/>/' ,  ' class="'.$modalClass.'" data-modal-url="'.$urlModal.'">' ,$matches[0],1);//1 = premier occurance
+            $startBalise = preg_replace('/>/', ' class="' . $modalClass . '" data-modal-url="' . $urlModal . '">', $matches[0], 1);//1 = premier occurance
 
-            return preg_replace('/\<.*?\>/' ,  $startBalise ,$html_display,1);//1 = premier occurance
+            return preg_replace('/\<.*?\>/', $startBalise, $html_display, 1);//1 = premier occurance
 
         }
 

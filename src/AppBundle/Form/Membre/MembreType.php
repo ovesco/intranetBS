@@ -24,8 +24,8 @@ class MembreType extends PersonneType
 
         $builder
             ->add('famille', FamilleType::class)
-            ->add('attributions', CollectionType::class, array('type' => AttributionType::class))
-            ->add('distinctions', CollectionType::class, array('type' => ObtentionDistinctionType::class))
+            ->add('attributions', CollectionType::class, array('entry_type' => AttributionType::class))
+            ->add('distinctions', CollectionType::class, array('entry_type' => ObtentionDistinctionType::class))
             ->add('naissance', DatePickerType::class, array('label' => 'Date de naissance'))
             ->add('numeroAvs', NumberType::class,
                 array(
@@ -45,30 +45,24 @@ class MembreType extends PersonneType
                     'required' => false,
                 )
             )
-            ->add(
-                'remarques',
-                RemarqueAccordionType::class,
-                array(
-                    'required' => false
-                )
+            ->add('remarques', RemarqueAccordionType::class,
+                array('required' => false)
             )
             ->add(
                 'envoiFacture',
                 ChoiceType::class,
                 array(
-                    'choices' => array('Membre' => 'Membre', 'Famille' => 'Famille')
+                    'choices' => array(
+                        'Membre' => 'Membre',
+                        'Famille' => 'Famille'),
+                    'choices_as_values' => true
                 )
             )
             ->add('inscription', DatePickerType::class,
-                array(
-                    'label' => 'Inscription'
-                )
+                array('label' => 'Inscription')
             )
             ->add('statut', TextType::class, array('label' => 'Statut'))
-            ->add(
-                'id',
-                HiddenType::class
-            );
+            ->add('id', HiddenType::class);
     }
 
     public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)

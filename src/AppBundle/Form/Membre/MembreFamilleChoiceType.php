@@ -40,7 +40,7 @@ class MembreFamilleChoiceType extends AbstractType
     }
 
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'appbundle_membre_famille_choice';
     }

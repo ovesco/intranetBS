@@ -22,7 +22,7 @@ class RemarqueAccordionType extends AbstractType
         return TextareaType::class;
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'remarque_accordion';
     }

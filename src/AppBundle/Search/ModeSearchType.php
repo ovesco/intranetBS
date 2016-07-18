@@ -3,8 +3,7 @@
 namespace AppBundle\Search;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use AppBundle\Search\Mode;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
  * Class ModeSearchType
@@ -33,10 +32,10 @@ class ModeSearchType extends AbstractType
 
     public function getParent()
     {
-        return 'choice';
+        return ChoiceType::class;
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'mode_search';
     }

@@ -14,11 +14,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @Gedmo\Loggable
  * @ORM\Table(name="app_membres")
  * @Search(repositoryClass="AppBundle\Search\MembreRepository")
- *
- *
- *
- *
- *
  */
 class Membre extends Personne implements ExpediableInterface, DebiteurInterface
 {

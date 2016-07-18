@@ -24,7 +24,7 @@ class TelephoneAddType extends AbstractType
         ));
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'app_bundle_telephone_add';
     }

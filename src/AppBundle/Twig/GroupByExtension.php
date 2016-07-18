@@ -27,7 +27,7 @@ class GroupByExtension extends \Twig_Extension
 
     public function getFilters() {
         return array(
-            'groupby'  => new \Twig_Filter_Method($this, 'groupBy'),
+            'groupby' => new \Twig_SimpleFilter('groupBy', array($this, 'groupBy')),
         );
     }
 
