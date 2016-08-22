@@ -11,19 +11,37 @@ use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Utils\Menu\Menu;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /**
- * @Route("/interne/roles")
+ * @Route("/interne/role")
  * @package AppBundle\Controller
  */
-class RolesController extends Controller
+class RoleController extends Controller
 {
+    /**
+     * Page qui affiche la hierarchie des roles
+     *
+     * @Route("/list", options={"expose"=true})
+     * @param Request $request
+     *
+     * @Menu("Liste des roles", block="security", order=2, icon="list")
+     * @Template("AppBundle:Roles:page_list.html.twig")
+     * @return Response
+     */
+    public function listAction(Request $request)
+    {
+        $em         = $this->getDoctrine()->getManager();
+        $roles      = $em->getRepository('AppBundle:Role')->findby(array('parent'=>null));
+
+        return array('rootRoles'=>$roles);
+    }
 
     /**
      * page permettant de lier des roles et des fonctions
      *
      * @Route("/matching_fonctions")
-     * @Menu("Matching droit-fonctions", block="security", icon="compress")
+     * @Menu("Matching droit-fonctions", block="security",order=1, icon="compress")
      */
     public function matchingFonctionsAction(Request $request) {
 

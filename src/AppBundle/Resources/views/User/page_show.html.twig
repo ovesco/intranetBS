@@ -1,0 +1,20 @@
+{% extends 'AppBundle:Layout:layout.html.twig' %}
+
+
+{% block titre %}User - {{ user.username }}{% endblock %}
+
+{% block content %}
+
+    <div class="ui page grid">
+        <div class="column">
+            <div class="row">
+
+               {{ dump(user) }}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+

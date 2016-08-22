@@ -1,0 +1,20 @@
+{% extends 'AppBundle:Layout:layout.html.twig' %}
+
+{% block titre %}Liste des roles{% endblock %}
+
+{% block content %}
+
+    <div class="ui page grid">
+        <div class="column">
+            <div class="row">
+
+                {{ list_caller.userAll|raw }}
+
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+

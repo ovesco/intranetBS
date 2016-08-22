@@ -58,8 +58,8 @@ assetic:
     use_controller: false
     bundles:
         - AppBundle
-        - InterneOrganisationBundle
-        - InterneSeanceBundle
+        #- InterneOrganisationBundle
+        #- InterneSeanceBundle
     write_to:       %kernel.root_dir%/../web/static/
 
     #java: /usr/bin/java
@@ -137,12 +137,3 @@ fos_rest:
     routing_loader:
         default_format: json
         include_format: false
-
-# PDF Exports
-ensepar_html2pdf:
-    orientation: P
-    format: A4
-    lang: en
-    unicode: true
-    encoding: UTF-8
-    margin: [10,15,10,15]

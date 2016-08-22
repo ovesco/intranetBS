@@ -20,26 +20,26 @@ app:
     type:     annotation
     prefix:   /
 
-mat:
-    resource: "@MatBundle/Controller/"
-    type:     annotation
-    prefix:   /intranet/materiel
-
-interne_organisation:
-    resource: "@InterneOrganisationBundle/Controller/"
-    type:     annotation
-    prefix:   /intranet/organisation
-
-seance_api:
-    type:     rest
-    resource: "@InterneSeanceBundle/Resources/config/routing_rest.yml"
-    prefix:   /intranet/seance-api
-    options:
-        expose: true
-
-seance:
-    resource: "@InterneSeanceBundle/Resources/config/routing.yml"
-    prefix:   /intranet/seance
+#mat:
+#    resource: "@MatBundle/Controller/"
+#    type:     annotation
+#    prefix:   /intranet/materiel
+#
+#interne_organisation:
+#    resource: "@InterneOrganisationBundle/Controller/"
+#    type:     annotation
+#    prefix:   /intranet/organisation
+#
+#seance_api:
+#    type:     rest
+#    resource: "@InterneSeanceBundle/Resources/config/routing_rest.yml"
+#    prefix:   /intranet/seance-api
+#    options:
+#        expose: true
+#
+#seance:
+#    resource: "@InterneSeanceBundle/Resources/config/routing.yml"
+#    prefix:   /intranet/seance
 
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"

@@ -41,7 +41,7 @@ class RolesManageCommand extends ContainerAwareCommand
             ->addArgument(
                 'action',
                 InputArgument::REQUIRED,
-                'The actino to do: add or remove'
+                'The action to do: add or remove'
             )
             ->addArgument(
                 'username',

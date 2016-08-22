@@ -34,13 +34,13 @@ class AppKernel extends Kernel
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),//Pour le routing javascript
             new FOS\ElasticaBundle\FOSElasticaBundle(),//Elasitca
             new FOS\RestBundle\FOSRestBundle(),//Pour les applications REST
-            new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
+            new Knp\Bundle\SnappyBundle\KnpSnappyBundle(), // pour les PDF
 
             new AppBundle\AppBundle(),
-            new Interne\OrganisationBundle\InterneOrganisationBundle(),
-            new Interne\MatBundle\MatBundle(),
-            new Interne\SeanceBundle\InterneSeanceBundle(),
-            new Ensepar\Html2pdfBundle\EnseparHtml2pdfBundle(),
+            //new Interne\OrganisationBundle\InterneOrganisationBundle(),
+            //new Interne\MatBundle\MatBundle(),
+            //new Interne\SeanceBundle\InterneSeanceBundle(),
+            //new Ensepar\Html2pdfBundle\EnseparHtml2pdfBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
