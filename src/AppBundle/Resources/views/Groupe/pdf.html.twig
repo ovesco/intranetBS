@@ -4,69 +4,94 @@
     {{ group.nom }}
 {% endblock %}
 
-
 {% block content %}
-    <h1>{{ group.nom }}</h1>
+    <body>
+    <h1 class="ui center aligned segment">{{ group.nom }}</h1>
+
+    <h2>Effectifs directs</h2>
+
+    <hr/>
 
     <table class="ui very basic table">
         <thead>
-        <tr>
-            <th>Prénom</th>
-            <th>Nom</th>
-            <th>Adresse</th>
-            <th>Tel</th>
-            <th>Mobile</th>
-        </tr>
+            <tr>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Fonction</th>
+                <th>Adresse</th>
+                <th>Tel</th>
+            </tr>
         </thead>
 
         <tbody>
         {% for member in group.members %}
-            <tr>
-                <td>{{ member.Prenom }}</td>
-                <td>{{ member.Nom }}</td>
-                <td>
-                    {{ member.Contact.Adresse.Rue }}<br/>
-                    {{ member.Contact.Adresse.Npa }} {{ member.Contact.Adresse.Localite }}
-                </td>
-                <td>021 907 23 98{{ (member.Contact.Telephones|first).Numero }}</td>
-                <td>021 907 23 98{{ (member.Contact.Telephones|first).Numero }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-
-    {% for subGroup in group.enfants %}
-        <h2>{{ subGroup.nom }}</h2>
-
-        <table class="ui very basic table">
-            <thead>
-            <tr>
-                <th>Prénom</th>
-                <th>Nom</th>
-                <th>Adresse</th>
-                <th>Tel</th>
-                <th>Mobile</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            {% for member in subGroup.members %}
-                <tr>
+            <tr class="top aligned">
                     <td>{{ member.Prenom }}</td>
                     <td>{{ member.Nom }}</td>
+                <td>{{ (member.Attributions|first).Fonction }}</td>
                     <td>
                         {{ member.Contact.Adresse.Rue }}<br/>
                         {{ member.Contact.Adresse.Npa }} {{ member.Contact.Adresse.Localite }}
                     </td>
-                    <td>021 907 23 98{{ (member.Contact.Telephones|first).Numero }}</td>
-                    <td>021 907 23 98{{ (member.Contact.Telephones|first).Numero }}</td>
+                <td>
+                    <div class="ui list">
+                        {% for telephone in member.Contact.Telephones %}
+                            {% if not telephone.Numero is empty and telephone.Numero != '' %}
+                                <div class="item">{{ telephone.Numero }}</div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </td>
                 </tr>
             {% endfor %}
-            </tbody>
-        </table>
+        </tbody>
+    </table>
+
+    {% for subGroup in group.enfants %}
+        <div class="group">
+            <h2>{{ subGroup.nom }}</h2>
+
+            <hr/>
+
+            <table class="ui very basic table">
+                <thead>
+                <tr>
+                    <th>Prénom</th>
+                    <th>Nom</th>
+                    <th>Fonction</th>
+                    <th>Adresse</th>
+                    <th>Tel</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for member in subGroup.members %}
+                    <tr class="top aligned">
+                        <td>{{ member.Prenom }}</td>
+                        <td>{{ member.Nom }}</td>
+                        <td>{{ (member.Attributions|first).Fonction }}</td>
+                        <td>
+                            {{ member.Contact.Adresse.Rue }}<br/>
+                            {{ member.Contact.Adresse.Npa }} {{ member.Contact.Adresse.Localite }}
+                        </td>
+                        <td>
+                            <div class="ui list">
+                                {% for telephone in member.Contact.Telephones %}
+                                    {% if not telephone.Numero is empty and telephone.Numero != '' %}
+                                        <div class="item">{{ telephone.Numero }}</div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
     {% endfor %}
+
+    </body>
 {% endblock %}
 
 

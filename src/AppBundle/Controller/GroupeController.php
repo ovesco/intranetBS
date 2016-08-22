@@ -74,10 +74,12 @@ class GroupeController extends Controller
             )
         );
 
+        //return new Response($html);
+
         $snappy = $this->get('knp_snappy.pdf');
 
-        $snappy->setOption('header-center', 'Header');
-        $snappy->setOption('footer-center', '[page]');
+        $snappy->setOption('header-html', 'Header');
+        $snappy->setOption('footer-html', '[page]');
 
         $pdf = $snappy->getOutputFromHtml($html, array(
             'enable-javascript' => true,
@@ -91,12 +93,13 @@ class GroupeController extends Controller
             'dpi' => 300,
             'image-dpi' => 300,
             'enable-external-links' => true,
-            'enable-internal-links' => true,
+            'enable-internal-links' => true
         ));
 
         return new Response($pdf, 200,
             array(
-                'Content-Type' => 'application/pdf'
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="' . $groupe->getNom() . '.pdf"'
             )
         );
     }
