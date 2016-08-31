@@ -40,10 +40,20 @@ class EntityHandler {
     }
 
 
+    /**
+     * @param $idsArray
+     * @return array
+     */
     public function getCollection($idsArray)
     {
         return $this->repository->findBy(array('id'=>$idsArray));
     }
+
+    public function getAll()
+    {
+        return $this->repository->findAll();
+    }
+
 
 
 
