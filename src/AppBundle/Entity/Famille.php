@@ -8,6 +8,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use AppBundle\Entity\DebiteurFamille;
 use FOS\ElasticaBundle\Configuration\Search;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\VirtualProperty;
+
 
 /**
  * Famille
@@ -16,6 +21,9 @@ use FOS\ElasticaBundle\Configuration\Search;
  * @ORM\Entity
  * @ORM\Table(name="app_familles")
  * @Search(repositoryClass="AppBundle\Search\Famille\FamilleRepository")
+ *
+ * @ExclusionPolicy("all")
+ *
  */
 class Famille implements ExpediableInterface,ClassNameInterface
 {
@@ -25,12 +33,17 @@ class Famille implements ExpediableInterface,ClassNameInterface
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Expose
+     *
      */
     private $id;
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Membre", mappedBy="famille", cascade={"persist"})
      * @ORM\JoinColumn(name="membres_id", referencedColumnName="id", onDelete="CASCADE")
+     *
+     * @Expose
      */
     private $membres;
 
@@ -38,6 +51,8 @@ class Famille implements ExpediableInterface,ClassNameInterface
      * @Gedmo\Versioned
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Pere", mappedBy="famille", cascade={"persist"})
      * @ORM\JoinColumn(name="pere_id", referencedColumnName="id", onDelete="SET NULL")
+     *
+     *
      */
     private $pere;
 
@@ -56,6 +71,8 @@ class Famille implements ExpediableInterface,ClassNameInterface
      * @ORM\Column(name="nom", type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Length(min = "2")
+     *
+     * @Expose
      */
     private $nom;
 

@@ -186,3 +186,24 @@ services:
         arguments:
             - @doctrine.orm.entity_manager
             - @session
+
+    # Serializer dedicated for the entities of the app
+    serializer.membre:
+        class: AppBundle\Utils\Serializer\MembreSerializer
+        arguments:
+            - @jms_serializer
+    serializer.user:
+        class: AppBundle\Utils\Serializer\UserSerializer
+        arguments:
+            - @jms_serializer
+
+    # Handler dedicated for the entities of the app
+    handler.membre:
+            class: AppBundle\Handler\MembreHandler
+            arguments:
+                - @doctrine.orm.entity_manager
+
+    handler.user:
+            class: AppBundle\Handler\UserHandler
+            arguments:
+                - @doctrine.orm.entity_manager

@@ -6,6 +6,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\VirtualProperty;
 
 /**
  * User
@@ -14,6 +18,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  * @UniqueEntity(fields="username",message="this username already exist")
+ *
+ * @ExclusionPolicy("all")
  *
  */
 class User implements UserInterface, \Serializable
@@ -24,6 +30,8 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Expose
      */
     private $id;
 
@@ -31,6 +39,8 @@ class User implements UserInterface, \Serializable
      * @var string $username
      *
      * @ORM\Column(name="username", type="string", length=255, unique = true)
+     *
+     * @Expose
      */
     private $username;
 
@@ -43,6 +53,8 @@ class User implements UserInterface, \Serializable
 
     /**
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Membre")
+     *
+     * @Expose
      */
     private $membre;
 
@@ -64,6 +76,8 @@ class User implements UserInterface, \Serializable
      * @var \Datetime
      *
      * @ORM\Column(name="last_connexion", type="datetime")
+     *
+     * @Expose
      */
     private $lastConnexion;
     

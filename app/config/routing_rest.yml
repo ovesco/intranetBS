@@ -1,0 +1,10 @@
+#REST
+users :
+  type: rest
+  resource:     @AppBundle/Controller/Rest/UserRestController.php
+  name_prefix: api_
+
+membres :
+  type: rest
+  resource:     @AppBundle/Controller/Rest/MembreRestController.php
+  name_prefix: api_

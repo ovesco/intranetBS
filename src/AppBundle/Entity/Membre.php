@@ -8,6 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use FOS\ElasticaBundle\Annotation\Search;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\VirtualProperty;
+use JMS\Serializer\Annotation\MaxDepth;
 
 /**
  * Membre
@@ -16,6 +21,8 @@ use FOS\ElasticaBundle\Annotation\Search;
  * @Gedmo\Loggable
  * @ORM\Table(name="app_membres")
  * @Search(repositoryClass="AppBundle\Search\MembreRepository")
+ *
+ * @ExclusionPolicy("all")
  */
 class Membre extends Personne implements ExpediableInterface, DebiteurInterface
 {
@@ -28,6 +35,10 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Famille", inversedBy="membres", cascade={"persist"}, fetch="EAGER")
      * @ORM\JoinColumn(name="famille_id", referencedColumnName="id")
      * @Gedmo\Versioned
+     *
+     * JMS annotations:
+     * @Expose
+     * @MaxDepth(2)
      */
     private $famille;
 
@@ -50,6 +61,8 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="naissance", type="date")
+     *
+     *
      */
     private $naissance;
 
@@ -58,6 +71,9 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="numero_bs", type="integer", nullable=true)
+     *
+     *
+     *
      */
     private $numeroBs;
 
@@ -82,6 +98,8 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="inscription", type="date")
+     *
+     *
      */
     private $inscription;
 

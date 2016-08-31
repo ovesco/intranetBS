@@ -5,12 +5,19 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\VirtualProperty;
+
 
 
 
 /**
  * @ORM\MappedSuperclass
  * @Gedmo\Loggable
+ *
+ * @ExclusionPolicy("all")
  */
 abstract class Personne
 {
@@ -23,6 +30,8 @@ abstract class Personne
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Expose
      */
     protected $id;
 
@@ -31,6 +40,9 @@ abstract class Personne
      * @var string
      * @Gedmo\Versioned
      * @ORM\Column(name="prenom", type="string", length=255)
+     *
+     * @Expose
+     *
      */
     protected $prenom;
 
@@ -39,6 +51,8 @@ abstract class Personne
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="sexe", type="string", columnDefinition="ENUM('Homme', 'Femme')")
+     *
+     *
      */
     protected $sexe;
 
