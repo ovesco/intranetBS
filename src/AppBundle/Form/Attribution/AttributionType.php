@@ -2,9 +2,9 @@
 
 namespace AppBundle\Form\Attribution;
 
-use AppBundle\Field\DatePickerType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -44,8 +44,11 @@ class AttributionType extends AbstractType
         });
 
         $builder
-            ->add('dateDebut', DatePickerType::class)
-            ->add('dateFin', DatePickerType::class, array(
+            ->add('dateDebut', DateType::class, array(
+                'widget' => 'single_text'
+            ))
+            ->add('dateFin', DateType::class, array(
+                'widget' => 'single_text',
                 'required' => false
             ))
             ->add('groupe', EntityType::class, array(

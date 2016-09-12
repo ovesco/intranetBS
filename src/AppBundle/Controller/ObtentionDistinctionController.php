@@ -22,7 +22,7 @@ class ObtentionDistinctionController extends Controller
 {
 
     /**
-     * @Route("/modal/add/{membre}", name="obtentiondistinction_add_modal", options={"expose"=true})
+     * @Route("/modal/add/{membre}", name="obtention-distinction_add_modal", options={"expose"=true})
      *
      * @param Request $request
      * @param Membre $membre
@@ -129,7 +129,7 @@ class ObtentionDistinctionController extends Controller
      * @return Response
      * @ParamConverter("obtention", class="AppBundle:ObtentionDistinction")
      */
-    public function editObtentionDistinction(ObtentionDistinction $obtention, Request $request)
+    public function editObtentionDistinctionAction(ObtentionDistinction $obtention, Request $request)
     {
         //TODO: modifier une obtention (ou peut-être ne veut-on que les supprimer ?)
     }
@@ -141,7 +141,7 @@ class ObtentionDistinctionController extends Controller
      * @param $obtentionDistinction
      * @return JsonResponse
      */
-    public function removeAttributionAction(ObtentionDistinction $obtentionDistinction)
+    public function removeObtentionDistinctionAction(ObtentionDistinction $obtentionDistinction)
     {
 
         $em = $this->getDoctrine()->getManager();

@@ -54,7 +54,7 @@ class ListModelsDistinctions
 
         $list->addActionLine(new ActionLine('Supprimer', 'delete', 'obtention-distinction_delete', $obtentionParameters, EventPostAction::RefreshList));
 
-        $list->addActionList(new ActionList('Ajouter', 'add', 'app_obtention_modaladd', $membreParameters, EventPostAction::ShowModal));
+        $list->addActionList(new ActionList('Ajouter', 'add', 'obtention-distinction_add_modal', $membreParameters, EventPostAction::ShowModal));
 
         $list->setDatatable(false);
         $list->setStyle('very basic');

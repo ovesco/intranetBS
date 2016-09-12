@@ -3,7 +3,7 @@
 
     {% for element in data %}
 
-        {% set header = (type == 'telephone') ? form_widget(element.telephone) : form_widget(element.email) %}
+        {% set header = (type == 'telephone') ? form_widget(element.numero) : form_widget(element.email) %}
 
         <div class="item">
             <i class="{{ (type == 'telephone') ? 'call' : 'mail' }} icon"></i>

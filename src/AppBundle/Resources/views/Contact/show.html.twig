@@ -30,7 +30,7 @@
                 <div class="header">Téléphone(s)</div>
                 <div class="description">
                     {% for phone in contact.telephones %}
-                        <p>{{ phone.telephone }}</p>
+                        <p>{{ phone.numero }}</p>
                         <p>{{ phone.remarques }}</p>
 
                         {% if not loop.last %}

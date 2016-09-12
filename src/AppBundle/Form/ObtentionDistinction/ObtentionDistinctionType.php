@@ -5,6 +5,7 @@ namespace AppBundle\Form\ObtentionDistinction;
 use AppBundle\Field\DatePickerType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -44,7 +45,10 @@ class ObtentionDistinctionType extends AbstractType
 
 
         $builder
-            ->add('date', DatePickerType::class, array('label' => "Reçu le"))
+            ->add('date', DateType::class, array(
+                'label' => "Reçu le",
+                'widget' => 'single_text'
+            ))
             ->add('distinction', EntityType::class, array(
                 'class' => 'AppBundle:Distinction'
             ));

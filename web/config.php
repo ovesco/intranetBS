@@ -28,6 +28,8 @@ $symfonyRequirements = new SymfonyRequirements();
 
 $majorProblems = $symfonyRequirements->getFailedRequirements();
 $minorProblems = $symfonyRequirements->getFailedRecommendations();
+$hasMajorProblems = (bool)count($majorProblems);
+$hasMinorProblems = (bool)count($minorProblems);
 
 ?>
 <!DOCTYPE html>
@@ -44,12 +46,10 @@ $minorProblems = $symfonyRequirements->getFailedRecommendations();
                 font-size: 14px;
                 font-family: "Lucida Sans Unicode", "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
             }
-
             .sf-reset h1.title {
                 font-size: 45px;
                 padding-bottom: 30px;
             }
-
             .sf-reset h2 {
                 font-weight: bold;
                 color: #FFFFFF;
@@ -61,42 +61,33 @@ $minorProblems = $symfonyRequirements->getFailedRecommendations();
                 display: inline-block;
                 text-transform: uppercase;
             }
-
             .sf-reset ul a,
             .sf-reset ul a:hover {
                 background: url(../images/blue-arrow.png) no-repeat right 6px;
                 padding-right: 10px;
             }
-
             .sf-reset ul, ol {
                 padding-left: 20px;
             }
-
             .sf-reset li {
                 padding-bottom: 18px;
             }
-
             .sf-reset ol li {
                 list-style-type: decimal;
             }
-
             .sf-reset ul li {
                 list-style-type: none;
             }
-
             .sf-reset .symfony-blocks-install {
                 overflow: hidden;
             }
-
             .sf-reset .symfony-install-continue {
                 font-size: 0.95em;
                 padding-left: 0;
             }
-
             .sf-reset .symfony-install-continue li {
                 padding-bottom: 10px;
             }
-
             .sf-reset .ok {
                 color: #fff;
                 font-family: "Lucida Sans Unicode", "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
@@ -104,34 +95,28 @@ $minorProblems = $symfonyRequirements->getFailedRecommendations();
                 padding: 10px;
                 margin-bottom: 20px;
             }
-
             .sf-reset .ko {
                 background-color: #d66;
             }
-
             .sf-reset p.help {
                 padding: 12px 16px;
                 word-break: break-word;
             }
-
             .version {
                 text-align: right;
                 font-size: 10px;
                 margin-right: 20px;
             }
-
             .sf-reset a,
             .sf-reset li a {
                 color: #08C;
                 text-decoration: none;
             }
-
             .sf-reset a:hover,
             .sf-reset li a:hover {
                 color: #08C;
                 text-decoration: underline;
             }
-
             .sf-reset textarea {
                 padding: 7px;
             }
@@ -175,7 +160,7 @@ $minorProblems = $symfonyRequirements->getFailedRecommendations();
                             ready to run Symfony applications.
                         </p>
 
-                        <?php if (count($majorProblems)): ?>
+                        <?php if ($hasMajorProblems): ?>
                             <h2 class="ko">Major problems</h2>
                             <p>Major problems have been detected and <strong>must</strong> be fixed before continuing:</p>
                             <ol>
@@ -187,10 +172,11 @@ $minorProblems = $symfonyRequirements->getFailedRecommendations();
                             </ol>
                         <?php endif; ?>
 
-                        <?php if (count($minorProblems)): ?>
+                        <?php if ($hasMinorProblems): ?>
                             <h2>Recommendations</h2>
                             <p>
-                                <?php if (count($majorProblems)): ?>Additionally, to<?php else: ?>To<?php endif; ?> enhance your Symfony experience,
+                                <?php if ($hasMajorProblems): ?>Additionally, to<?php else: ?>To<?php endif; ?> enhance
+                                your Symfony experience,
                                 it’s recommended that you fix the following:
                             </p>
                             <ol>
@@ -212,13 +198,13 @@ $minorProblems = $symfonyRequirements->getFailedRecommendations();
                             </p>
                         <?php endif; ?>
 
-                        <?php if (!count($majorProblems) && !count($minorProblems)): ?>
+                        <?php if (!$hasMajorProblems && !$hasMinorProblems): ?>
                             <p class="ok">All checks passed successfully. Your system is ready to run Symfony
                                 applications.</p>
                         <?php endif; ?>
 
                         <ul class="symfony-install-continue">
-                            <?php if (count($majorProblems) || count($minorProblems)): ?>
+                            <?php if ($hasMajorProblems || $hasMinorProblems): ?>
                                 <li><a href="config.php">Re-check configuration</a></li>
                             <?php endif; ?>
                         </ul>
