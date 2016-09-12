@@ -46,10 +46,10 @@ class Role implements RoleInterface
     /**
      * @ORM\OneToMany(targetEntity="Role", mappedBy="parent", cascade={"persist"}, fetch="EAGER")
      */
-    private $enfants;
+    private $childs;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Role", inversedBy="enfants", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Role", inversedBy="childs", cascade={"persist"})
      * @ORM\JoinColumn(name="parent_role_id", referencedColumnName="id", nullable=true)
      */
     private $parent;
@@ -58,7 +58,7 @@ class Role implements RoleInterface
 
     public function __construct()
     {
-        $this->enfants = new ArrayCollection();
+        $this->childs = new ArrayCollection();
     }
 
     /**
@@ -141,48 +141,57 @@ class Role implements RoleInterface
     }
 
     /**
-     * Add enfants
+     * Add child
      *
-     * @param \AppBundle\Entity\Role $enfants
+     * @param \AppBundle\Entity\Role $child
      * @return Role
      */
-    public function addEnfant(\AppBundle\Entity\Role $enfants)
+    public function addChild(\AppBundle\Entity\Role $child)
     {
-        $this->enfants[] = $enfants;
-        $enfants->setParent($this);
+        $this->childs[] = $child;
+        $child->setParent($this);
         return $this;
     }
 
     /**
-     * Remove enfants
+     * Remove child
      *
-     * @param \AppBundle\Entity\Role $enfants
+     * @param \AppBundle\Entity\Role $child
      */
-    public function removeEnfant(\AppBundle\Entity\Role $enfants)
+    public function removeChild(\AppBundle\Entity\Role $child)
     {
-        $this->enfants->removeElement($enfants);
+        $this->childs->removeElement($child);
     }
 
     /**
-     * Get enfants
+     * Get childs
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getEnfants()
+    public function getChilds()
     {
-        return $this->enfants;
+        return $this->childs;
     }
 
-    public function getEnfantsRecursive($main = false) {
+    /**
+     * Cette fonction permet de retourner tout les enfant du role en fonction
+     * de la hierarchie des roles
+     *
+     * @param bool $selfInclude
+     * @return array
+     */
+    public function getChildsRecursive($selfInclude = false) {
 
-        $enfants = $this->getEnfants()->toArray();
+        $childs = $this->getChilds()->toArray();
 
-        foreach($enfants as $r)
-            $enfants = array_merge($enfants, $r->getEnfantsRecursive());
+        /** @var Role $role */
+        foreach($childs as $role) {
+            $childs = array_merge($childs, $role->getChildsRecursive());
+        }
 
-        if($main) $enfants[] = $this;
+        if($selfInclude) $childs[] = $this;
 
-        return $enfants;
+        return $childs;
     }
 
     /**

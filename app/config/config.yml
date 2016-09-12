@@ -45,9 +45,6 @@ twig:
         list_caller: "@list_caller"
         #service de generation des menu. Permet d'obtenir les routes liée aux annotations @menu
         menu: "@menu"
-    form:
-        resources:
-            - 'AppBundle:Form:xeditable_widgets.html.twig'
     #template de base pour tout les formulaires ou ce n'est pas spécifier
     form_themes:
         - 'AppBundle:Form:default_widgets.html.twig'

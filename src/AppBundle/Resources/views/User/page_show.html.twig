@@ -9,11 +9,64 @@
         <div class="column">
             <div class="row">
 
-               {{ dump(user) }}
+
+                <table class="ui celled table">
+                    <thead>
+                    <tr>
+                        <th colspan="2">Infomation sur le User</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Username</td>
+                        <td>{{ user.username }}</td>
+                    </tr>
+                    <tr>
+                        <td>Password</td>
+                        <td>{{ user.password }}</td>
+                    </tr>
+                    <tr>
+                        <td>Dernière connexion</td>
+                        <td>{{ user.lastConnexion|date('d/m/Y') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Actif</td>
+                        <td>
+                            {% if user.isActive %}
+                                <div class="ui green label">oui</div>
+                            {% else %}
+                                <div class="ui red label">non</div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Roles liées en base de donnée</td>
+                        <td>
+                            {% for role in user.rolesEntity %}
+                                {{ role.role }} <br>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Roles déduit de la hierarchie (ainsi que d'éventuelle attribution)</td>
+                        <td>
+                            {% for role in user.getRoles %}
+                                {{ role }} <br>
+                            {% endfor %}
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+
+                <a class="ui blue button" href="{{ path('app_user_edit',{'user':user.id}) }}">Edit this user</a>
+
+
 
             </div>
         </div>
     </div>
+
 
 {% endblock %}
 

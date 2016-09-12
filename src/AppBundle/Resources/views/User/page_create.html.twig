@@ -1,0 +1,36 @@
+{% extends 'AppBundle:Layout:layout.html.twig' %}
+
+{% form_theme form 'AppBundle:Form:default_widgets.html.twig' %}
+
+{% block titre %}Create a new user{% endblock %}
+
+{% block content %}
+
+    <div class="ui page grid">
+        <div class="column">
+            <div class="row">
+
+                {{ form_start(form,{'attr': {'class': 'ui form'}}) }}
+
+                {{ form_row(form.username) }}
+
+                {{ form_rest(form) }}
+
+                <div class="ui red message">
+                    La relation entre un User et un Membre n'est pas prévue pour la realese 1.
+                </div>
+
+
+                <div class="ui field">
+                    <input type="submit" class="ui green button" value="Create" />
+                </div>
+
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
