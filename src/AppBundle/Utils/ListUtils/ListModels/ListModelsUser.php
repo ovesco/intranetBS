@@ -33,7 +33,7 @@ class ListModelsUser implements ListModelInterface
         }));
 
         $list->addColumn(new Column('Last connexion', function (User $user) use ($router) {
-            return $user->getLastConnexion()->format('d/m/Y');
+            return (is_null($user->getLastConnexion())? '-' : $user->getLastConnexion()->format('d/m/Y'));
         }));
 
         $list->addColumn(new Column('Actif', function (User $user) use ($router) {
@@ -43,7 +43,7 @@ class ListModelsUser implements ListModelInterface
             }
             else
             {
-                return '<div class="ui green label">non</div>';
+                return '<div class="ui red label">non</div>';
             }
         }));
         $list->addColumn(new Column('Roles', function (User $user) use ($router) {
@@ -51,7 +51,8 @@ class ListModelsUser implements ListModelInterface
             /** @var Role $role */
             foreach($user->getRoles() as $role)
             {
-                $roles = $roles.$role->getRole().'<br>';
+                $roles = $roles.$role.'<br>';
+                //$roles = $roles.$role->getRole().'<br>';
             }
             return $roles;
         }));

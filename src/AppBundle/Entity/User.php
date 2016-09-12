@@ -69,13 +69,16 @@ class User implements UserInterface, \Serializable
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
      *      )
+     *
+     * Cette nomenclature spécifique est nécaissaire pour éviter des conflits avec
+     * la methode getRoles imposée par le UserInterface
      */
-    private $roles;
+    private $savedRoles;
 
     /**
      * @var \Datetime
      *
-     * @ORM\Column(name="last_connexion", type="datetime")
+     * @ORM\Column(name="last_connexion", type="datetime", nullable=true)
      *
      * @Expose
      */
@@ -87,7 +90,7 @@ class User implements UserInterface, \Serializable
         $this->membre = null;
         $this->isActive = true;
         $this->salt 	= md5(uniqid(null, true));
-        $this->role 	= new ArrayCollection();
+        $this->savedRoles 	= new ArrayCollection();
     }
 
     /**
@@ -173,18 +176,32 @@ class User implements UserInterface, \Serializable
     public function hasRole($role) {
 
         foreach($this->getRoles() as $r)
-            if($r->getRole() == $role)
+            if($r->getRoles() == $role)
                 return true;
 
         return false;
     }
 
+
+
+
     /**
-     * Retourne les roles de l'utilisateur
+     * Fonction imposée par UserInterface
+     *
+     * Retourne les roles de l'utilisateur en cherchant dans l'arboressance des roles
+     * en fonction des roles sauvé pour cette utilisateur.
+     *
      */
     public function getRoles()
     {
-        $roles = $this->roles->toArray();
+        $roles = array();
+
+        /** @var Role $role */
+        foreach($this->savedRoles as $role)
+        {
+            $roles = array_merge($roles,$role->getChildsRecursive(true));
+        }
+
 
         //il est possible que le user ne soit pas lié a un membre
         if($this->hasMembre())
@@ -196,7 +213,19 @@ class User implements UserInterface, \Serializable
             }
         }
 
-        return $roles;
+        /*
+         * Conversion des roles en string car si on renvoie
+         * des objets, la classe RoleHierarchy de symfony fait
+         * merder qqch. Et après tout car marche très bien
+         * comme ca aussi ;-)
+         */
+        $rolesString = array();
+        foreach($roles as $role)
+        {
+            $rolesString[] = $role->getRole();
+        }
+
+        return $rolesString;
     }
     
     /**
@@ -230,24 +259,32 @@ class User implements UserInterface, \Serializable
     /**
      * Add roles
      *
-     * @param \AppBundle\Entity\Role roles
+     * @param \AppBundle\Entity\Role $role
      * @return User
      */
-    public function addRole(\AppBundle\Entity\Role $roles)
+    public function addSavedRole(\AppBundle\Entity\Role $role)
     {
 
-        $this->roles[] = $roles;
+        $this->savedRoles[] = $role;
         return $this;
     }
 
     /**
      * Remove roles
      *
-     * @param \AppBundle\Entity\Role roles
+     * @param \AppBundle\Entity\Role $role
      */
-    public function removeRole(\AppBundle\Entity\Role $roles)
+    public function removeSavedRole(\AppBundle\Entity\Role $role)
     {
-        $this->roles->removeElement($roles);
+        $this->savedRoles->removeElement($role);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getRolesEntity()
+    {
+        return $this->savedRoles;
     }
 
     /**
@@ -259,6 +296,17 @@ class User implements UserInterface, \Serializable
     {
         return $this->id;
     }
+
+    /**
+     * Is isActive
+     *
+     * @return boolean
+     */
+    public function isActive()
+    {
+        return $this->isActive;
+    }
+
 
     /**
      * Get isActive
@@ -304,5 +352,12 @@ class User implements UserInterface, \Serializable
         $this->lastConnexion = $lastConnexion;
 
         return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getSavedRoles(){
+        return $this->savedRoles;
     }
 }

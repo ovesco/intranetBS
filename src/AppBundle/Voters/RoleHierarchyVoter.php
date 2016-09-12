@@ -7,25 +7,29 @@ use Symfony\Component\Security\Core\Authorization\Voter\RoleVoter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Doctrine\ORM\EntityManager;
 
-class RoleHierarchyVoter extends RoleVoter {
+class RoleHierarchyVoter extends RoleVoter
+{
 
     private $em;
     private $session;
-    private static $sessionAttribute    = 'user-roles-hierarchies';
+    private static $sessionAttribute = 'user-roles-hierarchies';
     private static $expirationAttribute = 'user-roles-token';
-    private static $expirationTime      = 300;
+    private static $expirationTime = 300;
 
-    public function __construct(EntityManager $em, Session $session) {
+    public function __construct(EntityManager $em, Session $session)
+    {
 
         $this->em = $em;
         $this->session = $session;
 
         parent::__construct();
     }
+
     /**
      * {@inheritdoc}
      */
-    protected function extractRoles(TokenInterface $token) {
+    protected function extractRoles(TokenInterface $token)
+    {
 
         /*
          * L'utilisateur peut avoir une pétée de roles
@@ -35,9 +39,10 @@ class RoleHierarchyVoter extends RoleVoter {
          */
         $session = $this->session;
 
-        if(!$session->has(self::$sessionAttribute)
+        if (!$session->has(self::$sessionAttribute)
             || ($session->get(self::$sessionAttribute) == null)
-            || !($session->get(self::$expirationAttribute) > new \Datetime('now'))) {
+            || !($session->get(self::$expirationAttribute) > new \Datetime('now'))
+        ) {
 
 
             /*
@@ -61,11 +66,12 @@ class RoleHierarchyVoter extends RoleVoter {
      * @param array $roles
      * @return array
      */
-    public function fetchRoles($roles) {
+    public function fetchRoles($roles)
+    {
 
         $corrects = array();
 
-        foreach($roles as $role)
+        foreach ($roles as $role)
             $corrects = array_merge($corrects, $role->getEnfantsRecursive(true));
 
 
@@ -77,12 +83,13 @@ class RoleHierarchyVoter extends RoleVoter {
      * @param array $roles
      * @return array
      */
-    private static function removeDoublons(array $roles) {
+    private static function removeDoublons(array $roles)
+    {
 
         $returned = array();
 
-        foreach($roles as $r)
-            if(!in_array($r, $returned))
+        foreach ($roles as $r)
+            if (!in_array($r, $returned))
                 $returned[] = $r;
 
         return $returned;

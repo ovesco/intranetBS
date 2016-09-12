@@ -6,6 +6,7 @@ use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Form\User\UserType;
 
 /* Annotation */
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -15,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 
 /**
- * @Route("/interne/user")
+ * @Route("/intranet/admin/user")
  * @package AppBundle\Controller
  */
 class UserController extends Controller
@@ -45,6 +46,52 @@ class UserController extends Controller
     public function showAction(Request $request, User $user)
     {
         return array('user'=>$user);
+    }
+
+    /**
+     * @param Request $request
+     * @Route("/create")
+     * @Template("AppBundle:User:page_create.html.twig")
+     * @return Response
+     */
+    public function createAction(Request $request){
+
+        $user = new User();
+        $userForm = $this->createForm(new UserType(),$user);
+
+        $userForm->handleRequest($request);
+
+        if($userForm->isValid())
+        {
+            $this->get('handler.user')->persist($user);
+            return $this->redirect($this->generateUrl('app_user_list'));
+        }
+
+        return array('form'=>$userForm->createView());
+
+    }
+
+    /**
+     * @param Request $request
+     * @Route("/edit/{user}")
+     * @Template("AppBundle:User:page_edit.html.twig")
+     * @return Response
+     * @ParamConverter("user", class="AppBundle:User")
+     */
+    public function editAction(Request $request, User $user){
+
+        $userForm = $this->createForm(new UserType(),$user);
+
+        $userForm->handleRequest($request);
+
+        if($userForm->isValid())
+        {
+            $this->get('handler.user')->persist($user);
+            return $this->redirect($this->generateUrl('app_user_list'));
+        }
+
+        return array('form'=>$userForm->createView());
+
     }
 
 }

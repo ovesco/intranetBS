@@ -17,18 +17,20 @@ security:
                 login_path: /login
                 check_path: /login_check
                 default_target_path: /intranet
-
             logout:
                 path:   /logout
                 target: /login
 
 
+    # Attention: mettre les access controle les plus restrictif en haut
     access_control:
-        #acces general à n'importe quelle pages de l'app
-        - { path: ^/intranet, roles: ROLE_ACCESS_APP }
-
+        #acces à la partie admin de l'application
+        - { path: ^/intranet/admin, roles: ROLE_ADMIN}
         #acces à la partie finances de l'application
         - { path: ^/intranet/payement, roles: ROLE_PAYEMENT }
         - { path: ^/intranet/creance, roles: ROLE_CREANCE }
         - { path: ^/intranet/facture, roles: ROLE_FACTURE }
         - { path: ^/intranet/rappel, roles: ROLE_RAPPEL }
+        #acces general à n'importe quelle pages de l'app
+        - { path: ^/intranet, roles: ROLE_USER }
+

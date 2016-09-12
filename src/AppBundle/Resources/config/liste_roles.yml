@@ -4,7 +4,7 @@ parameters:
             name: "role administrateur"
             description: "Ce droit fournit tous les accès possibles sur l'application"
             childs:
-                ROLE_ACCESS_APP:
+                ROLE_USER:
                     name: "role accès à l'application"
                     description: "Permet l'accès à l'application, sans ce rôle aucune page n'est accessible"
                 ROLE_FINANCE:

@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use AppBundle\Entity\User;
-
+use AppBundle\Entity\Role;
 
 /**
  * Class UserCommand
@@ -39,7 +39,7 @@ class UserCommand extends ContainerAwareCommand
             ->addArgument(
                 'action',
                 InputArgument::REQUIRED,
-                'The actino to do: create or delete'
+                'The actino to do: create/delete/infos'
             )
             ->addArgument(
                 'username',
@@ -71,6 +71,10 @@ class UserCommand extends ContainerAwareCommand
             case 'delete':
                 $this->deleteUser($em,$input->getArgument('username'));
                 break;
+            case 'infos':
+                $this->infosUser($em,$input->getArgument('username'));
+                break;
+
         }
 
     }
@@ -108,6 +112,28 @@ class UserCommand extends ContainerAwareCommand
         $this->customOutput->info("User removed.")->writeln();
     }
 
+    /**
+     * Cette fonction est déstinée à retourner les infos de l'user
+     * à completer au fur et mesures des besoins.
+     *
+     * @param \Doctrine\ORM\EntityManager $em
+     * @param $username
+     */
+    private function infosUser($em,$username){
+
+        /** @var User $user */
+        $user = $em->getRepository('AppBundle:User')->findOneBy(array('username'=>$username));
+
+        dump($user);
+
+        /** @var Role $role */
+        foreach($user->getRoles() as $role)
+        {
+            //$this->customOutput->info($role->getRole())->writeln();
+            $this->customOutput->info($role)->writeln();
+        }
+
+    }
 
 
 }

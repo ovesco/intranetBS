@@ -49,9 +49,18 @@ class EntityHandler {
         return $this->repository->findBy(array('id'=>$idsArray));
     }
 
+    /**
+     * @return array
+     */
     public function getAll()
     {
         return $this->repository->findAll();
+    }
+
+    public function persist($entity)
+    {
+        $this->em->persist($entity);
+        $this->em->flush();
     }
 
 

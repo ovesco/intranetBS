@@ -42,7 +42,7 @@ class Mode{
  *
  * verbosity: VERBOSITY_DEBUG > VERBOSITY_VERY_VERBOSE > VERBOSITY_VERBOSE > VERBOSITY_NORMAL
  *
- * todo: aller lire : http://symfony.com/blog/new-in-symfony-2-8-console-style-guide
+ * pour infos aller lire : http://symfony.com/blog/new-in-symfony-2-8-console-style-guide
  *
  *
  * Class ConsoleOutput
