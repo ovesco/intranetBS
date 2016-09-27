@@ -64,9 +64,9 @@ class GroupeController extends Controller
      * @return Response PDF of the group members
      *
      * @ParamConverter("groupe", class="AppBundle:Groupe")
-     * @Route("/pdf/{groupe}", options={"expose"=true})
+     * @Route("/export-pdf/{groupe}", options={"expose"=true})
      */
-    public function pdfAction($groupe)
+    public function exportPdfAction($groupe)
     {
 
         $html = $this->renderView('@App/Groupe/pdf.html.twig', array(
@@ -103,6 +103,85 @@ class GroupeController extends Controller
             )
         );
     }
+
+    /**
+     * @param $groupe Groupe le groupe
+     * @return Response Excel of the group members
+     *
+     * @ParamConverter("groupe", class="AppBundle:Groupe")
+     * @Route("/export-excel/{groupe}", options={"expose"=true})
+     */
+    public function exportExcelAction($groupe)
+    {
+
+
+    }
+
+
+    /**
+     * @param $groupe Groupe le groupe
+     * @return Response Excel of the group members
+     *
+     * @ParamConverter("groupe", class="AppBundle:Groupe")
+     * @Route("/export-etiquettes/{groupe}", options={"expose"=true})
+     */
+    public function exportEtiquettesAction($groupe)
+    {
+        $html = $this->renderView('@App/Groupe/etiquettes.html.twig', array(
+                'group' => $groupe,
+                'page_height' => 297,
+                'page_width' => 210,
+                'cell_vertical_count' => 10,
+                'cell_horizontal_count' => 4,
+            )
+        );
+
+        //return new Response($html);
+
+        $snappy = $this->get('knp_snappy.pdf');
+
+        $pdf = $snappy->getOutputFromHtml($html, array(
+            'enable-javascript' => true,
+            'javascript-delay' => 1000,
+            'no-stop-slow-scripts' => true,
+            'no-background' => false,
+            'lowquality' => false,
+            'encoding' => 'UTF-8',
+            'images' => true,
+            'cookie' => array(),
+            'dpi' => 300,
+            'image-dpi' => 300,
+            'enable-external-links' => true,
+            'enable-internal-links' => true,
+            'margin-top' => 0,
+            'margin-right' => 0,
+            'margin-bottom' => 0,
+            'margin-left' => 0,
+        ));
+
+        return new Response($pdf, 200,
+            array(
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="' . $groupe->getNom() . '.pdf"'
+            )
+        );
+
+    }
+
+
+    /**
+     * @param $groupe Groupe le groupe
+     * @return Response Excel of the group members in REGA format
+     *
+     * @ParamConverter("groupe", class="AppBundle:Groupe")
+     * @Route("/export-rega/{groupe}", options={"expose"=true})
+     */
+    public function exportRegaAction($groupe)
+    {
+
+
+    }
+
 
     /**
      * @Route("/edit/{groupe}", options={"expose"=true})

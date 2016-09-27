@@ -9,15 +9,25 @@
         <base href="http://{{ app.request.host }}">
         <meta charset="UTF-8">
 
+        <style>
+            {% block css %}
+            {% endblock %}
+        </style>
+
     {% endblock %}
 </head>
+
 <body>
 {% block header %}
     <p>Brigade de Sauvabelin</p>
 {% endblock %}
 
 {% block content %}
-
 {% endblock %}
 </body>
+
+
+{% block js %}
+    {% endblock %}
+
 </html>

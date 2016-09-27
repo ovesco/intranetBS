@@ -1,0 +1,73 @@
+{% extends "@App/Layout/pdf.html.twig" %}
+
+{% block titre %}
+    {{ group.nom }}
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% if cell_horizontal_count == 1 %}
+    {% set width = "sixteen" %}
+{% elseif cell_horizontal_count == 2 %}
+    {% set width = "eight" %}
+{% elseif cell_horizontal_count == 3 %}
+    {% set width = "five" %}
+{% elseif cell_horizontal_count == 4 %}
+    {% set width = "four" %}
+{% elseif cell_horizontal_count == 5 %}
+    {% set width = "three" %}
+{% else %}
+    {% set width = "four" %}
+{% endif %}
+
+{% block content %}
+
+
+    {% set effectifs = group.members %}
+
+    {% for subGroup in group.enfants %}
+        {% set effectifs = effectifs|merge(subGroup.members) %}
+    {% endfor %}
+
+    <div class="ui middle aligned grid">
+
+        {% for member in effectifs %}
+
+            <div class="{{ width }} wide column etiquette">
+                <p>
+                    Aux parents de<br/>
+                    {{ member.prenom }} {{ member.nom }}<br/>
+                    {{ member.Contact.Adresse.Rue }}<br/>
+                    <b>{{ member.Contact.Adresse.Npa }} {{ member.Contact.Adresse.Localite }}</b>
+                </p>
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+{% endblock %}
+
+
+{% block css %}
+    .etiquette {
+    height: {{ page_height / cell_vertical_count / 10 }}cm;
+    }
+
+    .etiquette p {
+    margin: 0.5cm;
+    }
+
+    body {
+    border-style: double;
+    margin: 0;
+    }
+{% endblock %}
+
+
+{% block js %}
+
+
+{% endblock %}
+

@@ -91,16 +91,16 @@
 
                 <div class="ui bottom attached segment">
                     <div class="ui secondary vertical fluid menu">
-                        <a class="item">
+                        <a class="item" href="{{ path('app_groupe_exportpdf', {groupe: groupe.id}) }}">
                             <i class="file pdf outline icon"></i>PDF
                         </a>
-                        <a class="item">
+                        <a class="item" href="{{ path('app_groupe_exportexcel', {groupe: groupe.id}) }}">
                             <i class="file excel outline icon"></i>Excel
                         </a>
-                        <a class="item">
+                        <a class="item" href="{{ path('app_groupe_exportetiquettes', {groupe: groupe.id}) }}">
                             <i class="grid layout icon"></i>Étiquettes
                         </a>
-                        <a class="item">
+                        <a class="item" href="{{ path('app_groupe_exportrega', {groupe: groupe.id}) }}">
                             <i class="list layout icon"></i>Liste REGA
                         </a>
                     </div>
