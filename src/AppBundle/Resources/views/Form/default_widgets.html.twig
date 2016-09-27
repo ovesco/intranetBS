@@ -1,9 +1,25 @@
+{#
+Ici on mmet tous les template des formulaires standard.
+Ca concerne principalement les formulaires généré dans les modales.
+Les forms des memebres sont traités par les templates xeditables
+#}
+
+
+{% block form_row %}
+    <div class="ui grid middle aligned field">
+        <div class="six wide column">{{ form_label(form) }} :</div>
+        <div class="ten wide column">
+            {{ form_widget(form) }}
+            {{ form_errors(form) }}
+        </div>
+    </div>
+{% endblock form_row %}
+
+
 {# simple widget #}
 {% block form_widget_simple -%}
-    <div class="field">
-        {%- set type = type|default('text') -%}
-        <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
-    </div>
+    {%- set type = type|default('text') -%}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
 {%- endblock form_widget_simple %}
 
 
@@ -15,9 +31,7 @@
 
     {% if not multiple %}
 
-    <div class="field">
-        {{ block('form_label') }}
-        <select class="ui dropdown" {{ block('widget_attributes') }}>
+        <select class="ui fluid search dropdown" {{ block('widget_attributes') }}>
             {% if empty_value is not none -%}
                 <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ empty_value|trans({}, translation_domain) }}</option>
             {%- endif %}
@@ -31,30 +45,25 @@
             {% set options = choices -%}
             {{- block('choice_widget_options') -}}
         </select>
-    </div>
 
     {%  else  %}
-        <div class="field">
-            {{ block('form_label') }}
-            <select multiple {{ block('widget_attributes') }}>
-                {% if empty_value is not none -%}
-                    <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ empty_value|trans({}, translation_domain) }}</option>
-                {%- endif %}
-                {%- if preferred_choices|length > 0 -%}
-                    {% set options = preferred_choices %}
-                    {{- block('choice_widget_options') -}}
-                    {% if choices|length > 0 and separator is not none -%}
-                        <option disabled="disabled">{{ separator }}</option>
-                    {%- endif %}
-                {%- endif -%}
-                {% set options = choices -%}
-                {{- block('choice_widget_options') -}}
-            </select>
-        </div>
 
+        <select multiple {{ block('widget_attributes') }}>
+            {% if empty_value is not none -%}
+                <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ empty_value|trans({}, translation_domain) }}</option>
+            {%- endif %}
+            {%- if preferred_choices|length > 0 -%}
+                {% set options = preferred_choices %}
+                {{- block('choice_widget_options') -}}
+                {% if choices|length > 0 and separator is not none -%}
+                    <option disabled="disabled">{{ separator }}</option>
+                {%- endif %}
+            {%- endif -%}
+            {% set options = choices -%}
+            {{- block('choice_widget_options') -}}
+        </select>
 
     {% endif %}
-
 
 {%- endblock choice_widget %}
 
@@ -78,10 +87,7 @@
 
 {# textarea #}
 {% block textarea_widget -%}
-    <div class="field">
-        {{ block('form_label') }}
-        <textarea {{ block('widget_attributes') }}>{% if value is not empty %}{{ value }}{% endif %}</textarea>
-    </div>
+    <textarea {{ block('widget_attributes') }}>{% if value is not empty %}{{ value }}{% endif %}</textarea>
 {%- endblock textarea_widget %}
 
 {# checkbox #}

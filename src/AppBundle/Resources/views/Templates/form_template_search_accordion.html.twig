@@ -1,3 +1,5 @@
+{# TODO NUR de CMR : toujours utilisé ça ? Je pense que ça devait être pour la recherche de factures. Le mieux serait de pouvoir utiliser les mêmes templates #}
+
 {% block form_widget %}
     {% spaceless %}
         {% if compound %}
@@ -47,10 +49,12 @@
 
 {# SINGLE ROW #}
 {% block form_row -%}
+    {#
     <div class="title">
         <i class="dropdown icon"></i>
         {{- form_label(form) -}}
     </div>
+    #}
     <div class="content">
         <div class="field">
             {{- form_widget(form) -}} {# Recursive call #}

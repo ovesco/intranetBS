@@ -1,3 +1,8 @@
+{#
+ Template générique qui permet de mettre en forme toutes les listes.
+ Le template utilise un objet 'list' qui défini les colonnes et les templates de contenu
+ #}
+
 <div class="data-list" data-name="{{ list.name }}" data-url="{{ list.url }}">
 
     {% if list.hasToolbar %}
