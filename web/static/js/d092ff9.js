@@ -35,6 +35,37 @@ $('.listing-table tbody').on( 'click', 'tr', function () {
     $('.listing-update-' + token).text(number);
 } );
 
+$('#add_attribution').click(function() {
+    var table = tables[$(this).parents('.listing-container').attr("data-token")];
+
+    var rows  = table.rows('.selected').nodes(),
+        ids   = [];
+
+    $(rows).each(function(i, obj) {
+        ids.push($(obj).attr("data-id"));
+    });
+
+    var idMembres = { idMembre: ids };
+    getModal(idMembres, Routing.generate('attribution_get_modal'));
+});
+
+
+$('#add_distinction').click(function() {
+    var table = $(this).parent('.listing-container').children('.listing-table')
+
+    var rows  = table.rows('.selected').nodes(),
+        ids   = [];
+
+    $(rows).each(function(i, obj) {
+
+        ids.push($(obj).attr("data-id"));
+    });
+
+    var idMembres = { idMembre: ids };
+    getModal(idMembres, Routing.generate('date-distinction_get_modal'));
+});
+
+
 
 /**
  * cette fonction est appelée lorsqu'on veut supprimer un ou plusieurs éléments de la liste
@@ -68,9 +99,7 @@ function copyElementsBySelector(btn) {
 }
 
 /**
- * permet de créer une nouvelle liste dynamique. La fonction peut être appelée de deux manière différentes :
- * - sans trigger elle ouvrira la modale
- * - avec trigger elle ajoutera la liste
+ * permet de créer une nouvelle liste dynamique
  * @param trigger boolean
  */
 function addListe(trigger) {
@@ -84,3 +113,4 @@ function addListe(trigger) {
         setTimeout(function(){ alert("Liste ajoutée, la page va s'actualiser"); location.reload();}, 1000);
     }
 }
+

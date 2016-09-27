@@ -32,5 +32,5 @@ security:
         - { path: ^/intranet/facture, roles: ROLE_FACTURE }
         - { path: ^/intranet/rappel, roles: ROLE_RAPPEL }
         #acces general à n'importe quelle pages de l'app
-        - { path: ^/intranet, roles: ROLE_USER }
+        - { path: ^/intranet, roles: ROLE_ADMIN }
 

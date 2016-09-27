@@ -42,7 +42,8 @@
         "gedmo/doctrine-extensions": "dev-master",
         "interne/seancebundle": "dev-master",
         "ensepar/html2pdf-bundle": "^2.0",
-        "vitalets/x-editable": "dev-master"
+        "vitalets/x-editable": "dev-master",
+        "emanueleminotto/twig-cache-bundle": "^1.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

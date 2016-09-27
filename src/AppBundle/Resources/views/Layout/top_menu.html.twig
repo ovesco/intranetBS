@@ -16,6 +16,7 @@
 
             <div class="item">
 
+                {% cache 'twig.layout.magic_top_menu' {time: 0} %}
                 <div id="menu_search" class="ui input search">
                         <input class="prompt" type="text" placeholder="Quick menu...">
                     <div class="results"></div>
@@ -26,6 +27,7 @@
                         });
                     </script>
                 </div>
+                {% endcache %}
             </div>
 
         </div>

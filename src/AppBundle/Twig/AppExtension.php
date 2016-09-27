@@ -7,6 +7,7 @@ use AppBundle\Entity\Membre;
 use AppBundle\Entity\Mere;
 use AppBundle\Entity\Pere;
 use AppBundle\Entity\Personne;
+use AppBundle\Twig\Loader\StringLoader;
 use ReflectionClass;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -21,7 +22,7 @@ use Symfony\Component\Filesystem\Filesystem;
 class AppExtension extends \Twig_Extension
 {
     /** @var \Twig_Environment null */
-    private $environment = null;
+    private $environment    = null;
 
     /**
      * Returns the name of the extension.
@@ -134,8 +135,8 @@ class AppExtension extends \Twig_Extension
      */
     public function apply_filters(\Twig_Environment $env, $context = array(), $value, $filters)
     {
-
         $fs = new Filesystem();
+
 
         //set the needed path
         $template_dir_path = $env->getCache() . '/apply_filter';

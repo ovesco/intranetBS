@@ -12,7 +12,6 @@
         <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700,300&subset=latin,vietnamese' rel='stylesheet' type='text/css'>
         #}
 
-
         {% stylesheets
         '@AppBundle/Resources/public/css/Layout/*'
         '@AppBundle/Resources/public/css/Editable/*'
@@ -29,7 +28,6 @@
 
         {% block headjs %}{% endblock %}
 
-
         {# include semantic files (js,css,icon and fonts #}
         {% include 'AppBundle:Layout:load_semantic.html.twig' %}
 
@@ -39,7 +37,9 @@
 
     <body class="pusher">
 
+        {% cache 'twig.layout.main_menu' {time: 0} %}
         {{ render(controller('AppBundle:Layout:mainMenuGenerate')) }}
+        {% endcache %}
 
         {% include 'AppBundle:Layout:top_menu.html.twig' %}
 
@@ -76,10 +76,10 @@
 
 
 
+
         {# fos js routing bundle #}
         <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
         <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
-
 
         {% javascripts
         '@AppBundle/Resources/public/js/ExternalLib/*'

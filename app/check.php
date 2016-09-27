@@ -79,7 +79,7 @@ function get_error_message(Requirement $requirement, $lineSize)
         return;
     }
 
-    $errorMessage = wordwrap($requirement->getTestMessage(), $lineSize - 3, PHP_EOL . '   ') . PHP_EOL;
+    $errorMessage = wordwrap($requirement->getTestMessage(), $lineSize - 3, PHP_EOL.'   ').PHP_EOL;
     $errorMessage .= '   > '.wordwrap($requirement->getHelpText(), $lineSize - 5, PHP_EOL.'   > ').PHP_EOL;
 
     return $errorMessage;
@@ -121,7 +121,7 @@ function echo_block($style, $title, $message)
 
     echo_style($style, str_repeat(' ', $width));
     echo PHP_EOL;
-    echo_style($style, str_pad(' [' . $title . ']', $width, ' ', STR_PAD_RIGHT));
+    echo_style($style, str_pad(' ['.$title.']', $width, ' ', STR_PAD_RIGHT));
     echo PHP_EOL;
     echo_style($style, $message);
     echo PHP_EOL;

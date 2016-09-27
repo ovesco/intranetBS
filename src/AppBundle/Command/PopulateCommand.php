@@ -405,7 +405,7 @@ class PopulateCommand extends ContainerAwareCommand
 
         $adresse->setExpediable( (mt_rand(0,1) == 0) ? true : false );
         $adresse->setLocalite($faker->city);
-        $adresse->setNpa($faker->postcode);
+        $adresse->setNpa(substr($faker->postcode, 0, 4));
         $adresse->setRue($faker->streetName . ' ' . $faker->randomDigitNotNull);
         $adresse->setRemarques($this->getText(100,true));
 

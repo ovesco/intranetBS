@@ -51,7 +51,7 @@ twig:
 
 # Assetic Configuration
 assetic:
-    debug:          "%kernel.debug%"
+    debug:          false #"%kernel.debug%"
     use_controller: false
     bundles:
         - AppBundle
@@ -141,3 +141,6 @@ fos_rest:
 #
 sensio_framework_extra:
     request: { converters: true }
+
+twig_cache:
+    service: cache

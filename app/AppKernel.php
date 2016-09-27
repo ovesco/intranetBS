@@ -35,6 +35,7 @@ class AppKernel extends Kernel
             new FOS\ElasticaBundle\FOSElasticaBundle(),//Elasitca
             new FOS\RestBundle\FOSRestBundle(),//Pour les applications REST
             new Knp\Bundle\SnappyBundle\KnpSnappyBundle(), // pour les PDF
+            new \EmanueleMinotto\TwigCacheBundle\TwigCacheBundle(), //Twig cache tag
 
             new AppBundle\AppBundle(),
             //new Interne\OrganisationBundle\InterneOrganisationBundle(),

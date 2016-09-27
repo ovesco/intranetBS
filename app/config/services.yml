@@ -12,6 +12,10 @@ services:
     #    arguments:
     #        - @doctrine.orm.entity_manager
 
+    cache:
+        class: AppBundle\Utils\Cache\FileSystemCache
+        arguments:
+            - "%kernel.cache_dir%"
 
     jsonParser:
         class: AppBundle\Utils\Data\JsonParser

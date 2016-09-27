@@ -28,8 +28,8 @@ $symfonyRequirements = new SymfonyRequirements();
 
 $majorProblems = $symfonyRequirements->getFailedRequirements();
 $minorProblems = $symfonyRequirements->getFailedRecommendations();
-$hasMajorProblems = (bool)count($majorProblems);
-$hasMinorProblems = (bool)count($minorProblems);
+$hasMajorProblems = (bool) count($majorProblems);
+$hasMinorProblems = (bool) count($minorProblems);
 
 ?>
 <!DOCTYPE html>
@@ -175,8 +175,7 @@ $hasMinorProblems = (bool)count($minorProblems);
                         <?php if ($hasMinorProblems): ?>
                             <h2>Recommendations</h2>
                             <p>
-                                <?php if ($hasMajorProblems): ?>Additionally, to<?php else: ?>To<?php endif; ?> enhance
-                                your Symfony experience,
+                                <?php if ($hasMajorProblems): ?>Additionally, to<?php else: ?>To<?php endif; ?> enhance your Symfony experience,
                                 it’s recommended that you fix the following:
                             </p>
                             <ol>
@@ -199,8 +198,7 @@ $hasMinorProblems = (bool)count($minorProblems);
                         <?php endif; ?>
 
                         <?php if (!$hasMajorProblems && !$hasMinorProblems): ?>
-                            <p class="ok">All checks passed successfully. Your system is ready to run Symfony
-                                applications.</p>
+                            <p class="ok">All checks passed successfully. Your system is ready to run Symfony applications.</p>
                         <?php endif; ?>
 
                         <ul class="symfony-install-continue">

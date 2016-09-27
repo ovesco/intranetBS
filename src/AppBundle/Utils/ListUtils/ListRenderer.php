@@ -188,6 +188,7 @@ class ListRenderer
     public function addColumn(Column $col)
     {
         $this->columns->add($col);
+        return $this;
     }
 
     public function addActionLine(ActionLine $action)
