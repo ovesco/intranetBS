@@ -30,7 +30,7 @@
         {% set effectifs = effectifs|merge(subGroup.members) %}
     {% endfor %}
 
-    <div class="ui middle aligned grid">
+    <div class="ui grid">
 
         {% for member in effectifs %}
 
@@ -52,16 +52,27 @@
 
 {% block css %}
     .etiquette {
-    height: {{ page_height / cell_vertical_count / 10 }}cm;
+    height: {{ corrected_page_height / cell_vertical_count }}cm;
+    //border-style: double;
+    }
+
+    .ui.grid {
+    margin: 0;
     }
 
     .etiquette p {
     margin: 0.5cm;
+    font-size: {{ font_size }}em;
     }
 
     body {
-    border-style: double;
+    //border-style: double;
+    //border-color: red;
     margin: 0;
+    padding: 0;
+
+    height: {{ corrected_page_height }}cm;
+    width: {{ corrected_page_width }}cm;
     }
 {% endblock %}
 

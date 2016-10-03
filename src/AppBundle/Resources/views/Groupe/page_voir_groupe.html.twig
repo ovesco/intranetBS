@@ -97,7 +97,8 @@
                         <a class="item" href="{{ path('app_groupe_exportexcel', {groupe: groupe.id}) }}">
                             <i class="file excel outline icon"></i>Excel
                         </a>
-                        <a class="item" href="{{ path('app_groupe_exportetiquettes', {groupe: groupe.id}) }}">
+                        <a class="item"
+                           href="{{ path('app_groupe_exportetiquettes', {groupe: groupe.id, rowCount: 8, colCount: 4, fontSize: 100}) }}">
                             <i class="grid layout icon"></i>Étiquettes
                         </a>
                         <a class="item" href="{{ path('app_groupe_exportrega', {groupe: groupe.id}) }}">
