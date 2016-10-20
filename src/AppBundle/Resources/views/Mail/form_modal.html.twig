@@ -18,14 +18,12 @@
 {% endblock %}
 
 
-{% block script %}
+{% block js %}
+    {{ parent() }}
     <script>
         //to activate the dropdown field in the form
         $('.ui.dropdown').dropdown();
     </script>
 {% endblock %}
-
-
-
 
 

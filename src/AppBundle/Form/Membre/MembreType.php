@@ -8,8 +8,10 @@ use AppBundle\Form\Attribution\AttributionType;
 use AppBundle\Form\Famille\FamilleType;
 use AppBundle\Form\ObtentionDistinction\ObtentionDistinctionType;
 use AppBundle\Form\Personne\PersonneType;
+use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -26,7 +28,11 @@ class MembreType extends PersonneType
             ->add('famille', FamilleType::class)
             ->add('attributions', CollectionType::class, array('entry_type' => AttributionType::class))
             ->add('distinctions', CollectionType::class, array('entry_type' => ObtentionDistinctionType::class))
-            ->add('naissance', DatePickerType::class, array('label' => 'Date de naissance'))
+            ->add('naissance', BirthdayType::class, array(
+                'label' => 'Date de naissance',
+                'widget' => 'single_text',
+                'format' => 'dd.MM.yyyy'
+            ))
             ->add('numeroAvs', NumberType::class,
                 array(
                     'label' => 'Numéro AVS',
@@ -58,9 +64,10 @@ class MembreType extends PersonneType
                     'choices_as_values' => true
                 )
             )
-            ->add('inscription', DatePickerType::class,
-                array('label' => 'Inscription')
-            )
+            ->add('inscription', DateType::class, array(
+                'label' => 'Inscription',
+                'widget' => 'single_text',
+            ))
             ->add('statut', TextType::class, array('label' => 'Statut'))
             ->add('id', HiddenType::class);
     }

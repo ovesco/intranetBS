@@ -1,6 +1,5 @@
 {% extends "AppBundle:Layout:layout.html.twig" %}
 
-
 {% block titre %}Saisie de payement{% endblock %}
 
 {% block content %}
@@ -10,28 +9,17 @@
             <div class="eight wide column">
 
                 <div class="ui segment">
-
                     {% include  "AppBundle:Payement:addForm.html.twig" with {'formMultiple': formMultiple} %}
-
                 </div>
-
-
             </div>
 
             <div class="eight wide column">
-
                 <div class="ui segment">
-
                     {% include  "AppBundle:Payement:uploadFileForm.html.twig" with {'formUpload': formUpload} %}
-
                 </div>
-
-
             </div>
 
         </div>
     </div>
-
-
 
 {% endblock %}

@@ -3,35 +3,26 @@
     <head>
         <meta charset="utf-8">
         <title>{% block titre %}{% endblock %}</title>
-        <meta name="description" content="Outil de gestion de groupe scout développé par la Brigade de Sauvabelin">
+        <meta name="description"
+              content="Outil de gestion de groupe scout développé par les thugs de la Brigade de Sauvabelin">
         <meta name=viewport content="width=device-width, initial-scale=1">
         <meta name="mobile-web-app-capable" content="yes">
 
-        {#
-        <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/css/jquery-editable.css" rel="stylesheet"/>
-        <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700,300&subset=latin,vietnamese' rel='stylesheet' type='text/css'>
-        #}
 
-        {% stylesheets
-        '@AppBundle/Resources/public/css/Layout/*'
-        '@AppBundle/Resources/public/css/Editable/*'
-        output='css/layout.css' %}
-            <link rel="stylesheet" href="{{ asset_url }}" />
-        {% endstylesheets %}
+        {% block css %}
 
-        {% javascripts
-        '@AppBundle/Resources/public/js/LayoutHead/*'
-        output="js/layout_head.js"
-        %}
-        <script src="{{ asset_url }}"></script>
-        {% endjavascripts %}
+            <link rel="stylesheet" href="{{ asset('assets/vendor/semantic/dist/semantic.min.css') }}"/>
+            <link rel="stylesheet"
+                  href="{{ asset('assets/vendor/x-editable/dist/jquery-editable/css/jquery-editable.css') }}"/>
 
-        {% block headjs %}{% endblock %}
+            <link rel="stylesheet" href="{{ asset('bundles/app/css/Layout/layout.css') }}"/>
+            <link rel="stylesheet" href="{{ asset('bundles/app/css/bs.css') }}"/>
 
-        {# include semantic files (js,css,icon and fonts #}
-        {% include 'AppBundle:Layout:load_semantic.html.twig' %}
+            {#<link rel="stylesheet" href="{{ asset('assets/vendor/semantic/dist/themes/basic/assets/fonts/icons.ttf') }}" />#}
+            {#<link rel="stylesheet" href="{{ asset('assets/vendor/semantic/dist/themes/basic/assets/fonts/icons.woff') }}" />#}
+            {#<link rel="stylesheet" href="{{ asset('assets/vendor/semantic/dist/themes/default/assets/fonts/icons.woff2') }}" />#}
 
-        {% block css %}{% endblock %}
+        {% endblock %}
 
     </head>
 
@@ -43,17 +34,13 @@
 
         {% include 'AppBundle:Layout:top_menu.html.twig' %}
 
-
-            <div id="main-container">
-                {% block content %}{% endblock %}
-            </div>
-            <div id="server-data" data-client="{% if clientData is defined %}{{ clientData }}{% endif %}"></div>
-
+        <div id="main-container">
+            {% block content %}{% endblock %}
+        </div>
+        <div id="server-data" data-client="{% if clientData is defined %}{{ clientData }}{% endif %}"></div>
 
         {#
             LISTING
-            =======
-
             On définit le container, car il nous permettra ensuite de modifier le menu
             de manière dynamique à chaque fois qu'on souhaite accéder au listing
         #}
@@ -65,48 +52,52 @@
 
              <div id="popup-menu-container"></div>
         #}
-
-
         {% include 'AppBundle:Listing:modal_add_listing.html.twig' %}
-
-        {#
-        <!-- on ajoute aussi un container qui contiendra les modales génerées dynamiquement -->
-        <div id="dynamic-modal-container"></div>
-        #}
-
-
-
-
-        {# fos js routing bundle #}
-        <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
-        <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
-
-        {% javascripts
-        '@AppBundle/Resources/public/js/ExternalLib/*'
-        '@AppBundle/Resources/public/js/Layout/*'
-        output="js/layout.js"
-        %}
-        <script src="{{ asset_url }}"></script>
-        {% endjavascripts %}
-
-
-        <script type="text/javascript">
-            {#
-             * Pour chaque flashbag contenu, sachant qu'ils ne contiennent
-             * que des alertes et des messages, on génère
-             * une alerte correspondante
-             #}
-            $(document).ready(function(){
-                {% for label, flashes in app.session.flashbag.all %}
-                    {% for flash in flashes %}
-                        alerte.send("{{ flash }}", "{{ label }}");
-                    {% endfor %}
-                {% endfor %}
-            });
-        </script>
 
 
         {# javascript en fin de page #}
-        {% block js %}{% endblock %}
+        {% block js %}
+            <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+            <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+
+            <script src="{{ asset('assets/vendor/moment/moment.js') }}"></script>
+            <script src="{{ asset('assets/vendor/moment/locale/fr-ch.js') }}"></script>
+
+            <script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
+            <script src="{{ asset('assets/vendor/semantic/dist/semantic.min.js') }}"></script>
+            <script src="{{ asset('assets/vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+            <script src="{{ asset('assets/vendor/noty/js/noty/jquery.noty.js') }}"></script>
+            <script src="{{ asset('assets/vendor/x-editable/dist/jquery-editable/js/jquery-editable-poshytip.min.js') }}"></script>
+
+            <script src="{{ asset('bundles/app/js/Layout/init.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/Layout/semantic.js') }}"></script>
+
+            <script src="{{ asset('bundles/app/js/Layout/liste.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/Layout/listing.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/Layout/loader.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/Layout/alerte.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/Layout/events.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/Layout/modal.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/Layout/noty.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/Layout/popup-menu.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/Layout/xeditable.js') }}"></script>
+
+
+            <script type="text/javascript">
+                {#
+                 * Pour chaque flashbag contenu, sachant qu'ils ne contiennent
+                 * que des alertes et des messages, on génère
+                 * une alerte correspondante
+                 #}
+                $(function () {
+                    {% for label, flashes in app.session.flashbag.all %}
+                    {% for flash in flashes %}
+                    alerte.send("{{ flash }}", "{{ label }}");
+                    {% endfor %}
+                    {% endfor %}
+                });
+            </script>
+
+        {% endblock %}
     </body>
 </html>

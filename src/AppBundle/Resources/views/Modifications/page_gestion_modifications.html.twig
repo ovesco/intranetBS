@@ -62,6 +62,7 @@
 {% endblock %}
 
 {% block js %}
+    {{ parent() }}
     <script type="text/javascript">
         var modifications   = {{ jsonModifications|raw }};
         var $tbody          = $('#tbody-modifs');

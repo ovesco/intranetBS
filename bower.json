@@ -1,0 +1,27 @@
+{
+  "name": "intranetBS",
+  "homepage": "https://github.com/sysmoh/intranetBS",
+  "authors": [
+    "Christian Müller <christian.muller@sauvabelin.ch>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "web/assets/vendor/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "semantic": "semantic-ui#^2.2.4",
+    "noty": "^2.3.8",
+    "x-editable": "^1.5.1",
+    "moment": "^2.15.1",
+    "parsleyjs": "^2.5.1",
+    "datatables.net": "^1.10.12",
+    "formatter.js": "formatter#^0.1.5"
+  }
+}

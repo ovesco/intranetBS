@@ -230,23 +230,13 @@
 
 {% endblock %}
 
-
 {% block css %}
-    {% stylesheets '@AppBundle/Resources/public/css/Membre/membre.css' filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/app/css/Membre/membre.css') }}"/>
 {% endblock %}
 
-
 {% block js %}
-
-    {% javascripts
-    '@AppBundle/Resources/public/js/Membre/page_voir_membre.js'
-    %}
-
-    <script src="{{ asset_url }}"></script>
-
-    {% endjavascripts %}
-
+    {{ parent() }}
+    <script src="{{ asset('bundles/app/js/Membre/page_voir_membre.js') }}"></script>
 {% endblock %}
 

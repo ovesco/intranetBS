@@ -1,7 +1,7 @@
 /**
  * Created by NicolasUffer on 12.10.15.
  */
-$(document).ready(function(){
+$(function () {
 
     $('.popup-menu').popup({
         hoverable: true,

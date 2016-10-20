@@ -153,15 +153,8 @@
     #}
 {% endblock %}
 
+
 {% block js %}
-
-    {# '@AppBundle/Resources/public/js/specials/ajouter_membre_famille_toggle.js' #}
-    {% javascripts
-
-    '@AppBundle/Resources/public/js/Membre/page_ajouter_membre.js'%}
-    <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-
-
-
+    {{ parent() }}
+    <script src="{{ asset('bundles/app/js/Membre/page_ajouter_membre.js') }}"></script>
 {% endblock %}

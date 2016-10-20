@@ -54,21 +54,31 @@
 
                                 <div class="ui divided list">
 
-                                    <a class="item">
-                                        <div class="right floated ui blue circular label">{{ groupe.members|length }}</div>
-                                        <div class="content">
-                                            <p>Effectifs direct</p>
-                                        </div>
-                                    </a>
-
-                                    {% for enfant in groupe.enfants %}
-                                        <a href="{{ path('app_groupe_show', {groupe: enfant.id}) }}" class="item">
-                                            <div class="right floated ui blue circular label">{{ enfant.membersRecursive|length }}</div>
+                                    {% if groupe.enfants|length > 0 %}
+                                        <a class="item">
+                                            <div class="right floated ui blue circular label">{{ groupe.members|length }}</div>
                                             <div class="content">
-                                                <p>{{ enfant.nom }}</p>
+                                                <p>Effectifs direct</p>
                                             </div>
                                         </a>
-                                    {% endfor %}
+
+                                        <a class="item">
+                                            <div class="right floated ui blue circular label">{{ groupe.membersRecursive|length - groupe.members|length }}</div>
+                                            <div class="content">
+                                                <p class="header">Effectifs des sous-groupes</p>
+                                            </div>
+                                        </a>
+
+                                        {% for enfant in groupe.enfants %}
+                                            <a href="{{ path('app_groupe_show', {groupe: enfant.id}) }}" class="item">
+                                                <div class="right floated ui blue circular label">{{ enfant.membersRecursive|length }}</div>
+                                                <div class="content">
+                                                    <p><i class="angle right icon"></i> {{ enfant.nom }}</p>
+                                                </div>
+                                            </a>
+                                        {% endfor %}
+
+                                    {% endif %}
 
                                     <a class="item">
                                         <div class="right floated ui blue circular label">{{ groupe.membersRecursive|length }}</div>

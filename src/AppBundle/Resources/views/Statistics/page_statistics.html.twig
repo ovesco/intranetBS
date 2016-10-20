@@ -252,7 +252,7 @@
 {% endblock %}
 
 {% block js %}
-
+    {{ parent() }}
 
     {# todo: importer ces scriptes!#}
     <script src="http://code.highcharts.com/highcharts.js"></script>
@@ -264,6 +264,5 @@
     <script src="{{ asset_url }}"></script>
 
     {% endjavascripts %}
-
 
 {% endblock %}

@@ -1,27 +1,16 @@
 {% extends "AppBundle:Layout:layout.html.twig" %}
 
-
-
-
 {% block titre %}Payements{% endblock %}
-
 
 {% block content %}
 
     <div class="ui page grid">
         <div class="row">
             <div class="column">
-
-
                 <h1 class="header">Validation des payements</h1>
 
-
-
                 {% for payement in payements %}
-
-
                     {{ render(controller('AppBundle:Payement:validationForm', { 'payement': payement.id })) }}
-
                 {% endfor %}
 
                 {#
@@ -32,9 +21,7 @@
         </div>
     </div>
 
-
-
-    {% endblock %}
+{% endblock %}
 
 
 
