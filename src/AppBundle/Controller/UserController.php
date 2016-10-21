@@ -32,7 +32,8 @@ class UserController extends Controller
      */
     public function listAction(Request $request)
     {
-        //$this->denyAccessUnlessGranted(UserVoter::VIEW,)
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         return array();
     }
 
@@ -46,6 +47,8 @@ class UserController extends Controller
      */
     public function showAction(Request $request, User $user)
     {
+        $this->denyAccessUnlessGranted('view',$user);
+
         return array('user'=>$user);
     }
 
@@ -57,6 +60,8 @@ class UserController extends Controller
      */
     public function createAction(Request $request){
 
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $user = new User();
         $userForm = $this->createForm(new UserType(),$user);
 
@@ -64,7 +69,7 @@ class UserController extends Controller
 
         if($userForm->isValid())
         {
-            $this->get('handler.user')->persist($user);
+            $this->get('app.repository.user')->save($user);
             return $this->redirect($this->generateUrl('app_user_list'));
         }
 
@@ -81,13 +86,15 @@ class UserController extends Controller
      */
     public function editAction(Request $request, User $user){
 
+        $this->denyAccessUnlessGranted('edit',$user);
+
         $userForm = $this->createForm(new UserType(),$user);
 
         $userForm->handleRequest($request);
 
         if($userForm->isValid())
         {
-            $this->get('handler.user')->persist($user);
+            $this->get('app.repository.user')->save($user);
             return $this->redirect($this->generateUrl('app_user_list'));
         }
 

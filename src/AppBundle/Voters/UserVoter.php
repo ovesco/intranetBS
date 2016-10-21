@@ -24,7 +24,7 @@ class UserVoter extends BaseVoter{
      */
     protected function canView($subject, User $user, TokenInterface $token)
     {
-
+        return $this->hasRole('ROLE_ADMIN',$token);
     }
 
     /**
@@ -32,7 +32,7 @@ class UserVoter extends BaseVoter{
      */
     protected function canEdit($subject, User $user, TokenInterface $token)
     {
-
+        return $this->hasRole('ROLE_ADMIN',$token);
     }
 
     /**
@@ -40,7 +40,7 @@ class UserVoter extends BaseVoter{
      */
     protected function canRemove($subject, User $user, TokenInterface $token)
     {
-
+        return $this->hasRole('ROLE_ADMIN',$token);
     }
 
     /**
@@ -48,7 +48,7 @@ class UserVoter extends BaseVoter{
      */
     protected function canCreate($subject, User $user, TokenInterface $token)
     {
-
+        return $this->hasRole('ROLE_ADMIN',$token);
     }
 
 }

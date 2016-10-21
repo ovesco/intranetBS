@@ -314,7 +314,8 @@ class ListCallerController extends Controller
      */
     public function userAll( $call = ListCallerController::CALL_BY_TWIG)
     {
-        $items = $this->getEntityManager()->getRepository('AppBundle:User')->findAll();
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $items = $this->get('app.repository.user')->findAll();
         $url = $this->getRouter()->generate('app_listcaller_userall');
         $list = ListModelsUser::getDefault($this->getTwig(), $this->getRouter(), $items, $url)->render();
         return $this->returnList($list, $call);
