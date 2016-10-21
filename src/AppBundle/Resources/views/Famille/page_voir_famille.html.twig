@@ -244,7 +244,6 @@
 
 
 
-
     {#
     <div class="ui page grid">
 
@@ -466,13 +465,22 @@
     {% endjavascripts %}
 
 
+
+{% endblock %}
+
+
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/app/css/Membre/membre.css') }}"/>
+{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/app/js/specials/validation_popup_generation.js') }}"></script>
+
     <script type="text/javascript">
-
-
-
         //Appel de l'editable
         $('.editable').click(function() {
-
             editable.init($(this));
         });
     </script>

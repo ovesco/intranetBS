@@ -169,20 +169,8 @@
 
 
 {% block css %}
-
-    {% javascripts
-    '@AppBundle/Resources/public/css/Layout/layout.css'
-    '@AppBundle/Resources/public/css/Membre/membre.css'
-
-    output="js/main.js" %}
-    <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-
-{% endblock %}
-
-
-{% block js %}
-
-
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/app/css/Layout/layout.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/app/css/Membre/membre.css') }}"/>
 {% endblock %}
 

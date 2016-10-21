@@ -17,15 +17,10 @@
             <div class="item">
 
                 {% cache 'twig.layout.magic_top_menu' {time: 0} %}
-                <div id="menu_search" class="ui input search">
-                        <input class="prompt" type="text" placeholder="Quick menu...">
+                <div id="menu_search" class="ui input search"
+                     data-entries="{{ menu.getAllBlocksToCategorySearch()|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}">
+                    <input class="prompt" type="text" placeholder="Quick menu...">
                     <div class="results"></div>
-                    <script>
-                        $(document).ready(function(){
-                            var menu_data = {{ menu.getAllBlocksToCategorySearch()|json_encode(constant('JSON_PRETTY_PRINT'))|raw }};
-                            $('#menu_search').search({source: menu_data});
-                        });
-                    </script>
                 </div>
                 {% endcache %}
             </div>

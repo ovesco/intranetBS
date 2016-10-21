@@ -1,5 +1,4 @@
-
-$(document).ready(function(){
+$(function () {
 
     var $add_form_container = $('#membre_add_form');
 

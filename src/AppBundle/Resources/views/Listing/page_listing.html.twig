@@ -59,8 +59,8 @@
 
 {% endblock %}
 
+
 {% block js %}
-{% javascripts '@AppBundle/Resources/public/js/specials/listing_view.js' %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-{% endjavascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/app/js/specials/listing_view.js') }}"></script>
 {% endblock %}

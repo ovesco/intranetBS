@@ -21,7 +21,7 @@ function getTemporaryStorage(){
 /**
  * Cette fonction initialise les listes présente sur la page qui vient de ce charger.
  */
-jQuery(document).ready(function() {
+$(function () {
     initDataListe();
 });
 

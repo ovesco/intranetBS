@@ -26,22 +26,20 @@ class AppKernel extends Kernel
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
-            new Symfony\Bundle\AsseticBundle\AsseticBundle(),
-            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
 
-            new JMS\SerializerBundle\JMSSerializerBundle(), //Le système de serialization
+            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),//Pour le routing javascript
             new FOS\ElasticaBundle\FOSElasticaBundle(),//Elasitca
             new FOS\RestBundle\FOSRestBundle(),//Pour les applications REST
+
+            new JMS\SerializerBundle\JMSSerializerBundle(), //Le système de serialization
             new Knp\Bundle\SnappyBundle\KnpSnappyBundle(), // pour les PDF
             new \EmanueleMinotto\TwigCacheBundle\TwigCacheBundle(), //Twig cache tag
 
             new AppBundle\AppBundle(),
-            //new Interne\OrganisationBundle\InterneOrganisationBundle(),
-            //new Interne\MatBundle\MatBundle(),
-            //new Interne\SeanceBundle\InterneSeanceBundle(),
-            //new Ensepar\Html2pdfBundle\EnseparHtml2pdfBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

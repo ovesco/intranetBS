@@ -9,14 +9,14 @@
 
         {% block content %}{% endblock %}
 
-        <script>
-            {% block script %}{% endblock %}
+        {% block js %}
+            <script>
+                $(document).ready(function () {
+                    bindForm();
+                    semantic_init();
+                });
+            </script>
+        {% endblock %}
 
-            /*  */
-            $(document).ready(function () {
-                bindForm();
-                semantic_init();
-            });
-        </script>
     </div>
 </div>

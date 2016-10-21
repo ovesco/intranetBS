@@ -123,16 +123,18 @@ class GroupeController extends Controller
      * @return Response Excel of the group members
      *
      * @ParamConverter("groupe", class="AppBundle:Groupe")
-     * @Route("/export-etiquettes/{groupe}", options={"expose"=true})
+     * @Route("/export-etiquettes/{groupe}/{rowCount}/{colCount}/{fontSize}", options={"expose"=true})
      */
-    public function exportEtiquettesAction($groupe)
+    public function exportEtiquettesAction($groupe, $rowCount, $colCount, $fontSize)
     {
+
         $html = $this->renderView('@App/Groupe/etiquettes.html.twig', array(
                 'group' => $groupe,
-                'page_height' => 297,
-                'page_width' => 210,
-                'cell_vertical_count' => 10,
-                'cell_horizontal_count' => 4,
+                'corrected_page_height' => 41, //cm
+                'corrected_page_width' => 29, //cm
+                'cell_vertical_count' => $rowCount,
+                'cell_horizontal_count' => $colCount,
+                'font_size' => $fontSize / 100
             )
         );
 
@@ -140,12 +142,9 @@ class GroupeController extends Controller
 
         $snappy = $this->get('knp_snappy.pdf');
 
+
         $pdf = $snappy->getOutputFromHtml($html, array(
-            'enable-javascript' => true,
-            'javascript-delay' => 1000,
-            'no-stop-slow-scripts' => true,
-            'no-background' => false,
-            'lowquality' => false,
+            'no-background' => true,
             'encoding' => 'UTF-8',
             'images' => true,
             'cookie' => array(),
@@ -157,6 +156,7 @@ class GroupeController extends Controller
             'margin-right' => 0,
             'margin-bottom' => 0,
             'margin-left' => 0,
+            'page-size' => 'A4'
         ));
 
         return new Response($pdf, 200,
@@ -165,9 +165,7 @@ class GroupeController extends Controller
                 'Content-Disposition' => 'inline; filename="' . $groupe->getNom() . '.pdf"'
             )
         );
-
     }
-
 
     /**
      * @param $groupe Groupe le groupe
