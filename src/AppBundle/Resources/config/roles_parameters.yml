@@ -1,0 +1,45 @@
+parameters:
+#    liste_roles:
+#        ROLE_ADMIN:
+#            name: "role administrateur"
+#            description: "Ce droit fournit tous les accès possibles sur l'application"
+#            childs:
+#                ROLE_USER:
+#                    name: "role accès à l'application"
+#                    description: "Permet l'accès à l'application, sans ce rôle aucune page n'est accessible"
+#                ROLE_FINANCE:
+#                    name: "role finances"
+#                    description: "Donne tous les accès sur la gestion des finances de l'application"
+#                    childs:
+#                        ROLE_CREANCE:
+#                            name: "gestion des créances"
+#                            childs:
+#                                ROLE_CREANCE_EDIT:
+#                                ROLE_CREANCE_SHOW:
+#                        ROLE_FACTURE:
+#                            name: "gestion des factures"
+#                        ROLE_PAYEMENT:
+#                            name: "gestion des payements"
+#                        ROLE_RAPPEL:
+#                            name: "gestion des rappels"
+#                ROLE_STRUCTURE:
+#                    name: "role sutructure"
+#
+#        ROLE_RACINE_2:
+#            name: "juste pour montrer qu'on peut faire une secondre racine"
+
+
+    # Liste des roles nécéssitant une explication
+    role_description:
+        ROLE_ADMIN: "administrateur"
+        ROLE_FINANCE: "finances"
+
+    # Hierachie des roles
+    role_hierarchy:
+        ROLE_ADMIN:
+            ROLE_USER:
+            ROLE_FINANCE:
+                ROLE_CREANCE:
+                    ROLE_CREANCE_EDIT:
+                    ROLE_CREANCE_VIEW:
+            ROLE_STRUCTURE:

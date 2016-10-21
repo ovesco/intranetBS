@@ -45,6 +45,7 @@ services:
             - @annotations.reader
             - @kernel
             - @router
+
     #Contient les listes stockée en session
     list_storage:
         class: AppBundle\Utils\ListUtils\ListStorage
@@ -146,12 +147,19 @@ services:
 
 
 
-    #EVENTS
+    # EVENTS LISTENER AND SUBSCRIBER
 #    app.dynamic_relation_subscriber:
 #        class: AppBundle\EventSubscriber\DynamicRelationSubscriber
 #        tags:
 #            - { name: doctrine.event_subscriber, connection: default }
 
+
+    app.subscriber.authentifaction:
+        class: AppBundle\EventSubscriber\AuthentificationSubscriber
+        arguments:
+            user_repository: "@app.repository.user"
+        tags:
+            - { name: kernel.event_subscriber }
 
     #Listener durant l'authentification.
     security.listener.authentification.successful:
@@ -161,7 +169,6 @@ services:
             - @doctrine.orm.entity_manager
             - @listing
         tags:
-            - { name: kernel.event_listener, event: security.interactive_login, method: onAuthenticationSuccess } #lors du premier login
             - { name: kernel.event_listener, event: security.authentication.success, method: onAuthenticationCheckActivity } #a chaque requete
 
 #    security.access.membre_voter:
@@ -201,13 +208,26 @@ services:
         arguments:
             - @jms_serializer
 
-    # Handler dedicated for the entities of the app
-    handler.membre:
-        class: AppBundle\Handler\MembreHandler
-        arguments:
-            - @doctrine.orm.entity_manager
 
-    handler.user:
-        class: AppBundle\Handler\UserHandler
+    # REPOSITORY FOR ENTITY
+    # Entity Repository as service (simplify code in controller)
+    app.repository.user:
+        class: AppBundle\Repository\UserRepository
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+        arguments: ['AppBundle:User']
+
+    # SECURITY
+
+    # Provider for user (used in authentication proccess)
+    app.user.provider:
+        class: AppBundle\Security\UserProvider
         arguments:
-            - @doctrine.orm.entity_manager
+            repository: "@app.repository.user"
+            hierarchy: "@app.role.hierarchy"
+
+    # Role Hierachy manager
+    app.role.hierarchy:
+        class: AppBundle\Security\RoleHierarchy
+        arguments:
+            container: "@service_container"

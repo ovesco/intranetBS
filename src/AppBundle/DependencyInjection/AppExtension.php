@@ -22,7 +22,7 @@ class AppExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
         $loader->load('intranet_parameters.yml');
-        $loader->load('liste_roles.yml');
+        $loader->load('roles_parameters.yml');
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);

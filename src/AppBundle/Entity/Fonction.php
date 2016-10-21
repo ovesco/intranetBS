@@ -41,13 +41,19 @@ class Fonction
     private $abreviation;
 
     /**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Role")
-     * @ORM\JoinTable(name="app_fonctions_roles",
-     *      joinColumns={@ORM\JoinColumn(name="fonction_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
-     *      )
+     * @var array
+     *
+     * @ORM\Column(name="roles", type="simple_array")
      */
     private $roles;
+
+    /**
+     * @var Attribution $attributions
+     *
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Attribution", mappedBy="fonction")
+     */
+    private $attributions;
 
 
     public function __toString()
@@ -116,7 +122,7 @@ class Fonction
      */
     public function __construct($nom = null, $abreviation = null)
     {
-        $this->attribution = new ArrayCollection();
+        $this->attributions = new ArrayCollection();
         $this->nom = $nom;
         $this->abreviation = $abreviation;
     }
@@ -156,32 +162,34 @@ class Fonction
 
 
     /**
-     * Add roles
+     * Add role
      *
-     * @param Role $roles
+     * @param  $role
      * @return Fonction
      */
-    public function addRole(Role $roles)
+    public function addRole($role)
     {
-        $this->roles[] = $roles;
+        $this->roles[] = $role;
 
         return $this;
     }
 
     /**
-     * Remove roles
+     * Remove role
      *
-     * @param Role $roles
+     * @param $role
      */
-    public function removeRole(Role $roles)
+    public function removeRole($role)
     {
-        $this->roles->removeElement($roles);
+        if(($key = array_search($role, $this->roles)) !== false) {
+            unset($this->roles[$key]);
+        }
     }
 
     /**
      * Get roles
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return array
      */
     public function getRoles()
     {

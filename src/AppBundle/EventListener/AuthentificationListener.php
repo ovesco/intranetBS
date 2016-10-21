@@ -38,6 +38,9 @@ class AuthentificationListener {
     }
 
     /**
+     * @deprecated NUR: voir le AuthentificationSubscriber... la méthode à été déplacée la bas c'est plus propre
+     * todo NUR virer cette méthode.
+     *
      * onAuthenticationSuccess
      * @param InteractiveLoginEvent $event
      */

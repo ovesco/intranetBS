@@ -15,11 +15,13 @@ use JMS\Serializer\Annotation\VirtualProperty;
  * User
  *
  * @ORM\Table(name="app_users")
- * @ORM\Entity
+ *
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  * @ORM\HasLifecycleCallbacks
  * @UniqueEntity(fields="username",message="this username already exist")
  *
  * @ExclusionPolicy("all")
+ *
  *
  */
 class User implements UserInterface, \Serializable
@@ -59,21 +61,27 @@ class User implements UserInterface, \Serializable
     private $membre;
 
 	 /**
-     * @ORM\Column(name="is_active", type="boolean")
-     */
+      * @var boolean
+      *
+      * @ORM\Column(name="is_active", type="boolean")
+      */
     private $isActive;
-    
+
     /**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Role")
-     * @ORM\JoinTable(name="app_roles_users",
-     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
-     *      )
+     * @var array
      *
-     * Cette nomenclature spécifique est nécaissaire pour éviter des conflits avec
-     * la methode getRoles imposée par le UserInterface
+     * @ORM\Column(name="selected_roles", type="simple_array")
      */
-    private $savedRoles;
+    private $selectedRoles;
+
+    /**
+     * @var array
+     *
+     * This variable is only stored in session and recomputed at each login
+     *
+     */
+    private $roles;
+
 
     /**
      * @var \Datetime
@@ -89,8 +97,9 @@ class User implements UserInterface, \Serializable
     {
         $this->membre = null;
         $this->isActive = true;
-        $this->salt 	= md5(uniqid(null, true));
-        $this->savedRoles 	= new ArrayCollection();
+        $this->selectedRoles 	= array();
+        $this->roles = null;
+
     }
 
     /**
@@ -108,6 +117,8 @@ class User implements UserInterface, \Serializable
 
     /**
      * @inheritDoc
+     *
+     * imposed by UserInterface
      */
     public function getSalt()
     {
@@ -149,8 +160,7 @@ class User implements UserInterface, \Serializable
             $this->id,
             $this->username,
             $this->password,
-            // see section on salt below
-            // $this->salt,
+            $this->roles,
         ));
     }
 
@@ -163,8 +173,7 @@ class User implements UserInterface, \Serializable
             $this->id,
             $this->username,
             $this->password,
-            // see section on salt below
-            // $this->salt
+            $this->roles
         ) = unserialize($serialized);
     }
     
@@ -175,58 +184,55 @@ class User implements UserInterface, \Serializable
      */
     public function hasRole($role) {
 
-        foreach($this->getRoles() as $r)
-            if($r->getRoles() == $role)
-                return true;
-
-        return false;
+        return in_array($role,$this->getRoles());
     }
 
 
+    /**
+     * @param array $roles
+     * @return $this
+     */
+    public function setRoles($roles)
+    {
+        $this->roles = $roles;
 
+        return $this;
+    }
 
     /**
      * Fonction imposée par UserInterface
      *
-     * Retourne les roles de l'utilisateur en cherchant dans l'arboressance des roles
-     * en fonction des roles sauvé pour cette utilisateur.
+     * Les roles sont injecté par le service UserProvider (app.user.provider)
+     *
+     * Retourne tout les roles de l'utilisateur.
      *
      */
     public function getRoles()
     {
+        return $this->roles;
+    }
+
+    /**
+     * Cherche les role déduit du membre liée à l'utilisateur
+     *
+     * @return array
+     */
+    public function getMembreRoles()
+    {
         $roles = array();
 
-        /** @var Role $role */
-        foreach($this->savedRoles as $role)
-        {
-            $roles = array_merge($roles,$role->getChildsRecursive(true));
-        }
-
-
-        //il est possible que le user ne soit pas lié a un membre
         if($this->hasMembre())
         {
             /** @var Attribution $attr */
-            foreach ($this->getMembre()->getActiveAttributions() as $attr) {
+            foreach ($this->getMembre()->getActiveAttributions() as $attr)
+            {
                 foreach ($attr->getFonction()->getRoles() as $r)
-                    $roles[] = $r;
+                     $roles[] = $r;
             }
         }
-
-        /*
-         * Conversion des roles en string car si on renvoie
-         * des objets, la classe RoleHierarchy de symfony fait
-         * merder qqch. Et après tout car marche très bien
-         * comme ca aussi ;-)
-         */
-        $rolesString = array();
-        foreach($roles as $role)
-        {
-            $rolesString[] = $role->getRole();
-        }
-
-        return $rolesString;
+        return $roles;
     }
+
     
     /**
      * Get membre
@@ -256,36 +262,6 @@ class User implements UserInterface, \Serializable
         return ($this->membre != null);
     }
 
-    /**
-     * Add roles
-     *
-     * @param \AppBundle\Entity\Role $role
-     * @return User
-     */
-    public function addSavedRole(\AppBundle\Entity\Role $role)
-    {
-
-        $this->savedRoles[] = $role;
-        return $this;
-    }
-
-    /**
-     * Remove roles
-     *
-     * @param \AppBundle\Entity\Role $role
-     */
-    public function removeSavedRole(\AppBundle\Entity\Role $role)
-    {
-        $this->savedRoles->removeElement($role);
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getRolesEntity()
-    {
-        return $this->savedRoles;
-    }
 
     /**
      * Get id
@@ -354,10 +330,55 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+
     /**
-     * @return ArrayCollection
+     * @param $role
+     * @return $this
      */
-    public function getSavedRoles(){
-        return $this->savedRoles;
+    public function addSelectedRoles($role)
+    {
+        if(!in_array($role,$this->selectedRoles))
+        {
+            $this->selectedRoles[] = $role;
+        }
+        return $this;
     }
+
+    /**
+     * @param $role
+     * @return $this
+     */
+    public function removeSelectedRoles($role)
+    {
+        if(($key = array_search($role, $this->selectedRoles)) !== false) {
+            unset($this->selectedRoles[$key]);
+        }
+        return $this;
+    }
+
+
+    /**
+     * Set selectedRoles
+     *
+     * @param array $selectedRoles
+     *
+     * @return User
+     */
+    public function setSelectedRoles($selectedRoles)
+    {
+        $this->selectedRoles = $selectedRoles;
+
+        return $this;
+    }
+
+    /**
+     * Get selectedRoles
+     *
+     * @return array
+     */
+    public function getSelectedRoles()
+    {
+        return $this->selectedRoles;
+    }
+
 }

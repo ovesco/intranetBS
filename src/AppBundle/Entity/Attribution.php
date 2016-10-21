@@ -62,7 +62,7 @@ class Attribution
      * @var Fonction $fonction
      *
      * @Gedmo\Versioned
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Fonction")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Fonction", inversedBy="attributions")
      * @ORM\JoinColumn(name="fonction_id", referencedColumnName="id")
      */
      private $fonction;
