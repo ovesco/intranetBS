@@ -46,9 +46,9 @@ class ListModelsUser implements ListModelInterface
                 return '<div class="ui red label">non</div>';
             }
         }));
+        /*
         $list->addColumn(new Column('Roles', function (User $user) use ($router) {
             $roles = '';
-            /** @var Role $role */
             foreach($user->getRoles() as $role)
             {
                 $roles = $roles.$role.'<br>';
@@ -56,6 +56,7 @@ class ListModelsUser implements ListModelInterface
             }
             return $roles;
         }));
+        */
         $list->addColumn(new Column('Membre', function (User $user) use ($router) {
             if(is_null($user->getMembre())){
                 return 'No membre';

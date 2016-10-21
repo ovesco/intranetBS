@@ -11,7 +11,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use AppBundle\Utils\Security\RoleHierarchy;
+use AppBundle\Repository\UserRepository;
+use AppBundle\Voters\UserVoter;
+use AppBundle\Entity\User;
 
 
 class QuickTestCommand extends ContainerAwareCommand
@@ -28,16 +30,15 @@ class QuickTestCommand extends ContainerAwareCommand
         /** @var \Doctrine\ORM\EntityManager $em */
        // $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
-        $liste = $this->getContainer()->getParameter('role_hierarchy');
+        /** @var UserRepository $uRepo */
+        $uRepo = $this->getContainer()->get('app.repository.user');
 
-        //dump($liste);
 
-        $role = $this->getContainer()->get('role.hierarchy');
+        $u = $uRepo->find(1);
 
-        $r = $role->getDeductedRoles('ROLE_CREANCE');
+        $voter = new UserVoter();
 
-        //dump($r);
-
+       // dump($voter->supports('edit',$u));
 
 
 

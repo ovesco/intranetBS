@@ -13,7 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Utils\Menu\Menu;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
+use AppBundle\Voters\UserVoter;
 
 /**
  * @Route("/intranet/admin/user")
@@ -32,6 +32,7 @@ class UserController extends Controller
      */
     public function listAction(Request $request)
     {
+        //$this->denyAccessUnlessGranted(UserVoter::VIEW,)
         return array();
     }
 

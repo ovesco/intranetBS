@@ -154,22 +154,14 @@ services:
 #            - { name: doctrine.event_subscriber, connection: default }
 
 
-    app.subscriber.authentifaction:
-        class: AppBundle\EventSubscriber\AuthentificationSubscriber
+    #subscriber durant l'authentification.
+    app.subscriber.authentication:
+        class: AppBundle\EventSubscriber\AuthenticationSubscriber
         arguments:
             user_repository: "@app.repository.user"
         tags:
             - { name: kernel.event_subscriber }
 
-    #Listener durant l'authentification.
-    security.listener.authentification.successful:
-        class: AppBundle\EventListener\AuthentificationListener
-        arguments:
-            - @security.token_storage
-            - @doctrine.orm.entity_manager
-            - @listing
-        tags:
-            - { name: kernel.event_listener, event: security.authentication.success, method: onAuthenticationCheckActivity } #a chaque requete
 
 #    security.access.membre_voter:
 #            class:      AppBundle\Voters\MembreVoter
@@ -231,3 +223,12 @@ services:
         class: AppBundle\Security\RoleHierarchy
         arguments:
             container: "@service_container"
+
+    # VOTERS
+    app.voter.user:
+        class:      AppBundle\Voters\UserVoter
+        arguments:
+            decisionManager: "@security.access.decision_manager"
+        public:     false #small boost performence
+        tags:
+            - { name: security.voter }
