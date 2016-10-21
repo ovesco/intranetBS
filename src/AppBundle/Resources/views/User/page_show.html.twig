@@ -42,15 +42,15 @@
                     <tr>
                         <td>Roles liées en base de donnée</td>
                         <td>
-                            {% for role in user.rolesEntity %}
-                                {{ role.role }} <br>
+                            {% for role in user.selectedRoles %}
+                                {{ role }} <br>
                             {% endfor %}
                         </td>
                     </tr>
                     <tr>
-                        <td>Roles déduit de la hierarchie (ainsi que d'éventuelle attribution)</td>
+                        <td>Roles déduit du membre</td>
                         <td>
-                            {% for role in user.getRoles %}
+                            {% for role in user.getMembreRoles() %}
                                 {{ role }} <br>
                             {% endfor %}
                         </td>

@@ -26,18 +26,12 @@
 
     </head>
 
-    <body class="pusher">
+    <body>
 
         {% cache 'twig.layout.main_menu' {time: 0} %}
         {{ render(controller('AppBundle:Layout:mainMenuGenerate')) }}
         {% endcache %}
 
-        {% include 'AppBundle:Layout:top_menu.html.twig' %}
-
-        <div id="main-container">
-            {% block content %}{% endblock %}
-        </div>
-        <div id="server-data" data-client="{% if clientData is defined %}{{ clientData }}{% endif %}"></div>
 
         {#
             LISTING
@@ -46,9 +40,25 @@
         #}
         <div class="ui top sidebar ui secondary segment" id="listing-bar"></div>
 
+        <div class="pusher">
+            {% include 'AppBundle:Layout:top_menu.html.twig' %}
+
+            <div id="main-container">
+                {% block content %}{% endblock %}
+            </div>
+            <div id="server-data" data-client="{% if clientData is defined %}{{ clientData }}{% endif %}"></div>
+
+        </div>
+
+
+
+
+
         {#
             On définit ici le container à menu. On y stocke le menu de popup géneré dynamiquement pour pouvoir
             l'afficher n'importe où sur la page
+
+            todo CMR de NUR tu sais ce que c'est ce truc ?
 
              <div id="popup-menu-container"></div>
         #}

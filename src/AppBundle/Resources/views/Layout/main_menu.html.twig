@@ -1,6 +1,7 @@
 {% import _self as macro_menu %}
 
 
+
 {% macro display_block(block_label, block) %}
 
     <div class="item popup-menu" data-html='
@@ -22,6 +23,36 @@
 
 {% endmacro %}
 
+
+{#
+{% macro display_block(block_label, block) %}
+
+    <div class="item">
+        <div class="header">{{ block_label }}</div>
+        <div class="menu">
+            {% for item in menu.getBloc(block) %}
+                {% if true %} {#item.expanded#
+                    <a class="item" href="{{ path(item.routeName) }}">{% if item.icon is not null %}<i class="ui {{ item.icon }} icon"></i>{% endif %}{{ item.label }}</a>
+                {% endif %}
+            {% endfor %}
+
+            <div class="ui dropdown item">
+                <i class="dropdown icon"></i>
+                Display Options
+                <div class="menu">
+                    <div class="header">Text Size</div>
+                    <a class="item">Small</a>
+                    <a class="item">Medium</a>
+                    <a class="item">Large</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endmacro %}
+
+#}
 
 <div id="main-menu" class="ui vertical inverted sidebar menu">
     <div class="item">
@@ -55,55 +86,4 @@
     {{ macro_menu.display_block('Sécurité','security') }}
 
 
-    {#
-    <div class="item">
-        <div class="ui small active  inverted header">Intranet</div>
-        <div class="menu">
-
-
-
-            <a class="item" href="{{ path('interne_organisation_news_show') }}">
-                News
-            </a>
-
-            <a class="item" href="{{ path('interne_organisation_agenda_show') }}">
-                Agenda
-            </a>
-
-            <a class="item" href="{{ path('interne_organisation_default') }}">
-                Téléchargement
-            </a>
-
-        </div>
-    </div>
-    #}
-
-
-
-
-
-{#
-    <div class="item">
-        <div class="ui small  inverted header">Galerie</div>
-        <div class="menu">
-            <a class="item" href="{{ path('galerie_interne_global_managing') }}">Administration générale</a>
-        </div>
-    </div>
-#}
-
-
-
-    {#
-
-    <div class="item">
-        <div class="ui small  inverted header">Divers</div>
-        <div class="menu">
-
-
-            <a class="item" href="{{path('app_bundle_statistics')}}">Statistiques</a>
-
-        </div>
-    </div>
-
-    #}
 </div>

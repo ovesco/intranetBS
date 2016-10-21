@@ -46,17 +46,17 @@ class ListModelsUser implements ListModelInterface
                 return '<div class="ui red label">non</div>';
             }
         }));
-        /*
-        $list->addColumn(new Column('Roles', function (User $user) use ($router) {
+
+        $list->addColumn(new Column('Roles choisi', function (User $user) use ($router) {
             $roles = '';
-            foreach($user->getRoles() as $role)
+            foreach($user->getSelectedRoles() as $role)
             {
                 $roles = $roles.$role.'<br>';
                 //$roles = $roles.$role->getRole().'<br>';
             }
             return $roles;
         }));
-        */
+
         $list->addColumn(new Column('Membre', function (User $user) use ($router) {
             if(is_null($user->getMembre())){
                 return 'No membre';
@@ -65,6 +65,23 @@ class ListModelsUser implements ListModelInterface
                 return $user->getMembre()->getPrenom().' '. $user->getMembre()->getNom();
             }
         }));
+
+        $list->addColumn(new Column('Roles via Membre', function (User $user) use ($router) {
+
+            $roles = $user->getMembreRoles();
+            if(!empty($roles))
+            {
+                $roles = '';
+                foreach($user->getMembreRoles() as $role)
+                {
+                    $roles = $roles.$role.'<br>';
+                    //$roles = $roles.$role->getRole().'<br>';
+                }
+                return $roles;
+            }
+            return 'No roles from membre';
+        }));
+
 
 
         //return '<a href="' . $router->generate('app_membre_show', array('membre' => $membre->getId())) . '">' . $membre->getPrenom() . '</a>';
