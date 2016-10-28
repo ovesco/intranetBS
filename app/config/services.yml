@@ -222,7 +222,15 @@ services:
     app.role.hierarchy:
         class: AppBundle\Security\RoleHierarchy
         arguments:
-            container: "@service_container"
+            builder: "@app.role.hierarchy.builder"
+
+    # Role Hierachy builder
+    app.role.hierarchy.builder:
+        class: AppBundle\Security\RoleHierarchyBuilder
+        arguments:
+            role_hierarchy: "%role_hierarchy%"
+            role_description: "%role_description%"
+
 
     # VOTERS
     app.voter.user:

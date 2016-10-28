@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Fonction;
+use AppBundle\Security\RoleHierarchy;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,21 +20,19 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class RoleController extends Controller
 {
     /**
-     * Page qui affiche la hierarchie des roles
+     * Modal qui montre la hierachie des roles
      *
-     * @Route("/list", options={"expose"=true})
+     * @Route("/hierarchy", options={"expose"=true})
      * @param Request $request
-     *
-     * @Menu("Liste des roles", block="security", order=2, icon="list")
-     * @Template("AppBundle:Roles:page_list.html.twig")
+     * @Template("AppBundle:Roles:modal_hierarchy.html.twig")
      * @return Response
      */
-    public function listAction(Request $request)
+    public function hierarchyAction(Request $request)
     {
-        $em         = $this->getDoctrine()->getManager();
-        $roles      = $em->getRepository('AppBundle:Role')->findby(array('parent'=>null));
+        /** @var RoleHierarchy $hierarchyService */
+        $hierarchyService = $this->get('app.role.hierarchy');
 
-        return array('rootRoles'=>$roles);
+        return array('hierarchy'=>$hierarchyService->getHierarchy());
     }
 
 }

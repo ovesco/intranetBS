@@ -5,6 +5,10 @@
  */
 function bindForm() {
 
+    /*
+     todo CMR de NUR cette fonction est appelée lors du chargement d'une modale et y a une gros erreur qui vient avec. Du coup, la fonction suivante (semantic_init()) ne marche pas...
+     */
+
     $('form.ajax').submit(function (e) {
         e.preventDefault();
 

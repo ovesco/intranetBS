@@ -9,47 +9,58 @@
 namespace AppBundle\Security;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+
 
 class RoleHierarchy {
 
 
-    /** @var ContainerInterface  */
-    private $container;
+    /** @var RoleHierarchyBuilder  */
+    private $builder;
 
-    /** @var mixed contient les donnée du fichier de parametre "roles_parametres.yml" */
-    private $roleHierarchyData;
-    
-    /**
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container = null)
+    /** @var  array */
+    private $roleHierarchy;
+
+    /** @var  array    ex: roleList['ROLE_USER] donne le Role correspondant */
+    private $roleList;
+
+    public function __construct(RoleHierarchyBuilder $builder)
     {
-        $this->container = $container;
-        $this->roleHierarchyData = $this->container->getParameter('role_hierarchy');
+        /*
+         * builder create the role hierarchy and give it ot this class
+         */
+        $builder->build();
+        $this->roleHierarchy = $builder->getHierarchy();
+        $this->roleList = $builder->getAllRoles();
+        $this->builder = $builder;
     }
 
 
     /**
-     * Deduce roles form an array of roles based on the hiearchy
+     * Deduce roles form an array of roles based on the hierarchy
      *
-     * @param array $roles
+     * @param array $rolesKey
      * @return array
      */
-    public function getDeducedRoles($roles)
+    public function getDeducedRoles($rolesKey)
     {
         $collection = new ArrayCollection();
 
-        foreach($roles as $role)
+        foreach($rolesKey as $key)
         {
-            $deducedRoles = $this->getSubRoles($role);
+            $role = $this->getRoleByKey($key);
 
-            foreach($deducedRoles as $deducedRole)
+            $childsRoles = $role->getChildsRecursive(true);
+
+            if(!empty($childsRoles))
             {
-                if(!$collection->contains($deducedRole))
+                /** @var Role $childRole */
+                foreach($childsRoles as $childRole)
                 {
-                    if($this->isExistingRole($deducedRole))//petit check pour avoir l'esprit tranquil
-                        $collection->add($deducedRole);
+                    if(!$collection->contains($childRole->getKey()))
+                    {
+                        if($this->isExistingRole($childRole->getKey()))//petit check pour avoir l'esprit tranquil
+                            $collection->add($childRole->getKey());
+                    }
                 }
             }
         }
@@ -57,99 +68,31 @@ class RoleHierarchy {
         return $collection->toArray();
     }
 
-
-
     /**
-     * Return all the role under the $role in the hierarchy (and with/without himself optionaly)
-     *
-     * @param $role
-     * @param bool $selfInclude
-     * @return array
+     * @param string $roleKey
+     * @return Role
      */
-    public function getSubRoles($role,$selfInclude = true)
+    public function getRoleByKey($roleKey)
     {
-        $childsRole = $this->findSubArrayByKey($this->roleHierarchyData,$role);
-
-        if($childsRole == null)
-        {
-            return ( $selfInclude ? array($role) : array() );
-        }
-
-        $deductedRoles = $this->extractKeys($childsRole);
-
-        if($selfInclude)
-        {
-            $deductedRoles[] = $role;
-        }
-
-        return $deductedRoles;
+        return $this->roleList[$roleKey];
     }
 
     /**
      * Check if the role is present in the hierarchy
      *
-     * @param $role
+     * @param string $roleKey
      * @return bool
      */
-    public function isExistingRole($role)
+    public function isExistingRole($roleKey)
     {
-        $allRoles = $this->extractKeys($this->roleHierarchyData);
-
-        return in_array($role,$allRoles);
-
+        return array_key_exists($roleKey,$this->roleList);
     }
 
-
     /**
-     * cette methode permet d'extraire les infos de la hierarchy stockée dans "roles_parameters.yml"
-     *
-     * @param $array
      * @return array
      */
-    private function extractKeys($array)
+    public function getHierarchy()
     {
-        $keys = array();
-        foreach($array as $key => $value)
-        {
-            $keys[] = $key;
-            if(is_array($value))
-            {
-                $childKeys = $this->extractKeys($value);
-                $keys = array_merge($keys,$childKeys);
-            }
-        }
-        return $keys;
+        return $this->roleHierarchy;
     }
-
-    /**
-     * cette methode permet d'extraire les infos de la hierarchy stockée dans "roles_parameters.yml"
-     *
-     * @param $arrayData
-     * @param $searchRole
-     * @return null
-     */
-    private function findSubArrayByKey($arrayData,$searchRole)
-    {
-        foreach($arrayData as $key => $array)
-        {
-            if($key == $searchRole)
-            {
-                return $array;
-            }
-            else
-            {
-                if(is_array($array))
-                {
-                    $subArray = $this->findSubArrayByKey($array,$searchRole);
-
-                    if($subArray != null)
-                    {
-                        return $subArray;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
 }

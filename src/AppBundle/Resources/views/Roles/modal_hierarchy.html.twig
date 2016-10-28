@@ -1,0 +1,34 @@
+{% extends 'AppBundle:Templates:modal.html.twig' %}
+
+{% import _self as macros %}
+
+{% block header %}
+
+    Hierarchie des roles
+
+{% endblock %}
+
+{% block content %}
+
+
+
+    <ul>
+    {% for root in hierarchy %}
+        {{ _self.printRole(root) }}
+    {% endfor %}
+    </ul>
+
+
+{% endblock %}
+
+
+
+{% macro printRole(role) %}
+
+    <li>{{ role.key }} {% if role.description is not null %}{{ help(role.description) }}{% endif %}</li>
+    <ul>
+        {% for child in role.childs %}
+            {{ _self.printRole(child) }}
+        {% endfor %}
+    </ul>
+{% endmacro %}
