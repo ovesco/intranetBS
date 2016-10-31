@@ -37,18 +37,20 @@ class AttributionController extends Controller
         if ($membre != null)
             $attribution->setMembre($membre);
 
-        $attributionForm = $this->createForm(new AttributionType(), $attribution);
+        $em = $this->getDoctrine()->getManager();
+
+        $attributionForm = $this->createForm(new AttributionType($em), $attribution);
         $attributionForm->handleRequest($request);
 
-        if ($attributionForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
+        if ($attributionForm->isSubmitted() && $attributionForm->isValid()) {
             $em->persist($attribution);
             $em->flush();
 
             return new JsonResponse($attribution, Response::HTTP_CREATED);
         }
 
-        $attributionForm = $this->createForm(new AttributionType(), $attribution, array(
+        $attributionForm = $this->createForm(new AttributionType($em), $attribution, array(
             'action' => $this->generateUrl('app_attribution_add')
         ));
 
@@ -73,13 +75,19 @@ class AttributionController extends Controller
     {
         $attribution->setDateFin($dateFin);
 
-        $attributionForm = $this->createForm(new AttributionType(), $attribution,
-            array('action' => $this->generateUrl('app_attribution_edit', array('attribution' => $attribution->getId()))));
+        $em = $this->getDoctrine()->getManager();
+
+        $attributionForm = $this->createForm(
+            new AttributionType($em),
+            $attribution,
+            array(
+                'action' => $this->generateUrl('app_attribution_edit', array('attribution' => $attribution->getId()))
+            )
+        );
 
         $attributionForm->handleRequest($request);
 
-        if ($attributionForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+        if ($attributionForm->isSubmitted() && $attributionForm->isValid()) {
             $em->persist($attribution);
             $em->flush();
 

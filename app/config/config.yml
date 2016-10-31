@@ -108,15 +108,6 @@ swiftmailer:
         path: "%kernel.cache_dir%/swiftmailer/spool"
     delivery_address:  dev.sauvabelin@gmail.com # Option de Dév. qui permet de réaiguiller tout les mails sur cette adresse.
 
-# FOS REST Bundle
-fos_rest:
-    body_listener: true # to receive json encoded requests
-    body_converter:
-            enabled: true # enable the use of paramconverter in rest route 
-    routing_loader:
-        default_format: json
-        include_format: false
-
 #
 sensio_framework_extra:
     request: { converters: true }

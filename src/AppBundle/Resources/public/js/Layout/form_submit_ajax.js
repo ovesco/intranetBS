@@ -43,24 +43,23 @@ function postForm( $form ){
         url         : $form.attr( 'action' ),
         data        : values,
         success     : function(data) {
-
-            /* Submit has succeeded */
-            if(data == true) {
-                location.reload();
-            }
-            /* Problem occured */
-            else {
-                /* Remove old modal and show new with fields errors */
-                $("[id^=modal-]").remove();
-                $(data).modal('show');
-
-                /* Add error */
-                alerte.send("Erreur lors de l'envoi du formulaire");
-            }
-
+            location.reload();
         },
         error: function (xhr, ajaxOptions, thrownError) {
             alerte.send("Erreur lors de l'envoi du formulaire\nDétails : " + xhr.status + " / " + thrownError, 'error');
+
+            return;
+
+            // TODO: précédemment, le success pouvait avoir un "false" comme valeur de retour et avoir un nouveau
+            // formulaire avec les messages d'erreur en retour. Sauf que c'est pas terroche, il faut tester ici le
+            // code d'erreur et si c'est "bad arguments" afficher le form avec les erreurs (ci-dessous)
+
+            /* Remove old modal and show new with fields errors */
+            $("[id^=modal-]").remove();
+            $(data).modal('show');
+
+            /* Add error */
+            alerte.send("Erreur lors de l'envoi du formulaire");
         }
     });
 }
