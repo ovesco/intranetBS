@@ -10,6 +10,10 @@
         <div class="column">
             <div class="row">
 
+                <a href="{{ path('app_user_list') }}" ><i class="angle double left icon"></i>Retour à la liste</a>
+
+                <h3>New user</h3>
+
                 {{ form_start(form,{'attr': {'class': 'ui form'}}) }}
 
                 {{ form_row(form.username) }}

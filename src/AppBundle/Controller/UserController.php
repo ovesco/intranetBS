@@ -14,6 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Utils\Menu\Menu;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Voters\UserVoter;
+use AppBundle\Security\RoleHierarchy;
 
 /**
  * @Route("/intranet/admin/user")
@@ -49,7 +50,12 @@ class UserController extends Controller
     {
         $this->denyAccessUnlessGranted('view',$user);
 
-        return array('user'=>$user);
+        /** @var RoleHierarchy $rh */
+        $rh = $this->get('app.role.hierarchy');
+
+        $deductedRoles = $rh->getAllRolesForUser($user);
+
+        return array('user'=>$user,'deductedRoles'=> $deductedRoles);
     }
 
     /**
@@ -63,7 +69,7 @@ class UserController extends Controller
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         $user = new User();
-        $userForm = $this->createForm(new UserType(),$user);
+        $userForm = $this->createForm(new UserType(),$user,array('app.role.hierarchy'=>$this->get('app.role.hierarchy')));
 
         $userForm->handleRequest($request);
 
@@ -79,7 +85,7 @@ class UserController extends Controller
 
     /**
      * @param Request $request
-     * @Route("/edit/{user}")
+     * @Route("/edit/{user}", options={"expose"=true})
      * @Template("AppBundle:User:page_edit.html.twig")
      * @return Response
      * @ParamConverter("user", class="AppBundle:User")
@@ -88,7 +94,7 @@ class UserController extends Controller
 
         $this->denyAccessUnlessGranted('edit',$user);
 
-        $userForm = $this->createForm(new UserType(),$user);
+        $userForm = $this->createForm(new UserType(),$user,array('app.role.hierarchy'=>$this->get('app.role.hierarchy')));
 
         $userForm->handleRequest($request);
 
@@ -98,7 +104,23 @@ class UserController extends Controller
             return $this->redirect($this->generateUrl('app_user_list'));
         }
 
-        return array('form'=>$userForm->createView());
+        return array('form'=>$userForm->createView(),'user'=>$user);
+
+    }
+
+    /**
+     * @param Request $request
+     * @Route("/remove/{user}", options={"expose"=true})
+     * @return Response
+     * @ParamConverter("user", class="AppBundle:User")
+     */
+    public function removeAction(Request $request, User $user){
+
+        $this->denyAccessUnlessGranted('remove',$user);
+
+        $this->get('app.repository.user')->remove($user);
+
+        return $this->redirect($this->generateUrl('app_user_list'));
 
     }
 

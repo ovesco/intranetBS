@@ -8,16 +8,20 @@
         <div class="column">
             <div class="row">
 
-                <div class="ui blue message">
-                    Pour plus d'info sur la hierachy des roles
 
-                    {{ modal_caller('<div class="ui blue button">see role hierachy</div>',path('app_role_hierarchy')) }}
 
-                </div>
+                <a href="{{ path('app_user_create') }}" class="ui green icon button"><i class="add icon"></i>Create a new user</a>
 
 
                 {{ list_caller.userAll|raw }}
 
+
+                <div class="ui orange message">
+                    Pour plus d'info sur la hierachy des roles :
+
+                    {{ modal_caller('<a>voir la hierachie des roles</a>',path('app_role_hierarchy')) }}
+
+                </div>
 
             </div>
         </div>

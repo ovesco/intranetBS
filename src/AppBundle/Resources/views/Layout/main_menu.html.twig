@@ -23,37 +23,6 @@
 
 {% endmacro %}
 
-
-{#
-{% macro display_block(block_label, block) %}
-
-    <div class="item">
-        <div class="header">{{ block_label }}</div>
-        <div class="menu">
-            {% for item in menu.getBloc(block) %}
-                {% if true %} {#item.expanded#
-                    <a class="item" href="{{ path(item.routeName) }}">{% if item.icon is not null %}<i class="ui {{ item.icon }} icon"></i>{% endif %}{{ item.label }}</a>
-                {% endif %}
-            {% endfor %}
-
-            <div class="ui dropdown item">
-                <i class="dropdown icon"></i>
-                Display Options
-                <div class="menu">
-                    <div class="header">Text Size</div>
-                    <a class="item">Small</a>
-                    <a class="item">Medium</a>
-                    <a class="item">Large</a>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-{% endmacro %}
-
-#}
-
 <div id="main-menu" class="ui vertical inverted sidebar menu">
     <div class="item">
         <a class="ui logo icon image" href="{{ path('app_app_home') }}">
@@ -65,7 +34,14 @@
 
     {{ macro_menu.display_block('Base de donnée','database') }}
 
-    {{ macro_menu.display_block('Strucuture','structure') }}
+    {% if is_granted('ROLE_STRUCTURE') %}
+        {% cache 'twig.layout.main_menu_structure' {time: 0} %}
+            {{ macro_menu.display_block('Strucuture','structure') }}
+        {% endcache %}
+    {% endif %}
+
+
+    {% if groups is not empty %}
 
     <div class="item">
         <div class="header">Groupe{% if groups|length > 1 %}s{% endif %}</div>
@@ -76,14 +52,31 @@
         </div>
     </div>
 
+    {% endif %}
 
-    {{ macro_menu.display_block('Paramètres','parameter') }}
 
     {{ macro_menu.display_block('Envois','envois') }}
 
-    {{ macro_menu.display_block('Finances','finances') }}
+    {% if is_granted('ROLE_PARAMETER') %}
+        {% cache 'twig.layout.main_menu_parameter' {time: 0} %}
+            {{ macro_menu.display_block('Paramètres','parameter') }}
+        {% endcache %}
+    {% endif %}
 
-    {{ macro_menu.display_block('Sécurité','security') }}
+
+    {% if is_granted('ROLE_FINANCE') %}
+        {% cache 'twig.layout.main_menu_finances' {time: 0} %}
+            {{ macro_menu.display_block('Finances','finances') }}
+        {% endcache %}
+    {% endif %}
+
+    {% if is_granted('ROLE_SECURITY') %}
+        {% cache 'twig.layout.main_menu_security' {time: 0} %}
+            {{ macro_menu.display_block('Sécurité','security') }}
+        {% endcache %}
+    {% endif %}
+
+
 
 
 </div>

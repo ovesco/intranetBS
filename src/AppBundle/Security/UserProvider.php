@@ -37,10 +37,7 @@ class UserProvider implements UserProviderInterface {
 
         if($user instanceof User)
         {
-            $user->setRoles(
-                $this->roleHierarchy->getDeducedRoles(
-                    array_merge($user->getSelectedRoles(),$user->getMembreRoles())
-                ));
+            $user->setRoles($this->roleHierarchy->getAllRolesForUser($user));
 
             return $user;
         }

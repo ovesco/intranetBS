@@ -32,7 +32,10 @@ parameters:
     # Liste des roles nécéssitant une explication
     role_description:
         ROLE_ADMIN: "administrateur"
-        ROLE_FINANCE: "finances"
+        ROLE_FINANCE: "gestion des finances"
+        ROLE_SECURITY: "Gestion des utilisateurs du site, doit d'accès et privilège"
+        ROLE_PARAMETER: "Gestion des parametres dynamique de l'application"
+        ROLE_STRUCTURE: "Gestion de la structure des groupes, fonctions, etc."
 
     # Hierachie des roles
     role_hierarchy:
@@ -43,3 +46,5 @@ parameters:
                     ROLE_CREANCE_EDIT:
                     ROLE_CREANCE_VIEW:
             ROLE_STRUCTURE:
+            ROLE_SECURITY:
+            ROLE_PARAMETER:

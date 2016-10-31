@@ -48,7 +48,7 @@ Les forms des memebres sont traités par les templates xeditables
 
     {%  else  %}
 
-        <select multiple {{ block('widget_attributes') }}>
+        <select multiple {{ block('widget_attributes') }} class="ui dropdown">
             {% if empty_value is not none -%}
                 <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ empty_value|trans({}, translation_domain) }}</option>
             {%- endif %}

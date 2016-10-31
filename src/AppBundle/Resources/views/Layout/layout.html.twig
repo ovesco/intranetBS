@@ -28,16 +28,20 @@
 
     <body>
 
-        {% cache 'twig.layout.main_menu' {time: 0} %}
-        {{ render(controller('AppBundle:Layout:mainMenuGenerate')) }}
-        {% endcache %}
+    {#
+       {% cache 'twig.layout.main_menu' {time: 0} %}
+       {{ render(controller('AppBundle:Layout:mainMenuGenerate')) }}
+       {% endcache %}
 
+       #}
 
-        {#
-            LISTING
-            On définit le container, car il nous permettra ensuite de modifier le menu
-            de manière dynamique à chaque fois qu'on souhaite accéder au listing
-        #}
+    {{ render(controller('AppBundle:Layout:mainMenuGenerate')) }}
+
+       {#
+           LISTING
+           On définit le container, car il nous permettra ensuite de modifier le menu
+           de manière dynamique à chaque fois qu'on souhaite accéder au listing
+       #}
         <div class="ui top sidebar ui secondary segment" id="listing-bar"></div>
 
         <div class="pusher">

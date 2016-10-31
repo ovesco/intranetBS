@@ -9,6 +9,7 @@
 namespace AppBundle\Security;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Entity\User;
 
 
 class RoleHierarchy {
@@ -36,6 +37,22 @@ class RoleHierarchy {
 
 
     /**
+     * Get all deducted roles for user. return like array('ROLE_ADMIN','ROLE_USER',...)
+     *
+     * @param User $user
+     * @return array
+     */
+    public function getAllRolesForUser(User $user)
+    {
+        $roles = array_merge($user->getSelectedRoles(),$user->getMembreRoles());
+        if(empty($roles))
+            return array();
+        return $this->getDeducedRoles(
+            array_merge($user->getSelectedRoles(),$user->getMembreRoles())
+        );
+    }
+
+    /**
      * Deduce roles form an array of roles based on the hierarchy
      *
      * @param array $rolesKey
@@ -43,23 +60,29 @@ class RoleHierarchy {
      */
     public function getDeducedRoles($rolesKey)
     {
+        if(empty($rolesKey))
+            return array();//small perf and avoid logic error
+
         $collection = new ArrayCollection();
 
         foreach($rolesKey as $key)
         {
             $role = $this->getRoleByKey($key);
 
-            $childsRoles = $role->getChildsRecursive(true);
-
-            if(!empty($childsRoles))
+            if($role instanceof Role)
             {
-                /** @var Role $childRole */
-                foreach($childsRoles as $childRole)
+                $childsRoles = $role->getChildsRecursive(true);
+
+                if(!empty($childsRoles))
                 {
-                    if(!$collection->contains($childRole->getKey()))
+                    /** @var Role $childRole */
+                    foreach($childsRoles as $childRole)
                     {
-                        if($this->isExistingRole($childRole->getKey()))//petit check pour avoir l'esprit tranquil
-                            $collection->add($childRole->getKey());
+                        if(!$collection->contains($childRole->getKey()))
+                        {
+                            if($this->isExistingRole($childRole->getKey()))//petit check pour avoir l'esprit tranquil
+                                $collection->add($childRole->getKey());
+                        }
                     }
                 }
             }
@@ -70,11 +93,24 @@ class RoleHierarchy {
 
     /**
      * @param string $roleKey
-     * @return Role
+     * @return Role|null
      */
     public function getRoleByKey($roleKey)
     {
-        return $this->roleList[$roleKey];
+        if(array_key_exists($roleKey,$this->roleList))
+            return $this->roleList[$roleKey];
+        else
+            return null;
+    }
+
+    /**
+     * return array with all the role (e.g. array(ROLE_XXX, ROLE_YYY,...) )
+     *
+     * @return array
+     */
+    public function getAllExistingRoles()
+    {
+        return array_keys($this->roleList);
     }
 
     /**
