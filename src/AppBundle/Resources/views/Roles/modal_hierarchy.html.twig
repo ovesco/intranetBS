@@ -10,25 +10,27 @@
 
 {% block content %}
 
-
-
-    <ul>
+<div class="ui list">
     {% for root in hierarchy %}
         {{ _self.printRole(root) }}
     {% endfor %}
-    </ul>
-
+</div>
 
 {% endblock %}
 
 
-
 {% macro printRole(role) %}
+    <div class="item">
+        <i class="key icon"></i>
+        <div class="content">
+            <div class="header">{{ role.key }}</div>
+            {% if role.description is not null %}<div class="description">{{ role.description }}</div>{% endif %}
+            <div class="list">
+                {% for child in role.childs %}
+                    {{ _self.printRole(child) }}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 
-    <li>{{ role.key }} {% if role.description is not null %}{{ help(role.description) }}{% endif %}</li>
-    <ul>
-        {% for child in role.childs %}
-            {{ _self.printRole(child) }}
-        {% endfor %}
-    </ul>
 {% endmacro %}

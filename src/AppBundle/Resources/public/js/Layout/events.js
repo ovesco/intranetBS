@@ -20,7 +20,9 @@ $('.event').click(function () {
                 switch (this.postAction) {
                     case '':
                         break;
-
+                    case 'Link':
+                        window.location.href = route;
+                        break;
                     case 'RefreshList':
                     case 'RefreshPage':
                         location.reload();

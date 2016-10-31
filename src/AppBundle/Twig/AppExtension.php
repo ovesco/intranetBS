@@ -64,6 +64,7 @@ class AppExtension extends \Twig_Extension
             'class_name_mere' => Mere::className(),
             'popup_selector' => 'popupable',
             'modal_caller_selector' => 'modal_caller',
+
         );
     }
 

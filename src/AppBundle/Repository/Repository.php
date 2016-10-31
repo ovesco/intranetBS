@@ -25,4 +25,10 @@ class Repository extends EntityRepository{
         $this->getEntityManager()->flush();
     }
 
+    public function remove($entity)
+    {
+        $this->getEntityManager()->remove($entity);
+        $this->getEntityManager()->flush();
+    }
+
 }

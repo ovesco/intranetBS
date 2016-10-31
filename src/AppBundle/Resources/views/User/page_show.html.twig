@@ -9,6 +9,8 @@
         <div class="column">
             <div class="row">
 
+                <a href="{{ path('app_user_list') }}" ><i class="angle double left icon"></i>Retour à la liste</a>
+
 
                 <table class="ui celled table">
                     <thead>
@@ -50,7 +52,7 @@
                     <tr>
                         <td>Roles déduit du membre</td>
                         <td>
-                            {% for role in user.getMembreRoles() %}
+                            {% for role in deductedRoles %}
                                 {{ role }} <br>
                             {% endfor %}
                         </td>
@@ -59,7 +61,9 @@
                     </tbody>
                 </table>
 
-                <a class="ui blue button" href="{{ path('app_user_edit',{'user':user.id}) }}">Edit this user</a>
+                <a class="ui blue icon button" href="{{ path('app_user_edit',{'user':user.id}) }}"><i class="edit icon"></i>Editer</a>
+
+                <a class="ui red icon button" href="{{ path('app_user_remove',{'user':user.id}) }}"><i class="remove icon"></i>Supprimer</a>
 
             </div>
         </div>

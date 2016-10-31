@@ -28,11 +28,11 @@ class ListModelsUser implements ListModelInterface
 
         $list->setSearchBar(true);
 
-        $list->addColumn(new Column('Username', function (User $user) use ($router) {
+        $list->addColumn(new Column('Utilisateur', function (User $user) use ($router) {
             return '<a href="' . $router->generate('app_user_show', array('user' => $user->getId())) . '">' . $user->getUsername() . '</a>';
         }));
 
-        $list->addColumn(new Column('Last connexion', function (User $user) use ($router) {
+        $list->addColumn(new Column('Dernière connexion', function (User $user) use ($router) {
             return (is_null($user->getLastConnexion())? '-' : $user->getLastConnexion()->format('d/m/Y'));
         }));
 
@@ -47,7 +47,7 @@ class ListModelsUser implements ListModelInterface
             }
         }));
 
-        $list->addColumn(new Column('Roles choisi', function (User $user) use ($router) {
+        $list->addColumn(new Column('Roles choisis', function (User $user) use ($router) {
             $roles = '';
             foreach($user->getSelectedRoles() as $role)
             {
@@ -57,9 +57,9 @@ class ListModelsUser implements ListModelInterface
             return $roles;
         }));
 
-        $list->addColumn(new Column('Membre', function (User $user) use ($router) {
+        $list->addColumn(new Column('Membre lié', function (User $user) use ($router) {
             if(is_null($user->getMembre())){
-                return 'No membre';
+                return 'Pas de membre';
             }
             else{
                 return $user->getMembre()->getPrenom().' '. $user->getMembre()->getNom();
@@ -79,9 +79,18 @@ class ListModelsUser implements ListModelInterface
                 }
                 return $roles;
             }
-            return 'No roles from membre';
+            return 'Aucun roles fournit par le membre';
         }));
 
+        $userParameters = function (User $user) {
+            return array(
+                "user" => $user->getId()
+            );
+        };
+
+        $list->addActionLine(new ActionLine('Modifier', 'edit', 'app_user_edit', $userParameters, EventPostAction::Link));
+
+        $list->addActionLine(new ActionLine('Voir', 'zoom', 'app_user_show', $userParameters, EventPostAction::Link));
 
 
         //return '<a href="' . $router->generate('app_membre_show', array('membre' => $membre->getId())) . '">' . $membre->getPrenom() . '</a>';

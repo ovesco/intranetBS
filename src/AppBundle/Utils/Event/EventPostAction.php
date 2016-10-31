@@ -8,6 +8,7 @@ class EventPostAction
     const RefreshList = 'RefreshList';
     const ShowModal = 'ShowModal';
     const Notify = 'Notify';
+    const Link = 'Link';
 
 }
 
