@@ -9,6 +9,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * Model
  *
+ * Le model sera par exemple: Patrouille, troupe, meute. Troupe et meute auront la même catégorie : Unité
+ *
  * @ORM\Table(name="app_model")
  * @Gedmo\Loggable
  * @ORM\Entity

@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @ORM\Table(name="app_fonctions")
  * @Gedmo\Loggable
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\FonctionRepository")
  */
 class Fonction
 {
@@ -43,7 +43,7 @@ class Fonction
     /**
      * @var array
      *
-     * @ORM\Column(name="roles", type="simple_array")
+     * @ORM\Column(name="roles", type="simple_array", nullable=true)
      */
     private $roles;
 
@@ -194,5 +194,13 @@ class Fonction
     public function getRoles()
     {
         return $this->roles;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRemovable()
+    {
+        return $this->attributions->isEmpty();
     }
 }

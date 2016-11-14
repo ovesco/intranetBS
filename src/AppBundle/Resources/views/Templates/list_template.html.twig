@@ -76,46 +76,62 @@
         </tbody>
     </table>
 
+    <div class="ui grid">
 
-    {# List actions #}
-    {% if list.actionsList|length != 0 %}
+        <div class="eight wide column">
 
-        {% for action in list.actionsList %}
-            <button class="ui icon button event"
-                    data-content="{{ action.label }}"
-                    data-event-route="{{ action.route }}"
-                    data-event-parameters="{{ action.routeParameters }}"
-                    data-event-postactions="{{ action.getPostActions }}">
-                <i class="{{ action.icon }} icon"></i>
-                {{ action.label }}
-            </button>
-        {% endfor %}
+            {# List actions #}
+            {% if list.actionsList|length != 0 %}
 
-    {% endif %}
+                {% for action in list.actionsList %}
+                    <button class="ui icon button event {{ action.style }}"
+                            data-content="{{ action.label }}"
+                            data-event-route="{{ action.route }}"
+                            data-event-parameters="{{ action.routeParameters }}"
+                            data-event-postactions="{{ action.getPostActions }}">
+                        <i class="{{ action.icon }} icon"></i>
+                        {{ action.label }}
+                    </button>
+                {% endfor %}
 
-    {% if list.actionsLine|length != 0 %}
-        <div class="ui compact menu">
-            <div class="ui simple dropdown item">
-                <i class="list icon"></i>
-                Actions
-                <i class="dropdown icon"></i>
+            {% endif %}
 
-                <div class="menu">
-                    {% for action in list.actionsLine %}
-                        {% if action.isInMass %}
-                            <div class="item event_mass">
-                                <i class="{{ action.icon }} icon"
-                                   data-content="{{ action.label }}"
-                                   data-event-route="{{ action.route }}"
-                                   data-event-postactions="{{ action.getPostActions }}"></i>
-                                {{ action.label }}
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
         </div>
-    {% endif %}
+
+        <div class="eight wide right aligned column">
+
+            {% if list.actionsLine|length != 0 %}
+                <div class="ui compact menu">
+                    <div class="ui simple dropdown item">
+                        <i class="list icon"></i>
+                        Actions
+                        <i class="dropdown icon"></i>
+
+                        <div class="menu">
+                            {% for action in list.actionsLine %}
+                                {% if action.isInMass %}
+                                    <div class="item event_mass">
+                                        <i class="{{ action.icon }} icon"
+                                           data-content="{{ action.label }}"
+                                           data-event-route="{{ action.route }}"
+                                           data-event-postactions="{{ action.getPostActions }}"></i>
+                                        {{ action.label }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+
+
+
 
 </div>
 

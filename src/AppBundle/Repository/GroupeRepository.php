@@ -1,10 +1,17 @@
 <?php
-namespace AppBundle\Entity;
-use Doctrine\ORM\EntityRepository;
+/**
+ * Created by PhpStorm.
+ * User: NicolasUffer
+ * Date: 20.10.16
+ * Time: 20:33
+ */
+
+namespace AppBundle\Repository;
 
 
-class GroupeRepository extends EntityRepository
-{
+class GroupeRepository extends Repository{
+
+
     /**
      * Retourne la hierarchie complète au format JSON pour affichage dans la hierarchie
      * canvas GO.js
@@ -31,7 +38,7 @@ class GroupeRepository extends EntityRepository
 
         $queryBuilder = $this->createQueryBuilder('groupe');
 
-            $queryBuilder->andWhere($queryBuilder->expr()->isNull('groupe.parent'));
+        $queryBuilder->andWhere($queryBuilder->expr()->isNull('groupe.parent'));
 
 
         return $queryBuilder->getQuery()->getResult();
@@ -56,12 +63,12 @@ class GroupeRepository extends EntityRepository
         }
 
         $queryBuilder
-        ->andWhere('groupe.id = :id')
-        ->setParameter('id', $groupeId)
-        ->andWhere('attribution.dateFin is NULL OR attribution.dateFin >= :dateFin')
-        ->setParameter('dateFin', $date)
-        ->andWhere('attribution.dateDebut <= :dateDebut')
-        ->setParameter('dateDebut', $date);
+            ->andWhere('groupe.id = :id')
+            ->setParameter('id', $groupeId)
+            ->andWhere('attribution.dateFin is NULL OR attribution.dateFin >= :dateFin')
+            ->setParameter('dateFin', $date)
+            ->andWhere('attribution.dateDebut <= :dateDebut')
+            ->setParameter('dateDebut', $date);
 
         $queryBuilder->addSelect('COUNT(attribution) as total');
 
@@ -85,7 +92,7 @@ class GroupeRepository extends EntityRepository
 
         do{
 
-           $arrayStart = $idArray;
+            $arrayStart = $idArray;
             $queryBuilder = $this->createQueryBuilder('groupe');
             $queryBuilder
                 ->andWhere('groupe.parent IN (:ids) OR groupe.id IN (:ids)')

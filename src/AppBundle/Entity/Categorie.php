@@ -9,9 +9,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * Categorie
  *
+ * Exemple de catégorie: Brigade, Branche, Unité, Sous-unité
+ *
+ * => n'est donc pas dépendant de l'age par ex: patrouille / sixaine sont toutes deux des sous-unité
+ *
  * @ORM\Table(name="app_categorie")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CategorieRepository")
  * @Gedmo\Loggable
- * @ORM\Entity
  */
 class Categorie
 {

@@ -1,0 +1,25 @@
+services:
+    # REPOSITORY FOR ENTITY
+    # Entity Repository as service (simplify code in controller)
+    app.repository.user:
+        class: AppBundle\Repository\UserRepository
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+        arguments: ['AppBundle:User']
+
+    app.repository.categorie:
+        class: AppBundle\Repository\CategorieRepository
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+        arguments: ['AppBundle:Categorie']
+
+    app.repository.fonction:
+        class: AppBundle\Repository\FonctionRepository
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+        arguments: ['AppBundle:Fonction']
+    app.repository.groupe:
+        class: AppBundle\Repository\GroupeRepository
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+        arguments: ['AppBundle:Groupe']

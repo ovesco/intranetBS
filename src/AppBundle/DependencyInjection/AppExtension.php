@@ -23,6 +23,8 @@ class AppExtension extends Extension
         $loader->load('services.yml');
         $loader->load('intranet_parameters.yml');
         $loader->load('roles_parameters.yml');
+        $loader->load('voters.yml');
+        $loader->load('repositories.yml');
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);

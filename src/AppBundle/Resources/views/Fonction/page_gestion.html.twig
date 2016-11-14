@@ -11,16 +11,7 @@
                 <h3>Gestion des fonctions</h3>
                 <div class="ui segment">
 
-
-                    <div class="ui small green button addFonction">
-                        <i class="add icon"></i>
-                        Ajouter une fonction
-                    </div>
-
-                    {% include "AppBundle:Fonction:liste_fonctions.html.twig" with {'fonctions': fonctions} %}
-
-
-
+                    {{ list_caller.fonctionAll()|raw }}
 
                 </div>
             </div>

@@ -33,7 +33,7 @@ class UserController extends Controller
      */
     public function listAction(Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $this->denyAccessUnlessGranted('ROLE_SECURITY');
 
         return array();
     }

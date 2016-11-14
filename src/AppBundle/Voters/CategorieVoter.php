@@ -11,12 +11,12 @@ namespace AppBundle\Voters;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use AppBundle\Entity\User;
 
-class UserVoter extends BaseVoter{
+class CategorieVoter extends BaseVoter{
 
 
     protected function getSupportedClass()
     {
-        return 'AppBundle\Entity\User';
+        return 'AppBundle\Entity\Categorie';
     }
 
     /**
@@ -24,7 +24,7 @@ class UserVoter extends BaseVoter{
      */
     protected function canView($subject, User $user, TokenInterface $token)
     {
-        return $this->hasRole('ROLE_SECURTIY',$token);
+        return true;
     }
 
     /**
@@ -32,7 +32,7 @@ class UserVoter extends BaseVoter{
      */
     protected function canEdit($subject, User $user, TokenInterface $token)
     {
-        return $this->hasRole('ROLE_SECURTIY',$token);
+        return $this->hasRole('ROLE_STRUCTURE',$token);
     }
 
     /**
@@ -40,7 +40,7 @@ class UserVoter extends BaseVoter{
      */
     protected function canRemove($subject, User $user, TokenInterface $token)
     {
-        return $this->hasRole('ROLE_SECURTIY',$token);
+        return $this->hasRole('ROLE_STRUCTURE',$token);
     }
 
     /**
@@ -48,7 +48,7 @@ class UserVoter extends BaseVoter{
      */
     protected function canCreate($subject, User $user, TokenInterface $token)
     {
-        return $this->hasRole('ROLE_SECURTIY',$token);
+        return $this->hasRole('ROLE_STRUCTURE',$token);
     }
 
 }

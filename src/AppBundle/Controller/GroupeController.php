@@ -32,10 +32,7 @@ class GroupeController extends Controller
      */
     public function gestionAction(Request $request)
     {
-
-        $em = $this->getDoctrine()->getManager();
-
-        $hiestGroupes = $em->getRepository('AppBundle:Groupe')->findHighestGroupes();
+        $hiestGroupes = $this->get('app.repository.groupe')->findHighestGroupes();
 
         return $this->render('AppBundle:Groupe:page_gestion.html.twig', array(
             'highestGroupes' => $hiestGroupes
@@ -183,7 +180,7 @@ class GroupeController extends Controller
 
     /**
      * @Route("/edit/{groupe}", options={"expose"=true})
-     *
+     * @Template("AppBundle:Groupe:modal_form.html.twig", vars={"groupe"})
      * @param Request $request
      * @param Groupe $groupe
      * @return Response
@@ -191,31 +188,26 @@ class GroupeController extends Controller
      */
     public function editAction(Groupe $groupe,Request $request)
     {
+        $form = $this->createForm(new GroupeType(), $groupe,
+            array('action' => $this->generateUrl('app_groupe_edit',array('groupe'=>$groupe->getId()))));
 
-        //$editedGroupe = new Groupe();
-        $editedGroupeForm = $this->createForm(new GroupeShowType(), $groupe);
+        $form->handleRequest($request);
 
-        $editedGroupeForm->handleRequest($request);
-
-        if($editedGroupeForm->isValid())
+        if($form->isValid())
         {
-            $em = $this->getDoctrine()->getManager();
-
-            //$groupe->setNom($editedGroupe->getNom());
-
-
-            $em->flush();
-
+            $this->get('app.repository.groupe')->save($groupe);
+            return $this->redirect($this->generateUrl('app_groupe_gestion'));
         }
 
-        return $this->redirect($this->generateUrl('app_groupe_gestion'));
+        return array('form'=>$form->createView());
+
     }
 
 
 
     /**
      * @Route("/add", options={"expose"=true})
-     *
+     * @Template("AppBundle:Groupe:page_voir_groupe.html.twig", vars={"groupe"})
      * @param Request $request
      * @return Response
      */

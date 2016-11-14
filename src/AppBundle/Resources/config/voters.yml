@@ -1,0 +1,18 @@
+services:
+
+    # VOTERS
+    app.voter.user:
+        class:      AppBundle\Voters\UserVoter
+        arguments:
+            decisionManager: "@security.access.decision_manager"
+        public:     false #small boost performence
+        tags:
+            - { name: security.voter }
+
+    app.voter.categorie:
+        class:      AppBundle\Voters\CategorieVoter
+        arguments:
+            decisionManager: "@security.access.decision_manager"
+        public:     false #small boost performence
+        tags:
+            - { name: security.voter }

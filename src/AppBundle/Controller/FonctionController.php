@@ -10,9 +10,10 @@ use AppBundle\Utils\Menu\Menu;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use AppBundle\Form\FonctionType;
+use AppBundle\Form\Fonction\FonctionType;
 use AppBundle\Entity\Fonction;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use AppBundle\Utils\Response\ResponseFactory;
 
 /**
  * Class StructureController
@@ -34,10 +35,7 @@ class FonctionController extends Controller
      */
     public function gestionAction(Request $request) {
 
-        //retourne toutes les fonctions
-        $fonctions = $this->getDoctrine()->getRepository('AppBundle:Fonction')->findAll();
-
-        return array('fonctions' =>$fonctions);
+        return array();
     }
 
     /**
@@ -55,9 +53,7 @@ class FonctionController extends Controller
 
         if($addForm->isValid())
         {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($fonction);
-            $em->flush();
+            $this->get('app.repository.fonction')->save($fonction);
             return $this->redirect($this->generateUrl('app_fonction_gestion'));
         }
 
@@ -84,14 +80,33 @@ class FonctionController extends Controller
 
         if($editedForm->isValid())
         {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($fonction);
-            $em->flush();
+            $this->get('app.repository.fonction')->save($fonction);
             return $this->redirect($this->generateUrl('app_fonction_gestion'));
 
         }
 
         return array('form'=>$editedForm->createView());
+    }
+
+    /**
+     * @Route("/remove/{fonction}", options={"expose"=true})
+     * @param Request $request
+     * @param Fonction $fonction
+     * @return Response
+     * @ParamConverter("fonction", class="AppBundle:Fonction")
+     * @Template("AppBundle:Fonction:form_modal.html.twig")
+     */
+    public function removeAction(Request $request,Fonction $fonction)
+    {
+        if($fonction->isRemovable())
+        {
+            $this->get('app.repository.fonction')->remove($fonction);
+            return ResponseFactory::ok();
+        }
+        else
+        {
+            return ResponseFactory::forbidden();
+        }
     }
 
 }

@@ -29,6 +29,7 @@ security:
         - { path: ^/intranet/creance, roles: ROLE_CREANCE }
         - { path: ^/intranet/facture, roles: ROLE_FACTURE }
         - { path: ^/intranet/rappel, roles: ROLE_RAPPEL }
+        - { path: ^/intranet/structure, roles: ROLE_STRUCTURE }
         #acces general à n'importe quelle pages de l'app
         - { path: ^/intranet, roles: ROLE_USER } #minium role to access to app
 

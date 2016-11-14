@@ -15,7 +15,7 @@ use AppBundle\Entity\Model;
  *
  * @ORM\Table(name="app_groupes")
  * @Gedmo\Loggable
- * @ORM\Entity(repositoryClass="AppBundle\Entity\GroupeRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\GroupeRepository")
  */
 class Groupe
 {

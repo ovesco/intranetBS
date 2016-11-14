@@ -8,7 +8,7 @@
     <div class="ui page grid">
         <div class="row">
             <div class="column">
-                <h3>Gestion des catégories</h3>
+                <h3>Gestion des catégories {{ help('Exemple de catégorie: Brigade, Branche, Unité, Sous-unité') }} </h3>
                 <div class="ui segment">
                    {{ list_caller.categorieAll()|raw }}
                 </div>

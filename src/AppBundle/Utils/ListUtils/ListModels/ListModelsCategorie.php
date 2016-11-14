@@ -71,7 +71,7 @@ class ListModelsCategorie implements ListModelInterface
         };
 
         /* Editer la categorie courant */
-        $edit = new ActionLine('Modifier', 'edit', 'app_categorie_edit', $parameters, EventPostAction::RefreshList);
+        $edit = new ActionLine('Modifier', 'edit', 'app_categorie_edit', $parameters, EventPostAction::ShowModal);
         $edit->setInMass(false);
         $list->addActionLine($edit);
 
@@ -81,7 +81,7 @@ class ListModelsCategorie implements ListModelInterface
         $list->addActionLine($delete);
 
 
-        $list->addActionList(new ActionList('Ajouter', 'add', 'app_categorie_add', function(){return array();}, EventPostAction::ShowModal));
+        $list->addActionList(new ActionList('Ajouter', 'add', 'app_categorie_add', function(){return array();}, EventPostAction::ShowModal,null,'green'));
 
         return $list;
     }

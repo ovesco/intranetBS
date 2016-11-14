@@ -201,16 +201,7 @@ services:
             - @jms_serializer
 
 
-    # REPOSITORY FOR ENTITY
-    # Entity Repository as service (simplify code in controller)
-    app.repository.user:
-        class: AppBundle\Repository\UserRepository
-        factory_service: doctrine.orm.default_entity_manager
-        factory_method: getRepository
-        arguments: ['AppBundle:User']
-
     # SECURITY
-
     # Provider for user (used in authentication proccess)
     app.user.provider:
         class: AppBundle\Security\UserProvider
@@ -232,11 +223,4 @@ services:
             role_description: "%role_description%"
 
 
-    # VOTERS
-    app.voter.user:
-        class:      AppBundle\Voters\UserVoter
-        arguments:
-            decisionManager: "@security.access.decision_manager"
-        public:     false #small boost performence
-        tags:
-            - { name: security.voter }
+

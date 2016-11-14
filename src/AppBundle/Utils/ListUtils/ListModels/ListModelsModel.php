@@ -96,17 +96,17 @@ class ListModelsModel implements ListModelInterface
             );
         };
         /* Editer le model courant */
-        $edit = new ActionLine('Modifier', 'edit', 'app_model_edit', $parameters, EventPostAction::RefreshList);
+        $edit = new ActionLine('Modifier', 'edit', 'app_model_edit', $parameters, EventPostAction::ShowModal);
         $edit->setInMass(false);
         $list->addActionLine($edit);
 
-        $delete = new ActionLine('Supprimer', 'remove', 'app_model_remove', $parameters, EventPostAction::RefreshList);
+        $delete = new ActionLine('Supprimer', 'remove', 'app_model_remove', $parameters, EventPostAction::ShowModal);
         $delete->setInMass(false);
         $delete->setCondition(function(Model $model){return $model->isRemovable();});
         $list->addActionLine($delete);
 
 
-        $list->addActionList(new ActionList('Ajouter', 'add', 'app_model_add', function(){return array();}, EventPostAction::ShowModal));
+        $list->addActionList(new ActionList('Ajouter', 'add', 'app_model_add', function(){return array();}, EventPostAction::ShowModal,null,'green'));
 
 
         return $list;

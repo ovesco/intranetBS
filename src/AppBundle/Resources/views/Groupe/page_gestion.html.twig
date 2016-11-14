@@ -1,6 +1,6 @@
 {% extends 'AppBundle:Layout:layout.html.twig' %}
 
-{% import 'AppBundle:Groupe:macro_hierarchie_groupe.html.twig' as macro %}
+{% import _self as macro %}
 
 {% block titre %}Groupes{% endblock %}
 
@@ -13,12 +13,20 @@
                 <div class="ui segment">
 
 
+                    <div class="ui list">
+                        {% for group in highestGroupes %}
+                            {{ macro.printGroup(group) }}
+                        {% endfor %}
+                    </div>
+
+                    {{ list_caller.groupeAll()|raw }}
+
                     <div class="ui small button addGroupeRacine">
                         <i class="add icon"></i>
                         Ajouter un groupe racine
                     </div>
 
-                    {{ macro.hierarchie(highestGroupes)}}
+
 
                 </div>
             </div>
@@ -26,6 +34,22 @@
     </div>
 
 
+    {% macro printGroup(group) %}
+        <div class="item">
+            <i class="caret right icon"></i>
+            <div class="content">
+                <div class="header">{{ group.nom }}</div>
+                <div class="description">{{ group.model.nom }}
+                    {{ modal_caller('<div><i class="edit icon"></i></div>',path('app_groupe_edit',{'groupe':group.id})) }}
+                </div>
+                <div class="list">
+                    {% for child in group.enfants %}
+                        {{ _self.printGroup(child) }}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endmacro %}
 
 
 

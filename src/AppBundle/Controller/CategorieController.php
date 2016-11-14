@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Utils\Menu\Menu;
 use AppBundle\Utils\Response\ResponseFactory;
+use AppBundle\Repository\CategorieRepository;
 
 /* Entity */
 use AppBundle\Entity\Categorie;
@@ -25,7 +26,7 @@ use AppBundle\Form\Categorie\CategorieType;
  * Class CategorieController
  * @package AppBundle\Controller
  *
- * @Route("/intranet/categorie")
+ * @Route("/intranet/structure/categorie")
  */
 class CategorieController extends Controller
 {
@@ -51,6 +52,8 @@ class CategorieController extends Controller
      */
     public function addAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_STRUCTURE');
+
         $new = new Categorie();
         $newForm = $this->createForm(new CategorieType(),$new,
             array('action' => $this->generateUrl('app_categorie_add')));
@@ -59,9 +62,7 @@ class CategorieController extends Controller
 
         if($newForm->isValid())
         {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($new);
-            $em->flush();
+            $this->get('app.repository.categorie')->save($new);
             return ResponseFactory::ok();
         }
 
@@ -79,14 +80,16 @@ class CategorieController extends Controller
      */
     public function editAction(Categorie $categorie,Request $request)
     {
+        $this->denyAccessUnlessGranted('edit',$categorie);
+
         $editedForm = $this->createForm(new CategorieType(),$categorie,
             array('action' => $this->generateUrl('app_categorie_edit',array('categorie'=>$categorie->getId()))));
 
         $editedForm->handleRequest($request);
+
         if($editedForm->isValid())
         {
-            $em = $this->getDoctrine()->getManager();
-            $em->flush();
+            $this->get('app.repository.categorie')->save($categorie);
             return ResponseFactory::ok();
         }
         return array('form'=>$editedForm->createView());
@@ -101,12 +104,11 @@ class CategorieController extends Controller
      */
     public function removeAction(Categorie $categorie,Request $request)
     {
+        $this->denyAccessUnlessGranted('remove',$categorie);
+
         if($categorie->isRemovable())
         {
-            /** @var EntityManager $em */
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($categorie);
-            $em->flush();
+            $this->get('app.repository.categorie')->remove($categorie);
             return ResponseFactory::ok();
         }
         else

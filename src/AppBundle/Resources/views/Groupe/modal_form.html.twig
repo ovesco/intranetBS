@@ -1,29 +1,38 @@
 {% extends 'AppBundle:Templates:modal_small.html.twig' %}
 
 {% if form.nom.vars.value == '' %}
-    {%  set header = 'Ajouter une fonction' %}
+    {%  set header = 'Ajouter un groupe' %}
     {%  set buttonText = 'Ajouter' %}
 {% else %}
-    {%  set header = 'Modifier une fonction' %}
+    {%  set header = 'Modifier un groupe' %}
     {%  set buttonText = 'Modifier' %}
 {% endif %}
+
 
 {% block header %}
     {{ header }}
 {% endblock %}
 
-
 {% block content %}
 
     {{ form_start(form,{'attr': {'class': 'ui form'}}) }}
 
+    {{ form_row(form.parent) }}
+
+
+    {{ form_row(form.nom) }}
+
+
+    {{ form_row(form.model) }}
+
+
     {{ form_rest(form) }}
+
 
     <div class="ui field">
         <input type="submit" class="ui green button" value="{{ buttonText }}" />
     </div>
 
     {{ form_end(form) }}
-
 
 {% endblock %}

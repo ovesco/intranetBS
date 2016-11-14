@@ -24,8 +24,6 @@ class CreanceRepository extends Repository
             ->addNestedTextMatch('debiteur.getOwnerAsString',$creance->debiteur)
         ;
 
-
-
         return $builder->getResults();
 
     }
