@@ -26,7 +26,7 @@ class MembreType extends PersonneType
 
         $builder
             ->add('famille', FamilleType::class)
-            ->add('attributions', CollectionType::class, array('entry_type' => AttributionType::class))
+            //->add('attributions', CollectionType::class, array('entry_type' => AttributionType::class))
             ->add('distinctions', CollectionType::class, array('entry_type' => ObtentionDistinctionType::class))
             ->add('naissance', BirthdayType::class, array(
                 'label' => 'Date de naissance',

@@ -2,7 +2,9 @@
 
 namespace AppBundle\Form\Attribution;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -11,8 +13,17 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
+use AppBundle\Transformer\MemberToIdTransformer;
+
 class AttributionType extends AbstractType
 {
+    private $manager;
+
+    public function __construct(ObjectManager $manager)
+    {
+        $this->manager = $manager;
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -25,21 +36,8 @@ class AttributionType extends AbstractType
 
             /* We have to check that it doesn't exist because of form inheritance */
             if (!$form->has('membre')) {
-                if (null !== $attribution->getMembre()) {
-                    $form->add('membre', HiddenType::class, array(
-                        'data' => $attribution->getMembre()->GetId()
-                    ));
-                } else {
-                    $form->add('membre', EntityType::class, array(
-                        'class' => 'AppBundle:Membre'
-                    ));
-                }
-            }
 
-            if (null !== $attribution->getId()) {
-                $form->add('id', HiddenType::class, array(
-                    'data' => $attribution->GetId()
-                ));
+
             }
         });
 
@@ -60,7 +58,9 @@ class AttributionType extends AbstractType
             ->add('remarques', TextareaType::class, array(
                 'required'	=> false,
             ))
-        ;
+            ->add('membre', HiddenType::class);
+
+        $builder->get('membre')->addModelTransformer(new MemberToIdTransformer($this->manager));
     }
 
 
