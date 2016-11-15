@@ -90,6 +90,9 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="statut", type="string", length=255, nullable=true)
+     *
+     *
+     * todo NUR transformer le statut en date de désinscription
      */
     private $statut;
 

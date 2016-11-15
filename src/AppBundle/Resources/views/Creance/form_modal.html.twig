@@ -1,34 +1,29 @@
 {% extends 'AppBundle:Templates:modal_small.html.twig' %}
 
-{% if form.nom.vars.value == '' %}
-    {%  set header = 'Ajouter une catégorie' %}
+{% if form.titre.vars.value == '' %}
+    {%  set header = 'Ajouter une créance' %}
     {%  set buttonText = 'Ajouter' %}
 {% else %}
-    {%  set header = 'Modifier une catégorie' %}
+    {%  set header = 'Modifier une créance' %}
     {%  set buttonText = 'Modifier' %}
 {% endif %}
-
 
 {% block header %}
     {{ header }}
 {% endblock %}
 
+
 {% block content %}
 
     {{ form_start(form,{'attr': {'class': 'ui form ajax'}}) }}
 
-    {{ form_row(form.nom) }}
-
-    {{ form_row(form.description) }}
-
-
     {{ form_rest(form) }}
-
 
     <div class="ui field">
         <input type="submit" class="ui green button" value="{{ buttonText }}" />
     </div>
 
     {{ form_end(form) }}
+
 
 {% endblock %}

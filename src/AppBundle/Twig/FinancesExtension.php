@@ -66,10 +66,10 @@ class FinancesExtension extends \Twig_Extension
         {
             if($creance->isPayed())
             {
-                return '<i class="bordered inverted green checkmark icon popupable" data-content="Payée"></i>';
+                return '<i class="green checkmark icon popupable" data-content="Payée"></i>';
             }
         }
-        return '<i class="bordered inverted red remove icon popupable" data-content="Impayée"></i>';
+        return '<i class="red remove icon popupable" data-content="Impayée"></i>';
     }
 
     public function creance_is_payed_detail(Creance $creance)
@@ -93,7 +93,7 @@ class FinancesExtension extends \Twig_Extension
         }
         else
         {
-            return '<i class="bordered inverted orange wait icon popupable" data-content="En attente de facturation"></i>';
+            return '<i class="orange wait icon popupable" data-content="En attente de facturation"></i>';
         }
 
     }
@@ -114,11 +114,11 @@ class FinancesExtension extends \Twig_Extension
     public function facture_is_payed(Facture $facture){
         if($facture->isPayed())
         {
-            return '<i class="bordered inverted green checkmark icon popupable" data-content="Payée"></i>';
+            return '<i class="green checkmark icon popupable" data-content="Payée"></i>';
         }
         else
         {
-            return '<i class="bordered inverted red remove icon popupable" data-content="Impayée"></i>';
+            return '<i class="red remove icon popupable" data-content="Impayée"></i>';
         }
     }
 

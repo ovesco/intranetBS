@@ -1,15 +1,48 @@
+{% form_theme form 'AppBundle:Form:form_search_accordion.html.twig' %}
+
+{% form_theme form.mode 'AppBundle:Form:default_widgets.html.twig' %}
+
+
+ {{ form_start(form, {'attr': {'class': 'ui form'}}) }}
 <div class="ui top attached message">
-    <h4 class="ui header">Formulaire de recherche</h4>
+    <h4 class="ui header">Recherche de créances</h4>
 </div>
 
 <div class="ui bottom attached segment">
-    {{ form_start(searchForm, {'attr': {'class': 'ui form accordion'}}) }}
 
-    {{ form_rest(searchForm) }}
 
-    <input type="submit" value="Rechercher" class="ui blue submit button">
+    <div class="ui grid">
+        <div class="eight wide column">
+            {{ form_row(form.titre) }}
+            {{ form_row(form.intervalDateCreation) }}
+            {{ form_row(form.intervalDatePayement) }}
+            {{ form_row(form.intervalMontantEmis) }}
+            {{ form_row(form.intervalMontantRecu) }}
+        </div>
+        <div class="eight wide column">
 
-    {{ form_end(searchForm) }}
+            {{ form_row(form.isFactured) }}
+            {{ form_row(form.isPayed) }}
+            {{ form_row(form.debiteur) }}
+            {{ form_row(form.remarque) }}
+
+        </div>
+    </div>
+
+    <div class="ui divider"></div>
+
+    <div class="ui grid">
+        <div class="eight wide column">
+            {{ form_row(form.mode) }}
+        </div>
+        <div class="eight wide right aligned column">
+            <input type="submit" value="Rechercher" class="ui blue submit button">
+        </div>
+    </div>
+
+    {{ form_rest(form) }}
+
 </div>
 
+{{ form_end(form) }}
 

@@ -43,8 +43,11 @@ parameters:
             ROLE_USER:
             ROLE_FINANCE:
                 ROLE_CREANCE:
+                    ROLE_CREANCE_CREATE:
                     ROLE_CREANCE_EDIT:
                     ROLE_CREANCE_VIEW:
+                    ROLE_CREANCE_REMOVE:
+                ROLE_FACTURE:
             ROLE_STRUCTURE:
             ROLE_SECURITY:
             ROLE_PARAMETER:

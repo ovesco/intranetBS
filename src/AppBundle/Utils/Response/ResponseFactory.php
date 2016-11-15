@@ -18,18 +18,27 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class ResponseFactory {
 
-    static function ok()
+    static function ok($text = null)
     {
         $response = new JsonResponse();
-        $response->setStatusCode(Response::HTTP_OK);
+        $response->setStatusCode(Response::HTTP_OK,$text);
         return $response;
     }
 
-    static function forbidden()
+    static function forbidden($text = null)
     {
         $response = new JsonResponse();
-        $response->setStatusCode(Response::HTTP_FORBIDDEN);
+        $response->setStatusCode(Response::HTTP_FORBIDDEN,$text);
         return $response;
     }
+
+    static function conflict($text = null)
+    {
+        $response = new JsonResponse();
+        $response->setStatusCode(Response::HTTP_CONFLICT,$text);
+        return $response;
+    }
+
+
 
 }

@@ -14,6 +14,15 @@ class ListModelsMembre implements ListModelInterface
 {
 
 
+    /**
+     * @param \Twig_Environment $twig
+     * @param Router $router
+     * @param $items
+     * @param null $url
+     * @return ListRenderer
+     *
+     * todo rajouter le groupe en argument pour pouvoir donner l'attribution correct en lien avec le groupe
+     */
     static public function getEffectifs(\Twig_Environment $twig, Router $router, $items, $url = null)
     {
         $list = ListModelsMembre::getDefault($twig, $router, $items, $url);

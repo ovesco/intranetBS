@@ -2,12 +2,10 @@
  * Cette méthode catch les événements submit d'un formulaire pour envoyer les requetes
  * en ajax. C'est utilisé dans les modal par exemple ou on veut catcher la réponse pour
  * mettre à jour la modal plutot que de charger une nouvelle page
+ *
+ * Attention: pour qu'un formulaire soit bindé il faut que la classe soit "ui form ajax"
  */
 function bindForm() {
-
-    /*
-     todo CMR de NUR cette fonction est appelée lors du chargement d'une modale et y a une gros erreur qui vient avec. Du coup, la fonction suivante (semantic_init()) ne marche pas...
-     */
 
     $('form.ajax').submit(function (e) {
         e.preventDefault();
@@ -50,7 +48,7 @@ function postForm( $form ){
 
             return;
 
-            // TODO: précédemment, le success pouvait avoir un "false" comme valeur de retour et avoir un nouveau
+            // TODO CMR: précédemment, le success pouvait avoir un "false" comme valeur de retour et avoir un nouveau
             // formulaire avec les messages d'erreur en retour. Sauf que c'est pas terroche, il faut tester ici le
             // code d'erreur et si c'est "bad arguments" afficher le form avec les erreurs (ci-dessous)
 

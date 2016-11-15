@@ -13,8 +13,11 @@
                 <a href="{{ path('app_user_create') }}" class="ui green icon button"><i class="add icon"></i>Create a new user</a>
 
 
-                {{ list_caller.userAll|raw }}
+                <div class="ui divider"></div>
 
+
+                {{ list_caller.userAll|raw }}
+                <div class="ui divider"></div>
 
                 <div class="ui orange message">
                     Pour plus d'info sur la hierachy des roles :

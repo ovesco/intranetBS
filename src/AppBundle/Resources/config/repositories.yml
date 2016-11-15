@@ -18,8 +18,15 @@ services:
         factory_service: doctrine.orm.default_entity_manager
         factory_method: getRepository
         arguments: ['AppBundle:Fonction']
+
     app.repository.groupe:
         class: AppBundle\Repository\GroupeRepository
         factory_service: doctrine.orm.default_entity_manager
         factory_method: getRepository
         arguments: ['AppBundle:Groupe']
+
+    app.repository.creance:
+        class: AppBundle\Repository\CreanceRepository
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+        arguments: ['AppBundle:Creance']

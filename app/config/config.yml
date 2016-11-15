@@ -2,7 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
-    - { resource: search.yml }
+    - { resource: elastica.yml }
     - { resource: doctrine_extensions.yml }
 
 #définition des parametres fixes lié a AppBundle

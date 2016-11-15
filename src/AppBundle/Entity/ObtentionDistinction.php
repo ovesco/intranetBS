@@ -12,6 +12,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="app_obtention_distinctions")
  * @Gedmo\Loggable
  * @ORM\Entity
+ *
+ *
+ * todo NUR ajouter un champ remarque
  */
 class ObtentionDistinction
 {

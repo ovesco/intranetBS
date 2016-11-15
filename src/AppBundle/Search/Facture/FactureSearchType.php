@@ -31,36 +31,8 @@ class FactureSearchType extends AbstractType
             ))
             ->add('nombreRappels', IntegerType::class, array('label' => 'Nombre de rappels', 'required' => false))
             ->add('debiteur', TextType::class, array('label' => 'Propriétaire', 'required' => false))
-            ->add('titreCreance', TextType::class, array('label' => 'Titre d\'une créances', 'required' => false))/*
-
-         eCreation','date',array('label' => 'à', 'required' => false))
-
-            ->add('titreCreance','text',array('label' => 'Titre de la créance', 'required' => false))
-            ->add('fromMontantEmisCreance',NumberType::class,array('label' => 'De', 'required' => false))
-            ->add('toMontantEmisCreance',NumberType::class,array('label' => 'a', 'required' => false))
-            ->add('fromDateCreationCreance','date',array('label' => 'De', 'required' => false))
-            ->add('toDateCreationCreance','date',array('label' => 'à', 'required' => false))
-
-            ->add('nombreRappels',NumberType::class,array('label' => 'Nombre de Rappel', 'required' => false))
-            ->add('fromMontantEmisRappel',NumberType::class,array('label' => 'De', 'required' => false))
-            ->add('toMontantEmisRappel',NumberType::class,array('label' => 'a', 'required' => false))
-            ->add('fromDateCreationRappel','date',array('label' => 'De', 'required' => false))
-            ->add('toDateCreationRappel','date',array('label' => 'à', 'required' => false))
-
-
-            ->add('fromMontantRecu',NumberType::class,array('label' => 'De', 'required' => false))
-            ->add('toMontantRecu',NumberType::class,array('label' => 'a', 'required' => false))
-
-            ->add('fromDatePayement','date',array('label' => 'De', 'required' => false))
-            ->add('toDatePayement','date',array('label' => 'à', 'required' => false))
-
-
-            ->add('statut','choice',array('label' => 'Statut','required' => false,'choices' => array('ouverte'=>'Ouverte', 'payee'=>'Payée'), 'required' => false))
-
-            */
-
-
-        ;//fin de la fonction builder
+            ->add('titreCreance', TextType::class, array('label' => 'Titre d\'une créances', 'required' => false))
+        ;
 
 
     }

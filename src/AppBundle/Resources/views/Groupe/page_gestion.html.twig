@@ -40,6 +40,13 @@
             <div class="content">
                 <div class="header">{{ group.nom }}</div>
                 <div class="description">{{ group.model.nom }}
+
+                    {% if group.active %}
+                        <div class="ui green label">Actif</div>
+                    {% else %}
+                        <div class="ui red label">Inactif</div>
+                    {% endif %}
+
                     {{ modal_caller('<div><i class="edit icon"></i></div>',path('app_groupe_edit',{'groupe':group.id})) }}
                 </div>
                 <div class="list">

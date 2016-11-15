@@ -1,4 +1,10 @@
-{# TODO NUR de CMR : toujours utilisé ça ? Je pense que ça devait être pour la recherche de factures. Le mieux serait de pouvoir utiliser les mêmes templates #}
+{#
+
+ Ce template est utile pour les formulaire de recherche monstrueux.
+ Il permet de mettre champ sous forme de accordion ce qui réduit considérablement
+ la taille visuelle du formulaire. (uffer)
+
+#}
 
 {% block form_widget %}
     {% spaceless %}
@@ -49,17 +55,19 @@
 
 {# SINGLE ROW #}
 {% block form_row -%}
-    {#
+
+    <div class="ui accordion">
     <div class="title">
         <i class="dropdown icon"></i>
         {{- form_label(form) -}}
     </div>
-    #}
+
     <div class="content">
         <div class="field">
             {{- form_widget(form) -}} {# Recursive call #}
             {{- form_errors(form) -}}
         </div>
+    </div>
     </div>
 {%- endblock form_row %}
 

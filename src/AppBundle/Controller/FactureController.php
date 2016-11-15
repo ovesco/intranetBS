@@ -45,6 +45,8 @@ class FactureController extends Controller
      * @Menu("Recherche de factures",block="finances",order=2,icon="search")
      * @param Request $request
      * @return Response
+     *
+     * todo NUR implémenter la recherche avec le "mode" pour ajouter ou enlever le resultat à la recherche préceédente comme avec les créance
      */
     public function searchAction(Request $request){
 

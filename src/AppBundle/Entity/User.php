@@ -70,7 +70,7 @@ class User implements UserInterface, \Serializable
     /**
      * @var array
      *
-     * @ORM\Column(name="selected_roles", type="simple_array")
+     * @ORM\Column(name="selected_roles", type="simple_array", nullable=true)
      */
     private $selectedRoles;
 

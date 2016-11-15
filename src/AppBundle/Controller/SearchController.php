@@ -24,6 +24,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  * Class SearchController
  * @package AppBundle\Controller
  * @Route("/intranet/search")
+ *
+ *
+ * todo NUR dans le formulaire de recherche de membre, il faut pouvoir chercher qui à son anni durant le camp.
  */
 class SearchController extends Controller
 {

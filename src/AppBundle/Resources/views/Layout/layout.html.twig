@@ -12,11 +12,14 @@
         {% block css %}
 
             <link rel="stylesheet" href="{{ asset('assets/vendor/semantic/dist/semantic.min.css') }}"/>
-            <link rel="stylesheet"
-                  href="{{ asset('assets/vendor/x-editable/dist/jquery-editable/css/jquery-editable.css') }}"/>
+            <link rel="stylesheet" href="{{ asset('assets/vendor/x-editable/dist/jquery-editable/css/jquery-editable.css') }}"/>
 
             <link rel="stylesheet" href="{{ asset('bundles/app/css/Layout/layout.css') }}"/>
             <link rel="stylesheet" href="{{ asset('bundles/app/css/bs.css') }}"/>
+
+            <link rel="stylesheet" href="{{ asset('assets/vendor/datatables.net-dt/css/jquery.dataTables.min.css') }}"/>
+
+
 
             {#<link rel="stylesheet" href="{{ asset('assets/vendor/semantic/dist/themes/basic/assets/fonts/icons.ttf') }}" />#}
             {#<link rel="stylesheet" href="{{ asset('assets/vendor/semantic/dist/themes/basic/assets/fonts/icons.woff') }}" />#}
@@ -106,13 +109,19 @@
                  #}
                 $(function () {
                     {% for label, flashes in app.session.flashbag.all %}
-                    {% for flash in flashes %}
-                    alerte.send("{{ flash }}", "{{ label }}");
-                    {% endfor %}
+                        {% if label != 'dump' %}
+                            {% for flash in flashes %}
+                            alerte.send("{{ flash }}", "{{ label }}");
+                            {% endfor %}
+                        {% endif %}
                     {% endfor %}
                 });
             </script>
 
+
+
         {% endblock %}
+
+
     </body>
 </html>

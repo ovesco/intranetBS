@@ -16,3 +16,11 @@ services:
         public:     false #small boost performence
         tags:
             - { name: security.voter }
+
+    app.voter.creance:
+        class:      AppBundle\Voters\CreanceVoter
+        arguments:
+            decisionManager: "@security.access.decision_manager"
+        public:     false #small boost performence
+        tags:
+            - { name: security.voter }

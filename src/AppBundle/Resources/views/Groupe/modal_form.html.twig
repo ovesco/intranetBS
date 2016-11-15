@@ -15,13 +15,12 @@
 
 {% block content %}
 
-    {{ form_start(form,{'attr': {'class': 'ui form'}}) }}
-
-    {{ form_row(form.parent) }}
-
+    {{ form_start(form,{'attr': {'class': 'ui form ajax'}}) }}
 
     {{ form_row(form.nom) }}
 
+    {# mettre en deuxieme sinon le focus du curseur ouvre directement la liste#}
+    {{ form_row(form.parent) }}
 
     {{ form_row(form.model) }}
 

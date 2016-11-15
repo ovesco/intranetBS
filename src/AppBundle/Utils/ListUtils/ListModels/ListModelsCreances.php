@@ -10,6 +10,8 @@ use AppBundle\Utils\Event\EventPostAction;
 use AppBundle\Utils\ListUtils\ListRenderer;
 use AppBundle\Entity\Creance;
 use Symfony\Component\Routing\Router;
+use AppBundle\Utils\ListUtils\ActionList;
+use AppBundle\Entity\Debiteur;
 
 class ListModelsCreances implements ListModelInterface
 {
@@ -39,16 +41,47 @@ class ListModelsCreances implements ListModelInterface
         $list->addColumn(new Column('Montant', function (Creance $item) {
             return $item->getMontantEmis();
         }, "money"));
+        /*
         $list->addColumn(new Column('Montant perçu', function (Creance $item) {
             return $item->getMontantRecu();
         }, "money"));
 
+        */
 
-        //$list->addAction(new Action('Afficher', 'zoom icon popupable', 'event_creance_show'));
-        //$list->addAction(new Action('Supprimer', 'delete icon popupable', 'event_creance_delete'));
+        $parameters = function (Creance $item) {
+            return array(
+                'creance' => $item->getId()
+            );
+        };
+
+        $removeCondition = function (Creance $creance) {
+            return !$creance->isFactured();
+        };
+
+        $list->addActionLine(new ActionLine('Voir', 'zoom', 'app_creance_show', $parameters, EventPostAction::ShowModal));
+
+        /* todo CMR de NUR comment je fait pour que cette action soit uniquement dans les lignes et pas dans le bouton de mass? */
+        $list->addActionLine(new ActionLine('Supprimer', 'remove', 'app_creance_remove', $parameters, EventPostAction::RefreshPage,$removeCondition));
 
 
-        //$list->setDatatable(true);
+
+        return $list;
+    }
+
+
+    /**
+     * @param \Twig_Environment $twig
+     * @param Router $router
+     * @param $items
+     * @param null $url
+     * @param Debiteur $debiteur
+     * @return ListRenderer
+     */
+    static public function getForDebiteur(\Twig_Environment $twig, Router $router, $items, $url = null,Debiteur $debiteur)
+    {
+        $list = self::getDefault( $twig,  $router, $items, $url);
+
+        $list->addActionList(new ActionList('Ajouter', 'add', 'app_creance_create',array('debiteur' => $debiteur->getId()), EventPostAction::ShowModal,null,'green'));
 
         return $list;
     }

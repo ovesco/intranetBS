@@ -184,6 +184,8 @@ class ListCallerController extends Controller
      * @param Groupe $groupe
      * @param $call
      * @return mixed
+     *
+     * todo injecter le groupe dans le getEffectifs(....groupe)
      */
     public function GroupeEffectifs(Groupe $groupe, $call = self::CALL_BY_TWIG)
     {
@@ -204,7 +206,7 @@ class ListCallerController extends Controller
     {
         $items = $debiteur->getCreances();
         $url = $this->getRouter()->generate('app_listcaller_debiteurcreances', array('debiteur' => $debiteur->getId()));
-        $list = ListModelsCreances::getDefault($this->getTwig(), $this->getRouter(), $items, $url)->render();
+        $list = ListModelsCreances::getForDebiteur($this->getTwig(), $this->getRouter(), $items, $url,$debiteur)->render();
         return $this->returnList($list, $call);
     }
 

@@ -8,7 +8,10 @@ use AppBundle\Utils\Elastic\QueryBuilder;
 class CreanceRepository extends Repository
 {
 
+
     public function search(CreanceSearch $creance){
+
+
 
         $builder = new QueryBuilder($this,true,5000);
 

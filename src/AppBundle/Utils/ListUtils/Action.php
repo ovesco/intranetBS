@@ -88,13 +88,21 @@ abstract class Action
      */
     public function getRouteParameters($item = null)
     {
-        /* Petite subtilité pour pouvoir appeler la fonction */
-        $function = $this->routeParameters;
-
-        if ($item == null)
-            return json_encode($function());
+        if(is_array($this->routeParameters))
+        {
+            /* dans le cas ou les arguement sont statique on peut les passer en array */
+            return json_encode($this->routeParameters);
+        }
         else
-            return json_encode($function($item));
+        {
+            /* Petite subtilité pour pouvoir appeler la fonction */
+            $function = $this->routeParameters;
+
+            if ($item == null)
+                return json_encode($function());
+            else
+                return json_encode($function($item));
+        }
     }
 
     /**

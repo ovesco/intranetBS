@@ -11,7 +11,7 @@ use FOS\ElasticaBundle\Configuration\Search;
  * Class Creance
  *
  * @ORM\Table(name="app_creances")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CreanceRepository")
  * @Search(repositoryClass="AppBundle\Search\Creance\CreanceRepository")
  *
  */

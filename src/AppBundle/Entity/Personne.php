@@ -18,6 +18,8 @@ use JMS\Serializer\Annotation\VirtualProperty;
  * @Gedmo\Loggable
  *
  * @ExclusionPolicy("all")
+ *
+ * todo NUR ajouter le déces en boolean
  */
 abstract class Personne
 {
@@ -70,6 +72,8 @@ abstract class Personne
      * @ORM\Column(name="iban", type="string", length=255, nullable=true)
      */
     protected $iban;
+
+
 
     /**
      * Get prenom

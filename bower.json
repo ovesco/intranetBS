@@ -22,6 +22,7 @@
     "moment": "^2.15.1",
     "parsleyjs": "^2.5.1",
     "datatables.net": "^1.10.12",
-    "formatter.js": "formatter#^0.1.5"
+    "formatter.js": "formatter#^0.1.5",
+    "datatables.net-dt": "^1.10.12"
   }
 }

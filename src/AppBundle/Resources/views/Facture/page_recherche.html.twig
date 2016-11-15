@@ -6,14 +6,15 @@
 {% block content %}
 
     <div class="ui page grid">
-        <div class="row">
-            <div class="four wide column">
+        <div class="column">
+            <div class="row">
 
-                {% include "AppBundle:Facture:searchForm.html.twig" with {'searchForm':searchForm} %}
+                {% include "AppBundle:Facture:searchForm.html.twig" with {'form':searchForm} %}
 
+                <div class="ui divider"></div>
             </div>
 
-            <div class="twelve wide column">
+            <div class="row">
 
                 {{ list_caller.Session(list_key)|raw }}
 

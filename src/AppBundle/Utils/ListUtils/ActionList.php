@@ -10,7 +10,7 @@ class ActionList extends Action
      * @param $label
      * @param $icon
      * @param $route
-     * @param null $routeParameters
+     * @param null $routeParameters ===> function if the argument is variable or array if the arrgument is fixed
      * @param null $postActions
      * @param null $condition
      * @param null $style ======> attribut class du boutton
