@@ -62,3 +62,9 @@ Sinon
 sudo service elasticsearch start
 ```
 
+## Initialisation de FOSElasticaBundle
+
+```bash
+php app/console fos:elastica:reset --force
+php app/console fos:elastica:populate
+```

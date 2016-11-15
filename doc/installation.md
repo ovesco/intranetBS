@@ -82,9 +82,3 @@ Les membres et les factures sont indexés pour la recherche avec [Elastic](https
 
 [Installation d'Elastic](/doc/install_elastic.md)
 
-### Initialisation de FOSElasticaBundle
-
-```bash
-php app/console fos:elastica:reset --force
-php app/console fos:elastica:populate
-```
