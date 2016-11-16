@@ -29,6 +29,7 @@ fos_elastica:
                         provider: ~
                         listener: ~
                         finder: ~
+                        repository: AppBundle\Search\Membre\MembreRepository
                 famille:
                     mappings:
                         nom: ~
@@ -74,6 +75,7 @@ fos_elastica:
                         provider: ~
                         listener: ~
                         finder: ~
+                        repository: AppBundle\Search\Creance\CreanceRepository
                 factures:
                     mappings:
                         id: ~
@@ -112,6 +114,7 @@ fos_elastica:
                         provider: ~
                         listener: ~
                         finder: ~
+                        repository: AppBundle\Search\Facture\FactureRepository
                 payement:
                     mappings:
                         id: ~
@@ -125,3 +128,4 @@ fos_elastica:
                         provider: ~
                         listener: ~
                         finder: ~
+                        repository: AppBundle\Search\Payement\PayementRepository

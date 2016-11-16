@@ -8,6 +8,8 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
+use AppBundle\Search\NumericIntervalSearchType;
+use AppBundle\Search\DateIntervalSearchType;
 
 
 class PayementSearchType extends AbstractType
@@ -18,14 +20,8 @@ class PayementSearchType extends AbstractType
         $builder
             ->add('idFacture', NumberType::class,
                 array('label' => 'N°Facture', 'required' => false))
-            ->add('fromMontantRecu', NumberType::class,
-                array('label' => 'De', 'required' => false))
-            ->add('toMontantRecu', NumberType::class,
-                array('label' => 'a', 'required' => false))
-            ->add('fromDate', DateType::class,
-                array('label' => 'De', 'required' => false))
-            ->add('toDate', DateType::class,
-                array('label' => 'à', 'required' => false))
+            ->add('intervalMontantRecu', NumericIntervalSearchType::class, array('label' => 'Montant reçu', 'required' => false))
+            ->add('intervalDate', DateIntervalSearchType::class, array('label' => 'Date de création', 'required' => false))
             ->add('state', ChoiceType::class,
                 array(
                     'label' => 'Lien avec facture ',
@@ -46,14 +42,14 @@ class PayementSearchType extends AbstractType
     public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\SearchClass\PayementSearch'
+            'data_class' => 'AppBundle\Search\Payement\PayementSearch'
         ));
     }
 
 
     public function getBlockPrefix()
     {
-        return 'app_bundlePayementSearchType';
+        return 'app_bundle_payement_search_type';
     }
 
 }

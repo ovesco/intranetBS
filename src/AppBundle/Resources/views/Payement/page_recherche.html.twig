@@ -6,15 +6,14 @@
 {% block content %}
 
     <div class="ui page grid">
-        <div class="row">
-            <div class="four wide column">
-                {% include "AppBundle:Payement:searchForm.html.twig" with {'searchForm':searchForm} %}
+        <div class="column">
+            <div class="row">
+                {% include "AppBundle:Payement:searchForm.html.twig" with {'form':searchForm} %}
+                <div class="ui divider"></div>
             </div>
 
-            <div class="twelve wide column">
-                {% if payements is not empty %}
-                    {% include "AppBundle:Payement:payementsListe.html.twig" with {'results':payements} %}
-                {% endif %}
+            <div class="row">
+                {{ list_caller.Session(list_key)|raw }}
             </div>
         </div>
     </div>

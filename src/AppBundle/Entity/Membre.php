@@ -20,12 +20,15 @@ use JMS\Serializer\Annotation\MaxDepth;
  * @ORM\Entity
  * @Gedmo\Loggable
  * @ORM\Table(name="app_membres")
- * @Search(repositoryClass="AppBundle\Search\MembreRepository")
+ * @Search(repositoryClass="AppBundle\Search\Membre\MembreRepository")
  *
  * @ExclusionPolicy("all")
  */
 class Membre extends Personne implements ExpediableInterface, DebiteurInterface
 {
+
+    const Facture_to_famille = 'Famille';
+    const Facture_to_membre = 'Membre';
 
     use MailableTrait;
 
@@ -133,7 +136,7 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface
      * @ORM\Column(name="envoi_facture", type="string", columnDefinition="ENUM('Famille', 'Membre')")
      *
      */
-    private $envoiFacture = 'Famille';
+    private $envoiFacture = self::Facture_to_famille;
 
     /**
      * @var DebiteurMembre
@@ -516,6 +519,9 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface
     public function getUsername()
     {
         // TODO: récupérer le username depuis le User
+        /*
+         * de uffer: a mon avis cette fonction n'a pas de sens. il faudrais plustot rendre le one to one avec le user bidirectionel et le récupéré comme ca
+         */
         return strtolower($this->getPrenom()) . '.' . strtolower($this->getNom());
     }
 
@@ -600,15 +606,16 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface
     }
 
     /**
-     * Set envoiFacture
-     *
-     * @param string $envoiFacture
-     * @return Membre
+     * @param $envoiFacture
+     * @return $this
+     * @throws \Exception
      */
     public function setEnvoiFacture($envoiFacture)
     {
-        $this->envoiFacture = $envoiFacture;
-
+        if(($envoiFacture == self::Facture_to_famille) || ($envoiFacture == self::Facture_to_membre))
+            $this->envoiFacture = $envoiFacture;
+        else
+            throw new \Exception("envoie facture should be membre or famille");
         return $this;
     }
 

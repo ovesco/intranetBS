@@ -1,60 +1,32 @@
 
-{% form_theme searchForm 'AppBundle:Templates:form_template.html.twig' %}
-
-<h4 class="ui header">Formulaire de recherche</h4>
-
-{{ form_start(searchForm, {'attr': {'class': 'ui form'}}) }}
-
-<div class="ui accordion">
-
-    <div class=" title">
-        <i class="dropdown icon"></i>
-        Etat du payement
-    </div>
-    <div class="content">
-        {{ form_row(searchForm.state) }}
-
-    </div>
-
-    <div class=" title">
-        <i class="dropdown icon"></i>
-        N°Réf. de la facture
-    </div>
-    <div class="content">
-        {{ form_row(searchForm.idFacture) }}
-    </div>
+{% form_theme form 'AppBundle:Form:form_search_accordion.html.twig' %}
 
 
-    <div class=" title">
-        <i class="dropdown icon"></i>
-        Montant Reçu
-    </div>
-    <div class="content">
 
-        <div class="two fields">
-            {{ form_row(searchForm.fromMontantRecu) }}
+ {{ form_start(form, {'attr': {'class': 'ui form'}}) }}
+<div class="ui top attached message">
+    <h4 class="ui header">Recherche de payement</h4>
+</div>
 
-            {{ form_row(searchForm.toMontantRecu) }}
+<div class="ui bottom attached segment">
+
+
+    <div class="ui grid">
+        <div class="eight wide column">
+            {{ form_rest(form) }}
+        </div>
+        <div class="eight wide column">
+
+
 
         </div>
     </div>
 
+    <div class="ui divider"></div>
 
-    <div class=" title">
-        <i class="dropdown icon"></i>
-        Date de payement
-    </div>
-    <div class="content">
-
-        {{ form_row(searchForm.fromDate) }}
-
-        {{ form_row(searchForm.toDate) }}
-    </div>
+    <input type="submit" value="Rechercher" class="ui blue submit button">
 
 </div>
 
-{{ form_rest(searchForm) }}
-<input type="submit" value="Rechercher" class="ui blue submit button">
-{{ form_end(searchForm) }}
-
+{{ form_end(form) }}
 

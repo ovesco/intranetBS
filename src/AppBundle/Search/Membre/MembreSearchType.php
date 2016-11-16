@@ -1,12 +1,14 @@
 <?php
 
-namespace AppBundle\Search;
+namespace AppBundle\Search\Membre;
 
 use AppBundle\Field\DatePickerType;
 use AppBundle\Field\GenreType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use AppBundle\Search\ModeSearchType;
+use AppBundle\Search\Attribution\AttributionSearchType;
 
 class MembreSearchType extends AbstractType
 {

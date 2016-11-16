@@ -6,7 +6,7 @@
  * Time: 18:54
  */
 
-namespace AppBundle\Search;
+namespace AppBundle\Search\Attribution;
 
 
 

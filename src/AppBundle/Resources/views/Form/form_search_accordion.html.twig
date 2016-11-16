@@ -4,6 +4,8 @@
  Il permet de mettre champ sous forme de accordion ce qui réduit considérablement
  la taille visuelle du formulaire. (uffer)
 
+ il est aussi adapté a certain type de champ du genre DateInterval ou NumericInterval
+
 #}
 
 {% block form_widget %}
@@ -46,11 +48,10 @@
 
 
 {% block datepicker_widget -%}
-    <div class="field">
-        <input type="text" class="datepicker" {{ block('widget_attributes') }} value="{{ value }}" placeholder="{{ label }}"/>
-    </div>
-{%- endblock datepicker_widget %}
 
+        <input type="date" class="datepicker" {{ block('widget_attributes') }} value="{{ value }}" placeholder="{{ label }}"/>
+
+{%- endblock datepicker_widget %}
 
 
 {# SINGLE ROW #}
@@ -84,7 +85,9 @@
 {% block AppBundle_date_interval_search_widget %}
     <table>
         <tr>
+            <td>{{ form_label(form.lower) }}</td>
             <td>{{ form_widget(form.lower) }}</td>
+            <td>{{ form_label(form.higher) }}</td>
             <td>{{ form_widget(form.higher) }}</td>
         </tr>
     </table>

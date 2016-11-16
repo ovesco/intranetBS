@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Search;
+namespace AppBundle\Search\Membre;
 
 use FOS\ElasticaBundle\Repository;
 use AppBundle\Utils\Elastic\QueryBuilder;

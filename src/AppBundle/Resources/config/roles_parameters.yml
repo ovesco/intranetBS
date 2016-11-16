@@ -48,6 +48,7 @@ parameters:
                     ROLE_CREANCE_VIEW:
                     ROLE_CREANCE_REMOVE:
                 ROLE_FACTURE:
+                ROLE_PAYEMENT:
             ROLE_STRUCTURE:
             ROLE_SECURITY:
             ROLE_PARAMETER:

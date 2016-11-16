@@ -25,4 +25,15 @@ class DatePickerType extends AbstractType
     {
         return 'text';
     }
+
+    /**
+     * Permet de faire que le champ sera représenté par un datepicker_widget
+     *
+     * @return string
+     *
+     */
+    public function getBlockPrefix()
+    {
+        return 'datepicker';
+    }
 }

@@ -6,9 +6,9 @@
  * Time: 18:54
  */
 
-namespace AppBundle\Search;
+namespace AppBundle\Search\Membre;
 
-
+use AppBundle\Search\Attribution\AttributionSearch;
 
 class MembreSearch {
 

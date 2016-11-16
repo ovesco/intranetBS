@@ -34,9 +34,12 @@ use AppBundle\Form\Payement\PayementValidationType;
 /* Other */
 use AppBundle\Search\Payement\PayementSearch;
 use AppBundle\Search\Payement\PayementRepository;
+use AppBundle\Utils\ListUtils\ListKey;
 
 /* Services */
 use AppBundle\Utils\Finances\PayementFileParser;
+use AppBundle\Utils\ListUtils\ListStorage;
+
 
 
 /**
@@ -62,7 +65,10 @@ class PayementController extends Controller
 
         $searchForm = $this->createForm(new PayementSearchType,$payementSearch);
 
-        $results = array();
+        /** @var ListStorage $sessionContainer */
+        $sessionContainer = $this->get('list_storage');
+        $sessionContainer->setRepository(ListKey::PAYEMENTS_SEARCH_RESULTS,'AppBundle:Payement');
+
 
         $searchForm->handleRequest($request);
 
@@ -77,9 +83,12 @@ class PayementController extends Controller
 
             $results = $repository->search($payementSearch);
 
+            //set results in session
+            $sessionContainer->setObjects(ListKey::PAYEMENTS_SEARCH_RESULTS,$results);
+
         }
 
-        return array('searchForm'=>$searchForm->createView(),'payements'=>$results);
+        return array('searchForm'=>$searchForm->createView(),'list_key'=>ListKey::PAYEMENTS_SEARCH_RESULTS);
     }
 
     /**

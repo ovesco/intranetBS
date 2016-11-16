@@ -26,19 +26,13 @@ class AppKernel extends Kernel
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
-
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),//Pour le routing javascript
             new FOS\ElasticaBundle\FOSElasticaBundle(),//Elasitca
-            new FOS\RestBundle\FOSRestBundle(),//Pour les applications REST
-
             new JMS\SerializerBundle\JMSSerializerBundle(), //Le système de serialization
             new Knp\Bundle\SnappyBundle\KnpSnappyBundle(), // pour les PDF
             new \EmanueleMinotto\TwigCacheBundle\TwigCacheBundle(), //Twig cache tag
-
             new AppBundle\AppBundle(),
         );
 
@@ -47,7 +41,7 @@ class AppKernel extends Kernel
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
-            //$bundles[] = new CoreSphere\ConsoleBundle\CoreSphereConsoleBundle();//Pour avoir la console dans la toobar symfony
+            //$bundles[] = new CoreSphere\ConsoleBundle\CoreSphereConsoleBundle();//Pour avoir la console dans la toolbar symfony
         }
 
         return $bundles;

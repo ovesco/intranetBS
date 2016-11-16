@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Search;
+namespace AppBundle\Search\Attribution;
 
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -28,7 +28,7 @@ class AttributionSearchType extends AbstractType
     public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Search\AttributionSearch'
+            'data_class' => 'AppBundle\Search\Attribution\AttributionSearch'
         ));
     }
 

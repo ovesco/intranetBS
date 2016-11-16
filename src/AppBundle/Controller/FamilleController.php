@@ -25,7 +25,7 @@ class FamilleController extends Controller {
      *
      * @ParamConverter("famille", class="AppBundle:Famille")
      * @Route("/show/{famille}")
-     * @Template("AppBundle:Famille:page_voir_famille.html.twig")
+     * @Template("AppBundle:Famille:page_show.html.twig")
      */
     public function showAction(Famille $famille) {
 

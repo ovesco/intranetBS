@@ -29,6 +29,7 @@ use AppBundle\Utils\ListUtils\ListModels\ListModelsCategorie;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsUser;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsFonction;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsGroupe;
+use AppBundle\Utils\ListUtils\ListModels\ListModelsPayement;
 
 /* Annotations */
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -83,6 +84,9 @@ class ListCallerController extends Controller
                 return $this->returnList($list, $call);
             case ListKey::FAMILLE_SEARCH_RESULTS_ADD_MEMBRE:
                 $list = ListModelsFamille::getSearchResults($this->getTwig(), $this->getRouter(), $items, $url)->render();
+                return $this->returnList($list, $call);
+            case ListKey::PAYEMENTS_SEARCH_RESULTS:
+                $list = ListModelsPayement::getSearchResults($this->getTwig(), $this->getRouter(), $items, $url)->render();
                 return $this->returnList($list, $call);
         }
     }

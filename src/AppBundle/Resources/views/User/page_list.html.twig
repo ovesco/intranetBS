@@ -5,26 +5,25 @@
 {% block content %}
 
     <div class="ui page grid">
-        <div class="column">
-            <div class="row">
-
-
-
+        <div class="row">
+            <div class="eight wide column">
                 <a href="{{ path('app_user_create') }}" class="ui green icon button"><i class="add icon"></i>Create a new user</a>
+            </div>
+            <div class="eight wide column">
+                <div class="ui orange message">
+                    Pour plus d'info sur la hierachy des roles :
+                    {{ modal_caller('<a>voir la hierachie des roles</a>',path('app_role_hierarchy')) }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="column">
 
 
-                <div class="ui divider"></div>
+            <div class="ui divider"></div>
 
 
                 {{ list_caller.userAll|raw }}
-                <div class="ui divider"></div>
-
-                <div class="ui orange message">
-                    Pour plus d'info sur la hierachy des roles :
-
-                    {{ modal_caller('<a>voir la hierachie des roles</a>',path('app_role_hierarchy')) }}
-
-                </div>
 
             </div>
         </div>
