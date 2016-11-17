@@ -16,8 +16,8 @@ class PayementUploadFileType extends AbstractType
     {
         $builder
             ->add('file', FileType::class, array(
-                'attr' => array('accept' => '.v11'),
-                'constraints' => new File(array('maxSize' => '200K'))));//fin de la fonction
+                'attr' => array('accept' => '.v11,.csv'),
+                'constraints' => new File(array('maxSize' => '200K'))));
 
 
     }
@@ -25,7 +25,8 @@ class PayementUploadFileType extends AbstractType
     public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
     {
 
-        $resolver->setDefaults(array(//'data_class' => 'AppBundle\Entity\Payement'
+        $resolver->setDefaults(array(
+            'data_class' => 'AppBundle\Entity\PayementFile',
         ));
 
     }
@@ -33,7 +34,7 @@ class PayementUploadFileType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'app_bundlePayementUploadFileType';
+        return 'app_bundle_payement_file_upload';
     }
 
 }

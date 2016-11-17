@@ -77,9 +77,16 @@ class ListModelsFactures implements ListModelInterface
         $list->setSearchBar(true);
 
         $list->addColumn(new Column('Num. ref', function (Facture $facture) use ($router) {
-            return '<a href="' . $router->generate('app_facture_show', array('facture' => $facture->getId())) . '">N°' . $facture->getId() . '</a>';
+            return 'N°' . $facture->getId();
         }));
-        $list->addColumn(new Column('Statut', function (Facture $facture) { return $facture;}, 'facture_is_payed|raw'));
+
+        $list->addColumn(new Column('Débiteur', function (Facture $facture) use ($router) {
+
+            return $facture->getDebiteur()->getOwnerAsString();
+
+        }));
+
+        $list->addColumn(new Column('Statut', function (Facture $facture) { return $facture;}, 'facture_state|raw'));
 
         $list->addColumn(new Column('Nb. Rappels', function (Facture $facture) {
             return $facture->getNombreRappels();
@@ -97,6 +104,9 @@ class ListModelsFactures implements ListModelInterface
                 'facture' => $facture->getId()
             );
         };
+
+        $list->addActionLine(new ActionLine('Voir', 'zoom', 'app_facture_show', $factureParameters, EventPostAction::ShowModal));
+
 
         $list->addActionLine(new ActionLine('Supprimer', 'delete', 'app_facture_delete', $factureParameters, EventPostAction::RefreshList));
 

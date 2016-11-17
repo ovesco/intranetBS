@@ -27,7 +27,7 @@ class FactureSearchType extends AbstractType
                 'statut', ChoiceType::class, array(
                 'label' => 'Statut',
                 'required' => false,
-                'choices' => array(Facture::OUVERTE => 'Ouverte', Facture::PAYEE => 'Payée'),
+                'choices' => array(Facture::OPEN => 'Ouverte', Facture::PAYED => 'Payée',Facture::CANCELLED => 'Annulée'),
             ))
             ->add('nombreRappels', IntegerType::class, array('label' => 'Nombre de rappels', 'required' => false))
             ->add('debiteur', TextType::class, array('label' => 'Propriétaire', 'required' => false))

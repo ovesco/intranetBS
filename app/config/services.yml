@@ -66,10 +66,6 @@ services:
         arguments:
             - %app.upload_path%
 
-    #analyse les fichier de facture fournit par la poste
-    payement_file_parser:
-        class: AppBundle\Utils\Finances\PayementFileParser
-
     #permet de faire un pdf avec une facture
     facture_printer:
         class: AppBundle\Utils\Finances\FacturePrinter
@@ -83,6 +79,12 @@ services:
         class: AppBundle\Utils\Elastic\Search
         arguments:
             - @fos_elastica.manager
+
+    #permet de checker la validité d'un payement
+    app.payement.check:
+        class: AppBundle\Utils\Finances\PayementCheck
+        arguments:
+            - @app.repository.facture
 
 
     # Twig

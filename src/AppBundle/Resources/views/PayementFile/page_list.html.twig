@@ -1,0 +1,26 @@
+{% extends 'AppBundle:Layout:layout.html.twig' %}
+
+
+{% block titre %}Fichier de payement{% endblock %}
+
+{% block content %}
+
+    <div class="ui page grid">
+        <div class="row">
+            <div class="column">
+                <div class="ui attached message">
+                    <div class="header"><h3><i class="file icon"></i>Liste des fichiers de payement téléchargé</h3></div>
+                </div>
+                <div class="ui bottom attached segment">
+
+                    {{ list_caller.payementFileAll()|raw }}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+

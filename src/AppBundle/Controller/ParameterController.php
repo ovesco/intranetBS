@@ -16,10 +16,14 @@ use AppBundle\Utils\Menu\Menu;
 use AppBundle\Entity\Parameter;
 
 /* Form */
-use AppBundle\Form\ParameterType;
+use AppBundle\Form\Parameter\ParameterType;
 
 /**
  * Ce controller est utilisé pour la gestion des pages de list et d'édition des parametres de l'applications.
+ *
+ *
+ * todo passer un coup dans ce controller pour un affichage des parametr comme ListModelsParameter.
+ * ainsi qu'une édition par modal des parametre... ca serais plus générique
  *
  * Class ParameterController
  * @package AppBundle\Controller

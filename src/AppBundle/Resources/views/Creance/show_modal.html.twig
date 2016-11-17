@@ -18,17 +18,16 @@
         <tr>
             <td>Facture</td>
             <td>
-                {#
-                {{ creance|creance_facture_status_detail|raw }}
-                #}
-
-
+                {{ creance.facture|ref|raw }}
+                {% if creance.isFactured %}
+                    {{ modal_caller('<i class="zoom blue icon"></i>',path('app_facture_show',{'facture':creance.facture.id})) }}
+                {% endif %}
             </td>
         </tr>
         <tr>
             <td>Etat</td>
             <td>
-                {{ creance|creance_is_payed_detail|raw }}
+                {{ creance|creance_state_detail|raw }}
             </td>
         </tr>
 

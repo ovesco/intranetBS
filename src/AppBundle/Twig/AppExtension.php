@@ -58,6 +58,7 @@ class AppExtension extends \Twig_Extension
     {
         return array(
             'global_date_format' => 'd.m.Y',
+            'global_datetime_format' => 'd.m.Y - H:i',
             'class_name_membre' => Membre::className(),
             'class_name_famille' => Famille::className(),
             'class_name_pere' => Pere::className(),
@@ -267,6 +268,8 @@ class AppExtension extends \Twig_Extension
         $matches = array();
         /*
          * Ne marche que si un attribut "class=" est trouvé dans $html_display
+         *
+         * todo ca serait bien si ca marchait aussi sans...
          */
         if (preg_match('/class[ \t]*=[ \t]*"[^"]+"/', $html_display, $matches)) {
             $class = $matches[0];

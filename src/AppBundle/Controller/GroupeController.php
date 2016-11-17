@@ -47,7 +47,7 @@ class GroupeController extends Controller
      * @Route("/show/{groupe}", options={"expose"=true})
      * @Template("AppBundle:Groupe:page_voir_groupe.html.twig", vars={"groupe"})
      */
-    public function showAction($groupe) {
+    public function showAction(Groupe $groupe) {
 
         return array(
             'listing'       => $this->get('listing'),

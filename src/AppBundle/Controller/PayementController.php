@@ -116,116 +116,45 @@ class PayementController extends Controller
      */
     public function addAction(Request $request){
 
-        $form = $this->processAddForm($request);
-
-        $upload = $this->processUploadForm($request);
-
-        return array('formMultiple'=>$form->createView(),'formUpload'=>$upload->createView());
+        return array();
     }
 
-    /**
-     * @param Request $request
-     * @return \Symfony\Component\Form\Form
-     *
-     * Cette fonction fournit le forumlaire d'ajout multiple de payement pour la page "add"
-     *
-     */
-    private function processAddForm(Request $request){
 
-        $form  = $this->createForm(new PayementAddMultipleType());
-        $form->get('multiple_payement')->setData(array(new Payement()));
-        $form->add('Ajouter','submit');
-        $form->add('Anuller','reset');
+    /**
+     * Form for adding manualy payments
+     *
+     * @Route("/create", options={"expose"=true})
+     * @param Request $request
+     * @Template("AppBundle:Payement:form_add_manually.html.twig")
+     * @return Response
+     */
+    public function createAction(Request $request){
+
+        $payement = new Payement();
+        $form = $this->createForm(new PayementAddType(),$payement,array('action'=>$this->generateUrl('app_payement_create')));
 
         $form->handleRequest($request);
 
-        if($form->isValid())
-        {
-            $em = $this->getDoctrine()->getManager();
+        if($form->isValid()){
+            $payement->setDate(new \DateTime());
+            $payement->setValidated(false);
+            $payement = $this->get('app.payement.check')->check($payement);
+            $this->get('app.repository.payement')->save($payement);
 
-            $payements = $form->get('multiple_payement')->getData();
-
-            $sucessString = '';
-            $errorString = '';
-            /** @var Payement $payement */
-            foreach($payements as $payement)
-            {
-
-                /*
-                 * On controle que le payement soit bien valide
-                 */
-                if(($payement->getIdFacture() != null) && ($payement->getMontantRecu() != null))
-                {
-                    $payement->setDate(new \DateTime());
-                    $payement->setValidated(false);
-                    $payement->checkState($em);
-
-                    $em->persist($payement);
-
-                    $sucessString = $sucessString.'Payement '.$payement->getIdFacture().' avec '.$payement->getMontantRecu().'CHF enregisté!'."\r\n";
-                }
-                elseif(($payement->getIdFacture() != null) || ($payement->getMontantRecu() != null))
-                {
-                    /*
-                     * Envoi d'information sur l'erreur via flashbag
-                     */
-                    $errorString = $errorString.'Payement '.$payement->getIdFacture().' avec '.$payement->getMontantRecu().'CHF non valide!'."\r\n";
-                }
-
-            }
-            $em->flush();
             /*
-             * Send info via flashbag
+             * Si le payement est accepté, on process un nouveaux formulaire
+             * Et on renvoie un feedback sur le payement prédédent
              */
-            $this->get('session')->getFlashBag()->add('success',$sucessString);
-            $this->get('session')->getFlashBag()->add('error',$errorString);
-
-        }
-        return $form;
-    }
-
-    private function processUploadForm(Request $request){
-
-        $upload = $this->createForm(new PayementUploadFileType());
-        $upload->add('Charger','submit');
-
-        if ($request->isMethod('POST')) {
-
-            $upload->handleRequest($request);
-
-            if($upload->isValid()){
-                /** @var UploadedFile $file */
-                $file = $upload['file']->getData();
-
-                /** @var PayementFileParser $payementParser */
-                $payementParser = $this->get('payement_file_parser');
-                $payementParser->setFile($file);
-                $payementParser->extract();
-                /** @var ArrayCollection $payements */
-                $payements = $payementParser->getPayements();
-
-                $em = $this->getDoctrine()->getManager();
-                foreach($payements as $payement)
-                {
-                    $payement->checkState($em);
-                    $em->persist($payement);
-                }
-                $em->flush();
-
-                $this->get('session')->getFlashBag()->add('success','Fichier valide avec '.$payements->count().' payements ajoutés.');
-            }
-            else
-            {
-                $this->get('session')->getFlashBag()->add('error','Fichier non valide');
-            }
-
+            $nextPayement = new Payement();
+            $form = $this->createForm(new PayementAddType(),$nextPayement,array('action'=>$this->generateUrl('app_payement_create')));
+            return array('form'=>$form->createView(),'previousPayement'=>$payement);
         }
 
-
-
-        return $upload;
-
+        return array('form'=>$form->createView());
     }
+
+
+
 
     /**
      * Page for validation of payements
@@ -278,7 +207,7 @@ class PayementController extends Controller
                     case Payement::FOUND_LOWER:
                     case Payement::FOUND_VALID:
                     case Payement::FOUND_UPPER:
-                        $payement->getFacture()->setStatut(Facture::PAYEE);
+                        $payement->getFacture()->setStatut(Facture::PAYED);
                         break;
                 }
 

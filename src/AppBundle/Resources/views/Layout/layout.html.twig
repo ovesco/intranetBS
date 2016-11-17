@@ -109,11 +109,9 @@
                  #}
                 $(function () {
                     {% for label, flashes in app.session.flashbag.all %}
-                        {% if label != 'dump' %}
                             {% for flash in flashes %}
                             alerte.send("{{ flash }}", "{{ label }}");
                             {% endfor %}
-                        {% endif %}
                     {% endfor %}
                 });
             </script>

@@ -17,6 +17,8 @@ use AppBundle\Entity\User;
 use AppBundle\Security\RoleHierarchy;
 use AppBundle\Security\RoleHierarchyBuilder;
 
+use AppBundle\Entity\Facture;
+
 class QuickTestCommand extends ContainerAwareCommand
 {
 
@@ -28,11 +30,24 @@ class QuickTestCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
-        /** @var RoleHierarchy $h */
-        $h = $this->getContainer()->get('app.role.hierarchy');
+        $repo = $this->getContainer()->get('app.repository.facture');
 
 
-        dump($h->getDeducedRoles(array('ROLE_CREANCE')));
+        /** @var Facture $f */
+        foreach($repo->findAll() as $f)
+        {
+            $rand = random_int(0,100);
+            if($rand <= 30)
+                $f->setStatut(Facture::OPEN);
+            elseif($rand <= 66)
+                $f->setStatut(Facture::CANCELLED);
+            else
+                $f->setStatut(Facture::PAYED);
+
+            $repo->save($f);
+        }
+
+
 
 
 

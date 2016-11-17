@@ -4,8 +4,8 @@
 
 {% macro display_block(block_label, block) %}
 
-    <div class="item popup-menu" data-html='
-            <div class="ui vertical menu">
+    <div class="item popup-menu" data-variation="inverted" data-html='
+            <div class="ui inverted vertical menu">
                 {% for item in menu.getBloc(block) %}
                     <a class="item" href="{{ path(item.routeName) }}">{% if item.icon is not null %}<i class="ui {{ item.icon }} icon"></i>{% endif %}{{ item.label }}</a>
                 {% endfor %}

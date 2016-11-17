@@ -1,0 +1,24 @@
+{{ form_start(form, {'attr': {'class': 'ui form form_add_upload'}}) }}
+
+{{ form_rest(form) }}
+
+{% set extensions = form.file.vars.attr.accept|split(',') %}
+
+Les extentions de fichiers autorisées sont:
+
+{% for extension in extensions %}
+
+        *{{ extension }},
+
+{% endfor %}
+
+<div class="field">
+    <input type="submit" value="Télécharger" class="ui blue button">
+</div>
+
+<div class="ui inverted dimmer">
+    <div class="ui loader"></div>
+</div>
+
+
+{{ form_end(form) }}

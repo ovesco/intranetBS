@@ -30,8 +30,8 @@ class ListModelsCreances implements ListModelInterface
         $list->setUrl($url);
         $list->setSearchBar(true);
 
-        $list->addColumn(new Column('Facture', function (Creance $item) { return $item; },'creance_facture_status|raw'));
-        $list->addColumn(new Column('Etat', function (Creance $item) { return $item; },'creance_is_payed|raw'));
+        $list->addColumn(new Column('Facture', function (Creance $item) { return $item->getFacture(); },'ref|raw'));
+        $list->addColumn(new Column('Etat', function (Creance $item) { return $item; },'creance_state|raw'));
 
         $list->addColumn(new Column('Motif', function (Creance $item) {
             return $item->getTitre();
@@ -98,8 +98,8 @@ class ListModelsCreances implements ListModelInterface
         $list->setSearchBar(true);
 
 
-        $list->addColumn(new Column('Facture', function (Creance $item) { return $item; },'creance_facture_status|raw'));
-        $list->addColumn(new Column('Etat', function (Creance $item) { return $item; },'creance_is_payed|raw'));
+        $list->addColumn(new Column('Facture', function (Creance $item) { return $item->getFacture(); },'ref|raw'));
+        $list->addColumn(new Column('Etat', function (Creance $item) { return $item; },'creance_state|raw'));
 
         $list->addColumn(new Column('Motif', function (Creance $item) {
             return $item->getTitre();

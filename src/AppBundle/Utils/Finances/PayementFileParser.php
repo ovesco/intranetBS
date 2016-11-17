@@ -10,34 +10,39 @@ class PayementFileParser {
 
     /** @var  UploadedFile */
     private $file;
+
     /** @var  string */
     private $extension;
+
     /** @var ArrayCollection  */
     private $payements;
 
     /** @var  Array */
     private $infos;
 
-    public function __construct(){
+    public function __construct(UploadedFile $file){
         $this->payements = new ArrayCollection();
-    }
-
-    public function setFile(UploadedFile $file){
         $this->file = $file;
         /*
          * C'est nécaissaire d'utiliser "getClientOriginalExtension" sinon on chope "txt".
          */
         $this->extension = $file->getClientOriginalExtension();
-
     }
 
-    public function extract(){
+    /**
+     * this method process the file and extract payement informations in it.
+     */
+    public function parse(){
         if ($this->extension) { //extension trouvée
 
             switch($this->extension){
                 case 'V11':
                 case 'v11':
-                    $this->extractInV11();
+                    $this->extractV11();
+                    break;
+                case 'csv':
+                case 'CSV':
+                    $this->extractCSV();
                     break;
             }
 
@@ -51,11 +56,69 @@ class PayementFileParser {
     }
 
     public function getInfos(){
-        return $this->infos;
+        $infos = '';
+        foreach($this->infos as $key=>$message)
+        {
+            $infos = $infos.'['.$key.'] '.$message.PHP_EOL;
+        }
+        return $infos;
     }
 
 
-    private function extractInV11(){
+    /**
+     * le fichier css doit correspeondre à ce format pour chaque ligne : référance,montant_recu,dd.mm.YYYY,
+     */
+    private function extractCSV(){
+        /*
+         * extraction du contenu du fichier.
+         */
+        $fileString = file($this->file);
+        $nbLine = count($fileString);
+        $this->infos = array('montant_total'=>0,'nombre_payement'=>0,'erreur'=>0);
+
+        /*
+         * analyse ligne par ligne du fichier
+         */
+        for ($i = 0; $i < $nbLine; $i++) {
+
+            $line = $fileString[$i];
+
+            //extract csv by line
+            $data = str_getcsv($line);
+
+            $numRef = (integer)$data[0];
+            $montantRecu = (float)$data[1];
+            $datePayement = new \DateTime('now');
+            if($data[2] != null )
+                $datePayement = \DateTime::createFromFormat('d.m.Y',$data[2]); //dd.mm.yyyy
+
+            if(
+                ($numRef >= 1 && $numRef <= 10000000) &&
+                ($montantRecu >= 1 && $montantRecu <= 100000)
+            ){
+                /*
+                  * création du payement extraite de la ligne
+                  */
+                $payement = new Payement();
+                $payement->setIdFacture($numRef);
+                $payement->setMontantRecu($montantRecu);
+                $payement->setDate($datePayement);
+                $payement->setState(Payement::NOT_DEFINED);
+                $payement->setValidated(false);
+
+                $this->payements[] = $payement;
+                $this->infos['nombre_payement']++;
+                $this->infos['montant_total'] = $this->infos['montant_total'] + $montantRecu;
+            }
+            else {
+                $this->infos['erreur']++;
+            }
+
+        }
+
+    }
+
+    private function extractV11(){
 
         /*
          * extraction du contenu du fichier.

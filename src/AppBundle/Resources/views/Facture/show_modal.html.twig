@@ -10,12 +10,12 @@
         <tr>
             <td>Statut</td>
             <td>
-                {{ facture|facture_is_payed_detail|raw }}
+                {{ facture|facture_state_detail|raw }}
             </td>
         </tr>
         <tr>
             <td>Date de création</td>
-            <td>{{ facture.dateCreation|date("d/m/Y") }}</td>
+            <td>{{ facture.dateCreation|date(global_date_format) }}</td>
         </tr>
 
 
@@ -24,7 +24,7 @@
             <td>Date de payement</td>
             <td>
                 {% if facture.statut == 'payee' %}
-                    {{ facture.datePayement|date("d/m/Y") }}
+                    {{ facture.datePayement|date(global_date_format) }}
                 {% endif %}
             </td>
         </tr>
@@ -32,7 +32,7 @@
         <tr>
             <td>Propriétaire</td>
             <td>
-                {{ facture.debiteur.owner.__toString }}
+                {{ facture.debiteur.getOwnerAsString() }}
             </td>
         </tr>
 
@@ -78,6 +78,10 @@
         {% for creance in facture.creances %}
             <tr>
                 <td>
+
+                    {{ modal_caller('<i class="zoom blue icon"></i>',path('app_creance_show',{'creance':creance.id})) }}
+
+
                     <b>{{ creance.titre }}</b>
 
                     {% if creance.remarque is not empty %}

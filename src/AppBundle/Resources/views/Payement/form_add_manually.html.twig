@@ -1,0 +1,21 @@
+
+{{ form_start(form, {'attr': {'class': 'ui form form_add_manually'}}) }}
+
+{% if previousPayement is defined %}
+
+    {% set color = previousPayement.state|payement_state_color %}
+    {% set text = previousPayement.state|payement_state_text %}
+
+    <div class="ui {{ color }} message">{{ text }}</div>
+
+{% endif %}
+
+{{ form_rest(form) }}
+
+<input type="submit" value="ajouter" class="ui blue button">
+
+<div class="ui inverted dimmer">
+    <div class="ui loader"></div>
+</div>
+
+{{ form_end(form) }}

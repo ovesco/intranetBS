@@ -30,6 +30,7 @@ use AppBundle\Utils\ListUtils\ListModels\ListModelsUser;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsFonction;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsGroupe;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsPayement;
+use AppBundle\Utils\ListUtils\ListModels\ListModelsPayementFile;
 
 /* Annotations */
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -354,4 +355,18 @@ class ListCallerController extends Controller
         $list = ListModelsGroupe::getDefault($this->getTwig(), $this->getRouter(), $items, $url)->render();
         return $this->returnList($list, $call);
     }
+
+    /**
+     * @route("/payementfile/all", defaults={"call"="route"})
+     * @param $call
+     * @return mixed
+     */
+    public function payementFileAll( $call = self::CALL_BY_TWIG)
+    {
+        $items = $this->get('app.repository.payement_file')->findAll();
+        $url = $this->getRouter()->generate('app_listcaller_payementfileall');
+        $list = ListModelsPayementFile::getDefault($this->getTwig(), $this->getRouter(), $items, $url)->render();
+        return $this->returnList($list, $call);
+    }
+
 }

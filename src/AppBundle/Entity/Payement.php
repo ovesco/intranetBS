@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityManager;
  * Payement
  *
  * @ORM\Table(name="app_payement")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\PayementRepository")
  * @Search(repositoryClass="AppBundle\Search\Payement\PayementRepository")
  */
 class Payement
@@ -253,65 +253,6 @@ class Payement
         return $this->validated;
     }
 
-
-    /**
-     * Cette fonction va checker le statut de lu payement en fonction des factures existantes.
-     *
-     * @param EntityManager $em
-     */
-    public function checkState(EntityManager $em){
-
-        /** @var Facture $facture */
-        $facture = $em->getRepository('InterneFinancesBundle:Facture')->find($this->getIdFacture());
-
-        if($facture != Null)
-        {
-            if($facture->getStatut() == Facture::OUVERTE)
-            {
-                $montantTotalEmis = $facture->getMontantEmis();
-                $montantRecu = $this->getMontantRecu();
-
-                if($montantTotalEmis == $montantRecu)
-                {
-                    $this->setState(Payement::FOUND_VALID);
-                }
-                elseif($montantTotalEmis > $montantRecu)
-                {
-                    $this->setState(Payement::FOUND_LOWER);
-                }
-                elseif($montantTotalEmis < $montantRecu)
-                {
-                    $this->setState(Payement::FOUND_UPPER);
-                }
-                /*
-                 * On lie le payement à la facture
-                 */
-                $this->setFacture($facture);
-                $facture->setPayement($this);
-                /*
-                 * On definit la facture comme payée dans tout les cas...ce qui correspond à la réalité.
-                 * par contre le payement reste à valider pour répartir la somme dans les créances
-                 */
-                $facture->setStatut(Facture::PAYEE);
-                $em->persist($facture);
-            }
-            else
-            {
-                /*
-                 * la facture a déjà été payée
-                 */
-                $this->setState(Payement::FOUND_ALREADY_PAID);
-            }
-
-
-        }
-        else
-        {
-            $this->setState(Payement::NOT_FOUND);
-        }
-
-
-    }
 
     /**
      * Set comment

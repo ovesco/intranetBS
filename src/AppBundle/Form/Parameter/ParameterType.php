@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Form\Paramter;
+namespace AppBundle\Form\Parameter;
 
 use AppBundle\Entity\Parameter;
 use AppBundle\Form\Email\EmailType;
@@ -57,7 +57,7 @@ class ParameterType extends AbstractType
                             'mimeTypes' => [
                                 'image/png'
                             ],
-                            'mimeTypesMessage' => 'Please upload a valid PDF',
+                            'mimeTypesMessage' => 'Please upload a valid PNG',
                         ])
                     ]));
                 break;

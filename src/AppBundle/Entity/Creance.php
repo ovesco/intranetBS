@@ -17,8 +17,6 @@ use FOS\ElasticaBundle\Configuration\Search;
  */
 class Creance
 {
-    const EN_ATTENTE = 'en_attente';
-
     /**
      * @var integer
      *
@@ -260,17 +258,33 @@ class Creance
      */
     public function isPayed()
     {
-        if($this->isFactured())
-        {
-            if($this->facture->getStatut() == Facture::PAYEE)
-            {
-                return true;
-            }
-            else
-                return false;
-        }
-        else
-            return false;
+        return $this->facture->isPayed();
+    }
+
+    /**
+     * Is open
+     *
+     * Cette méthode regarde si la créance à une facture et si
+     * cette facture est payée.
+     *
+     * @return Boolean
+     */
+    public function isOpen()
+    {
+        return $this->facture->isOpen();
+    }
+
+    /**
+     * Is payed
+     *
+     * Cette méthode regarde si la créance à une facture et si
+     * cette facture est payée.
+     *
+     * @return Boolean
+     */
+    public function isCancelled()
+    {
+        return $this->facture->isCancelled();
     }
 
     /**
@@ -284,23 +298,6 @@ class Creance
             return true;
         else
             return false;
-    }
-
-
-    /**
-     * @deprecated
-     * @return string
-     */
-    public function getStatut()
-    {
-        if($this->isFactured())
-        {
-            return $this->facture->getStatut();
-        }
-        else
-        {
-            return self::EN_ATTENTE;
-        }
     }
 
 

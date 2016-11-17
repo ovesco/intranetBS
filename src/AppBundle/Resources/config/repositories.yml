@@ -30,3 +30,21 @@ services:
         factory_service: doctrine.orm.default_entity_manager
         factory_method: getRepository
         arguments: ['AppBundle:Creance']
+
+    app.repository.facture:
+        class: AppBundle\Repository\FactureRepository
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+        arguments: ['AppBundle:Facture']
+
+    app.repository.payement:
+        class: AppBundle\Repository\PayementRepository
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+        arguments: ['AppBundle:Payement']
+
+    app.repository.payement_file:
+        class: AppBundle\Repository\PayementFileRepository
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+        arguments: ['AppBundle:PayementFile']

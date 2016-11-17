@@ -15,8 +15,8 @@ class PayementAddType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('idFacture', IntegerType::class, array('label' => 'N°Facture', 'required' => false))
-            ->add('montantRecu', NumberType::class, array('label' => 'Montant reçu', 'required' => false));//fin de la fonction
+            ->add('idFacture', IntegerType::class, array('label' => 'N°Facture', 'required' => true))
+            ->add('montantRecu', NumberType::class, array('label' => 'Montant reçu', 'required' => true));//fin de la fonction
 
 
     }

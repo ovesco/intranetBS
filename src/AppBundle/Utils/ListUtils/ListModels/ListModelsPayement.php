@@ -72,7 +72,9 @@ class ListModelsPayement implements ListModelInterface
         $list->setUrl($url);
         $list->setSearchBar(true);
 
-        $list->addColumn(new Column('Montant', function (Payement $item) { return $item; },'money'));
+        $list->addColumn(new Column('Num. réf.', function (Payement $item) { return $item->getIdFacture(); }));
+
+        $list->addColumn(new Column('Montant', function (Payement $item) { return $item->getMontantRecu(); },'money'));
 
 
         $list->addColumn(new Column('Date', function (Payement $item) {

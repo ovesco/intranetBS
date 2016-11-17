@@ -8,18 +8,36 @@
         <div class="row">
             <div class="eight wide column">
 
-                <div class="ui segment">
-                    {% include  "AppBundle:Payement:addForm.html.twig" with {'formMultiple': formMultiple} %}
+                <div class="ui attached message">
+                    <div class="header"><h3><i class="hand pointer icon"></i>Saisie manuelle</h3></div>
                 </div>
+                <div class="ui bottom attached segment">
+
+                    {{ render(controller('AppBundle:Payement:create')) }}
+
+                </div>
+
             </div>
 
             <div class="eight wide column">
-                <div class="ui segment">
-                    {% include  "AppBundle:Payement:uploadFileForm.html.twig" with {'formUpload': formUpload} %}
+                <div class="ui attached message">
+                    <div class="header"><h3><i class="file icon"></i>Télécharger un fichier</h3></div>
                 </div>
+                <div class="ui bottom attached segment">
+
+                    {{ render(controller('AppBundle:PayementFile:upload')) }}
+
+                    <a href="{{ path('app_payementfile_list') }}"> <i class="caret right icon"></i> voir la liste des fichiers téléchargés</a>
+                </div>
+
             </div>
 
         </div>
     </div>
 
+{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/app/js/Finances/payement_add_form.js') }}"></script>
 {% endblock %}

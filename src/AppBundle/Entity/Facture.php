@@ -8,17 +8,21 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 use FOS\ElasticaBundle\Configuration\Search;
 
 /**
+ *
+ * todo NUR rajouter un statut "annulée" c'est bien plus logique
+ *
  * Class Facture
  *
  * @ORM\Table(name="app_factures")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\FactureRepository")
  * @Search(repositoryClass="AppBundle\Search\Facture\FactureRepository")
  *
  */
 class Facture
 {
-    const PAYEE = 'payee';
-    const OUVERTE = 'ouverte';
+    const PAYED = 'payed';
+    const OPEN = 'open';
+    const CANCELLED = 'cancelled';
 
     /**
      * @var integer
@@ -48,9 +52,9 @@ class Facture
     /**
      * @var string
      *
-     * @ORM\Column(name="statut", type="string", columnDefinition="ENUM('ouverte','payee')")
+     * @ORM\Column(name="statut", type="string", columnDefinition="ENUM('open','payed','cancelled')")
      */
-    private $statut = Facture::OUVERTE;
+    private $statut = Facture::OPEN;
 
     /**
      * @var \DateTime
@@ -118,9 +122,18 @@ class Facture
 
     public function isPayed()
     {
-        return (Facture::PAYEE == $this->statut? true:false);
+        return (Facture::PAYED == $this->statut? true:false);
     }
 
+    public function isOpen()
+    {
+        return (Facture::OPEN == $this->statut? true:false);
+    }
+
+    public function isCancelled()
+    {
+        return (Facture::CANCELLED == $this->statut? true:false);
+    }
     /**
      * Set statut
      *
@@ -130,8 +143,11 @@ class Facture
     public function setStatut($statut)
     {
 
-        if ($statut != Facture::OUVERTE && $statut != Facture::PAYEE)
-            throw new Exception("Le statut doit être " . Facture::OUVERTE . " ou " . Facture::PAYEE . ", obtenu : '" . $statut . "'");
+        if ($statut != Facture::OPEN && $statut != Facture::PAYED  && $statut != Facture::CANCELLED)
+            throw new Exception("Le statut doit être "
+                . Facture::OPEN . "|"
+                . Facture::PAYED . "|"
+                . Facture::CANCELLED  . ", obtenu : '" . $statut . "'");
 
         $this->statut = $statut;
 

@@ -23,16 +23,14 @@ class FinancesExtension extends \Twig_Extension
     {
         return array(
             new \Twig_SimpleFilter('money',array($this, 'money_filter')),
+            new \Twig_SimpleFilter('ref',array($this, 'facture_ref_filter')),
             new \Twig_SimpleFilter('payement_state_icon', array($this, 'payement_state_icon')),
             new \Twig_SimpleFilter('payement_state_color', array($this, 'payement_state_color')),
             new \Twig_SimpleFilter('payement_state_text', array($this, 'payement_state_text')),
-            new \Twig_SimpleFilter('statut_label', array($this, 'statut_label')),
-            new \Twig_SimpleFilter('creance_facture_status', array($this, 'creance_facture_status')),
-            new \Twig_SimpleFilter('creance_facture_status_detail', array($this, 'creance_facture_status_detail')),
-            new \Twig_SimpleFilter('creance_is_payed', array($this, 'creance_is_payed')),
-            new \Twig_SimpleFilter('creance_is_payed_detail', array($this, 'creance_is_payed_detail')),
-            new \Twig_SimpleFilter('facture_is_payed', array($this, 'facture_is_payed')),
-            new \Twig_SimpleFilter('facture_is_payed_detail', array($this, 'facture_is_payed_detail')),
+            new \Twig_SimpleFilter('creance_state', array($this, 'creance_state')),
+            new \Twig_SimpleFilter('creance_state_detail', array($this, 'creance_state_detail')),
+            new \Twig_SimpleFilter('facture_state', array($this, 'facture_state')),
+            new \Twig_SimpleFilter('facture_state_detail', array($this, 'facture_state_detail')),
 
         );
     }
@@ -57,90 +55,45 @@ class FinancesExtension extends \Twig_Extension
 
     }
 
+    public function facture_ref_filter(Facture $facture)
+    {
+       if($facture instanceof Facture)
+       {
+           return 'N°'.$facture->getId();
+       }
+        return '-';
+    }
 
-
-
-    public function creance_is_payed(Creance $creance)
+    public function creance_state(Creance $creance)
     {
         if($creance->isFactured())
         {
-            if($creance->isPayed())
-            {
-                return '<i class="green checkmark icon popupable" data-content="Payée"></i>';
-            }
+            return $this->facture_state($creance->getFacture());
         }
-        return '<i class="red remove icon popupable" data-content="Impayée"></i>';
+        return '<i class="orange wait icon popupable" data-content="En attente de facturation"></i>';
     }
 
-    public function creance_is_payed_detail(Creance $creance)
+    public function creance_state_detail(Creance $creance)
     {
         if($creance->isFactured())
         {
-            if($creance->isPayed())
-            {
-                return '<div class="ui green label"><i class="check icon"></i>Payée</div>';
-            }
+            return $this->facture_state_detail($creance->getFacture());
         }
-        return '<div class="ui red label"><i class="remove icon"></i>Impayée</div>';
+        return '<div class="ui orange label"><i class="wait icon"></i>En attente de facturation</div>';
     }
 
 
-    public function creance_facture_status(Creance $creance){
-        if($creance->isFactured())
-        {
-            return 'N° '.$creance->getFacture()->getId();
-
-        }
-        else
-        {
-            return '<i class="orange wait icon popupable" data-content="En attente de facturation"></i>';
-        }
-
-    }
-
-    public function creance_facture_status_detail(Creance $creance){
-        if($creance->isFactured())
-        {
-            return 'N° '.$creance->getFacture()->getId();
-
-        }
-        else
-        {
-            return '<div class="ui orange label"><i class="wait icon"></i>En attente de facturation</div>';
-        }
-
-    }
-
-    public function facture_is_payed(Facture $facture){
-        if($facture->isPayed())
-        {
-            return '<i class="green checkmark icon popupable" data-content="Payée"></i>';
-        }
-        else
-        {
-            return '<i class="red remove icon popupable" data-content="Impayée"></i>';
-        }
-    }
-
-    public function facture_is_payed_detail(Facture $facture){
-        if($facture->isPayed())
-        {
-            return '<div class="ui green label"><i class="check icon"></i>Payée</div>';
-        }
-        else
-        {
-            return '<div class="ui red label"><i class="remove icon"></i>Impayée</div>';
-        }
-    }
-
-
-
-    public function statut_label($statut)
+    public function facture_state(Facture $facture)
     {
-        throw new \Exception('this filter should be replaced by creance_is_payed or creance_facture_status');
+        $data = $this->processFactureRepresentation($facture->getStatut());
+        return '<i class="'.$data['color'].' '.$data['icon'].' icon popupable" data-content="'.$data['text'].'"></i>';
     }
 
-
+    public function facture_state_detail(Facture $facture)
+    {
+        $data = $this->processFactureRepresentation($facture->getStatut());
+        return '<div class="ui '.$data['color'].' label"><i class="'.$data['icon'].' icon"></i>'.$data['text'].'</div>';
+    }
 
     public function payement_state_icon($state)
     {
@@ -185,6 +138,24 @@ class FinancesExtension extends \Twig_Extension
         }
 
     }
+
+
+    private function processFactureRepresentation($state){
+        switch($state){
+            case Facture::PAYED:
+                return array('color'=>'green','text'=>'Facture payée','icon'=>'check');
+                break;
+            case Facture::OPEN:
+                return array('color'=>'orange','text'=>'Facture ouverte','icon'=>'circle thin');
+                break;
+            case Facture::CANCELLED:
+                return array('color'=>'red','text'=>'Facture annulée','icon'=>'warning');
+                break;
+            default:
+                return null;
+        }
+
+}
 
 
 

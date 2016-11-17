@@ -1,5 +1,6 @@
 parameters:
     #ces parametres peuvent être changée par le client, il sont donc modifiable en cours d'utilisation
+    #il s'agit donc du fichier d'initialisation de ces parametre qui sont ensuite stocké en DB
     intranet_parameters:
             app_name:
                 type: text
