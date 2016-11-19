@@ -57,7 +57,7 @@ class FinancesExtension extends \Twig_Extension
 
     }
 
-    public function facture_ref_filter(Facture $facture)
+    public function facture_ref_filter($facture)
     {
        if($facture instanceof Facture)
        {

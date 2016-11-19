@@ -198,7 +198,7 @@ class PayementController extends Controller
                 $message = $message . ' et facture de compensation crée.';
             }
 
-
+            $this->get('app.repository.payement')->save($payement);
             //$this->get('session')->getFashBag()->add('notice',$message);
 
             return ResponseFactory::ok();

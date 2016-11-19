@@ -32,7 +32,7 @@ class ListModelsFactures implements ListModelInterface
             return 'N°' . $facture->getId();
         }));
 
-        $list->addColumn(new Column('Statut', function (Facture $facture) { return $facture;}, 'facture_is_payed|raw'));
+        $list->addColumn(new Column('Statut', function (Facture $facture) { return $facture;}, 'facture_state|raw'));
 
         $list->addColumn(new Column('Créances', function (Facture $facture) {
             return $facture->getMontantEmisCreances();
