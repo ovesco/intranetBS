@@ -17,7 +17,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Mail
 {
 
-
     private $mailable;
 
     const METHOD_EMAIL = "email";

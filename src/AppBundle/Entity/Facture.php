@@ -45,7 +45,7 @@ class Facture
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Creance",
-     *                mappedBy="facture", cascade={"persist", "remove"})
+     *                mappedBy="facture", cascade={"persist"})
      */
     private $creances;
 
@@ -462,6 +462,16 @@ class Facture
     public function getDebiteur()
     {
         return $this->debiteur;
+    }
+
+    /**
+     * Si un payement à été recu, il n'est plus possible de supprimer la facture
+     *
+     * @return bool
+     */
+    public function isRemovable()
+    {
+        return !$this->hasPayement();
     }
 
 }

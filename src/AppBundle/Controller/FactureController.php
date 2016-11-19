@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 /* Symfony */
 use AppBundle\Utils\ListUtils\ListKey;
+use AppBundle\Utils\Response\ResponseFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,6 +31,7 @@ use AppBundle\Utils\Menu\Menu;
 /* Service */
 use AppBundle\Utils\Export\Pdf;
 use AppBundle\Utils\ListUtils\ListStorage;
+use AppBundle\Utils\Finances\FacturePrinter;
 
 /**
  * Class FactureController
@@ -100,19 +102,20 @@ class FactureController extends Controller
 
 
     /**
-     * @Route("/delete/{facture}", options={"expose"=true})
+     * @Route("/remove/{facture}", options={"expose"=true})
      * @param Facture $facture
      * @ParamConverter("facture", class="AppBundle:Facture")
      * @param Request $request
      * @return Response
      */
-    public function deleteAction(Request $request,Facture $facture)
+    public function removeAction(Request $request,Facture $facture)
     {
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($facture);
-        $em->flush();
-        $response = new Response();
-        return $response->setStatusCode(200);//OK
+        if($facture->isRemovable())
+        {
+            $this->get('app.repository.facture')->remove($facture);
+            return ResponseFactory::ok();
+        }
+        return ResponseFactory::conflict('La facture a déjà été payée.');
     }
 
     /**
@@ -126,20 +129,23 @@ class FactureController extends Controller
     public function printAction(Facture $facture)
     {
 
-        $printer = $this->get('facture_printer');
+        /** @var FacturePrinter $printer */
+        $printer = $this->get('app.facture_printer');
         /** @var Pdf $pdf */
         $pdf = $printer->factureToPdf($facture);
 
         /*
          * Ajout de l'adresse
+         *
+         * todo NUR à faire
          */
-        $adresse = $facture->getDebiteur()->getOwner()->getAdresseExpedition();
+        //$adresse = $facture->getDebiteur()->getOwner()->getAdresseExpedition();
 
-        $pdf->addAdresseEnvoi($adresse);
+        //$pdf->addAdresseEnvoi($adresse);
 
 
-        $filePath = $this->get('kernel')->getCacheDir().'/temp_pdf/';
-        $fileName = 'facture.pdf';
+        $filePath = $this->getParameter('cache_facture_dir');
+        $fileName = 'facture_'.$facture->getId().'.pdf';
 
         $fs = new Filesystem();
 
@@ -156,8 +162,8 @@ class FactureController extends Controller
 
         $response = new BinaryFileResponse($filePath.$fileName);
         $response->setContentDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            'Facture_'.$facture->getId().'.pdf' //change file name
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT
+            //'Facture_'.$facture->getId().'.pdf' //change file name
         );
 
         return $response;

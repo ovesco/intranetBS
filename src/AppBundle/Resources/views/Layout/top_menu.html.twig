@@ -1,31 +1,30 @@
-<div id="top-menu" class="ui fixed inverted menu">
-    <div class="container">
-        <div class="left menu">
-            <div class="item" id="main-menu-button">
-                <i class="content icon"></i>Menu
-            </div>
+<div id="top-menu" class="ui fixed inverted tiny menu">
 
-            <div class="item">
-                <div id="layout-search" class="ui input category search">
-
-                    <input id="layout-search-input" class="prompt" type="text" placeholder="Recherche...">
-
-                    <div class="results"></div>
-                </div>
-            </div>
-
-            <div class="item">
-
-                {% cache 'twig.layout.magic_top_menu' {time: 0} %}
-                <div id="menu_search" class="ui input search"
-                     data-entries="{{ menu.getAllBlocksToCategorySearch()|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}">
-                    <input class="prompt" type="text" placeholder="Quick menu...">
-                    <div class="results"></div>
-                </div>
-                {% endcache %}
-            </div>
-
+        <div class="item" id="main-menu-button">
+            <i class="content icon"></i>Menu
         </div>
+
+        <div class="item">
+            <div id="layout-search" class="ui input category search">
+
+                <input id="layout-search-input" class="prompt" type="text" placeholder="Recherche...">
+
+                <div class="results"></div>
+            </div>
+        </div>
+
+        <div class="item">
+
+            {% cache 'twig.layout.magic_top_menu' {time: 0} %}
+            <div id="menu_search" class="ui input search"
+                 data-entries="{{ menu.getAllBlocksToCategorySearch()|json_encode(constant('JSON_PRETTY_PRINT'))|e|raw }}">
+                <input class="prompt" type="text" placeholder="Quick menu...">
+                <div class="results"></div>
+            </div>
+            {% endcache %}
+        </div>
+
+
         <div class="right menu">
 
             <a class="item" href="#" id="main-listing-button">Listes</a>
@@ -47,5 +46,5 @@
                 {% endif %}
             </div>
         </div>
-    </div>
+
 </div>

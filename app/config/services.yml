@@ -67,7 +67,7 @@ services:
             - %upload_documents_dir%
 
     #permet de faire un pdf avec une facture
-    facture_printer:
+    app.facture_printer:
         class: AppBundle\Utils\Finances\FacturePrinter
         arguments:
             - @doctrine.orm.entity_manager
@@ -79,6 +79,13 @@ services:
         class: AppBundle\Utils\Elastic\Search
         arguments:
             - @fos_elastica.manager
+
+    #permet la gestion des notifications de façon simplifiée
+    app.notification_bag:
+        class: AppBundle\Utils\SessionTools\NotificationBag
+        arguments:
+            - @session
+
 
     #permet de checker la validité d'un payement
     app.payement.check:

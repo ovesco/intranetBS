@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Form\Payement;
+namespace AppBundle\Search\Payement;
 
 
 use Symfony\Component\Form\AbstractType;
@@ -10,6 +10,9 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use AppBundle\Search\NumericIntervalSearchType;
 use AppBundle\Search\DateIntervalSearchType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+
+use AppBundle\Entity\Payement;
 
 
 class PayementSearchType extends AbstractType
@@ -22,18 +25,18 @@ class PayementSearchType extends AbstractType
                 array('label' => 'N°Facture', 'required' => false))
             ->add('intervalMontantRecu', NumericIntervalSearchType::class, array('label' => 'Montant reçu', 'required' => false))
             ->add('intervalDate', DateIntervalSearchType::class, array('label' => 'Date de création', 'required' => false))
+            ->add('validated',CheckboxType::class,array('required'=>false,'label'=>'Payement validé?'))
             ->add('state', ChoiceType::class,
                 array(
                     'label' => 'Lien avec facture ',
                     'required' => false,
                     'choices' =>
                         array(
-                            'waiting' => 'En attente de validation',
-                            'not_found' => 'Facture inexistante',
-                            'found_valid' => 'Facture payée',
-                            'found_lower_valid' => 'Facture payée avec montant inférieur',
-                            'found_lower_new_facture' => 'Facture payée avec montant inférieur (et complément exigé)',
-                            'found_upper' => 'Facture payée avec montant supérieur'
+                            Payement::NOT_FOUND => 'Facture inexistante',
+                            Payement::FOUND_VALID => 'Facture payée',
+                            Payement::FOUND_LOWER => 'Facture payée avec montant inférieur',
+                            Payement::FOUND_UPPER => 'Facture payée avec montant supérieur',
+                            Payement::FOUND_ALREADY_PAID => 'Facture déjà payée',
                 )));//fin de la fonction
 
 

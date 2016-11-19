@@ -2,6 +2,7 @@
 
 
 namespace AppBundle\Entity;
+
 /**
  *
  *
@@ -25,13 +26,13 @@ interface DebiteurInterface
      * @param Creance $creance
      * @return mixed
      */
-    public function addCreance($creance);
+    public function addCreance(Creance $creance);
 
     /**
      * @param Facture $facture
      * @return mixed
      */
-    public function addFacture($facture);
+    public function addFacture(Facture $facture);
 
 
 }

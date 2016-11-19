@@ -190,18 +190,17 @@
                     <div class="column">
                         <div class="ui top attached message">
                             <div class="header">
-                                <div class="ui grid">
-                                    <div class="ten wide column"><h3><i class="money icon"></i>Créances et factures</h3></div>
-                                    <div class="six wide column">{{ form_row(membreForm.envoiFacture) }}</div>
-                                </div>
+                                <h3><i class="money icon"></i>Facturation</h3>
                             </div>
                         </div>
-
                         <div class="ui bottom attached segment">
-                            {{ render(controller('AppBundle:Debiteur:show', { 'debiteur': membre.debiteur.id })) }}
+                            {{ form_row(membreForm.envoiFacture) }}
                         </div>
-                    </div>
+
+                        {{ render(controller('AppBundle:Debiteur:show', { 'debiteur': membre.debiteur.id })) }}
+                   </div>
                 </div>
+
 
                 <div class="row"> <!-- envois -->
                     <div class="column">

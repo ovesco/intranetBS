@@ -22,7 +22,7 @@ class LayoutController extends Controller
     /**
      * Génère le menu principal.
      */
-    public function mainMenuGenerateAction()
+    public function menuAction()
     {
         /** @var User $user */
         $user = $this->getUser();

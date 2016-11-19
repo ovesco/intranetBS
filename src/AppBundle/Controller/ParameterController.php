@@ -45,8 +45,8 @@ class ParameterController extends Controller
     }
 
     /**
-     * @Route("/edit/{parameter}")
-     * @Template("AppBundle:Parametre:page_edit.html.twig")
+     * @Route("/edit/{parameter}", options={"expose"=true})
+     * @Template("AppBundle:Parametre:modal_edit.html.twig")
      * @param Parameter $parameter
      * @ParamConverter("parameter", class="AppBundle:Parameter")
      * @param Request $request
@@ -54,10 +54,10 @@ class ParameterController extends Controller
      */
     public  function editAction(Request $request,Parameter $parameter)
     {
-        $form = $this->createForm(new ParameterType(),$parameter);
+        $form = $this->createForm(new ParameterType(),$parameter,
+            array('action'=>$this->generateUrl('app_parameter_edit',array('parameter'=>$parameter->getId()))));
 
         $form->handleRequest($request);
-
 
         if($form->isValid())
         {

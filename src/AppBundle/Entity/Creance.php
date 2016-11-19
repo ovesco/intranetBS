@@ -322,6 +322,7 @@ class Creance
     {
         $this->debiteur = $debiteur;
 
+
         return $this;
     }
 

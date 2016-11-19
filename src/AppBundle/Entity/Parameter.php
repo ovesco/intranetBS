@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * Parameter
  *
  * @ORM\Table(name="app_parameter")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ParameterRepository")
  */
 class Parameter
 {

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 /* Symfony */
+use AppBundle\Entity\Creance;
 use AppBundle\Utils\Response\ResponseFactory;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -25,8 +26,7 @@ use AppBundle\Entity\Payement;
 use AppBundle\Search\Facture\FactureRepository;
 
 /* Form */
-use AppBundle\Form\FactureRepartitionType;
-use AppBundle\Form\Payement\PayementSearchType;
+use AppBundle\Search\Payement\PayementSearchType;
 use AppBundle\Form\Payement\PayementAddMultipleType;
 use AppBundle\Form\Payement\PayementUploadFileType;
 use AppBundle\Form\Payement\PayementAddType;
@@ -40,6 +40,8 @@ use AppBundle\Utils\ListUtils\ListKey;
 /* Services */
 use AppBundle\Utils\Finances\PayementFileParser;
 use AppBundle\Utils\ListUtils\ListStorage;
+use AppBundle\Utils\SessionTools\Notification;
+use AppBundle\Utils\Response\AjaxResponseFactory;
 
 
 
@@ -184,7 +186,8 @@ class PayementController extends Controller
      */
     public function validationFormAction(Request $request,Payement $payement)
     {
-        $form  = $this->createForm(new PayementValidationType(),$payement);
+        $form  = $this->createForm(new PayementValidationType(),
+            $payement,array('action'=>$this->generateUrl('app_payement_validationform',array('payement'=>$payement->getId()))));
 
         $form->handleRequest($request);
 
@@ -192,16 +195,48 @@ class PayementController extends Controller
 
             $message = 'Payement validé';
 
-            $newFacture = $form->get("new_facture")->getData();
+            /*
+             * On test ici que le champ supplémentaire premetant la création
+             * d'une cérance à été mit (uniquement pour les facture payé insuffisement)
+             *
+             */
+            if($form->has("new_creance"))
+            {
+                $newCreance = $form->get("new_creance")->getData();
 
-            if($newFacture){
-                $message = $message . ' et facture de compensation crée.';
+                /*
+                 * On test si l'utilisateur soit faire une cérance de compensation
+                 */
+                if($newCreance){
+
+                    $montant = $payement->getFacture()->getMontantEmis() - $payement->getMontantRecu();
+
+                    /*
+                     * On crée la créance de compensation
+                     */
+                    $creance = new Creance();
+                    $creance
+                        ->setDateCreation(new \DateTime('now'))
+                        ->setMontantEmis($montant)
+                        ->setTitre('Compensation montant insuffisant facture num.'.$payement->getFacture()->getId());
+
+                    $payement->getFacture()->getDebiteur()->addCreance($creance);
+
+                    $this->get('app.repository.creance')->save($creance);
+
+                    $message = $message . ' et facture de compensation crée.';
+                }
             }
 
-            $this->get('app.repository.payement')->save($payement);
-            //$this->get('session')->getFashBag()->add('notice',$message);
+            /*
+             * On valide le payment définitivement
+             */
+            $payement->setValidated(true);
 
-            return ResponseFactory::ok();
+            $this->get('app.repository.payement')->save($payement);
+            $this->get('app.notification_bag')->addNotification(new Notification($message,Notification::SUCCESS));
+
+            return AjaxResponseFactory::ok(AjaxResponseFactory::POST_ACTION_RELOAD);
 
         }
 
@@ -212,261 +247,21 @@ class PayementController extends Controller
     /**
      * delete a payement
      *
-     * @Route("/delete/{payement}", options={"expose"=true})
+     * @Route("/remove/{payement}", options={"expose"=true})
      * @param Payement $payement
      * @ParamConverter("payement", class="AppBundle:Payement")
      * @return Response
      */
-    public function deleteAction(Payement $payement){
+    public function removeAction(Payement $payement){
 
-        if((!$payement->isValidated()) || ($payement->getFacture() == null))
+        if($payement->isRemovable())
         {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($payement);
-            $em->flush();
+            $this->get('app.repository.payement')->remove($payement);
 
-            $response = new Response();
-            return $response->setStatusCode(200);//OK
+            return ResponseFactory::ok('Payement supprimé');
         }
-        $response = new Response();
-        return $response->setStatusCode(409);//Conflict
+        return ResponseFactory::conflict('payement liée à une facture');
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * @Route("/repartition_payement", name="interne_finances_payement_repartition_ajax", options={"expose"=true})
-     * @param Request $request
-     * @return Response
-     */
-    public function getPayementRepartitionFormAjaxAction(Request $request){
-
-        if($request->isXmlHttpRequest()) {
-
-            $idPayement = $request->request->get('idPayement');
-
-            $em = $this->getDoctrine()->getManager();
-            $payement = $em->getRepository('AppBundle:Payement')->find($idPayement);
-
-
-            if($payement != null){
-
-                $facture = $em->getRepository('AppBundle:Facture')->find($payement->getIdFacture());
-
-
-                $repartitionForm = $this->createForm(new FactureRepartitionType(),$facture);
-
-                return $this->render('AppBundle:Payement:modalRepartitionForm.html.twig',
-                    array('form'=>$repartitionForm->createView(),'payement'=>$payement,'facture'=>$facture));
-
-            }
-
-
-        }
-    }
-
-    /**
-     * @Route("/validation", name="interne_finances_payement_validation", options={"expose"=true})
-     * @param Request $request
-     * @return Response
-     */
-    public function validationAjaxAction(Request $request)
-    {
-        if($request->isXmlHttpRequest())
-        {
-
-
-            //on récupère les données du formulaire
-            $idPayement = $request->request->get('idPayement');
-            $action = $request->request->get('action');
-
-            //conversion string to other type
-            $idPayement = intval($idPayement); //cast sur int
-
-            //chargement BDD
-            $em = $this->getDoctrine()->getManager();
-
-            //chargement du payement
-            $payement = $em->getRepository('AppBundle:Payement')->find($idPayement);
-
-
-            $results = $this->compareWithFactureInBDD($em,array($payement)); //on analise uniquement ce payement
-            $result = $results[0];//on prend le premier résultat (et le seul)
-
-            $facture = $result['facture'];
-            $statut = $result['statut'];
-            $datePayement = $payement->getDatePayement();
-
-            switch($action){
-                case 'ignore':
-
-                    echo(0);
-                    /*
-                     * c'est les cas: not_found ou found_payed
-                     */
-                    $payement->setState($statut);
-                    break;
-
-                case 'validate':
-                    $payement->setState($statut);
-
-                    $facture->setStatut('payee');
-                    $facture->setDatePayement($datePayement);
-
-                    //validation des créances de la factures
-                    foreach($facture->getCreances() as $creance)
-                    {
-                        $creance->setMontantRecu($creance->getMontantEmis());
-                    }
-
-                    //validation des rappels de la facture
-                    foreach($facture->getRappels() as $rappel)
-                    {
-                        $rappel->setMontantRecu($rappel->getMontantEmis());
-                    }
-
-                    break;
-
-                case 'repartition':
-                    $payement->setState($statut);
-
-                    $facture->setStatut('payee');
-                    $facture->setDatePayement($datePayement);
-                    $this->repartitionMontantInFacture($request,$facture);
-
-
-                    break;
-
-                case 'repartition_and_new_facture':
-                    $payement->setState($statut);
-
-                    $facture->setStatut('payee');
-                    $facture->setDatePayement($datePayement);
-                    $this->repartitionMontantInFacture($request,$facture);
-
-                    /*
-                     * dans ce cas de figure, on crée des créances supplémentaires
-                     * pour compenser le montant exigé
-                     */
-
-
-
-                    foreach($facture->getCreances() as $creance) {
-                        $soldeRestant = $creance->getMontantEmis()-$creance->getMontantRecu();
-                        if($soldeRestant > 0) {
-
-                            $owner = $creance->getOwner();
-
-
-                            $newCreance = null;
-                            if($owner->isClass('Membre')) {
-                                $newCreance = new CreanceToMembre();
-                                $owner->addCreance($newCreance);
-                            }
-                            if($owner->isClass('Famille')) {
-                                $newCreance = new CreanceToFamille();
-                                $owner->addCreance($newCreance);
-                            }
-
-                            $newCreance->setRemarque($creance->getRemarque().' (Crée en complément de la facture numéro: '.$facture->getId().')');
-                            $newCreance->setTitre($creance->getTitre());
-                            $newCreance->setMontantEmis($soldeRestant);
-                            $today = new \DateTime();
-                            $newCreance->setDateCreation($today);
-
-                            $em->persist($newCreance);
-                            $em->flush();
-
-                        }
-                    }
-
-                break;
-
-            }
-            $em->flush();
-
-            return new Response();
-        }
-
-        return new Response();
-    }
-
-    private function repartitionMontantInFacture($request, $facture)
-    {
-        $AppBundleFactureRepartitionType = null;
-        $serializedForm = $request->request->get('form');
-        /**
-         * Parse_str va crée le tableau $AppBundleFactureRepartitionType
-         */
-        parse_str($serializedForm);
-        $repartitionArray = $AppBundleFactureRepartitionType;
-
-
-        //validation des créances de la factures
-        $index = 0;
-        foreach ($facture->getCreances() as $creance) {
-            $creance->setMontantRecu($repartitionArray['creances'][$index]['montantRecu']);
-            $index++;
-        }
-
-        //validationd des rappels de la facture
-        $index = 0;
-        foreach ($facture->getRappels() as $rappel) {
-            $rappel->setMontantRecu($repartitionArray['rappels'][$index]['montantRecu']);
-            $index++;
-        }
-    }
-
-
-
 
 
 }

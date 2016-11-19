@@ -10,6 +10,12 @@ use AppBundle\Utils\Elastic\QueryBuilder;
 class PayementRepository extends Repository
 {
 
+    /**
+     * @param PayementSearch $payement
+     * @return array
+     *
+     * todo NUR a faire.
+     */
     public function search(PayementSearch $payement){
 
         $builder = new QueryBuilder($this,true,5000);

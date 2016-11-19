@@ -287,4 +287,10 @@ class Payement
     }
 
 
+    public function isRemovable()
+    {
+        return !$this->hasFacture();
+    }
+
+
 }

@@ -38,7 +38,7 @@
 
        #}
 
-    {{ render(controller('AppBundle:Layout:mainMenuGenerate')) }}
+    {{ render(controller('AppBundle:Layout:menu')) }}
 
        {#
            LISTING
@@ -113,6 +113,13 @@
                             alerte.send("{{ flash }}", "{{ label }}");
                             {% endfor %}
                     {% endfor %}
+
+                    {% for notification in notification_bag.getNotifications() %}
+                        alerte.send("{{ notification.message }}","{{ notification.type }}");
+                    {% endfor %}
+                    {{ notification_bag.clearNotifications() }}
+
+
                 });
             </script>
 

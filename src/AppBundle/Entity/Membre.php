@@ -651,7 +651,7 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface
      * @param \AppBundle\Entity\Creance $creance
      * @return Membre
      */
-    public function addCreance($creance)
+    public function addCreance(Creance $creance)
     {
         $this->getDebiteur()->addCreance($creance);
         return $this;
@@ -685,7 +685,7 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface
      * @param \AppBundle\Entity\Facture $facture
      * @return Membre
      */
-    public function addFacture($facture)
+    public function addFacture(Facture $facture)
     {
         $this->getDebiteur()->addFacture($facture);
         return $this;

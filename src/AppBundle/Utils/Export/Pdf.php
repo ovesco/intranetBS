@@ -7,8 +7,8 @@ use AppBundle\Entity\Membre;
 use AppBundle\Entity\Famille;
 use AppBundle\Entity\Mere;
 use AppBundle\Entity\Pere;
-use fpdf\FPDF;
-use fpdi\FPDI;
+use FPDF;
+use FPDI;
 use Symfony\Component\BrowserKit\Response;
 
 /**

@@ -27,6 +27,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  *
  *
  * todo NUR dans le formulaire de recherche de membre, il faut pouvoir chercher qui à son anni durant le camp.
+ * et certainement bouger ca dans le controller membre
  */
 class SearchController extends Controller
 {
@@ -35,11 +36,11 @@ class SearchController extends Controller
     /**
      * Effectue une recherche complète parmi les membres, groupes et familles
      * Filtre ensuite les 4 premiers résultats par catégorie pour ne pas en avoir trop
-     * @Route("/layout-search", name="interne_main_layout_search", options={"expose"=true})
+     * @Route("/layout", options={"expose"=true})
      * @param Request $request
      * @return JsonResponse
      */
-    public function layoutSearchAction(Request $request) {
+    public function layoutAction(Request $request) {
 
         $pattern     = $request->query->get('pattern');
         $pattern     = "*" . $pattern . "*";

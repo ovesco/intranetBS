@@ -40,11 +40,19 @@ function init() {
      */
     $('#layout-search').search({
         apiSettings: {
-            url: Routing.generate('interne_main_layout_search')+'?pattern={query}'
+            url: Routing.generate('app_search_layout')+'?pattern={query}'
         },
         type: 'category'
     });
 
 
-    $('#menu_search').search({source: $('#menu_search').data("entries")});
+    var $menu_search =  $('#menu_search');
+    var menu_entries = $menu_search.data("entries");
+    $menu_search.search({
+        source: menu_entries,
+        searchFields   : ['title'],
+        searchFullText: false
+    });
+
+
 }

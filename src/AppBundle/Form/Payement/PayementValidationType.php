@@ -31,9 +31,9 @@ class PayementValidationType extends AbstractType
             case Payement::FOUND_ALREADY_PAID:
                 break;
             case Payement::FOUND_LOWER:
-                $builder->add('new_facture', CheckboxType::class,
+                $builder->add('new_creance', CheckboxType::class,
                     array(
-                        'label' => 'Crée un facture de compensation?',
+                        'label' => 'Crée un créance de compensation?',
                         'required' => false,
                         'mapped'=>false
                     ));

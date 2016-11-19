@@ -35,13 +35,31 @@ function postForm( $form ){
 
     /*
      * Throw the form values to the server!
+     *
+     * todo CMR de NUR ca marche pas pour l'upload de fichier en ajax genre quand on veut modifier le logo via les parametres
      */
     $.ajax({
         type        : $form.attr( 'method' ),
         url         : $form.attr( 'action' ),
         data        : values,
         success     : function(data) {
-            location.reload();
+
+            console.log(data);
+
+            if (typeof data.post_action !== 'undefined') {
+                // the variable is defined
+                switch (data.post_action)
+                {
+                    case 'reload':
+                        location.reload();
+                        break;
+                    default:
+                        location.reload();
+                }
+            }
+            else
+                location.reload();
+
         },
         error: function (xhr, ajaxOptions, thrownError) {
             alerte.send("Erreur lors de l'envoi du formulaire\nDétails : " + xhr.status + " / " + thrownError, 'error');

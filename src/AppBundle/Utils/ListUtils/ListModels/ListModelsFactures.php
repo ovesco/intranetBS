@@ -54,9 +54,15 @@ class ListModelsFactures implements ListModelInterface
             );
         };
 
+        $conditionRemove = function (Facture $facture) {
+            return $facture->isRemovable();
+        };
         $list->addActionLine(new ActionLine('Voir', 'zoom', 'app_facture_show', $factureParameters, EventPostAction::ShowModal));
 
-        $list->addActionLine(new ActionLine('Supprimer', 'delete', 'interne_finances_facture_delete', $factureParameters, EventPostAction::RefreshList));
+        $list->addActionLine(new ActionLine('Supprimer', 'delete', 'app_facture_remove', $factureParameters, EventPostAction::RefreshList,$conditionRemove));
+
+        $list->addActionLine(new ActionLine('Imprimer', 'print', 'app_facture_print', $factureParameters,EventPostAction::Link));
+
 
         $list->setDatatable(true);
 

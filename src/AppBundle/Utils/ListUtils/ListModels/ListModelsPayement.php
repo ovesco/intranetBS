@@ -45,6 +45,15 @@ class ListModelsPayement implements ListModelInterface
 
         $list->addColumn(new Column('Etat', function (Payement $item) { return $item; },'payement_state|raw'));
 
+        $payementParameters = function (Payement $payement) {
+            return array(
+                "payement" => $payement->getId()
+            );
+        };
+
+        $list->addActionLine(new ActionLine('Afficher', 'zoom', 'app_payement_show', $payementParameters, EventPostAction::ShowModal,null,true,false));
+
+
         return $list;
     }
 
@@ -59,10 +68,15 @@ class ListModelsPayement implements ListModelInterface
             );
         };
 
-        $list->addActionLine(new ActionLine('Afficher', 'zoom', 'app_payement_show', $payementParameters, EventPostAction::ShowModal,null,true,false));
+        $list->addActionLine(new ActionLine('Valider', 'check', 'app_payement_validationform', $payementParameters, EventPostAction::ShowModal,null,true,false));
 
 
-        $list->addActionLine(new ActionLine('Valider', 'settings', 'app_payement_validationform', $payementParameters, EventPostAction::ShowModal,null,true,false));
+        $removeCondition = function (Payement $payement) {
+            return $payement->isRemovable();
+        };
+
+
+        $list->addActionLine(new ActionLine('Supprimer', 'remove', 'app_payement_remove', $payementParameters, EventPostAction::RefreshList,$removeCondition,true,false));
 
 
 

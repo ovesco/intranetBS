@@ -36,6 +36,10 @@ class PayementSearch
      */
     public $state;
 
+    /**
+     * @var bool
+     */
+    public $validated;
 
     public function __construct(){
         $this->intervalMontantRecu = new NumericIntervalSearch();

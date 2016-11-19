@@ -25,7 +25,7 @@ use JMS\Serializer\Annotation\VirtualProperty;
  * @ExclusionPolicy("all")
  *
  */
-class Famille implements ExpediableInterface,ClassNameInterface
+class Famille implements ExpediableInterface,ClassNameInterface,DebiteurInterface
 {
     /**
      * @var integer
@@ -439,4 +439,17 @@ class Famille implements ExpediableInterface,ClassNameInterface
     {
         return $this->receiver;
     }
+
+    public function addCreance(Creance $creance)
+    {
+        $this->getDebiteur()->addCreance($creance);
+        return $this;
+    }
+
+    public function addFacture(Facture $facture)
+    {
+        $this->getDebiteur()->addFacture($facture);
+        return $this;
+    }
+
 }

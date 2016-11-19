@@ -48,3 +48,9 @@ services:
         factory_service: doctrine.orm.default_entity_manager
         factory_method: getRepository
         arguments: ['AppBundle:PayementFile']
+
+    app.repository.parameter:
+        class: AppBundle\Repository\ParameterRepository
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+        arguments: ['AppBundle:Parameter']

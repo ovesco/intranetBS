@@ -16,6 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use AppBundle\Utils\ListUtils\ListKey;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Repository\PayementRepository;
+use AppBundle\Repository\ParameterRepository;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsAttributions;
@@ -31,6 +32,7 @@ use AppBundle\Utils\ListUtils\ListModels\ListModelsFonction;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsGroupe;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsPayement;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsPayementFile;
+use AppBundle\Utils\ListUtils\ListModels\ListModelsParameter;
 
 /* Annotations */
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -381,6 +383,21 @@ class ListCallerController extends Controller
         $items = $repo->findNotValidated();
         $url = $this->getRouter()->generate('app_listcaller_payementnotvalidated');
         $list = ListModelsPayement::getNotValidated($this->getTwig(), $this->getRouter(), $items, $url)->render();
+        return $this->returnList($list, $call);
+    }
+
+    /**
+     * @route("/parameter/all", defaults={"call"="route"})
+     * @param $call
+     * @return mixed
+     */
+    public function parameterAll( $call = self::CALL_BY_TWIG)
+    {
+        /** @var ParameterRepository $repo */
+        $repo = $this->get('app.repository.parameter');
+        $items = $repo->findAll();
+        $url = $this->getRouter()->generate('app_listcaller_payementnotvalidated');
+        $list = ListModelsParameter::getDefault($this->getTwig(), $this->getRouter(), $items, $url)->render();
         return $this->returnList($list, $call);
     }
 }

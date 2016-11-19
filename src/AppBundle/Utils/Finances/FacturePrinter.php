@@ -38,11 +38,11 @@ class FacturePrinter
          */
 
 
-        $ccpBvr = $this->parametres->getValue('finance','impression_ccp_bvr');
-        $adresse = $this->parametres->getValue('info_groupe','adresse');
-        $modePayement = $this->parametres->getValue('finance','impression_mode_payement');
-        $texteFacture = $this->parametres->getValue('finance','impression_texte_facture');
-        $affichageMontant = $this->parametres->getValue('finance','impression_affichage_montant');
+        $ccpBvr = $this->parametres->get('finances_impression_cpp_bvr');
+        $adresse = $this->parametres->get('group_address');
+        $modePayement = $this->parametres->get('finances_impression_mode_payement');
+        $texteFacture = $this->parametres->get('finances_impression_texte_facture');
+        $affichageMontant = $this->parametres->get('finances_impression_affichage_montant');
 
         /*
          * Infos utile de la facture

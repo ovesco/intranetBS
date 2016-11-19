@@ -20,10 +20,8 @@
         "symfony/filesystem": "3.0.*@dev",
         "doctrine/orm": "^2.4.8",
         "doctrine/doctrine-bundle": "~1.4",
-
         "sensio/distribution-bundle": "~5.0",
         "sensio/framework-extra-bundle": "^3.0.2",
-
         "friendsofsymfony/jsrouting-bundle": "dev-master",
         "friendsofsymfony/elastica-bundle": "3.2.x",
         "twig/extensions": "dev-master",
@@ -34,7 +32,9 @@
         "knplabs/knp-snappy-bundle": "dev-master",
         "gedmo/doctrine-extensions": "dev-master",
         "emanueleminotto/twig-cache-bundle": "^1.0",
-        "interne/seancebundle": "dev-master"
+        "interne/seancebundle": "dev-master",
+        "setasign/fpdf" : "1.8.1",
+        "setasign/fpdi" : "1.6.1"
     },
     "require-dev": {
       "fzaninotto/faker": "1.5.*@dev",
