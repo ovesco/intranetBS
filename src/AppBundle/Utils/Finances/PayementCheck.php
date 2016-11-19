@@ -9,6 +9,7 @@
 namespace AppBundle\Utils\Finances;
 
 use AppBundle\Repository\FactureRepository;
+use AppBundle\Repository\PayementRepository;
 use AppBundle\Entity\Payement;
 use AppBundle\Entity\Facture;
 
@@ -18,51 +19,94 @@ class PayementCheck {
     /** @var  FactureRepository */
     private $factureRepository;
 
-    public function __construct(FactureRepository $repository){
+    /** @var  PayementRepository */
+    private $payementRepository;
 
-        $this->factureRepository = $repository;
+    /** @var  FactureAutoDistribution */
+    private $autoDistribution;
+
+    /**
+     * @param FactureRepository $factureRepository
+     * @param PayementRepository $payementRepository
+     */
+    public function __construct(FactureRepository $factureRepository, PayementRepository $payementRepository, FactureAutoDistribution $autoDistribution){
+
+        $this->factureRepository = $factureRepository;
+        $this->payementRepository = $payementRepository;
+        $this->autoDistribution = $autoDistribution;
     }
 
     /**
-     * Cette fonction va checker le statut de lu payement en fonction des factures existantes.
+     * Cette fonction va checker le statut du payement en fonction des factures existantes.
      *
      * @param Payement $payement
      * @return Payement
      */
-    public function check(Payement $payement){
+    public function validation(Payement $payement){
 
         /** @var Facture $facture */
         $facture = $this->factureRepository->find($payement->getIdFacture());
 
-        if($facture != Null)
+        /*
+         * On vérifie que la facture existe bien.
+         */
+        if($facture instanceof Facture)
         {
-            if($facture->getStatut() == Facture::OPEN)
+            /*
+             * On vérifie que aucun payement n'a été recu avant...
+             */
+            if(!$facture->hasPayement())
             {
                 $montantTotalEmis = $facture->getMontantEmis();
                 $montantRecu = $payement->getMontantRecu();
 
                 if($montantTotalEmis == $montantRecu)
                 {
+                    /*
+                     * Le payement est accépté
+                     */
                     $payement->setState(Payement::FOUND_VALID);
+                    $payement->setValidated(true);
+                    $facture->setStatut(Facture::PAYED);
+                    $facture->setDatePayement($payement->getDate());
+                    /*
+                     * répartition des montants
+                     */
+                    $this->autoDistribution->distributEqual($facture,$montantRecu);
                 }
                 elseif($montantTotalEmis > $montantRecu)
                 {
+                    /*
+                     * Le payement n'est pas accepté...il passera par la validation manuelle
+                     * par contre la facture est mise en statut payé
+                     */
                     $payement->setState(Payement::FOUND_LOWER);
+                    $payement->setValidated(false);
+                    $facture->setStatut(Facture::PAYED);
+
+
+                    $this->autoDistribution->distribut($facture,$montantRecu);
                 }
                 elseif($montantTotalEmis < $montantRecu)
                 {
+                    /*
+                     * Le payement est accépté
+                     */
                     $payement->setState(Payement::FOUND_UPPER);
+                    $payement->setValidated(true);
+                    $facture->setStatut(Facture::PAYED);
+                    $facture->setDatePayement($payement->getDate());
+                    /*
+                     * répartition des montants
+                     */
+                    $this->autoDistribution->distribut($facture,$montantRecu);
                 }
                 /*
                  * On lie le payement à la facture
                  */
                 $payement->setFacture($facture);
                 $facture->setPayement($payement);
-                /*
-                 * On definit la facture comme payée dans tout les cas...ce qui correspond à la réalité.
-                 * par contre le payement reste à valider pour répartir la somme dans les créances
-                 */
-                $facture->setStatut(Facture::PAYED);
+
                 $this->factureRepository->save($facture);
             }
             else
@@ -71,14 +115,21 @@ class PayementCheck {
                  * la facture a déjà été payée
                  */
                 $payement->setState(Payement::FOUND_ALREADY_PAID);
+                $payement->setValidated(false);
             }
         }
         else
         {
+            /*
+             * la facture n'est pas trouvée.
+             */
             $payement->setState(Payement::NOT_FOUND);
+            $payement->setValidated(false);
         }
 
-        return $payement;
+
+
+        $this->payementRepository->save($payement);
     }
 
 

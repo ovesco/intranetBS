@@ -6,8 +6,10 @@ imports:
     - { resource: doctrine_extensions.yml }
 
 #définition des parametres fixes lié a AppBundle
-app:
-    upload_path: %kernel.root_dir%/../uploads
+parameters:
+    upload_dir: '%kernel.root_dir%/../web/uploads'
+    upload_payement_file_dir: '%upload_dir%/payement_files'
+    upload_documents_dir: '%upload_dir%/documents'
 
 framework:
     #esi:             ~

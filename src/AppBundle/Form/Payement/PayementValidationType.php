@@ -9,6 +9,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 
 class PayementValidationType extends AbstractType
@@ -16,16 +18,42 @@ class PayementValidationType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('comment', TextareaType::class, array('label' => 'Remarque', 'required' => false, 'attr' => array('placeholder' => 'Une remarque qui pourrait aider dans le future...')));//fin de la fonction
+
+        /** @var Payement $payement */
+        $payement = $builder->getData();
+
+
+        switch($payement->getState()) {
+            case Payement::NOT_FOUND:
+                break;
+            case Payement::NOT_DEFINED:
+                break;
+            case Payement::FOUND_ALREADY_PAID:
+                break;
+            case Payement::FOUND_LOWER:
+                $builder->add('new_facture', CheckboxType::class,
+                    array(
+                        'label' => 'Crée un facture de compensation?',
+                        'required' => false,
+                        'mapped'=>false
+                    ));
+                break;
+            case Payement::FOUND_UPPER:
+                break;//should not be validate
+            case Payement::FOUND_VALID:
+                break;//should not be validate
+        }
+        $builder->add('comment', TextareaType::class, array('label' => 'Remarque', 'required' => false));//fin de la fonction
+
+
 
 
         /*
          * evenement lors de l'instentitation du formulaire. cela permet d'adapter le formulaire
          * en fonction des données.
-         */
+         *
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-            /** @var Payement $payement */
+            /** @var Payement $payement *
             $payement = $event->getData();
             $form = $event->getForm();
 
@@ -74,6 +102,7 @@ class PayementValidationType extends AbstractType
 
 
         });
+        */
 
 
     }

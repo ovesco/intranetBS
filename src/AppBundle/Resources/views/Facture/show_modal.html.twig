@@ -4,6 +4,8 @@
     Détail de la facture N°{{ facture.id }}
 {% endblock %}
 
+{% set hasPayement = facture.hasPayement() %}
+
 {% block content %}
     <table class="ui definition table">
         <tbody>
@@ -20,14 +22,16 @@
 
 
 
+        {% if hasPayement %}
         <tr>
             <td>Date de payement</td>
             <td>
-                {% if facture.statut == 'payee' %}
-                    {{ facture.datePayement|date(global_date_format) }}
-                {% endif %}
+                {{ facture.datePayement|date(global_date_format) }}
+
+                {{ modal_caller('<a class=" "><i class="zoom blue icon"></i>Voir le payement</a>',path('app_payement_show',{'payement':facture.payement.id})) }}
             </td>
         </tr>
+        {% endif %}
 
         <tr>
             <td>Propriétaire</td>
@@ -67,11 +71,10 @@
         <thead>
         <tr>
             <th rowspan="2">Créances et Rappels</th>
-            <th colspan="2">Montant</th>
-        </tr>
-        <tr>
-            <th>Emis</th>
+            <th>Montant émis</th>
+            {% if hasPayement %}
             <th>Reçu</th>
+            {% endif %}
         </tr>
         </thead>
         <tbody>
@@ -91,10 +94,13 @@
                     {% endif %}
                 </td>
                 <td>{{ creance.montantEmis|money }}</td>
-                {% if creance.montantRecu >= creance.montantEmis %}
-                    <td class="positive">{{ creance.montantRecu|money }}</td>
-                {% else %}
-                    <td class="negative">{{ creance.montantRecu|money }}</td>
+
+                {% if hasPayement %}
+                    {% if creance.montantRecu >= creance.montantEmis %}
+                        <td class="positive">{{ creance.montantRecu|money }}</td>
+                    {% else %}
+                        <td class="negative">{{ creance.montantRecu|money }}</td>
+                    {% endif %}
                 {% endif %}
             </tr>
 
@@ -105,10 +111,12 @@
             <tr>
                 <td>Rappel N°{{ loop.index }}</td>
                 <td>{{ rappel.montantEmis|money }}</td>
-                {% if rappel.montantRecu >= rappel.montantEmis %}
-                    <td class="positive">{{ rappel.montantRecu|money }}</td>
-                {% else %}
-                    <td class="negative">{{ rappel.montantRecu|money }}</td>
+                {% if hasPayement %}
+                    {% if rappel.montantRecu >= rappel.montantEmis %}
+                        <td class="positive">{{ rappel.montantRecu|money }}</td>
+                    {% else %}
+                        <td class="negative">{{ rappel.montantRecu|money }}</td>
+                    {% endif %}
                 {% endif %}
             </tr>
         {% endfor %}
@@ -116,10 +124,12 @@
         <tr>
             <td class="right aligned">Total</td>
             <td>{{ facture.montantEmis|money }}</td>
-            {% if facture.montantRecu >= facture.montantEmis %}
-                <td class="positive">{{ facture.montantRecu|money }}</td>
-            {% else %}
-                <td class="negative">{{ facture.montantRecu|money }}</td>
+            {% if hasPayement %}
+                {% if facture.montantRecu >= facture.montantEmis %}
+                    <td class="positive">{{ facture.montantRecu|money }}</td>
+                {% else %}
+                    <td class="negative">{{ facture.montantRecu|money }}</td>
+                {% endif %}
             {% endif %}
         </tr>
 

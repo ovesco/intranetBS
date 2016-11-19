@@ -2,12 +2,9 @@
 {{ form_start(form, {'attr': {'class': 'ui form form_add_manually'}}) }}
 
 {% if previousPayement is defined %}
-
-    {% set color = previousPayement.state|payement_state_color %}
-    {% set text = previousPayement.state|payement_state_text %}
-
-    <div class="ui {{ color }} message">{{ text }}</div>
-
+    {% if previousPayement is not null%}
+    {{ previousPayement|payement_state|raw }}
+    {% endif %}
 {% endif %}
 
 {{ form_rest(form) }}

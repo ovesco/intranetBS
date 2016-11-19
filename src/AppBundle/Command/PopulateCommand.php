@@ -1235,7 +1235,7 @@ class PopulateCommand extends ContainerAwareCommand
             for($n = 0; $n < $nbCreance; $n++) {
                 $facture->addCreance($this->getCreance($debiteur,true));
             }
-            $facture->setStatut('payee');
+            $facture->setStatut(Facture::PAYED);
             $facture->setDatePayement($datePayement);
             for($n = 0; $n < mt_rand(0,6); $n++) {
                 $rappel = new Rappel();

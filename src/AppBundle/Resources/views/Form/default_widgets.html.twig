@@ -94,9 +94,11 @@ je sais pas si je suis un vieux con mais je dirais " c'était mieux avant"
 
 {# checkbox #}
 {% block checkbox_widget -%}
-    <div class="ui checkbox">
+    <div class="ui segment">
+    <div class="ui toggle checkbox">
         <input {{ block('widget_attributes') }} {% if value is defined %} value="{{value}}" {% endif %} {% if checked %} checked="checked" {% endif %} type="checkbox">
         {{ block('form_label') }}
+    </div>
     </div>
 {%- endblock checkbox_widget %}
 

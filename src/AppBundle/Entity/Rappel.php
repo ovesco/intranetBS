@@ -7,6 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Rappel
  *
+ *
+ *
  * @ORM\Table(name="app_rappels")
  * @ORM\Entity
  */

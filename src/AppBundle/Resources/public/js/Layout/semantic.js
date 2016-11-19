@@ -27,6 +27,9 @@ function semantic_init()
 
     /*
      * Enable popup with class name: popupable
+     *
+     * todo CMR de NUR dans les datatable, en passant dans des pages suivantes, les popup ne marche plus...faudrais verifier l'initialisation
+     * a chaque changement de page dans les datatables
      */
     $('.popupable').popup();
     $('.popupable.onclick').popup({on:'click'});

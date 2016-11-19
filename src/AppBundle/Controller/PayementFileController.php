@@ -104,8 +104,7 @@ class PayementFileController extends Controller
                 foreach($payements as $payement)
                 {
                     //check the payement and associeated facture
-                    $payement = $this->get('app.payement.check')->check($payement);
-                    $this->get('app.repository.payement')->save($payement);
+                    $payement = $this->get('app.payement.check')->validation($payement);
                 }
 
                 $message = 'Fichier correctement téléchargé, avec '.$payements->count().' payements.';

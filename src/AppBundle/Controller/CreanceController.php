@@ -115,7 +115,7 @@ class CreanceController extends Controller
      * @return Response
      * @Template("AppBundle:Creance:page_recherche.html.twig")
      *
-     * todo NUR implémenter la recherche avec le "mode" pour ajouter ou enlever le resultat à la recherche préceédente
+     * todo NUR: implémenter la recherche avec le "mode" pour ajouter ou enlever le resultat à la recherche préceédente
      */
     public function searchAction(Request $request){
 

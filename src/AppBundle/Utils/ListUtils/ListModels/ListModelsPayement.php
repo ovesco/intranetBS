@@ -4,6 +4,7 @@
 namespace AppBundle\Utils\ListUtils\ListModels;
 
 use AppBundle\Entity\Payement;
+use AppBundle\Entity\PayementFile;
 use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\Column;
 use AppBundle\Utils\ListUtils\ListModelInterface;
@@ -27,36 +28,46 @@ class ListModelsPayement implements ListModelInterface
      */
     static public function getDefault(\Twig_Environment $twig, Router $router, $items, $url = null)
     {
-        /*
+
         $list = new ListRenderer($twig, $items);
         $list->setUrl($url);
         $list->setSearchBar(true);
 
-        $list->addColumn(new Column('Facture', function (Creance $item) { return $item; },'creance_facture_status|raw'));
-        $list->addColumn(new Column('Etat', function (Creance $item) { return $item; },'creance_is_payed|raw'));
+        $list->addColumn(new Column('', function (Payement $item) { return $item; },'payement_validation|raw'));
 
-        $list->addColumn(new Column('Motif', function (Creance $item) {
-            return $item->getTitre();
-        }));
+        $list->addColumn(new Column('Num. réf.', function (Payement $item) { return $item->getIdFacture(); }));
+
+        $list->addColumn(new Column('Montant', function (Payement $item) { return $item->getMontantRecu(); },'money'));
+
+        $list->addColumn(new Column('Date', function (Payement $item) {
+            return $item->getDate();
+        },'date(global_date_format)'));
+
+        $list->addColumn(new Column('Etat', function (Payement $item) { return $item; },'payement_state|raw'));
+
+        return $list;
+    }
 
 
+    static public function getNotValidated(\Twig_Environment $twig, Router $router, $items, $url = null)
+    {
+        $list = self::getDefault($twig,$router,$items,$url);
 
-        $parameters = function (Creance $item) {
+        $payementParameters = function (Payement $payement) {
             return array(
-                'creance' => $item->getId()
+                "payement" => $payement->getId()
             );
         };
 
-        $removeCondition = function (Creance $creance) {
-            return !$creance->isFactured();
-        };
+        $list->addActionLine(new ActionLine('Afficher', 'zoom', 'app_payement_show', $payementParameters, EventPostAction::ShowModal,null,true,false));
 
-        $list->addActionLine(new ActionLine('Voir', 'zoom', 'app_creance_show', $parameters, EventPostAction::ShowModal));
+
+        $list->addActionLine(new ActionLine('Valider', 'settings', 'app_payement_validationform', $payementParameters, EventPostAction::ShowModal,null,true,false));
+
 
 
 
         return $list;
-        */
     }
 
 
@@ -68,50 +79,24 @@ class ListModelsPayement implements ListModelInterface
      */
     static public function getSearchResults(\Twig_Environment $twig, Router $router, $items, $url = null)
     {
-        $list = new ListRenderer($twig, $items);
-        $list->setUrl($url);
-        $list->setSearchBar(true);
 
-        $list->addColumn(new Column('Num. réf.', function (Payement $item) { return $item->getIdFacture(); }));
-
-        $list->addColumn(new Column('Montant', function (Payement $item) { return $item->getMontantRecu(); },'money'));
+        $list = self::getDefault($twig,$router,$items,$url);
 
 
-        $list->addColumn(new Column('Date', function (Payement $item) {
-            return $item->getDate();
-        },'date(global_date_format)'));
-
-
-
-        /*
-
-        $creanceParameters = function (Creance $creance) {
+        $payementParameters = function (Payement $payement) {
             return array(
-                "creance" => $creance->getId()
+                "payement" => $payement->getId()
             );
         };
 
-        $list->addActionLine(new ActionLine('Afficher', 'zoom', 'app_creance_show', $creanceParameters, EventPostAction::ShowModal,null,true,false));
+        $list->addActionLine(new ActionLine('Afficher', 'zoom', 'app_payement_show', $payementParameters, EventPostAction::ShowModal,null,true,false));
 
 
-        //si la créance est déjà facturée, on donne la possibilité de visionner la facture.
-        $factureCondition = function (Creance $creance) {
-            return $creance->isFactured();
-        };
-
-        $factureParameters = function (Creance $creance) {
-            return array(
-                "facture" => ($creance->isFactured() ? $creance->getFacture()->getId() : null)
-            );
-        };
-
-
-        $list->addActionLine(new ActionLine('Afficher', 'edit', 'app_facture_show', $factureParameters, EventPostAction::ShowModal,$factureCondition,true,false));
-
-
-        */
 
         return $list;
+
+
+
     }
 
 }

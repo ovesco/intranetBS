@@ -9,7 +9,7 @@ use FOS\ElasticaBundle\Configuration\Search;
 
 /**
  *
- * todo NUR rajouter un statut "annulée" c'est bien plus logique
+ *
  *
  * Class Facture
  *
@@ -432,6 +432,13 @@ class Facture
     }
 
 
+    /**
+     * @return bool
+     */
+    public function hasPayement()
+    {
+        return ($this->payement != null ? true:false);
+    }
 
     /**
      * Set debiteur
@@ -456,4 +463,5 @@ class Facture
     {
         return $this->debiteur;
     }
+
 }

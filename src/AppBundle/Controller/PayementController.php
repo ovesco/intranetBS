@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 /* Symfony */
+use AppBundle\Utils\Response\ResponseFactory;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -136,10 +137,9 @@ class PayementController extends Controller
         $form->handleRequest($request);
 
         if($form->isValid()){
-            $payement->setDate(new \DateTime());
-            $payement->setValidated(false);
-            $payement = $this->get('app.payement.check')->check($payement);
-            $this->get('app.repository.payement')->save($payement);
+
+            $payement->setDate(new \DateTime('now'));
+            $payement = $this->get('app.payement.check')->validation($payement);
 
             /*
              * Si le payement est accepté, on process un nouveaux formulaire
@@ -167,19 +167,10 @@ class PayementController extends Controller
      */
     public function validationAction(Request $request){
 
-
-        $em = $this->getDoctrine()->getManager();
-
-        /*
-         * todo faire ceci avec elasitca (pas nécaissaire dans l'imédia)
-        */
-
-        $payements = $em->getRepository('AppBundle:Payement')->findBy(array('validated'=>false),null,10);
-
-        return array('payements'=>$payements);
-
-
+        return array();
     }
+
+
 
     /**
      * Validation form
@@ -193,46 +184,29 @@ class PayementController extends Controller
      */
     public function validationFormAction(Request $request,Payement $payement)
     {
-        $validationForm  = $this->createForm(new PayementValidationType(),$payement);
+        $form  = $this->createForm(new PayementValidationType(),$payement);
 
-        if($request->isXmlHttpRequest()){
+        $form->handleRequest($request);
 
-            $validationForm->handleRequest($request);
+        if($form->isValid()) {
 
-            if($validationForm->isValid()) {
+            $message = 'Payement validé';
 
-                $em = $this->getDoctrine()->getManager();
+            $newFacture = $form->get("new_facture")->getData();
 
-                switch($payement->getState()){
-                    case Payement::FOUND_LOWER:
-                    case Payement::FOUND_VALID:
-                    case Payement::FOUND_UPPER:
-                        $payement->getFacture()->setStatut(Facture::PAYED);
-                        break;
-                }
-
-                /*
-                 * todo verifier le montant avant la validation.
-                 */
-
-                $payement->setValidated(true);
-                $em->persist($payement);
-                $em->flush();
-
-                $success = new Response();
-                $success->setStatusCode(200);//ok
-                return $success;
-
+            if($newFacture){
+                $message = $message . ' et facture de compensation crée.';
             }
-            else{
-                $error = new Response();
-                $error->setStatusCode(400);//bad request
-                return $error;
-            }
+
+
+            //$this->get('session')->getFashBag()->add('notice',$message);
+
+            return ResponseFactory::ok();
 
         }
 
-        return array('payement'=>$payement,'form'=>$validationForm->createView());
+        return array('form'=>$form->createView(),'payement'=>$payement);
+
     }
 
     /**

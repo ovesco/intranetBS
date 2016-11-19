@@ -10,4 +10,10 @@ namespace AppBundle\Repository;
 
 class PayementRepository extends Repository{
 
+    public function findNotValidated(){
+
+        return $this->findBy(array('validated'=>false));
+
+    }
+
 }

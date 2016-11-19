@@ -64,7 +64,7 @@ services:
     document_storage:
         class: AppBundle\Utils\Document\DocumentStorage
         arguments:
-            - %app.upload_path%
+            - %upload_documents_dir%
 
     #permet de faire un pdf avec une facture
     facture_printer:
@@ -85,7 +85,14 @@ services:
         class: AppBundle\Utils\Finances\PayementCheck
         arguments:
             - @app.repository.facture
+            - @app.repository.payement
+            - @app.facture.auto_distribution
 
+    #permet de répartire l'argent dans recu pour une facture de facon automatique dans ses créance et rappel
+    app.facture.auto_distribution:
+        class: AppBundle\Utils\Finances\FactureAutoDistribution
+        arguments:
+            - @app.repository.facture
 
     # Twig
     # Extensions twig qui permettent de mettre en place des filtres

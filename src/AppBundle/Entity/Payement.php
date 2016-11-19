@@ -218,6 +218,14 @@ class Payement
     }
 
     /**
+     * @return bool
+     */
+    public function hasFacture()
+    {
+        return ($this->facture != null ? true:false);
+    }
+
+    /**
      * Set validated
      *
      * @param boolean $validated

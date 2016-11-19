@@ -31,7 +31,9 @@ class FinancesExtension extends \Twig_Extension
             new \Twig_SimpleFilter('creance_state_detail', array($this, 'creance_state_detail')),
             new \Twig_SimpleFilter('facture_state', array($this, 'facture_state')),
             new \Twig_SimpleFilter('facture_state_detail', array($this, 'facture_state_detail')),
-
+            new \Twig_SimpleFilter('payement_state', array($this, 'payement_state')),
+            new \Twig_SimpleFilter('payement_state_detail', array($this, 'payement_state_detail')),
+            new \Twig_SimpleFilter('payement_validation', array($this, 'payement_validation')),
         );
     }
 
@@ -95,22 +97,24 @@ class FinancesExtension extends \Twig_Extension
         return '<div class="ui '.$data['color'].' label"><i class="'.$data['icon'].' icon"></i>'.$data['text'].'</div>';
     }
 
-    public function payement_state_icon($state)
+    public function payement_validation(Payement $payement)
     {
-        $data = $this->processStateRepresentation($state);
-        return $data['icon'];
+        if($payement->isValidated())
+            return '<i class="green check icon popupable" data-content="Payement validé"></i>';
+        else
+            return '<i class="red warning sign icon popupable" data-content="Payement non validé"></i>';
     }
 
-    public function payement_state_text($state)
+    public function payement_state(Payement $payement)
     {
-        $data = $this->processStateRepresentation($state);
-        return $data['text'];
+        $data = $this->processStateRepresentation($payement->getState());
+        return '<i class="'.$data['color'].' '.$data['icon'].' icon popupable" data-content="'.$data['text'].'"></i>';
     }
 
-    public function payement_state_color($state)
+    public function payement_state_detail(Payement $payement)
     {
-        $data = $this->processStateRepresentation($state);
-        return $data['color'];
+        $data = $this->processStateRepresentation($payement->getState());
+        return '<div class="ui '.$data['color'].' label"><i class="'.$data['icon'].' icon"></i>'.$data['text'].'</div>';
     }
 
     private function processStateRepresentation($state){

@@ -258,33 +258,42 @@ class Creance
      */
     public function isPayed()
     {
-        return $this->facture->isPayed();
+        if($this->isFactured())
+            return $this->facture->isPayed();
+        else
+            return false;
     }
 
     /**
      * Is open
      *
      * Cette méthode regarde si la créance à une facture et si
-     * cette facture est payée.
+     * cette facture est ouverte.
      *
      * @return Boolean
      */
     public function isOpen()
     {
-        return $this->facture->isOpen();
+        if($this->isFactured())
+            return $this->facture->isOpen();
+        else
+            return false;
     }
 
     /**
      * Is payed
      *
      * Cette méthode regarde si la créance à une facture et si
-     * cette facture est payée.
+     * cette facture est annulée.
      *
      * @return Boolean
      */
     public function isCancelled()
     {
-        return $this->facture->isCancelled();
+        if($this->isFactured())
+            return $this->facture->isCancelled();
+        else
+            return false;
     }
 
     /**

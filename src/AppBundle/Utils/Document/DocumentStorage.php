@@ -8,18 +8,12 @@ use AppBundle\Entity\Document;
 
 class DocumentStorage
 {
-    const DOCUMENTS_PATH = "/documents/";
-
-    /** @var string */
-    protected $rootDirkernel;
-
     /** @var string */
     protected $documentsDir;
 
-    public function __construct($rootDirkernel)
+    public function __construct($uploadDocumentDir)
     {
-        $this->rootDirkernel = $rootDirkernel;
-        $this->documentsDir = $this->rootDirkernel.DocumentStorage::DOCUMENTS_PATH;
+        $this->documentsDir = $uploadDocumentDir;
     }
 
     /**
