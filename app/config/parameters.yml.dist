@@ -26,8 +26,6 @@ parameters:
     #Email for bug notification
     bug_report_email: dev.sauvabelin@gmail.com
 
-    #Upload path for file
-    upload_dir: '%kernel.root_dir%/../web/uploads'
-    upload_payement_dir: '%upload_dir%/payment_files'
+
 
 
