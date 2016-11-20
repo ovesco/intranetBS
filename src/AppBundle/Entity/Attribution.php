@@ -15,6 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Attribution
 {
+    use RemarquableTrait;
 	
     /**
      * @var integer
@@ -66,14 +67,6 @@ class Attribution
      * @ORM\JoinColumn(name="fonction_id", referencedColumnName="id")
      */
      private $fonction;
-
-    /**
-     * @var String
-     *
-     * @Gedmo\Versioned
-     * @ORM\Column(name="remarques", type="text", nullable=true)
-     */
-    private $remarques;
 
 
     public function __construct()
@@ -210,20 +203,5 @@ class Attribution
         return $this;
     }
 
-    /**
-     * @return String
-     */
-    public function getRemarques()
-    {
-        return $this->remarques;
-    }
-
-    /**
-     * @param String $remarques
-     */
-    public function setRemarques($remarques)
-    {
-        $this->remarques = $remarques;
-    }
 
 }

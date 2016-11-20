@@ -54,3 +54,9 @@ services:
         factory_service: doctrine.orm.default_entity_manager
         factory_method: getRepository
         arguments: ['AppBundle:Parameter']
+
+    app.repository.famille:
+        class: AppBundle\Repository\FamilleRepository
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+        arguments: ['AppBundle:Famille']

@@ -12,17 +12,6 @@ namespace AppBundle\Entity;
 interface DebiteurInterface
 {
     /**
-     * @param $debiteur
-     * @return mixed
-     */
-    public function setDebiteur($debiteur);
-
-    /**
-     * @return Debiteur
-     */
-    public function getDebiteur();
-
-    /**
      * @param Creance $creance
      * @return mixed
      */
@@ -33,6 +22,5 @@ interface DebiteurInterface
      * @return mixed
      */
     public function addFacture(Facture $facture);
-
 
 }

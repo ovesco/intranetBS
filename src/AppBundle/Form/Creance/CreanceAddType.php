@@ -24,9 +24,9 @@ class CreanceAddType extends AbstractType
             )
 
             ->add(
-                'remarque',
+                'remarques',
                 TextareaType::class,
-                array('label' => 'Remarque', 'required' => false)
+                array('label' => 'Remarques', 'required' => false)
             )
             ->add(
                 'montantEmis',

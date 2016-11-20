@@ -18,14 +18,14 @@ use JMS\Serializer\Annotation\VirtualProperty;
  * Famille
  *
  * @Gedmo\Loggable
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\FamilleRepository")
  * @ORM\Table(name="app_familles")
  * @Search(repositoryClass="AppBundle\Search\Famille\FamilleRepository")
  *
  * @ExclusionPolicy("all")
  *
  */
-class Famille implements ExpediableInterface,ClassNameInterface,DebiteurInterface
+class Famille implements ExpediableInterface,DebiteurInterface,ReceiverInterface
 {
     /**
      * @var integer
@@ -449,6 +449,12 @@ class Famille implements ExpediableInterface,ClassNameInterface,DebiteurInterfac
     public function addFacture(Facture $facture)
     {
         $this->getDebiteur()->addFacture($facture);
+        return $this;
+    }
+
+    public function addMail(Mail $mail)
+    {
+        $this->getReceiver()->addMail($mail);
         return $this;
     }
 

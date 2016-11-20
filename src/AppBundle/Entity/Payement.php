@@ -16,6 +16,7 @@ use Doctrine\ORM\EntityManager;
  */
 class Payement
 {
+    use RemarquableTrait;
 
     const NOT_DEFINED = 'not_defined'; //if the payement is still not compared with Facture
     const NOT_FOUND = 'not_found'; //no facture with this payment->idFacture
@@ -74,13 +75,6 @@ class Payement
      * @ORM\Column(name="validated", type="boolean")
      */
     private $validated;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="comment", type="text", nullable=true)
-     */
-    private $comment;
 
 
     /**
@@ -259,31 +253,6 @@ class Payement
     public function getValidated()
     {
         return $this->validated;
-    }
-
-
-    /**
-     * Set comment
-     *
-     * @param string $comment
-     *
-     * @return Payement
-     */
-    public function setComment($comment)
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get comment
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
     }
 
 

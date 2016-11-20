@@ -48,7 +48,6 @@ class Mail
      */
     private $method;
 
-
     /**
      * @var Sender
      *
@@ -64,10 +63,6 @@ class Mail
      * @ORM\JoinColumn(name="receiver_id", referencedColumnName="id")
      */
     private $receiver;
-
-
-
-
 
     /**
      * @var \Datetime

@@ -13,7 +13,7 @@ namespace AppBundle\Entity;
  *
  * Elle est utiliser uniquement dans méthode imposée par ExpediableInterface.
  *
- *
+ * todo voir si il faut par faire un service pour ca
  * Class Expediable
  * @package AppBundle\Entity
  */
@@ -39,24 +39,23 @@ class Expediable
     {
 
         $this->callerEntity = $callerEntity;
-        $this->callerClass = $callerEntity->className();
 
-        switch($this->callerClass)
+        if($callerEntity instanceof Membre)
         {
-            case Membre::className():
-                $this->membre = $this->callerEntity;
-                $this->famille = $this->callerEntity->getFamille();
-                $this->pere = ($this->famille->getPere() == null) ? null : $this->famille->getPere();
-                $this->mere = ($this->famille->getMere() == null) ? null : $this->famille->getMere();
-                break;
-            case Famille::className():
-                $this->membre = null;
-                $this->famille = $this->callerEntity;
-                $this->pere = ($this->famille->getPere() == null) ? null : $this->famille->getPere();
-                $this->mere = ($this->famille->getMere() == null) ? null : $this->famille->getMere();
-                break;
+            $this->membre = $this->callerEntity;
+            $this->famille = $this->callerEntity->getFamille();
+            $this->pere = ($this->famille->getPere() == null) ? null : $this->famille->getPere();
+            $this->mere = ($this->famille->getMere() == null) ? null : $this->famille->getMere();
+        }
+        elseif($callerEntity instanceof Famille)
+        {
+            $this->membre = null;
+            $this->famille = $this->callerEntity;
+            $this->pere = ($this->famille->getPere() == null) ? null : $this->famille->getPere();
+            $this->mere = ($this->famille->getMere() == null) ? null : $this->famille->getMere();
         }
 
+        //todo cette logique ne devrais pas etre dans le constructeur
         $this->adresse = $this->findAdresse();
         $this->listeEmails = $this->findListeEmails();
     }

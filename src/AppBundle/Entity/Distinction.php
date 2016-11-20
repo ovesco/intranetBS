@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Distinction
@@ -14,6 +15,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class Distinction
 {
+
+    use RemarquableTrait;
+
     /**
      * @var integer
      *
@@ -37,12 +41,7 @@ class Distinction
      */
     private $obtentionDistinctions;
     
-    /**
-     * @var text
-     * @Gedmo\Versioned
-     * @ORM\Column(name="remarques", type="text", nullable=true)
-     */
-    private $remarques;
+
 
 
     /**
@@ -78,28 +77,7 @@ class Distinction
         return $this->nom;
     }
 
-    /**
-     * Set remarques
-     *
-     * @param string $remarques
-     * @return Distinction
-     */
-    public function setRemarques($remarques)
-    {
-        $this->remarques = $remarques;
 
-        return $this;
-    }
-
-    /**
-     * Get remarques
-     *
-     * @return string 
-     */
-    public function getRemarques()
-    {
-        return $this->remarques;
-    }
     /**
      * Constructor
      */

@@ -59,10 +59,10 @@ class AppExtension extends \Twig_Extension
         return array(
             'global_date_format' => 'd.m.Y',
             'global_datetime_format' => 'd.m.Y - H:i',
-            'class_name_membre' => Membre::className(),
-            'class_name_famille' => Famille::className(),
-            'class_name_pere' => Pere::className(),
-            'class_name_mere' => Mere::className(),
+            'class_name_membre' => 'Membre',
+            'class_name_famille' => 'Famille',
+            'class_name_pere' => 'Pere',
+            'class_name_mere' => 'Mere',
             'popup_selector' => 'popupable',
             'modal_caller_selector' => 'modal_caller',
 

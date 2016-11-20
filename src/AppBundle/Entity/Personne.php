@@ -26,6 +26,7 @@ abstract class Personne
     const HOMME = 'Homme';
     const FEMME = 'Femme';
 
+
     /**
      * @var integer
      *

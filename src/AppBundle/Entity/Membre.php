@@ -24,14 +24,14 @@ use JMS\Serializer\Annotation\MaxDepth;
  *
  * @ExclusionPolicy("all")
  */
-class Membre extends Personne implements ExpediableInterface, DebiteurInterface
+class Membre extends Personne implements ExpediableInterface, DebiteurInterface, ReceiverInterface
 {
 
     const Facture_to_famille = 'Famille';
     const Facture_to_membre = 'Membre';
 
-    use MailableTrait;
 
+    use RemarquableTrait;
     /**
      * @var Famille
      *
@@ -109,13 +109,7 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface
      */
     private $inscription;
 
-    /**
-     * @var string
-     *
-     * @Gedmo\Versioned
-     * @ORM\Column(name="remarques", type="text", nullable=true)
-     */
-    private $remarques;
+
 
     /**
      * @var integer
@@ -200,14 +194,7 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface
     private $bookings;
     //*/
 
-    /**
-     * Return the class name
-     * @return string
-     */
-    static public function className()
-    {
-        return __CLASS__;
-    }
+
 
     /**
      * Représentation string du membre
@@ -493,28 +480,7 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface
         return $groups;
     }
 
-    /**
-     * Get remarques
-     *
-     * @return string
-     */
-    public function getRemarques()
-    {
-        return $this->remarques;
-    }
 
-    /**
-     * Set remarques
-     *
-     * @param $remarques
-     * @return Membre
-     */
-    public function setRemarques($remarques)
-    {
-        $this->remarques = $remarques;
-
-        return $this;
-    }
 
     public function getUsername()
     {
@@ -584,14 +550,6 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface
             return true;
         else
             return false;
-    }
-
-    /**
-     * @return string
-     */
-    public function getClass()
-    {
-        return 'Membre';
     }
 
 
@@ -738,6 +696,12 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface
         $this->sender = $sender;
         if(is_null($sender->getMembre()))
             $sender->setMembre($this);
+        return $this;
+    }
+
+    public function addMail(Mail $mail)
+    {
+        $this->getReceiver()->addMail($mail);
         return $this;
     }
 }

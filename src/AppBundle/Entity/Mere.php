@@ -12,8 +12,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * @ORM\Entity
  */
-class Mere extends Geniteur implements ClassNameInterface
+class Mere extends Geniteur
 {
+
 
     /**
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Famille", inversedBy="mere")
@@ -29,13 +30,5 @@ class Mere extends Geniteur implements ClassNameInterface
     public function __construct()
     {
         $this->setSexe(Personne::FEMME);
-    }
-
-    /**
-     * Return the class name
-     * @return string
-     */
-    static public function className(){
-        return __CLASS__;
     }
 }

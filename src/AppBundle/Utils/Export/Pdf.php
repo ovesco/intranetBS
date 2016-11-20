@@ -265,17 +265,13 @@ class Pdf extends FPDI {
             $adresse = $adresseExpedition['adresse'];
             $owner = $adresseExpedition['ownerEntity'];
 
-            switch($owner->className())
-            {
-                case Membre::className():
-                case Pere::className():
-                case Mere::className():
-                    $this->Cell(50,$h,ucfirst($owner->getNom()).' '.ucfirst($owner->getPrenom()));
-                    break;
-                case Famille::className():
-                    $this->Cell(50,$h,'Famille '.ucfirst($owner->getNom()));
-                    break;
-            }
+            if($owner instanceof Membre ||
+                $owner instanceof Pere ||
+                $owner instanceof Mere
+            )
+                $this->Cell(50,$h,ucfirst($owner->getNom()).' '.ucfirst($owner->getPrenom()));
+            if($owner instanceof Famille)
+                $this->Cell(50,$h,'Famille '.ucfirst($owner->getNom()));
 
 
             $y = $y+$h;

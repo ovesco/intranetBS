@@ -14,8 +14,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @Gedmo\Loggable
  * @ORM\Entity
  */
-class Pere extends Geniteur implements ClassNameInterface
+class Pere extends Geniteur
 {
+
 
     /**
      * @Gedmo\Versioned
@@ -31,13 +32,5 @@ class Pere extends Geniteur implements ClassNameInterface
     public function __construct()
     {
         $this->setSexe(Personne::HOMME);
-    }
-
-    /**
-     * Return the class name
-     * @return string
-     */
-    static public function className(){
-        return __CLASS__;
     }
 }

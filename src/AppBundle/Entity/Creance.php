@@ -17,6 +17,9 @@ use FOS\ElasticaBundle\Configuration\Search;
  */
 class Creance
 {
+
+    use RemarquableTrait;
+
     /**
      * @var integer
      *
@@ -41,12 +44,6 @@ class Creance
      */
     protected $titre;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="remarque", type="text", nullable=true)
-     */
-    protected $remarque;
 
     /**
      * @var \DateTime
@@ -115,28 +112,6 @@ class Creance
         return $this->titre;
     }
 
-    /**
-     * Set remarque
-     *
-     * @param string $remarque
-     * @return Creance
-     */
-    public function setRemarque($remarque)
-    {
-        $this->remarque = $remarque;
-
-        return $this;
-    }
-
-    /**
-     * Get remarque
-     *
-     * @return string 
-     */
-    public function getRemarque()
-    {
-        return $this->remarque;
-    }
 
     /**
      * Set dateCreation
