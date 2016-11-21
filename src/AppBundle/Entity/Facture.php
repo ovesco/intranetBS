@@ -36,16 +36,14 @@ class Facture
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Rappel",
-     *                mappedBy="facture", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Rappel",mappedBy="facture", cascade={"persist", "remove"})
      */
     private $rappels;
 
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Creance",
-     *                mappedBy="facture", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Creance",mappedBy="facture", cascade={"persist"})
      */
     private $creances;
 
@@ -450,7 +448,10 @@ class Facture
     public function setDebiteur(\AppBundle\Entity\Debiteur $debiteur = null)
     {
         $this->debiteur = $debiteur;
-
+        if(!$debiteur->getFactures()->contains($this))
+        {
+            $debiteur->addFacture($this);
+        }
         return $this;
     }
 

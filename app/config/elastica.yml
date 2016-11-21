@@ -54,7 +54,7 @@ fos_elastica:
                     mappings:
                         id: ~
                         titre: ~
-                        remarque: ~
+                        remarques: ~
                         montantEmis: ~
                         montantRecu: ~
                         isFactured: { type: boolean }

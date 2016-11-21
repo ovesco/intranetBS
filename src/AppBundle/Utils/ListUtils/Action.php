@@ -99,7 +99,7 @@ abstract class Action
             $function = $this->routeParameters;
 
             if ($item == null)
-                return json_encode($function());
+                return null;
             else
                 return json_encode($function($item));
         }

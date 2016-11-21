@@ -60,7 +60,7 @@ class UserController extends Controller
 
     /**
      * @param Request $request
-     * @Route("/create")
+     * @Route("/create", options={"expose"=true})
      * @Template("AppBundle:User:page_create.html.twig")
      * @return Response
      */

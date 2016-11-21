@@ -5,7 +5,7 @@
 {% macro display_block(block_label, block) %}
 
     <div class="item popup-menu" data-variation="inverted" data-html='
-            <div class="ui inverted vertical menu">
+            <div class="ui inverted vertical small menu">
                 {% for item in menu.getBloc(block) %}
                     <a class="item" href="{{ path(item.routeName) }}">{% if item.icon is not null %}<i class="ui {{ item.icon }} icon"></i>{% endif %}{{ item.label }}</a>
                 {% endfor %}
@@ -23,7 +23,7 @@
 
 {% endmacro %}
 
-<div id="main-menu" class="ui vertical inverted sidebar menu">
+<div id="main-menu" class="ui vertical inverted sidebar small menu">
     <div class="item">
         <a class="ui logo icon image" href="{{ path('app_app_home') }}">
             <img src="{{ parametreService.get('group_logo') }}" alt="Logo">

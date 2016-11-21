@@ -74,6 +74,12 @@ services:
             - @parametres
             - @pdf
 
+    #permet la gestion de la facturation
+    app.facturation:
+        class: AppBundle\Utils\Finances\Facturation
+        arguments:
+            - @app.repository.facture
+
     #permet de faire un pdf avec une facture
     app.search:
         class: AppBundle\Utils\Elastic\Search

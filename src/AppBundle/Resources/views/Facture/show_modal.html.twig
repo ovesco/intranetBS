@@ -87,10 +87,10 @@
 
                     <b>{{ creance.titre }}</b>
 
-                    {% if creance.remarque is not empty %}
+                    {% if creance.remarques is not empty %}
                         <br>
 
-                        Remarque: {{ creance.remarque }}
+                        Remarque: {{ creance.remarques }}
                     {% endif %}
                 </td>
                 <td>{{ creance.montantEmis|money }}</td>

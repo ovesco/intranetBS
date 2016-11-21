@@ -115,7 +115,6 @@ abstract class Debiteur
     {
         $this->factures[] = $facture;
         $facture->setDebiteur($this);
-
         return $this;
     }
 

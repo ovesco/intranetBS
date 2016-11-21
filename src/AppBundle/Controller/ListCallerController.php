@@ -77,7 +77,7 @@ class ListCallerController extends Controller
         $url = $this->generateUrl('app_listcaller_session', array('key' => $key));
         switch ($key) {
             case ListKey::CREANCES_SEARCH_RESULTS:
-                $list = ListModelsCreances::getSearchResults($this->getTwig(), $this->getRouter(), $items, $url)->render();
+                $list = ListModelsCreances::getSearchResults($this->getTwig(), $this->getRouter(), $items, $url, $key)->render();
                 return $this->returnList($list, $call);
             case ListKey::FACTURES_SEARCH_RESULTS:
                 $list = ListModelsFactures::getSearchResults($this->getTwig(), $this->getRouter(), $items, $url)->render();

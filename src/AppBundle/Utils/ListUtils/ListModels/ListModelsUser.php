@@ -10,6 +10,7 @@ use AppBundle\Utils\ListUtils\Column;
 use AppBundle\Utils\ListUtils\ListModelInterface;
 use AppBundle\Utils\ListUtils\ListRenderer;
 use Symfony\Component\Routing\Router;
+use AppBundle\Utils\ListUtils\ActionList;
 
 class ListModelsUser implements ListModelInterface
 {
@@ -94,6 +95,9 @@ class ListModelsUser implements ListModelInterface
 
 
         //return '<a href="' . $router->generate('app_membre_show', array('membre' => $membre->getId())) . '">' . $membre->getPrenom() . '</a>';
+
+
+        $list->addActionList(new ActionList('Ajouter', 'add', 'app_user_create',null, EventPostAction::Link,null,'green'));
 
 
         return $list;

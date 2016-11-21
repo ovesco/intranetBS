@@ -187,7 +187,7 @@ class ListStorage {
 
         if(!method_exists($repository,"findBy"))
         {
-            throw new \Exception("ListStorage:getObjects: can't pass repositpry without -findBy()- methode");
+            throw new \Exception("ListStorage:getObjects: can't pass repository without -findBy()- methode");
         }
         if($this->getContainer($containerKey)->isEmpty()){
             return array();

@@ -153,7 +153,7 @@ class FinancesExtension extends \Twig_Extension
                 return array('color'=>'orange','text'=>'Facture ouverte','icon'=>'circle thin');
                 break;
             case Facture::CANCELLED:
-                return array('color'=>'red','text'=>'Facture annulée','icon'=>'warning');
+                return array('color'=>'red','text'=>'Facture annulée','icon'=>'remove circle');
                 break;
             default:
                 return null;

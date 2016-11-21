@@ -32,7 +32,7 @@ class Creance
     /**
      * @var Facture
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Facture", inversedBy="creances")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Facture", inversedBy="creances", cascade={"persist"})
      * @ORM\JoinColumn(name="facture_id", referencedColumnName="id")
      */
     protected $facture;
@@ -68,7 +68,6 @@ class Creance
     protected $montantRecu;
 
     /**
-     * @var Debiteur
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Debiteur", inversedBy="creances")
      * @ORM\JoinColumn(name="debiteur_id", referencedColumnName="id")

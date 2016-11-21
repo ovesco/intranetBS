@@ -11,84 +11,17 @@
     <div class="row">
         <div class="column">
 
-
-            {{ list_caller.parameterAll()|raw }}
-
-
-            <h3>Liste des paramètres de l'intranet
-                {{ help("Les paramètres de l'application permettent de modifier certaines valeurs utilisées dans de nombeux endroits, tel que le nom du groupe scout par exemple.") }}
-            </h3>
-
-
-
-            <div class="ui accordion segment">
-                {% for parameter in parameters %}
-
-                <div class="title">
-                    <i class="dropdown icon"></i>
-                    {{ parameter.label }}
-                </div>
-                <div class="content">
-
-                    <table class="ui definition table">
-                        <tbody>
-                        <tr>
-                            <td>Description</td>
-                            <td>{{ parameter.description }}</td>
-                        </tr>
-                        <tr>
-                            <td>Valeur actuelle</td>
-                            <td>
-
-                                {% if parameter.type == constant('AppBundle\\Entity\\Parameter::TYPE_STRING') %}
-
-                                    {{ parameter.data }}
-
-                                {% elseif parameter.type == constant('AppBundle\\Entity\\Parameter::TYPE_TEXT') %}
-
-                                    {{ parameter.data }}
-
-                                {% elseif parameter.type == constant('AppBundle\\Entity\\Parameter::TYPE_EMAIL') %}
-
-                                    {{ parameter.data }}
-
-                                {% elseif parameter.type == constant('AppBundle\\Entity\\Parameter::TYPE_CHOICE') %}
-                                    {% set choices =  parameter.options('choices') %}
-                                    {% for choice in choices %}
-                                        {% if choice[parameter.data] is defined %}
-                                            {{ choice[parameter.data] }}
-                                        {% endif %}
-                                    {% endfor %}
-
-
-                                {% elseif parameter.type == constant('AppBundle\\Entity\\Parameter::TYPE_PNG') %}
-
-                                    <img src="{{ parameter.data }}">
-
-                                {% endif %}
-
-
-
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-
-
-
-                    <a class="ui button" href="{{ path('app_parameter_edit',{'parameter':parameter.id}) }}">Edit</a>
-
-
-
-                </div>
-
-
-
-                {% endfor %}
+            <div class="ui attached message">
+                <h3>Liste des paramètres de configuration
+                    {{ help("Les paramètres de l'application permettent de modifier certaines valeurs utilisées dans de nombeux endroits, tel que le nom du groupe scout par exemple.") }}
+                </h3>
             </div>
 
+            <div class="ui bottom attached segment">
 
+                {{ list_caller.parameterAll()|raw }}
 
+            </div>
 
         </div>
     </div>

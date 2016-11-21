@@ -9,6 +9,7 @@ use AppBundle\Search\Creance\CreanceRepository as ElasticRepository;
 use AppBundle\Search\Creance\CreanceSearch;
 use AppBundle\Search\Creance\CreanceSearchType;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsCreances;
+use Doctrine\Common\Collections\ArrayCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -20,6 +21,8 @@ use AppBundle\Utils\ListUtils\ListKey;
 use AppBundle\Utils\Response\ResponseFactory;
 use AppBundle\Repository\CreanceRepository;
 use AppBundle\Entity\Debiteur;
+use AppBundle\Search\Mode;
+use AppBundle\Utils\Finances\Facturation;
 
 /**
  * Class CreanceController
@@ -115,7 +118,7 @@ class CreanceController extends Controller
      * @return Response
      * @Template("AppBundle:Creance:page_recherche.html.twig")
      *
-     * todo NUR: implémenter la recherche avec le "mode" pour ajouter ou enlever le resultat à la recherche préceédente
+     *
      */
     public function searchAction(Request $request){
 
@@ -131,7 +134,6 @@ class CreanceController extends Controller
         $searchForm->handleRequest($request);
         if ($searchForm->isValid()) {
 
-            $creanceSearch = $searchForm->getData();
 
             $elasticaManager = $this->container->get('fos_elastica.manager');
 
@@ -140,12 +142,61 @@ class CreanceController extends Controller
 
             $results = $repository->search($creanceSearch);
 
-            //set results in session
-            $sessionContainer->setObjects(ListKey::CREANCES_SEARCH_RESULTS,$results);
+            //get the search mode
+            $mode = $searchForm->get("mode")->getData();
+            switch($mode)
+            {
+                case Mode::MODE_INCLUDE: //include new results with the previous
+                    $sessionContainer->addObjects(ListKey::CREANCES_SEARCH_RESULTS,$results);
+                    break;
+                case Mode::MODE_EXCLUDE: //exclude new results to the previous
+                    $sessionContainer->removeObjects(ListKey::CREANCES_SEARCH_RESULTS,$results);
+                    break;
+                case Mode::MODE_STANDARD:
+                default:
+                    $sessionContainer->setObjects(ListKey::CREANCES_SEARCH_RESULTS,$results);
+
+            }
 
         }
 
         return array('searchForm'=>$searchForm->createView(),
                 'list_key'=>ListKey::CREANCES_SEARCH_RESULTS);
     }
+
+    /**
+     * @Route("/facturation/{list_session_key}", options={"expose"=true})
+     * @param Request $request
+     * @return Response
+     *
+     */
+    public function facturationAction(Request $request, $list_session_key){
+
+        /** @var ListStorage $sessionContainer */
+        $sessionContainer = $this->get('list_storage');
+
+        switch($list_session_key)
+        {
+            case ListKey::CREANCES_SEARCH_RESULTS:
+                $sessionContainer->setRepository(ListKey::CREANCES_SEARCH_RESULTS,'AppBundle:Creance');
+
+                $creances = $sessionContainer->getObjects(ListKey::CREANCES_SEARCH_RESULTS);
+
+                /** @var Facturation $facturation */
+                $facturation = $this->get('app.facturation');
+                $facturation->facturationCreances(new ArrayCollection($creances));
+
+
+                return ResponseFactory::ok();
+            default:
+                return ResponseFactory::badRquest($list_session_key.' is not implemented for CreanceController::facturationActino');
+        }
+
+
+
+
+    }
+
+
+
 }

@@ -83,6 +83,8 @@ class ListModelsCreances implements ListModelInterface
 
         $list->addActionList(new ActionList('Ajouter', 'add', 'app_creance_create',array('debiteur' => $debiteur->getId()), EventPostAction::ShowModal,null,'green'));
 
+        $list->addActionList(new ActionList('Facturer', 'file text', 'app_debiteur_facturation',array('debiteur' => $debiteur->getId()), EventPostAction::RefreshList,null,'blue'));
+
         return $list;
     }
 
@@ -91,7 +93,7 @@ class ListModelsCreances implements ListModelInterface
      * @param $items
      * @return ListRenderer
      */
-    static public function getSearchResults(\Twig_Environment $twig, Router $router, $items, $url = null)
+    static public function getSearchResults(\Twig_Environment $twig, Router $router, $items, $url = null, $listSessionKey = null)
     {
         $list = new ListRenderer($twig, $items);
         $list->setUrl($url);
@@ -142,6 +144,7 @@ class ListModelsCreances implements ListModelInterface
         $list->addActionLine(new ActionLine('Afficher', 'edit', 'app_facture_show', $factureParameters, EventPostAction::ShowModal,$factureCondition,true,false));
 
 
+        $list->addActionList(new ActionList('Facturer les créance ouvertes', 'file text', 'app_creance_facturation',array('list_session_key' => $listSessionKey), EventPostAction::RefreshPage,null,'blue'));
 
         return $list;
     }
