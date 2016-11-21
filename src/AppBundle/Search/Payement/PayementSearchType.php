@@ -13,6 +13,8 @@ use AppBundle\Search\DateIntervalSearchType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 use AppBundle\Entity\Payement;
+use AppBundle\Search\ModeSearchType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 
 class PayementSearchType extends AbstractType
@@ -21,11 +23,14 @@ class PayementSearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('mode', ModeSearchType::class)
+            ->add('intervalIdFacture', NumericIntervalSearchType::class, array('label' => 'N°Facture (interval)', 'required' => false))
             ->add('idFacture', NumberType::class,
                 array('label' => 'N°Facture', 'required' => false))
             ->add('intervalMontantRecu', NumericIntervalSearchType::class, array('label' => 'Montant reçu', 'required' => false))
             ->add('intervalDate', DateIntervalSearchType::class, array('label' => 'Date de création', 'required' => false))
             ->add('validated',CheckboxType::class,array('required'=>false,'label'=>'Payement validé?'))
+            ->add('remarque', TextareaType::class, array('label' => 'Remarque', 'required' => false))
             ->add('state', ChoiceType::class,
                 array(
                     'label' => 'Lien avec facture ',

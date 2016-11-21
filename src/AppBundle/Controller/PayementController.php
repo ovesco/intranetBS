@@ -42,6 +42,7 @@ use AppBundle\Utils\Finances\PayementFileParser;
 use AppBundle\Utils\ListUtils\ListStorage;
 use AppBundle\Utils\SessionTools\Notification;
 use AppBundle\Utils\Response\AjaxResponseFactory;
+use AppBundle\Search\Mode;
 
 
 
@@ -86,8 +87,21 @@ class PayementController extends Controller
 
             $results = $repository->search($payementSearch);
 
-            //set results in session
-            $sessionContainer->setObjects(ListKey::PAYEMENTS_SEARCH_RESULTS,$results);
+            //get the search mode
+            $mode = $searchForm->get(Mode::FORM_FIELD)->getData();
+            switch($mode)
+            {
+                case Mode::INCLUDE_PREVIOUS: //include new results with the previous
+                    $sessionContainer->addObjects(ListKey::PAYEMENTS_SEARCH_RESULTS,$results);
+                    break;
+                case Mode::EXCLUDE_PREVIOUS: //exclude new results to the previous
+                    $sessionContainer->removeObjects(ListKey::PAYEMENTS_SEARCH_RESULTS,$results);
+                    break;
+                case Mode::STANDARD:
+                default:
+                    $sessionContainer->setObjects(ListKey::PAYEMENTS_SEARCH_RESULTS,$results);
+
+            }
 
         }
 

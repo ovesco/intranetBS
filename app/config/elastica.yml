@@ -122,6 +122,8 @@ fos_elastica:
                         date: { type: date}
                         state: ~
                         idFacture: ~
+                        remarques: ~
+                        validated: { type: boolean }
                     persistence:
                         driver: orm
                         model: AppBundle\Entity\Payement

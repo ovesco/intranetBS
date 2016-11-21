@@ -1,12 +1,15 @@
+{% form_theme form 'AppBundle:Form:form_search_accordion.html.twig' %}
+
+{% form_theme form.mode 'AppBundle:Form:default_widgets.html.twig' %}
 
 <h4 class="ui header">Formulaire de recherche</h4>
 
-{{ form_start(searchForm, {'attr': {'class': 'ui form'}}) }}
+{{ form_start(form, {'attr': {'class': 'ui form'}}) }}
 
-{{ form_rest(searchForm) }}
+{{ form_rest(form) }}
 
 <input type="submit" value="Rechercher" class="ui blue submit button">
 
-{{ form_end(searchForm) }}
+{{ form_end(form) }}
 
 

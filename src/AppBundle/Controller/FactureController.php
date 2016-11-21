@@ -32,6 +32,7 @@ use AppBundle\Utils\Menu\Menu;
 use AppBundle\Utils\Export\Pdf;
 use AppBundle\Utils\ListUtils\ListStorage;
 use AppBundle\Utils\Finances\FacturePrinter;
+use AppBundle\Search\Mode;
 
 /**
  * Class FactureController
@@ -46,9 +47,10 @@ class FactureController extends Controller
      * @Route("/search", options={"expose"=true})
      * @Menu("Recherche de factures",block="finances",order=2,icon="search")
      * @param Request $request
+     * @Template("AppBundle:Facture:page_recherche.html.twig")
      * @return Response
      *
-     * todo NUR implémenter la recherche avec le "mode" pour ajouter ou enlever le resultat à la recherche préceédente comme avec les créance
+     *
      */
     public function searchAction(Request $request){
 
@@ -75,14 +77,26 @@ class FactureController extends Controller
 
             $results = $repository->search($factureSearch);
 
-            //set results in session
-            $sessionContainer->setObjects(ListKey::FACTURES_SEARCH_RESULTS,$results);
+            //get the search mode
+            $mode = $searchForm->get(Mode::FORM_FIELD)->getData();
+            switch($mode)
+            {
+                case Mode::INCLUDE_PREVIOUS: //include new results with the previous
+                    $sessionContainer->addObjects(ListKey::FACTURES_SEARCH_RESULTS,$results);
+                    break;
+                case Mode::EXCLUDE_PREVIOUS: //exclude new results to the previous
+                    $sessionContainer->removeObjects(ListKey::FACTURES_SEARCH_RESULTS,$results);
+                    break;
+                case Mode::STANDARD:
+                default:
+                    $sessionContainer->setObjects(ListKey::FACTURES_SEARCH_RESULTS,$results);
+
+            }
 
         }
 
 
-        return $this->render('AppBundle:Facture:page_recherche.html.twig',
-            array('searchForm'=>$searchForm->createView(),'list_key'=>ListKey::FACTURES_SEARCH_RESULTS));
+        return array('searchForm'=>$searchForm->createView(),'list_key'=>ListKey::FACTURES_SEARCH_RESULTS);
 
     }
 

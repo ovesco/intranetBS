@@ -28,7 +28,7 @@ class MembreSearchType extends AbstractType
     public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Search\MembreSearch'
+            'data_class' => 'AppBundle\Search\Membre\MembreSearch'
         ));
     }
 

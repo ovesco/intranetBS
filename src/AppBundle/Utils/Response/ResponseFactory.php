@@ -39,7 +39,7 @@ class ResponseFactory {
         return $response;
     }
 
-    static function badRquest($text = null)
+    static function badRequest($text = null)
     {
         $response = new JsonResponse();
         $response->setStatusCode(Response::HTTP_BAD_REQUEST,$text);

@@ -143,16 +143,16 @@ class CreanceController extends Controller
             $results = $repository->search($creanceSearch);
 
             //get the search mode
-            $mode = $searchForm->get("mode")->getData();
+            $mode = $searchForm->get(Mode::FORM_FIELD)->getData();
             switch($mode)
             {
-                case Mode::MODE_INCLUDE: //include new results with the previous
+                case Mode::INCLUDE_PREVIOUS: //include new results with the previous
                     $sessionContainer->addObjects(ListKey::CREANCES_SEARCH_RESULTS,$results);
                     break;
-                case Mode::MODE_EXCLUDE: //exclude new results to the previous
+                case Mode::EXCLUDE_PREVIOUS: //exclude new results to the previous
                     $sessionContainer->removeObjects(ListKey::CREANCES_SEARCH_RESULTS,$results);
                     break;
-                case Mode::MODE_STANDARD:
+                case Mode::STANDARD:
                 default:
                     $sessionContainer->setObjects(ListKey::CREANCES_SEARCH_RESULTS,$results);
 
@@ -189,7 +189,7 @@ class CreanceController extends Controller
 
                 return ResponseFactory::ok();
             default:
-                return ResponseFactory::badRquest($list_session_key.' is not implemented for CreanceController::facturationActino');
+                return ResponseFactory::badRequest($list_session_key.' is not implemented for CreanceController::facturationActino');
         }
 
 

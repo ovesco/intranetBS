@@ -19,7 +19,8 @@ namespace AppBundle\Search;
  * @package AppBundle\Search
  */
 class Mode {
-    const MODE_STANDARD = 0;
-    const MODE_INCLUDE = 1;
-    const MODE_EXCLUDE = 2;
+    const FORM_FIELD = "mode";
+    const STANDARD = 0;
+    const INCLUDE_PREVIOUS = 1;
+    const EXCLUDE_PREVIOUS = 2;
 }

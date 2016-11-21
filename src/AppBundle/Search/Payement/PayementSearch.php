@@ -32,6 +32,11 @@ class PayementSearch
     public $idFacture;
 
     /**
+     * @var integer
+     */
+    public $intervalIdFacture;
+
+    /**
      * @var string
      */
     public $state;
@@ -41,8 +46,15 @@ class PayementSearch
      */
     public $validated;
 
+    /**
+     * @var string
+     *
+     */
+    public $remarque;
+
     public function __construct(){
         $this->intervalMontantRecu = new NumericIntervalSearch();
+        $this->intervalIdFacture = new NumericIntervalSearch();
         $this->intervalDate = new DateIntervalSearch();
     }
 

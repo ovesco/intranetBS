@@ -1,5 +1,6 @@
 {% form_theme form 'AppBundle:Form:form_search_accordion.html.twig' %}
 
+{% form_theme form.mode 'AppBundle:Form:default_widgets.html.twig' %}
 
 {{ form_start(searchForm, {'attr': {'class': 'ui form'}}) }}
 
@@ -24,6 +25,7 @@
             {{ form_row(form.debiteur) }}
             {{ form_row(form.titreCreance) }}
 
+
         </div>
     </div>
 
@@ -32,6 +34,7 @@
 
     <div class="ui grid">
         <div class="eight wide column">
+            {{ form_row(form.mode) }}
         </div>
         <div class="eight wide right aligned column">
             <input type="submit" value="Rechercher" class="ui blue submit button">

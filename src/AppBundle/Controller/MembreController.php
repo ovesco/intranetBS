@@ -5,8 +5,8 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Famille;
 use AppBundle\Entity\Membre;
 use AppBundle\Form\Membre\MembreShowType;
-use AppBundle\Search\MembreSearch;
-use AppBundle\Search\MembreSearchType;
+use AppBundle\Search\Membre\MembreSearch;
+use AppBundle\Search\Membre\MembreSearchType;
 use AppBundle\Search\Mode;
 use AppBundle\Utils\ListUtils\ListKey;
 use AppBundle\Utils\ListUtils\ListStorage;
@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Utils\Menu\Menu;
+use AppBundle\Search\Membre\MembreRepository;
 
 
 /* annotations */
@@ -200,19 +201,26 @@ class MembreController extends Controller {
 
         if ($membreForm->isValid()) {
 
-            $results = $this->container->get('app.search')->Membre($membreSearch);
+            $elasticaManager = $this->container->get('fos_elastica.manager');
+
+            /** @var MembreRepository $repository */
+            $repository = $elasticaManager->getRepository('AppBundle:Membre');
+
+            $results = $repository->search($membreSearch);
+
+            //$results = $this->container->get('app.search')->Membre($membreSearch);
 
             //get the search mode
             $mode = $membreForm->get("mode")->getData();
             switch($mode)
             {
-                case Mode::MODE_INCLUDE: //include new results with the previous
+                case Mode::INCLUDE_PREVIOUS: //include new results with the previous
                     $sessionContainer->addObjects(ListKey::MEMBRES_SEARCH_RESULTS,$results);
                     break;
-                case Mode::MODE_EXCLUDE: //exclude new results to the previous
+                case Mode::EXCLUDE_PREVIOUS: //exclude new results to the previous
                     $sessionContainer->removeObjects(ListKey::MEMBRES_SEARCH_RESULTS,$results);
                     break;
-                case Mode::MODE_STANDARD:
+                case Mode::STANDARD:
                 default:
                     $sessionContainer->setObjects(ListKey::MEMBRES_SEARCH_RESULTS,$results);
 

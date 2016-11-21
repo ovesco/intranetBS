@@ -19,9 +19,9 @@ class ModeSearchType extends AbstractType
     {
         $resolver->setDefaults(array(
             'choices' => array(
-                Mode::MODE_STANDARD => 'Standard',
-                Mode::MODE_INCLUDE=> 'Inclure prédédentes',
-                Mode::MODE_EXCLUDE=> 'Exclure prédédentes',
+                Mode::STANDARD => 'Standard',
+                Mode::INCLUDE_PREVIOUS=> 'Inclure prédédentes',
+                Mode::EXCLUDE_PREVIOUS=> 'Exclure prédédentes',
             ),
             'mapped'=>false,
             'required'=>true,

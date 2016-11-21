@@ -1,6 +1,7 @@
 
 {% form_theme form 'AppBundle:Form:form_search_accordion.html.twig' %}
 
+{% form_theme form.mode 'AppBundle:Form:default_widgets.html.twig' %}
 
 
  {{ form_start(form, {'attr': {'class': 'ui form'}}) }}
@@ -13,10 +14,14 @@
 
     <div class="ui grid">
         <div class="eight wide column">
-            {{ form_rest(form) }}
+            {{ form_row(form.idFacture) }}
+            {{ form_row(form.intervalMontantRecu) }}
+            {{ form_row(form.intervalDate) }}
+
         </div>
         <div class="eight wide column">
-
+            {{ form_row(form.validated) }}
+            {{ form_row(form.state) }}
 
 
         </div>
@@ -24,7 +29,17 @@
 
     <div class="ui divider"></div>
 
-    <input type="submit" value="Rechercher" class="ui blue submit button">
+    <div class="ui grid">
+        <div class="eight wide column">
+            {{ form_row(form.mode) }}
+        </div>
+        <div class="eight wide right aligned column">
+            <input type="submit" value="Rechercher" class="ui blue submit button">
+        </div>
+    </div>
+
+    {{ form_rest(form) }}
+
 
 </div>
 

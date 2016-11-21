@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use AppBundle\Search\ModeSearchType;
 
 class FactureSearchType extends AbstractType
 {
@@ -18,6 +19,7 @@ class FactureSearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('mode', ModeSearchType::class)
             ->add('id', NumberType::class, array('label' => 'Num. de référance', 'required' => false))
             ->add('intervalDateCreation', DateIntervalSearchType::class, array('label' => 'Date de création', 'required' => false))
             ->add('intervalDatePayement', DateIntervalSearchType::class, array('label' => 'Date de payement', 'required' => false))
