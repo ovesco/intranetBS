@@ -27,6 +27,7 @@ class Mode{
     const ERROR = 'error';
     const INFO = 'info';
     const COMMENT = 'comment';
+    const SUCCESS = 'success';
 }
 
 /**
@@ -42,7 +43,8 @@ class Mode{
  *
  * verbosity: VERBOSITY_DEBUG > VERBOSITY_VERY_VERBOSE > VERBOSITY_VERBOSE > VERBOSITY_NORMAL
  *
- * pour infos aller lire : http://symfony.com/blog/new-in-symfony-2-8-console-style-guide
+ * pour infos aller lire :
+ * @link http://symfony.com/blog/new-in-symfony-2-8-console-style-guide
  *
  *
  * Class ConsoleOutput
@@ -78,13 +80,14 @@ class ConsoleOutput
 
 
             switch($mode){
+                case Mode::INFO:
                 case Mode::STANDARD:
                     //do nothing
                     break;
                 case Mode::ERROR:
                     $string = '<error>'.$string.'</error> ';
                     break;
-                case Mode::INFO:
+                case Mode::SUCCESS:
                     $string = '<info>'.$string.'</info> ';
                     break;
                 case Mode::COMMENT:
@@ -127,6 +130,11 @@ class ConsoleOutput
 
     public function info($string){
         $this->writeMode($string,Mode::INFO);
+        return $this;
+    }
+
+    public function success($string){
+        $this->writeMode($string,Mode::SUCCESS);
         return $this;
     }
 

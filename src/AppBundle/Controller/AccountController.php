@@ -28,6 +28,9 @@ class AccountController extends Controller
     /**
      * Permet à un utilisateur de modifier son mot de passe
      * @Route("/modify-password", name="security_modify_password")
+     *
+     * todo NUR passer un coup ici...
+     *
      */
     public function modifyPasswordAction(Request $request) {
 

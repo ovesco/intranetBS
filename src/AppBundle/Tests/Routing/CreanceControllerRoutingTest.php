@@ -10,12 +10,13 @@ namespace AppBundle\Tests\Routing;
 
 /**
  * @group routing
- * @group dev
+ *
  */
-class AppControllerRoutingTest extends PageTestCase{
+class CreanceControllerRoutingTest extends PageTestCase{
 
     public function getControllerClass(){
-        return 'AppBundle\Controller\AppController';
+        return 'AppBundle\Controller\CreanceController';
     }
+
 
 }

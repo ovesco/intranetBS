@@ -16,6 +16,7 @@ use Symfony\Component\Filesystem\Filesystem;
 class TestsCommand extends ContainerAwareCommand
 {
 
+    /** @var  ConsoleOutput */
     private $output;
     private $input;
 
@@ -26,13 +27,16 @@ class TestsCommand extends ContainerAwareCommand
             ->setDescription('Tests sur l\'application')
             ->addArgument('group', InputArgument::OPTIONAL, 'group:groupeName')
             ->addOption('log',null,InputOption::VALUE_NONE,'log messages in file: app/logs/TestsCommand.log')
+            ->addOption('clear_cache',null,InputOption::VALUE_NONE,"clear cache before tests");
         ;
 
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->output = $output;
+        $output->setVerbosity(OutputInterface::VERBOSITY_VERY_VERBOSE);
+
+        $this->output = new ConsoleOutput($output);
         $this->input = $input;
 
         $groupArg = $this->input->getArgument('group');
@@ -42,9 +46,11 @@ class TestsCommand extends ContainerAwareCommand
             $group = explode('group:',$groupArg)[1];
         }
 
-        //clear cache of env test
-        $cache = shell_exec("php app/console cache:clear --env=test --no-debug");
-        $this->output($cache,'info');
+        if ($input->getOption('clear_cache')) {
+            //clear cache of env test
+            $cache = shell_exec("php app/console cache:clear --env=test --no-debug");
+            $this->output->info($cache,'info');
+        }
 
         $startInfo = 'Starting tests';
         $shell_command = "php /usr/local/bin/phpunit -d memory_limit=-1 -c app";
@@ -57,14 +63,13 @@ class TestsCommand extends ContainerAwareCommand
             /* l'option "-d memory_limit=-1" permet de modifier la limite mémoire du script phpunit. */
         }
 
-        $this->output($startInfo,'info');
+        $this->output->info($startInfo);
         $version = shell_exec("php /usr/local/bin/phpunit --version");
-        $this->output($version,'info');
-
+        $this->output->info($version);
 
 
         $message = shell_exec($shell_command);
-        $this->output($message,'comment');
+        $this->output->info($message);
 
 
         if ($input->getOption('log')) {
@@ -82,41 +87,13 @@ class TestsCommand extends ContainerAwareCommand
         $failures = preg_match($pattern,$message);
         if($ok && !$failures)
         {
-            $this->output('Test passed!!!','info');
+            $this->output->success('Test passed!!!')->writeln();
         }
         else
         {
-            $this->output('Error in tests...','error');
+            $this->output->error('Error in tests...')->writeln();
         }
 
-        $this->output('Finish tests','info');
-
-
-
-
-
-    }
-
-
-    private function output($string,$mode = null){
-
-        if (OutputInterface::VERBOSITY_VERBOSE <= $this->output->getVerbosity()) {
-
-            switch($mode){
-                case null;
-                    break;
-                case 'error':
-                    $string = '<error>Error:</error> '.$string;
-                    break;
-                case 'info':
-                    $string = '<info>Info:</info> '.$string;
-                    break;
-                case 'comment':
-                    $string = '<comment>Comment:</comment> '.$string;
-                    break;
-            }
-            $this->output->writeln(PHP_EOL.$string);
-        }
     }
 
 }

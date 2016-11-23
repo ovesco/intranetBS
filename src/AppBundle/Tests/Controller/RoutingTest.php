@@ -37,8 +37,11 @@ class RoutingTest extends WebTestCase
         $membre = $em->getRepository('AppBundle:Membre')->findOneBy(array());
         $famille = $em->getRepository('AppBundle:Famille')->findOneBy(array());
 
+        */
         $routes = array();
-        //$routes = array_merge($routes,$this->routeAppController());
+        $routes = array_merge($routes,$this->routeAppController());
+
+        /*
 
         //$routes = array_merge($routes,$this->routeAttributionController($em));//error
 
@@ -57,7 +60,7 @@ class RoutingTest extends WebTestCase
 
 */
 
-        return null;//$routes;
+        return $routes;
     }
 
     public function setUp()

@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Membre;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,21 +30,5 @@ class AppController extends Controller
 
         return $this->render("AppBundle:App:page_home.html.twig", array('user' => $this->getUser()));
     }
-
-    /**
-     * @Route("/test")
-     * @Menu("Test",block="test",order=1)
-     */
-    public function testAction()
-    {
-
-        /** @var Membre $m */
-        $m = $this->getDoctrine()->getRepository('AppBundle:Membre')->find(3);
-
-
-
-        return $this->render('AppBundle:App:page_test.html.twig');
-    }
-
 
 }

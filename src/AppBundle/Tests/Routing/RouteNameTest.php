@@ -1,36 +1,36 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: NicolasUffer
+ * Date: 23.11.16
+ * Time: 10:35
+ */
 
-namespace AppBundle\Command;
+namespace AppBundle\Tests\Routing;
 
-/* Specifics class for command */
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-/* Filesystem */
+use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Filesystem;
-
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Route;
-
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route as RouteAnnotation;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Finder\SplFileInfo;
 
-class RouteNamingCheckCommand extends ContainerAwareCommand
-{
 
-    /**
-     * @var ConsoleOutput
-     */
-    protected $customOutput;
 
-    /** @var InputInterface */
-    protected $input;
-
-    /** @var OutputInterface */
-    protected $output;
+/**
+ *
+ * Cette class permet de tester la nomenclature de toutes les routes.
+ *
+ * Class RouteNameTest
+ * @package AppBundle\Tests\Routing
+ *
+ * @group routing
+ */
+class RouteNameTest extends KernelTestCase{
 
     /**
      * @var Reader
@@ -42,46 +42,58 @@ class RouteNamingCheckCommand extends ContainerAwareCommand
      */
     protected $router;
 
+    /** @var ContainerInterface */
+    private $container;
 
-    protected function configure()
+
+    /**
+     * setUp is called automatically during instenciation...
+     */
+    public function setUp()
     {
-        $this
-            ->setName('app:check:route')
-            ->setDescription('Effectue un check sur la nomencalture de l\'ensemble des route de l\'application')
-        ;
+        self::bootKernel();
 
-    }
-
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $output->setVerbosity(OutputInterface::VERBOSITY_DEBUG);//set debug mode
-
-        $this->customOutput = new ConsoleOutput($output);
-        $this->output = $output;
-        $this->input = $input;
+        $this->container = self::$kernel->getContainer();
 
         /** @var Reader reader */
-        $this->reader = $this->getContainer()->get('annotations.reader');
+        $this->reader = $this->container->get('annotations.reader');
 
         /** @var RouterInterface $router */
-        $this->router = $this->getContainer()->get('router');
+        $this->router = $this->container->get('router');
+    }
 
-        $controllersClass = $this->findControllersClass();
-        foreach($controllersClass as $controllerClass)
+
+    /**
+     * Cette fonction génere les données à tester
+     *
+     * @link https://phpunit.de/manual/current/en/writing-tests-for-phpunit.html#writing-tests-for-phpunit.data-providers
+     */
+    public function routesProvider()
+    {
+        $this->setUp();
+
+        $data = array();
+
+        foreach($this->findControllersClass() as $controllerClass)
         {
-            $this->checkController($controllerClass);
-        }
 
+            $data = array_merge($data,$this->getControllerRoutes($controllerClass));
+        }
+        return $data;
     }
 
 
     /**
      * check si la route correspond au standard de nomencature
      *
-     * @param Route $route
-     * @param $routeName
+     * @dataProvider routesProvider
+     *
+     * la méthode définie dans "dataProvider" permet d'injecter
+     * les bon arguments dans le test de facon répétée. Ceci
+     * permet de reseter avec la convention 1test = 1assertion.
+     *
      */
-    protected function checkRoute(Route $route,$routeName)
+    public function testRouteName(Route $route, $routeName)
     {
         $controllerAction = $route->getDefault('_controller');
 
@@ -97,32 +109,22 @@ class RouteNamingCheckCommand extends ContainerAwareCommand
         $computedName = strtolower($computedName);
         $computedName = str_replace('\\','_',$computedName);
 
-        if($computedName == $routeName)
-        {
-            $this->customOutput->greenLabel(' ok ');
-            $this->customOutput->writeMode(' '.$computedName,Mode::INFO);
-            $this->customOutput->writeln();
-        }
-        else
-        {
-            $this->customOutput->writeMode(' no ',Mode::ERROR);
-            $this->customOutput->write($routeName);
-            $this->customOutput->writeMode(' should be: ',Mode::COMMENT);
-            $this->customOutput->writeln($computedName);
-        }
+
+        $this->assertTrue($computedName == $routeName,'Error in route name: '.$routeName. ' should be '.$computedName);
     }
 
     /**
      * This function return the class name of all the controllers
      * in the "src" directory.
      */
-    protected function findControllersClass()
+    public function findControllersClass()
     {
         $finder = new Finder();
-        $srcDir = $this->getContainer()->get('kernel')->getRootDir() . "/../src";
+        $srcDir = $this->container->get('kernel')->getRootDir() . "/../src";
         $finder->files()->in($srcDir)->name("*Controller.php");
 
         $controllersClass = array();
+        /** @var SplFileInfo $file */
         foreach ($finder as $file) {
             $fileName = $file->getRelativePathname();
             $className = str_replace('/','\\',$fileName);
@@ -133,10 +135,13 @@ class RouteNamingCheckCommand extends ContainerAwareCommand
 
 
     /**
+     * get route and route name of a controller
+     *
      * @param string $controllerClass
      * @throws \InvalidArgumentException
+     * @return array
      */
-    protected function checkController($controllerClass)
+    public function getControllerRoutes($controllerClass)
     {
         if (!class_exists($controllerClass)) {
             throw new \InvalidArgumentException(sprintf('Class "%s" does not exist.', $controllerClass));
@@ -147,24 +152,21 @@ class RouteNamingCheckCommand extends ContainerAwareCommand
             throw new \InvalidArgumentException(sprintf('Annotations from class "%s" cannot be read as it is abstract.', $controllerClass));
         }
 
+        $data = array();
         foreach ($class->getMethods() as $method) {
 
             /** @var Route $route */
             foreach($this->router->getRouteCollection() as $routeName => $route)
             {
-                dump($route->getPath());
-                dump($route->getSchemes());
-                /*
                 $routeController = $route->getDefault('_controller');
 
                 if($routeController == $controllerClass.'::'.$method->getName())
                 {
-                    $this->checkRoute($route,$routeName);
+                    $data[] = array($route,$routeName);
                 }
-                */
             }
         }
+        return $data;
     }
+
 }
-
-
