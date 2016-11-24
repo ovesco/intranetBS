@@ -70,7 +70,7 @@ class ScriptCommand extends ContainerAwareCommand
             case 'restart_database':
 
                 $this->commands->add(new ConsoleCommand('cache:clear'));
-                $this->commands->add(new ShellCommand('rm -rf '.$this->getContainer()->getParameter('app.upload_dir')));
+                $this->commands->add(new ShellCommand('rm -rf '.$this->getContainer()->getParameter('upload_dir')));
 
                 /** @var AbstractSchemaManager $schemaManager */
                 $schemaManager = $this->getContainer()->get('doctrine')->getConnection()->getSchemaManager();
