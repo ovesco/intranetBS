@@ -88,10 +88,12 @@ class TestsCommand extends ContainerAwareCommand
         if($ok && !$failures)
         {
             $this->output->success('Test passed!!!')->writeln();
+            return 0;//travis exigence
         }
         else
         {
             $this->output->error('Error in tests...')->writeln();
+            return 1;//travis exigence
         }
 
     }

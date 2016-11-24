@@ -1,16 +1,19 @@
 language: php
 
 php:
-  - 5.5.9
+  - 5.6
 
 before_script:
+  #setup parameters for tests in travis
   - cp app/config/parameters.yml.travis app/config/parameters.yml
-  - mysql -e 'create database symfony;'
   - composer install
-  - php app/console doctrine:schema:create --env=test
-  - sh sh_script/fill_dev_database.sh
+  #start database
+  #- mysql -e 'create database symfony;'
+  - php app/console app:script restart_database
+  #fill database with faker
+  - php app/console app:script populate_with_faker
 
-script: phpunit -c app/
+script: php app/console app:tests group:travis
 
 services:
   - elasticsearch

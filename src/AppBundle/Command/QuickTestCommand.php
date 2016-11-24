@@ -30,30 +30,27 @@ class QuickTestCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
-        $repo = $this->getContainer()->get('app.repository.facture');
+        $path = '/freu/we/{param}';
 
+        //list($param,$i,$e) = $this->get_string_between($path,'{','}');
 
-        /** @var Facture $f */
-        foreach($repo->findAll() as $f)
-        {
-            $rand = random_int(0,100);
-            if($rand <= 30)
-                $f->setStatut(Facture::OPEN);
-            elseif($rand <= 66)
-                $f->setStatut(Facture::CANCELLED);
-            else
-                $f->setStatut(Facture::PAYED);
+        $param = str_replace('{param}','1',$path);
 
-            $repo->save($f);
-        }
+        $output->writeln($param);
 
 
 
 
+    }
 
-
-
-
+    function get_string_between($string, $start, $end){
+        $string = ' ' . $string;
+        $ini = strpos($string, $start);
+        if ($ini == 0) return '';
+        $ini += strlen($start);
+        $len = strpos($string, $end, $ini) - $ini;
+        $substring = substr($string, $ini, $len);
+        return array($substring,$ini,$len);
     }
 
 

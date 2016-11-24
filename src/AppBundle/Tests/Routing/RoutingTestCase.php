@@ -8,17 +8,18 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-abstract class PageTestCase extends WebTestCase
+abstract class RoutingTestCase extends WebTestCase
 {
     /** @var Client client */
     protected $client;
 
-    /** @var EntityManager $em */
-    protected $em;
-
     /** @var  RouterInterface */
     protected $router;
+
+    /** @var ContainerInterface */
+    protected $container;
 
     /**
      * @dataProvider uriProvider
@@ -30,7 +31,6 @@ abstract class PageTestCase extends WebTestCase
 
         $this->logInFile($uri,$this->client->getResponse()->getContent());
 
-        //var_dump($this->client->getResponse()->getContent());
         $this->assertTrue($this->client->getResponse()->isSuccessful(), 'Test route: ' . $uri);
     }
 
@@ -44,7 +44,7 @@ abstract class PageTestCase extends WebTestCase
 
         $this->router = self::$kernel->getContainer()->get('router');
 
-        $this->em = $this->client->getContainer()->get('doctrine.orm.entity_manager');
+        $this->container = self::$kernel->getContainer();
     }
 
     public function uriProvider()
@@ -53,23 +53,40 @@ abstract class PageTestCase extends WebTestCase
 
         $uris = array();
 
-        foreach($this->getControllerRoutes() as $route)
+        /** @var Route $route */
+        foreach($this->getControllerRoutes() as $routeName => $route)
         {
+            $uris[] = array($this->replaceParamteterInPath($routeName,$route));
+        }
 
-            //todo il faudra maintenant aller chercher les arguement dans
-            //le fichier de la class fille.
-            $parameters = null;
+        return $uris;
+    }
 
-            $uris[] = array($route);
+    protected function replaceParamteterInPath($routeName,Route $route)
+    {
+        $path = $route->getPath();
+
+        if(preg_match('/{\w*}+/' ,$path))
+        {
+            $parameters = $this->getParameters();
+
+            $parameterForRoute = $parameters[$routeName];
+
+            foreach($parameterForRoute as $parameter=>$value)
+            {
+                $path = str_replace('{'.$parameter.'}',$value,$path);
+            }
         }
 
 
-        //todo travailler ici
-        return array(array('/intranet'),array('/intranet/test/1'));
-        //return $uris;
+        return $path;
     }
 
 
+    /**
+     * @return array
+     */
+    abstract protected function getParameters();
 
     /**
      *
@@ -110,7 +127,7 @@ abstract class PageTestCase extends WebTestCase
 
                 if($routeController == $controllerClass.'::'.$method->getName())
                 {
-                    $routes[] = $route->getPath();
+                    $routes[$routeName] = $route;
                 }
             }
         }

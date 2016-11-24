@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
-
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
 /**
  * Cette commande permet de lancé des scripts. Chaque script est définit dans un
  * "switch case" qui prend en argument le nom du script voulu.
@@ -60,7 +60,7 @@ class ScriptCommand extends ContainerAwareCommand
                 $this->commands->add(new ConsoleCommand('doctrine:database:create'));
                 $this->commands->add(new ConsoleCommand('doctrine:schema:update',array('--force'=>true)));
                 $this->commands->add(new ConsoleCommand('fos:elastica:reset'));
-                $this->commands->add(new ConsoleCommand('app:roles:build'));
+                //$this->commands->add(new ConsoleCommand('app:roles:build'));
                 $this->commands->add(new ConsoleCommand('app:populate',array('action'=>'create')));
                 $this->commands->add(new ConsoleCommand('app:populate',array('action'=>'fill','members'=>200)));
                 $this->commands->add(new ConsoleCommand('app:user',array('action'=>'create','username'=>'admin','password'=>'admin')));
@@ -68,12 +68,32 @@ class ScriptCommand extends ContainerAwareCommand
                 $this->commands->add(new ConsoleCommand('fos:elastica:populate'));
                 break;
             case 'restart_database':
+
                 $this->commands->add(new ConsoleCommand('cache:clear'));
-                $this->commands->add(new ShellCommand('rm -rf '.$this->getContainer()->getParameter('app.upload_path')));
-                $this->commands->add(new ConsoleCommand('doctrine:database:drop',array('--force'=>true)));
+                $this->commands->add(new ShellCommand('rm -rf '.$this->getContainer()->getParameter('app.upload_dir')));
+
+                /** @var AbstractSchemaManager $schemaManager */
+                $schemaManager = $this->getContainer()->get('doctrine')->getConnection()->getSchemaManager();
+
+                //on test juste une des tables pour voir si la base de donnée existe
+                if ($schemaManager->tablesExist(array('app_users')) == true) {
+                    // table exists! ...
+                    $this->commands->add(new ConsoleCommand('doctrine:database:drop',array('--force'=>true)));
+                }
+
                 $this->commands->add(new ConsoleCommand('doctrine:database:create'));
                 $this->commands->add(new ConsoleCommand('doctrine:schema:update',array('--force'=>true)));
                 $this->commands->add(new ConsoleCommand('fos:elastica:reset'));
+                break;
+
+            case 'populate_with_faker':
+
+                $this->commands->add(new ConsoleCommand('app:populate',array('action'=>'create')));
+                $this->commands->add(new ConsoleCommand('app:populate',array('action'=>'fill','members'=>200)));
+                $this->commands->add(new ConsoleCommand('app:user',array('action'=>'create','username'=>'admin','password'=>'admin')));
+                $this->commands->add(new ConsoleCommand('app:roles:manage',array('action'=>'add','username'=>'admin','role'=>'ROLE_ADMIN')));
+                $this->commands->add(new ConsoleCommand('fos:elastica:populate'));
+
                 break;
         }
 

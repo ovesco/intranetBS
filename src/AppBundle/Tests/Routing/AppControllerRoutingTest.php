@@ -11,11 +11,17 @@ namespace AppBundle\Tests\Routing;
 /**
  * @group routing
  * @group dev
+ * @group travis
  */
-class AppControllerRoutingTest extends PageTestCase{
+class AppControllerRoutingTest extends RoutingTestCase{
 
     public function getControllerClass(){
         return 'AppBundle\Controller\AppController';
+    }
+
+    public function getParameters()
+    {
+        return array();
     }
 
 }

@@ -25,9 +25,6 @@ class AppController extends Controller
      */
     public function homeAction()
     {
-        //$em = $this->getDoctrine()->getManager();
-        //$lastNews = $em->getRepository('InterneOrganisationBundle:News')->findForPaging(0, 1);
-
         return $this->render("AppBundle:App:page_home.html.twig", array('user' => $this->getUser()));
     }
 
