@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: NicolasUffer
- * Date: 01.11.15
- * Time: 23:26
- */
-
 
 namespace AppBundle\Utils\ListUtils;
 
