@@ -89,9 +89,9 @@ class ScriptCommand extends ContainerAwareCommand
             case 'populate_with_faker':
 
                 $this->commands->add(new ConsoleCommand('app:populate',array('action'=>'create')));
-                $this->commands->add(new ConsoleCommand('app:populate',array('action'=>'fill','members'=>200)));
+                $this->commands->add(new ConsoleCommand('app:populate',array('action'=>'fill','members'=>100)));
                 $this->commands->add(new ConsoleCommand('app:user',array('action'=>'create','username'=>'admin','password'=>'admin')));
-                $this->commands->add(new ConsoleCommand('app:roles:manage',array('action'=>'add','username'=>'admin','role'=>'ROLE_ADMIN')));
+                $this->commands->add(new ConsoleCommand('app:user:promote',array('username'=>'admin','role'=>'ROLE_ADMIN')));
                 $this->commands->add(new ConsoleCommand('fos:elastica:populate'));
 
                 break;

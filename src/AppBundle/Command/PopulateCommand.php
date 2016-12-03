@@ -1196,7 +1196,7 @@ class PopulateCommand extends ContainerAwareCommand
         $periode = array('hiver','printemps','été','automne');
 
         $creance->setTitre((mt_rand(0,1) == 0) ? 'Cotisation '.$annee : 'Camp '.$periode[mt_rand(0,3)].' '.$annee);
-        $creance->setRemarque($this->getText(120,true));
+        $creance->setRemarques($this->getText(120,true));
         $creance->setMontantEmis(mt_rand(1,300));
         $creance->setDateCreation($this->getRandomDate());
         if($payee)
@@ -1210,7 +1210,7 @@ class PopulateCommand extends ContainerAwareCommand
     }
 
     /**
-     * @param $owner
+     * @param $debiteur
      * @return Facture
      */
     private function getFacture($debiteur){
