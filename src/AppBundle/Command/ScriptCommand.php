@@ -79,9 +79,9 @@ class ScriptCommand extends ContainerAwareCommand
                 if ($schemaManager->tablesExist(array('app_users')) == true) {
                     // table exists! ...
                     $this->commands->add(new ConsoleCommand('doctrine:database:drop',array('--force'=>true)));
+                    $this->commands->add(new ConsoleCommand('doctrine:database:create'));
                 }
 
-                $this->commands->add(new ConsoleCommand('doctrine:database:create'));
                 $this->commands->add(new ConsoleCommand('doctrine:schema:update',array('--force'=>true)));
                 $this->commands->add(new ConsoleCommand('fos:elastica:reset'));
                 break;

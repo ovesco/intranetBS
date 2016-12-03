@@ -8,7 +8,7 @@ before_script:
   - cp app/config/parameters.yml.travis app/config/parameters.yml
   - composer install
   #start database
-  #- mysql -e 'create database symfony;'
+  - mysql -e 'create database symfony;'
   - php app/console app:script restart_database
   #fill database with faker
   - php app/console app:script populate_with_faker
