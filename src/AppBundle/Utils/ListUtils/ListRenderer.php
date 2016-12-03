@@ -50,7 +50,6 @@ class ListRenderer
      * @param Twig_Environment $twig
      * @param array $items
      * @param null $itemIdAccessor
-     * @param string $url ------------- Url to regenerate the liste
      */
     public function __construct(Twig_Environment $twig, $items = array(), $itemIdAccessor = null)
     {
