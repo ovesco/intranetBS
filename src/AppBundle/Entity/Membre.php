@@ -216,7 +216,7 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
         if ($this->getFamille() != null)
             return ucwords($this->getFamille()->getNom());
         else
-            return "Pas dans une famille...";
+            return "[NO_FAMILY]";
     }
 
     /**

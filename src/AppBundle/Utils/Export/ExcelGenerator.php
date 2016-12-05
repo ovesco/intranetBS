@@ -29,6 +29,11 @@ class ExcelGenerator {
         return $workBook;
     }
 
+
+    public function exportDetails($items) {
+
+    }
+
     public function exportList(ListRenderer $list) {
 
         $name   = $list->getName();
