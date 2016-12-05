@@ -1210,7 +1210,7 @@ class PopulateCommand extends ContainerAwareCommand
     }
 
     /**
-     * @param $owner
+     * @param $debiteur
      * @return Facture
      */
     private function getFacture($debiteur){
