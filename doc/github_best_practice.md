@@ -57,8 +57,19 @@ git add -p //mode safe: avec un prompteur pour vérifier chaque modification à 
 Ensuite, on commit les changement sur la branche local:
 
 ```bash
-git commit
+git commit //avec editeur de message qui s'ouvre 
+git commit -m "Message"
 ``` 
+Voici un peu de lecture:
+[Lecture importante sur les messages de commit 1]: http://chris.beams.io/posts/git-commit/
+[Lecture importante sur les messages de commit 2]: http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
+
+Attention, oubliez pas de configuer auteur et email dans git si c'est pas encore fait:
+```bash
+git config --global user.name "John Doe"
+git config --global user.email johndoe@example.com
+``` 
+
 ###Push des mofifications
 
 Ensuite, on envoie les modifications sur le server de github:
