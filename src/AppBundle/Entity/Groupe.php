@@ -82,7 +82,7 @@ class Groupe
     public function __construct($nom = "")
     {
         $this->enfants = new \Doctrine\Common\Collections\ArrayCollection();
-
+        $this->attributions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->nom = $nom;
         $this->active = true;
     }
@@ -227,13 +227,16 @@ class Groupe
     /**
      * Add attributions
      *
-     * @param \AppBundle\Entity\Attribution $attributions
+     * @param \AppBundle\Entity\Attribution $attribution
      * @return Groupe
      */
-    public function addAttribution(\AppBundle\Entity\Attribution $attributions)
+    public function addAttribution(\AppBundle\Entity\Attribution $attribution)
     {
-        $this->attributions[] = $attributions;
-    
+        $this->attributions[] = $attribution;
+        if($attribution->getGroupe() != $this)
+        {
+            $attribution->setGroupe($this);
+        }
         return $this;
     }
 
@@ -280,9 +283,15 @@ class Groupe
         return $this->model;
     }
 
+    /**
+     * Renvoie les membre liée au groupe dont
+     * l'attribution n'est pas encore terminée
+     * en ce moment.
+     *
+     * @return array
+     */
     public function getMembers()
     {
-
         $members = array();
         $today   = new \Datetime();
 
@@ -291,13 +300,9 @@ class Groupe
             foreach ($this->getAttributions() as $attribution) {
                 if ($attribution->getDateFin() == null || $attribution->getDateFin() >= $today)
                     array_push($members, $attribution->getMembre());
-
             }
         }
-
-
         return $members;
-
     }
 
     public function getMembersRecursive()
@@ -318,13 +323,16 @@ class Groupe
      * @return Membre le chef du groupe
      */
     public function getChef() {
-
-        foreach($this->getMembers() as $m) {
-
-            if($m->getActiveAttribution()->getFonction() == $this->getGroupeReference()->getFonctionChef())
-                return $m;
+        /** @var Membre $membre */
+        foreach($this->getMembers() as $membre)
+        {
+            /** @var Attribution $attributions */
+            foreach($membre->getActiveAttributionsForGroupe($this) as $attributions)
+            {
+                if($attributions->getFonction() == $this->getModel()->getFonctionChef())
+                    return $membre;
+            }
         }
-
         return null; //renvoie null sinon
     }
 
