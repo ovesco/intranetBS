@@ -1,0 +1,19 @@
+{% extends 'TwigBundle:Exception:template.html.twig' %}
+
+{% block title %}Error: {{ status_code }}{% endblock %}
+
+{% block message_title %}Oops! An Error Occurred{% endblock %}
+
+{% block message_detail %}
+    The server returned a error <br>
+    <div style="
+    background-color: rgba(255, 0, 16, 0.58);
+    border: 1px solid;
+    border-radius: 2px;
+    padding: 10px;
+    margin-top: 10px;
+    ">
+    code: {{ status_code }}<br>
+    message: {{ status_text }}
+    </div>
+{% endblock %}
