@@ -4,6 +4,7 @@ imports:
     - { resource: services.yml }
     - { resource: elastica.yml }
     - { resource: doctrine_extensions.yml }
+    - { resource: maintenance.yml }
 
 #définition des parametres fixes lié a AppBundle
 parameters:

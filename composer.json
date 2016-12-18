@@ -34,7 +34,8 @@
         "emanueleminotto/twig-cache-bundle": "^1.0",
         "interne/seancebundle": "dev-master",
         "setasign/fpdf" : "1.8.1",
-        "setasign/fpdi" : "1.6.1"
+        "setasign/fpdi" : "1.6.1",
+        "lexik/maintenance-bundle": "2.1.1"
     },
     "require-dev": {
       "fzaninotto/faker": "1.5.*@dev",
