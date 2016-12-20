@@ -56,7 +56,7 @@ class CRONCommand extends ContainerAwareCommand
          */
         $this->tasks = array(
             new CRONTask('php app/console cache:clear',"20 seconds"),//todo NUR: changer si passage en mode prop => to 1 day
-            new CRONTask('php app/console swiftmailer:spool:send --env=dev',"1 day"),//todo NUR: changer si passage en mode prod => env=prod
+            new CRONTask('php app/console swiftmailer:spool:send --env=dev',"1 day"),//todo NUR: changer si passage en mode prod => env=prod +=> 2h
         );
 
 
