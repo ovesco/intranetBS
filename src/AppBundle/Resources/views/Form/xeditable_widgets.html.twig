@@ -11,7 +11,7 @@
 {% block xtype %}
 
     {% set TEXTS    = ['text', 'email', 'integer', 'money', 'number', 'password', 'percent', 'search', 'url'] %}
-    {% set TEXTAREA = ['textarea'] %}
+    {% set TEXTAREA = ['textarea','remarque_accordion'] %}
     {% set CHOICES  = ['choice', 'entity', 'country', 'language', 'locale', 'timezone', 'currency', 'semantic', 'genre', 'boolean'] %}
     {% set DATES    = ['date', 'datetime', 'time', 'birthday', 'datepicker'] %}
 
@@ -135,25 +135,28 @@
 {% endblock %}
 
 {# remarque_accordion #}
+
 {% block remarque_accordion_widget -%}
+    {{ block('form_widget') }}
+    {# todo v2 une implémentation plus jolie pour le rendu serait bienvenue
     <div class="ui accordion">
         <div class="title">
             <i class="dropdown icon"></i>
-            {{ block('form_label') }}
+            {{ value|slice(0,10) }}
         </div>
         <div class="content">
             <div class="field">
                 <div class="ui form">
                     <div class="field">
-                        <textarea {{ block('widget_attributes') }}>
-                            {{ value }}
-                        </textarea>
+                        {{ block('form_widget') }}
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    #}
 {%- endblock remarque_accordion_widget %}
+
 
 
 {# date #}
