@@ -29,7 +29,6 @@ use Symfony\Component\Finder\SplFileInfo;
  * @package AppBundle\Tests\Routing
  *
  * @group routing
- * @group travis
  */
 class RouteNameTest extends KernelTestCase{
 
