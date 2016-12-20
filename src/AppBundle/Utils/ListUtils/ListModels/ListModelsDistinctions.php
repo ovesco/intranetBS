@@ -9,23 +9,24 @@ use AppBundle\Utils\Event\EventPostAction;
 use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\ActionList;
 use AppBundle\Utils\ListUtils\Column;
+use AppBundle\Utils\ListUtils\ListModel;
 use AppBundle\Utils\ListUtils\ListRenderer;
 use Symfony\Component\Routing\Router;
 
-class ListModelsDistinctions
+class ListModelsDistinctions extends ListModel
 {
 
 
     /**
-     * @param \Twig_Environment $twig
-     * @param Router $router
      * @param $items
      * @param Membre $membre
      * @param string $url
      * @return ListRenderer
      */
-    static public function getDefault(\Twig_Environment $twig, Router $router, $items, Membre $membre, $url = null)
+    public function getDefault($items, Membre $membre, $url = null)
     {
+        $twig = $this->twig;
+        $router = $this->router;
         $list = new ListRenderer($twig, $items);
         $list->setUrl($url);
 

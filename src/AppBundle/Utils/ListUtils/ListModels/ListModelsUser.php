@@ -3,32 +3,30 @@
 namespace AppBundle\Utils\ListUtils\ListModels;
 
 use AppBundle\Entity\User;
-use AppBundle\Entity\Role;
 use AppBundle\Utils\Event\EventPostAction;
 use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\Column;
-use AppBundle\Utils\ListUtils\ListModelInterface;
+use AppBundle\Utils\ListUtils\ListModel;
 use AppBundle\Utils\ListUtils\ListRenderer;
 use Symfony\Component\Routing\Router;
 use AppBundle\Utils\ListUtils\ActionList;
 
-class ListModelsUser implements ListModelInterface
+class ListModelsUser extends ListModel
 {
 
     /**
-     * @param \Twig_Environment $twig
-     * @param Router $router
      * @param $items
      * @param string $url
      * @return ListRenderer
      */
-    static public function getDefault(\Twig_Environment $twig, Router $router, $items, $url = null)
+    public function getDefault($items, $url = null)
     {
-        $list = new ListRenderer($twig, $items);
+        $list = new ListRenderer($this->twig, $items);
         $list->setUrl($url);
 
         $list->setSearchBar(true);
 
+        $router = $this->router;
         $list->addColumn(new Column('Utilisateur', function (User $user) use ($router) {
             return '<a href="' . $router->generate('app_user_show', array('user' => $user->getId())) . '">' . $user->getUsername() . '</a>';
         }));
@@ -83,23 +81,26 @@ class ListModelsUser implements ListModelInterface
             return 'Aucun roles fournit par le membre';
         }));
 
-        $userParameters = function (User $user) {
-            return array(
-                "user" => $user->getId()
-            );
-        };
+        if($this->isGranted('ROLE_ADMIN'))
+        {
 
-        $list->addActionLine(new ActionLine('Modifier', 'edit', 'app_user_edit', $userParameters, EventPostAction::Link));
+            $userParameters = function (User $user) {
+                return array(
+                    "user" => $user->getId()
+                );
+            };
 
-        $list->addActionLine(new ActionLine('Voir', 'zoom', 'app_user_show', $userParameters, EventPostAction::Link));
+            $list->addActionLine(new ActionLine('Modifier', 'edit', 'app_user_edit', $userParameters, EventPostAction::Link));
 
-
-        //return '<a href="' . $router->generate('app_membre_show', array('membre' => $membre->getId())) . '">' . $membre->getPrenom() . '</a>';
-
-
-        $list->addActionList(new ActionList('Ajouter', 'add', 'app_user_create',null, EventPostAction::Link,null,'green'));
+            $list->addActionLine(new ActionLine('Voir', 'zoom', 'app_user_show', $userParameters, EventPostAction::Link));
 
 
+            //return '<a href="' . $router->generate('app_membre_show', array('membre' => $membre->getId())) . '">' . $membre->getPrenom() . '</a>';
+
+
+            $list->addActionList(new ActionList('Ajouter', 'add', 'app_user_create',null, EventPostAction::Link,null,'green'));
+
+        }
         return $list;
     }
 

@@ -7,6 +7,7 @@ use AppBundle\Entity\Payement;
 use AppBundle\Entity\PayementFile;
 use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\Column;
+use AppBundle\Utils\ListUtils\ListModel;
 use AppBundle\Utils\ListUtils\ListModelInterface;
 use AppBundle\Utils\Event\EventPostAction;
 use AppBundle\Utils\ListUtils\ListRenderer;
@@ -15,21 +16,18 @@ use Symfony\Component\Routing\Router;
 use AppBundle\Utils\ListUtils\ActionList;
 use AppBundle\Entity\Debiteur;
 
-class ListModelsPayement implements ListModelInterface
+class ListModelsPayement extends  ListModel
 {
 
 
     /**
-     * @param \Twig_Environment $twig
-     * @param $items
-     * @param Router $router
      * @param string $url
      * @return ListRenderer
      */
-    static public function getDefault(\Twig_Environment $twig, Router $router, $items, $url = null)
+    public function getDefault($items, $url = null)
     {
 
-        $list = new ListRenderer($twig, $items);
+        $list = new ListRenderer($this->twig, $items);
         $list->setUrl($url);
         $list->setSearchBar(true);
 
@@ -58,9 +56,9 @@ class ListModelsPayement implements ListModelInterface
     }
 
 
-    static public function getNotValidated(\Twig_Environment $twig, Router $router, $items, $url = null)
+    public function getNotValidated( $items, $url = null)
     {
-        $list = self::getDefault($twig,$router,$items,$url);
+        $list = $this->getDefault($items,$url);
 
         $payementParameters = function (Payement $payement) {
             return array(
@@ -87,14 +85,13 @@ class ListModelsPayement implements ListModelInterface
 
 
     /**
-     * @param \Twig_Environment $twig
      * @param $items
      * @return ListRenderer
      */
-    static public function getSearchResults(\Twig_Environment $twig, Router $router, $items, $url = null)
+    public function getSearchResults( $items, $url = null)
     {
 
-        $list = self::getDefault($twig,$router,$items,$url);
+        $list = $this->getDefault($items,$url);
 
 
         $payementParameters = function (Payement $payement) {
