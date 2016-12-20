@@ -14,15 +14,14 @@ use Symfony\Component\Filesystem\Filesystem;
  * L'idée de cette commande est de s'affichir de la confifuration
  * CRON du server (enfin de la simplifier).
  *
- *
+ * Donc plus qu'à faire tourner qu'une seul commande avec CRON (celle-ci)
+ * à une fréquence suffisante.
  *
  * Class CRONCommand
  * @package AppBundle\Command
  */
 class CRONCommand extends ContainerAwareCommand
 {
-    /** Fichier de sauvegarde des temps d'execution de chaque commande */
-    const CRON_PATH = '/CRON/last_execution.txt';
 
     /** @var ConsoleOutput */
     private $output;
@@ -41,9 +40,8 @@ class CRONCommand extends ContainerAwareCommand
         $this
             ->setName('app:cron')
             ->setDescription('Taches CRON sur l\'application')
-            ->addOption('reset',null,InputOption::VALUE_NONE,'')
+            ->addOption('reset',null,InputOption::VALUE_NONE,'reset allow to restart cron tasks based on the current time')
         ;
-
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -55,12 +53,10 @@ class CRONCommand extends ContainerAwareCommand
 
         /*
          * LISTE DES TACHES CRON
-         *
-         *
          */
         $this->tasks = array(
-            new CRONTask('php app/console cache:clear',"20 seconds"),
-            new CRONTask('php app/console swiftmailer:spool:send --env=dev',"1 day"),//todo NUR: changer si passage en mode prod
+            new CRONTask('php app/console cache:clear',"20 seconds"),//todo NUR: changer si passage en mode prop => to 1 day
+            new CRONTask('php app/console swiftmailer:spool:send --env=dev',"1 day"),//todo NUR: changer si passage en mode prod => env=prod
         );
 
 
@@ -99,20 +95,26 @@ class CRONCommand extends ContainerAwareCommand
         }
     }
 
+    /**
+     * save time of execution in file
+     */
     protected function save()
     {
-        $root = $this->getContainer()->getParameter('kernel.root_dir');
+        $file = $this->getContainer()->getParameter('cron_execution_time_file');
         $fs = new Filesystem();
-        $fs->dumpFile($root.CRONCommand::CRON_PATH,json_encode($this->tasks));
+        $fs->dumpFile($file,json_encode($this->tasks));
     }
 
+    /**
+     * load last execution time from file
+     */
     protected function load()
     {
-        $root = $this->getContainer()->getParameter('kernel.root_dir');
+        $file = $this->getContainer()->getParameter('cron_execution_time_file');
         $fs = new Filesystem();
-        if($fs->exists($root.CRONCommand::CRON_PATH))
+        if($fs->exists($file))
         {
-            $content = file_get_contents($root.CRONCommand::CRON_PATH);
+            $content = file_get_contents($file);
             $this->tasks = json_decode($content);
         }
     }
