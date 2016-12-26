@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="{{ _charset }}" />
+    <meta name="description" content="Outil de gestion de groupe scout développé par la Brigade de Sauvabelin">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>{% block title %}{% endblock %}</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:calibri, arial;
+        }
+        body{
+            background:lightgrey;
+        }
+        #message{
+            width:600px;
+            margin:100px auto 0 auto;
+            background:#ffffff;
+            box-shadow:0 0 10px rgb(100,100,100);
+            border-radius:4px;
+            border-color: #000066;
+            border-style: solid;
+            border-width: 1px;
+            padding: 10px;
+            overflow:hidden;
+        }
+        #message h1{
+            padding: 10px;
+        }
+
+        #message div{
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="message">
+        <h1>{% block message_title %}{% endblock %}</h1>
+        <div>
+            {% block message_detail %}{% endblock %}
+        </div>
+    </div>
+</body>
+</html>
