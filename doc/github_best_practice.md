@@ -5,7 +5,7 @@ Le but étant de formaliser un peu le processus de développement du projet
 en peremettant un suivit des modifications ainsi que la mise en place d'une
 relecture attentive de chaque modifications par les autres développeurs.
 
-[Un peu de doc sur les branches]: https://github.com/Kunena/Kunena-Forum/wiki/Create-a-new-branch-with-git-and-manage-branches
+[Un peu de doc sur les branches](https://github.com/Kunena/Kunena-Forum/wiki/Create-a-new-branch-with-git-and-manage-branches)
 
 ##Je souhaite faire une modification, que dois-je faire?
 
@@ -67,8 +67,8 @@ git commit //avec editeur de message qui s'ouvre
 git commit -m "Message"
 ``` 
 Voici un peu de lecture:
-[Lecture importante sur les messages de commit 1]: http://chris.beams.io/posts/git-commit/
-[Lecture importante sur les messages de commit 2]: http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
+[Lecture importante sur les messages de commit 1](http://chris.beams.io/posts/git-commit/)
+[Lecture importante sur les messages de commit 2](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html)
 
 Attention, oubliez pas de configuer auteur et email dans git si c'est pas encore fait:
 ```bash
