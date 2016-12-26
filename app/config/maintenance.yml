@@ -19,7 +19,7 @@ lexik_maintenance:
 
          # MemCache driver
         class: Lexik\Bundle\MaintenanceBundle\Drivers\MemCacheDriver               # class for MemCache driver
-        options: {key_name: 'maintenance', host: 127.0.0.1, port: 11211}           # need to define a key_name, the host and port
+        options: {key_name: 'maintenance', host: '%maintenance_host%', port: '%maintenance_port%'}           # need to define a key_name, the host and port
 
         # Database driver:
         class: 'Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver'             # class for database driver
