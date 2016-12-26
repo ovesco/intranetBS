@@ -226,7 +226,7 @@
                         </div>
 
                         <div class="ui bottom attached segment">
-                            {% include 'AppBundle:Membre:history.html.twig' %}
+                            {{ render(controller('AppBundle:EntityAudit:membre',{'membreId':membre.id})) }}
                         </div>
                     </div>
                 </div> <!-- history -->
