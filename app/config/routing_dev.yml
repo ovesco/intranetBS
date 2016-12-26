@@ -13,3 +13,8 @@ _errors:
 _main:
     resource: routing.yml
 
+#allow to test error page during the dev process
+#try with url like /_error/{code}.{format}: /_error/404 or /_error/404.json
+_errors:
+    resource: "@TwigBundle/Resources/config/routing/errors.xml"
+    prefix:   /_error

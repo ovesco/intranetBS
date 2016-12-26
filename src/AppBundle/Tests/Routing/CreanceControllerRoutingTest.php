@@ -13,6 +13,7 @@ use AppBundle\Utils\ListUtils\ListKey;
 /**
  * @group routing
  * @group dev
+ * @group travis
  */
 class CreanceControllerRoutingTest extends RoutingTestCase{
 
