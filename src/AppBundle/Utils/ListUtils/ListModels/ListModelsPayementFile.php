@@ -7,27 +7,26 @@ use AppBundle\Entity\PayementFile;
 use AppBundle\Utils\Event\EventPostAction;
 use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\Column;
+use AppBundle\Utils\ListUtils\ListModel;
 use AppBundle\Utils\ListUtils\ListModelInterface;
 use AppBundle\Utils\ListUtils\ListRenderer;
 use Symfony\Component\Routing\Router;
 
-class ListModelsPayementFile implements ListModelInterface
+class ListModelsPayementFile extends  ListModel
 {
 
     /**
-     * @param \Twig_Environment $twig
-     * @param Router $router
      * @param $items
      * @param string $url
      * @return ListRenderer
      */
-    static public function getDefault(\Twig_Environment $twig, Router $router, $items, $url = null)
+    public function getDefault($items, $url = null)
     {
-        $list = new ListRenderer($twig, $items);
+        $list = new ListRenderer($this->twig, $items);
         $list->setUrl($url);
 
         $list->setSearchBar(true);
-
+        $router = $this->router;
         $list->addColumn(new Column('Fichier', function (PayementFile $file) use ($router) {
             return $file->getFilename();
         }));

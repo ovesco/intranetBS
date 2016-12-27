@@ -6,26 +6,25 @@ use AppBundle\Utils\Event\EventPostAction;
 use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\ActionList;
 use AppBundle\Utils\ListUtils\Column;
+use AppBundle\Utils\ListUtils\ListModel;
 use AppBundle\Utils\ListUtils\ListModelInterface;
 use AppBundle\Utils\ListUtils\ListRenderer;
 use Symfony\Component\Routing\Router;
 use AppBundle\Entity\Fonction;
 
 
-class ListModelsFonction implements ListModelInterface
+class ListModelsFonction extends  ListModel
 {
 
 
     /**
-     * @param \Twig_Environment $twig
-     * @param Router $router
      * @param $items
      * @param string $url
      * @return ListRenderer
      */
-    static public function getDefault(\Twig_Environment $twig, Router $router, $items, $url = null)
+    public function getDefault($items, $url = null)
     {
-        $list = new ListRenderer($twig, $items);
+        $list = new ListRenderer($this->twig, $items);
         $list->setUrl($url);
         $list->setName('fonction_default');
 
