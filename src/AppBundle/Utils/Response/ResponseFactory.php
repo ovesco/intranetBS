@@ -46,6 +46,13 @@ class ResponseFactory {
         return $response;
     }
 
+    static function interalError($text = null)
+    {
+        $response = new JsonResponse();
+        $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR,$text);
+        return $response;
+    }
+
 
 
 

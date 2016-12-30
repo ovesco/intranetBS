@@ -31,6 +31,7 @@ security:
         - { path: ^/intranet/rappel, roles: ROLE_RAPPEL }
         - { path: ^/intranet/structure, roles: ROLE_STRUCTURE }
         - { path: ^/intranet/parameter, roles: ROLE_PARAMETER }
+        - { path: ^/intranet/modification, roles: ROLE_MODIFICATION }
         #acces general à n'importe quelle pages de l'app
         - { path: ^/intranet, roles: ROLE_USER } #minium role to access to app
 

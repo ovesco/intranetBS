@@ -59,9 +59,15 @@
     {% set object = form.parent.vars['value'] %}
 
     data-pk="{{ object.id }}"
-    data-url="{{ path('interne_ajax_app_modify_property') }}"
+    data-url="{{ path('app_modification_modify') }}"
     data-name="{{ attr ~ "___" ~ class(object) ~ "___" ~ form.vars['name'] }}" {# le name contient le nom du champ a modifier ainsi que le type de ce champ #}
     data-value="{{ value }}"
+    data-object_id="{{ object.id }}"
+{#
+    data-object_id="{{ object.id }}"
+    data-objectClass="{{ class(object) }}"
+    data-formClass="{{ class(form) }}"
+    #}
 
     {# type et éventuelles données supplémentaires requises liées à ce type, comme pour choice, on génère le data-source #}
     {{ block('xtype') }}
