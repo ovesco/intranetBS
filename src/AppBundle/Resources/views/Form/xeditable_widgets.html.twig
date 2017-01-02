@@ -62,7 +62,6 @@
     data-url="{{ path('app_modification_modify') }}"
     data-name="{{ attr ~ "___" ~ class(object) ~ "___" ~ form.vars['name'] }}" {# le name contient le nom du champ a modifier ainsi que le type de ce champ #}
     data-value="{{ value }}"
-    data-object_id="{{ object.id }}"
 {#
     data-object_id="{{ object.id }}"
     data-objectClass="{{ class(object) }}"
@@ -137,6 +136,10 @@
 {% endblock %}
 
 {% block checkbox_widget %}
+    {{ block('form_widget') }}
+{% endblock %}
+
+{% block birthday_widget %}
     {{ block('form_widget') }}
 {% endblock %}
 

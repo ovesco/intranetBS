@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Membre;
+use AppBundle\Field\DatePickerType;
 use AppBundle\Field\GenreType;
 use AppBundle\Utils\Response\ResponseFactory;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -13,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -100,6 +102,12 @@ class ModificationController extends Controller
             case 'datetime':
                 $formTypeClass = DateTimeType::class;
                 break;
+            case 'datepicker':
+                $formTypeClass = DatePickerType::class;
+                break;
+            case 'number':
+                $formTypeClass = NumberType::class;
+                break;
             default:
                 throw new Exception('The type "'.$formBlockPrefix.'"" is not defined as an xeditable type. Add it to '.self::class);
         }
@@ -111,8 +119,7 @@ class ModificationController extends Controller
 
 
         /*
-         * Formulaire valide, on valide la modification, et on crée une entrée de modification qui permettra
-         * au SG de valider ou pas ces changements
+         * Formulaire valide, on valide la modification.
          */
         if($form->isValid()) {
             $em->persist($entity);
