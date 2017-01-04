@@ -41,7 +41,7 @@ use AppBundle\Entity\DebiteurFamille;
 use AppBundle\Entity\DebiteurMembre;
 
 
-class FakerCommand extends ContainerAwareCommand
+class PopulateCommand extends ContainerAwareCommand
 {
     /** @var \Doctrine\ORM\EntityManager $em */
     protected $em;
