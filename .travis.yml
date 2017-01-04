@@ -11,7 +11,7 @@ before_script:
   - mysql -e 'create database symfony;'
   - php app/console app:script restart_database
   #fill database with faker
-  - php app/console app:script populate_with_faker
+  - php app/console app:script populate
 
 script: phpunit --group travis --verbose -d memory_limit=-1 -c app/ #php app/console app:tests group:travis
 

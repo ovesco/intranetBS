@@ -55,7 +55,7 @@ class FakerCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('app:faker:populate')
+            ->setName('app:populate')
             ->setDescription('Remplir la base de donnée avec des données aléatoire')
             ->addArgument('members', InputArgument::OPTIONAL, 'Combien de membres souhaitez-vous génerer (default 200) ?',150)
         ;

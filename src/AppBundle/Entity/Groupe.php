@@ -232,7 +232,7 @@ class Groupe
      */
     public function addAttribution(\AppBundle\Entity\Attribution $attribution)
     {
-        $this->attributions[] = $attribution;
+        $this->attributions->add($attribution);
         if($attribution->getGroupe() != $this)
         {
             $attribution->setGroupe($this);

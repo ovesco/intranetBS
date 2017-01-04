@@ -393,7 +393,7 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
      */
     public function addAttribution(\AppBundle\Entity\Attribution $attribution)
     {
-        $this->attributions[] = $attribution;
+        $this->attributions->add($attribution);
         if($attribution->getMembre() != $this)
         {
             $attribution->setMembre($this);
@@ -483,7 +483,7 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
         foreach ($this->attributions as $attr) {
             if ($attr->getDateFin() >= $today || $attr->getDateFin() == null)
                 if($attr->getGroupe() == $groupe)
-                    $attrs[] = $attr;
+                    $attrs->add($attr);
         }
 
         return $attrs;
