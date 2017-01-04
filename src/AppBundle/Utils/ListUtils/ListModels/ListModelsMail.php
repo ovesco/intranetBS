@@ -7,6 +7,7 @@ use AppBundle\Entity\Famille;
 use AppBundle\Entity\Membre;
 use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\Column;
+use AppBundle\Utils\ListUtils\ListModel;
 use AppBundle\Utils\ListUtils\ListModelInterface;
 use AppBundle\Utils\ListUtils\ListRenderer;
 use AppBundle\Entity\Mail;
@@ -15,25 +16,24 @@ use AppBundle\Entity\ReceiverFamille;
 use Symfony\Component\Routing\Router;
 use AppBundle\Twig\AppExtension;
 
-class ListModelsMail implements ListModelInterface
+class ListModelsMail extends ListModel
 {
 
 
     /**
-     * @param \Twig_Environment $twig
      * @param $items
-     * @param Router $router
      * @param string $url
      * @return ListRenderer
      */
-    static public function getDefault(\Twig_Environment $twig, Router $router, $items, $url = null)
+    public function getDefault($items, $url = null)
     {
-        $list = new ListRenderer($twig, $items);
+        $list = new ListRenderer($this->twig, $items);
         $list->setUrl($url);
         $list->setSearchBar(true);
 
         $list->addColumn(new Column('Mail', function (Mail $item) { return $item->getTitle(); }));
 
+        $twig = $this->twig;
         $list->addColumn(new Column('Courrier', function (Mail $item) use ($twig) {
 
             $adresse = $item->getAddress();
@@ -98,7 +98,7 @@ class ListModelsMail implements ListModelInterface
             return null;
         }));
 
-
+        $router = $this->router;
         $list->addColumn(new Column('Document', function (Mail $item) use ($router) {
             if(is_null($item->getDocument()))
                 return 'No documents';
@@ -116,14 +116,14 @@ class ListModelsMail implements ListModelInterface
     }
 
     /**
-     * @param \Twig_Environment $twig
      * @param $items
-     * @param Router $router
      * @param string $url
      * @return ListRenderer
      */
-    static public function getMyMail(\Twig_Environment $twig, Router $router, $items, $url = null)
+    public function getMyMail($items, $url = null)
     {
+        $twig = $this->twig;
+        $router = $this->router;
         $list = new ListRenderer($twig, $items);
         $list->setUrl($url);
         $list->setSearchBar(true);

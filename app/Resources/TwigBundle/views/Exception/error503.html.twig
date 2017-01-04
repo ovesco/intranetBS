@@ -1,0 +1,10 @@
+{# error 503 is used for maintenance page #}
+{% extends 'TwigBundle:Exception:template.html.twig' %}
+
+{% block title %}Mainteance{% endblock %}
+
+{% block message_title %}We&rsquo;ll be back soon!{% endblock %}
+
+{% block message_detail %}
+    Sorry for the inconvenience but we&rsquo;re performing some maintenance at the moment.
+{% endblock %}

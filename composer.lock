@@ -2373,6 +2373,60 @@
             "time": "2015-11-30 10:53:14"
         },
         {
+            "name": "simplethings/entity-audit-bundle",
+            "version": "v0.9.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/simplethings/EntityAudit.git",
+                "reference": "151b49b67569baee8f83b34088fc3b567bb3e708"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/simplethings/EntityAudit/zipball/151b49b67569baee8f83b34088fc3b567bb3e708",
+                "reference": "151b49b67569baee8f83b34088fc3b567bb3e708",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": "~2.5",
+                "doctrine/orm": "~2.4",
+                "php": "^5.3.9|~7.0"
+            },
+            "conflict": {
+                "doctrine/doctrine-bundle": "<1.4",
+                "gedmo/doctrine-extensions": "<2.3.1",
+                "symfony/framework-bundle": "<2.7"
+            },
+            "require-dev": {
+                "doctrine/doctrine-bundle": "~1.4",
+                "gedmo/doctrine-extensions": "^2.3.1",
+                "phpunit/phpunit": "^4.8",
+                "symfony/framework-bundle": "~2.7|~3.0",
+                "symfony/var-dumper": "^2.7"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "SimpleThings\\EntityAudit\\": "src/SimpleThings/EntityAudit"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1"
+            ],
+            "description": "Audit for Doctrine Entities",
+            "keywords": [
+                "Audit",
+                "database",
+                "persistence"
+            ],
+            "time": "2016-08-22 08:57:38"
+        },
+        {
             "name": "swiftmailer/swiftmailer",
             "version": "v5.4.4",
             "source": {

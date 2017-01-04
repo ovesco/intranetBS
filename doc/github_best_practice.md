@@ -5,6 +5,8 @@ Le but étant de formaliser un peu le processus de développement du projet
 en peremettant un suivit des modifications ainsi que la mise en place d'une
 relecture attentive de chaque modifications par les autres développeurs.
 
+[Un peu de doc sur les branches](https://github.com/Kunena/Kunena-Forum/wiki/Create-a-new-branch-with-git-and-manage-branches)
+
 ##Je souhaite faire une modification, que dois-je faire?
 
 Le principe de base de ce tutoriel est de créer un branche spécifique à chaque 
@@ -33,15 +35,19 @@ Si le résultat n'est pas celui-ci alors il vous faudras commiter le travail act
 ```bash
 git checkout master //switch to branch master
 ```
+Ensuite un petit pull pour avoir la derniere version de la branche master:
+```bash
+git pull
+```
 
 ###Nouvelle branche
 Nous créeons maintenant la nouvelle branche qui contiendra tout les modifications reliée à votre nouvelle fonctionalité.
 La branche devrais contenir en début votre pseudo et ensuite un titre clair lié à votre développement.
 
 ```bash
-git branch nuffer_add_new_list_export_csv //create new branch
-git checkout nuffer_add_new_list_export_csv //swith to the new branch
-
+git checkout -b nuffer_add_new_list_export_csv //create new branch and swith to it
+git push origin nuffer_add_new_list_export_csv //push the branche on github
+git branch //permet de voir les branches et de verifier qu'on se trouve dans la nouvelle
 ```
 
 ###On taf un peu
@@ -61,8 +67,8 @@ git commit //avec editeur de message qui s'ouvre
 git commit -m "Message"
 ``` 
 Voici un peu de lecture:
-[Lecture importante sur les messages de commit 1]: http://chris.beams.io/posts/git-commit/
-[Lecture importante sur les messages de commit 2]: http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
+[Lecture importante sur les messages de commit 1](http://chris.beams.io/posts/git-commit/)
+[Lecture importante sur les messages de commit 2](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html)
 
 Attention, oubliez pas de configuer auteur et email dans git si c'est pas encore fait:
 ```bash

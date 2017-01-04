@@ -5,6 +5,7 @@ namespace AppBundle\Utils\ListUtils\ListModels;
 
 use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\Column;
+use AppBundle\Utils\ListUtils\ListModel;
 use AppBundle\Utils\ListUtils\ListModelInterface;
 use AppBundle\Utils\Event\EventPostAction;
 use AppBundle\Utils\ListUtils\ListRenderer;
@@ -13,19 +14,19 @@ use Symfony\Component\Routing\Router;
 use AppBundle\Utils\ListUtils\ActionList;
 use AppBundle\Entity\Debiteur;
 
-class ListModelsCreances implements ListModelInterface
+class ListModelsCreances extends  ListModel
 {
 
 
     /**
-     * @param \Twig_Environment $twig
      * @param $items
-     * @param Router $router
      * @param string $url
      * @return ListRenderer
      */
-    static public function getDefault(\Twig_Environment $twig, Router $router, $items, $url = null)
+    public function getDefault($items, $url = null)
     {
+        $twig = $this->twig;
+        $router = $this->router;
         $list = new ListRenderer($twig, $items);
         $list->setUrl($url);
         $list->setSearchBar(true);
@@ -70,16 +71,16 @@ class ListModelsCreances implements ListModelInterface
 
 
     /**
-     * @param \Twig_Environment $twig
-     * @param Router $router
      * @param $items
      * @param null $url
      * @param Debiteur $debiteur
      * @return ListRenderer
      */
-    static public function getForDebiteur(\Twig_Environment $twig, Router $router, $items, $url = null,Debiteur $debiteur)
+    public function getForDebiteur($items, $url = null,Debiteur $debiteur)
     {
-        $list = self::getDefault( $twig,  $router, $items, $url);
+        $twig = $this->twig;
+        $router = $this->router;
+        $list = self::getDefault($items, $url);
 
         $list->addActionList(new ActionList('Ajouter', 'add', 'app_creance_create',array('debiteur' => $debiteur->getId()), EventPostAction::ShowModal,null,'green'));
 
@@ -89,12 +90,13 @@ class ListModelsCreances implements ListModelInterface
     }
 
     /**
-     * @param \Twig_Environment $twig
      * @param $items
      * @return ListRenderer
      */
-    static public function getSearchResults(\Twig_Environment $twig, Router $router, $items, $url = null, $listSessionKey = null)
+    public function getSearchResults( $items, $url = null, $listSessionKey = null)
     {
+        $twig = $this->twig;
+        $router = $this->router;
         $list = new ListRenderer($twig, $items);
         $list->setUrl($url);
         $list->setSearchBar(true);
