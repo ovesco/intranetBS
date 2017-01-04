@@ -21,8 +21,6 @@ use AppBundle\Utils\Menu\Menu;
 use AppBundle\Search\Membre\MembreRepository;
 
 
-/* annotations */
-
 /**
  * Class MembreController
  * @package AppBundle\Controller
@@ -35,6 +33,7 @@ class MembreController extends Controller {
 
     /**
      * Affiche la page d'ajout de membre
+     * (Le formulaire d'ajout de membre est géré par le controller AddMembreController)
      *
      * @Route("/add")
      * @Menu("Ajouter un membre",block="database",order=1, icon="add", expanded=true)

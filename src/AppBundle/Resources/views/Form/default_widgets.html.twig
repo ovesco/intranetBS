@@ -83,7 +83,12 @@ je sais pas si je suis un vieux con mais je dirais " c'était mieux avant"
         {%- if label is empty -%}
             {% set label = name|humanize %}
         {%- endif -%}
-        <label {% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label|trans({}, translation_domain) }}</label>
+        <label {% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+        {{ label|trans({}, translation_domain) }}
+        {%- if required -%}
+            <span style="color: red">*</span>
+        {%- endif -%}
+        </label>
     {%- endif %}
 {%- endblock form_label %}
 

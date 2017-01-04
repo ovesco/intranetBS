@@ -19,9 +19,10 @@ class MembreNomPrenomType extends AbstractType
             ->add('nom', TextType::class,
                 array(
                     'label' => 'Nom',
-                    'mapped' => false,
+                    'mapped' => false,//Normalement, le nom est une propriété de la famille...
                     'required' => true));
     }
+
 
     public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
     {

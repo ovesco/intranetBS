@@ -22,6 +22,7 @@ function AddMembreCallNextForm(next_url){
         data: $('#membre_add_form form').serialize(),
         success: function (response) {
             $('#membre_add_form').html(response);
+            semantic_init();
         },
         error: function(xhr, ajaxOptions, thrownError) {
             alerte.send("Erreur lors de l'ouverture de la fenêtre.<br />Détails : " + xhr.status + " / " + thrownError, 'error');
@@ -35,6 +36,7 @@ function AddMembreCallPreviousForm(previous_url){
         type: 'GET',
         success: function (response) {
             $('#membre_add_form').html(response);
+            semantic_init();
         },
         error: function(xhr, ajaxOptions, thrownError) {
             alerte.send("Erreur lors de l'ouverture de la fenêtre.<br />Détails : " + xhr.status + " / " + thrownError, 'error');

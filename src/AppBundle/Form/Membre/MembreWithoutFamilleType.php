@@ -14,6 +14,7 @@ class MembreWithoutFamilleType extends MembreType
         parent::buildForm($builder,$options);
         $builder->remove('famille');
         $builder->remove('prenom');
+        $builder->remove('distinctions');
         
         $builder->add(
             'prenom',

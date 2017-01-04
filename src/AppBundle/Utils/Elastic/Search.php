@@ -8,10 +8,10 @@
 
 namespace AppBundle\Utils\Elastic;
 
-use AppBundle\Search\MembreSearch;
+use AppBundle\Search\Membre\MembreSearch;
 use FOS\ElasticaBundle\Repository;
 use FOS\ElasticaBundle\Manager\RepositoryManagerInterface;
-use AppBundle\Search\MembreRepository;
+use AppBundle\Search\Membre\MembreRepository;
 use AppBundle\Search\Famille\FamilleSearch;
 
 class Search{

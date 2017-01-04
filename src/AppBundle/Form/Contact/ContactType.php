@@ -19,7 +19,7 @@ class ContactType extends AbstractType
                 // chaque item du tableau sera un champ « email »
                 'entry_type' => EmailType::class))
             ->add('telephones', DynamicCollectionType::class, array(
-                // chaque item du tableau sera un champ « email »
+                // chaque item du tableau sera un champ « telephone »
                 'entry_type' => TelephoneType::class))
         ;
     }

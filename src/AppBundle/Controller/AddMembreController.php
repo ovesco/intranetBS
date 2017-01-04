@@ -17,9 +17,9 @@ use AppBundle\Utils\ListUtils\ListStorage;
 use Doctrine\ORM\EntityManager;
 
 
-use AppBundle\Search\MembreSearch;
-use AppBundle\Search\MembreSearchType;
-use AppBundle\Search\MembreRepository;
+use AppBundle\Search\Membre\MembreSearch;
+use AppBundle\Search\Membre\MembreSearchType;
+use AppBundle\Search\Membre\MembreRepository;
 
 use AppBundle\Search\Mode;
 
@@ -90,7 +90,7 @@ class AddMembreController extends Controller
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $session = $request->getSession();
 
             $nom = $form->get('nom')->getData();
@@ -110,7 +110,8 @@ class AddMembreController extends Controller
             return $this->redirect($this->generateUrl('app_addmembre_famillechoice'));
 
         }
-        return $this->render('AppBundle:Membre/AddForm:start.html.twig',
+
+        return $this->render('AppBundle:AddMembre:start.html.twig',
             array('form' => $form->createView(), 'next' => $this->generateUrl('app_addmembre_start')));
     }
 
@@ -187,7 +188,7 @@ class AddMembreController extends Controller
             $sessionContainer->setRepository(ListKey::FAMILLE_SEARCH_RESULTS_ADD_MEMBRE,'AppBundle:Famille');
             $sessionContainer->setObjects(ListKey::FAMILLE_SEARCH_RESULTS_ADD_MEMBRE,$matchedFamilles);
 
-            return $this->render('AppBundle:Membre/AddForm:FamilleChoice.html.twig',
+            return $this->render('AppBundle:AddMembre:FamilleChoice.html.twig',
                 array('form'=>$form->createView(),
                     'next'=>$this->generateUrl('app_addmembre_famillechoice'),
                     'list_key'=>ListKey::FAMILLE_SEARCH_RESULTS_ADD_MEMBRE,
@@ -228,7 +229,7 @@ class AddMembreController extends Controller
             $famille = $em->getRepository('AppBundle:Famille')->find($familleId);
             $membre->setFamille($famille);
             $form = $this->createForm(new MembreWithoutFamilleType(),$membre);
-            $template = 'AppBundle:Membre/AddForm:AddMembreWithoutFamille.html.twig';
+            $template = 'AppBundle:AddMembre:AddMembreWithoutFamille.html.twig';
         }
         else
         {
@@ -236,7 +237,7 @@ class AddMembreController extends Controller
             $famille->setNom($nom);
             $membre->setFamille($famille);
             $form = $this->createForm(new MembreWithFamilleType(),$membre);
-            $template = 'AppBundle:Membre/AddForm:AddMembre.html.twig';
+            $template = 'AppBundle:AddMembre:AddMembreWithFamille.html.twig';
         }
 
 
@@ -246,7 +247,7 @@ class AddMembreController extends Controller
         {
             $em->persist($membre);
             $em->flush();
-            return $this->render('AppBundle:Membre/AddForm:End.html.twig',array('membre'=>$membre));
+            return $this->render('AppBundle:AddMembre:End.html.twig',array('membre'=>$membre));
         }
 
         return $this->render($template,

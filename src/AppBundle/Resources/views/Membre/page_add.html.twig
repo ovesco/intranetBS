@@ -4,155 +4,17 @@
 
 {% block content %}
 
-
 <div class="ui page grid">
     <div class="row">
         <div class="column">
-
             <div id="membre_add_form">
                 {{ render(controller('AppBundle:AddMembre:start')) }}
             </div>
-
         </div>
     </div>
 </div>
 
-
-    {#
-
-
-    {{ form_start(membreForm,{'attr': {'class': 'ui form'}}) }}
-
-    <div class="ui page grid">
-        <div class="row">
-            <div class="column">
-
-                <h2 class="header">Ajouter un membre</h2>
-
-                <div class="two fields">
-                    {{ form_widget(membreForm.prenom) }}
-
-                    {{ form_widget(membreForm.famille.nom) }}
-                </div>
-
-
-
-            </div>
-        </div>
-        <div class="row">
-            <div class="column">
-                <h3 class="ui dividing header">Information sur la famille</h3>
-                <div id="famille_form">
-
-
-                    <div class="ui grid">
-                        <div class="row">
-                            <div class="five wide column">
-                                <h4 class="ui dividing header">Famille</h4>
-                            </div>
-
-                            <div class="five wide column">
-                                <h4 class="ui dividing header">Mère</h4>
-                                {{ form_widget(membreForm.famille.mere.prenom) }}
-                                {{ form_widget(membreForm.famille.mere.profession) }}
-                            </div>
-
-                            <div class="five wide column">
-                                <h4 class="ui dividing header">Père</h4>
-                                {{ form_widget(membreForm.famille.pere.prenom) }}
-                                {{ form_widget(membreForm.famille.pere.profession) }}
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="five wide column">
-                                <h5 class="ui dividing header">Adresse</h5>
-                                {% set contact = membreForm.famille.contact %}
-                                {{ form_widget(contact.adresse.rue) }}
-                                <div class="two fields">
-                                    {{ form_widget(contact.adresse.npa) }}
-                                    {{ form_widget(contact.adresse.localite) }}
-                                </div>
-
-                                {{ form_widget(contact.adresse.remarques) }}
-
-                            </div>
-
-                            <div class="five wide column">
-                                <h5 class="ui dividing header">Adresse</h5>
-                                {% set contact = membreForm.famille.mere.contact %}
-                                {{ form_widget(contact.adresse.rue) }}
-                                <div class="two fields">
-                                    {{ form_widget(contact.adresse.npa) }}
-                                    {{ form_widget(contact.adresse.localite) }}
-                                </div>
-
-                                {{ form_widget(contact.adresse.remarques) }}
-                            </div>
-
-                            <div class="five wide column">
-                                <h5 class="ui dividing header">Adresse</h5>
-                                {% set contact = membreForm.famille.pere.contact %}
-                                {{ form_widget(contact.adresse.rue) }}
-                                <div class="two fields">
-                                    {{ form_widget(contact.adresse.npa) }}
-                                    {{ form_widget(contact.adresse.localite) }}
-
-                                </div>
-                                {{ form_widget(contact.adresse.remarques) }}
-                            </div>
-                        </div>
-
-                    </div>
-
-
-
-
-                </div>
-
-
-
-            </div>
-        </div>
-        <div class="row">
-            <h3 class="ui dividing header">Information sur le membre</h3>
-            <div class="five wide column">
-
-
-
-
-                {{ form_widget(membreForm.sexe) }}
-                {{ form_widget(membreForm.naissance) }}
-                {{ form_widget(membreForm.numeroAvs) }}
-                {{ form_widget(membreForm.iban) }}
-                {{ form_widget(membreForm.envoiFacture) }}
-                {{ form_widget(membreForm.remarques) }}
-
-                <h5 class="ui dividing header">Adresse</h5>
-                {% set contact = membreForm.contact %}
-                {{ form_widget(contact.adresse.rue) }}
-                <div class="two fields">
-                    {{ form_widget(contact.adresse.npa) }}
-                    {{ form_widget(contact.adresse.localite) }}
-
-                </div>
-                {{ form_widget(contact.adresse.remarques) }}
-
-
-            </div>
-
-        </div>
-    </div>
-
-
-
-
-   {{ form_end(membreForm) }}
-
-
-    #}
 {% endblock %}
-
 
 {% block js %}
     {{ parent() }}

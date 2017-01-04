@@ -13,9 +13,9 @@ class MembreWithFamilleType extends MembreType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-        
-        $builder->remove('prenom')
-            ->add('prenom',
+        $builder->remove('distinctions');
+        $builder->remove('prenom');
+        $builder->add('prenom',
                 TextType::class,
                 array(
                     'required' => false,

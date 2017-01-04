@@ -1,4 +1,4 @@
-{% extends 'AppBundle:Membre/AddForm:addFormLayout.html.twig' %}
+{% extends 'AppBundle:AddMembre:addFormLayout.html.twig' %}
 
 {% block title %}
     Ajouter un membre
@@ -8,12 +8,12 @@
 
     {{ form_start(form,{'attr': {'class': 'ui form'}}) }}
 
+    {{ form_row(form.prenom) }}
+    {{ form_row(form.nom) }}
     {{ form_rest(form) }}
 
     {{ form_end(form) }}
 
 {% endblock %}
-
-
 
 {% block next_step %}Etape suivante{% endblock %}
