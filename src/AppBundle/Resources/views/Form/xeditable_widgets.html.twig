@@ -37,7 +37,9 @@
 
     {% elseif attr in DATES %}
         data-type="date"
-
+        data-clear="false"
+        {# on doit définir le format des données envoyées en ajax, donc format standard #}
+        data-format="DD.MM.Y"{# correspond à format_date en version xeditable #}
     {% else %}
 
     {% endif %}
@@ -62,11 +64,6 @@
     data-url="{{ path('app_modification_modify') }}"
     data-name="{{ attr ~ "___" ~ class(object) ~ "___" ~ form.vars['name'] }}" {# le name contient le nom du champ a modifier ainsi que le type de ce champ #}
     data-value="{{ value }}"
-{#
-    data-object_id="{{ object.id }}"
-    data-objectClass="{{ class(object) }}"
-    data-formClass="{{ class(form) }}"
-    #}
 
     {# type et éventuelles données supplémentaires requises liées à ce type, comme pour choice, on génère le data-source #}
     {{ block('xtype') }}

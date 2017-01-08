@@ -42,6 +42,9 @@ class ModificationController extends Controller
      */
     public function modifyAction(Request $request) {
 
+        if(!$request->isMethod('POST'))
+            return ResponseFactory::interalError('This url sould be called by POST methode');
+
         $id     = $request->get('pk');                   // L'id de l'entité à modifier
         $value  = $request->get('value');                // la nouvelle valeur
         $data   = $request->get('name');                 // Les données utile
@@ -67,9 +70,15 @@ class ModificationController extends Controller
          * car la fonction getName() des formulaires a été retirée.
          *
          * La liste de tout les type de formulaire que l'on souhaite
-         * utiliser avec xeditable doit etre listée dans le swicht ci-dessous.
+         * utiliser avec xeditable doit etre listée dans le switch ci-dessous.
+         *
+         * Attention /!\ toute option particulière du formulaire rendu
+         * a de forte chance de pas marché...Si formulaire non standard,
+         * il faut favorisé la création d'un nouveaux type (ex. GenreType)
+         *
          */
         $formTypeClass = null;
+        $formOptions = array();
         switch($formBlockPrefix)
         {
             case 'text':
@@ -89,21 +98,27 @@ class ModificationController extends Controller
                 break;
             case 'choice':
                 $formTypeClass = ChoiceType::class;
+                //obligatory since sf 2.7
+                $formOptions['choices_as_values'] =  true;//will be removed in sf 3+
+                /*
+                 * Le champ choice ne connait pas les choix à disposition.
+                 * Il faut donc qu'il aie au moins la valeur recu comme
+                 * choix si on veut qu'il soit validé.
+                 */
+                $formOptions['choices'] = array($value=>$value);
                 break;
             case 'genre':
                 $formTypeClass = GenreType::class;
                 break;
             case 'birthday':
                 $formTypeClass = BirthdayType::class;
+                $formOptions['widget'] = 'single_text';
+                $formOptions['format'] = $this->getParameter('format_date_icu');
                 break;
             case 'date':
                 $formTypeClass = DateType::class;
-                break;
-            case 'datetime':
-                $formTypeClass = DateTimeType::class;
-                break;
-            case 'datepicker':
-                $formTypeClass = DatePickerType::class;
+                $formOptions['widget'] = 'single_text';
+                $formOptions['format'] = $this->getParameter('format_date_icu');
                 break;
             case 'number':
                 $formTypeClass = NumberType::class;
@@ -114,8 +129,8 @@ class ModificationController extends Controller
 
 
 
-        $form   = $this->createFormBuilder($entity, array('csrf_protection' => false))->add($field, $formTypeClass)->getForm();
-        $form->submit( array($field => $value) );
+        $form = $this->createFormBuilder($entity, array('csrf_protection' => false))->add($field, $formTypeClass,$formOptions)->getForm();
+        $form->submit(array($field => $value));
 
 
         /*
@@ -124,8 +139,8 @@ class ModificationController extends Controller
         if($form->isValid()) {
             $em->persist($entity);
             $em->flush();
+            return ResponseFactory::ok();
         }
-
         else {
 
             $errors = '';
@@ -135,43 +150,6 @@ class ModificationController extends Controller
             }
             return ResponseFactory::interalError($errors);
         }
-
-        return ResponseFactory::ok();
     }
 
-
-    /**
-     * Permet de gérer les modifications
-     * @Route("modification/global-view", name="interne_modification_vue_globale")
-     */
-    public function modificationViewAction() {
-
-        $em             = $this->getDoctrine()->getManager();
-        $modifications  = $em->getRepository('AppBundle:Modification')->findByStatut(Modification::EN_ATTENTE);
-        $twigModif      = $this->get('app.twig.validation_extension');
-        $jsoned         = array();
-        $concerned      = function($path) use ($em) {
-            $data = explode('.', $path);
-            return $this->getDoctrine()->getRepository('AppBundle:' . ucfirst($data[0]))->find($data[1]);
-        };
-
-        foreach($modifications as $modif) {
-
-            $ccc = $concerned($modif->getPath());
-
-            $jsoned[] = array(
-                'id'        => $modif->getId(),
-                'auteur'    => array('nom' => $modif->getAuteur()->__toString(), 'id' => $modif->getAuteur()->getId()),
-                'concerned' => array('type' => ($ccc instanceof Membre)? 'membre' : 'famille', 'id' => $ccc->getId(), 'path' => $twigModif->pathToString($modif->getPath())),
-                'values'    => array('old' => $modif->getOldValue(), 'new' => $modif->getNewValue()),
-                'date'      => $modif->getDate()->format('d.m.Y')
-            );
-        }
-
-
-        return $this->render('AppBundle:Modifications:page_gestion_modifications.html.twig', array(
-
-            'jsonModifications' => json_encode($jsoned)
-        ));
-    }
 }
