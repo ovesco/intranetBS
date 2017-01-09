@@ -14,6 +14,8 @@ use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\VirtualProperty;
 use JMS\Serializer\Annotation\MaxDepth;
 
+use AppBundle\Annotations\Annotation\Excel;
+
 /**
  * Membre
  *
@@ -93,8 +95,6 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="statut", type="string", length=255, nullable=true)
-     *
-     *
      * todo NUR transformer le statut en date de désinscription
      */
     private $statut;
@@ -104,8 +104,6 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="inscription", type="date")
-     *
-     *
      */
     private $inscription;
 
