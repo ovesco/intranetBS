@@ -89,27 +89,33 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
     private $numeroAvs;
 
     /**
-     * @var string
+     * @var \Datetime
      *
      * @Gedmo\Versioned
-     * @ORM\Column(name="statut", type="string", length=255, nullable=true)
+     * @ORM\Column(name="inscription", type="date", nullable=true)
      *
-     *
-     * todo NUR transformer le statut en date de désinscription
+     * Doit pouvoir etre null en cas de présence dans la DB sans reception de l'inscription
      */
-    private $statut;
+    private $inscription;
 
     /**
      * @var \Datetime
      *
      * @Gedmo\Versioned
-     * @ORM\Column(name="inscription", type="date")
+     * @ORM\Column(name="desincription", type="date", nullable=true)
      *
+     *  Doit pouvoir etre null lorsque le membre n'est pas encore désinscrit
      *
      */
-    private $inscription;
+    private $desinscription;
 
-
+    /**
+     * @var boolean
+     *
+     * @Gedmo\Versioned
+     * @ORM\Column(name="inscrit", type="boolean")
+     */
+    private $decede;
 
     /**
      * @var integer
@@ -163,7 +169,9 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
      */
     public function __construct()
     {
-        $this->inscription = new \Datetime();
+        $this->inscription = null;
+        $this->desinscription = null;
+        $this->decede = false;
         $this->naissance = new \Datetime();
         $this->validity = true;
 
@@ -315,29 +323,6 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
     }
 
     /**
-     * Get statut
-     *
-     * @return string
-     */
-    public function getStatut()
-    {
-        return $this->statut;
-    }
-
-    /**
-     * Set statut
-     *
-     * @param string $statut
-     * @return Membre
-     */
-    public function setStatut($statut)
-    {
-        $this->statut = $statut;
-
-        return $this;
-    }
-
-    /**
      * Get naissance
      *
      * @return \DateTime
@@ -363,7 +348,7 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
     /**
      * Get inscription
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function getInscription()
     {
@@ -376,7 +361,7 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
      * @param \DateTime $inscription
      * @return Membre
      */
-    public function setInscription($inscription)
+    public function setInscription(\DateTime $inscription)
     {
         $this->inscription = $inscription;
 
@@ -704,4 +689,39 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
         $this->getReceiver()->addMail($mail);
         return $this;
     }
+
+    /**
+     * @return \Datetime
+     */
+    public function getDesinscription()
+    {
+        return $this->desinscription;
+    }
+
+    /**
+     * @param \Datetime $desinscription
+     */
+    public function setDesinscription($desinscription)
+    {
+        $this->desinscription = $desinscription;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isDecede()
+    {
+        return $this->decede;
+    }
+
+    /**
+     * @param boolean $decede
+     */
+    public function setDecede($decede)
+    {
+        $this->decede = $decede;
+    }
+
+
+
 }

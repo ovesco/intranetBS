@@ -64,13 +64,10 @@
                             {# Informations de base sur le membre #}
                             {{ form_row(membreForm.prenom) }}
                             {{ form_row(membreForm.naissance) }}
+                            {{ form_row(membreForm.envoiFacture) }}
                             {{ form_row(membreForm.sexe) }}
                             {{ form_row(membreForm.numeroAvs) }}
-
-                            <div class="ui divider"></div>
-
-                            {{ form_row(membreForm.numeroBs) }}
-                            {{ form_row(membreForm.statut) }}
+                            {{ form_row(membreForm.iban) }}
                             {{ form_row(membreForm.remarques) }}
 
                         </div>
@@ -134,8 +131,20 @@
 
                     </div>
 
-                    <div class="eight wide column">     <!-- informations famille -->
+                    <div class="eight wide column">
 
+                        <div class="ui top attached message">
+                            <div class="header"><h3><i class="child icon"></i>Scoutisme</h3></div>
+                        </div>
+
+                        <div class="ui bottom attached segment">
+                            {{ form_row(membreForm.numeroBs) }}
+                            {{ form_row(membreForm.inscription) }}
+                            {{ form_row(membreForm.desinscription) }}
+                            {{ form_row(membreForm.decede) }}
+                        </div>
+
+                        <!-- informations famille -->
                         <div class="ui top attached message">
                             <div class="header"><h3><i class="users icon"></i><a href="{{ path('app_famille_show', {famille: membre.famille.id}) }}">Famille</a></h3></div>
                         </div>
@@ -192,15 +201,6 @@
 
                 <div class="row">
                     <div class="column">
-                        <div class="ui top attached message">
-                            <div class="header">
-                                <h3><i class="money icon"></i>Facturation</h3>
-                            </div>
-                        </div>
-                        <div class="ui bottom attached segment">
-                            {{ form_row(membreForm.envoiFacture) }}
-                        </div>
-
                         {{ render(controller('AppBundle:Debiteur:show', { 'debiteur': membre.debiteur.id })) }}
                    </div>
                 </div>

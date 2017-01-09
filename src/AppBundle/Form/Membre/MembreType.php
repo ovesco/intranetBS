@@ -17,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
+use AppBundle\Field\BooleanType;
 
 class MembreType extends PersonneType
 {
@@ -45,6 +46,14 @@ class MembreType extends PersonneType
                 )
             )
             ->add(
+                'iban',
+                TextType::class,
+                array(
+                    'label' => 'IBAN',
+                    'required' => false,
+                )
+            )
+            ->add(
                 'numeroBs',
                 NumberType::class,
                 array(
@@ -68,8 +77,14 @@ class MembreType extends PersonneType
             ->add('inscription', DateType::class, array(
                 'label' => 'Inscription',
                 'widget' => 'single_text',
+                'format' => 'dd.MM.yyyy'
             ))
-            ->add('statut', TextType::class, array('label' => 'Statut'))
+            ->add('desinscription', DateType::class, array(
+                'label' => 'Désinscription',
+                'widget' => 'single_text',
+                'format' => 'dd.MM.yyyy'
+            ))
+            ->add('decede', BooleanType::class, array('label' => 'Décédé'))
             ->add('id', HiddenType::class);
     }
 
