@@ -142,22 +142,25 @@ class AuditAnalizer {
         {
             foreach($ids as $id)
             {
-                $revisions = $this->auditReader->findRevisions($class,$id);
-                $numOfRev = count($revisions);
-                /*
-                 * Il faut au moins deux révision sur une entité pour voir une differance.
-                 */
-                if($numOfRev > 1)
-                {
-                    for($i = 0; $i < $numOfRev -1; $i++)
+                try{
+                    $revisions = $this->auditReader->findRevisions($class,$id);
+                    $numOfRev = count($revisions);
+                    /*
+                     * Il faut au moins deux révision sur une entité pour voir une differance.
+                     */
+                    if($numOfRev > 1)
                     {
-                        $new = $revisions[$i];
-                        $old = $revisions[$i+1];
-                        $diff = $this->auditReader->diff($class,$id,$old->getRev(),$new->getRev());
-                        $dateNew = $new->getTimestamp();
-                        $versions[date_timestamp_get($dateNew)] = array('rev'=>$new, 'diff'=>$diff);
+                        for($i = 0; $i < $numOfRev -1; $i++)
+                        {
+                            $new = $revisions[$i];
+                            $old = $revisions[$i+1];
+                            $diff = $this->auditReader->diff($class,$id,$old->getRev(),$new->getRev());
+                            $dateNew = $new->getTimestamp();
+                            $versions[date_timestamp_get($dateNew)] = array('rev'=>$new, 'diff'=>$diff);
+                        }
                     }
                 }
+                catch (\Exception $e){ /* Avoid problem when entity are not revised yet */ }
             }
         }
         // Trie le tableau en classant les éléments par
