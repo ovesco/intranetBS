@@ -110,6 +110,4 @@ class Expediable
     {
         return $this->listeEmails;
     }
-
-
 }

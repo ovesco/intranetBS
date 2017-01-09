@@ -13,7 +13,8 @@ before_script:
   #fill database with faker
   - php app/console app:script populate
 
-script: phpunit --group travis --verbose -d memory_limit=-1 -c app/ #php app/console app:tests group:travis
+#le script lance les tests qui sont grouper sous le tag "travis" @group travis
+script: phpunit --group travis --verbose -d memory_limit=-1 -c app/
 
 services:
   - elasticsearch

@@ -7,3 +7,8 @@ services:
         arguments:
             - "@app.twig.app_extension"
             - "@twig"
+
+    excel.renderer.groupe:
+        class: AppBundle\Utils\Excel\Renderer\GroupeRenderer
+        arguments:
+            - "@doctrine.orm.entity_manager"

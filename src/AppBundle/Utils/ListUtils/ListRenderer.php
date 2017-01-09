@@ -72,7 +72,6 @@ class ListRenderer
         } else {
             $this->itemIdAccessor = $itemIdAccessor;
         }
-
     }
 
 

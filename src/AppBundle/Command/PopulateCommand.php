@@ -401,7 +401,7 @@ class PopulateCommand extends ContainerAwareCommand
         $geniteur = new Pere();
 
         $geniteur->setPrenom($this->getPrenom('m'));
-        $geniteur->getProfession($this->getProfession(true));
+        $geniteur->setProfession($this->getProfession(true));
         $geniteur->setContact($this->getRandomContact());
         $geniteur->setSexe(Personne::HOMME);
         $geniteur->setIban($this->getIban(true));
@@ -417,7 +417,7 @@ class PopulateCommand extends ContainerAwareCommand
         $geniteur = new Mere();
 
         $geniteur->setPrenom($this->getPrenom(Personne::FEMME));
-        $geniteur->getProfession($this->getProfession(true));
+        $geniteur->setProfession($this->getProfession(true));
         $geniteur->setContact($this->getRandomContact());
         $geniteur->setSexe(Personne::FEMME);
         $geniteur->setIban($this->getIban(true));

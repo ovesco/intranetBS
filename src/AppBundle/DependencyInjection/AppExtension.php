@@ -25,6 +25,7 @@ class AppExtension extends Extension
         $loader->load('roles_parameters.yml');
         $loader->load('voters.yml');
         $loader->load('repositories.yml');
+        $loader->load('lists.yml');
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);

@@ -25,57 +25,89 @@ function bindForm() {
  */
 function postForm( $form ){
 
+    var values;
     /*
-     * Get all form values
+     * La methode d'envoi des donnée varie si le formulaire
+     * contient un input "file" ou non. File requière un
+     * envoie synchrone.
      */
-    var values = {};
-    $.each( $form.serializeArray(), function(i, field) {
-        values[field.name] = field.value;
-    });
+    if ($form.find('input:file').length ) {
+        /*
+         * Get all form values, with FormData we can
+         * upload file with ajax
+         */
+        values = new FormData($form[0]);
 
-    /*
-     * Throw the form values to the server!
-     *
-     * todo CMR de NUR ca marche pas pour l'upload de fichier en ajax genre quand on veut modifier le logo via les parametres
-     */
-    $.ajax({
-        type        : $form.attr( 'method' ),
-        url         : $form.attr( 'action' ),
-        data        : values,
-        success     : function(data) {
+        $.ajax({
+            type        : $form.attr( 'method' ),
+            url         : $form.attr( 'action' ),
+            data        : values,
+            async       : false,
+            success     : successForm,
+            error       : errorForm,
+            cache       : false,
+            contentType : false,
+            processData : false
+        });
 
-            console.log(data);
+    }
+    else
+    {
+        values = {};
+        /*
+         * Get all form values from standard form (without file type)
+         */
+        $.each( $form.serializeArray(), function(i, field) {
+            values[field.name] = field.value;
+        });
+        /*
+         * Throw the form values to the server!
+         */
+        $.ajax({
+            type        : $form.attr( 'method' ),
+            url         : $form.attr( 'action' ),
+            data        : values,
+            success     : successForm,
+            error       : errorForm
+        });
+    }
 
-            if (typeof data.post_action !== 'undefined') {
-                // the variable is defined
-                switch (data.post_action)
-                {
-                    case 'reload':
-                        location.reload();
-                        break;
-                    default:
-                        location.reload();
-                }
-            }
-            else
+
+
+
+}
+
+function successForm(data)
+{
+    if (typeof data.post_action !== 'undefined') {
+        // the variable is defined
+        switch (data.post_action)
+        {
+            case 'reload':
                 location.reload();
-
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            alerte.send("Erreur lors de l'envoi du formulaire\nDétails : " + xhr.status + " / " + thrownError, 'error');
-
-            return;
-
-            // TODO CMR: précédemment, le success pouvait avoir un "false" comme valeur de retour et avoir un nouveau
-            // formulaire avec les messages d'erreur en retour. Sauf que c'est pas terroche, il faut tester ici le
-            // code d'erreur et si c'est "bad arguments" afficher le form avec les erreurs (ci-dessous)
-
-            /* Remove old modal and show new with fields errors */
-            $("[id^=modal-]").remove();
-            $(data).modal('show');
-
-            /* Add error */
-            alerte.send("Erreur lors de l'envoi du formulaire");
+                break;
+            default:
+                location.reload();
         }
-    });
+    }
+    else
+        location.reload();
+}
+
+function errorForm(xhr, ajaxOptions, thrownError)
+{
+    alerte.send("Erreur lors de l'envoi du formulaire\nDétails : " + xhr.status + " / " + thrownError, 'error');
+
+    return;
+
+    // TODO CMR: précédemment, le success pouvait avoir un "false" comme valeur de retour et avoir un nouveau
+    // formulaire avec les messages d'erreur en retour. Sauf que c'est pas terroche, il faut tester ici le
+    // code d'erreur et si c'est "bad arguments" afficher le form avec les erreurs (ci-dessous)
+
+    /* Remove old modal and show new with fields errors */
+    $("[id^=modal-]").remove();
+    $(data).modal('show');
+
+    /* Add error */
+    alerte.send("Erreur lors de l'envoi du formulaire");
 }

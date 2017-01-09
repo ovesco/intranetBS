@@ -1,0 +1,38 @@
+{# todo v2 On pourra ici mettre plus d'info (par exemple avec un appel de modal) #}
+<table class="ui small table">
+    <thead>
+    <tr>
+        <th></th>
+        <th>Auteur</th>
+        <th>Champ</th>
+        <th>Ancien</th>
+        <th>Nouveau</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for version in versions|reverse %}
+
+        {% set rev = version['rev'] %}
+        {% set diff = version['diff'] %}
+        {% set username = rev.username %}
+        {% set date = rev.timestamp|date('d/m/Y H:i:s') %}
+
+        {% for field, values in diff %}
+
+            {% if  values.old != values.new %}
+                <tr>
+                    <td>{{ date }}</td>
+                    <td>{{ username }}</td>
+                    <td>{{ field }}</td>
+                    <td>{{ values.old }}</td>
+                    <td>{{ values.new }}</td>
+                </tr>
+
+            {% endif %}
+
+        {% endfor %}
+
+    {% endfor %}
+    </tbody>
+</table>
+

@@ -6,31 +6,29 @@ use AppBundle\Entity\Membre;
 use AppBundle\Utils\Event\EventPostAction;
 use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\Column;
-use AppBundle\Utils\ListUtils\ListModelInterface;
+use AppBundle\Utils\ListUtils\ListModel;
 use AppBundle\Utils\ListUtils\ListRenderer;
 use Symfony\Component\Routing\Router;
 
-class ListModelsMembre implements ListModelInterface
+class ListModelsMembre extends  ListModel
 {
 
 
     /**
-     * @param \Twig_Environment $twig
-     * @param Router $router
      * @param $items
      * @param null $url
      * @return ListRenderer
      *
-     * todo rajouter le groupe en argument pour pouvoir donner l'attribution correct en lien avec le groupe
+     * todo CMR rajouter le groupe en argument pour pouvoir donner l'attribution correct en lien avec le groupe
      */
-    static public function getEffectifs(\Twig_Environment $twig, Router $router, $items, $url = null)
+    public function getEffectifs( $items, $url = null)
     {
-        $list = ListModelsMembre::getDefault($twig, $router, $items, $url);
+        $list = $this->getDefault($items, $url);
 
         $list->setName('effectifs');
 
         $attributionParameters = function (Membre $membre) {
-            // TODO: ne marche pas s'il y a plusieurs attributions
+            // TODO CMR : ne marche pas s'il y a plusieurs attributions
             return array(
                 "attribution" => $membre->getActiveAttribution()->getId()
             );
@@ -43,18 +41,17 @@ class ListModelsMembre implements ListModelInterface
     }
 
     /**
-     * @param \Twig_Environment $twig
-     * @param Router $router
      * @param $items
      * @param string $url
      * @return ListRenderer
      */
-    static public function getDefault(\Twig_Environment $twig, Router $router, $items, $url = null)
+    public function getDefault( $items, $url = null)
     {
-        $list = new ListRenderer($twig, $items);
+        $list = new ListRenderer($this->twig, $items);
         $list->setUrl($url);
 
         $list->setSearchBar(true);
+        $router = $this->router;
 
         $list->addColumn(new Column('Prénom', function (Membre $membre) use ($router) {
             return '<a href="' . $router->generate('app_membre_show', array('membre' => $membre->getId())) . '">' . $membre->getPrenom() . '</a>';
@@ -73,11 +70,11 @@ class ListModelsMembre implements ListModelInterface
         return $list;
     }
 
-    static public function getFraterie(\Twig_Environment $twig, Router $router, $items, $url= null)
+    public function getFraterie( $items, $url= null)
     {
-        $list = new ListRenderer($twig, $items);
+        $list = new ListRenderer($this->twig, $items);
         $list->setUrl($url);
-
+        $router = $this->router;
         $list->addColumn(new Column('Prénom', function (Membre $membre) use ($router) {
             return '<a href="' . $router->generate('app_membre_show', array('membre' => $membre->getId())) . '">' . $membre->getPrenom() . '</a>';
         }));
