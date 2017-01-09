@@ -109,13 +109,6 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
      */
     private $desinscription;
 
-    /**
-     * @var boolean
-     *
-     * @Gedmo\Versioned
-     * @ORM\Column(name="inscrit", type="boolean")
-     */
-    private $decede;
 
     /**
      * @var integer
@@ -171,12 +164,8 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
     {
         $this->inscription = null;
         $this->desinscription = null;
-        $this->decede = false;
         $this->naissance = new \Datetime();
         $this->validity = true;
-
-        //un membre a forcement un contact
-        $this->contact = new Contact();
 
         //un membre a forcement un debiteur
         $this->debiteur = new DebiteurMembre();
@@ -706,21 +695,7 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
         $this->desinscription = $desinscription;
     }
 
-    /**
-     * @return boolean
-     */
-    public function isDecede()
-    {
-        return $this->decede;
-    }
 
-    /**
-     * @param boolean $decede
-     */
-    public function setDecede($decede)
-    {
-        $this->decede = $decede;
-    }
 
 
 
