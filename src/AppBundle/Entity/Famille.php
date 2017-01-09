@@ -138,9 +138,16 @@ class Famille implements ExpediableInterface,DebiteurInterface,ReceiverInterface
     /**
      * Return the class name
      * @return string
+     * @deprecated
+     * @throws \Exception
+     *
+     * todo v2 remove this methode
      */
     static public function className(){
-        return __CLASS__;
+
+        throw new \Exception('This method is deprecated, you should use InstanceOf instead of it.');
+
+        //return __CLASS__;
     }
 
     /**

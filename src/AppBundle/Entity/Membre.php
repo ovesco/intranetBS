@@ -543,13 +543,20 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
     /**
      * @param String $className
      * @return bool
+     * @deprecated
+     * @throws \Exception
+     *
+     * todo v2 remove this methode
      */
     public function isClass($className)
     {
+        throw new \Exception('This method is deprecated, you should use InstanceOf instead of it.');
+        /*
         if($className == 'Membre')
             return true;
         else
             return false;
+        */
     }
 
 
