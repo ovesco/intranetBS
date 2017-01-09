@@ -95,6 +95,14 @@ class ScriptCommand extends ContainerAwareCommand
                 $this->commands->add(new ConsoleCommand('fos:elastica:populate'));
 
                 break;
+
+            case 'maintenance_on':
+                $this->commands->add(new ConsoleCommand('lexik:maintenance:lock'));
+                break;
+            case 'maintenance_off':
+                $this->commands->add(new ConsoleCommand('lexik:maintenance:unlock'));
+                break;
+
         }
 
         $this->runScript();
