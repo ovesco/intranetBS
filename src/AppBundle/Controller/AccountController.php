@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use AppBundle\Entity\User;
 
 /**
  * Le controller de compte utilisateur. Réunit toutes les tâches relatives à la gestion du compte utilisateur d'un
@@ -16,7 +17,7 @@ class AccountController extends Controller
 {
     /**
      * Affiche la page de gestion de compte
-     * @Route("", name="app_account")
+     * @Route("")
      */
     public function accountAction(){
 
@@ -27,16 +28,14 @@ class AccountController extends Controller
 
     /**
      * Permet à un utilisateur de modifier son mot de passe
-     * @Route("/modify-password", name="security_modify_password")
-     *
-     * todo NUR passer un coup ici...
+     * @Route("/modify-password")
      *
      */
     public function modifyPasswordAction(Request $request) {
 
         $errors  = array();
 
-        /** @var \Interne\SecurityBundle\Entity\User $user */
+        /** @var User $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $encoder = $this->get('security.password_encoder');
         $current = $encoder->encodePassword($user, $request->request->get('current_password'));
@@ -50,7 +49,7 @@ class AccountController extends Controller
             $errors[] = 'Le nouveau mot de passe ne correspond pas à la vérification !';
 
         if(strlen($new) < 5)
-            $errors[] = 'Mot de passe trop court (minimum 6 caractères';
+            $errors[] = 'Mot de passe trop court (minimum 6 caractères)';
 
 
         /*
@@ -72,6 +71,6 @@ class AccountController extends Controller
                 $this->get('session')->getFlashBag()->add('error', $error);
 
 
-        return $this->redirect($this->generateUrl('app_account'));
+        return $this->redirect($this->generateUrl('app_account_account'));
     }
 }

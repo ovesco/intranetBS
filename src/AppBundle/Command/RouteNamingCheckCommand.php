@@ -152,16 +152,12 @@ class RouteNamingCheckCommand extends ContainerAwareCommand
             /** @var Route $route */
             foreach($this->router->getRouteCollection() as $routeName => $route)
             {
-                dump($route->getPath());
-                dump($route->getSchemes());
-                /*
                 $routeController = $route->getDefault('_controller');
 
                 if($routeController == $controllerClass.'::'.$method->getName())
                 {
                     $this->checkRoute($route,$routeName);
                 }
-                */
             }
         }
     }
