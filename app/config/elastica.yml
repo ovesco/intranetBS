@@ -13,10 +13,13 @@ fos_elastica:
                             properties:
                                 id: { type: integer }
                                 nom: ~
-                        naissance:
-                            type: date
+                        naissance: { type: date }
+                        inscription: { type: date }
+                        desinscription: { type: date }
+                        decede: { type: boolean }
                         remarques: ~
                         numeroBs: ~
+                        numeroAvs: ~
                         sexe: ~
                         attributions:
                             type: "nested"
