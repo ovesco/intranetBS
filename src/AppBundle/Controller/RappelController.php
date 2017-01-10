@@ -21,9 +21,11 @@ class RappelController extends Controller
 {
 
     /**
-     * @Route("/get_form_ajax", name="interne_finance_rappel_get_form_ajax", options={"expose"=true})
+     * @Route("/send_form_ajax", options={"expose"=true})
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * todo NUR repasser par ici...
      */
     public function sendFormAjaxAction(Request $request)
     {
@@ -45,9 +47,11 @@ class RappelController extends Controller
     }
 
     /**
-     * @Route("/add_ajax", name="interne_finance_rappel_add_ajax", options={"expose"=true})
+     * @Route("/add_ajax", options={"expose"=true})
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * todo NUR repasser par ici...
      */
     public function addRappel(Request $request)
     {
