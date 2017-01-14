@@ -39,12 +39,16 @@ class ListModelsFonction extends  ListModel
         }));
 
         $list->addColumn(new Column('Roles', function (Fonction $fonction) {
+            //todo NUR v2 mettre en place les roles par fonctions
+            return '<div class="ui red basic label">Prévu pour la version 2</div>';
+            /*
             $roles = '';
             foreach($fonction->getRoles() as $role)
             {
                 $roles = $roles.$role.'<br>';
             }
             return $roles;
+            */
         }));
 
 

@@ -55,16 +55,15 @@ class ScriptCommand extends ContainerAwareCommand
         {
             case 'restart_dev':
                 $this->commands->add(new ConsoleCommand('cache:clear'));
-                $this->commands->add(new ShellCommand('rm -rf '.$this->getContainer()->getParameter('app.upload_path')));
+                $this->commands->add(new ShellCommand('rm -rf '.$this->getContainer()->getParameter('upload_dir')));
                 $this->commands->add(new ConsoleCommand('doctrine:database:drop',array('--force'=>true)));
                 $this->commands->add(new ConsoleCommand('doctrine:database:create'));
                 $this->commands->add(new ConsoleCommand('doctrine:schema:update',array('--force'=>true)));
                 $this->commands->add(new ConsoleCommand('fos:elastica:reset'));
                 //$this->commands->add(new ConsoleCommand('app:roles:build'));
-                $this->commands->add(new ConsoleCommand('app:populate',array('action'=>'create')));
-                $this->commands->add(new ConsoleCommand('app:populate',array('action'=>'fill','members'=>200)));
+                $this->commands->add(new ConsoleCommand('app:faker:populate'));
                 $this->commands->add(new ConsoleCommand('app:user',array('action'=>'create','username'=>'admin','password'=>'admin')));
-                $this->commands->add(new ConsoleCommand('app:roles:manage',array('action'=>'add','username'=>'admin','role'=>'ROLE_ADMIN')));
+                $this->commands->add(new ConsoleCommand('app:user:promote',array('username'=>'admin','role'=>'ROLE_ADMIN')));
                 $this->commands->add(new ConsoleCommand('fos:elastica:populate'));
                 break;
             case 'restart_database':
@@ -86,15 +85,23 @@ class ScriptCommand extends ContainerAwareCommand
                 $this->commands->add(new ConsoleCommand('fos:elastica:reset'));
                 break;
 
-            case 'populate_with_faker':
+            case 'populate':
 
-                $this->commands->add(new ConsoleCommand('app:populate',array('action'=>'create')));
-                $this->commands->add(new ConsoleCommand('app:populate',array('action'=>'fill','members'=>100)));
+                $this->commands->add(new ConsoleCommand('app:populate'));
                 $this->commands->add(new ConsoleCommand('app:user',array('action'=>'create','username'=>'admin','password'=>'admin')));
                 $this->commands->add(new ConsoleCommand('app:user:promote',array('username'=>'admin','role'=>'ROLE_ADMIN')));
+                $this->commands->add(new ConsoleCommand('fos:elastica:reset'));
                 $this->commands->add(new ConsoleCommand('fos:elastica:populate'));
 
                 break;
+
+            case 'maintenance_on':
+                $this->commands->add(new ConsoleCommand('lexik:maintenance:lock'));
+                break;
+            case 'maintenance_off':
+                $this->commands->add(new ConsoleCommand('lexik:maintenance:unlock'));
+                break;
+
         }
 
         $this->runScript();

@@ -17,6 +17,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class Model
 {
+    use RemarquableTrait;
+
     /**
      * @var integer
      *
