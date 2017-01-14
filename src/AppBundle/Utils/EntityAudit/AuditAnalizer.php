@@ -8,10 +8,14 @@
 
 namespace AppBundle\Utils\EntityAudit;
 
+use Monolog\Logger;
 use SimpleThings\EntityAudit\AuditReader;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\Famille;
+use SimpleThings\EntityAudit\Revision;
+use SimpleThings\EntityAudit\Exception\AuditException;
+
 
 /**
  * Class AuditAnalizer
@@ -27,13 +31,17 @@ class AuditAnalizer {
     /** @var EntityManager  */
     private $em;
 
+    /** @var  Logger */
+    private $logger;
+
     /**
      * @param AuditReader $auditReader
      * @param EntityManager $em
      */
-    public function __construct(AuditReader $auditReader, EntityManager $em){
+    public function __construct(AuditReader $auditReader, EntityManager $em, Logger $logger){
         $this->auditReader = $auditReader;
         $this->em = $em;
+        $this->logger = $logger;
     }
 
     /**
@@ -145,22 +153,38 @@ class AuditAnalizer {
                 try{
                     $revisions = $this->auditReader->findRevisions($class,$id);
                     $numOfRev = count($revisions);
-                    /*
-                     * Il faut au moins deux révision sur une entité pour voir une differance.
-                     */
-                    if($numOfRev > 1)
+
+                    if($numOfRev <= 1)
                     {
-                        for($i = 0; $i < $numOfRev -1; $i++)
+                        //Il faut au moins deux révisions sur une entité pour voir une differance.
+                        continue;//go to next iteration
+                    }
+
+                    /* Oldest revision first */
+                    $revisions = array_reverse($revisions);
+
+                    /* On compare chaque revision avec la précédent */
+                    /** @var Revision $previous */
+                    $previous = null;
+                    /** @var Revision $revision */
+                    foreach($revisions as $revision)
+                    {
+                        if($previous == null)
                         {
-                            $new = $revisions[$i];
-                            $old = $revisions[$i+1];
-                            $diff = $this->auditReader->diff($class,$id,$old->getRev(),$new->getRev());
-                            $dateNew = $new->getTimestamp();
-                            $versions[date_timestamp_get($dateNew)] = array('rev'=>$new, 'diff'=>$diff);
+                            //case of the first iteration
+                            $previous = $revision;
+                            continue;
                         }
+                        $diff = $this->auditReader->diff($class,$id,$previous->getRev(),$revision->getRev());
+                        $dateNew = $revision->getTimestamp();
+                        $previous = $revision;
+                        $versions[date_timestamp_get($dateNew)] = array('rev'=>$revision, 'diff'=>$diff);
                     }
                 }
-                catch (\Exception $e){ /* Avoid problem when entity are not revised yet */ }
+                /* Avoid problem when entity are not revised yet */
+                catch (AuditException $e){
+                    $this->logger->error($e->getMessage());
+                }
             }
         }
         // Trie le tableau en classant les éléments par
