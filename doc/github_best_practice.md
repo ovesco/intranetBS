@@ -99,3 +99,13 @@ comme reviewers (!!! important !!!)
 Une fois les reviewers ayant accepté vos modifications, la branche pourra etre mergée. Si des modifications sont demandée, il suffit de faire un 
 les modificaiton dans la branche et commiter les modifications demandée. Le reviewers ferrons à nouveaux leur travail.
 
+A noté que la branche doit aussi passsé les tests travis et être a jours avec la branche master...c'est bien expliqué sur la page de "pull request"
+
+###Suppression des branches
+On supprime les branches une fois que le merge à eu lieu.
+
+Suppression local:
+```bash
+git branch -d your_local_branch
+``` 
+Suppresion remote (sur github): Se fait via la page github des branches

@@ -179,6 +179,8 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
         $this->sender = new SenderMembre();
         $this->sender->setMembre($this);
 
+        $this->attributions = new ArrayCollection();
+
     }
 
 
@@ -360,13 +362,16 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
     /**
      * Add attributions
      *
-     * @param \AppBundle\Entity\Attribution $attributions
+     * @param \AppBundle\Entity\Attribution $attribution
      * @return Membre
      */
-    public function addAttribution(\AppBundle\Entity\Attribution $attributions)
+    public function addAttribution(\AppBundle\Entity\Attribution $attribution)
     {
-        $this->attributions[] = $attributions;
-        $attributions->setMembre($this);
+        $this->attributions->add($attribution);
+        if($attribution->getMembre() != $this)
+        {
+            $attribution->setMembre($this);
+        }
         return $this;
     }
 
@@ -430,6 +435,29 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
         foreach ($this->attributions as $attr) {
             if ($attr->getDateFin() >= $today || $attr->getDateFin() == null)
                 $attrs[] = $attr;
+        }
+
+        return $attrs;
+    }
+
+    /**
+     * Get active attributions
+     *
+     * Retourne les attributions active spécifique à
+     * un groupe.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActiveAttributionsForGroupe(Groupe $groupe)
+    {
+        $attrs = new ArrayCollection();
+        $today = new \Datetime("now");
+
+        /** @var Attribution $attr */
+        foreach ($this->attributions as $attr) {
+            if ($attr->getDateFin() >= $today || $attr->getDateFin() == null)
+                if($attr->getGroupe() == $groupe)
+                    $attrs->add($attr);
         }
 
         return $attrs;
