@@ -41,6 +41,8 @@ class Categorie
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="description", type="text", nullable=true)
+     *
+     * todo remplacer ceci par le remarquableTrait
      */
     private $description;
 

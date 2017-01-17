@@ -121,7 +121,10 @@ class Attribution
     public function setGroupe(\AppBundle\Entity\Groupe $groupe = null)
     {
         $this->groupe = $groupe;
-
+        if(!$groupe->getAttributions()->contains($this))
+        {
+            $groupe->addAttribution($this);
+        }
         return $this;
     }
 
@@ -200,6 +203,10 @@ class Attribution
     public function setMembre(Membre $membre)
     {
         $this->membre = $membre;
+        if(!$membre->getAttributions()->contains($this))
+        {
+            $membre->addAttribution($this);
+        }
         return $this;
     }
 
