@@ -10,6 +10,18 @@ use Symfony\Component\Routing\Route;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Class RoutingTestCase
+ * @package AppBundle\Tests\Routing
+ *
+ * l'idée de cette class et de permettre de mettre en place rapidement
+ * des tests sur toutes les routes d'un controller.
+ *
+ * Les tests seront lancés sur toutes les routes du controller
+ * - execpté les route dans getExcludedRoutes()
+ * - les routes nécessistant un parametre doivent etre résolue dans getParameters()
+ *
+ */
 abstract class RoutingTestCase extends WebTestCase
 {
     /** @var Client client */
