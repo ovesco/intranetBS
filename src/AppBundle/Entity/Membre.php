@@ -162,6 +162,7 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
      */
     public function __construct()
     {
+        parent::__construct();
         $this->inscriptionDate = null;
         $this->desinscriptionDate = null;
         $this->naissance = new \Datetime();

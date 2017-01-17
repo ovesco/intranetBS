@@ -1,4 +1,3 @@
-/web/bundles/
 /app/bootstrap.php.cache
 /app/cache/*
 /app/config/parameters.yml
@@ -10,11 +9,7 @@
 /vendor/
 /bin/
 /composer.phar
+/composer.lock
 /.idea
-/web/css/
-/web/images/
-/web/js/
-/web/PDFTemplates/
-/web/static/*
-/web/galerie/photos/*
-/src/AppBundle/Utils/Parmetre/values/*
+/web/
+/node_modules/
