@@ -11,12 +11,12 @@ namespace AppBundle\Voters;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use AppBundle\Entity\User;
 
-class CategorieVoter extends BaseVoter{
+class DistinctionVoter extends BaseVoter{
 
 
     protected function getSupportedClass()
     {
-        return 'AppBundle\Entity\Categorie';
+        return 'AppBundle\Entity\Distinction';
     }
 
     /**
@@ -32,7 +32,7 @@ class CategorieVoter extends BaseVoter{
      */
     protected function canEdit($subject, User $user, TokenInterface $token)
     {
-        return $this->hasRole('ROLE_CATEGORIE_EDIT',$token);
+        return $this->hasRole('ROLE_DISTINCTION_EDIT',$token);
     }
 
     /**
@@ -40,7 +40,7 @@ class CategorieVoter extends BaseVoter{
      */
     protected function canRemove($subject, User $user, TokenInterface $token)
     {
-        return $this->hasRole('ROLE_CATEGORIE_REMOVE',$token);
+        return $this->hasRole('ROLE_DISTINCTION_REMOVE',$token);
     }
 
     /**
@@ -48,7 +48,7 @@ class CategorieVoter extends BaseVoter{
      */
     protected function canCreate($subject, User $user, TokenInterface $token)
     {
-        return $this->hasRole('ROLE_CATEGORIE_CREATE',$token);
+        return $this->hasRole('ROLE_DISTINCTION_CREATE',$token);
     }
 
 }

@@ -1,0 +1,24 @@
+{% extends 'AppBundle:Layout:layout.html.twig' %}
+
+
+{% block titre %}Distinctions{% endblock %}
+
+{% block content %}
+
+    <div class="ui page grid">
+        <div class="row">
+            <div class="column">
+                <h3>Gestion des distinctions</h3>
+                <div class="ui segment">
+
+                   {{ list_caller.distinctionAll()|raw }}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+

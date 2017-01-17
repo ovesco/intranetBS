@@ -161,7 +161,7 @@ class ListCallerController extends Controller
     {
         $items = $membre->getDistinctions();
         $url = $this->get('router')->generate('app_listcaller_membredistinctions', array('membre' => $membre->getId()));
-        $list = $this->get('app.list.distinction')->getDefault($items, $membre, $url)->render();
+        $list = $this->get('app.list.obtention_distinction')->getDefault($items, $membre, $url)->render();
         return $this->returnList($list, $call);
     }
 
@@ -378,6 +378,19 @@ class ListCallerController extends Controller
         $items = $repo->findAll();
         $url = $this->get('router')->generate('app_listcaller_parameterall');
         $list =  $this->get('app.list.parameter')->getDefault($items, $url)->render();
+        return $this->returnList($list, $call);
+    }
+
+    /**
+     * @route("/distinction/all", defaults={"call"="route"})
+     * @param $call
+     * @return mixed
+     */
+    public function distinctionAll( $call = self::CALL_BY_TWIG)
+    {
+        $items = $this->get('app.repository.distinction')->findAll();
+        $url = $this->get('router')->generate('app_listcaller_distinctionall');
+        $list = $this->get('app.list.distinction')->getGestion( $items, $url)->render();
         return $this->returnList($list, $call);
     }
 }

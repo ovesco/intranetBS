@@ -19,7 +19,7 @@ use AppBundle\Utils\Response\ResponseFactory;
  * Class StructureController
  * @package AppBundle\Controller
  *
- * @Route("/intranet/fonctions")
+ * @Route("/intranet/structure/fonctions")
  */
 class FonctionController extends Controller
 {
@@ -94,7 +94,6 @@ class FonctionController extends Controller
      * @param Fonction $fonction
      * @return Response
      * @ParamConverter("fonction", class="AppBundle:Fonction")
-     * @Template("AppBundle:Fonction:form_modal.html.twig")
      */
     public function removeAction(Request $request,Fonction $fonction)
     {
