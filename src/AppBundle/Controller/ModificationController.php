@@ -27,7 +27,7 @@ use Symfony\Component\Security\Acl\Exception\Exception;
 /**
  * Class ModificationController
  * @package AppBundle\Controller
- * @route("/intranet/modification")
+ * @route("/api/modification")
  */
 class ModificationController extends Controller
 {
@@ -43,7 +43,7 @@ class ModificationController extends Controller
     public function modifyAction(Request $request) {
 
         if(!$request->isMethod('POST'))
-            return ResponseFactory::interalError('This url sould be called by POST methode');
+            return ResponseFactory::interalError('This url sould be called by POST method');
 
         $id     = $request->get('pk');                   // L'id de l'entité à modifier
         $value  = $request->get('value');                // la nouvelle valeur
@@ -84,18 +84,23 @@ class ModificationController extends Controller
             case 'text':
                 $formTypeClass = TextType::class;
                 break;
+
             case 'email':
                 $formTypeClass = EmailType::class;
                 break;
+
             case 'boolean':
                 $formTypeClass = BooleanType::class;
                 break;
+
             case 'integer':
                 $formTypeClass = IntegerType::class;
                 break;
+
             case 'textarea':
                 $formTypeClass = TextareaType::class;
                 break;
+
             case 'choice':
                 $formTypeClass = ChoiceType::class;
                 //obligatory since sf 2.7
@@ -107,42 +112,35 @@ class ModificationController extends Controller
                  */
                 $formOptions['choices'] = array($value=>$value);
                 break;
+
             case 'genre':
                 $formTypeClass = GenreType::class;
                 break;
+
             case 'birthday':
                 $formTypeClass = BirthdayType::class;
                 $formOptions['widget'] = 'single_text';
                 $formOptions['format'] = $this->getParameter('format_date_icu');
                 break;
+
             case 'date':
                 $formTypeClass = DateType::class;
                 $formOptions['widget'] = 'single_text';
                 $formOptions['format'] = $this->getParameter('format_date_icu');
                 break;
+
             case 'number':
                 $formTypeClass = NumberType::class;
                 break;
+
             default:
                 throw new Exception('The type "'.$formBlockPrefix.'"" is not defined as an xeditable type. Add it to '.self::class);
         }
 
-
-
         $form = $this->createFormBuilder($entity, array('csrf_protection' => false))->add($field, $formTypeClass,$formOptions)->getForm();
         $form->submit(array($field => $value));
 
-
-        /*
-         * Formulaire valide, on valide la modification.
-         */
-        if($form->isValid()) {
-            $em->persist($entity);
-            $em->flush();
-            return ResponseFactory::ok();
-        }
-        else {
-
+        if(!$form->isValid()) {
             $errors = '';
             foreach($form->getErrors() as $error)
             {
@@ -150,6 +148,12 @@ class ModificationController extends Controller
             }
             return ResponseFactory::interalError($errors);
         }
+
+        //save modification
+        $em->persist($entity);
+        $em->flush();
+        return ResponseFactory::ok();
+
     }
 
 }

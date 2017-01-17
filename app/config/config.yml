@@ -20,6 +20,8 @@ parameters:
     #format de date pour la construction des formulaires
     #http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax
     format_date_icu: 'dd.MM.yyyy'
+    #correspond à format_date en version xeditable
+    format_date_xeditable: 'DD.MM.Y'
 
 framework:
     #esi:             ~
@@ -62,6 +64,7 @@ twig:
         global_date_format: "%format_date%"
         global_datetime_format: "%format_datetime%"
         format_date_icu: "%format_date_icu%"
+        format_date_xeditable: "%format_date_xeditable%"
     #template de base pour tout les formulaires ou ce n'est pas spécifier
     form_themes:
         - 'AppBundle:Form:default_widgets.html.twig'
