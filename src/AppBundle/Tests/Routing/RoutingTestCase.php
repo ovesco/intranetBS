@@ -56,6 +56,9 @@ abstract class RoutingTestCase extends WebTestCase
         /** @var Route $route */
         foreach($this->getControllerRoutes() as $routeName => $route)
         {
+            if(in_array($routeName,$this->getExcludedRoutes()))
+                continue;
+
             $uris[] = array($this->replaceParamteterInPath($routeName,$route));
         }
 
@@ -96,6 +99,13 @@ abstract class RoutingTestCase extends WebTestCase
      * @return string
      */
     abstract public function getControllerClass();
+
+    /**
+     * Return array of RouteName to exclude of tests
+     *
+     * @return array
+     */
+    abstract public function getExcludedRoutes();
 
     /**
      * get route and route name of a controller

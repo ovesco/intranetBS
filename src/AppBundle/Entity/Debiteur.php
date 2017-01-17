@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Debiteur
  *
  * @ORM\Table(name="app_debiteur")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\DebiteurRepository")
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="proprietaire", type="string")
  * @ORM\DiscriminatorMap({"membre" = "DebiteurMembre", "famille" = "DebiteurFamille"})

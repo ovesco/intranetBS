@@ -19,6 +19,11 @@ class AppControllerRoutingTest extends RoutingTestCase{
         return 'AppBundle\Controller\AppController';
     }
 
+    public function getExcludedRoutes()
+    {
+        return array();
+    }
+
     public function getParameters()
     {
         return array();

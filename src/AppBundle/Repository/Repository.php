@@ -31,6 +31,34 @@ class Repository extends EntityRepository{
         $this->getEntityManager()->flush();
     }
 
+    /**
+     * Cette fonction est surtout utile pour les tests
+     * lorsqu'on veut faire des tests sur des entités
+     * aléatoire.
+     *
+     * @param $numberOfEntity
+     * @return array
+     * @throws \Error
+     * @throws \Exception
+     * @throws \TypeError
+     */
+    public function findRandom($numberOfEntity)
+    {
+        $results = $this->createQueryBuilder('e')
+            ->select('e.id')
+            ->getQuery()
+            ->getResult();
+
+        $ids = array();
+        for($i = 0; $i < $numberOfEntity; $i++)
+        {
+            $randomKey = random_int(0,count($results)-1);
+            $ids[] = $results[$randomKey]['id'];
+        }
+
+        return $this->findBy(array('id'=>$ids));
+    }
+
 
 
 }

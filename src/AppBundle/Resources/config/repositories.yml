@@ -60,3 +60,15 @@ services:
         factory_service: doctrine.orm.default_entity_manager
         factory_method: getRepository
         arguments: ['AppBundle:Famille']
+
+    app.repository.debiteur:
+        class: AppBundle\Repository\DebiteurRepository
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+        arguments: ['AppBundle:Debiteur']
+
+    app.repository.membre:
+        class: AppBundle\Repository\MembreRepository
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+        arguments: ['AppBundle:Membre']

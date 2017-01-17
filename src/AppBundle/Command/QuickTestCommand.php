@@ -19,6 +19,16 @@ use AppBundle\Security\RoleHierarchyBuilder;
 
 use AppBundle\Entity\Facture;
 
+
+/**
+ * Class QuickTestCommand
+ * @package AppBundle\Command
+ *
+ *
+ * Cette commande n'a d'autre fonction que de permettre des tests
+ * rapide lors du developement en faissant varié sont contenu.
+ *
+ */
 class QuickTestCommand extends ContainerAwareCommand
 {
 
@@ -30,29 +40,12 @@ class QuickTestCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
-        $path = '/freu/we/{param}';
+        $repo = $this->getContainer()->get('app.repository.fonction');
 
-        //list($param,$i,$e) = $this->get_string_between($path,'{','}');
-
-        $param = str_replace('{param}','1',$path);
-
-        $output->writeln($param);
-
-
+        $repo->findRandom(10);
 
 
     }
-
-    function get_string_between($string, $start, $end){
-        $string = ' ' . $string;
-        $ini = strpos($string, $start);
-        if ($ini == 0) return '';
-        $ini += strlen($start);
-        $len = strpos($string, $end, $ini) - $ini;
-        $substring = substr($string, $ini, $len);
-        return array($substring,$ini,$len);
-    }
-
 
 }
 

@@ -17,7 +17,7 @@ use JMS\Serializer\Annotation\MaxDepth;
 /**
  * Membre
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\MembreRepository")
  * @Gedmo\Loggable
  * @ORM\Table(name="app_membres")
  * @Search(repositoryClass="AppBundle\Search\Membre\MembreRepository")
