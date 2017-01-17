@@ -92,22 +92,22 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
      * @var \Datetime
      *
      * @Gedmo\Versioned
-     * @ORM\Column(name="inscription", type="date", nullable=true)
+     * @ORM\Column(name="inscription_date", type="date", nullable=true)
      *
      * Doit pouvoir etre null en cas de présence dans la DB sans reception de l'inscription
      */
-    private $inscription;
+    private $inscriptionDate;
 
     /**
      * @var \Datetime
      *
      * @Gedmo\Versioned
-     * @ORM\Column(name="desincription", type="date", nullable=true)
+     * @ORM\Column(name="desincription_date", type="date", nullable=true)
      *
      *  Doit pouvoir etre null lorsque le membre n'est pas encore désinscrit
      *
      */
-    private $desinscription;
+    private $desinscriptionDate;
 
 
     /**
@@ -162,8 +162,8 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
      */
     public function __construct()
     {
-        $this->inscription = null;
-        $this->desinscription = null;
+        $this->inscriptionDate = null;
+        $this->desinscriptionDate = null;
         $this->naissance = new \Datetime();
         $this->validity = true;
 
@@ -339,20 +339,20 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
      *
      * @return \DateTime|null
      */
-    public function getInscription()
+    public function getInscriptionDate()
     {
-        return $this->inscription;
+        return $this->inscriptionDate;
     }
 
     /**
      * Set inscription
      *
-     * @param \DateTime $inscription
+     * @param \DateTime $inscriptionDate
      * @return Membre
      */
-    public function setInscription(\DateTime $inscription)
+    public function setInscriptionDate(\DateTime $inscriptionDate)
     {
-        $this->inscription = $inscription;
+        $this->inscriptionDate = $inscriptionDate;
 
         return $this;
     }
@@ -682,17 +682,17 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
     /**
      * @return \Datetime
      */
-    public function getDesinscription()
+    public function getDesinscriptionDate()
     {
-        return $this->desinscription;
+        return $this->desinscriptionDate;
     }
 
     /**
-     * @param \Datetime $desinscription
+     * @param \Datetime $desinscriptionDate
      */
-    public function setDesinscription($desinscription)
+    public function setDesinscriptionDate(\DateTime $desinscriptionDate)
     {
-        $this->desinscription = $desinscription;
+        $this->desinscriptionDate = $desinscriptionDate;
     }
 
 

@@ -31,7 +31,7 @@
         "monolog/monolog": "@stable",
         "knplabs/knp-snappy-bundle": "dev-master",
         "gedmo/doctrine-extensions": "dev-master",
-        "emanueleminotto/twig-cache-bundle": "^1.0",
+        "emanueleminotto/twig-cache-bundle": "1.0.3",
         "interne/seancebundle": "dev-master",
         "setasign/fpdf" : "1.8.1",
         "setasign/fpdi" : "1.6.1",

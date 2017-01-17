@@ -16,6 +16,7 @@ parameters:
     cache_facture_dir: %kernel.cache_dir%/tmp_doc/facture/
     cron_execution_time_file: '%kernel.root_dir%/cron/cron_last.log'
 
+    format_date_icu: 'dd.MM.yyyy'
 
 framework:
     #esi:             ~
