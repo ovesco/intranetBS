@@ -1,0 +1,20 @@
+{#
+ Template générique qui permet de mettre en forme toutes les listes.
+ Le template utilise un objet 'list' qui défini les colonnes et les templates de contenu
+ #}
+
+
+{% for column in list.columns %} {{ column.name }},{% endfor %}
+
+{# todo definir un custum escape pour éviter les new line http://twig.sensiolabs.org/doc/2.x/filters/escape.html#}
+{% for item in list.items %}
+       {% for column in list.columns %}
+           {% if column.twigFilters is null %}{{ column.render(item)|raw }},{% else %}{% set value = column.render(item) %}{{ value|apply_filters(column.twigFilters)|raw }},{% endif %}
+       {% endfor %}
+
+{% endfor %}
+
+
+
+
+

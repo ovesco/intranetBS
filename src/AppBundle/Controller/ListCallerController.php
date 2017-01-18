@@ -8,7 +8,9 @@ use AppBundle\Entity\Groupe;
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\Receiver;
 use AppBundle\Entity\Sender;
+use AppBundle\Utils\ListUtils\ListModel;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsMail;
+use AppBundle\Utils\ListUtils\ListRenderer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -55,6 +57,7 @@ class ListCallerController extends Controller
 
     const CALL_BY_ROUTE = "route";
     const CALL_BY_TWIG = "twig";
+    const CALL_EXPORT_CSV = "export_csv";
 
     /**
      * @param ContainerInterface $container
@@ -111,13 +114,24 @@ class ListCallerController extends Controller
      * @param $call
      * @return Response
      */
-    private function returnList($list, $call)
+    private function returnList(ListRenderer $list, $call)
     {
+        switch($call)
+        {
+            case self::CALL_BY_TWIG:
+                return $list->render();
+
+            case self::CALL_EXPORT_CSV:
+                return new Response($list->render());
+
+        }
+        /*
         if ($call == ListCallerController::CALL_BY_ROUTE) {
             return new Response($list);
         } else {
             return $list;
         }
+        */
     }
 
     /**
@@ -313,16 +327,18 @@ class ListCallerController extends Controller
     }
 
     /**
-     * @route("/fonction/all", defaults={"call"="route"})
-     * @param $call
+     * @route("/fonction/all/{format}", defaults={"format"="include_html"})
+     * @param $format
      * @return mixed
      */
-    public function fonctionAll( $call = self::CALL_BY_TWIG)
+    public function fonctionAll($format = ListRenderer::FORMAT_INCLUDE_HTML)
     {
         $items = $this->get('app.repository.fonction')->findAll();
         $url = $this->get('router')->generate('app_listcaller_fonctionall');
-        $list = $this->get('app.list.fonction')->getDefault( $items, $url)->render();
-        return $this->returnList($list, $call);
+        //$list = $this->get('app.list.fonction')->getDefault( $items, $url)->render();
+        $list = $this->get('app.list.fonction')->getDefault( $items, $url);
+        return $list->render2($format);
+        //$this->returnList($list, $call);
     }
 
     /**

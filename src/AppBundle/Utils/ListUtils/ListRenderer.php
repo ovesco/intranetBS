@@ -2,7 +2,9 @@
 
 namespace AppBundle\Utils\ListUtils;
 
+use AppBundle\Utils\Response\ResponseFactory;
 use Doctrine\Common\Collections\ArrayCollection;
+use Elastica\Test\Exception\ResponseExceptionTest;
 use Twig_Environment;
 
 
@@ -45,6 +47,8 @@ class ListRenderer
     /** @var  string */
     private $url;
 
+    /** @var array  */
+    private $export_formats;
 
     /**
      * @param Twig_Environment $twig
@@ -62,6 +66,8 @@ class ListRenderer
         $this->actionsList = new ArrayCollection();
         $this->datatable = true;
         $this->style = '';
+
+        $this->export_formats = array(self::FORMAT_EXPORT_CSV,self::FORMAT_EXPORT_XLSX);
 
 
         //most of the time objects have getId funciton.
@@ -87,6 +93,35 @@ class ListRenderer
             'AppBundle:Templates:list_template.html.twig',
             array('list' => $this)
         );
+    }
+
+
+    const FORMAT_INCLUDE_HTML = 'include_html';
+    const FORMAT_EXPORT_CSV = 'export_csv';
+    const FORMAT_EXPORT_XLSX = 'export_xlsx';
+
+
+
+    public function render2($format = self::FORMAT_INCLUDE_HTML)
+    {
+        switch($format)
+        {
+            case self::FORMAT_INCLUDE_HTML:
+                return $this->twig->render('AppBundle:Templates:list_template.html.twig',array('list' => $this));
+
+            case self::FORMAT_EXPORT_CSV:
+                $response = $this->twig->render('AppBundle:Templates:list_template.csv.twig',array('list' => $this));
+                $type = 'text/csv';
+                return ResponseFactory::streamFile($response,$this->name.'.csv',$type);
+
+            case self::FORMAT_EXPORT_XLSX:
+                //todo provisoir
+                $export = new ListToExcel('.');
+                $file = $export->generateExcel($this);
+                $type = 'application/vnd.ms-excel';
+                return ResponseFactory::sendFile($file,$this->name.'.xlsx',$type);
+
+        }
     }
 
     /**
@@ -235,4 +270,22 @@ class ListRenderer
     {
         $this->url = $url;
     }
+
+    /**
+     * @return array
+     */
+    public function getExportFormats()
+    {
+        return $this->export_formats;
+    }
+
+    /**
+     * @param array $export_formats
+     */
+    public function setExportFormats($export_formats)
+    {
+        $this->export_formats = $export_formats;
+    }
+
+
 }

@@ -12,3 +12,8 @@ services:
         class: AppBundle\Utils\Excel\Renderer\GroupeRenderer
         arguments:
             - "@doctrine.orm.entity_manager"
+
+    app.list_to_excel:
+        class: AppBundle\Utils\ListUtils\ListToExcel
+        arguments:
+            - "%cache_temporary_documents_dir%"

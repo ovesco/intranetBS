@@ -103,7 +103,20 @@
 
             <div class="column">
                 <a href="{{ path('excel.export.list', {type: 'groupe', id: 3}) }}" target="_blank">Tester un excel (ID hardcodé)</a>
+
             </div>
+
+            <div class="ui compact menu">
+                <div class="ui simple dropdown item">
+                    <i class="download icon"></i>
+                    <div class="menu">
+                        {% for format in list.exportFormats %}
+                            <a class="item" href="{{ list.url }}/{{ format }}">{{ format }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
 
             {% if list.actionsLine|length != 0 %}
                 <div class="ui compact menu">
