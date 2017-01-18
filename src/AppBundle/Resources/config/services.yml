@@ -1,18 +1,7 @@
 #todo migrer les services requit par l'app ici...c'est plus logique
 
 services:
-
-    excel_generator:
-        class:  AppBundle\Utils\Export\Excel\ExcelGenerator
-        arguments:
-            - "@app.twig.app_extension"
-            - "@twig"
-
-    excel.renderer.groupe:
-        class: AppBundle\Utils\Excel\Renderer\GroupeRenderer
-        arguments:
-            - "@doctrine.orm.entity_manager"
-
+    #conversion des listes en excel
     app.list_to_excel:
         class: AppBundle\Utils\ListUtils\ListToExcel
         arguments:
