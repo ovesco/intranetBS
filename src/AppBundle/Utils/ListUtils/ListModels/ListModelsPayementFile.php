@@ -5,14 +5,12 @@ namespace AppBundle\Utils\ListUtils\ListModels;
 
 use AppBundle\Entity\PayementFile;
 use AppBundle\Utils\Event\EventPostAction;
+use AppBundle\Utils\ListUtils\AbstractList;
 use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\Column;
-use AppBundle\Utils\ListUtils\ListModel;
-use AppBundle\Utils\ListUtils\ListModelInterface;
 use AppBundle\Utils\ListUtils\ListRenderer;
-use Symfony\Component\Routing\Router;
 
-class ListModelsPayementFile extends  ListModel
+class ListModelsPayementFile extends  AbstractList
 {
 
     /**
@@ -22,21 +20,21 @@ class ListModelsPayementFile extends  ListModel
      */
     public function getDefault($items, $url = null)
     {
-        $list = new ListRenderer($this->twig, $items);
-        $list->setUrl($url);
+        $this->setItems($items);
+        $this->setUrl($url);
 
-        $list->setSearchBar(true);
-        $router = $this->router;
-        $list->addColumn(new Column('Fichier', function (PayementFile $file) use ($router) {
+        $router = $this->getRouter();
+
+        $this->addColumn(new Column('Fichier', function (PayementFile $file) use ($router) {
             return $file->getFilename();
         }));
 
-        $list->addColumn(new Column('Information', function (PayementFile $file) use ($router) {
+        $this->addColumn(new Column('Information', function (PayementFile $file) use ($router) {
             return $file->getInfos();
         }));
 
 
-        $list->addColumn(new Column('Date', function (PayementFile $file) use ($router) {
+        $this->addColumn(new Column('Date', function (PayementFile $file) use ($router) {
             return $file->getDate();
         },'date(global_datetime_format)'));
 
@@ -47,15 +45,15 @@ class ListModelsPayementFile extends  ListModel
             );
         };
 
-        $list->addActionLine(new ActionLine('Modifier', 'edit', 'app_user_edit', $userParameters, EventPostAction::Link));
+        $this->addActionLine(new ActionLine('Modifier', 'edit', 'app_user_edit', $userParameters, EventPostAction::Link));
 
-        $list->addActionLine(new ActionLine('Voir', 'zoom', 'app_user_show', $userParameters, EventPostAction::Link));
+        $this->addActionLine(new ActionLine('Voir', 'zoom', 'app_user_show', $userParameters, EventPostAction::Link));
 
 
         //return '<a href="' . $router->generate('app_membre_show', array('membre' => $membre->getId())) . '">' . $membre->getPrenom() . '</a>';
 
 */
-        return $list;
+        return $this;
     }
 
 }

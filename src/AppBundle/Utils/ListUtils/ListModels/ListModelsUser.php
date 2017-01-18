@@ -4,6 +4,7 @@ namespace AppBundle\Utils\ListUtils\ListModels;
 
 use AppBundle\Entity\User;
 use AppBundle\Utils\Event\EventPostAction;
+use AppBundle\Utils\ListUtils\AbstractList;
 use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\Column;
 use AppBundle\Utils\ListUtils\ListModel;
@@ -11,7 +12,7 @@ use AppBundle\Utils\ListUtils\ListRenderer;
 use Symfony\Component\Routing\Router;
 use AppBundle\Utils\ListUtils\ActionList;
 
-class ListModelsUser extends ListModel
+class ListModelsUser extends AbstractList
 {
 
     /**
@@ -21,21 +22,20 @@ class ListModelsUser extends ListModel
      */
     public function getDefault($items, $url = null)
     {
-        $list = new ListRenderer($this->twig, $items);
-        $list->setUrl($url);
+        $this->setItems($items);
+        $this->setUrl($url);
 
-        $list->setSearchBar(true);
 
         $router = $this->router;
-        $list->addColumn(new Column('Utilisateur', function (User $user) use ($router) {
+        $this->addColumn(new Column('Utilisateur', function (User $user) use ($router) {
             return '<a href="' . $router->generate('app_user_show', array('user' => $user->getId())) . '">' . $user->getUsername() . '</a>';
         }));
 
-        $list->addColumn(new Column('Dernière connexion', function (User $user) use ($router) {
+        $this->addColumn(new Column('Dernière connexion', function (User $user) use ($router) {
             return (is_null($user->getLastConnexion())? '-' : $user->getLastConnexion()->format('d/m/Y'));
         }));
 
-        $list->addColumn(new Column('Actif', function (User $user) use ($router) {
+        $this->addColumn(new Column('Actif', function (User $user) use ($router) {
             if($user->getIsActive())
             {
                 return '<div class="ui green label">oui</div>';
@@ -46,7 +46,7 @@ class ListModelsUser extends ListModel
             }
         }));
 
-        $list->addColumn(new Column('Roles choisis', function (User $user) use ($router) {
+        $this->addColumn(new Column('Roles choisis', function (User $user) use ($router) {
             $roles = '';
             foreach($user->getSelectedRoles() as $role)
             {
@@ -56,7 +56,7 @@ class ListModelsUser extends ListModel
             return $roles;
         }));
 
-        $list->addColumn(new Column('Membre lié', function (User $user) use ($router) {
+        $this->addColumn(new Column('Membre lié', function (User $user) use ($router) {
             if(is_null($user->getMembre())){
                 return 'Pas de membre';
             }
@@ -65,7 +65,7 @@ class ListModelsUser extends ListModel
             }
         }));
 
-        $list->addColumn(new Column('Roles via Membre', function (User $user) use ($router) {
+        $this->addColumn(new Column('Roles via Membre', function (User $user) use ($router) {
 
             $roles = $user->getMembreRoles();
             if(!empty($roles))
@@ -90,18 +90,18 @@ class ListModelsUser extends ListModel
                 );
             };
 
-            $list->addActionLine(new ActionLine('Modifier', 'edit', 'app_user_edit', $userParameters, EventPostAction::Link));
+            $this->addActionLine(new ActionLine('Modifier', 'edit', 'app_user_edit', $userParameters, EventPostAction::Link));
 
-            $list->addActionLine(new ActionLine('Voir', 'zoom', 'app_user_show', $userParameters, EventPostAction::Link));
+            $this->addActionLine(new ActionLine('Voir', 'zoom', 'app_user_show', $userParameters, EventPostAction::Link));
 
 
             //return '<a href="' . $router->generate('app_membre_show', array('membre' => $membre->getId())) . '">' . $membre->getPrenom() . '</a>';
 
 
-            $list->addActionList(new ActionList('Ajouter', 'add', 'app_user_create',null, EventPostAction::Link,null,'green'));
+            $this->addActionList(new ActionList('Ajouter', 'add', 'app_user_create',null, EventPostAction::Link,null,'green'));
 
         }
-        return $list;
+        return $this;
     }
 
 }

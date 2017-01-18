@@ -14,24 +14,28 @@ use AppBundle\Utils\ListUtils\ListModel;
 use AppBundle\Utils\ListUtils\ListRenderer;
 use Symfony\Component\Routing\Router;
 
-class ListModelsDistinctions extends AbstractList
+class ListModelsObtentionDistinctions extends AbstractList
 {
-    public function getDefault($items, $url = null){}
-
-    /*
     public function getDefault($items, $url = null)
     {
         $twig = $this->twig;
         $router = $this->router;
-        $list = new ListRenderer($twig, $items);
-        $list->setUrl($url);
+        $this->setItems($items);
+        $this->setUrl($url);
+    }
 
-        $list->setSearchBar(true);
+    
+    public function getMembreDistinctions($items, $url = null, Membre $membre)
+    {
+        $twig = $this->twig;
+        $router = $this->router;
+        $this->getDefault($items,$url);
 
-        $list->addColumn(new Column('Distinction', function (ObtentionDistinction $item) {
+
+        $this->addColumn(new Column('Distinction', function (ObtentionDistinction $item) {
             return $item->getDistinction()->getNom();
         }));
-        $list->addColumn(new Column('Depuis le', function (ObtentionDistinction $item) {
+        $this->addColumn(new Column('Depuis le', function (ObtentionDistinction $item) {
             return $item->getDate();
         },
             'date(global_date_format)'));
@@ -49,16 +53,15 @@ class ListModelsDistinctions extends AbstractList
         };
 
 
-        $list->addActionLine(new ActionLine('Supprimer', 'delete', 'obtention-distinction_delete', $obtentionParameters, EventPostAction::RefreshList));
+        $this->addActionLine(new ActionLine('Supprimer', 'delete', 'obtention-distinction_delete', $obtentionParameters, EventPostAction::RefreshList));
 
-        $list->addActionList(new ActionList('Ajouter', 'add', 'obtention-distinction_add_modal', $membreParameters, EventPostAction::ShowModal));
+        $this->addActionList(new ActionList('Ajouter', 'add', 'obtention-distinction_add_modal', $membreParameters, EventPostAction::ShowModal));
 
-        $list->setDatatable(false);
-        $list->setStyle('very basic');
+        $this->setDatatable(false);
+        $this->setCssClass('very basic');
 
-        return $list;
+        return $this;
     }
-    */
 
 }
 

@@ -5,20 +5,7 @@
 
 <div class="data-list" data-name="{{ list.name }}" data-url="{{ list.url }}">
 
-    {% if list.hasToolbar %}
-        <div class="data-liste-toolbar">
-
-            {% if list.hasSearchBar %}
-                <div class="ui mini icon input">
-                    <input class="data-liste-search" type="text" placeholder="Rechercher...">
-                    <i class="search icon"></i>
-                </div>
-            {% endif %}
-
-        </div>
-    {% endif %}
-
-    <table class="ui table{% if list.datatable %} datatable{% endif %} {{ list.style }}">
+    <table class="ui table{% if list.datatable %} datatable {% endif %} {{ list.cssClass }}">
 
         <thead>
         <tr>
@@ -101,21 +88,18 @@
 
         <div class="eight wide right aligned column">
 
-            <div class="column">
-                <a href="{{ path('excel.export.list', {type: 'groupe', id: 3}) }}" target="_blank">Tester un excel (ID hardcodé)</a>
-
-            </div>
-
+            {% if list.hasExportFormats %}
             <div class="ui compact menu">
                 <div class="ui simple dropdown item">
                     <i class="download icon"></i>
                     <div class="menu">
-                        {% for format in list.exportFormats %}
-                            <a class="item" href="{{ list.url }}/{{ format }}">{{ format }}</a>
+                        {% for format,label in list.exportFormats %}
+                            <a class="item" href="{{ list.url }}/{{ format }}">{{ label }}</a>
                         {% endfor %}
                     </div>
                 </div>
             </div>
+            {% endif %}
 
 
             {% if list.actionsLine|length != 0 %}

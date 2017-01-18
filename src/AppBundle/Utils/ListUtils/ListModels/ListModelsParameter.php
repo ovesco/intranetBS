@@ -4,37 +4,23 @@
 namespace AppBundle\Utils\ListUtils\ListModels;
 
 use AppBundle\Entity\Parameter;
-use AppBundle\Entity\Payement;
-use AppBundle\Entity\PayementFile;
+use AppBundle\Utils\ListUtils\AbstractList;
 use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\Column;
-use AppBundle\Utils\ListUtils\ListModel;
-use AppBundle\Utils\ListUtils\ListModelInterface;
 use AppBundle\Utils\Event\EventPostAction;
-use AppBundle\Utils\ListUtils\ListRenderer;
-use AppBundle\Entity\Creance;
 use Symfony\Component\Routing\Router;
-use AppBundle\Utils\ListUtils\ActionList;
-use AppBundle\Entity\Debiteur;
 
-class ListModelsParameter extends ListModel
+class ListModelsParameter extends AbstractList
 {
-
-    /**
-     * @param $items
-     * @param string $url
-     * @return ListRenderer
-     */
     public function getDefault($items, $url = null)
     {
-        $list = new ListRenderer($this->twig, $items);
-        $list->setUrl($url);
-        $list->setSearchBar(true);
+        $this->setItems($items);
+        $this->setUrl($url);
 
 
-        $list->addColumn(new Column('Parametre', function (Parameter $item) { return $item->getDescription(); }));
+        $this->addColumn(new Column('Parametre', function (Parameter $item) { return $item->getDescription(); }));
 
-        $list->addColumn(new Column('Donnée', function (Parameter $item) {
+        $this->addColumn(new Column('Donnée', function (Parameter $item) {
 
             switch($item->getType())
             {
@@ -56,7 +42,7 @@ class ListModelsParameter extends ListModel
             }
         }));
 
-        $list->addColumn(new Column('Type', function (Parameter $item) { return $item->getType(); }));
+        $this->addColumn(new Column('Type', function (Parameter $item) { return $item->getType(); }));
 
         if($this->isGranted('ROLE_PARAMETER'))
         {
@@ -65,11 +51,11 @@ class ListModelsParameter extends ListModel
                     "parameter" => $item->getId()
                 );
             };
-            $list->addActionLine(new ActionLine('Editer', 'edit', 'app_parameter_edit', $parameters, EventPostAction::ShowModal,null,true,false));
+            $this->addActionLine(new ActionLine('Editer', 'edit', 'app_parameter_edit', $parameters, EventPostAction::ShowModal,null,true,false));
         }
 
 
-        return $list;
+        return $this;
     }
 
 

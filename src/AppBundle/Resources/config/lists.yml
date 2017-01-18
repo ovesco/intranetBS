@@ -3,104 +3,79 @@ services:
     app.list.parameter:
         class: AppBundle\Utils\ListUtils\ListModels\ListModelsParameter
         arguments:
-            twig:     @twig
-            router:   @router
-            checker:  @security.authorization_checker
+            container: @service_container
 
     app.list.user:
         class: AppBundle\Utils\ListUtils\ListModels\ListModelsUser
         arguments:
-            twig:     @twig
-            router:   @router
-            checker:  @security.authorization_checker
+            container: @service_container
 
     app.list.payement_file:
         class: AppBundle\Utils\ListUtils\ListModels\ListModelsPayementFile
         arguments:
-            twig:     @twig
-            router:   @router
-            checker:  @security.authorization_checker
+            container: @service_container
 
     app.list.payement:
         class: AppBundle\Utils\ListUtils\ListModels\ListModelsPayement
         arguments:
-            twig:     @twig
-            router:   @router
-            checker:  @security.authorization_checker
+            container: @service_container
 
     app.list.model:
         class: AppBundle\Utils\ListUtils\ListModels\ListModelsModel
         arguments:
-            twig:     @twig
-            router:   @router
-            checker:  @security.authorization_checker
+            container: @service_container
 
     app.list.membre:
         class: AppBundle\Utils\ListUtils\ListModels\ListModelsMembre
         arguments:
-            twig:     @twig
-            router:   @router
-            checker:  @security.authorization_checker
+            container: @service_container
 
     app.list.mail:
         class: AppBundle\Utils\ListUtils\ListModels\ListModelsMail
         arguments:
-            twig:     @twig
-            router:   @router
-            checker:  @security.authorization_checker
+            container: @service_container
 
     app.list.groupe:
         class: AppBundle\Utils\ListUtils\ListModels\ListModelsGroupe
         arguments:
-            twig:     @twig
-            router:   @router
-            checker:  @security.authorization_checker
+            container: @service_container
 
     app.list.fonction:
         class: AppBundle\Utils\ListUtils\ListModels\ListModelsFonction
         arguments:
-            twig:     @twig
-            router:   @router
-            checker:  @security.authorization_checker
+            container: @service_container
 
     app.list.famille:
         class: AppBundle\Utils\ListUtils\ListModels\ListModelsFamille
         arguments:
-            twig:     @twig
-            router:   @router
-            checker:  @security.authorization_checker
+            container: @service_container
 
     app.list.facture:
         class: AppBundle\Utils\ListUtils\ListModels\ListModelsFactures
         arguments:
-            twig:     @twig
-            router:   @router
-            checker:  @security.authorization_checker
+            container: @service_container
 
     app.list.distinction:
         class: AppBundle\Utils\ListUtils\ListModels\ListModelsDistinctions
         arguments:
-            twig:     @twig
-            router:   @router
-            checker:  @security.authorization_checker
+            container: @service_container
+
+    app.list.obtention_distinction:
+        class: AppBundle\Utils\ListUtils\ListModels\ListModelsObtentionDistinctions
+        arguments:
+            container: @service_container
 
     app.list.creance:
         class: AppBundle\Utils\ListUtils\ListModels\ListModelsCreances
         arguments:
-            twig:     @twig
-            router:   @router
-            checker:  @security.authorization_checker
+            container: @service_container
 
     app.list.categorie:
         class: AppBundle\Utils\ListUtils\ListModels\ListModelsCategorie
         arguments:
-            twig:     @twig
-            router:   @router
-            checker:  @security.authorization_checker
+            container: @service_container
 
     app.list.attribution:
         class: AppBundle\Utils\ListUtils\ListModels\ListModelsAttributions
         arguments:
-            twig:     @twig
-            router:   @router
-            checker:  @security.authorization_checker
+            container: @service_container

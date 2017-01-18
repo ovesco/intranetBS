@@ -4,13 +4,14 @@ namespace AppBundle\Utils\ListUtils\ListModels;
 
 use AppBundle\Entity\Membre;
 use AppBundle\Utils\Event\EventPostAction;
+use AppBundle\Utils\ListUtils\AbstractList;
 use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\Column;
 use AppBundle\Utils\ListUtils\ListModel;
 use AppBundle\Utils\ListUtils\ListRenderer;
 use Symfony\Component\Routing\Router;
 
-class ListModelsMembre extends  ListModel
+class ListModelsMembre extends  AbstractList
 {
 
 
@@ -23,9 +24,9 @@ class ListModelsMembre extends  ListModel
      */
     public function getEffectifs( $items, $url = null)
     {
-        $list = $this->getDefault($items, $url);
+        $this->getDefault($items, $url);
 
-        $list->setName('effectifs');
+        $this->setName('effectifs');
 
         $attributionParameters = function (Membre $membre) {
             // TODO CMR : ne marche pas s'il y a plusieurs attributions
@@ -35,9 +36,9 @@ class ListModelsMembre extends  ListModel
         };
 
         /* Supprimer l'attribution courante */
-        $list->addActionLine(new ActionLine('Supprimer', 'delete', 'app_attribution_delete', $attributionParameters, EventPostAction::RefreshList));
+        $this->addActionLine(new ActionLine('Supprimer', 'delete', 'app_attribution_delete', $attributionParameters, EventPostAction::RefreshList));
 
-        return $list;
+        return $this;
     }
 
     /**
@@ -47,50 +48,49 @@ class ListModelsMembre extends  ListModel
      */
     public function getDefault( $items, $url = null)
     {
-        $list = new ListRenderer($this->twig, $items);
-        $list->setUrl($url);
+        $this->setItems($items);
+        $this->setUrl($url);
 
-        $list->setSearchBar(true);
         $router = $this->router;
 
-        $list->addColumn(new Column('Prénom', function (Membre $membre) use ($router) {
+        $this->addColumn(new Column('Prénom', function (Membre $membre) use ($router) {
             return '<a href="' . $router->generate('app_membre_show', array('membre' => $membre->getId())) . '">' . $membre->getPrenom() . '</a>';
         }));
-        $list->addColumn(new Column('Nom', function (Membre $membre) use ($router) {
+        $this->addColumn(new Column('Nom', function (Membre $membre) use ($router) {
             return '<a href="' . $router->generate('app_famille_show', array('famille' => $membre->getFamille()->getId())) . '">' . $membre->getNom() . '</a>';
         }));
-        $list->addColumn(new Column('Fonction', function (Membre $membre) use ($router) {
+        $this->addColumn(new Column('Fonction', function (Membre $membre) use ($router) {
             return $membre->getActiveAttribution();
         }));
-        $list->addColumn(new Column('Naissance', function (Membre $membre) {
+        $this->addColumn(new Column('Naissance', function (Membre $membre) {
             return $membre->GetNaissance();
         },
             'date(global_date_format)'));
 
-        return $list;
+        return $this;
     }
 
     public function getFraterie( $items, $url= null)
     {
-        $list = new ListRenderer($this->twig, $items);
-        $list->setUrl($url);
+        $this->setItems($items);
+        $this->setUrl($url);
         $router = $this->router;
-        $list->addColumn(new Column('Prénom', function (Membre $membre) use ($router) {
+        $this->addColumn(new Column('Prénom', function (Membre $membre) use ($router) {
             return '<a href="' . $router->generate('app_membre_show', array('membre' => $membre->getId())) . '">' . $membre->getPrenom() . '</a>';
         }));
-        $list->addColumn(new Column('Fonction', function (Membre $membre) {
+        $this->addColumn(new Column('Fonction', function (Membre $membre) {
             if ($membre->getActiveAttribution() != null)
                 return $membre->getActiveAttribution()->getFonction();
         }));
-        $list->addColumn(new Column('Naissance', function (Membre $membre) {
+        $this->addColumn(new Column('Naissance', function (Membre $membre) {
             return $membre->GetNaissance();
         },
             'date(global_date_format)'));
 
-        $list->setDatatable(false);
-        $list->setStyle('very basic');
+        $this->setDatatable(false);
+        $this->setCssClass('very basic');
 
-        return $list;
+        return $this;
     }
 }
 

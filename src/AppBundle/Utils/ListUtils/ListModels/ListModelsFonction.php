@@ -3,42 +3,33 @@
 namespace AppBundle\Utils\ListUtils\ListModels;
 
 use AppBundle\Utils\Event\EventPostAction;
+use AppBundle\Utils\ListUtils\AbstractList;
 use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\ActionList;
 use AppBundle\Utils\ListUtils\Column;
-use AppBundle\Utils\ListUtils\ListModel;
-use AppBundle\Utils\ListUtils\ListModelInterface;
 use AppBundle\Utils\ListUtils\ListRenderer;
 use Symfony\Component\Routing\Router;
 use AppBundle\Entity\Fonction;
 
 
-class ListModelsFonction extends  ListModel
+class ListModelsFonction extends  AbstractList
 {
 
-
-    /**
-     * @param $items
-     * @param string $url
-     * @return ListRenderer
-     */
     public function getDefault($items, $url = null)
     {
-        $list = new ListRenderer($this->twig, $items);
-        $list->setUrl($url);
-        $list->setName('fonction_default');
+        $this->setItems($items);
+        $this->setUrl($url);
+        $this->setName('fonction_default');
 
-        //$list->setSearchBar(true);
-
-        $list->addColumn(new Column('Nom', function (Fonction $fonction) {
+        $this->addColumn(new Column('Nom', function (Fonction $fonction) {
             return $fonction->getNom();
         }));
 
-        $list->addColumn(new Column('Abréviation', function (Fonction $fonction) {
+        $this->addColumn(new Column('Abréviation', function (Fonction $fonction) {
             return $fonction->getAbreviation();
         }));
 
-        $list->addColumn(new Column('Roles', function (Fonction $fonction) {
+        $this->addColumn(new Column('Roles', function (Fonction $fonction) {
             $roles = '';
             foreach($fonction->getRoles() as $role)
             {
@@ -57,18 +48,21 @@ class ListModelsFonction extends  ListModel
         /* Editer la fonction courant */
         $edit = new ActionLine('Modifier', 'edit', 'app_fonction_edit', $parameters, EventPostAction::ShowModal);
         $edit->setInMass(false);
-        $list->addActionLine($edit);
+        $this->addActionLine($edit);
 
         $delete = new ActionLine('Supprimer', 'remove', 'app_fonction_remove', $parameters, EventPostAction::RefreshPage);
         $delete->setInMass(false);
         $delete->setCondition(function(Fonction $fonction){return $fonction->isRemovable();});
-        $list->addActionLine($delete);
+        $this->addActionLine($delete);
 
 
-        $list->addActionList(new ActionList('Ajouter', 'add', 'app_fonction_add', function(){return array();}, EventPostAction::ShowModal,null,'green'));
+        $this->addActionList(new ActionList('Ajouter', 'add', 'app_fonction_add', function(){return array();}, EventPostAction::ShowModal,null,'green'));
+
+        $this->addExportFormats(self::FORMAT_EXPORT_XLSX,'Exporter en xlsx');
+        $this->addExportFormats(self::FORMAT_EXPORT_CSV,'Exporter en csv');
 
 
-        return $list;
+        return $this;
     }
 
 }

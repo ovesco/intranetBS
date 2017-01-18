@@ -4,6 +4,7 @@
 namespace AppBundle\Utils\ListUtils\ListModels;
 
 use AppBundle\Utils\Event\EventPostAction;
+use AppBundle\Utils\ListUtils\AbstractList;
 use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\Column;
 use AppBundle\Utils\ListUtils\ListModel;
@@ -12,39 +13,32 @@ use AppBundle\Utils\ListUtils\ListRenderer;
 use AppBundle\Entity\Facture;
 use Symfony\Component\Routing\Router;
 
-class ListModelsFactures extends  ListModel
+class ListModelsFactures extends  AbstractList
 {
 
-
-    /**
-     * @param $items
-     * @param string $url
-     * @return ListRenderer
-     */
     public function getDefault($items,$url = null)
     {
         $twig = $this->twig;
         $router = $this->router;
-        $list = new ListRenderer($twig, $items);
-        $list->setUrl($url);
-        $list->setSearchBar(true);
+        $this->setItems($items);
+        $this->setUrl($url);
 
-        $list->addColumn(new Column('Num. ref', function (Facture $facture) use ($router) {
+        $this->addColumn(new Column('Num. ref', function (Facture $facture) use ($router) {
             return 'N°' . $facture->getId();
         }));
 
-        $list->addColumn(new Column('Statut', function (Facture $facture) { return $facture;}, 'facture_state|raw'));
+        $this->addColumn(new Column('Statut', function (Facture $facture) { return $facture;}, 'facture_state|raw'));
 
-        $list->addColumn(new Column('Créances', function (Facture $facture) {
+        $this->addColumn(new Column('Créances', function (Facture $facture) {
             return $facture->getMontantEmisCreances();
         }, "money"));
-        $list->addColumn(new Column('Rappels', function (Facture $facture) {
+        $this->addColumn(new Column('Rappels', function (Facture $facture) {
             return $facture->getMontantEmisRappels();
         }, "money"));
-        $list->addColumn(new Column('Total', function (Facture $facture) {
+        $this->addColumn(new Column('Total', function (Facture $facture) {
             return $facture->getMontantEmis();
         }, "money"));
-        $list->addColumn(new Column('Reçu', function (Facture $facture) {
+        $this->addColumn(new Column('Reçu', function (Facture $facture) {
             return $facture->getMontantRecu();
         }, "money"));
 
@@ -58,16 +52,16 @@ class ListModelsFactures extends  ListModel
         $conditionRemove = function (Facture $facture) {
             return $facture->isRemovable();
         };
-        $list->addActionLine(new ActionLine('Voir', 'zoom', 'app_facture_show', $factureParameters, EventPostAction::ShowModal));
+        $this->addActionLine(new ActionLine('Voir', 'zoom', 'app_facture_show', $factureParameters, EventPostAction::ShowModal));
 
-        $list->addActionLine(new ActionLine('Supprimer', 'delete', 'app_facture_remove', $factureParameters, EventPostAction::RefreshList,$conditionRemove));
+        $this->addActionLine(new ActionLine('Supprimer', 'delete', 'app_facture_remove', $factureParameters, EventPostAction::RefreshList,$conditionRemove));
 
-        $list->addActionLine(new ActionLine('Imprimer', 'print', 'app_facture_print', $factureParameters,EventPostAction::Link));
+        $this->addActionLine(new ActionLine('Imprimer', 'print', 'app_facture_print', $factureParameters,EventPostAction::Link));
 
 
-        $list->setDatatable(true);
+        $this->setDatatable(true);
 
-        return $list;
+        return $this;
     }
 
     /**
@@ -78,30 +72,29 @@ class ListModelsFactures extends  ListModel
     {
         $twig = $this->twig;
         $router = $this->router;
-        $list = new ListRenderer($twig, $items);
-        $list->setUrl($url);
+        $this->setItems($items);
+        $this->setUrl($url);
 
-        $list->setSearchBar(true);
 
-        $list->addColumn(new Column('Num. ref', function (Facture $facture) use ($router) {
+        $this->addColumn(new Column('Num. ref', function (Facture $facture) use ($router) {
             return 'N°' . $facture->getId();
         }));
 
-        $list->addColumn(new Column('Débiteur', function (Facture $facture) use ($router) {
+        $this->addColumn(new Column('Débiteur', function (Facture $facture) use ($router) {
 
             return $facture->getDebiteur()->getOwnerAsString();
 
         }));
 
-        $list->addColumn(new Column('Statut', function (Facture $facture) { return $facture;}, 'facture_state|raw'));
+        $this->addColumn(new Column('Statut', function (Facture $facture) { return $facture;}, 'facture_state|raw'));
 
-        $list->addColumn(new Column('Nb. Rappels', function (Facture $facture) {
+        $this->addColumn(new Column('Nb. Rappels', function (Facture $facture) {
             return $facture->getNombreRappels();
         }));
-        $list->addColumn(new Column('Total', function (Facture $facture) {
+        $this->addColumn(new Column('Total', function (Facture $facture) {
             return $facture->getMontantEmis();
         }, "money"));
-        $list->addColumn(new Column('Reçu', function (Facture $facture) {
+        $this->addColumn(new Column('Reçu', function (Facture $facture) {
             return $facture->getMontantRecu();
         }, "money"));
 
@@ -112,14 +105,14 @@ class ListModelsFactures extends  ListModel
             );
         };
 
-        $list->addActionLine(new ActionLine('Voir', 'zoom', 'app_facture_show', $factureParameters, EventPostAction::ShowModal));
+        $this->addActionLine(new ActionLine('Voir', 'zoom', 'app_facture_show', $factureParameters, EventPostAction::ShowModal));
 
 
-        $list->addActionLine(new ActionLine('Supprimer', 'delete', 'app_facture_delete', $factureParameters, EventPostAction::RefreshList));
+        $this->addActionLine(new ActionLine('Supprimer', 'delete', 'app_facture_delete', $factureParameters, EventPostAction::RefreshList));
 
-        $list->setDatatable(true);
+        $this->setDatatable(true);
 
-        return $list;
+        return $this;
     }
 
 }

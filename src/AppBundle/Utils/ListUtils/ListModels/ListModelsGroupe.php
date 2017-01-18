@@ -4,6 +4,7 @@ namespace AppBundle\Utils\ListUtils\ListModels;
 
 use AppBundle\Entity\Model;
 use AppBundle\Utils\Event\EventPostAction;
+use AppBundle\Utils\ListUtils\AbstractList;
 use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\ActionList;
 use AppBundle\Utils\ListUtils\Column;
@@ -15,7 +16,7 @@ use AppBundle\Entity\Fonction;
 use AppBundle\Entity\Groupe;
 
 
-class ListModelsGroupe extends  ListModel
+class ListModelsGroupe extends  AbstractList
 {
 
 
@@ -26,14 +27,14 @@ class ListModelsGroupe extends  ListModel
      */
     public function getDefault($items, $url = null)
     {
-        $twig = $this->twig;
-        $list = new ListRenderer($twig, $items);
-        $list->setUrl($url);
-        $list->setName('groupe_default');
+        
+        $this->setItems($items);
+        $this->setUrl($url);
+        $this->setName('groupe_default');
 
-        //$list->setSearchBar(true);
+        //$this->setSearchBar(true);
 
-        $list->addColumn(new Column('Nom', function (Groupe $groupe) {
+        $this->addColumn(new Column('Nom', function (Groupe $groupe) {
             return $groupe->getNom();
         }));
 
@@ -47,18 +48,18 @@ class ListModelsGroupe extends  ListModel
         /* Editer le model courant *
         $edit = new ActionLine('Modifier', 'edit', 'app_model_edit', $parameters, EventPostAction::ShowModal);
         $edit->setInMass(false);
-        $list->addActionLine($edit);
+        $this->addActionLine($edit);
 
         $delete = new ActionLine('Supprimer', 'remove', 'app_model_remove', $parameters, EventPostAction::ShowModal);
         $delete->setInMass(false);
         $delete->setCondition(function(Model $model){return $model->isRemovable();});
-        $list->addActionLine($delete);
+        $this->addActionLine($delete);
 
 
-        $list->addActionList(new ActionList('Ajouter', 'add', 'app_model_add', function(){return array();}, EventPostAction::ShowModal,null,'green'));
+        $this->addActionList(new ActionList('Ajouter', 'add', 'app_model_add', function(){return array();}, EventPostAction::ShowModal,null,'green'));
 
 */
-        return $list;
+        return $this;
     }
 
 }

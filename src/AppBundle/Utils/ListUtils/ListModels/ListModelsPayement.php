@@ -4,19 +4,14 @@
 namespace AppBundle\Utils\ListUtils\ListModels;
 
 use AppBundle\Entity\Payement;
-use AppBundle\Entity\PayementFile;
+use AppBundle\Utils\ListUtils\AbstractList;
 use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\Column;
-use AppBundle\Utils\ListUtils\ListModel;
-use AppBundle\Utils\ListUtils\ListModelInterface;
 use AppBundle\Utils\Event\EventPostAction;
 use AppBundle\Utils\ListUtils\ListRenderer;
-use AppBundle\Entity\Creance;
 use Symfony\Component\Routing\Router;
-use AppBundle\Utils\ListUtils\ActionList;
-use AppBundle\Entity\Debiteur;
 
-class ListModelsPayement extends  ListModel
+class ListModelsPayement extends  AbstractList
 {
 
 
@@ -27,21 +22,20 @@ class ListModelsPayement extends  ListModel
     public function getDefault($items, $url = null)
     {
 
-        $list = new ListRenderer($this->twig, $items);
-        $list->setUrl($url);
-        $list->setSearchBar(true);
+        $this->setItems($items);
+        $this->setUrl($url);
 
-        $list->addColumn(new Column('', function (Payement $item) { return $item; },'payement_validation|raw'));
+        $this->addColumn(new Column('', function (Payement $item) { return $item; },'payement_validation|raw'));
 
-        $list->addColumn(new Column('Num. réf.', function (Payement $item) { return $item->getIdFacture(); }));
+        $this->addColumn(new Column('Num. réf.', function (Payement $item) { return $item->getIdFacture(); }));
 
-        $list->addColumn(new Column('Montant', function (Payement $item) { return $item->getMontantRecu(); },'money'));
+        $this->addColumn(new Column('Montant', function (Payement $item) { return $item->getMontantRecu(); },'money'));
 
-        $list->addColumn(new Column('Date', function (Payement $item) {
+        $this->addColumn(new Column('Date', function (Payement $item) {
             return $item->getDate();
         },'date(global_date_format)'));
 
-        $list->addColumn(new Column('Etat', function (Payement $item) { return $item; },'payement_state|raw'));
+        $this->addColumn(new Column('Etat', function (Payement $item) { return $item; },'payement_state|raw'));
 
         $payementParameters = function (Payement $payement) {
             return array(
@@ -49,16 +43,16 @@ class ListModelsPayement extends  ListModel
             );
         };
 
-        $list->addActionLine(new ActionLine('Afficher', 'zoom', 'app_payement_show', $payementParameters, EventPostAction::ShowModal,null,true,false));
+        $this->addActionLine(new ActionLine('Afficher', 'zoom', 'app_payement_show', $payementParameters, EventPostAction::ShowModal,null,true,false));
 
 
-        return $list;
+        return $this;
     }
 
 
     public function getNotValidated( $items, $url = null)
     {
-        $list = $this->getDefault($items,$url);
+        $this->getDefault($items,$url);
 
         $payementParameters = function (Payement $payement) {
             return array(
@@ -66,7 +60,7 @@ class ListModelsPayement extends  ListModel
             );
         };
 
-        $list->addActionLine(new ActionLine('Valider', 'check', 'app_payement_validationform', $payementParameters, EventPostAction::ShowModal,null,true,false));
+        $this->addActionLine(new ActionLine('Valider', 'check', 'app_payement_validationform', $payementParameters, EventPostAction::ShowModal,null,true,false));
 
 
         $removeCondition = function (Payement $payement) {
@@ -74,12 +68,12 @@ class ListModelsPayement extends  ListModel
         };
 
 
-        $list->addActionLine(new ActionLine('Supprimer', 'remove', 'app_payement_remove', $payementParameters, EventPostAction::RefreshList,$removeCondition,true,false));
+        $this->addActionLine(new ActionLine('Supprimer', 'remove', 'app_payement_remove', $payementParameters, EventPostAction::RefreshList,$removeCondition,true,false));
 
 
 
 
-        return $list;
+        return $this;
     }
 
 
@@ -91,7 +85,7 @@ class ListModelsPayement extends  ListModel
     public function getSearchResults( $items, $url = null)
     {
 
-        $list = $this->getDefault($items,$url);
+        $this->getDefault($items,$url);
 
 
         $payementParameters = function (Payement $payement) {
@@ -100,11 +94,11 @@ class ListModelsPayement extends  ListModel
             );
         };
 
-        $list->addActionLine(new ActionLine('Afficher', 'zoom', 'app_payement_show', $payementParameters, EventPostAction::ShowModal,null,true,false));
+        $this->addActionLine(new ActionLine('Afficher', 'zoom', 'app_payement_show', $payementParameters, EventPostAction::ShowModal,null,true,false));
 
 
 
-        return $list;
+        return $this;
 
 
 

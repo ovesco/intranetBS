@@ -5,6 +5,7 @@ namespace AppBundle\Utils\ListUtils\ListModels;
 
 use AppBundle\Entity\Famille;
 use AppBundle\Entity\Membre;
+use AppBundle\Utils\ListUtils\AbstractList;
 use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\Column;
 use AppBundle\Utils\ListUtils\ListModel;
@@ -16,7 +17,7 @@ use AppBundle\Entity\ReceiverFamille;
 use Symfony\Component\Routing\Router;
 use AppBundle\Twig\AppExtension;
 
-class ListModelsMail extends ListModel
+class ListModelsMail extends AbstractList
 {
 
 
@@ -27,14 +28,13 @@ class ListModelsMail extends ListModel
      */
     public function getDefault($items, $url = null)
     {
-        $list = new ListRenderer($this->twig, $items);
-        $list->setUrl($url);
-        $list->setSearchBar(true);
+        $this->setItems($items);
+        $this->setUrl($url);
 
-        $list->addColumn(new Column('Mail', function (Mail $item) { return $item->getTitle(); }));
+        $this->addColumn(new Column('Mail', function (Mail $item) { return $item->getTitle(); }));
 
         $twig = $this->twig;
-        $list->addColumn(new Column('Courrier', function (Mail $item) use ($twig) {
+        $this->addColumn(new Column('Courrier', function (Mail $item) use ($twig) {
 
             $adresse = $item->getAddress();
             if($adresse != null)
@@ -58,7 +58,7 @@ class ListModelsMail extends ListModel
 
         }));
 
-        $list->addColumn(new Column('Emails', function (Mail $item) use ($twig) {
+        $this->addColumn(new Column('Emails', function (Mail $item) use ($twig) {
 
 
             if(!$item->getEmails()->isEmpty())
@@ -88,7 +88,7 @@ class ListModelsMail extends ListModel
         }));
 
 
-        $list->addColumn(new Column('Sender', function (Mail $item) {
+        $this->addColumn(new Column('Sender', function (Mail $item) {
 
             $owner = $item->getSender()->getOwner();
             if($owner instanceof Membre)
@@ -99,7 +99,7 @@ class ListModelsMail extends ListModel
         }));
 
         $router = $this->router;
-        $list->addColumn(new Column('Document', function (Mail $item) use ($router) {
+        $this->addColumn(new Column('Document', function (Mail $item) use ($router) {
             if(is_null($item->getDocument()))
                 return 'No documents';
             $name = $item->getDocument()->getName();
@@ -112,7 +112,7 @@ class ListModelsMail extends ListModel
             return $source.$print;
         }));
 
-        return $list;
+        return $this;
     }
 
     /**
@@ -124,13 +124,12 @@ class ListModelsMail extends ListModel
     {
         $twig = $this->twig;
         $router = $this->router;
-        $list = new ListRenderer($twig, $items);
-        $list->setUrl($url);
-        $list->setSearchBar(true);
+        $this->setItems($items);
+        $this->setUrl($url);
 
-        $list->addColumn(new Column('Mail', function (Mail $item) { return $item->getTitle(); }));
+        $this->addColumn(new Column('Mail', function (Mail $item) { return $item->getTitle(); }));
 
-        $list->addColumn(new Column('Courrier', function (Mail $item) use ($twig) {
+        $this->addColumn(new Column('Courrier', function (Mail $item) use ($twig) {
 
             $adresse = $item->getAddress();
             if($adresse != null)
@@ -156,7 +155,7 @@ class ListModelsMail extends ListModel
 
         }));
 
-        $list->addColumn(new Column('Emails', function (Mail $item) use ($twig) {
+        $this->addColumn(new Column('Emails', function (Mail $item) use ($twig) {
 
 
             if(!$item->getEmails()->isEmpty())
@@ -186,7 +185,7 @@ class ListModelsMail extends ListModel
         }));
 
 
-        $list->addColumn(new Column('Pour', function (Mail $item) {
+        $this->addColumn(new Column('Pour', function (Mail $item) {
 
             $owner = $item->getReceiver()->getOwner();
             if($owner instanceof Membre)
@@ -201,7 +200,7 @@ class ListModelsMail extends ListModel
         }));
 
 
-        $list->addColumn(new Column('Document', function (Mail $item) use ($router) {
+        $this->addColumn(new Column('Document', function (Mail $item) use ($router) {
             if(is_null($item->getDocument()))
                 return 'No documents';
             $name = $item->getDocument()->getName();
@@ -214,7 +213,7 @@ class ListModelsMail extends ListModel
             return $source.$print;
         }));
 
-        return $list;
+        return $this;
     }
 
 }
