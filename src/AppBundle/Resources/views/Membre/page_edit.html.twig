@@ -2,7 +2,7 @@
 
 
 {% block titre %}
-    Edit {{ membre.prenom }} {{ membre.nom }}
+    {{ membre.prenom }} {{ membre.nom }}
 {% endblock %}
 
 {% block content %}
@@ -19,14 +19,13 @@
                         <h2 class="ui header">
                             <i class="user icon"></i>
                             <div class="content">
-                                Edit: {{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}
+                                Modifier: {{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}
                             </div>
                         </h2>
                     </div>
 
                     <div class="four wide right aligned column">
                         <input class="ui green button" type="submit" value="Enregistrer">
-
                     </div>
 
 

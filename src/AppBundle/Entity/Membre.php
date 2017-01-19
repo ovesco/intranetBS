@@ -163,12 +163,11 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->inscription = null;
         $this->naissance = null;
         $this->validity = true;
-
-        //un membre a forcement un contact
-        $this->contact = new Contact();
 
         //un membre a forcement un debiteur
         $this->debiteur = new DebiteurMembre();

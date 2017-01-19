@@ -74,6 +74,12 @@ abstract class Personne
      */
     protected $iban;
 
+    public function __construct()
+    {
+        //une personne a forcement un contact
+        $this->contact = new Contact();
+    }
+
 
 
     /**

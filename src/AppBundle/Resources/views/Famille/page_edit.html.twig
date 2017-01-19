@@ -1,0 +1,168 @@
+{% extends 'AppBundle:Layout:layout.html.twig' %}
+
+{% block titre %}
+    Famille {{ famille.nom|capitalize }}
+{% endblock %}
+
+{% macro contact(entity, form, id) %}
+
+    {% set id = (id is null) ? entity.id : id %}
+    <div class="ui pointing secondary tabular menu">
+        <a class="active item" data-tab="adresse-{{ id }}">Adresse</a>
+        <a class="item" data-tab="contact-{{ id }}">Téléphone et mail</a>
+    </div>
+
+    <div class="ui active tab basic segment" data-tab="adresse-{{ id }}">
+
+        {% if entity.contact.adresse %}
+        {{ form_row(form.contact.adresse.rue) }}
+        {{ form_row(form.contact.adresse.npa) }}
+        {{ form_row(form.contact.adresse.localite) }}
+        {{ form_row(form.contact.adresse.expediable) }}
+        {{ form_row(form.contact.adresse.remarques) }}
+        {% endif %}
+    </div>
+
+
+    <div class="ui tab basic segment" data-tab="contact-{{ id }}">
+
+        <h5 class="ui header">Téléphone(s) - <a href="#" class="button-add-telephone" data-contact-id="{{ entity.contact.id }}">ajouter</a></h5>
+        {% include 'AppBundle:Contact:list_phone_mail.html.twig' with {'type' : 'telephone', 'data' : form.contact.telephones} %}
+
+        <div class="ui divider"></div>
+        <h5 class="ui header">E-mail(s) - <a href="#" class="button-add-email" data-contact-id="{{ entity.contact.id }}">ajouter</a></h5>
+        {% include 'AppBundle:Contact:list_phone_mail.html.twig' with {'type' : 'email', 'data' : form.contact.emails} %}
+    </div>
+
+{% endmacro %}
+
+{% import _self as macral %}
+
+
+{% block content %}
+
+    {{ form_start(form,{'attr': {'class': 'ui form'}}) }}
+    <div class="ui page grid">
+        <div class="column">
+
+            <div class="ui grid">
+
+                <div class="row">
+
+                    <div class="twelve wide column">
+                        <h2 class="ui header">
+                            <i class="users icon"></i>
+                            <div class="content">
+                                Famille {{ famille.nom|capitalize }}
+                                <div class="sub header">{% if famille.contact.adresse %}{{ famille.contact.adresse.localite }}{% else %}-{% endif %}</div>
+                            </div>
+                        </h2>
+                    </div>
+
+                    <div class="four wide right aligned column">
+                        <input class="ui green button" type="submit" value="Enregistrer">
+                    </div>
+
+                </div>
+
+                <div class="row"> <!-- informations de base sur la famille -->
+
+                    <div class="eight wide column">
+                        <div class="ui attached message">
+                            <div class="header"><h3><i class="info icon"></i>Informations</h3></div>
+                        </div>
+
+                        <div class="ui bottom attached segment">
+
+                            {# Informations de base sur la famille #}
+                            {{ form_row(form.nom) }}
+
+                            <h4 class="ui horizontal header divider">
+                                <i class="exchange icon"></i>
+                                Informations de contact
+                            </h4>
+
+                            {{ macral.contact(famille, form, 'famille') }}
+
+                        </div>
+                    </div>
+
+
+                    <div class="eight wide column">
+                        <div class="ui attached message">
+                            <div class="header"><h3><i class="user icon"></i>Parents</h3></div>
+                        </div>
+
+                        <div class="ui bottom attached segment">
+
+                            {% set activeMere = (famille.pere is null) ? 'active' : '' %}
+                            <div class="ui top attached tabular menu">
+                                {% if famille.pere %}<a class="item active" data-tab="pere">Père</a>{% endif %}
+                                {% if famille.mere %}<a class="item {{ activeMere }}" data-tab="mere">Mère</a>{% endif %}
+                            </div>
+
+                            {% if famille.pere %}
+
+                                <div class="ui bottom attached active tab segment" data-tab="pere">
+
+
+                                    {{ form_row(form.pere.prenom) }}
+                                    {{ form_row(form.pere.profession) }}
+
+                                    <h4 class="ui horizontal header divider">
+                                        <i class="exchange icon"></i>
+                                        Informations de contact
+                                    </h4>
+
+                                    {{ macral.contact(famille.pere, form.pere, 'pere') }}
+
+
+                                </div>
+                            {% endif %}
+
+                            {% if famille.mere %}
+                                <div class="ui bottom attached {{ activeMere }} tab segment" data-tab="mere">
+
+                                    {{ form_row(form.mere.prenom) }}
+                                    {{ form_row(form.mere.profession) }}
+
+                                    <h4 class="ui horizontal header divider">
+                                        <i class="exchange icon"></i>
+                                        Informations de contact
+                                    </h4>
+
+                                    {{ macral.contact(famille.mere, form.mere, 'mere') }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div> <!-- /informations de base -->
+
+            </div>
+        </div>
+    </div>
+
+
+    {{ form_end(form) }}
+
+{% endblock %}
+
+
+
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/app/css/Membre/membre.css') }}"/>
+{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/app/js/specials/validation_popup_generation.js') }}"></script>
+
+    <script type="text/javascript">
+        //Appel de l'editable
+        $('.editable').click(function() {
+            editable.init($(this));
+        });
+    </script>
+{% endblock %}

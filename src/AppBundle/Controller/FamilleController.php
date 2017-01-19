@@ -10,6 +10,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Form\Famille\FamilleEditType;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class FamilleController
@@ -29,12 +31,39 @@ class FamilleController extends Controller {
      */
     public function showAction(Famille $famille) {
 
-        $familleForm = $this->createForm(new FamilleType, $famille);
+        $familleForm = $this->createForm(FamilleType::class, $famille);
 
         return array(
             'listing'       => $this->get('listing'),
             'famille'       => $famille,
             'familleForm'   => $familleForm->createView()
+        );
+    }
+
+    /**
+     * @param $famille Famille la famille
+     * @param Request $request,
+     * @return Response la vue
+     *
+     * @ParamConverter("famille", class="AppBundle:Famille")
+     * @Route("/edit/{famille}")
+     * @Template("AppBundle:Famille:page_edit.html.twig")
+     */
+    public function editAction(Request $request,Famille $famille) {
+
+        $form = $this->createForm(FamilleEditType::class, $famille);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $this->get('app.repository.famille')->save($famille);
+            return $this->redirect($this->generateUrl('app_famille_show',array('famille'=>$famille->getId())));
+        }
+
+        return array(
+            'famille'       => $famille,
+            'form'   => $form->createView()
         );
     }
 
