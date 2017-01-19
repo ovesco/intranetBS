@@ -3,7 +3,6 @@ imports:
     - { resource: security.yml }
     - { resource: services.yml }
     - { resource: elastica.yml }
-    - { resource: doctrine_extensions.yml }
     - { resource: maintenance.yml }
     - { resource: config_entity_audit.yml }
 

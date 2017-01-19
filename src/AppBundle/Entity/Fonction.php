@@ -3,14 +3,12 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Fonction
  *
  * @ORM\Table(name="app_fonctions")
- * @Gedmo\Loggable
  * @ORM\Entity(repositoryClass="AppBundle\Repository\FonctionRepository")
  */
 class Fonction
@@ -27,7 +25,7 @@ class Fonction
     /**
      * @var string
      *
-     * @Gedmo\Versioned
+     * 
      * @ORM\Column(name="nom", type="string", length=255)
      */
     private $nom;
@@ -35,7 +33,7 @@ class Fonction
     /**
      * @var string
      *
-     * @Gedmo\Versioned
+     * 
      * @ORM\Column(name="abreviation", type="string", length=255, nullable=true)
      */
     private $abreviation;

@@ -3,14 +3,12 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 
 /**
  * ObtentionDistinction
  *
  * @ORM\Table(name="app_obtention_distinctions")
- * @Gedmo\Loggable
  * @ORM\Entity
  *
  *
@@ -30,7 +28,7 @@ class ObtentionDistinction
     /**
      * @var \DateTime
      *
-     * @Gedmo\Versioned
+     * 
      * @ORM\Column(name="date", type="date", nullable=false)
      */
     private $date;
@@ -38,7 +36,7 @@ class ObtentionDistinction
     /**
      * @var Distinction $distinctions
      *
-     * @Gedmo\Versioned
+     * 
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Distinction", inversedBy="obtentionDistinctions")
      */
     private $distinction;
@@ -47,7 +45,7 @@ class ObtentionDistinction
     /**
      * @var membre
      *
-     * @Gedmo\Versioned
+     * 
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Membre", inversedBy="distinctions")
      * @ORM\JoinColumn(name="membre_id", referencedColumnName="id", onDelete="CASCADE")
      */

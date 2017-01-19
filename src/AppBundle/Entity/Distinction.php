@@ -11,7 +11,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @ORM\Table(name="app_distinctions")
  * @ORM\Entity
- * @Gedmo\Loggable
  */
 class Distinction
 {

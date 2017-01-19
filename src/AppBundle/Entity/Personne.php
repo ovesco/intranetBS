@@ -4,7 +4,6 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\Groups;
@@ -15,7 +14,6 @@ use JMS\Serializer\Annotation\VirtualProperty;
 
 /**
  * @ORM\MappedSuperclass
- * @Gedmo\Loggable
  *
  * @ExclusionPolicy("all")
  *
@@ -39,9 +37,9 @@ abstract class Personne
     protected $id;
 
     /**
-     * @Gedmo\Versioned
+     * 
      * @var string
-     * @Gedmo\Versioned
+     * 
      * @ORM\Column(name="prenom", type="string", length=255)
      *
      * @Expose
@@ -52,7 +50,7 @@ abstract class Personne
     /**
      * @var string
      *
-     * @Gedmo\Versioned
+     * 
      * @ORM\Column(name="sexe", type="string", columnDefinition="ENUM('Homme', 'Femme')")
      *
      *
@@ -60,7 +58,7 @@ abstract class Personne
     protected $sexe;
 
     /**
-     * @Gedmo\Versioned
+     * 
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Contact", cascade={"persist"}, fetch="EAGER")
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
      */
@@ -69,7 +67,7 @@ abstract class Personne
     /**
      * @var string
      *
-     * @Gedmo\Versioned
+     * 
      * @ORM\Column(name="iban", type="string", length=255, nullable=true)
      */
     protected $iban;

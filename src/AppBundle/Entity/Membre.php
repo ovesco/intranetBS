@@ -5,7 +5,6 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use FOS\ElasticaBundle\Annotation\Search;
 use JMS\Serializer\Annotation\ExclusionPolicy;
@@ -18,7 +17,6 @@ use JMS\Serializer\Annotation\MaxDepth;
  * Membre
  *
  * @ORM\Entity
- * @Gedmo\Loggable
  * @ORM\Table(name="app_membres")
  * @Search(repositoryClass="AppBundle\Search\Membre\MembreRepository")
  *
@@ -37,7 +35,7 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Famille", inversedBy="membres", cascade={"persist"}, fetch="EAGER")
      * @ORM\JoinColumn(name="famille_id", referencedColumnName="id")
-     * @Gedmo\Versioned
+     * 
      *
      * JMS annotations:
      * @Expose
@@ -62,7 +60,7 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
     /**
      * @var \Datetime
      *
-     * @Gedmo\Versioned
+     * 
      * @ORM\Column(name="naissance", type="date")
      *
      *
@@ -72,7 +70,7 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
     /**
      * @var integer
      *
-     * @Gedmo\Versioned
+     * 
      * @ORM\Column(name="numero_bs", type="integer", nullable=true)
      *
      *
@@ -83,7 +81,7 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
     /**
      * @var string
      *
-     * @Gedmo\Versioned
+     * 
      * @ORM\Column(name="numero_avs", type="string", length=255, nullable=true)
      */
     private $numeroAvs;
@@ -91,7 +89,7 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
     /**
      * @var string
      *
-     * @Gedmo\Versioned
+     * 
      * @ORM\Column(name="statut", type="string", length=255, nullable=true)
      *
      *
@@ -102,7 +100,7 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
     /**
      * @var \Datetime
      *
-     * @Gedmo\Versioned
+     * 
      * @ORM\Column(name="inscription", type="date")
      *
      *
@@ -114,7 +112,7 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
     /**
      * @var integer
      *
-     * @Gedmo\Versioned
+     * 
      * @ORM\Column(name="validity", type="integer")
      */
     private $validity;

@@ -5,7 +5,6 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
 use AppBundle\Entity\DebiteurFamille;
 use FOS\ElasticaBundle\Configuration\Search;
 use JMS\Serializer\Annotation\ExclusionPolicy;
@@ -17,7 +16,6 @@ use JMS\Serializer\Annotation\VirtualProperty;
 /**
  * Famille
  *
- * @Gedmo\Loggable
  * @ORM\Entity(repositoryClass="AppBundle\Repository\FamilleRepository")
  * @ORM\Table(name="app_familles")
  * @Search(repositoryClass="AppBundle\Search\Famille\FamilleRepository")
@@ -48,7 +46,7 @@ class Famille implements ExpediableInterface,DebiteurInterface,ReceiverInterface
     private $membres;
 
     /**
-     * @Gedmo\Versioned
+     * 
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Pere", mappedBy="famille", cascade={"persist"})
      * @ORM\JoinColumn(name="pere_id", referencedColumnName="id", onDelete="SET NULL")
      *
@@ -58,7 +56,7 @@ class Famille implements ExpediableInterface,DebiteurInterface,ReceiverInterface
 
     /**
      *
-     * @Gedmo\Versioned
+     * 
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Mere", mappedBy="famille", cascade={"persist"})
      * @ORM\JoinColumn(name="mere_id", referencedColumnName="id", onDelete="SET NULL")
      */
@@ -67,7 +65,7 @@ class Famille implements ExpediableInterface,DebiteurInterface,ReceiverInterface
     /**
      * @var string
      *
-     * @Gedmo\Versioned
+     * 
      * @ORM\Column(name="nom", type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Length(min = "2")
@@ -79,13 +77,13 @@ class Famille implements ExpediableInterface,DebiteurInterface,ReceiverInterface
     /**
      * @var integer
      *
-     * @Gedmo\Versioned
+     * 
      * @ORM\Column(name="validity", type="integer")
      */
     private $validity;
 
     /**
-     * @Gedmo\Versioned
+     * 
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Contact", cascade={"persist"})
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
      */

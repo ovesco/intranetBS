@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
  * Attribution
  *
  * @ORM\Table(name="app_attributions")
- * @Gedmo\Loggable
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks()
  */
