@@ -1,0 +1,152 @@
+{% extends 'AppBundle:Layout:layout.html.twig' %}
+
+
+{% block titre %}
+    Edit {{ membre.prenom }} {{ membre.nom }}
+{% endblock %}
+
+{% block content %}
+
+{{ form_start(form,{'attr': {'class': 'ui form'}}) }}
+
+    <div class="ui page grid">
+        <div class="column">
+            <div class="ui grid">
+
+                <div class="row">
+
+                    <div class="twelve wide column">
+                        <h2 class="ui header">
+                            <i class="user icon"></i>
+                            <div class="content">
+                                Edit: {{ membre.prenom|capitalize }} {{ membre.nom|capitalize }}
+                            </div>
+                        </h2>
+                    </div>
+
+                    <div class="four wide right aligned column">
+                        <input class="ui green button" type="submit" value="Enregistrer">
+
+                    </div>
+
+
+                </div>
+
+                <div class="row"> <!-- informations de base -->
+
+                    <div class="eight wide column">
+
+                        <div class="ui attached message">
+                            <div class="header"><h3><i class="info icon"></i>Informations</h3></div>
+                        </div>
+                        <div class="ui bottom attached segment">
+
+                            {# Informations de base sur le membre #}
+                            {{ form_row(form.prenom) }}
+                            {{ form_row(form.naissance) }}
+                            {{ form_row(form.sexe) }}
+                            {{ form_row(form.numeroAvs) }}
+
+                            <div class="ui divider"></div>
+
+                            {{ form_row(form.numeroBs) }}
+                            {{ form_row(form.statut) }}
+
+                        </div>
+
+
+                        <div class="ui top attached message">
+                            <div class="header"><h3><i class="fax icon"></i>Contact</h3></div>
+                        </div>
+
+                        <div class="ui bottom attached segment">
+
+                            <div class="ui pointing secondary tabular menu">
+                                <a class="active item" data-tab="adresse-{{ membre.prenom }}">Adresse</a>
+                                <a class="item" data-tab="contact-{{ membre.prenom }}">Téléphone et mail</a>
+                            </div>
+
+                            <div class="ui active tab basic segment" data-tab="adresse-{{ membre.prenom }}">
+                                <div class="ui small info message">
+
+
+                                    {% set    ae = membre.adresseExpedition %}
+                                    {% if     ae != null %}
+                                        {% set    ownerEntity = ae['ownerEntity'] %}
+                                        {% set    lf = '<a href="' ~path('app_famille_show', {'famille': membre.famille.id}) ~ '">' %}
+
+                                        {% if     ownerEntity|get_class == class_name_membre %}
+                                            {% set aeowner = 'la sienne' %}
+                                        {% elseif ownerEntity|get_class == class_name_famille %}
+                                            {% set aeowner = lf ~ 'celle de sa famille</a>' %}
+                                        {% elseif ownerEntity|get_class == class_name_mere %}
+                                            {% set aeowner = lf ~ 'celle de sa mère</a>' %}
+                                        {% elseif ownerEntity|get_class == class_name_pere %}
+                                            {% set aeowner = lf ~ 'celle de son père</a>' %}
+                                        {% else %}
+                                            {% set aeowner = ', aucune idée en vrai.' %}
+                                        {% endif %}
+                                    <div class="content">Actuellement, l'adresse de facturation de ce membre est <b>{{ aeowner|raw }}</b></div>
+                                    {% endif %}
+
+
+                                </div>
+
+                                {{ form_row(form.contact.adresse.rue) }}
+                                {{ form_row(form.contact.adresse.npa) }}
+                                {{ form_row(form.contact.adresse.localite) }}
+                                {{ form_row(form.contact.adresse.expediable) }}
+                                {{ form_row(form.contact.adresse.remarques) }}
+                            </div>
+
+
+                            <div class="ui tab basic segment" data-tab="contact-{{ membre.prenom }}">
+
+                                <h5 class="ui header">Téléphone(s) - <a href="#" class="button-add-telephone" data-contact-id="{{ membre.contact.id }}">ajouter</a></h5>
+                                {% include 'AppBundle:Contact:list_phone_mail.html.twig' with {'type' : 'telephone', 'data' : form.contact.telephones} %}
+
+                                <div class="ui divider"></div>
+                                <h5 class="ui header">E-mail(s) - <a href="#" class="button-add-email" data-contact-id="{{ membre.contact.id }}">ajouter</a></h5>
+                                {% include 'AppBundle:Contact:list_phone_mail.html.twig' with {'type' : 'email', 'data' : form.contact.emails} %}
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+                    <div class="eight wide column">     <!-- informations famille -->
+
+                        <div class="ui top attached message">
+                            <div class="header"><h3><i class="users icon"></i><a href="{{ path('app_famille_show', {famille: membre.famille.id}) }}">Famille</a></h3></div>
+                        </div>
+
+                        <div class="ui bottom attached segment">
+
+                            todo: change famillie...
+
+                        </div>
+                    </div> <!-- /informations famille -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{{ form_end(form) }}
+
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/app/css/Membre/membre.css') }}"/>
+{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/app/js/Membre/page_voir_membre.js') }}"></script>
+{% endblock %}
+

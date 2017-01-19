@@ -13,8 +13,16 @@ class EmailType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email', TextType::class, array('required' => false, 'label' => 'Email'))
-            ->add('remarques', RemarqueAccordionType::class, array('required' => false))
+            ->add('email', TextType::class, array(
+                'required' => false,
+                'label' => 'Email',
+                'attr'=>array('placeholder'=>'Email')
+            ))
+            ->add('remarques', RemarqueAccordionType::class, array(
+                'required' => false,
+                'label'=>'Remarques',
+                'attr'=>array('placeholder'=>'Remarques')
+            ))
             ->add('expediable', BooleanType::class, array('required' => true, 'label' => 'Expediable'));
     }
 

@@ -64,10 +64,12 @@ class MembreType extends PersonneType
                     'choices_as_values' => true
                 )
             )
+
             ->add('inscription', DateType::class, array(
                 'label' => 'Inscription',
                 'widget' => 'single_text',
             ))
+
             ->add('statut', TextType::class, array('label' => 'Statut'))
             ->add('id', HiddenType::class);
     }

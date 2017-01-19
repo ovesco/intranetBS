@@ -1,4 +1,4 @@
-{% extends 'AppBundle:Membre/AddForm:addFormLayout.html.twig' %}
+{% extends 'AppBundle:AddMembre:addFormLayout.html.twig' %}
 
 {% block title %}
     Alerte aux homonymes!
@@ -8,6 +8,18 @@
     {{ message }}
 {% endblock %}
 
-
+{% block information %}
+    Listes des homonymes détectés:
+    <div class="ui list">
+        {% for homonyme in homonymes %}
+            <a class="item" href="{{ path('app_membre_show',{'membre':homonyme.id}) }}">
+                <i class="user icon"></i>
+                <div class="content">
+                    {{ homonyme.prenom }} {{ homonyme.famille.nom }} ({{ homonyme.famille.__toString }})
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}
 
 {% block next_step %}Etape suivante{% endblock %}

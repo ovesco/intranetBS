@@ -46,7 +46,9 @@ use Symfony\Component\HttpFoundation\Session\Session;
  *
  * 2.b) aucune famille trouvée avec ce nom, on crée une nouvelle famille
  *
- * 3) forumaire du membre
+ * 3) redirection sur la page de nouveau membre
+ *
+ * 4) edition rapide du membre/famille possible va formulaire complet
  *
  *
  *
@@ -62,6 +64,8 @@ class AddMembreController extends Controller
     const FAMILLE_ID = 'membre_in_progress_famille_id';
 
     /**
+     * Permet de repartir à zero dans le processus d'ajout de membre
+     *
      * @Route("/reset", options={"expose"=true})
      * @param Request $request
      * @return Response
@@ -91,23 +95,43 @@ class AddMembreController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $session = $request->getSession();
 
             $nom = $form->get('nom')->getData();
             $prenom = $form->get('prenom')->getData();
 
+            //save nom and prenom in session for futurer use.
             $session->set(AddMembreController::MEMBRE_NOM, $nom);
             $session->set(AddMembreController::MEMBRE_PRENOM, $prenom);
+            //reset familleId
+            $session->set(AddMembreController::FAMILLE_ID,null);
 
+            //search homonyme
             $membreSearch = new MembreSearch();
             $membreSearch->nom = $nom;
             $membreSearch->prenom = $prenom;
-            $results = $this->get('app.search')->Membre($membreSearch);
-            if(!empty($results))
+            $resultsMembre = $this->get('app.search')->Membre($membreSearch);
+
+            //search famille with same name
+            $familleSearch = new FamilleSearch();
+            $familleSearch->nom = $nom;
+            $resultsFamille = $this->get('app.search')->Famille($familleSearch);
+
+            if(!empty($resultsMembre))
             {
+                //then homonyme exists
                 return $this->redirect($this->generateUrl('app_addmembre_homonyme'));
             }
-            return $this->redirect($this->generateUrl('app_addmembre_famillechoice'));
+
+            if(!empty($resultsFamille))
+            {
+                //then famille exists
+                return $this->redirect($this->generateUrl('app_addmembre_famillechoice'));
+            }
+
+            //create membre
+            return $this->redirect($this->generateUrl('app_addmembre_finish'));
 
         }
 
@@ -122,11 +146,24 @@ class AddMembreController extends Controller
      */
     public function HomonymeAction(Request $request)
     {
+
+        //get nom and prenom
+        $session = $request->getSession();
+        $nom = $session->get(AddMembreController::MEMBRE_NOM);
+        $prenom = $session->get(AddMembreController::MEMBRE_PRENOM);
+
+        //search homonyme
+        $membreSearch = new MembreSearch();
+        $membreSearch->nom = $nom;
+        $membreSearch->prenom = $prenom;
+        $resultsMembre = $this->get('app.search')->Membre($membreSearch);
+
         $message = 'Un homonyme existe pour ce membre, voulez-vous continuer?';
-        return $this->render('AppBundle:Membre/AddForm:Homonyme.html.twig',
+        return $this->render('AppBundle:AddMembre:Homonyme.html.twig',
             array(
                 'next' => $this->generateUrl('app_addmembre_famillechoice'),
-                'message' => $message
+                'message' => $message,
+                'homonymes'=>$resultsMembre
             ));
     }
 
@@ -140,123 +177,102 @@ class AddMembreController extends Controller
     public function familleChoiceAction(Request $request) {
 
         $session = $request->getSession();
-
         $nom = $session->get(AddMembreController::MEMBRE_NOM,null);
 
         if(is_null($nom))
         {
+            //restart process
             return $this->redirect($this->generateUrl('app_addmembre_start'));
         }
 
         $familleSearch = new FamilleSearch();
         $familleSearch->nom = $nom;
-        $matchedFamilles = $this->get('app.search')->Famille($familleSearch);
+        $searchResults = $this->get('app.search')->Famille($familleSearch);
 
-        if(empty($matchedFamilles))
+        if(empty($searchResults))
         {
             $session->set(AddMembreController::FAMILLE_ID, null);
             //direct redirect to next step
-            return $this->redirect($this->generateUrl('app_addmembre_membre'));
+            return $this->redirect($this->generateUrl('app_addmembre_finish'));
         }
-        else
+
+        $membre = new Membre();
+
+        //cree un formulaire avec les résultats de la recherche en option
+        $form = $this->createForm(new MembreFamilleChoiceType($searchResults),$membre);
+
+        $form->handleRequest($request);
+
+        if($form->isValid())
         {
-            $membre = new Membre();
-            //choix d'une famille
-            $form = $this->createForm(new MembreFamilleChoiceType($matchedFamilles),$membre);
-
-            $form->handleRequest($request);
-
-            if($form->isValid())
+            $familleId = null;
+            if($membre->getFamille() != null)
             {
-                if($membre->getFamille() != null)
-                {
-                    $familleId =  $membre->getFamille()->getId();
-                }
-                else
-                {
-                    $familleId = null;
-                }
-
-                $session->set(AddMembreController::FAMILLE_ID, $familleId);
-                //redirect to check famille
-                return $this->redirect($this->generateUrl('app_addmembre_membre'));
-
+                $familleId =  $membre->getFamille()->getId();
             }
 
-            /** @var ListStorage $sessionContainer */
-            $sessionContainer = $this->get('list_storage');
-            $sessionContainer->setRepository(ListKey::FAMILLE_SEARCH_RESULTS_ADD_MEMBRE,'AppBundle:Famille');
-            $sessionContainer->setObjects(ListKey::FAMILLE_SEARCH_RESULTS_ADD_MEMBRE,$matchedFamilles);
+            $session->set(AddMembreController::FAMILLE_ID, $familleId);
+            //finish process
+            return $this->redirect($this->generateUrl('app_addmembre_finish'));
 
-            return $this->render('AppBundle:AddMembre:FamilleChoice.html.twig',
-                array('form'=>$form->createView(),
-                    'next'=>$this->generateUrl('app_addmembre_famillechoice'),
-                    'list_key'=>ListKey::FAMILLE_SEARCH_RESULTS_ADD_MEMBRE,
-                    'message'=>'Ce nom de famille existe déjà, ce membre fait-il partie d\'une des familles-ci dessous?'
-                ));
         }
+
+
+        return $this->render('AppBundle:AddMembre:FamilleChoice.html.twig',
+            array('form'=>$form->createView(),
+                'next'=>$this->generateUrl('app_addmembre_famillechoice'),
+                'message'=>'Ce nom de famille existe déjà, ce membre fait-il partie d\'une des familles-ci dessous?'
+            ));
+
 
 
      }
 
     /**
      *
-     * @Route("/membre", options={"expose"=true})
+     * @Route("/finish", options={"expose"=true})
      * @param Request $request
      * @return Response
      */
-    public function membreAction(Request $request) {
+    public function finishAction(Request $request) {
 
         $session = $request->getSession();
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-
         $nom = $session->get(AddMembreController::MEMBRE_NOM,null);
         $prenom = $session->get(AddMembreController::MEMBRE_PRENOM,null);
         $familleId = $session->get(AddMembreController::FAMILLE_ID,null);
+
         if(is_null($nom) || is_null($prenom))
         {
             return $this->redirect($this->generateUrl('app_addmembre_start'));
         }
 
-        $form = null;
         $membre = new Membre();
         $membre->setPrenom($prenom);
+
         $famille = null;
-        $template = null;
-        if(!is_null($familleId))
-        {
-            $famille = $em->getRepository('AppBundle:Famille')->find($familleId);
-            $membre->setFamille($famille);
-            $form = $this->createForm(new MembreWithoutFamilleType(),$membre);
-            $template = 'AppBundle:AddMembre:AddMembreWithoutFamille.html.twig';
-        }
-        else
+        if(is_null($familleId))
         {
             $famille = new Famille();
             $famille->setNom($nom);
-            $membre->setFamille($famille);
-            $form = $this->createForm(new MembreWithFamilleType(),$membre);
-            $template = 'AppBundle:AddMembre:AddMembreWithFamille.html.twig';
         }
-
-
-        $form->handleRequest($request);
-
-        if($form->isValid())
+        else
         {
-            $em->persist($membre);
-            $em->flush();
-            return $this->render('AppBundle:AddMembre:End.html.twig',array('membre'=>$membre));
+            $famille = $this->get('app.repository.famille')->findOneBy(array('id'=>$familleId));
         }
 
-        return $this->render($template,
-            array('form'=>$form->createView(),
-                'famille'=>$famille,
-                'next'=> $this->generateUrl('app_addmembre_membre'),
-            ));
+        $famille->addMembre($membre);
 
+        //presist new membre and his famille
+        $this->get('app.repository.membre')->save($membre);
+        $this->get('app.repository.famille')->save($famille);
 
+        /*
+         * Plustôt que de rediriger directement sur la page de membre on privilègie
+         * le rendu d'un nouveau template qui s'insere bien dans l'ajax qui gere
+         * cette page.
+         */
+        return $this->render('AppBundle:AddMembre:finish.html.twig',
+            array('membre'=>$membre));
 
     }
 

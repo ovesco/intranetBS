@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Famille;
 use AppBundle\Entity\Membre;
 use AppBundle\Form\Membre\MembreShowType;
+use AppBundle\Form\Membre\MembreEditType;
 use AppBundle\Search\Membre\MembreSearch;
 use AppBundle\Search\Membre\MembreSearchType;
 use AppBundle\Search\Mode;
@@ -82,6 +83,32 @@ class MembreController extends Controller {
             'membre'            => $membre,
             'listing'           => $this->get('listing'),
             'membreForm'        => $membreForm->createView(),
+        );
+    }
+
+    /**
+     * @Route("/edit/{membre}", options={"expose"=true}, requirements={"membre" = "\d+"})
+     * @ParamConverter("membre", class="AppBundle:Membre")
+     * @param Request $request
+     * @param Membre $membre
+     * @return Response
+     * @Template("AppBundle:Membre:page_edit.html.twig")
+     */
+    public function editAction(Request $request, Membre $membre) {
+
+        $form = $this->createForm(MembreEditType::class,$membre);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $this->get('app.repository.membre')->save($membre);
+            return $this->redirect($this->generateUrl('app_membre_show',array('membre'=>$membre->getId())));
+        }
+
+        return array(
+            'membre' => $membre,
+            'form' => $form->createView()
         );
     }
 

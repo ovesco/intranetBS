@@ -1,21 +1,20 @@
-{% extends 'AppBundle:Membre/AddForm:addFormLayout.html.twig' %}
+{% extends 'AppBundle:AddMembre:addFormLayout.html.twig' %}
 
 {% block title %}
     Choisiez une famille
 {% endblock %}
 
+{% block message %}
+    {{ message }}
+{% endblock %}
 
 {% block form %}
-
-    {{ list_caller.Session(list_key)|raw }}
 
     {{ form_start(form,{'attr': {'class': 'ui form'}}) }}
 
     {{ form_rest(form) }}
 
     {{ form_end(form) }}
-
-
 
 {% endblock %}
 

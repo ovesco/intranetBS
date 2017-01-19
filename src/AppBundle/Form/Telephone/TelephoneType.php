@@ -12,8 +12,16 @@ class TelephoneType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('numero', TextType::class, array('required' => false, 'label' => 'Numéro'))
-            ->add('remarques', TextareaType::class, array('required' => false, 'label' => 'Remarque'));
+            ->add('numero', TextType::class, array(
+                'required' => false,
+                'label' => 'Numéro',
+                'attr'=>array('placeholder'=>'Numéro')
+            ))
+            ->add('remarques', TextareaType::class, array(
+                'required' => false,
+                'label' => 'Remarque',
+                'attr'=>array('placeholder'=>'Remarque')
+            ));
     }
 
     public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)

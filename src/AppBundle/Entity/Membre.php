@@ -17,7 +17,7 @@ use JMS\Serializer\Annotation\MaxDepth;
 /**
  * Membre
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\MembreRepository")
  * @Gedmo\Loggable
  * @ORM\Table(name="app_membres")
  * @Search(repositoryClass="AppBundle\Search\Membre\MembreRepository")
@@ -163,8 +163,8 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
      */
     public function __construct()
     {
-        $this->inscription = new \Datetime();
-        $this->naissance = new \Datetime();
+        $this->inscription = null;
+        $this->naissance = null;
         $this->validity = true;
 
         //un membre a forcement un contact

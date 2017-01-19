@@ -85,9 +85,7 @@ class ListCallerController extends Controller
             case ListKey::MEMBRES_SEARCH_RESULTS:
                 $list = ListModelsMembre::getDefault($this->getTwig(), $this->getRouter(), $items, $url)->render();
                 return $this->returnList($list, $call);
-            case ListKey::FAMILLE_SEARCH_RESULTS_ADD_MEMBRE:
-                $list = ListModelsFamille::getSearchResults($this->getTwig(), $this->getRouter(), $items, $url)->render();
-                return $this->returnList($list, $call);
+
             case ListKey::PAYEMENTS_SEARCH_RESULTS:
                 $list = ListModelsPayement::getSearchResults($this->getTwig(), $this->getRouter(), $items, $url)->render();
                 return $this->returnList($list, $call);

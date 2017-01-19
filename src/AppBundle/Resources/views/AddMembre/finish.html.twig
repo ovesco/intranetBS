@@ -1,0 +1,27 @@
+{% extends 'AppBundle:AddMembre:addFormLayout.html.twig' %}
+
+{% block title %}
+    Membre correctement ajouter
+{% endblock %}
+
+
+{% block message %}
+    Aller maintenant compléter le membre et sa famille:
+
+    <div class="ui list">
+        <div class="item">
+            <i class="right arrow icon"></i>
+            <div class="content">
+                Aller voir le <a href="{{ path('app_membre_show',{'membre':membre.id}) }}">membre</a>
+            </div>
+        </div>
+        <div class="item">
+            <i class="right arrow icon"></i>
+            <div class="content">
+                Aller voir la <a href="{{ path('app_famille_show',{'famille':membre.famille.id}) }}">famille</a>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
