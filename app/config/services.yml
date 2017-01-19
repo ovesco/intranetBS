@@ -80,12 +80,6 @@ services:
         arguments:
             - @app.repository.facture
 
-    #permet de faire un pdf avec une facture
-    app.search:
-        class: AppBundle\Utils\Elastic\Search
-        arguments:
-            - @fos_elastica.manager
-
     #permet la gestion des notifications de façon simplifiée
     app.notification_bag:
         class: AppBundle\Utils\SessionTools\NotificationBag

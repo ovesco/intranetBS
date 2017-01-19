@@ -10,7 +10,7 @@ namespace AppBundle\Search\Membre;
 
 use AppBundle\Search\Attribution\AttributionSearch;
 
-class MembreSearch {
+class MembreSearch{
 
     /** @var  string */
     public $nom;
