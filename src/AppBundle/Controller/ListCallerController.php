@@ -9,9 +9,7 @@ use AppBundle\Entity\Membre;
 use AppBundle\Entity\Receiver;
 use AppBundle\Entity\Sender;
 use AppBundle\Utils\ListUtils\AbstractList;
-use AppBundle\Utils\ListUtils\ListModel;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsMail;
-use AppBundle\Utils\ListUtils\ListRenderer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -70,7 +68,7 @@ class ListCallerController extends Controller
      * @Route("/session/{key}/{format}", defaults={"format"="include_html"})
      *
      */
-    public function Session($key, $format = ListRenderer::FORMAT_INCLUDE_HTML)
+    public function Session($key, $format = AbstractList::FORMAT_INCLUDE_HTML)
     {
         $items = $this->get('list_storage')->getObjects($key);
         $url = $this->generateUrl('app_listcaller_session', array('key' => $key));
