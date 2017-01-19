@@ -1,6 +1,8 @@
 /**
  * Ce script est excusivement destiné à une utilisation dans la page
  * de saisie des payements.
+ * Il permet de recharger le formulaire d'ajout sans recharger la page
+ *
  */
 $(document).ready(function() {
 
