@@ -134,13 +134,7 @@ class CreanceController extends Controller
         $searchForm->handleRequest($request);
         if ($searchForm->isValid()) {
 
-
-            $elasticaManager = $this->container->get('fos_elastica.manager');
-
-            /** @var ElasticRepository $repository */
-            $repository = $elasticaManager->getRepository('AppBundle:Creance');
-
-            $results = $repository->search($creanceSearch);
+            $results = $this->get('app.search.creance')->search($creanceSearch);
 
             //get the search mode
             $mode = $searchForm->get(Mode::FORM_FIELD)->getData();

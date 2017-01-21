@@ -80,12 +80,7 @@ class PayementController extends Controller
 
             $payementSearch = $searchForm->getData();
 
-            $elasticaManager = $this->container->get('fos_elastica.manager');
-
-            /** @var PayementRepository $repository */
-            $repository = $elasticaManager->getRepository('AppBundle:Payement');
-
-            $results = $repository->search($payementSearch);
+            $results = $this->get('app.search.payement')->search($payementSearch);
 
             //get the search mode
             $mode = $searchForm->get(Mode::FORM_FIELD)->getData();

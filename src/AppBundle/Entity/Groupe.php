@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\Model;
+use FOS\ElasticaBundle\Configuration\Search;
 
 /**
  * Groupe
@@ -16,6 +17,7 @@ use AppBundle\Entity\Model;
  * @ORM\Table(name="app_groupes")
  * @Gedmo\Loggable
  * @ORM\Entity(repositoryClass="AppBundle\Repository\GroupeRepository")
+ * @Search(repositoryClass="AppBundle\Search\Groupe\GroupeRepository")
  */
 class Groupe
 {

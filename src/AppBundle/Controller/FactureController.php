@@ -70,12 +70,7 @@ class FactureController extends Controller
 
             $factureSearch = $searchForm->getData();
 
-            $elasticaManager = $this->container->get('fos_elastica.manager');
-
-            /** @var FactureRepository $repository */
-            $repository = $elasticaManager->getRepository('AppBundle:Facture');
-
-            $results = $repository->search($factureSearch);
+            $results = $this->get('app.search.facture')->search($factureSearch);
 
             //get the search mode
             $mode = $searchForm->get(Mode::FORM_FIELD)->getData();

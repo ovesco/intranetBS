@@ -1,0 +1,38 @@
+services:
+    # SEARCH REPOSITORY FOR ENTITY
+    # Search entity as service (simplify code in controller)
+    app.search.membre:
+        class: AppBundle\Search\Membre\MembreRepository
+        factory_service: fos_elastica.manager
+        factory_method: getRepository
+        arguments: ['AppBundle:Membre']
+
+    app.search.famille:
+        class: AppBundle\Search\Famille\FamilleRepository
+        factory_service: fos_elastica.manager
+        factory_method: getRepository
+        arguments: ['AppBundle:Famille']
+
+    app.search.groupe:
+        class: AppBundle\Search\Groupe\GroupeRepository
+        factory_service: fos_elastica.manager
+        factory_method: getRepository
+        arguments: ['AppBundle:Groupe']
+
+    app.search.creance:
+        class: AppBundle\Search\Creance\CreanceRepository
+        factory_service: fos_elastica.manager
+        factory_method: getRepository
+        arguments: ['AppBundle:Creance']
+
+    app.search.facture:
+        class: AppBundle\Search\Facture\FactureRepository
+        factory_service: fos_elastica.manager
+        factory_method: getRepository
+        arguments: ['AppBundle:Facture']
+
+    app.search.payement:
+        class: AppBundle\Search\Payement\PayementRepository
+        factory_service: fos_elastica.manager
+        factory_method: getRepository
+        arguments: ['AppBundle:Payement']

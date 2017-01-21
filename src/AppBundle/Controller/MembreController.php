@@ -182,6 +182,8 @@ class MembreController extends Controller {
     /**
      * Affiche la page permettant de lancer une recherche
      *
+     * todo NUR dans le formulaire de recherche de membre, il faut pouvoir chercher qui à son anni durant le camp.
+     *
      * @Route("/search")
      * @Menu("Rechercher un membre",block="database",order=2, icon="search", expanded=true)
      * @Template("AppBundle:Membre:page_search.html.twig")
@@ -192,7 +194,6 @@ class MembreController extends Controller {
         $membreSearch = new MembreSearch();
         $membreForm = $this->createForm(new MembreSearchType(),$membreSearch);
 
-
         /** @var ListStorage $sessionContainer */
         $sessionContainer = $this->get('list_storage');
         $sessionContainer->setRepository(ListKey::MEMBRES_SEARCH_RESULTS,'AppBundle:Membre');
@@ -201,14 +202,7 @@ class MembreController extends Controller {
 
         if ($membreForm->isValid()) {
 
-            $elasticaManager = $this->container->get('fos_elastica.manager');
-
-            /** @var MembreRepository $repository */
-            $repository = $elasticaManager->getRepository('AppBundle:Membre');
-
-            $results = $repository->search($membreSearch);
-
-            //$results = $this->container->get('app.search')->Membre($membreSearch);
+            $results = $this->get('app.search.membre')->search($membreSearch);
 
             //get the search mode
             $mode = $membreForm->get("mode")->getData();
