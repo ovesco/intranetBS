@@ -19,7 +19,12 @@
                         {% endfor %}
                     </div>
 
-                    {{ list_caller.groupeAll()|raw }}
+                    {#
+                    une liste est aussi disponible pour les groupe
+                    mais une gestion avec une représentation en arboresance
+                    est bien plus agréable à comprendre
+                    #}
+                    {#{{ list_caller.groupeAll()|raw }}#}
 
                     <div class="ui small button addGroupeRacine">
                         <i class="add icon"></i>
