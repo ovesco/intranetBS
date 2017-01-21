@@ -565,22 +565,6 @@ class Membre extends Personne implements ExpediableInterface, DebiteurInterface,
         return $this;
     }
 
-
-
-
-    /**
-     * @param String $className
-     * @return bool
-     */
-    public function isClass($className)
-    {
-        if($className == 'Membre')
-            return true;
-        else
-            return false;
-    }
-
-
     /**
      * Get envoiFacture
      *
