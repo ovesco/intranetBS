@@ -60,6 +60,14 @@ class ConsoleOutput
         $this->output = $output;
     }
 
+    /**
+     * @return OutputInterface
+     */
+    public function getOutput()
+    {
+        return $this->output;
+    }
+
     public function write($string = null)
     {
         if(is_null($string))

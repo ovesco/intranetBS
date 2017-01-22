@@ -4,6 +4,8 @@ imports:
     - { resource: services.yml }
     - { resource: elastica.yml }
     - { resource: doctrine_extensions.yml }
+    - { resource: maintenance.yml }
+    - { resource: config_entity_audit.yml }
 
 #définition des parametres fixes lié a AppBundle
 parameters:
@@ -13,6 +15,7 @@ parameters:
     upload_documents_dir: '%upload_dir%/documents'
     #cache facture directory
     cache_facture_dir: %kernel.cache_dir%/tmp_doc/facture/
+    cron_execution_time_file: '%kernel.root_dir%/cron/cron_last.log'
 
     #format de date (à utiliser au maximum svp)
     format_date: 'd.m.Y'
@@ -79,7 +82,7 @@ doctrine:
     dbal:
         default_connection:   default
         connections:
-            default:
+            default: #this name "default" is neccessary for entity audit doctrine extentsion. cf. simple_things_entity_audit
                 driver:   "%database_driver%"
                 host:     "%database_host%"
                 port:     "%database_port%"

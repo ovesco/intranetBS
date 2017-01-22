@@ -7,25 +7,26 @@ use AppBundle\Utils\Event\EventPostAction;
 use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\ActionList;
 use AppBundle\Utils\ListUtils\Column;
+use AppBundle\Utils\ListUtils\ListModel;
 use AppBundle\Utils\ListUtils\ListModelInterface;
 use AppBundle\Utils\ListUtils\ListRenderer;
 use Symfony\Component\Routing\Router;
 use AppBundle\Entity\Model;
 
 
-class ListModelsCategorie implements ListModelInterface
+class ListModelsCategorie extends  ListModel
 {
 
 
     /**
-     * @param \Twig_Environment $twig
-     * @param Router $router
      * @param $items
      * @param string $url
      * @return ListRenderer
      */
-    static public function getDefault(\Twig_Environment $twig, Router $router, $items, $url = null)
+    public function getDefault( $items, $url = null)
     {
+        $twig = $this->twig;
+        $router = $this->router;
         $list = new ListRenderer($twig, $items);
         $list->setUrl($url);
         $list->setName('categorie_default');

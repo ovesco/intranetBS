@@ -107,6 +107,14 @@ services:
         arguments:
             - @app.repository.facture
 
+    #permet l'analize des entities versionnées
+    app.audit.analizer:
+        class: AppBundle\Utils\EntityAudit\AuditAnalizer
+        arguments:
+            auditReader: @simplethings_entityaudit.reader
+            em: @doctrine.orm.entity_manager
+
+
     # Twig
     # Extensions twig qui permettent de mettre en place des filtres
     # personnalisés

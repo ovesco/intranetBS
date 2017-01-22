@@ -1,0 +1,9 @@
+#Config pour le versioning de nos entities
+simple_things_entity_audit:
+    #List des entities versionnée (crée une table avec le suffix _audit dans la db)
+    audited_entities:
+        - AppBundle\Entity\Membre
+        - AppBundle\Entity\Adresse
+        - AppBundle\Entity\Email
+        - AppBundle\Entity\Telephone
+        - AppBundle\Entity\Famille

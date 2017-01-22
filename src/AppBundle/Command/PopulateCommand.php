@@ -2,12 +2,11 @@
 
 namespace AppBundle\Command;
 
+use AppBundle\Entity\Categorie;
 use AppBundle\Entity\Contact;
 use AppBundle\Entity\ObtentionDistinction;
 use AppBundle\Entity\Personne;
 use AppBundle\Entity\Telephone;
-use AppBundle\Utils\Email\Email;
-use ClassesWithParents\F;
 
 use AppBundle\Entity\Mail;
 use AppBundle\Entity\ReceiverFamille;
@@ -16,13 +15,15 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Helper\ProgressBar;
+use AppBundle\Command\ConsoleOutput as CustomOutput;
 
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\Famille;
 use AppBundle\Entity\Adresse;
 use AppBundle\Entity\Attribution;
-use AppBundle\Entity\Geniteur;
 
 use AppBundle\Entity\Fonction;
 use AppBundle\Entity\Distinction;
@@ -31,8 +32,6 @@ use AppBundle\Entity\Groupe;
 use AppBundle\Entity\Pere;
 use AppBundle\Entity\Mere;
 
-use Interne\SecurityBundle\Entity\Role;
-use Interne\SecurityBundle\Entity\User;
 
 /* FinanceBundle */
 use AppBundle\Entity\Rappel;
@@ -44,209 +43,54 @@ use AppBundle\Entity\DebiteurMembre;
 
 class PopulateCommand extends ContainerAwareCommand
 {
+    /** @var \Doctrine\ORM\EntityManager $em */
+    protected $em;
 
-    private $listeGroupes = null;
-    private $listeFonctions = null;
-    private $listeDistinctions = null;
+    /** @var integer */
+    protected $numberOfMember;
+
+    /** @var  CustomOutput */
+    protected $output;
 
     protected function configure()
     {
         $this
             ->setName('app:populate')
-            ->setDescription('Remplir la base de donnée')
-            ->addArgument('action', InputArgument::REQUIRED, 'Quel action souhaitez-vous faire? create: crée l\'arboresance / fill: remplir la base de donnée')
-            ->addArgument('members', InputArgument::OPTIONAL, 'Combien de membres souhaitez-vous génerer ?')            //nombre de membres souhaité
-            ->addArgument('fonction', InputArgument::OPTIONAL, 'Abreviation de la fonction des attributions génerées')  //Abbreviation de la fonction des attributions souhaitées
-            ->addArgument('type', InputArgument::OPTIONAL, 'ID du type des groupes des attributions génerées')          //ID du type de groupe souhaité
+            ->setDescription('Remplir la base de donnée avec des données aléatoire')
+            ->addArgument('members', InputArgument::OPTIONAL, 'Combien de membres souhaitez-vous génerer (default 200) ?',150)
         ;
+    }
+
+    /**
+     * this method is executed before execute() and
+     * used to setup variables used in the command
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
+        $this->output = new CustomOutput($output);
+        $this->em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $this->numberOfMember = intval($input->getArgument('members'));
+
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
-        /** @var \Doctrine\ORM\EntityManager $em */
-        $em                           = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $action                       = $input->getArgument('action');
-        $nombreDeMembresSouhaites     = intval($input->getArgument('members'));
-        $fonction                     = $input->getArgument('fonction');
-        $type                         = $input->getArgument('type');
-
-
-        if($action == 'create'){
-
-            echo 1;
-            //on enregistre la liste des distinctions
-            $distinctions = $this->getDistinctions();
-            foreach($distinctions as $dist)
-            {
-                $distinctionInBDD = $em->getRepository('AppBundle:Distinction')->findOneByNom($dist);
-                if($distinctionInBDD == null)
-                {
-                    //création si inexistant
-                    $new = new Distinction();
-                    $new->setNom($dist);
-                    $em->persist($new);
-                }
-            }
-
-            echo 2;
-            //on energistre la liste des fonctions
-            $fonctions = $this->getFonctions();
-            foreach($fonctions as $fonc => $abrev)
-            {
-                $fonctionInBDD = $em->getRepository('AppBundle:Fonction')->findOneByNom($fonc);
-                if($fonctionInBDD == null)
-                {
-                    //création si inexistant
-                    $new = new Fonction();
-                    $new->setNom($fonc);
-                    $new->setAbreviation($abrev);
-                    $em->persist($new);
-                }
-            }
-
-            echo 3;
-            //On crée la hierarchie!!!
-            $em->flush();
-            $groupes = $this->getGroupes();
-            $this->createHierarchie($em,null,$groupes);
-
-            //Sauvegarde complète
-            $em->flush();
-            echo 4;
-
-
-
-        }
-        elseif($action == 'fill'){
-
-            /** @var \Symfony\Component\Console\Helper\ProgressHelper $progress */
-            $progress    = $this->getHelperSet()->get('progress');
-
-            $progress->start($output, $nombreDeMembresSouhaites);
-
-            for($i = 0; $i < $nombreDeMembresSouhaites; $i++) {
-
-                /*
-                 * En premier lieu, on crée une nouvelle famille. Dans cette famille, on va ajouter entre 1 et 4 gosse,
-                 * et entre 1 et 2 parents. Lorsqu'on a choisit le nombre de gosses à ajouter, on va incrémenter le nombre
-                 * de membres souhaité en tout pour que ce soit pris en compte
-                 */
-                $famille = new Famille();
-                $famille->setNom($this->getNom());
-                $famille->setContact($this->getRandomContact());
-                $famille->setValidity(mt_rand(0,2));
-
-
-                //Ajout des parents
-                switch(mt_rand(0,2) == 0){
-                    case 0:
-                        //On lui file une mère
-                        $famille->setMere($this->getRandomMere());
-                        break;
-                    case 1:
-                        //On lui file un père
-                        $famille->setPere($this->getRandomPere());
-                        break;
-                    case 2:
-                        //on donne les deux parent
-                        $famille->setMere($this->getRandomMere(Personne::FEMME));
-                        $famille->setPere($this->getRandomPere(Personne::HOMME));
-                        break;
-                }
-
-
-                /*
-                 * Après avoir géré les parents, on va gérer les membres ainsi que leurs attributions respectives
-                 * afin qu'ils soient placés dans des groupes de manière efficace
-                 */
-                $nbrDeGosses = 0;
-
-                if(($nombreDeMembresSouhaites - $i) < 5)
-                    $nbrDeGosses = $nombreDeMembresSouhaites - $i;
-
-                else
-                    $nbrDeGosses = mt_rand(1,5);
-
-                $i += $nbrDeGosses;
-
-                for($j = 0; $j < $nbrDeGosses; $j++) {
-
-                    $membre = $this->getRandomMember();
-                    $membre->addAttribution($this->getRandomAttribution($fonction, $type));
-
-
-                    for($k = 0; $k < mt_rand(0,3); $k++)
-                        $membre->addDistinction($this->getRandomDistinction());
-
-
-                    //ajout créance et facture
-                    $debiteurM = new DebiteurMembre();
-                    $membre->setDebiteur($debiteurM);
-                    $nbCreanceEnAttente = mt_rand(1,3);
-                    for($n = 0; $n < $nbCreanceEnAttente; $n++) {
-                        $membre->getDebiteur()->addCreance($this->getCreance($membre->getDebiteur()));
-                    }
-                    $nbFacture = mt_rand(1,3);
-                    for($n = 0; $n < $nbFacture; $n++) {
-                        $membre->getDebiteur()->addFacture($this->getFacture($membre->getDebiteur()));
-                    }
-
-                    //ajout d'envois
-
-                    $receiver = new ReceiverMembre();
-                    $pmail = new Mail();
-                    $pmail->setTitle('Envoi par poste');
-                    $pmail->setSender($membre->getSender());
-                    $receiver->addMail($pmail);
-                    $email = new Mail();
-                    $email->setTitle('Envoi par e-mail');
-                    $email->setSender($membre->getSender());
-                    $receiver->addMail($email);
-                    $em->persist($receiver);
-                    $membre->setReceiver($receiver);
-
-
-                    $famille->addMembre($membre);
-                }
-
-                //ajout créance et facture
-
-                $debiteur = new DebiteurFamille();
-                $famille->setDebiteur($debiteur);
-                $nbCreanceEnAttente = mt_rand(1,3);
-                for($n = 0; $n < $nbCreanceEnAttente; $n++) {
-                    $famille->getDebiteur()->addCreance($this->getCreance($famille->getDebiteur()));
-                }
-                $nbFacture = mt_rand(1,3);
-                for($n = 0; $n < $nbFacture; $n++) {
-                    $famille->getDebiteur()->addFacture($this->getFacture($famille->getDebiteur()));
-                }
-
-                //ajout d'envois
-
-                $receiver = new ReceiverFamille();
-                $pmail = new Mail();
-                $pmail->setTitle('Envoi par poste');
-                $receiver->addMail($pmail);
-                $email = new Mail();
-                $email->setTitle('Envoi par e-mail');
-                $receiver->addMail($email);
-                $em->persist($receiver);
-                $famille->setReceiver($receiver);
-
-
-                $em->persist($famille);
-
-                $progress->advance();
-            }
-
-            $em->flush();
-
-            $progress->finish();
-        }
-
-
+        $this->createDistinctions();
+        $this->output->info('Created: Distinctions')->writeln();
+        $this->createFonctions();
+        $this->output->info('Created: Fonctions')->writeln();
+        $this->createCategories();
+        $this->output->info('Created: Categories')->writeln();
+        $this->createModels();
+        $this->output->info('Created: Models')->writeln();
+        $this->createHierarchie(null,$this->getGroupes());
+        $this->output->info('Created: Groupes')->writeln();
+        $this->output->info('Start adding Members')->writeln();
+        $this->createMembers();
+        $this->output->info('Finish adding Members')->writeln();
 
     }
 
@@ -254,16 +98,15 @@ class PopulateCommand extends ContainerAwareCommand
      * Cette fonction crée la hierarchie des groupes définit dans la fonction getGroupes.
      * Elle doit être appelée après la création des fonctions et des disintinctions.
      *
-     * @param $em
      * @param $parent
      * @param $childsGroupes
      */
-    private function createHierarchie($em,$parent,$childsGroupes){
+    private function createHierarchie($parent,$childsGroupes){
 
         foreach($childsGroupes as $name => $groupeData)
         {
 
-            $groupe = $em->getRepository('AppBundle:Groupe')->findOneByNom($name);
+            $groupe = $this->em->getRepository('AppBundle:Groupe')->findOneByNom($name);
 
             if($groupe == null)
             {
@@ -272,32 +115,20 @@ class PopulateCommand extends ContainerAwareCommand
                 $groupe->setNom($name);
             }
 
-            $model = $em->getRepository('AppBundle:Model')->findOneBy(array('nom'=>$groupeData[0]));
-
-            if($model == null)
-            {
-                //création si inexistant
-                $model = new Model();
-                $model->setNom($groupeData[0]);
-                $model->setAffichageEffectifs(true);
-            }
-
-            //forcément déjà existant car la création des fonctions et faite avant!
-            $fonctionChef = $em->getRepository('AppBundle:Fonction')->findOneBy(array('abreviation'=>$groupeData[1]));
-
-            $model->setFonctionChef($fonctionChef);
+            $model = $this->em->getRepository('AppBundle:Model')->findOneBy(array('nom'=>$groupeData[0]));
 
             $groupe->setModel($model);
             $groupe->setParent($parent);
             $groupe->setActive(true);
 
             //next sub level
-            $childs = $groupeData[2];
-            $this->createHierarchie($em,$groupe,$childs);
+            $childs = $groupeData[1];
+            $this->createHierarchie($groupe,$childs);
 
-            $em->persist($model);
-            $em->persist($groupe);
-            $em->flush();
+
+            $this->em->persist($model);
+            $this->em->persist($groupe);
+            $this->em->flush();
 
         }
 
@@ -307,94 +138,239 @@ class PopulateCommand extends ContainerAwareCommand
 
         $groupes = array(
             'Brigade de Sauvabelin' => array(
-                'Brigade','CDT', array(
+                'Brigade', array(
                     'Eclaireurs' => array(
-                        'Branche','CB', array(
+                        'Branche', array(
                             'Berisal'=> array(
-                                'Troupe','CT', array(
+                                'Troupe', array(
                                     'Faucons'=> array(
-                                        'Patrouille','CP', array()
+                                        'Patrouille', array()
                                     ),
                                     'Cerfs'=> array(
-                                        'Patrouille','CP', array(),
+                                        'Patrouille', array(),
                                     ),
                                     'Panthère'=> array(
-                                        'Patrouille','CP', array(),
+                                        'Patrouille', array(),
                                     ),
                                 ),
                             ),
                             'Montfort'=> array(
-                                'Troupe','CT', array(
+                                'Troupe', array(
                                     'Fregate'=> array(
-                                        'Patrouille','CP', array()
+                                        'Patrouille', array()
                                     ),
                                     'Optimiste'=> array(
-                                        'Patrouille','CP', array(),
+                                        'Patrouille', array(),
                                     ),
                                     'Galion'=> array(
-                                        'Patrouille','CP', array(),
+                                        'Patrouille', array(),
                                     ),
                                 ),
                             ),
                         ),
                     ),
                     'Eclaireuses' => array(
-                        'Branche','CB', array(
+                        'Branche', array(
                             'Solalex'=> array(
-                                'Troupe','CT', array(
+                                'Troupe', array(
                                     'Hirondelles'=> array(
-                                        'Patrouille','CP', array()
+                                        'Patrouille', array()
                                     ),
                                     'Daufins'=> array(
-                                        'Patrouille','CP', array(),
+                                        'Patrouille', array(),
                                     ),
                                     'Tigresses'=> array(
-                                        'Patrouille','CP', array(),
+                                        'Patrouille', array(),
                                     ),
                                 ),
                             ),
                         ),
-                    )
+                    ),
+                    'Louveteaux' => array(
+                        'Branche', array(
+                            'Mont-d\'or'=> array(
+                                'Meute', array(
+                                    'Blattes'=> array(
+                                        'Sixaine', array()
+                                    ),
+                                    'Ours'=> array(
+                                        'Sixaine', array(),
+                                    ),
+                                    'Loup'=> array(
+                                        'Sixaine', array(),
+                                    ),
+                                ),
+                            ),
+                            'Clairière'=> array(
+                                'Meute', array(
+                                    'Chèvres'=> array(
+                                        'Sixaine',array()
+                                    ),
+                                    'Chats'=> array(
+                                        'Sixaine', array(),
+                                    ),
+                                    'Lapins'=> array(
+                                        'Sixaine', array(),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
                 )
             ),
-            'ADABS' => array(
-                'Anciens','Pres.', array()
-            )
         );
 
         return $groupes;
 
     }
 
-    private function getDistinctions(){
-        return array(
-            'Cravate Bleu',
-            '1er classe',
-            'Badge feu',
-            'Aspirant',
-
+    private function createDistinctions(){
+        $distinctions = array(
+            'Cravate Bleu'=>'La cravate bleu est une distinctions que tout les chefs d\'unité recoivent',
+            '1er classe'=>'Distinction obtenue suite à la réalisaiton d\'une épreuve technique',
+            'Badge feu'=>'',
+            'Badge topographie'=>'',
+            'Badge cuisine'=>'',
+            'Aspirant'=>'',
         );
+        foreach($distinctions as $distinction => $remarque)
+        {
+            $distinctionInBDD = $this->em->getRepository('AppBundle:Distinction')->findOneByNom($distinction);
+            if($distinctionInBDD == null)
+            {
+                $new = new Distinction();
+                $new->setNom($distinction);
+                $new->setRemarques($remarque);
+                $this->em->persist($new);
+            }
+        }
+        $this->em->flush();
     }
 
-    private function getFonctions(){
-        return array(
+    private function createFonctions(){
+        $fonctions = array(
             'Commandant'=>'CDT',
+            'Quartier-maitre'=>'QM',
+            'Chef matériel'=>'Mat',
             'Chef de Branche'=>'CB',
+            'Chef de Branche adjoint'=>'CBA',
             'Chef de Troupe'=>'CT',
+            'Chef de Troupe adjoint'=>'CTA',
             'Chef de Patrouille'=>'CP',
             'Chef de Meute'=>'CM',
             'Chef Louvetaux'=>'CL',
             'Adjoint'=>'Adj',
             'Eclaireur'=>'Ecl',
+            'Eclaireuse'=>'Eclse',
             'Louveteaux'=>'Lvtx',
-            'Président ADABS'=>'Pres.'
-
-
+            'Louvettes'=>'Lvttes',
         );
+        foreach($fonctions as $fonction => $abrev)
+        {
+            $fonctionInBDD = $this->em->getRepository('AppBundle:Fonction')->findOneByNom($fonction);
+            if($fonctionInBDD == null)
+            {
+                //création si inexistant
+                $new = new Fonction();
+                $new->setNom($fonction);
+                $new->setAbreviation($abrev);
+                $this->em->persist($new);
+            }
+        }
+        $this->em->flush();
+    }
+
+    private function createCategories(){
+        $categories = array(
+            'Brigade'=>'description',
+            'Branche'=>'description',
+            'Unité'=>'description',
+            'Sous-unité'=>'description',
+        );
+        foreach($categories as $categorie => $descr)
+        {
+            $categorieInBDD = $this->em->getRepository('AppBundle:Categorie')->findOneByNom($categorie);
+            if($categorieInBDD == null)
+            {
+                //création si inexistant
+                $new = new Categorie();
+                $new->setNom($categorie);
+                $new->setDescription($descr);
+                $this->em->persist($new);
+            }
+        }
+        $this->em->flush();
     }
 
     /**
-     * Génère une adresse bidon
+     * cette fonction doit etre executée après la création
+     * des fonctions et des catégories.
+     */
+    private function createModels(){
+        $models = array(
+            'Brigade'=>array(
+                'Categorie'=>'Brigade',
+                'FonctionChef'=>'CDT',
+                'Fonctions'=>array('QM','Mat')
+            ),
+            'Branche'=> array(
+                'Categorie'=>'Branche',
+                'FonctionChef'=>'CB',
+                'Fonctions'=>array('CBA')
+            ),
+            'Troupe'=> array(
+                'Categorie'=>'Unité',
+                'FonctionChef'=>'CT',
+                'Fonctions'=>array('Adj','CTA')
+            ),
+            'Meute'=> array(
+                'Categorie'=>'Unité',
+                'FonctionChef'=>'CM',
+                'Fonctions'=>array('Adj')
+            ),
+            'Patrouille'=> array(
+                'Categorie'=>'Sous-unité',
+                'FonctionChef'=>'CP',
+                'Fonctions'=>array('Ecl')
+            ),
+            'Sixaine'=> array(
+                'Categorie'=>'Sous-unité',
+                'FonctionChef'=>'CL',
+                'Fonctions'=>array('Lvtx')
+            ),
+        );
+        foreach($models as $modelName => $infos)
+        {
+            $modelInBDD = $this->em->getRepository('AppBundle:Model')->findOneByNom($modelName);
+            if($modelInBDD == null)
+            {
+                //création si inexistant
+                $new = new Model();
+                $new->setNom($modelName);
+                $categorie = $this->em->getRepository('AppBundle:Categorie')->findOneByNom($infos['Categorie']);
+                $new->addCategorie($categorie);
+                $fonctionChef = $this->em->getRepository('AppBundle:Fonction')->findOneByAbreviation($infos['FonctionChef']);
+                $new->setFonctionChef($fonctionChef);
+
+                $fonctions = $this->em->getRepository('AppBundle:Fonction')->findByAbreviation($infos['Fonctions']);
+                foreach($fonctions as $fonction)
+                {
+                    $new->addFonction($fonction);
+                    $this->em->persist($fonction);
+                }
+
+                $new->setAffichageEffectifs(true);
+
+                $this->em->persist($fonctionChef);
+                $this->em->persist($categorie);
+                $this->em->persist($new);
+            }
+        }
+        $this->em->flush();
+    }
+
+    /**
+     * Génère une adresse aléatoire
      * @param $canBeNull
      * @return Adresse
      */
@@ -476,42 +452,39 @@ class PopulateCommand extends ContainerAwareCommand
 
     /**
      * Génère une attribution aléatoire
-     * @param string $fonction l'abreviation de la fonction
-     * @param $model l'id du groupe model de groupe souhaité
      * @return Attribution
      */
-    private function getRandomAttribution($fonction = null, $model = null) {
+    private function addRandomAttribution(Membre $membre) {
 
-        /** @var \Doctrine\ORM\EntityManager $em */
-        $em          = $this->getContainer()->get('doctrine.orm.entity_manager');
         $attribution = new Attribution();
 
-        if($this->listeFonctions == null) {
-
-            if($fonction == null)
-                $this->listeFonctions = $em->getRepository('AppBundle:Fonction')->findAll();
-
-            else
-                $this->listeFonctions = $em->getRepository('AppBundle:Fonction')->findByAbreviation($fonction);
-        }
-
-        if($this->listeGroupes == null) {
-
-            if($model == null)
-                $this->listeGroupes = $em->getRepository('AppBundle:Groupe')->findAll();
-
-            else {
-                $model = $em->getRepository('AppBundle:Model')->find($model);
-                $this->listeGroupes = $em->getRepository('AppBundle:Groupe')->findBy(array('model'=>$model));
-            }
-        }
-
+        $listeGroupes = $this->em->getRepository('AppBundle:Groupe')->findAll();
 
         $attribution->setDateDebut($this->getRandomInscription());
         $attribution->setDateFin((mt_rand(1,10) > 7) ? new \Datetime( date('Y-m-d h:i:s', mt_rand(1428932408, 1513176008)) ) : null);
-        $attribution->setFonction($this->listeFonctions[mt_rand(0, (count($this->listeFonctions)-1))]);
-        $attribution->setGroupe($this->listeGroupes[mt_rand(0, (count($this->listeGroupes)-1))]);
 
+        /** @var Groupe $groupe */
+        $groupe = $listeGroupes[mt_rand(0, (count($listeGroupes)-1))];//on prend un groupe aleatoire
+        $attribution->setGroupe($groupe);
+        $attribution->setMembre($membre);
+
+        /*
+         * On regarde si y a un chefs dans le groupe. Si pas encore, alors on met le membre
+         * comme chefs.
+         * Si deja un chef, alors on met le membre dans une des attributions possible du groupe
+         */
+        if($groupe->getChef() == null)
+        {
+            $attribution->setFonction($groupe->getModel()->getFonctionChef());
+        }
+        else
+        {
+            $fonctions = $groupe->getModel()->getFonctions();
+            $attribution->setFonction($fonctions[mt_rand(0, (count($fonctions)-1))]);
+        }
+        $this->em->persist($membre);
+        $this->em->persist($groupe);
+        $this->em->persist($attribution);
         return $attribution;
     }
 
@@ -521,12 +494,10 @@ class PopulateCommand extends ContainerAwareCommand
      */
     private function getRandomDistinction() {
 
-        $em          = $this->getContainer()->get('doctrine.orm.entity_manager');
-        if($this->listeDistinctions == null)
-            $this->listeDistinctions = $em->getRepository('AppBundle:Distinction')->findAll();
+        $listeDistinctions = $this->em->getRepository('AppBundle:Distinction')->findAll();
 
         $distinction = new ObtentionDistinction();
-        $distinction->setDistinction($this->listeDistinctions[mt_rand(0, (count($this->listeDistinctions)-1))]);
+        $distinction->setDistinction($listeDistinctions[mt_rand(0, (count($listeDistinctions)-1))]);
         $distinction->setDate($this->getRandomInscription());
 
         return $distinction;
@@ -1310,6 +1281,137 @@ class PopulateCommand extends ContainerAwareCommand
             return (rand(0,1) == 1) ? $tel : null;
         else
             return $tel;
+    }
+
+    /**
+     *
+     */
+    protected function createMembers()
+    {
+
+        $progress = new ProgressBar($this->output->getOutput(), $this->numberOfMember);
+
+        $progress->start();
+
+        for ($i = 0; $i < $this->numberOfMember; $i++) {
+
+            /*
+             * En premier lieu, on crée une nouvelle famille. Dans cette famille, on va ajouter entre 1 et 4 gosse,
+             * et entre 1 et 2 parents. Lorsqu'on a choisit le nombre de gosses à ajouter, on va incrémenter le nombre
+             * de membres souhaité en tout pour que ce soit pris en compte
+             */
+            $famille = new Famille();
+            $famille->setNom($this->getNom());
+            $famille->setContact($this->getRandomContact());
+            $famille->setValidity(mt_rand(0, 2));
+
+
+            //Ajout des parents
+            switch (mt_rand(0, 2) == 0) {
+                case 0:
+                    //On lui file une mère
+                    $famille->setMere($this->getRandomMere());
+                    break;
+                case 1:
+                    //On lui file un père
+                    $famille->setPere($this->getRandomPere());
+                    break;
+                case 2:
+                    //on donne les deux parent
+                    $famille->setMere($this->getRandomMere());
+                    $famille->setPere($this->getRandomPere());
+                    break;
+            }
+
+
+            /*
+             * Après avoir géré les parents, on va gérer les membres ainsi que leurs attributions respectives
+             * afin qu'ils soient placés dans des groupes de manière efficace
+             */
+            $nbrDeGosses = 0;
+
+            if (($this->numberOfMember - $i) < 5)
+                $nbrDeGosses = $this->numberOfMember - $i;
+
+            else
+                $nbrDeGosses = mt_rand(1, 5);
+
+            $i += $nbrDeGosses;
+
+            for ($j = 0; $j < $nbrDeGosses; $j++) {
+
+                $membre = $this->getRandomMember();
+
+                $this->addRandomAttribution($membre);
+
+                for ($k = 0; $k < mt_rand(0, 3); $k++)
+                    $membre->addDistinction($this->getRandomDistinction());
+
+
+                //ajout créance et facture
+                $debiteurM = new DebiteurMembre();
+                $membre->setDebiteur($debiteurM);
+                $nbCreanceEnAttente = mt_rand(1, 3);
+                for ($n = 0; $n < $nbCreanceEnAttente; $n++) {
+                    $membre->getDebiteur()->addCreance($this->getCreance($membre->getDebiteur()));
+                }
+                $nbFacture = mt_rand(1, 3);
+                for ($n = 0; $n < $nbFacture; $n++) {
+                    $membre->getDebiteur()->addFacture($this->getFacture($membre->getDebiteur()));
+                }
+
+                //ajout d'envois
+
+                $receiver = new ReceiverMembre();
+                $pmail = new Mail();
+                $pmail->setTitle('Envoi par poste');
+                $pmail->setSender($membre->getSender());
+                $receiver->addMail($pmail);
+                $email = new Mail();
+                $email->setTitle('Envoi par e-mail');
+                $email->setSender($membre->getSender());
+                $receiver->addMail($email);
+                $this->em->persist($receiver);
+                $membre->setReceiver($receiver);
+
+
+                $famille->addMembre($membre);
+            }
+
+            //ajout créance et facture
+
+            $debiteur = new DebiteurFamille();
+            $famille->setDebiteur($debiteur);
+            $nbCreanceEnAttente = mt_rand(1, 3);
+            for ($n = 0; $n < $nbCreanceEnAttente; $n++) {
+                $famille->getDebiteur()->addCreance($this->getCreance($famille->getDebiteur()));
+            }
+            $nbFacture = mt_rand(1, 3);
+            for ($n = 0; $n < $nbFacture; $n++) {
+                $famille->getDebiteur()->addFacture($this->getFacture($famille->getDebiteur()));
+            }
+
+            //ajout d'envois
+
+            $receiver = new ReceiverFamille();
+            $pmail = new Mail();
+            $pmail->setTitle('Envoi par poste');
+            $receiver->addMail($pmail);
+            $email = new Mail();
+            $email->setTitle('Envoi par e-mail');
+            $receiver->addMail($email);
+            $this->em->persist($receiver);
+            $famille->setReceiver($receiver);
+
+
+            $this->em->persist($famille);
+
+            $progress->advance();
+        }
+
+        $this->em->flush();
+
+        $progress->finish();
     }
 
 }

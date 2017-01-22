@@ -8,6 +8,7 @@ use AppBundle\Entity\Payement;
 use AppBundle\Entity\PayementFile;
 use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\Column;
+use AppBundle\Utils\ListUtils\ListModel;
 use AppBundle\Utils\ListUtils\ListModelInterface;
 use AppBundle\Utils\Event\EventPostAction;
 use AppBundle\Utils\ListUtils\ListRenderer;
@@ -16,21 +17,17 @@ use Symfony\Component\Routing\Router;
 use AppBundle\Utils\ListUtils\ActionList;
 use AppBundle\Entity\Debiteur;
 
-class ListModelsParameter implements ListModelInterface
+class ListModelsParameter extends ListModel
 {
 
-
     /**
-     * @param \Twig_Environment $twig
      * @param $items
-     * @param Router $router
      * @param string $url
      * @return ListRenderer
      */
-    static public function getDefault(\Twig_Environment $twig, Router $router, $items, $url = null)
+    public function getDefault($items, $url = null)
     {
-
-        $list = new ListRenderer($twig, $items);
+        $list = new ListRenderer($this->twig, $items);
         $list->setUrl($url);
         $list->setSearchBar(true);
 
@@ -61,16 +58,15 @@ class ListModelsParameter implements ListModelInterface
 
         $list->addColumn(new Column('Type', function (Parameter $item) { return $item->getType(); }));
 
-
-
-        $parameters = function (Parameter $item) {
-            return array(
-                "parameter" => $item->getId()
-            );
-        };
-
-        $list->addActionLine(new ActionLine('Editer', 'edit', 'app_parameter_edit', $parameters, EventPostAction::ShowModal,null,true,false));
-
+        if($this->isGranted('ROLE_PARAMETER'))
+        {
+            $parameters = function (Parameter $item) {
+                return array(
+                    "parameter" => $item->getId()
+                );
+            };
+            $list->addActionLine(new ActionLine('Editer', 'edit', 'app_parameter_edit', $parameters, EventPostAction::ShowModal,null,true,false));
+        }
 
 
         return $list;

@@ -33,6 +33,8 @@ class AppKernel extends Kernel
             new JMS\SerializerBundle\JMSSerializerBundle(), //Le système de serialization
             new Knp\Bundle\SnappyBundle\KnpSnappyBundle(), // pour les PDF
             new \EmanueleMinotto\TwigCacheBundle\TwigCacheBundle(), //Twig cache tag
+            new Lexik\Bundle\MaintenanceBundle\LexikMaintenanceBundle(),
+            new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),//Versioning of entity
             new AppBundle\AppBundle(),
         );
 
