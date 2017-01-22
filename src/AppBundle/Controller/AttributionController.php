@@ -22,8 +22,11 @@ class AttributionController extends Controller
 {
 
     /**
-     * @Route("/add", name="app_attribution_add", options={"expose"=true})
-     * @Route("/add/{membre}", name="app_attribution_add_tomembre", options={"expose"=true})
+     * todo CMR de NUR la double déclaration route ne correspond pas au standard de nomenclature
+     * de plus c'est pas trop logique de mettre deux logique dans la meme methode.
+     * Quand est-ce que on utilise add attribution sans membre?
+     *
+     * @Route("/add/{membre}", name="app_attribution_add", options={"expose"=true})
      *
      * @param Request $request
      * @param Membre $membre
@@ -61,8 +64,7 @@ class AttributionController extends Controller
 
 
     /**
-     * @Route("/edit/{attribution}", name="app_attribution_edit", options={"expose"=true})
-     * @Route("/end/{attribution}/{dateFin}", name="app_attribution_end", options={"expose"=true})
+     * @Route("/edit/{attribution}/{dateFin}", options={"expose"=true}, requirements={"attribution": "\d+"})
      *
      * @param Request $request
      * @param Attribution $attribution

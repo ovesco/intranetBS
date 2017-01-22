@@ -62,3 +62,4 @@ parameters:
                     ROLE_CATEGORIE_REMOVE:
             ROLE_SECURITY:
             ROLE_PARAMETER:
+            ROLE_MODIFICATION:

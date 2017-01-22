@@ -37,7 +37,9 @@
 
     {% elseif attr in DATES %}
         data-type="date"
-
+        data-clear="false"
+        {# on doit définir le format des données envoyées en ajax, donc format standard #}
+        data-format="{{ format_date_xeditable }}"
     {% else %}
 
     {% endif %}
@@ -59,7 +61,7 @@
     {% set object = form.parent.vars['value'] %}
 
     data-pk="{{ object.id }}"
-    data-url="{{ path('interne_ajax_app_modify_property') }}"
+    data-url="{{ path('app_modification_modify') }}"
     data-name="{{ attr ~ "___" ~ class(object) ~ "___" ~ form.vars['name'] }}" {# le name contient le nom du champ a modifier ainsi que le type de ce champ #}
     data-value="{{ value }}"
 
@@ -131,6 +133,10 @@
 {% endblock %}
 
 {% block checkbox_widget %}
+    {{ block('form_widget') }}
+{% endblock %}
+
+{% block birthday_widget %}
     {{ block('form_widget') }}
 {% endblock %}
 

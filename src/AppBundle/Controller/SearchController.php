@@ -26,8 +26,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  * @Route("/intranet/search")
  *
  *
- * todo NUR dans le formulaire de recherche de membre, il faut pouvoir chercher qui à son anni durant le camp.
+ * todo NUR v2 ans le formulaire de recherche de membre, il faut pouvoir chercher qui à son anni durant le camp.
  * et certainement bouger ca dans le controller membre
+ *
+ * todo NUR beta1 la logique de ce controller laisse à désiré. il faudrais bouger une bonne partie de cette logique
+ * dans un service.
+ *
  */
 class SearchController extends Controller
 {
@@ -112,7 +116,7 @@ class SearchController extends Controller
      * et le retourne. Ca permet d'éviter d'avoir à sérializer des données en Json et tout
      * @param Request $request
      * @return Response
-     * @Route("/advanced-search", name="interne_search_advanced", options={"expose"=true})
+     * @Route("/advanced-search", options={"expose"=true})
      */
     public function advancedSearchAction(Request $request) {
 
@@ -139,7 +143,7 @@ class SearchController extends Controller
 
     /**
      * Recherche les familles pour le formulaire d'ajout de membre
-     * @Route("/famille-search", name="interne_famille_search", options={"expose"=true})
+     * @Route("/famille-search", options={"expose"=true})
      * @param Request $request
      * @return JsonResponse
      */

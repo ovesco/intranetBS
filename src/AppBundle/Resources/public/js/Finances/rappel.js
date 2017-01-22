@@ -1,3 +1,4 @@
+//todo NUR ce fichier est probablement obselet
 function addRappel(idFacture,idForm,reload,loader){
 
     //default value
