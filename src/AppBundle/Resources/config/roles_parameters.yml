@@ -50,6 +50,16 @@ parameters:
                 ROLE_FACTURE:
                 ROLE_PAYEMENT:
             ROLE_STRUCTURE:
+                ROLE_DISTINCTION:
+                    ROLE_DISTINCTION_CREATE:
+                    ROLE_DISTINCTION_EDIT:
+                    ROLE_DISTINCTION_VIEW:
+                    ROLE_DISTINCTION_REMOVE:
+                ROLE_CATEGORIE:
+                    ROLE_CATEGORIE_CREATE:
+                    ROLE_CATEGORIE_EDIT:
+                    ROLE_CATEGORIE_VIEW:
+                    ROLE_CATEGORIE_REMOVE:
             ROLE_SECURITY:
             ROLE_PARAMETER:
             ROLE_MODIFICATION:
