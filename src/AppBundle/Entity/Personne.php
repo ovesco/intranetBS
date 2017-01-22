@@ -19,7 +19,6 @@ use JMS\Serializer\Annotation\VirtualProperty;
  *
  * @ExclusionPolicy("all")
  *
- * todo NUR ajouter le déces en boolean
  */
 abstract class Personne
 {
@@ -74,7 +73,21 @@ abstract class Personne
      */
     protected $iban;
 
+    /**
+     * @var boolean
+     *
+     * @Gedmo\Versioned
+     * @ORM\Column(name="decede", type="boolean")
+     */
+    private $decede;
 
+
+    public function __construct()
+    {
+        $this->decede = false;
+        //une personne a forcement un contact
+        $this->contact = new Contact();
+    }
 
     /**
      * Get prenom
@@ -179,5 +192,21 @@ abstract class Personne
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isDecede()
+    {
+        return $this->decede;
+    }
+
+    /**
+     * @param boolean $decede
+     */
+    public function setDecede($decede)
+    {
+        $this->decede = $decede;
     }
 }
