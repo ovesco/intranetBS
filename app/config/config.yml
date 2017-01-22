@@ -16,7 +16,6 @@ parameters:
     #cache facture directory
     cache_facture_dir: %kernel.cache_dir%/tmp_doc/facture/
     cron_execution_time_file: '%kernel.root_dir%/cron/cron_last.log'
-
     #format de date (à utiliser au maximum svp)
     format_date: 'd.m.Y'
     format_datetime: 'd.m.Y - H:i'
@@ -25,6 +24,7 @@ parameters:
     format_date_icu: 'dd.MM.yyyy'
     #correspond à format_date en version xeditable
     format_date_xeditable: 'DD.MM.Y'
+
 
 framework:
     #esi:             ~
