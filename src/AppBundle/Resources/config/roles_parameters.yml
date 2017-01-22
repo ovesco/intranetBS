@@ -52,3 +52,4 @@ parameters:
             ROLE_STRUCTURE:
             ROLE_SECURITY:
             ROLE_PARAMETER:
+            ROLE_MODIFICATION:
