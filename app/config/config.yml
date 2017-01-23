@@ -16,6 +16,14 @@ parameters:
     #cache facture directory
     cache_facture_dir: %kernel.cache_dir%/tmp_doc/facture/
     cron_execution_time_file: '%kernel.root_dir%/cron/cron_last.log'
+    #format de date (à utiliser au maximum svp)
+    format_date: 'd.m.Y'
+    format_datetime: 'd.m.Y - H:i'
+    #format de date pour la construction des formulaires
+    #http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax
+    format_date_icu: 'dd.MM.yyyy'
+    #correspond à format_date en version xeditable
+    format_date_xeditable: 'DD.MM.Y'
 
 
 framework:
@@ -55,11 +63,17 @@ twig:
         #service de generation des menu. Permet d'obtenir les routes liée aux annotations @menu
         menu: "@menu"
         notification_bag: "@app.notification_bag"
+        #format de date
+        global_date_format: "%format_date%"
+        global_datetime_format: "%format_datetime%"
+        format_date_icu: "%format_date_icu%"
+        format_date_xeditable: "%format_date_xeditable%"
     #template de base pour tout les formulaires ou ce n'est pas spécifier
     form_themes:
         - 'AppBundle:Form:default_widgets.html.twig'
     date:
-        format: d.m.Y, H:i:s
+        #format utilisé automatiquement dans les filtres date
+        format: "%format_date%"
         interval_format: '%%d days'
 
 

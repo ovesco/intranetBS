@@ -21,6 +21,7 @@ class BooleanType extends AbstractType
                 false   => "Non"
             )
         ));
+
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
