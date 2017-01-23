@@ -19,7 +19,7 @@ use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route as RouteAnnotation;
 use AppBundle\Tests\Routing\RoutingTestCase;
 
-class RouteNamingCheckCommand extends ContainerAwareCommand
+class RouteCheckCommand extends ContainerAwareCommand
 {
 
     /**
@@ -47,7 +47,7 @@ class RouteNamingCheckCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('app:check:route')
+            ->setName('app:route:check')
             ->setDescription('Effectue un check sur la nomencalture de l\'ensemble des route de l\'application')
         ;
 
