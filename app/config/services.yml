@@ -7,6 +7,9 @@ services:
             - @session
             - @doctrine.orm.entity_manager
 
+    app.listing.button_generator:
+            class: AppBundle\Utils\Listing\ButtonGenerator
+
     #parser:
     #    class: AppBundle\Utils\Accessor\Parser
     #    arguments:
@@ -113,6 +116,7 @@ services:
         arguments:
             auditReader: @simplethings_entityaudit.reader
             em: @doctrine.orm.entity_manager
+            logger: @logger
 
 
     # Twig

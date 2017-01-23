@@ -4,63 +4,13 @@
 
 {% block content %}
 
-    <div class="ui page grid">
-        <div class="row">
-            <div class="column">
+    {{ dump(listing) }}
 
-                <h1>Listes personnalisées</h1>
+    {{ modal_caller('<a class="ui button">create</a>',path('app_listing_create')) }}
 
-                <div class="ui segment">
-                    <p>Les listes dynamiques vous permettent de créer des listes de membres que vous pouvez ensuite exporter ou utiliser un peu partout ailleurs.</p>
-                    <a onclick="addListe(false);" class="ui green tiny button">Créer</a>
-                {% for liste in listing.listes %}
-
-                    <div data-token="{{ liste.token }}" class="ui vertical segment listing-container">
-
-                        <h3 class="ui horizontal divider">
-                            <i class="users icon"></i>
-                            {{ liste.name }}
-                        </h3>
-
-
-                        {% include 'AppBundle:Listing:listing_view_liste.html.twig' with {'liste' : liste} %}
-
-
-                    </div>
-
-                {% endfor %}
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <div id="add-liste-modal" class="ui small modal">
-        <i class="close icon"></i>
-        <div class="header">
-            Ajouter une liste
-        </div>
-        <div class="content">
-            <form method="post">
-                <p>Choisissez un nom pour la liste. Si le nom est déjà pris, il sera légèrement modifié</p>
-                <div class="ui left icon input">
-                    <input id="new-liste-name" type="text" name="new_liste_name" placeholder="Entrez un nom">
-                    <i class="list icon"></i>
-                </div>
-
-                <button class="ui green button">Ajouter la liste</button>
-            </form>
-        </div>
-        <div class="actions">
-            <div class="ui button">Cancel</div>
-        </div>
-    </div>
 
 
 {% endblock %}
 
 
-{% block js %}
-    {{ parent() }}
-    <script src="{{ asset('bundles/app/js/specials/listing_view.js') }}"></script>
-{% endblock %}
+

@@ -8,6 +8,7 @@
 
 namespace AppBundle\Utils\EntityAudit;
 
+use Doctrine\DBAL\Driver\PDOException;
 use Monolog\Logger;
 use SimpleThings\EntityAudit\AuditReader;
 use Doctrine\ORM\EntityManager;
@@ -15,6 +16,7 @@ use AppBundle\Entity\Membre;
 use AppBundle\Entity\Famille;
 use SimpleThings\EntityAudit\Revision;
 use SimpleThings\EntityAudit\Exception\AuditException;
+use Symfony\Component\Security\Acl\Exception\Exception;
 
 
 /**
@@ -183,6 +185,14 @@ class AuditAnalizer {
                 }
                 /* Avoid problem when entity are not revised yet */
                 catch (AuditException $e){
+                    $this->logger->error($e->getMessage());
+                }
+                catch (PDOException $e)
+                {
+                    $this->logger->error($e->getMessage());
+                }
+                catch (\Exception $e)
+                {
                     $this->logger->error($e->getMessage());
                 }
             }

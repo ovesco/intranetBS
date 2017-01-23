@@ -40,12 +40,6 @@
 
     {{ render(controller('AppBundle:Layout:menu')) }}
 
-       {#
-           LISTING
-           On définit le container, car il nous permettra ensuite de modifier le menu
-           de manière dynamique à chaque fois qu'on souhaite accéder au listing
-       #}
-        <div class="ui top sidebar ui secondary segment" id="listing-bar"></div>
 
         <div class="pusher">
             {% include 'AppBundle:Layout:top_menu.html.twig' %}
@@ -69,7 +63,6 @@
 
              <div id="popup-menu-container"></div>
         #}
-        {% include 'AppBundle:Listing:modal_add_listing.html.twig' %}
 
 
         {# javascript en fin de page #}

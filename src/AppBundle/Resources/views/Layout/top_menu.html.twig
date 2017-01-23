@@ -27,7 +27,8 @@
 
         <div class="right menu">
 
-            <a class="item" href="#" id="main-listing-button">Listes</a>
+            {{ modal_caller('<div class="item">Listes</div>',path('app_listing_mylistingmodal')) }}
+
 
             <div class="ui dropdown item">
                 {% if app.user != null %}

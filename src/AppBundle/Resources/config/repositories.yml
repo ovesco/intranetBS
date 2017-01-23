@@ -66,3 +66,9 @@ services:
         factory_service: doctrine.orm.default_entity_manager
         factory_method: getRepository
         arguments: ['AppBundle:Distinction']
+
+    app.repository.listing:
+        class: AppBundle\Repository\ListingRepository
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+        arguments: ['AppBundle:Listing']

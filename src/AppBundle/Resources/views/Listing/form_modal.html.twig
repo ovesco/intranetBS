@@ -1,0 +1,29 @@
+{% extends 'AppBundle:Templates:modal_small.html.twig' %}
+
+{% if form.name.vars.value == '' %}
+    {%  set header = 'Créer une list' %}
+    {%  set buttonText = 'Enregistrer' %}
+{% else %}
+    {%  set header = 'Modifier une list' %}
+    {%  set buttonText = 'Modifier' %}
+{% endif %}
+
+{% block header %}
+    {{ header }}
+{% endblock %}
+
+
+{% block content %}
+
+    {{ form_start(form,{'attr': {'class': 'ui form ajax'}}) }}
+
+    {{ form_rest(form) }}
+
+    <div class="ui field">
+        <input type="submit" class="ui green button" value="{{ buttonText }}" />
+    </div>
+
+    {{ form_end(form) }}
+
+
+{% endblock %}

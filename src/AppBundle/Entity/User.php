@@ -91,6 +91,14 @@ class User implements UserInterface, \Serializable
      * @Expose
      */
     private $lastConnexion;
+
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Listing", mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $listing;
     
 
     public function __construct()
@@ -99,7 +107,7 @@ class User implements UserInterface, \Serializable
         $this->isActive = true;
         $this->selectedRoles 	= array();
         $this->roles = null;
-
+        $this->listing = new ArrayCollection();
     }
 
     /**
@@ -380,5 +388,28 @@ class User implements UserInterface, \Serializable
     {
         return $this->selectedRoles;
     }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getListing()
+    {
+        return $this->listing;
+    }
+
+    /**
+     * @param Listing $listing
+     * @return User
+     */
+    public function addListing(Listing $listing)
+    {
+        if($listing->getUser() != $this)
+            $listing->setUser($this);
+        if(!$this->listing->contains($listing))
+            $this->listing->add($listing);
+        return $this;
+    }
+
+
 
 }
