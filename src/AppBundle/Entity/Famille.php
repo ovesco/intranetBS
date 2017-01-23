@@ -134,14 +134,6 @@ class Famille implements ExpediableInterface,DebiteurInterface,ReceiverInterface
     }
 
     /**
-     * Return the class name
-     * @return string
-     */
-    static public function className(){
-        return __CLASS__;
-    }
-
-    /**
      * Get id
      *
      * @return integer

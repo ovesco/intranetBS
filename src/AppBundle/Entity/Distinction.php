@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Distinction
  *
  * @ORM\Table(name="app_distinctions")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\DistinctionRepository")
  */
 class Distinction
 {
@@ -123,4 +123,13 @@ class Distinction
     {
         return $this->obtentionDistinctions;
     }
+
+    /**
+     * @return bool
+     */
+    public function isRemovable()
+    {
+        return $this->obtentionDistinctions->isEmpty();
+    }
+
 }

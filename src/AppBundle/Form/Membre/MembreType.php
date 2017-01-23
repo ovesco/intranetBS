@@ -17,6 +17,8 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
+use AppBundle\Field\BooleanType;
+use AppBundle\Field\DateType as AppDateType;
 
 class MembreType extends PersonneType
 {
@@ -29,11 +31,8 @@ class MembreType extends PersonneType
             ->add('famille', FamilleType::class)
             //->add('attributions', CollectionType::class, array('entry_type' => AttributionType::class))
             ->add('distinctions', CollectionType::class, array('entry_type' => ObtentionDistinctionType::class))
-            ->add('naissance', BirthdayType::class, array(
-                'label' => 'Date de naissance',
-                'widget' => 'single_text',
-                'format' => 'dd.MM.yyyy'
-            ))
+
+            ->add('naissance', AppDateType::class, array('label' => 'Date de naissance'))
             ->add('numeroAvs', NumberType::class,
                 array(
                     'label' => 'Numéro AVS',
@@ -42,6 +41,14 @@ class MembreType extends PersonneType
                         'data-formatter' => 'true',
                         'data-pattern' => '{{9999999999999}}'
                     )
+                )
+            )
+            ->add(
+                'iban',
+                TextType::class,
+                array(
+                    'label' => 'IBAN',
+                    'required' => false,
                 )
             )
             ->add(
@@ -65,11 +72,9 @@ class MembreType extends PersonneType
                     'choices_as_values' => true
                 )
             )
-            ->add('inscription', DateType::class, array(
-                'label' => 'Inscription',
-                'widget' => 'single_text',
-            ))
-            ->add('statut', TextType::class, array('label' => 'Statut'))
+            ->add('inscriptionDate', AppDateType::class, array( 'label' => 'Inscription'))
+            ->add('desinscriptionDate', AppDateType::class, array('label' => 'Désinscription'))
+            ->add('decede', BooleanType::class, array('label' => 'Décédé'))
             ->add('id', HiddenType::class);
     }
 

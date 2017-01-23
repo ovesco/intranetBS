@@ -1,20 +1,29 @@
-/web/bundles/
-/app/bootstrap.php.cache
+#Please follow order of directories and files...
+#all file in cache directory:
 /app/cache/*
-/app/config/parameters.yml
-/app/logs/*
+#except this file:
 !app/cache/.gitkeep
+#specific config of each instance of the app:
+/app/config/parameters.yml
+#all the file in log directory:
+/app/logs/*
+#except this file:
 !app/logs/.gitkeep
+#file in app dir:
+/app/bootstrap.php.cache
 /app/phpunit.xml
-/build/
-/vendor/
+#all file in these directories
 /bin/
+/node_modules/
+/vendor/
+#all specific file of external assets
+/web/assets/
+#all specific file of bundles
+/web/bundles/
+#for old version of the app
+/web/static/
+/web/test/
+#file in root directory
 /composer.phar
+/composer.lock
 /.idea
-/web/css/
-/web/images/
-/web/js/
-/web/PDFTemplates/
-/web/static/*
-/web/galerie/photos/*
-/src/AppBundle/Utils/Parmetre/values/*
