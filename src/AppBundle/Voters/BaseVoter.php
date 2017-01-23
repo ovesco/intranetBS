@@ -13,21 +13,41 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use AppBundle\Entity\User;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 
+/**
+ * Class CRUD
+ * @package AppBundle\Voters
+ *
+ * According to standard CRUD
+ * https://en.wikipedia.org/wiki/Create,_read,_update_and_delete
+ *
+ */
+class CRUD{
+    const CREATE = 'create';
+    const READ = 'read';
+    const UPDATE = 'update';
+    const DELETE = 'delete';
+}
+
+
 abstract class BaseVoter extends  Voter {
 
-    const VIEW = 'view';
-    const CREATE = 'create';
-    const EDIT = 'edit';
-    const REMOVE = 'remove';
 
     /** @var  AccessDecisionManagerInterface */
     private $decisionManager;
 
+    /**
+     * @param AccessDecisionManagerInterface $decisionManager
+     */
     public function __construct(AccessDecisionManagerInterface $decisionManager)
     {
         $this->decisionManager = $decisionManager;
     }
 
+    /**
+     * @param $role
+     * @param $token
+     * @return bool
+     */
     protected function hasRole($role,$token)
     {
         if ($this->decisionManager->decide($token, array($role))) {
@@ -36,13 +56,13 @@ abstract class BaseVoter extends  Voter {
         return false;
     }
 
-    abstract protected function getSupportedClass();
+
 
 
     protected function supports($attribute, $subject){
 
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, array(self::VIEW, self::EDIT,self::CREATE,self::REMOVE))) {
+        if (!in_array($attribute, array(CRUD::CREATE, CRUD::READ,CRUD::UPDATE,CRUD::DELETE))) {
             return false;
         }
 
@@ -65,45 +85,25 @@ abstract class BaseVoter extends  Voter {
         }
 
         switch ($attribute) {
-            case self::VIEW:
-                return $this->canView($subject, $user, $token);
-            case self::EDIT:
-                return $this->canEdit($subject, $user, $token);
-            case self::REMOVE:
-                return $this->canRemove($subject, $user, $token);
-            case self::CREATE:
+            case CRUD::CREATE:
                 return $this->canCreate($subject, $user, $token);
+            case CRUD::READ:
+                return $this->canRead($subject, $user, $token);
+            case CRUD::UPDATE:
+                return $this->canUpdate($subject, $user, $token);
+            case CRUD::DELETE:
+                return $this->canDelete($subject, $user, $token);
         }
 
         throw new \LogicException('This code should not be reached!');
     }
 
 
-
-
     /**
-     * @param $subject
-     * @param User $user
-     * @param TokenInterface $token
-     * @return boolean
+     *
+     * @return mixed
      */
-    abstract protected function canView($subject, User $user, TokenInterface $token);
-
-    /**
-     * @param $subject
-     * @param User $user
-     * @param TokenInterface $token
-     * @return boolean
-     */
-    abstract protected function canEdit($subject, User $user, TokenInterface $token);
-
-    /**
-     * @param $subject
-     * @param User $user
-     * @param TokenInterface $token
-     * @return boolean
-     */
-    abstract protected function canRemove($subject, User $user, TokenInterface $token);
+    abstract protected function getSupportedClass();
 
     /**
      * @param $subject
@@ -113,6 +113,28 @@ abstract class BaseVoter extends  Voter {
      */
     abstract protected function canCreate($subject, User $user, TokenInterface $token);
 
+    /**
+     * @param $subject
+     * @param User $user
+     * @param TokenInterface $token
+     * @return boolean
+     */
+    abstract protected function canRead($subject, User $user, TokenInterface $token);
+
+    /**
+     * @param $subject
+     * @param User $user
+     * @param TokenInterface $token
+     * @return boolean
+     */
+    abstract protected function canUpdate($subject, User $user, TokenInterface $token);
+
+    /**
+     * @param $subject
+     * @param User $user
+     * @param TokenInterface $token
+     * @return boolean
+     */
+    abstract protected function canDelete($subject, User $user, TokenInterface $token);
+
 }
-
-

@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
  * Class RappelController
  * @package AppBundle\Controller
  *
- * @Route("/intranet/rappel")
+ * @Route("/intranet/finance/rappel")
  */
 class RappelController extends Controller
 {

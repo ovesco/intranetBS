@@ -38,7 +38,7 @@ use AppBundle\Search\Mode;
  * Class FactureController
  * @package AppBundle\Controller
  *
- * @Route("/intranet/facture")
+ * @Route("/intranet/finance/facture")
  */
 class FactureController extends Controller
 {

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 /* Symfony */
+use AppBundle\Voters\CRUD;
 use Doctrine\Common\Collections\ArrayCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -52,9 +53,10 @@ class CategorieController extends Controller
      */
     public function addAction(Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_CATEGORIE_CREATE');
-
         $new = new Categorie();
+
+        $this->denyAccessUnlessGranted(CRUD::CREATE,$new);
+
         $newForm = $this->createForm(new CategorieType(),$new,
             array('action' => $this->generateUrl('app_categorie_add')));
 
@@ -80,7 +82,7 @@ class CategorieController extends Controller
      */
     public function editAction(Categorie $categorie,Request $request)
     {
-        $this->denyAccessUnlessGranted('edit',$categorie);
+        $this->denyAccessUnlessGranted(CRUD::UPDATE,$categorie);
 
         $editedForm = $this->createForm(new CategorieType(),$categorie,
             array('action' => $this->generateUrl('app_categorie_edit',array('categorie'=>$categorie->getId()))));
@@ -104,7 +106,7 @@ class CategorieController extends Controller
      */
     public function removeAction(Categorie $categorie,Request $request)
     {
-        $this->denyAccessUnlessGranted('remove',$categorie);
+        $this->denyAccessUnlessGranted(CRUD::DELETE,$categorie);
 
         if($categorie->isRemovable())
         {
