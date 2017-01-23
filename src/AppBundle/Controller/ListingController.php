@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 
 use AppBundle\Entity\Listing;
+use AppBundle\Entity\Membre;
 use AppBundle\Utils\Response\ResponseFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -107,6 +108,44 @@ class ListingController extends Controller
 
         return  array('listing' => $listing);
     }
+
+    /**
+     * @return Response la vue
+     * @Route("/show/{listing}")
+     * @Template("AppBundle:Listing:show_modal.html.twig")
+     * @ParamConverter("listing", class="AppBundle:Listing")
+     */
+    public function showModalAction(Request $request, Listing $listing) {
+
+        return  array('listing' => $listing);
+    }
+
+
+
+
+    /**
+     * @return Response la vue
+     * @Route("/manage_button/{entityClass}/{entityId}")
+     */
+    public function manageButtonAction(Request $request,$entityClass,$entityId) {
+
+        $listings = array();
+        switch($entityClass)
+        {
+            case 'membre':
+                $listings = $this->get('app.repository.listing')->listingOfUser($this->getUser(),Membre::class);
+        }
+
+        $json = array();
+        /** @var Listing $list */
+        foreach($listings as $list)
+        {
+            $json[] = array('name'=>$list->getName());
+        }
+
+        return new JsonResponse($json);
+    }
+
 
 
 

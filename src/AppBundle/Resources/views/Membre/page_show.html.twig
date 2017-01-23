@@ -44,8 +44,8 @@
                                 </div>
                             </div>
 
-                            <div class="ui mini blue basic icon button popupable" data-html="{{ listing_button.generate(membre) }}">
-
+                            <div class="ui mini blue basic icon button onclick popupable" data-html="{{ listing_button.generate(membre) }}">
+                                listing
                             </div>
                         </div>
 
@@ -248,5 +248,7 @@
 {% block js %}
     {{ parent() }}
     <script src="{{ asset('bundles/app/js/Membre/page_voir_membre.js') }}"></script>
+
+    <script src="{{ asset('bundles/app/js/Layout/listing.js') }}"></script>
 {% endblock %}
 

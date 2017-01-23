@@ -8,7 +8,10 @@ services:
             - @doctrine.orm.entity_manager
 
     app.listing.button_generator:
-            class: AppBundle\Utils\Listing\ButtonGenerator
+        class: AppBundle\Utils\Listing\ButtonGenerator
+        arguments:
+            - @app.repository.listing
+            - @security.token_storage
 
     #parser:
     #    class: AppBundle\Utils\Accessor\Parser

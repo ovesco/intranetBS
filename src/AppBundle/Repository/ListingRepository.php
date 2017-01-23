@@ -12,9 +12,16 @@ use AppBundle\Entity\User;
 
 class ListingRepository extends Repository{
 
-    public function listingOfUser(User $user)
+    public function listingOfUser(User $user, $entityClass = null)
     {
-        return $this->findBy(array('user'=>$user));
+        $contrainte = array('user'=>$user);
+
+        if($entityClass != null)
+        {
+            $contrainte['entity'] = $entityClass;
+        }
+
+        return $this->findBy($contrainte);
     }
 
 }
