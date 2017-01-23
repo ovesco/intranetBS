@@ -9,7 +9,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Adresse
  *
- * @Gedmo\Loggable
  * @ORM\Table(name="app_adresses")
  * @ORM\Entity
  */

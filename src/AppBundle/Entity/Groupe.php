@@ -3,7 +3,6 @@
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\Model;
 
@@ -14,7 +13,6 @@ use AppBundle\Entity\Model;
  * un nom ainsi qu'un model.
  *
  * @ORM\Table(name="app_groupes")
- * @Gedmo\Loggable
  * @ORM\Entity(repositoryClass="AppBundle\Repository\GroupeRepository")
  */
 class Groupe
@@ -31,14 +29,14 @@ class Groupe
     /**
      * @var string
      *
-     * @Gedmo\Versioned
+     * 
      * @ORM\Column(name="nom", type="string", length=255)
      */
     private $nom;
 
     /**
      *
-     * @Gedmo\Versioned
+     * 
      * @var Groupe
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Groupe", inversedBy="enfants", cascade={"persist"})
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
@@ -60,7 +58,7 @@ class Groupe
     /**
      * @var Model $model
      *
-     * @Gedmo\Versioned
+     * 
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Model", inversedBy="groupes", cascade={"persist"})
      */
     private $model;
@@ -71,7 +69,7 @@ class Groupe
      *
      * @var Boolean $active
      *
-     * @Gedmo\Versioned
+     * 
      * @ORM\Column(name="active", type="boolean")
      */
     private $active;

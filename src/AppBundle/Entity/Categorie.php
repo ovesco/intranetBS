@@ -15,7 +15,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * @ORM\Table(name="app_categorie")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CategorieRepository")
- * @Gedmo\Loggable
  */
 class Categorie
 {

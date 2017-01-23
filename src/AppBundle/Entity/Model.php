@@ -4,7 +4,6 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Model
@@ -12,7 +11,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Le model sera par exemple: Patrouille, troupe, meute. Troupe et meute auront la même catégorie : Unité
  *
  * @ORM\Table(name="app_model")
- * @Gedmo\Loggable
  * @ORM\Entity
  */
 class Model
@@ -31,14 +29,14 @@ class Model
     /**
      * @var string
      *
-     * @Gedmo\Versioned
+     * 
      * @ORM\Column(name="nom", type="string", length=255)
      */
     private $nom;
 
     /**
      * @ORM\OneToOne(targetEntity="Fonction")
-     * @Gedmo\Versioned
+     * 
      * @ORM\JoinColumn(name="fonctionChef_id", referencedColumnName="id", nullable=true)
      */
     private $fonctionChef;
@@ -72,7 +70,7 @@ class Model
 
     /**
      * @var boolean
-     * @Gedmo\Versioned
+     * 
      * @ORM\Column(name="affichage_effectifs", type="boolean")
      */
     private $affichageEffectifs;

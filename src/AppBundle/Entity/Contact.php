@@ -11,7 +11,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Contact
  *
  * @ORM\Table(name="app_contact")
- * @Gedmo\Loggable
  * @ORM\Entity
  */
 class Contact
