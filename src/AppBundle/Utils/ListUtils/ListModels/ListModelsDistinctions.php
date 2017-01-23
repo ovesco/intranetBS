@@ -3,8 +3,7 @@
 
 namespace AppBundle\Utils\ListUtils\ListModels;
 
-use AppBundle\Entity\Membre;
-use AppBundle\Entity\ObtentionDistinction;
+use AppBundle\Entity\Distinction;
 use AppBundle\Utils\Event\EventPostAction;
 use AppBundle\Utils\ListUtils\ActionLine;
 use AppBundle\Utils\ListUtils\ActionList;
@@ -15,50 +14,47 @@ use Symfony\Component\Routing\Router;
 
 class ListModelsDistinctions extends ListModel
 {
-
-
     /**
      * @param $items
-     * @param Membre $membre
-     * @param string $url
+     * @param null $url
      * @return ListRenderer
      */
-    public function getDefault($items, Membre $membre, $url = null)
+    public function getGestion($items, $url = null)
     {
         $twig = $this->twig;
         $router = $this->router;
         $list = new ListRenderer($twig, $items);
         $list->setUrl($url);
 
-        $list->setSearchBar(true);
-
-        $list->addColumn(new Column('Distinction', function (ObtentionDistinction $item) {
-            return $item->getDistinction()->getNom();
+        $list->addColumn(new Column('Distinction', function (Distinction $item) {
+            return $item->getNom();
         }));
-        $list->addColumn(new Column('Depuis le', function (ObtentionDistinction $item) {
-            return $item->getDate();
-        },
-            'date(global_date_format)'));
 
-        $obtentionParameters = function (ObtentionDistinction $obtention) {
+        $list->addColumn(new Column('Remarque', function (Distinction $item) {
+            return $item->getRemarques();
+        }));
+
+        $parameters = function (Distinction $distinction) {
             return array(
-                "obtention-distinction" => $obtention->getId()
+                "distinction" => $distinction->getId()
             );
         };
 
-        $membreParameters = function () use ($membre) {
-            return array(
-                "membre" => $membre->getId()
-            );
-        };
+        /* Editer la distinction courante */
+        $edit = new ActionLine('Modifier', 'edit', 'app_distinction_edit', $parameters, EventPostAction::ShowModal);
+        $edit->setInMass(false);
+        $list->addActionLine($edit);
+
+        /* Supprimer la distinction courante */
+        $delete = new ActionLine('Supprimer', 'remove', 'app_distinction_remove', $parameters, EventPostAction::RefreshPage);
+        $delete->setInMass(false);
+        $delete->setCondition(function(Distinction $distinction){return $distinction->isRemovable();});
+        $list->addActionLine($delete);
+
+        /* ajouter une distinction */
+        $list->addActionList(new ActionList('Ajouter', 'add', 'app_distinction_add', function(){return array();}, EventPostAction::ShowModal,null,'green'));
 
 
-        $list->addActionLine(new ActionLine('Supprimer', 'delete', 'obtention-distinction_delete', $obtentionParameters, EventPostAction::RefreshList));
-
-        $list->addActionList(new ActionList('Ajouter', 'add', 'obtention-distinction_add_modal', $membreParameters, EventPostAction::ShowModal));
-
-        $list->setDatatable(false);
-        $list->setStyle('very basic');
 
         return $list;
     }

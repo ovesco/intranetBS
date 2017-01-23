@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 class StatisticsController extends Controller
 {
     /**
-     * @Route("/", name="app_bundle_statistics")
+     * @Route("/")
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -31,7 +31,7 @@ class StatisticsController extends Controller
 
 
     /**
-     * @Route("/get_graph_ajax", name="interne_fiances_statistics_get_graph", options={"expose"=true})
+     * @Route("/get_graph_ajax", options={"expose"=true})
      * @param Request $request
      * @return JsonResponse
      */

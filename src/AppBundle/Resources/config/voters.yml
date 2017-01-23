@@ -24,3 +24,11 @@ services:
         public:     false #small boost performence
         tags:
             - { name: security.voter }
+
+    app.voter.distinction:
+        class:      AppBundle\Voters\DistinctionVoter
+        arguments:
+            decisionManager: "@security.access.decision_manager"
+        public:     false #small boost performence
+        tags:
+            - { name: security.voter }

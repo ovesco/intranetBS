@@ -12,3 +12,12 @@ services:
         class: AppBundle\Utils\Excel\Renderer\GroupeRenderer
         arguments:
             - "@doctrine.orm.entity_manager"
+
+
+    #FORMULAIRES NECESSITANT DE L'INJECTION
+    app.form.field.date:
+        class: AppBundle\Field\DateType
+        arguments:
+            format: "%format_date_icu%"
+        tags:
+            - { name: form.type }
