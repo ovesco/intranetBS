@@ -27,6 +27,7 @@ class Mere extends Geniteur
      */
     public function __construct()
     {
+        parent::__construct();
         $this->setSexe(Personne::FEMME);
     }
 }

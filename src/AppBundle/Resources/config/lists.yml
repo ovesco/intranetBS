@@ -104,3 +104,10 @@ services:
             twig:     @twig
             router:   @router
             checker:  @security.authorization_checker
+
+    app.list.obtention_distinction:
+        class: AppBundle\Utils\ListUtils\ListModels\ListModelsObtentionDistinctions
+        arguments:
+            twig:     @twig
+            router:   @router
+            checker:  @security.authorization_checker

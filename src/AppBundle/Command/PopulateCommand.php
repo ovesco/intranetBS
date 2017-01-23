@@ -440,11 +440,10 @@ class PopulateCommand extends ContainerAwareCommand
         $membre->setPrenom($this->getPrenom($sexe));
         $membre->setContact($this->getRandomContact());
         $membre->setNaissance($this->getRandomDateNaissance());
-        $membre->setInscription($this->getRandomInscription());
+        $membre->setInscriptionDate($this->getRandomInscription());
         $membre->setValidity(mt_rand(0,2));
         $membre->setNumeroAvs(mt_rand(111111111,999999999));
         $membre->setNumeroBs(mt_rand(0, 99999));
-        $membre->setStatut($this->getStatut());
         $membre->setIban($this->getIban(true));
 
         return $membre;
@@ -1130,16 +1129,6 @@ class PopulateCommand extends ContainerAwareCommand
             return (rand(0,1) == 1) ? $text : null;
         else
             return $text;
-    }
-
-    /**
-     * @return mixed
-     */
-    private function getStatut()
-    {
-        $statut = array('Inscrit','Préinscrit','Désincrit');
-        $randIndex = mt_rand(0, (count($statut)-1));
-        return $statut[$randIndex];
     }
 
 

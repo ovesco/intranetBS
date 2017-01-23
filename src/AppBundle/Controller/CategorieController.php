@@ -52,7 +52,7 @@ class CategorieController extends Controller
      */
     public function addAction(Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_STRUCTURE');
+        $this->denyAccessUnlessGranted('ROLE_CATEGORIE_CREATE');
 
         $new = new Categorie();
         $newForm = $this->createForm(new CategorieType(),$new,
