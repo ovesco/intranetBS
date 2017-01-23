@@ -101,7 +101,7 @@ abstract class RoutingTestCase extends WebTestCase
     /**
      * @return array
      */
-    abstract protected function getParameters();
+    abstract public function getParameters();
 
     /**
      *
@@ -171,6 +171,7 @@ abstract class RoutingTestCase extends WebTestCase
         $fs = new Filesystem();
         $fs->dumpFile($logFile,$message);
     }
+
 
 
 }
