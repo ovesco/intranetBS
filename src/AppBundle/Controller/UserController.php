@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Voters\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,7 +49,7 @@ class UserController extends Controller
      */
     public function showAction(Request $request, User $user)
     {
-        $this->denyAccessUnlessGranted('view',$user);
+        $this->denyAccessUnlessGranted(CRUD::READ,$user);
 
         /** @var RoleHierarchy $rh */
         $rh = $this->get('app.role.hierarchy');
@@ -66,9 +67,10 @@ class UserController extends Controller
      */
     public function createAction(Request $request){
 
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
         $user = new User();
+
+        $this->denyAccessUnlessGranted(CRUD::CREATE,$user);
+
         $userForm = $this->createForm(new UserType(),$user,array('app.role.hierarchy'=>$this->get('app.role.hierarchy')));
 
         $userForm->handleRequest($request);
@@ -92,7 +94,7 @@ class UserController extends Controller
      */
     public function editAction(Request $request, User $user){
 
-        $this->denyAccessUnlessGranted('edit',$user);
+        $this->denyAccessUnlessGranted(CRUD::UPDATE,$user);
 
         $userForm = $this->createForm(new UserType(),$user,array('app.role.hierarchy'=>$this->get('app.role.hierarchy')));
 
@@ -116,7 +118,7 @@ class UserController extends Controller
      */
     public function removeAction(Request $request, User $user){
 
-        $this->denyAccessUnlessGranted('remove',$user);
+        $this->denyAccessUnlessGranted(CRUD::DELETE,$user);
 
         $this->get('app.repository.user')->remove($user);
 

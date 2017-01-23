@@ -1,6 +1,27 @@
 #todo migrer les services requit par l'app ici...c'est plus logique
 
 services:
+    #SECURITY
+    # Provider for user (used in authentication proccess)
+    app.user.provider:
+        class: AppBundle\Security\UserProvider
+        arguments:
+            repository: "@app.repository.user"
+            hierarchy: "@app.role.hierarchy"
+
+    # Role Hierachy manager
+    app.role.hierarchy:
+        class: AppBundle\Security\RoleHierarchy
+        arguments:
+            builder: "@app.role.hierarchy.builder"
+
+    # Role Hierachy builder
+    app.role.hierarchy.builder:
+        class: AppBundle\Security\RoleHierarchyBuilder
+        arguments:
+            role_hierarchy: "%security.role_hierarchy%"
+            role_description: "%security.role_description%"
+
 
     excel_generator:
         class:  AppBundle\Utils\Export\Excel\ExcelGenerator

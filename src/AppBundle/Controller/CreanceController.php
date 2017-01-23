@@ -9,6 +9,7 @@ use AppBundle\Search\Creance\CreanceRepository as ElasticRepository;
 use AppBundle\Search\Creance\CreanceSearch;
 use AppBundle\Search\Creance\CreanceSearchType;
 use AppBundle\Utils\ListUtils\ListModels\ListModelsCreances;
+use AppBundle\Voters\CRUD;
 use Doctrine\Common\Collections\ArrayCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -27,7 +28,7 @@ use AppBundle\Utils\Finances\Facturation;
 /**
  * Class CreanceController
  * @package AppBundle\Controller
- * @Route("/intranet/creance")
+ * @Route("/intranet/finance/creance")
  */
 class CreanceController extends Controller
 {
@@ -49,7 +50,7 @@ class CreanceController extends Controller
      */
     public function removeAction(Request $request,Creance $creance)
     {
-        $this->denyAccessUnlessGranted('remove',$creance);
+        $this->denyAccessUnlessGranted(CRUD::DELETE,$creance);
         /*
          * On vérifie que la cérance n'est pas liée à une facture avant de la supprimer
          */
@@ -75,7 +76,7 @@ class CreanceController extends Controller
     public function createAction(Request $request,Debiteur $debiteur)
     {
         $creance = new Creance();
-        $this->denyAccessUnlessGranted('create',$creance);
+        $this->denyAccessUnlessGranted(CRUD::CREATE,$creance);
 
         $creance->setDebiteur($debiteur);
 
@@ -106,7 +107,7 @@ class CreanceController extends Controller
      */
     public function showAction(Request $request,Creance $creance){
 
-        $this->denyAccessUnlessGranted('view',$creance);
+        $this->denyAccessUnlessGranted(CRUD::READ,$creance);
         return array('creance' => $creance);
 
     }

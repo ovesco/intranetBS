@@ -49,7 +49,7 @@ use AppBundle\Search\Mode;
 /**
  * Class PayementController
  * @package AppBundle\Controller
- * @Route("/intranet/payement")
+ * @Route("/intranet/finance/payement")
  */
 class PayementController extends Controller
 {

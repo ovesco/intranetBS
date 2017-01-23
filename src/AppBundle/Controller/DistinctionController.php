@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Distinction;
+use AppBundle\Voters\CRUD;
 use AppBundle\Voters\DistinctionVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -46,7 +47,7 @@ class DistinctionController extends Controller{
     {
         $distinction = new Distinction();
 
-        $this->denyAccessUnlessGranted(DistinctionVoter::CREATE,$distinction);
+        $this->denyAccessUnlessGranted(CRUD::CREATE,$distinction);
 
         $form = $this->createForm(new DistinctionType(),$distinction,array('action' => $this->generateUrl('app_distinction_add')));
 
@@ -71,7 +72,7 @@ class DistinctionController extends Controller{
      */
     public function editAction(Request $request,Distinction $distinction)
     {
-        $this->denyAccessUnlessGranted(DistinctionVoter::EDIT,$distinction);
+        $this->denyAccessUnlessGranted(CRUD::UPDATE,$distinction);
 
         $editedForm = $this->createForm(
             new DistinctionType(),
@@ -99,7 +100,7 @@ class DistinctionController extends Controller{
      */
     public function removeAction(Request $request,Distinction $distinction)
     {
-        $this->denyAccessUnlessGranted(DistinctionVoter::REMOVE,$distinction);
+        $this->denyAccessUnlessGranted(CRUD::DELETE,$distinction);
 
         if(!$distinction->isRemovable())
         {

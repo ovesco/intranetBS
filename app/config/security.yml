@@ -2,10 +2,8 @@ security:
     providers:
         service: #use a service as provider
             id: app.user.provider #use this service as user provider
-
     encoders:
         AppBundle\Entity\User: plaintext
-
     firewalls:
         # Firewall principal
         interne:
@@ -19,16 +17,15 @@ security:
                 path:   /logout
                 target: /login
 
-
     # Attention: mettre les access controle les plus restrictif en haut
     access_control:
         #acces à la partie admin de l'application
         - { path: ^/intranet/admin, roles: ROLE_ADMIN}
         #acces à la partie finances de l'application
-        - { path: ^/intranet/payement, roles: ROLE_PAYEMENT }
-        - { path: ^/intranet/creance, roles: ROLE_CREANCE }
-        - { path: ^/intranet/facture, roles: ROLE_FACTURE }
-        - { path: ^/intranet/rappel, roles: ROLE_RAPPEL }
+        - { path: ^/intranet/finance/payement, roles: ROLE_PAYEMENT }
+        - { path: ^/intranet/finance/creance, roles: ROLE_CREANCE }
+        - { path: ^/intranet/finance/facture, roles: ROLE_FACTURE }
+        - { path: ^/intranet/finance/rappel, roles: ROLE_RAPPEL }
         - { path: ^/intranet/structure, roles: ROLE_STRUCTURE }
         - { path: ^/intranet/parameter, roles: ROLE_PARAMETER }
         - { path: ^/api/modification, roles: ROLE_MODIFICATION }

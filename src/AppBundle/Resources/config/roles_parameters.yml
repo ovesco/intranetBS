@@ -1,36 +1,7 @@
 parameters:
-#    liste_roles:
-#        ROLE_ADMIN:
-#            name: "role administrateur"
-#            description: "Ce droit fournit tous les accès possibles sur l'application"
-#            childs:
-#                ROLE_USER:
-#                    name: "role accès à l'application"
-#                    description: "Permet l'accès à l'application, sans ce rôle aucune page n'est accessible"
-#                ROLE_FINANCE:
-#                    name: "role finances"
-#                    description: "Donne tous les accès sur la gestion des finances de l'application"
-#                    childs:
-#                        ROLE_CREANCE:
-#                            name: "gestion des créances"
-#                            childs:
-#                                ROLE_CREANCE_EDIT:
-#                                ROLE_CREANCE_SHOW:
-#                        ROLE_FACTURE:
-#                            name: "gestion des factures"
-#                        ROLE_PAYEMENT:
-#                            name: "gestion des payements"
-#                        ROLE_RAPPEL:
-#                            name: "gestion des rappels"
-#                ROLE_STRUCTURE:
-#                    name: "role sutructure"
-#
-#        ROLE_RACINE_2:
-#            name: "juste pour montrer qu'on peut faire une secondre racine"
-
-
     # Liste des roles nécéssitant une explication
-    role_description:
+    security.role_description:
+        ROLE_USER: "Role minimum permetant l'accès à l'application"
         ROLE_ADMIN: "administrateur"
         ROLE_FINANCE: "gestion des finances"
         ROLE_SECURITY: "Gestion des utilisateurs du site, doit d'accès et privilège"
@@ -38,28 +9,29 @@ parameters:
         ROLE_STRUCTURE: "Gestion de la structure des groupes, fonctions, etc."
 
     # Hierachie des roles
-    role_hierarchy:
+    # /!\ final roles according to CRUD standard
+    security.role_hierarchy:
         ROLE_ADMIN:
             ROLE_USER:
             ROLE_FINANCE:
                 ROLE_CREANCE:
                     ROLE_CREANCE_CREATE:
-                    ROLE_CREANCE_EDIT:
-                    ROLE_CREANCE_VIEW:
-                    ROLE_CREANCE_REMOVE:
+                    ROLE_CREANCE_UPDATE:
+                    ROLE_CREANCE_READ:
+                    ROLE_CREANCE_DELETE:
                 ROLE_FACTURE:
                 ROLE_PAYEMENT:
             ROLE_STRUCTURE:
                 ROLE_DISTINCTION:
                     ROLE_DISTINCTION_CREATE:
-                    ROLE_DISTINCTION_EDIT:
-                    ROLE_DISTINCTION_VIEW:
-                    ROLE_DISTINCTION_REMOVE:
+                    ROLE_DISTINCTION_UPDATE:
+                    ROLE_DISTINCTION_READ:
+                    ROLE_DISTINCTION_DELETE:
                 ROLE_CATEGORIE:
                     ROLE_CATEGORIE_CREATE:
-                    ROLE_CATEGORIE_EDIT:
-                    ROLE_CATEGORIE_VIEW:
-                    ROLE_CATEGORIE_REMOVE:
+                    ROLE_CATEGORIE_UPDATE:
+                    ROLE_CATEGORIE_READ:
+                    ROLE_CATEGORIE_DELETE:
             ROLE_SECURITY:
             ROLE_PARAMETER:
             ROLE_MODIFICATION:

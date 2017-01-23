@@ -22,7 +22,7 @@ class CategorieVoter extends BaseVoter{
     /**
      * {@inheritdoc}
      */
-    protected function canView($subject, User $user, TokenInterface $token)
+    protected function canRead($subject, User $user, TokenInterface $token)
     {
         return true;
     }
@@ -30,17 +30,17 @@ class CategorieVoter extends BaseVoter{
     /**
      * {@inheritdoc}
      */
-    protected function canEdit($subject, User $user, TokenInterface $token)
+    protected function canUpdate($subject, User $user, TokenInterface $token)
     {
-        return $this->hasRole('ROLE_CATEGORIE_EDIT',$token);
+        return $this->hasRole('ROLE_CATEGORIE_UPDATE',$token);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function canRemove($subject, User $user, TokenInterface $token)
+    protected function canDelete($subject, User $user, TokenInterface $token)
     {
-        return $this->hasRole('ROLE_CATEGORIE_REMOVE',$token);
+        return $this->hasRole('ROLE_CATEGORIE_DELETE',$token);
     }
 
     /**
