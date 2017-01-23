@@ -135,8 +135,8 @@ abstract class RoutingTestCase extends WebTestCase
     }
 
     /**
-     * Dump un message d'erreur dans un fichier pour pouvoir plus
-     * agréablement consulter l'erreur.
+     * Save each tested page in a html file.
+     * Make it easyer when you want to check errors...
      *
      * @param $uri
      * @param $message
@@ -144,8 +144,8 @@ abstract class RoutingTestCase extends WebTestCase
     public function logInFile($uri,$message)
     {
         $file = str_replace ("/" ,  "_" ,  $uri  ).'.html';
-        $webDir = self::$kernel->getContainer()->getParameter('kernel.root_dir').'/../web';
-        $logFile = $webDir.'/test/log/page_tests/'.$file;
+        $logDir = self::$kernel->getContainer()->getParameter('kernel.logs_dir').'/tests/page_tests/';
+        $logFile = $logDir.$file;
         $fs = new Filesystem();
         $fs->dumpFile($logFile,$message);
     }
