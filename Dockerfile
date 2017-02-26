@@ -23,6 +23,8 @@ RUN apt-get install -y lsof
 RUN apt-get install -y nginx
 #setup custom conf for nginx
 COPY ./docker/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ./docker/nginx/fastcgi.conf /etc/nginx/fastcgi.conf
+COPY ./docker/nginx/mime.types /etc/nginx/mime.types
 
 
 #install server mysql-server
@@ -43,13 +45,18 @@ RUN ln -s /usr/share/phpmyadmin /usr/share/nginx/html/db_admin
 #RUN php5enmod mcrypt
 #RUN service php5-fpm restart
 
-# 80:nginy 3306:mysql
+# 80:nginy 3306:mysql (not exposed because internal of the container)
 #EXPOSE 80 #3306
 
-WORKDIR /home/docker/images/test
+#define the app directory in the container
+WORKDIR /home/docker
 
 #add file to the image filesystem WORKDIR/src
-ADD . src/
+#ADD . src/
+COPY . src/
+
+#setup the web entry point for dev environement
+RUN ln -s src/web /usr/share/nginx/html/dev
 
 
 
@@ -68,5 +75,7 @@ ENTRYPOINT ["src/docker/service_start.sh"]
 
 
 #not used anymore...keep to remember that is not good way
-#to use in service_start.sh
+#because docker file run one for image and not for container.
+#
+#to use in service_start.sh which is launched once in container
 ####CMD ["nginx", "-g", "daemon off;"]

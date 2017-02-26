@@ -1,9 +1,6 @@
 #!/bin/bash 
 
-
 echo "Start images on docker: $PWD" 
-
-tree .
 
 #echo "service nginx start"
 #service nginx start

@@ -60,7 +60,7 @@ case "$1" in
             ;;
 
 		container:start)
-            sudo docker start $2 #--attach
+            sudo docker start $2 --attach
             ;;
 
 		container:stop)
