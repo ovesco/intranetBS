@@ -23,8 +23,9 @@ case "$1" in
 			echo "container:list"
 			echo " 	list all the containers"
 			echo
-			echo "container:start <container_name|container_id>"
+			echo "container:start <container_name|container_id> [--attach]"
 			echo " 	start container"
+			echo " 	option --attach: allow to debug but exit the container at the end of script"
 			echo
 			echo "container:attach:console <container_name>"
 			echo " 	attach a console to the container"
@@ -60,11 +61,14 @@ case "$1" in
             ;;
 
 		container:start)
-            sudo docker start $2 --attach
+		    container_name=$2
+		    option=$3
+            sudo docker start $container_name $option #--attach
             ;;
 
 		container:stop)
-            sudo docker stop $2
+		    container_name=$2
+            sudo docker stop $container_name
             ;;
 
 		container:attach:console)
