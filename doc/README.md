@@ -1,4 +1,4 @@
-#Documentation
+# Documentation
 
 - [Installation](/doc/installation.md)
 - [Tests](/doc/tests.md)

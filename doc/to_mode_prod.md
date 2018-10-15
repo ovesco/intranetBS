@@ -1,6 +1,6 @@
-#Passer en mode "Prod"
+# Passer en mode "Prod"
 
-##Erreur courrante avec les CSS et Assetic.
+## Erreur courrante avec les CSS et Assetic.
 
 Il faut que l'appel aux resources se fasse par le chemin correct dans le répértoire /web et non pas avec "@MonBundle...".
 C'est nécessaire pour que le filtre "cssrewrite" marche correctement. Ci-dessous un exemple correct:
@@ -11,7 +11,7 @@ C'est nécessaire pour que le filtre "cssrewrite" marche correctement. Ci-dessou
 {% endstylesheets %}
 ```
 
-##Script pour mode "Prod"
+## Script pour mode "Prod"
 
 Suggestion d'un petit script .sh pour executer les commandes nécaissaire au passage en mode "prod":
 
