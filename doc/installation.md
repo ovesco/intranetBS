@@ -2,17 +2,20 @@
 ## Acquérir les sources
 * Cloner le dépôt Git
 * Installer composer sur le serveur
+
 ```bash
-#obtenir le composer en version php (composer.phar)
+# obtenir le composer en version php (composer.phar)
 curl -sS https://getcomposer.org/installer | php
 ```
+
 * Installer les dépendances à l'aide de composer
+
 ```bash
-#si compser.phar en php dans le répertoire du projet
+# si compser.phar en php dans le répertoire du projet
 php composer.phar self-update
 php composer.phar update
-
-#si composer installé dans le rep /bin.
+	
+# si composer installé dans le rep /bin.
 composer update
 ```
 
@@ -38,6 +41,7 @@ php app/console doctrine:schema:create
 ```
 
 * Peupler la base de donnée
+
 ```bash
 php app/console doctrine:schema:update --force
 ```
@@ -49,7 +53,7 @@ php app/console app:populate create
 php app/console app:populate fill 200
 ```
 ### Générer les droits
-Les droits sont sotckés dans la base de données. Ils euvent être extraits d'un fichier yml respectant la structure avec la commande suivante :
+Les droits sont stockés dans la base de données. Ils peuvent être extraits d'un fichier [YAML](https://wikipedia.org/wiki/YAML) respectant la structure avec la commande suivante :
 ```bash
 php app/console security:roles:build roles.yml
 ```
@@ -60,7 +64,7 @@ php app/console app:populate create_admin
 ```
 ou ajouter manuellement avec phpmyadmin dans security_users et roles_users
 
-###Exemple de script pour générer des données de test
+### Exemple de script pour générer des données de test
 
 Ce script requière que la base de donnée soit vide avant son execution.
 
@@ -76,7 +80,7 @@ php app/console fos:elastica:populate
 
 Après ceci, une connexion avec le user "admin" (psw: "admin") et le tour et joué...
 
-##Indexation
+## Indexation
 
 Les membres et les factures sont indexés pour la recherche avec [Elastic](https://www.elastic.co/) (anciennement Elasticsearch).
 
